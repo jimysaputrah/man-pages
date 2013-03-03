@@ -1,0 +1,143 @@
+Pod::Readme(3)	      User Contributed Perl Documentation	Pod::Readme(3)
+
+
+
+NAME
+       Pod::Readme - Convert POD to README file
+
+SYNOPSIS
+	 use Pod::Readme;
+	 my $parser = Pod::Readme->new();
+
+	 # Read POD from STDIN and write to STDOUT
+	 $parser->parse_from_filehandle;
+
+	 # Read POD from Module.pm and write to README
+	 $parser->parse_from_file('Module.pm', 'README');
+
+DESCRIPTION
+       This module is a subclass of Pod::PlainText which provides additional
+       POD markup for generating README files.
+
+       Why should one bother with this? One can simply use
+
+	 pod2text Module.pm > README
+
+       A problem with doing that is that the default pod2text converter will
+       add text to links, so that "L<Module>" is translated to "the Module
+       manpage".
+
+       Another problem is that the README includes the entirety of the module
+       documentation!  Most people browsing the README file do not need all of
+       this information.
+
+       Likewise, including installation and requirement information in the
+       module documentation is not necessary either, since the module is
+       already installed.
+
+       This module allows authors to mark portions of the POD to be included
+       only in, or to be excluded from the README file.  It also allows you to
+       include portions of another file (such as a separate ChangeLog).
+
+   Markup
+       Special POD markup options are described below:
+
+       begin/end
+	     =begin readme
+
+	     =head1 README ONLY
+
+	     This section will only show up in the README file.
+
+	     =end readme
+
+	   Delineates a POD section that is only available in README file. If
+	   you prefer to include plain text instead, add the "text" modifier:
+
+	     =begin readme text
+
+	     README ONLY (PLAINTEXT)
+
+		 This section will only show up in the README file.
+
+	     =end readme
+
+	   Note that placing a colon before the section to indicate that it is
+	   POD (e.g. "begin :readme") is not supported in this version.
+
+       stop/continue
+	     =for readme stop
+
+	   All POD that follows will not be included in the README, until a
+	   "continue" command occurs:
+
+	     =for readme continue
+
+       include
+	     =for readme include file=filename type=type start=Regexp stop=Regexp
+
+	     =for readme include file=Changes start=^0.09 stop=^0.081 type=text
+
+	   Includes a plaintext file named filename, starting with the line
+	   that contains the start "Regexp" and ending at the line that begins
+	   with the stop "Regexp".  (The start and stop Regexps are optional:
+	   one or both may be omitted.)
+
+	   Type may be "text" or "pod". If omitted, "pod" will be assumed.
+
+	   Quotes may be used when the filename or marks contains spaces:
+
+	     =for readme include file="another file.pod"
+
+       One can also using maintain multiple file types (such as including
+       TODO, or COPYING) by using a modified constructor:
+
+	 $parser = Pod::Readme->new( readme_type => "copying" );
+
+       In the above "Markup" commands replace "readme" with the tag specified
+       instead (such as "copying"):
+
+	 =begin copying
+
+       As of version 0.03 you can specify multiple sections by separating them
+       with a comma:
+
+	 =begin copying,readme
+
+       There is also no standard list of type names.  Some names might be
+       recognized by other POD processors (such as "testing" or "html").
+       Pod::Readme will reject the following "known" type names when they are
+       specified in the constructor:
+
+	   testing html xhtml xml docbook rtf man nroff dsr rno latex tex code
+
+       You can also use a "debug" mode to diagnose any problems, such as
+       mistyped format names:
+
+	 $parser = Pod::Readme->new( debug => 1 );
+
+       Warnings will be issued for any ignored formatting commands.
+
+   Example
+       For an example, see the Readme.pm file in this distribution.
+
+SEE ALSO
+       See perlpod, perlpodspec and podlators.
+
+AUTHOR
+       Robert Rothenberg <rrwo at cpan.org>
+
+   Suggestions and Bug Reporting
+       Feedback is always welcome.  Please use the CPAN Request Tracker at
+       <http://rt.cpan.org> to submit bug reports.
+
+LICENSE
+       Copyright (c) 2005,2006 Robert Rothenberg. All rights reserved.	This
+       program is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+       Some portions are based on Pod::PlainText 2.02.
+
+
+
+perl v5.10.1			  2012-06-20			Pod::Readme(3)

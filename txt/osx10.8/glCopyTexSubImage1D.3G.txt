@@ -1,0 +1,98 @@
+GLCOPYTEXSUBIMAGE1D(3G) 	  OpenGL 3.3	       GLCOPYTEXSUBIMAGE1D(3G)
+
+
+
+NAME
+       glCopyTexSubImage1D - copy a one-dimensional texture subimage
+
+C SPECIFICATION
+       void glCopyTexSubImage1D(GLenum target, GLint level, GLint xoffset,
+				GLint x, GLint y, GLsizei width);
+
+
+PARAMETERS
+       target
+	   Specifies the target texture. Must be GL_TEXTURE_1D.
+
+       level
+	   Specifies the level-of-detail number. Level 0 is the base image
+	   level. Level n is the nth mipmap reduction image.
+
+       xoffset
+	   Specifies the texel offset within the texture array.
+
+       x, y
+	   Specify the window coordinates of the left corner of the row of
+	   pixels to be copied.
+
+       width
+	   Specifies the width of the texture subimage.
+
+DESCRIPTION
+       glCopyTexSubImage1D replaces a portion of a one-dimensional texture
+       image with pixels from the current GL_READ_BUFFER (rather than from
+       main memory, as is the case for glTexSubImage1D()).
+
+       The screen-aligned pixel row with left corner at (x,\ y), and with
+       length width replaces the portion of the texture array with x indices
+       xoffset through xoffset + width - 1, inclusive. The destination in the
+       texture array may not include any texels outside the texture array as
+       it was originally specified.
+
+       The pixels in the row are processed exactly as if glReadPixels() had
+       been called, but the process stops just before final conversion. At
+       this point, all pixel component values are clamped to the range 0 1 and
+       then converted to the texture's internal format for storage in the
+       texel array.
+
+       It is not an error to specify a subtexture with zero width, but such a
+       specification has no effect. If any of the pixels within the specified
+       row of the current GL_READ_BUFFER are outside the read window
+       associated with the current rendering context, then the values obtained
+       for those pixels are undefined.
+
+       No change is made to the internalformat, width, or border parameters of
+       the specified texture array or to texel values outside the specified
+       subregion.
+
+NOTES
+       The glPixelStore() mode affects texture images.
+
+ERRORS
+       GL_INVALID_ENUM is generated if /target is not GL_TEXTURE_1D.
+
+
+       GL_INVALID_OPERATION is generated if the texture array has not been
+       defined by a previous glTexImage1D() or glCopyTexImage1D() operation.
+
+
+       GL_INVALID_VALUE is generated if level is less than 0.
+
+
+       GL_INVALID_VALUE may be generated if level > log 2 ai max, where max is
+       the returned value of GL_MAX_TEXTURE_SIZE.
+
+
+       GL_INVALID_VALUE is generated if xoffset < - b, or xoffset + width > w
+       - b, where w is the GL_TEXTURE_WIDTH and b is the GL_TEXTURE_BORDER of
+       the texture image being modified. Note that w includes twice the border
+       width.
+
+
+ASSOCIATED GETS
+       glGetTexImage()
+
+SEE ALSO
+       glCopyTexImage1D(), glCopyTexImage2D(), glCopyTexSubImage2D(),
+       glCopyTexSubImage3D(), glPixelStore(), glReadBuffer(), glTexImage1D(),
+       glTexImage2D(), glTexImage3D(), glTexParameter(), glTexSubImage1D(),
+       glTexSubImage2D(), glTexSubImage3D()
+
+COPYRIGHT
+       Copyright (C) 1991-2006 Silicon Graphics, Inc. This document is
+       licensed under the SGI Free Software B License. For details, see
+       http://oss.sgi.com/projects/FreeB/.
+
+
+
+OpenGL 3.3			  03/08/2011	       GLCOPYTEXSUBIMAGE1D(3G)

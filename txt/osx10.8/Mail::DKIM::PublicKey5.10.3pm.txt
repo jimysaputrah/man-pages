@@ -1,0 +1,36 @@
+Mail::DKIM::PublicKey(User Contributed Perl DocumentatMail::DKIM::PublicKey(3)
+
+
+
+CONSTRUCTOR
+   fetch() - retrieve a public key record from DNS
+	 my $public_key = Mail::DKIM::PublicKey->fetch(
+			     Protocol => "dns",
+			     Selector => "brisbane",
+			     Domain => "example.com",
+			   );
+
+       If the public key is found, a Mail::DKIM::PublicKey object is returned,
+       representing the information found in DNS.  If the public key does not
+       exist in DNS, then "undef" is returned.	If a DNS error occurs while
+       fetching the key, then this method will "die".  If the public key was
+       found, but is not valid (e.g. it is "revoked"), then this method will
+       "die".
+
+METHODS
+   granularity() - get or set the granularity (g=) field
+	 my $g = $public_key->granularity;
+
+	 $public_key->granularity("*");
+
+       Granularity of the key. The value must match the Local-part of the
+       effective "i=" tag of the DKIM-Signature header field.  The granularity
+       is a literal value, or a pattern with a single '*' wildcard character
+       that matches zero or more characters.
+
+       If no granularity is defined, then the default value, '*', will be
+       returned.
+
+
+
+perl v5.10.1			  2010-02-24	      Mail::DKIM::PublicKey(3)

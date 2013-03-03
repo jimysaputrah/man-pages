@@ -1,0 +1,87 @@
+Moose::Meta::AttributeUsertConMoose::Meta::Attribute::Native::Trait::Number(3)
+
+
+
+NAME
+       Moose::Meta::Attribute::Native::Trait::Number - Helper trait for Num
+       attributes
+
+VERSION
+       version 2.0205
+
+SYNOPSIS
+	 package Real;
+	 use Moose;
+
+	 has 'integer' => (
+	     traits  => ['Number'],
+	     is      => 'ro',
+	     isa     => 'Num',
+	     default => 5,
+	     handles => {
+		 set => 'set',
+		 add => 'add',
+		 sub => 'sub',
+		 mul => 'mul',
+		 div => 'div',
+		 mod => 'mod',
+		 abs => 'abs',
+	     },
+	 );
+
+	 my $real = Real->new();
+	 $real->add(5);    # same as $real->integer($real->integer + 5);
+	 $real->sub(2);    # same as $real->integer($real->integer - 2);
+
+DESCRIPTION
+       This trait provides native delegation methods for numbers. All of the
+       operations correspond to arithmetic operations like addition or
+       multiplication.
+
+DEFAULT TYPE
+       If you don't provide an "isa" value for your attribute, it will default
+       to "Num".
+
+PROVIDED METHODS
+       All of these methods modify the attribute's value in place. All methods
+       return the new value.
+
+       o   add($value)
+
+	   Adds the current value of the attribute to $value.
+
+       o   sub($value)
+
+	   Subtracts $value from the current value of the attribute.
+
+       o   mul($value)
+
+	   Multiplies the current value of the attribute by $value.
+
+       o   div($value)
+
+	   Divides the current value of the attribute by $value.
+
+       o   mod($value)
+
+	   Returns the current value of the attribute modulo $value.
+
+       o   abs
+
+	   Sets the current value of the attribute to its absolute value.
+
+BUGS
+       See "BUGS" in Moose for details on reporting bugs.
+
+AUTHOR
+       Stevan Little <stevan@iinteractive.com>
+
+COPYRIGHT AND LICENSE
+       This software is copyright (c) 2011 by Infinity Interactive, Inc..
+
+       This is free software; you can redistribute it and/or modify it under
+       the same terms as the Perl 5 programming language system itself.
+
+
+
+perl v5.12.4		      Moose::Meta::Attribute::Native::Trait::Number(3)

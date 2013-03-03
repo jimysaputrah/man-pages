@@ -1,0 +1,83 @@
+
+TSEARCH(3)		 BSD Library Functions Manual		    TSEARCH(3)
+
+NAME
+     tdelete, tfind, tsearch, twalk -- manipulate binary search trees
+
+SYNOPSIS
+     #include <search.h>
+
+     void *
+     tdelete(const void *restrict key, void **restrict rootp,
+	 int (*compar) (const void *key1, const void *key2));
+
+     void *
+     tfind(const void *key, void *const *rootp,
+	 int (*compar) (const void *key1, const void *key2));
+
+     void *
+     tsearch(const void *key, void **rootp,
+	 int (*compar) (const void *key1, const void *key2));
+
+     void
+     twalk(const void *root,
+	 void (*action) (const void *node, VISIT order, int level));
+
+DESCRIPTION
+     The tdelete(), tfind(), tsearch(), and twalk() functions manage binary
+     search trees, based on algorithms T and D from Knuth (6.2.2).  The com-
+     parison function passed in by the user takes two arguments, each of which
+     is a key pointer.	This function has the same style of return values as
+     strcmp(3).
+
+     The tfind() function searches for a node whose key matches the argument
+     key in the binary tree rooted at rootp, returning a pointer to the node
+     if it is found and NULL if it is not.
+
+     Note that a node is itself a pointer to the key of the node.  Thus, you
+     should generally cast this result to a double pointer to the data type
+     stored in the tree, for example (struct myType **), and use double indi-
+     rection to retrieve the original key value.
+
+     The tsearch() function is identical to tfind() except that, if no match
+     is found, it inserts a new node for the key into the tree and returns a
+     pointer to the node.  If rootp points to a NULL value, a new binary
+     search tree is created.
+
+     The tdelete() function deletes a node from the specified binary search
+     tree and returns a pointer to the parent of the node that was deleted.
+     It takes the same arguments as tfind() and tsearch().  If the node to be
+     deleted is the root of the binary search tree, rootp will be adjusted.
+
+     The twalk() function walks the binary search tree rooted in root and
+     calls the function action on each node.  The action function is called
+     with three arguments: a pointer to the current node, a value from the
+     enum typedef enum { preorder, postorder, endorder, leaf } VISIT; specify-
+     ing the traversal type, and a node level (where level zero is the root of
+     the tree).
+
+     As twalk() traverses the tree, it calls the action function with the tra-
+     versal type "preorder" before visiting the left subtree of the node, with
+     the traversal type "postorder" before visiting the right subtree of the
+     node, and with the traversal type "endorder" after visiting the right
+     subtree of the node.  The action function is called only once for a leaf-
+     node, with the traversal type "leaf."
+
+     Note: the names for the traversal types differ somewhat from common par-
+     lance.  The traversal type "postorder" corresponds to what would typi-
+     cally be referred to as in-order, and the traversal type "endorder" cor-
+     responds to what would typically be referred to as post-order.
+
+RETURN VALUES
+     The tsearch() function returns NULL if allocation of a new node fails
+     (usually due to a lack of free memory).
+
+     The tfind(), tsearch(), and tdelete() functions return NULL if rootp is
+     NULL or the node cannot be found.
+
+     The twalk() function returns no value.
+
+SEE ALSO
+     bsearch(3), hsearch(3), lsearch(3)
+
+BSD				 June 15, 1997				   BSD

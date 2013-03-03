@@ -1,0 +1,81 @@
+
+dispatch_semaphore_cr... BSD Library Functions Manual dispatch_semaphore_cr...
+
+NAME
+     dispatch_semaphore_create, dispatch_semaphore_signal,
+     dispatch_semaphore_wait -- synchronized counting semaphore
+
+SYNOPSIS
+     #include <dispatch/dispatch.h>
+
+     dispatch_semaphore_t
+     dispatch_semaphore_create(long count);
+
+     long
+     dispatch_semaphore_signal(dispatch_semaphore_t semaphore);
+
+     long
+     dispatch_semaphore_wait(dispatch_semaphore_t semaphore,
+	 dispatch_time_t timeout);
+
+DESCRIPTION
+     Dispatch semaphores are used to synchronize threads.  The timeout parame-
+     ter is creatable with the dispatch_time(3) or dispatch_walltime(3) func-
+     tions.
+
+COMPLETION SYNCHRONIZATION
+     If the count parameter is equal to zero, then the semaphore is useful for
+     synchronizing completion of work.	For example:
+
+	   sema = dispatch_semaphore_create(0);
+
+	   dispatch_async(queue, ^{
+		   foo();
+		   dispatch_semaphore_signal(sema);
+	   });
+
+	   bar();
+
+	   dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+
+FINITE RESOURCE POOL
+     If the count parameter is greater than zero, then the semaphore is useful
+     for managing a finite pool of resources.  For example, a library that
+     wants to limit Unix descriptor usage:
+
+	   sema = dispatch_semaphore_create(getdtablesize() / 4);
+
+     At each Unix FD allocation:
+
+	   dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+	   fd = open("/etc/services", O_RDONLY);
+
+     When each FD is closed:
+
+	   close(fd);
+	   dispatch_semaphore_signal(sema);
+
+RETURN VALUES
+     The dispatch_semaphore_create() function returns NULL if no memory is
+     available or if the count parameter is less than zero.
+
+     The dispatch_semaphore_signal() function returns non-zero when a thread
+     is woken.	Otherwise, zero is returned.
+
+     The dispatch_semaphore_wait() function returns zero upon success and non-
+     zero after the timeout expires. If the timeout is DISPATCH_TIME_FOREVER,
+     then dispatch_semaphore_wait() waits forever and always returns zero.
+
+MEMORY MODEL
+     Dispatch semaphores are retained and released via calls to
+     dispatch_retain() and dispatch_release().
+
+CAVEATS
+     Unbalanced dispatch semaphores cannot be released.  For a given sema-
+     phore, calls to dispatch_semaphore_signal() and dispatch_semaphore_wait()
+     must be balanced before dispatch_release() is called on it.
+
+SEE ALSO
+     dispatch(3), dispatch_object(3)
+
+Darwin				  May 1, 2009				Darwin

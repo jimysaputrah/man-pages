@@ -1,0 +1,101 @@
+CPANPLUS::Internals::UtPerl3Programmers ReferenCPANPLUS::Internals::Utils(3pm)
+
+
+
+NAME
+       CPANPLUS::Internals::Utils
+
+SYNOPSIS
+	   my $bool = $cb->_mkdir( dir => 'blah' );
+	   my $bool = $cb->_chdir( dir => 'blah' );
+	   my $bool = $cb->_rmdir( dir => 'blah' );
+
+	   my $bool = $cb->_move( from => '/some/file', to => '/other/file' );
+	   my $bool = $cb->_move( from => '/some/dir',	to => '/other/dir' );
+
+	   my $cont = $cb->_get_file_contents( file => '/path/to/file' );
+
+
+	   my $version = $cb->_perl_version( perl => $^X );
+
+DESCRIPTION
+       "CPANPLUS::Internals::Utils" holds a few convenience functions for
+       CPANPLUS libraries.
+
+METHODS
+   $cb->_mkdir( dir => '/some/dir' )
+       "_mkdir" creates a full path to a directory.
+
+       Returns true on success, false on failure.
+
+   $cb->_chdir( dir => '/some/dir' )
+       "_chdir" changes directory to a dir.
+
+       Returns true on success, false on failure.
+
+   $cb->_rmdir( dir => '/some/dir' );
+       Removes a directory completely, even if it is non-empty.
+
+       Returns true on success, false on failure.
+
+   $cb->_perl_version ( perl => 'some/perl/binary' );
+       "_perl_version" returns the version of a certain perl binary.  It does
+       this by actually running a command.
+
+       Returns the perl version on success and false on failure.
+
+   $cb->_version_to_number( version => $version );
+       Returns a proper module version, or '0.0' if none was available.
+
+   $cb->_whoami
+       Returns the name of the subroutine you're currently in.
+
+   _get_file_contents( file => $file );
+       Returns the contents of a file
+
+       Moves a file or directory to the target.
+
+       Returns true on success, false on failure.
+
+       Moves a file or directory to the target.
+
+       Returns true on success, false on failure.
+
+   $cb->_mode_plus_w( file => '/path/to/file' );
+       Sets the +w bit for the file.
+
+       Returns true on success, false on failure.
+
+   $uri = $cb->_host_to_uri( scheme => SCHEME, host => HOST, path => PATH );
+       Turns a CPANPLUS::Config style "host" entry into an URI string.
+
+       Returns the uri on success, and false on failure
+
+   $cb->_vcmp( VERSION, VERSION );
+       Normalizes the versions passed and does a '<=>' on them, returning the
+       result.
+
+   $cb->_home_dir
+       Returns the user's homedir, or "cwd" if it could not be found
+
+   $path = $cb->_safe_path( path => $path );
+       Returns a path that's safe to us on Win32 and VMS.
+
+       Only cleans up the path on Win32 if the path exists.
+
+       On VMS, it encodes dots to _ using "VMS::Filespec::vmsify"
+
+   ($pkg, $version, $ext) = $cb->_split_package_string( package =>
+       PACKAGE_STRING );
+       Splits the name of a CPAN package string up into its package, version
+       and extension parts.
+
+       For example, "Foo-Bar-1.2.tar.gz" would return the following parts:
+
+	   Package:    Foo-Bar
+	   Version:    1.2
+	   Extension:  tar.gz
+
+
+
+perl v5.12.4			  2011-06-07   CPANPLUS::Internals::Utils(3pm)

@@ -1,0 +1,87 @@
+GLUUNPROJECT4(3G)					     GLUUNPROJECT4(3G)
+
+
+
+NAME
+       gluUnProject4 - map window and clip coordinates to object coordinates
+
+
+C SPECIFICATION
+       GLint gluUnProject4( GLdouble winX,
+			    GLdouble winY,
+			    GLdouble winZ,
+			    GLdouble clipW,
+			    const GLdouble *model,
+			    const GLdouble *proj,
+			    const GLint *view,
+			    GLdouble near,
+			    GLdouble far,
+			    GLdouble* objX,
+			    GLdouble* objY,
+			    GLdouble* objZ,
+			    GLdouble* objW )
+
+
+PARAMETERS
+       winX, winY, winZ
+		       Specify the window coordinates to be mapped.
+
+       clipW	       Specify the clip w coordinate to be mapped.
+
+       model	       Specifies  the modelview matrix (as from a glGetDoublev
+		       call).
+
+       proj	       Specifies the projection matrix (as from a glGetDoublev
+		       call).
+
+       view	       Specifies  the viewport (as from a glGetIntegerv call).
+
+       near, far       Specifies the near and far planes (as from a  glGetDou-
+		       blev call).
+
+       objX, objY, objZ, objW
+		       Returns the computed object coordinates.
+
+DESCRIPTION
+       gluUnProject4 maps the specified window coordinates winX, winY and winZ
+       and its clip w coordinate clipW into object  coordinates  (objX,  objY,
+       objZ,  objW)  using  model, proj and view. clipW can be other than 1 as
+       for vertices in glFeedbackBuffer when data type GL_4D_COLOR_TEXTURE  is
+       returned.  This also handles the case where the near and far planes are
+       different from the default, 0 and 1, respectively.  A return  value  of
+       GL_TRUE	indicates  success; a return value of GL_FALSE indicates fail-
+       ure.
+
+       To compute the coordinates (objX, objY, objZ and  objW),  gluUnProject4
+       multiplies   the  normalized  device  coordinates  by  the  inverse  of
+       model*proj as follows:
+
+				2(winX - view[0])
+				-----------------  - 1
+				     view[2]
+
+	   objX 		2(winY - view[1])
+	   objY   =  INV(PM)	-----------------  - 1
+	   objZ 		     view[3]
+	    W
+				  2(winZ - near)
+				-----------------  - 1
+				    (far - near)
+
+				      clipW
+
+
+       INV() denotes matrix inversion.
+
+       gluUnProject4 is equivalent to gluUnProject when clipW is 1, near is  0
+       and far is 1.
+
+NOTES
+       gluUnProject4 is available only if the GLU version is 1.3 or greater.
+
+SEE ALSO
+       glGet, glFeedbackBuffer, gluProject, gluUnProject
+
+
+
+							     GLUUNPROJECT4(3G)

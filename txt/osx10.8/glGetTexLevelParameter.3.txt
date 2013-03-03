@@ -1,0 +1,142 @@
+GLGETTEXLEVELPARAMETER(3G)			    GLGETTEXLEVELPARAMETER(3G)
+
+
+
+NAME
+       glGetTexLevelParameterfv,  glGetTexLevelParameteriv  -  return  texture
+       parameter values for a specific level of detail
+
+
+C SPECIFICATION
+       void glGetTexLevelParameterfv( GLenum target,
+				      GLint level,
+				      GLenum pname,
+				      GLfloat *params )
+       void glGetTexLevelParameteriv( GLenum target,
+				      GLint level,
+				      GLenum pname,
+				      GLint *params )
+
+
+PARAMETERS
+       target  Specifies the symbolic  name  of  the  target  texture,	either
+	       GL_TEXTURE_1D,		GL_TEXTURE_2D,		GL_TEXTURE_3D,
+	       GL_PROXY_TEXTURE_1D,	     GL_PROXY_TEXTURE_2D,	    or
+	       GL_PROXY_TEXTURE_3D.
+
+       level   Specifies  the  level-of-detail	number	of  the desired image.
+	       Level 0 is the base image level.  Level n  is  the  nth	mipmap
+	       reduction image.
+
+       pname   Specifies   the	 symbolic   name   of	a  texture  parameter.
+	       GL_TEXTURE_WIDTH,     GL_TEXTURE_HEIGHT,      GL_TEXTURE_DEPTH,
+	       GL_TEXTURE_INTERNAL_FORMAT,		    GL_TEXTURE_BORDER,
+	       GL_TEXTURE_RED_SIZE,			GL_TEXTURE_GREEN_SIZE,
+	       GL_TEXTURE_BLUE_SIZE,			GL_TEXTURE_ALPHA_SIZE,
+	       GL_TEXTURE_LUMINANCE_SIZE,  and	GL_TEXTURE_INTENSITY_SIZE  are
+	       accepted.
+
+       params  Returns the requested data.
+
+DESCRIPTION
+       glGetTexLevelParameter returns in params texture parameter values for a
+       specific level-of-detail value, specified as level.  target defines the
+       target  texture,  either  GL_TEXTURE_1D,  GL_TEXTURE_2D, GL_TEXTURE_3D,
+       GL_PROXY_TEXTURE_1D, GL_PROXY_TEXTURE_2D, or GL_PROXY_TEXTURE_3D.
+
+       GL_MAX_TEXTURE_SIZE, and GL_MAX_3D_TEXTURE_SIZE are not really descrip-
+       tive  enough.   It  has to report the largest square texture image that
+       can be accommodated with mipmaps and borders, but a  long  skinny  tex-
+       ture,  or a texture without mipmaps and borders, may easily fit in tex-
+       ture memory.  The proxy targets allow the user to more accurately query
+       whether	the GL can accommodate a texture of a given configuration.  If
+       the texture cannot be accommodated, the texture state variables,  which
+       may  be queried with glGetTexLevelParameter, are set to 0.  If the tex-
+       ture can be accommodated, the texture state values will be set as  they
+       would be set for a non-proxy target.
+
+       pname  specifies  the  texture  parameter whose value or values will be
+       returned.
+
+       The accepted parameter names are as follows:
+
+       GL_TEXTURE_WIDTH
+		 params returns a single  value,  the  width  of  the  texture
+		 image.   This value includes the border of the texture image.
+		 The initial value is 0.
+
+       GL_TEXTURE_HEIGHT
+		 params returns a single value,  the  height  of  the  texture
+		 image.   This value includes the border of the texture image.
+		 The initial value is 0.
+
+       GL_TEXTURE_DEPTH
+		 params returns a single  value,  the  depth  of  the  texture
+		 image.   This value includes the border of the texture image.
+		 The initial value is 0.
+
+       GL_TEXTURE_INTERNAL_FORMAT
+		 params returns a single value, the internal  of  the  texture
+		 image.
+
+       GL_TEXTURE_BORDER
+		 params  returns  a  single  value, the width in pixels of the
+		 border of the texture image. The initial value is 0.
+
+       GL_TEXTURE_RED_SIZE,
+
+       GL_TEXTURE_GREEN_SIZE,
+
+       GL_TEXTURE_BLUE_SIZE,
+
+       GL_TEXTURE_ALPHA_SIZE,
+
+       GL_TEXTURE_LUMINANCE_SIZE,
+
+       GL_TEXTURE_INTENSITY_SIZE
+		 The internal storage resolution of an	individual  component.
+		 The resolution chosen by the GL will be a close match for the
+		 resolution requested by the user with the component  argument
+		 of	  glTexImage1D,       glTexImage2D,	 glTexImage3D,
+		 glCopyTexImage1D, and glCopyTexImage2D. The initial value  is
+		 0.
+
+NOTES
+       If  an error is generated, no change is made to the contents of params.
+
+       GL_TEXTURE_INTERNAL_FORMAT is available only if the GL version  is  1.1
+       or greater. In version 1.0, use GL_TEXTURE_COMPONENTS instead.
+
+       GL_PROXY_TEXTURE_1D  and  GL_PROXY_TEXTURE_2D are available only if the
+       GL version is 1.1 or greater.
+
+       GL_TEXTURE_3D, GL_PROXY_TEXTURE_3D, and GL_TEXTURE_DEPTH are  available
+       only if the GL version is 1.2 or greater.
+
+       When	the	GL_ARB_multitexture	extension     is    supported,
+       glGetTexLevelParameter returns the texture  level  parameters  for  the
+       active texture unit.
+
+ERRORS
+       GL_INVALID_ENUM	is  generated  if  target  or pname is not an accepted
+       value.
+
+       GL_INVALID_VALUE is generated if level is less than 0.
+
+       GL_INVALID_VALUE may be generated if level is greater  than  log2(max),
+       where max is the returned value of GL_MAX_TEXTURE_SIZE.
+
+       GL_INVALID_OPERATION is generated if glGetTexLevelParameter is executed
+       between the execution of glBegin and  the  corresponding  execution  of
+       glEnd.
+
+SEE ALSO
+       glActiveTextureARB,	   glGetTexParameter,	     glCopyTexImage1D,
+       glCopyTexImage2D,       glCopyTexSubImage1D,	  glCopyTexSubImage2D,
+       glCopyTexSubImage3D,  glTexEnv,	glTexGen,  glTexImage1D, glTexImage2D,
+       glTexImage3D,   glTexSubImage1D,   glTexSubImage2D,    glTexSubImage3D,
+       glTexParameter
+
+
+
+						    GLGETTEXLEVELPARAMETER(3G)

@@ -1,0 +1,111 @@
+
+CABS(3) 		 BSD Library Functions Manual		       CABS(3)
+
+NAME
+     cabs -- complex norm (absolute value) function
+     carg -- complex argument function
+
+SYNOPSIS
+     #include <complex.h>
+
+     double
+     cabs(double complex z);
+
+     long double
+     cabsl(long double complex z);
+
+     float
+     cabsf(float complex z);
+
+     double
+     carg(double complex z);
+
+     long double
+     cargl(long double complex z);
+
+     float
+     cargf(float complex z);
+
+DESCRIPTION
+     cabs(z) computes the norm (absolute value) of the complex floating-point
+     number z.
+
+     carg(z) computes the argument (also called phase angle) of the complex
+     floating-point number z, with a branch cut on the negative real axis.
+     The result is in the range [-pi, pi], and has the same sign as the imagi-
+     nary part of z.
+
+EXAMPLES
+     The function foo defined in the example below applies a non-linear rota-
+     tion to the complex plane, such that points near the origin are not much
+     affected, and points far from the origin are rotated by about pi/2.
+
+     This is accomplished by using cabs and carg to convert to polar coordi-
+     nates, then computing the transformation in that coordinate system, and
+     finally converting back to the usual rectangular coordinate system.
+
+	   #include <complex.h>
+	   #include <math.h>
+
+	   double complex foo(double complex z) {
+	     // get the polar coordinates of z
+	     double r = cabs(z);
+	     double theta = carg(z);
+
+	     // add a value dependent on r to theta
+	     theta += atan(r);
+
+	     // now change back to rectangular coordinates and
+	     // return the new complex number
+	     return r*cos(theta) + r*sin(theta)*I;
+	   }
+
+SPECIAL VALUES
+     cabs(x + yi), cabs(y + xi), and cabs(x - yi) are equivalent.  This is
+     used to abbreviate the specification of special values.
+
+     cabs(x +- 0i) is equivalent to fabs(x).
+
+     cabs(+-inf + yi) returns inf even if y is a NaN.
+
+     cabs(x + NaN i) returns NaN, for finite x.
+
+     cabs(NaN + NaN i) returns NaN.
+
+     carg(-0 +- 0i) returns +-pi.
+
+     carg(+0 +- 0i) returns +-0.
+
+     carg(x +- 0i) returns +-pi for x < 0.
+
+     carg(x +- 0i) returns +-0 for x > 0.
+
+     carg(+-0 + yi) returns -pi/2 for y < 0.
+
+     carg(+-0 + yi) returns +pi/2 for y > 0.
+
+     carg(-inf +- yi) returns +-pi for finite y > 0.
+
+     carg(+inf +- yi) returns +-0 for finite y > 0.
+
+     carg(x +- inf i) returns +-pi/2 for finite x.
+
+     carg(-inf +- inf i) returns +-3*pi/4.
+
+     carg(+inf +- inf i) returns +-pi/4.
+
+     carg(x + yi) returns NaN if either of x or y is NaN.
+
+NOTES
+     cabs() and carg() are fully specified in terms of real functions:
+
+	   cabs(x + iy) = hypot(x,y)
+	   carg(x + iy) = atan2(y,x).
+
+SEE ALSO
+     hypot(3), atan2(3), fabs(3), complex(3)
+
+STANDARDS
+     The cabs() and carg() functions conform to ISO/IEC 9899:1999(E).
+
+4th Berkeley Distribution      December 11, 2006     4th Berkeley Distribution

@@ -1,0 +1,63 @@
+
+DIRNAME(3)		 BSD Library Functions Manual		    DIRNAME(3)
+
+NAME
+     dirname -- extract the directory part of a pathname
+
+SYNOPSIS
+     #include <libgen.h>
+
+     char *
+     dirname(char *path);
+
+DESCRIPTION
+     The dirname() function is the converse of basename(3); it returns a
+     pointer to the parent directory of the pathname pointed to by path.  Any
+     trailing `/' characters are not counted as part of the directory name.
+     If path is a null pointer, the empty string, or contains no `/' charac-
+     ters, dirname() returns a pointer to the string ".", signifying the cur-
+     rent directory.
+
+IMPLEMENTATION NOTES
+     The dirname() function returns a pointer to internal storage space allo-
+     cated on the first call that will be overwritten by subsequent calls.
+
+     Other vendor implementations of dirname() may modify the contents of the
+     string passed to dirname(); if portability is desired, this should be
+     taken into account when writing code which calls this function.
+
+LEGACY SYNOPSIS
+     #include <libgen.h>
+
+     char *
+     dirname(const char *path);
+
+     In legacy mode, path will not be changed.
+
+RETURN VALUES
+     On successful completion, dirname() returns a pointer to the parent
+     directory of path.
+
+     If dirname() fails, a null pointer is returned and the global variable
+     errno is set to indicate the error.
+
+ERRORS
+     The following error codes may be set in errno:
+
+     [ENAMETOOLONG]	The path component to be returned was larger than
+			MAXPATHLEN.
+
+SEE ALSO
+     basename(1), dirname(1), basename(3), compat(5)
+
+STANDARDS
+     The dirname() function conforms to X/Open Portability Guide Issue 4,
+     Version 2 (``XPG4.2'').
+
+HISTORY
+     The dirname() function first appeared in OpenBSD 2.2 and FreeBSD 4.2.
+
+AUTHORS
+     Todd C. Miller
+
+BSD			       October 12, 2006 			   BSD

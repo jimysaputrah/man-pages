@@ -1,0 +1,76 @@
+IO::Pager::Unbuffered(User Contributed Perl DocumentatIO::Pager::Unbuffered(3)
+
+
+
+NAME
+       IO::Pager::Unbuffered - Pipe output to a pager if output is to a TTY
+
+SYNOPSIS
+	 use IO::Pager::Unbuffered;
+	 {
+	   #local $STDOUT =	IO::Pager::Unbuffered::open *STDOUT;
+	   local  $STDOUT = new IO::Pager::Unbuffered	    *STDOUT;
+	   print <<"  HEREDOC" ;
+	   ...
+	   A bunch of text later
+	   HEREDOC
+	 }
+
+DESCRIPTION
+       IO::Pager is designed to programmaticly decide whether or not to point
+       the STDOUT file handle into a pipe to program specified in $ENV{PAGER}
+       or one of a standard list of pagers.
+
+   new( [FILEHANDLE] )
+       Instantiate a new IO::Pager to paginate FILEHANDLE if necessary.
+       Assign the return value to a scoped variable.
+
+       FILEHANDLE
+	   Defaults to currently select()-ed FILEHANDLE.
+
+   open( [FILEHANDLE] )
+       An alias for new.
+
+   close( FILEHANDLE )
+       Explicitly close the filehandle, if a pager was deemed necessary this
+       will kill it. Normally you'd just wait for the user to exit the pager
+       and the object to pass out of scope.
+
+       This does not default to the current filehandle.
+
+CAVEATS
+       You probably want to do something with SIGPIPE eg;
+
+	 eval{
+	   $SIG{PIPE} = sub{ die };
+	   local $STDOUT = IO::Pager::open(*STDOUT);
+
+	   while(1){
+	     #Do something
+	   }
+	 }
+
+	 #Do something else
+
+SEE ALSO
+       IO::Pager, IO::Pager::Buffered, IO::Pager::Page
+
+AUTHOR
+       Jerrad Pierce <jpierce@cpan.org>
+
+       This module is forked from IO::Page 0.02 by Monte Mitzelfelt
+
+       Significant proddage provided by Tye McQueen.
+
+LICENSE
+       o   Thou shalt not claim ownership of unmodified materials.
+
+       o   Thou shalt not claim whole ownership of modified materials.
+
+       o   Thou shalt grant the indemnity of the provider of materials.
+
+       o   Thou shalt use and dispense freely without other restrictions.
+
+
+
+perl v5.10.1			  2004-11-17	      IO::Pager::Unbuffered(3)

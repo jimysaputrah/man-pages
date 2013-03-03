@@ -1,0 +1,379 @@
+Mail::SPF::Query(3)   User Contributed Perl Documentation  Mail::SPF::Query(3)
+
+
+
+NAME
+       Mail::SPF::Query - query Sender Policy Framework for an IP,email,helo
+
+VERSION
+       1.999.1
+
+SYNOPSIS
+	   my $query = new Mail::SPF::Query (ip => "127.0.0.1", sender=>'foo@example.com', helo=>"somehost.example.com", trusted=>0, guess=>0);
+	   my ($result, 	  # pass | fail | softfail | neutral | none | error | unknown [mechanism]
+	       $smtp_comment,	  # "please see http://www.openspf.org/why.html?..."  when rejecting, return this string to the SMTP client
+	       $header_comment,   # prepend_header("Received-SPF" => "$result ($header_comment)")
+	       $spf_record,	  # "v=spf1 ..." original SPF record for the domain
+	      ) = $query->result();
+
+	   if	 ($result eq "pass") { "Domain is not forged. Apply RHSBL and content filters." }
+	   elsif ($result eq "fail") { "Domain is forged. Reject or save to spambox." }
+
+ABSTRACT
+       The SPF protocol relies on sender domains to describe their designated
+       outbound mailers in DNS.  Given an email address, Mail::SPF::Query
+       determines the legitimacy of an SMTP client IP address.
+
+DESCRIPTION
+       There are two ways to use Mail::SPF::Query.  Your choice depends on
+       whether the domains your server is an MX for have secondary MXes which
+       your server doesn't know about.
+
+       The first and more common style, calling ->result(), is suitable when
+       all mail is received directly from the originator's MTA.  If the
+       domains you receive do not have secondary MX entries, this is
+       appropriate.  This style of use is outlined in the SYNOPSIS above.
+       This is the common case.
+
+       The second style is more complex, but works when your server receives
+       mail from secondary MXes.  This performs checks as each recipient is
+       handled.  If the message is coming from a valid MX secondary for a
+       recipient, then the SPF check is not performed, and a "pass" response
+       is returned right away.	To do this, call "result2()" and
+       "message_result2()" instead of "result()".
+
+       If you do not know what a secondary MX is, you probably don't have one.
+       Use the first style.
+
+       You can try out Mail::SPF::Query on the command line with the following
+       command:
+
+	   perl -MMail::SPF::Query -le 'print for Mail::SPF::Query->new(
+	       helo => shift, ipv4 => shift, sender => shift)->result' \
+	       helohost.example.com 1.2.3.4 user@example.com
+
+BUGS
+       Mail::SPF::Query tries to implement the SPF specification (see "SEE
+       ALSO") as close as reasonably possible given that M:S:Q has been the
+       very first SPF implementation and has changed with the SPF
+       specification over time.  As a result, M:S:Q has various known
+       deficiencies that cannot be corrected with reasonably little effort:
+
+       o   Unable to query HELO and MAIL FROM separately.  M:S:Q is not
+	   designed to support the separate querying of the HELO and MAIL FROM
+	   identities.	Passing the HELO identity as the "sender" argument for
+	   a stand-alone HELO check might generally work but could yield
+	   unexpected results.
+
+       o   No IPv6 support.  IPv6 is not supported.  "ip6" mechanisms in SPF
+	   records and everywhere else are simply ignored.
+
+       o   Result explanation may be inappropriate for local policy results.
+	   If a query result was caused by anything other than a real SPF
+	   record (i.e. local policy, overrides, fallbacks, etc.), and no
+	   custom "default_explanation" was specified, the domain's
+	   explanation or M:S:Q's hard-coded default explanation will still be
+	   returned.  Be aware that in this case the explanation may not
+	   correctly explain the reason for such an artificial result.
+
+NON-STANDARD FEATURES
+       Also due to its long history, M:S:Q does have some legacy features that
+       are not parts of the official SPF specification, most notably best
+       guess processing and trusted forwarder accreditation checking.  Please
+       be careful when using these non-standard features or when reproducing
+       them in your own SPF implementation, as they may cause unexpected
+       results.
+
+METHODS
+   "Mail::SPF::Query->new()"
+	   my $query = eval { new Mail::SPF::Query (
+	       ip	   => '127.0.0.1',
+	       sender	   => 'foo@example.com',
+	       helo	   => 'host.example.com',
+
+	       # Optional parameters:
+	       debug	   => 1, debuglog => sub { print STDERR "@_\n" },
+	       local	   => 'extra mechanisms',
+	       trusted	   => 1,		   # do trusted forwarder processing
+	       guess	   => 1,		   # do best guess if no SPF record
+	       default_explanation => 'Please see http://spf.my.isp/spferror.html for details',
+	       max_lookup_count    => 10,	   # total number of SPF includes/redirects
+	       sanitize    => 0,		   # do not sanitize all returned strings
+	       myhostname  => 'foo.example.com',   # prepended to header_comment
+	       override    => {   'example.net' => 'v=spf1 a mx -all',
+				'*.example.net' => 'v=spf1 a mx -all' },
+	       fallback    => {   'example.org' => 'v=spf1 a mx -all',
+				'*.example.org' => 'v=spf1 a mx -all' }
+	   ) };
+
+	   if ($@) { warn "bad input to Mail::SPF::Query: $@" }
+
+       Set "trusted=>1" to turned on "trusted-forwarder.org" accreditation
+       checking.  The mechanism "include:spf.trusted-forwarder.org" is used
+       just before a "-all" or "?all".	The precise circumstances are somewhat
+       more complicated, but it does get the case of "v=spf1 -all" right --
+       i.e.  "trusted-forwarder.org" is not checked.  This is a non-standard
+       feature.
+
+       Set "guess=>1" to turned on automatic best guess processing.  This will
+       use the best_guess SPF record when one cannot be found in the DNS.
+       Note that this can only return "pass" or "neutral".  The "trusted" and
+       "local" flags also operate when the best_guess is being used.  This is
+       a non-standard feature.
+
+       Set "local=>'include:local.domain'" to include some extra processing
+       just before a "-all" or "?all".	The local processing happens just
+       before the trusted forwarder processing.  This is a non-standard
+       feature.
+
+       Set "default_explanation" to a string to be used if the SPF record does
+       not provide a specific explanation. The default value will direct the
+       user to a page at www.openspf.org with the following message:
+
+	   Please see http://www.openspf.org/why.html?sender=%{S}&ip=%{I}&receiver=%{R}
+
+       Note that the string has macro substitution performed.
+
+       Set "sanitize" to 0 to get all the returned strings unsanitized.
+       Alternatively, pass a function reference and this function will be used
+       to sanitize the returned values.  The function must take a single
+       string argument and return a single string which contains the sanitized
+       result.
+
+       Set "debug=>1" to watch the queries happen.
+
+       Set "override" to define SPF records for domains that do publish but
+       which you want to override anyway.  Wildcards are supported.  This is a
+       non-standard feature.
+
+       Set "fallback" to define "pretend" SPF records for domains that don't
+       publish them yet.  Wildcards are supported.  This is a non-standard
+       feature.
+
+       Note: domain name arguments to override and fallback need to be in all
+       lowercase.
+
+   "$query->result()"
+	   my ($result, $smtp_comment, $header_comment, $spf_record, $detail) = $query->result();
+
+       $result will be one of "pass", "fail", "softfail", "neutral", "none",
+       "error" or "unknown [...]":
+
+       "pass"
+	   The client IP address is an authorized mailer for the sender.  The
+	   mail should be accepted subject to local policy regarding the
+	   sender.
+
+       "fail"
+	   The client IP address is not an authorized mailer, and the sender
+	   wants you to reject the transaction for fear of forgery.
+
+       "softfail"
+	   The client IP address is not an authorized mailer, but the sender
+	   prefers that you accept the transaction because it isn't absolutely
+	   sure all its users are mailing through approved servers.  The
+	   "softfail" status is often used during initial deployment of SPF
+	   records by a domain.
+
+       "neutral"
+	   The sender makes no assertion about the status of the client IP.
+
+       "none"
+	   There is no SPF record for this domain.
+
+       "error"
+	   The DNS lookup encountered a temporary error during processing.
+
+       "unknown [...]"
+	   The domain has a configuration error in the published data or
+	   defines a mechanism that this library does not understand.  If the
+	   data contained an unrecognized mechanism, it will be presented
+	   following "unknown".  You should test for unknown using a regexp
+	   "/^unknown/" rather than "eq "unknown"".
+
+       Results are cached internally for a default of 120 seconds.  You can
+       call "->result()" repeatedly; subsequent lookups won't hit your DNS.
+
+       "smtp_comment" should be displayed to the SMTP client.
+
+       "header_comment" goes into a "Received-SPF" header, like so:
+
+	   Received-SPF: $result ($header_comment)
+
+       "spf_record" shows the original SPF record fetched for the query.  If
+       there is no SPF record, it is blank.  Otherwise, it will start with
+       "v=spf1" and contain the SPF mechanisms and such that describe the
+       domain.
+
+       Note that the strings returned by this method (and most of the other
+       methods) are (at least partially) under the control of the sender's
+       domain.	This means that, if the sender is an attacker, the contents
+       can be assumed to be hostile.  The various methods that return these
+       strings make sure that (by default) the strings returned contain only
+       characters in the range 32 - 126.  This behavior can be changed by
+       setting "sanitize" to 0 to turn off sanitization entirely.  You can
+       also set "sanitize" to a function reference to perform custom
+       sanitization.  In particular, assume that "smtp_comment" might contain
+       a newline character.
+
+       "detail" is a hash of all the foregoing result elements, plus extra
+       data returned by the SPF result.
+
+       Why the weird duplication?  In the beginning, "result()" returned only
+       one value, the $result.	Then $smtp_comment and $header_comment came
+       along.  Then $spf_record.  Past a certain number of positional results,
+       it makes more sense to have a hash.  But we didn't want to break
+       backwards compatibility, so we just declared that the fifth result
+       would be a hash and future return value would go in there.
+
+       The keys of the hash are:
+
+	   result
+	   smtp_comment
+	   header_comment
+	   header_pairs
+	   spf_record
+	   modifiers
+
+   "$query->result2()"
+	   my ($result, $smtp_comment, $header_comment, $spf_record) = $query->result2('recipient@domain', 'recipient2@domain');
+
+       "result2()" does everything that "result()" does, but it first checks
+       to see if the sending system is a recognized MX secondary for the
+       recipient(s).  If so, then it returns "pass" and does not perform the
+       SPF query.  Note that the sending system may be a MX secondary for some
+       (but not all) of the recipients for a multi-recipient message, which is
+       why result2 takes an argument list.  See also "message_result2()".
+
+       This is a non-standard feature.	This feature is also deprecated,
+       because exemption of trusted relays, such as secondary MXes, should
+       really be performed by the software that uses this library before doing
+       an SPF check.
+
+       $result will be one of "pass", "fail", "neutral [...]", or "unknown".
+       See "result()" above for meanings.
+
+       If you have secondary MXes and if you are unable to explicitly white-
+       list them before SPF tests occur, you can use this method in place of
+       "result()", calling it as many times as there are recipients, or just
+       providing all the recipients at one time.
+
+       "smtp_comment" can be displayed to the SMTP client.
+
+       For example:
+
+	   my $query = new Mail::SPF::Query (ip => "127.0.0.1",
+					     sender=>'foo@example.com',
+					     helo=>"somehost.example.com");
+
+	   ...
+
+	   my ($result, $smtp_comment, $header_comment);
+
+	   ($result, $smtp_comment, $header_comment) = $query->result2('recip1@example.com');
+	   # return suitable error code based on $result eq 'fail' or not
+
+	   ($result, $smtp_comment, $header_comment) = $query->result2('recip2@example.org');
+	   # return suitable error code based on $result eq 'fail' or not
+
+	   ($result, $smtp_comment, $header_comment) = $query->message_result2();
+	   # return suitable error if $result eq 'fail'
+	   # prefix message with "Received-SPF: $result ($header_comment)"
+
+   "$query->message_result2()"
+	   my ($result, $smtp_comment, $header_comment, $spf_record) = $query->message_result2();
+
+       "message_result2()" returns an overall status for the message after
+       zero or more calls to "result2()".  It will always be the last status
+       returned by "result2()", or the status returned by "result()" if
+       "result2()" was never called.
+
+       $result will be one of "pass", "fail", "neutral [...]", or "error".
+       See "result()" above for meanings.
+
+   "$query->best_guess()"
+	   my ($result, $smtp_comment, $header_comment) = $query->best_guess();
+
+       When a domain does not publish an SPF record, this library can produce
+       an educated guess anyway.
+
+       It pretends the domain defined A, MX, and PTR mechanisms, plus a few
+       others.	The default set of directives is
+
+	   a/24 mx/24 ptr
+
+       That default set will return either "pass" or "neutral".
+
+       If you want to experiment with a different default, you can pass it as
+       an argument: "$query->best_guess("a mx ptr")"
+
+       This is a non-standard feature.	This method is also deprecated.  You
+       should set "guess=>1" on the "new()" method instead.
+
+   "$query->trusted_forwarder()"
+	   my ($result, $smtp_comment, $header_comment) = $query->best_guess();
+
+       It is possible that the message is coming through a known-good relay
+       like "acm.org" or "pobox.com".  During the transitional period, many
+       legitimate services may appear to forge a sender address: for example,
+       a news website may have a "send me this article in email" link.
+
+       The "trusted-forwarder.org" domain is a white-list of known-good hosts
+       that either forward mail or perform benign envelope sender forgery:
+
+	   include:spf.trusted-forwarder.org
+
+       This will return either "pass" or "neutral".
+
+       This is a non-standard feature.	This method is also deprecated.  You
+       should set "trusted=>1" on the "new()" method instead.
+
+   "$query->sanitize('string')"
+       This applies the sanitization rules for the particular query object.
+       These rules are controlled by the "sanitize" parameter to the c<new()>
+       method.
+
+   "strict_sanitize('string')"
+       This ensures that all the characters in the returned string are
+       printable.  All whitespace is converted into spaces, and all other non-
+       printable characters are converted into question marks.	This is
+       probably over-aggressive for many applications.
+
+       This function is used by default when the "sanitize" option is passed
+       to the "new()" method.
+
+       This function is not a class method.
+
+   "$query->debuglog()"
+       Subclasses may override this with their own debug logger.
+       "Log::Dispatch" is recommended.
+
+       Alternatively, pass the "new()" constructor a "debuglog => sub { ... }"
+       callback, and we'll pass debugging lines to that.
+
+WARNINGS
+       Mail::Query::SPF should only be used at the point where messages are
+       received from the Internet.  The underlying assumption is that the
+       sender of the e-mail is sending the message directly to you or one of
+       your secondary MXes.  If your MTA does not have an exhaustive list of
+       secondary MXes, then the "result2()" and "message_result2()" methods
+       can be used.  These methods take care to permit mail from secondary
+       MXes.
+
+AUTHORS
+       Meng Weng Wong <mengwong+spf@pobox.com>, Philip Gladstone, Julian
+       Mehnle <julian@mehnle.net>
+
+SEE ALSO
+       About SPF: <http://www.openspf.org>
+
+       Mail::SPF::Query: http://search.cpan.org/dist/Mail-SPF-Query
+       <http://search.cpan.org/dist/Mail-SPF-Query>
+
+       The latest release of the SPF specification:
+       http://www.openspf.org/spf-classic-current.txt
+       <http://www.openspf.org/spf-classic-current.txt>
+
+
+
+perl v5.12.4			  2006-02-26		   Mail::SPF::Query(3)

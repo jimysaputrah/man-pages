@@ -1,0 +1,154 @@
+Class::MOP::Instance(3User Contributed Perl DocumentatiClass::MOP::Instance(3)
+
+
+
+NAME
+       Class::MOP::Instance - Instance Meta Object
+
+VERSION
+       version 2.0205
+
+DESCRIPTION
+       The Instance Protocol controls the creation of object instances, and
+       the storage of attribute values in those instances.
+
+       Using this API directly in your own code violates encapsulation, and we
+       recommend that you use the appropriate APIs in Class::MOP::Class and
+       Class::MOP::Attribute instead. Those APIs in turn call the methods in
+       this class as appropriate.
+
+       This class also participates in generating inlined code by providing
+       snippets of code to access an object instance.
+
+METHODS
+   Object construction
+       Class::MOP::Instance->new(%options)
+	   This method creates a new meta-instance object.
+
+	   It accepts the following keys in %options:
+
+	   o	   associated_metaclass
+
+		   The Class::MOP::Class object for which instances will be
+		   created.
+
+	   o	   attributes
+
+		   An array reference of Class::MOP::Attribute objects. These
+		   are the attributes which can be stored in each instance.
+
+   Creating and altering instances
+       $metainstance->create_instance
+	   This method returns a reference blessed into the associated
+	   metaclass's class.
+
+	   The default is to use a hash reference. Subclasses can override
+	   this.
+
+       $metainstance->clone_instance($instance)
+	   Given an instance, this method creates a new object by making
+	   shallow clone of the original.
+
+   Introspection
+       $metainstance->associated_metaclass
+	   This returns the Class::MOP::Class object associated with the meta-
+	   instance object.
+
+       $metainstance->get_all_slots
+	   This returns a list of slot names stored in object instances. In
+	   almost all cases, slot names correspond directly attribute names.
+
+       $metainstance->is_valid_slot($slot_name)
+	   This will return true if $slot_name is a valid slot name.
+
+       $metainstance->get_all_attributes
+	   This returns a list of attributes corresponding to the attributes
+	   passed to the constructor.
+
+   Operations on Instance Structures
+       It's important to understand that the meta-instance object is a
+       different entity from the actual instances it creates. For this reason,
+       any operations on the $instance_structure always require that the
+       object instance be passed to the method.
+
+       $metainstance->get_slot_value($instance_structure, $slot_name)
+       $metainstance->set_slot_value($instance_structure, $slot_name, $value)
+       $metainstance->initialize_slot($instance_structure, $slot_name)
+       $metainstance->deinitialize_slot($instance_structure, $slot_name)
+       $metainstance->initialize_all_slots($instance_structure)
+       $metainstance->deinitialize_all_slots($instance_structure)
+       $metainstance->is_slot_initialized($instance_structure, $slot_name)
+       $metainstance->weaken_slot_value($instance_structure, $slot_name)
+       $metainstance->slot_value_is_weak($instance_structure, $slot_name)
+       $metainstance->strengthen_slot_value($instance_structure, $slot_name)
+       $metainstance->rebless_instance_structure($instance_structure,
+       $new_metaclass)
+	   The exact details of what each method does should be fairly obvious
+	   from the method name.
+
+   Inlinable Instance Operations
+       $metainstance->is_inlinable
+	   This is a boolean that indicates whether or not slot access
+	   operations can be inlined. By default it is true, but subclasses
+	   can override this.
+
+       $metainstance->inline_create_instance($class_variable)
+	   This method expects a string that, when inlined, will become a
+	   class name. This would literally be something like '$class', not an
+	   actual class name.
+
+	   It returns a snippet of code that creates a new object for the
+	   class. This is something like " bless {}, $class_name ".
+
+       $metainstance->inline_get_is_lvalue
+	   Returns whether or not "inline_get_slot_value" is a valid lvalue.
+	   This can be used to do extra optimizations when generating inlined
+	   methods.
+
+       $metainstance->inline_slot_access($instance_variable, $slot_name)
+       $metainstance->inline_get_slot_value($instance_variable, $slot_name)
+       $metainstance->inline_set_slot_value($instance_variable, $slot_name,
+       $value)
+       $metainstance->inline_initialize_slot($instance_variable, $slot_name)
+       $metainstance->inline_deinitialize_slot($instance_variable, $slot_name)
+       $metainstance->inline_is_slot_initialized($instance_variable,
+       $slot_name)
+       $metainstance->inline_weaken_slot_value($instance_variable, $slot_name)
+       $metainstance->inline_strengthen_slot_value($instance_variable,
+       $slot_name)
+	   These methods all expect two arguments. The first is the name of a
+	   variable, than when inlined, will represent the object instance.
+	   Typically this will be a literal string like '$_[0]'.
+
+	   The second argument is a slot name.
+
+	   The method returns a snippet of code that, when inlined, performs
+	   some operation on the instance.
+
+       $metainstance->inline_rebless_instance_structure($instance_variable,
+       $class_variable)
+	   This takes the name of a variable that will, when inlined,
+	   represent the object instance, and the name of a variable that will
+	   represent the class to rebless into, and returns code to rebless an
+	   instance into a class.
+
+   Introspection
+       Class::MOP::Instance->meta
+	   This will return a Class::MOP::Class instance for this class.
+
+	   It should also be noted that Class::MOP will actually bootstrap
+	   this module by installing a number of attribute meta-objects into
+	   its metaclass.
+
+AUTHOR
+       Stevan Little <stevan@iinteractive.com>
+
+COPYRIGHT AND LICENSE
+       This software is copyright (c) 2011 by Infinity Interactive, Inc..
+
+       This is free software; you can redistribute it and/or modify it under
+       the same terms as the Perl 5 programming language system itself.
+
+
+
+perl v5.12.4			  2011-09-06	       Class::MOP::Instance(3)

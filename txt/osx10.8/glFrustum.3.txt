@@ -1,0 +1,104 @@
+GLFRUSTUM(3G)							 GLFRUSTUM(3G)
+
+
+
+NAME
+       glFrustum - multiply the current matrix by a perspective matrix
+
+
+C SPECIFICATION
+       void glFrustum( GLdouble left,
+		       GLdouble right,
+		       GLdouble bottom,
+		       GLdouble top,
+		       GLdouble zNear,
+		       GLdouble zFar )
+
+
+PARAMETERS
+       left, right Specify  the  coordinates  for  the left and right vertical
+		   clipping planes.
+
+       bottom, top Specify the coordinates for the bottom and  top  horizontal
+		   clipping planes.
+
+       zNear, zFar Specify  the  distances  to the near and far depth clipping
+		   planes.  Both distances must be positive.
+
+DESCRIPTION
+       glFrustum describes a perspective matrix that  produces	a  perspective
+       projection.   The  current  matrix  (see glMatrixMode) is multiplied by
+       this  matrix  and  the  result  replaces  the  current  matrix,	as  if
+       glMultMatrix were called with the following matrix as its argument:
+
+
+
+
+
+
+
+	  2 zNear
+	------------	   0		  A		 0
+	right - left
+
+			2 zNear
+	    0	      ------------	  B		 0
+		      top - bottom
+
+
+
+	    0		   0		  C		 D
+
+
+	    0		   0		  -1		 0
+
+			 A = (right + left) / (right - left)
+
+			 B = (top + bottom) / (top - bottom)
+
+			C = - (zFar + zNear) / (zFar - zNear)
+
+			D = - (2 zFar zNear) / (zFar - zNear)
+
+       Typically, the matrix mode is GL_PROJECTION, and (left, bottom, -zNear)
+       and (right, top,  -zNear) specify the points on the near clipping plane
+       that  are  mapped to the lower left and upper right corners of the win-
+       dow, assuming that the eye is located at (0, 0,	0).   -zFar  specifies
+       the  location  of  the far clipping plane.  Both zNear and zFar must be
+       positive.
+
+       Use glPushMatrix and glPopMatrix to save and restore the current matrix
+       stack.
+
+NOTES
+       Depth  buffer  precision  is affected by the values specified for zNear
+       and zFar.  The greater the ratio of zFar to zNear is, the  less	effec-
+       tive  the  depth buffer will be at distinguishing between surfaces that
+       are near each other.  If
+
+				  r = zFar / zNear
+
+       roughly log2(r) bits of depth buffer precision  are  lost.   Because  r
+       approaches  infinity  as zNear approaches 0, zNear must never be set to
+       0.
+
+ERRORS
+       GL_INVALID_VALUE is generated if zNear or zFar is not positive,	or  if
+       left = right, or bottom = top.
+
+       GL_INVALID_OPERATION  is generated if glFrustum is executed between the
+       execution of glBegin and the corresponding execution of glEnd.
+
+ASSOCIATED GETS
+       glGet with argument GL_MATRIX_MODE
+       glGet with argument GL_MODELVIEW_MATRIX
+       glGet with argument GL_PROJECTION_MATRIX
+       glGet with argument GL_TEXTURE_MATRIX
+       glGet with argument GL_COLOR_MATRIX
+
+SEE ALSO
+       glOrtho, glMatrixMode, glMultMatrix, glPushMatrix, glViewport
+
+
+
+								 GLFRUSTUM(3G)

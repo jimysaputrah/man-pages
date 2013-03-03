@@ -1,0 +1,77 @@
+GLMULTIDRAWELEMENTS(3G) 	  OpenGL 3.3	       GLMULTIDRAWELEMENTS(3G)
+
+
+
+NAME
+       glMultiDrawElements - render multiple sets of primitives by specifying
+       indices of array data elements
+
+C SPECIFICATION
+       void glMultiDrawElements(GLenum mode, const GLsizei * count,
+				GLenum type, const GLvoid ** indices,
+				GLsizei primcount);
+
+PARAMETERS
+       mode
+	   Specifies what kind of primitives to render. Symbolic constants
+	   GL_POINTS, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINES,
+	   GL_LINE_STRIP_ADJACENCY, GL_LINES_ADJACENCY, GL_TRIANGLE_STRIP,
+	   GL_TRIANGLE_FAN, GL_TRIANGLES, GL_TRIANGLE_STRIP_ADJACENCY and
+	   GL_TRIANGLES_ADJACENCY are accepted.
+
+       count
+	   Points to an array of the elements counts.
+
+       type
+	   Specifies the type of the values in indices. Must be one of
+	   GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, or GL_UNSIGNED_INT.
+
+       indices
+	   Specifies a pointer to the location where the indices are stored.
+
+       primcount
+	   Specifies the size of the count array.
+
+DESCRIPTION
+       glMultiDrawElements specifies multiple sets of geometric primitives
+       with very few subroutine calls. Instead of calling a GL function to
+       pass each individual vertex, normal, texture coordinate, edge flag, or
+       color, you can prespecify separate arrays of vertices, normals, and so
+       on, and use them to construct a sequence of primitives with a single
+       call to glMultiDrawElements.
+
+
+       glMultiDrawElements is identical in operation to glDrawElements()
+       except that primcount separate lists of elements are specified.
+
+       Vertex attributes that are modified by glMultiDrawElements have an
+       unspecified value after glMultiDrawElements returns. Attributes that
+       aren't modified maintain their previous values.
+
+NOTES
+       GL_LINE_STRIP_ADJACENCY, GL_LINES_ADJACENCY,
+       GL_TRIANGLE_STRIP_ADJACENCY and GL_TRIANGLES_ADJACENCY are available
+       only if the GL version is 3.2 or greater.
+
+ERRORS
+       GL_INVALID_ENUM is generated if mode is not an accepted value.
+
+
+       GL_INVALID_VALUE is generated if primcount is negative.
+
+
+       GL_INVALID_OPERATION is generated if a non-zero buffer object name is
+       bound to an enabled array or the element array and the buffer object's
+       data store is currently mapped.
+
+SEE ALSO
+       glDrawArrays(), glDrawRangeElements()
+
+COPYRIGHT
+       Copyright (C) 1991-2006 Silicon Graphics, Inc. This document is
+       licensed under the SGI Free Software B License. For details, see
+       http://oss.sgi.com/projects/FreeB/.
+
+
+
+OpenGL 3.3			  03/08/2011	       GLMULTIDRAWELEMENTS(3G)

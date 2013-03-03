@@ -1,0 +1,75 @@
+Moose::Object(3)      User Contributed Perl Documentation     Moose::Object(3)
+
+
+
+NAME
+       Moose::Object - The base object for Moose
+
+VERSION
+       version 2.0205
+
+DESCRIPTION
+       This class is the default base class for all Moose-using classes. When
+       you "use Moose" in this class, your class will inherit from this class.
+
+       It provides a default constructor and destructor, which run all of the
+       "BUILD" and "DEMOLISH" methods in the inheritance hierarchy,
+       respectively.
+
+       You don't actually need to inherit from this in order to use Moose, but
+       it makes it easier to take advantage of all of Moose's features.
+
+METHODS
+       Moose::Object->new(%params|$params)
+	   This method calls "$class->BUILDARGS(@_)", and then creates a new
+	   instance of the appropriate class. Once the instance is created, it
+	   calls "$instance->BUILD($params)" for each "BUILD" method in the
+	   inheritance hierarchy.
+
+       Moose::Object->BUILDARGS(%params|$params)
+	   The default implementation of this method accepts a hash or hash
+	   reference of named parameters. If it receives a single argument
+	   that isn't a hash reference it throws an error.
+
+	   You can override this method in your class to handle other types of
+	   options passed to the constructor.
+
+	   This method should always return a hash reference of named options.
+
+       $object->does($role_name)
+	   This returns true if the object does the given role.
+
+       $object->DOES($class_or_role_name)
+	   This is a a Moose role-aware implementation of "DOES" in UNIVERSAL.
+
+	   This is effectively the same as writing:
+
+	     $object->does($name) || $object->isa($name)
+
+	   This method will work with Perl 5.8, which did not implement
+	   "UNIVERSAL::DOES".
+
+       $object->dump($maxdepth)
+	   This is a handy utility for "Data::Dumper"ing an object. By
+	   default, the maximum depth is 1, to avoid making a mess.
+
+       $object->DESTROY
+	   A default destructor is provided, which calls
+	   "$instance->DEMOLISH($in_global_destruction)" for each "DEMOLISH"
+	   method in the inheritance hierarchy.
+
+BUGS
+       See "BUGS" in Moose for details on reporting bugs.
+
+AUTHOR
+       Stevan Little <stevan@iinteractive.com>
+
+COPYRIGHT AND LICENSE
+       This software is copyright (c) 2011 by Infinity Interactive, Inc..
+
+       This is free software; you can redistribute it and/or modify it under
+       the same terms as the Perl 5 programming language system itself.
+
+
+
+perl v5.12.4			  2011-09-06		      Moose::Object(3)

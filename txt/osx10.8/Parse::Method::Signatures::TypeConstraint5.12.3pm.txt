@@ -1,0 +1,61 @@
+Parse::Method::SignatuUser:ContribParse::Method::Signatures::TypeConstraint(3)
+
+
+
+NAME
+       Parse::Method::Signatures::TypeConstraint - turn parsed TC data into
+       Moose TC object
+
+DESCRIPTION
+       Class used to turn PPI elements into Moose::Meta::TypeConstraint
+       objects.
+
+ATTRIBUTES
+   tc
+	   Lazy Build.
+
+       The Moose::Meta::TypeConstraint object for this type constraint, built
+       when requested. "tc_callback" will be called for each individual
+       component type in turn.
+
+   tc_callback
+	   Type: CodeRef
+
+	   Default: "find_registered_constraint"
+
+       Callback used to turn type names into type objects. See
+       "type_constraint_callback" in Parse::Method::Signatures for more
+       details and an example.
+
+   from_namespace
+	   Type: ClassName
+
+       If provided, then the default "tc_callback" will search for
+       MooseX::Types in this package.
+
+METHODS
+   find_registered_constraint
+       Will search for an imported MooseX::Types in "from_namespace" (if
+       provided). Failing that it will ask the
+       Moose::Meta::TypeConstraint::Registry for a type with the given name.
+
+       If all else fails, it will simple return the type as a string, so that
+       Moose's auto-vivification of classnames to type will work.
+
+   to_string
+       String representation of the type constraint, approximately as parsed.
+
+SEE ALSO
+       Parse::Method::Signatures, MooseX::Types, MooseX::Types::Util.
+
+AUTHORS
+       Florian Ragwitz <rafl@debian.org>.
+
+       Ash Berlin <ash@cpan.org>.
+
+LICENSE
+       Licensed under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  Parse::Method::Signatures::TypeConstraint(3)

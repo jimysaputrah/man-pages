@@ -1,0 +1,115 @@
+PPI::Normal(3)	      User Contributed Perl Documentation	PPI::Normal(3)
+
+
+
+NAME
+       PPI::Normal - Normalize Perl Documents
+
+   DESCRIPTION
+       Perl Documents, as created by PPI, are typically filled with all sorts
+       of mess such as whitespace and comments and other things that don't
+       effect the actual meaning of the code.
+
+       In addition, because there is more than one way to do most things, and
+       the syntax of Perl itself is quite flexible, there are many ways in
+       which the "same" code can look quite different.
+
+       PPI::Normal attempts to resolve this by providing a variety of
+       mechanisms and algorithms to "normalize" Perl Documents, and determine
+       a sort of base form for them (although this base form will be a memory
+       structure, and not something that can be turned back into Perl source
+       code).
+
+       The process itself is quite complex, and so for convenience and
+       extensibility it has been separated into a number of layers. At a later
+       point, it will be possible to write Plugin classes to insert additional
+       normalization steps into the various different layers.
+
+       In addition, you can choose to do the normalization only as deep as a
+       particular layer, depending on aggressively you want the normalization
+       process to be.
+
+METHODS
+   register $function => $layer, ...
+       The "register" method is used by normalization method providers to tell
+       the normalization engines which functions need to be run, and in which
+       layer they apply.
+
+       Provide a set of key/value pairs, where the key is the full name of the
+       function (in string form), and the value is the layer (see description
+       of the layers above) in which it should be run.
+
+       Returns true if all functions are registered, or "undef" on error.
+
+   new
+	 my $level_1 = PPI::Normal->new;
+	 my $level_2 = PPI::Normal->new(2);
+
+       Creates a new normalization object, to which Document objects can be
+       passed to be normalized.
+
+       Of course, what you probably REALLY want is just to call
+       PPI::Document's "normalize" method.
+
+       Takes an optional single parameter of the normalisation layer to use,
+       which at this time can be either "1" or "2".
+
+       Returns a new "PPI::Normal" object, or "undef" on error.
+
+layer
+       The "layer" accessor returns the normalisation layer of the object.
+
+   process
+       The "process" method takes anything that can be converted to a
+       PPI::Document (object, SCALAR ref, filename), loads it and applies the
+       normalisation process to the document.
+
+       Returns a PPI::Document::Normalized object, or "undef" on error.
+
+NOTES
+       The following normalisation layers are implemented. When writing
+       plugins, you should register each transformation function with the
+       appropriate layer.
+
+   Layer 1 - Insignificant Data Removal
+       The basic step common to all normalization, layer 1 scans through the
+       Document and removes all whitespace, comments, POD, and anything else
+       that returns false for its "significant" method.
+
+       It also checks each Element and removes known-useless sub-element
+       metadata such as the Element's physical position in the file.
+
+   Layer 2 - Significant Element Removal
+       After the removal of the insignificant data, Layer 2 removed larger,
+       more complex, and superficially "significant" elements, that can be
+       removed for the purposes of normalisation.
+
+       Examples from this layer include pragmas, now-useless statement
+       separators (since the PDOM tree is holding statement elements), and
+       several other minor bits and pieces.
+
+   Layer 3 - TO BE COMPLETED
+       This version of the forward-port of the Perl::Compare functionality to
+       the 0.900+ API of PPI only implements Layer 1 and 2 at this time.
+
+TO DO
+       - Write the other 4-5 layers :)
+
+SUPPORT
+       See the support section in the main module.
+
+AUTHOR
+       Adam Kennedy <adamk@cpan.org>
+
+COPYRIGHT
+       Copyright 2005 - 2011 Adam Kennedy.
+
+       This program is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+       The full text of the license can be found in the LICENSE file included
+       with this module.
+
+
+
+perl v5.12.4			  2011-02-25			PPI::Normal(3)

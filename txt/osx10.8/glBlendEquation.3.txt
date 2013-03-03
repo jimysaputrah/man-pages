@@ -1,0 +1,113 @@
+GLBLENDEQUATION(3G)					   GLBLENDEQUATION(3G)
+
+
+
+NAME
+       glBlendEquation - set the blend equation
+
+
+C SPECIFICATION
+       void glBlendEquation( GLenum mode )
+
+
+PARAMETERS
+       mode  specifies	how  source  and  destination colors are combined.  It
+	     must be GL_FUNC_ADD, GL_FUNC_SUBTRACT,  GL_FUNC_REVERSE_SUBTRACT,
+	     GL_MIN, GL_MAX.
+
+
+DESCRIPTION
+       The blend equation determines how a new pixel (the ``source'' color) is
+       combined with a pixel already in the framebuffer  (the  ``destination''
+       color).
+
+       GL_MIN sets  the  blend	equation  so that each component of the result
+	      color is the minimum of  the  corresponding  components  of  the
+	      source and destination colors.
+
+       GL_MAX sets  the  blend	equation  so that each component of the result
+	      color is the maximum of  the  corresponding  components  of  the
+	      source and destination colors.
+
+       The remaining blend equations use the source and destination blend fac-
+       tors specified by glBlendFunc.  See glBlendFunc for  a  description  of
+       the various blend factors.
+
+       In  the	equations that follow, source and destination color components
+       are referred to as (Rs, Gs, Bs, As ) and (Rd, Gd,  Bd,  Ad  ),  respec-
+       tively.	 The  result  color  is referred to as (Rr, Gr, Br, Ar ).  The
+       source and destination blend factors are denoted (sR, sG, sB, sA )  and
+       (dR,  dG, dB, dA ), respectively.  For these equations all color compo-
+       nents are understood to have values in the range [0, 1].
+
+       GL_FUNC_ADD
+	      sets the blend equation so that the source and destination  data
+	      are  added.  Each component of the source color is multiplied by
+	      the corresponding source factor, then each component of the des-
+	      tination	color  is  multiplied by the corresponding destination
+	      factor.  The result is the componentwise sum of  the  two  prod-
+	      ucts, clamped to the range [0, 1].
+
+
+		     Rr = min (1, Rs sR + Rd dR )
+		     Gr = min (1, Gs sG + Gd dG )
+		     Br = min (1, Bs sB + Bd dB )
+		     Ar = min (1, As sA + Ad dA )
+
+       GL_FUNC_SUBTRACT
+	      Is like GL_FUNC_ADD except the product of the destination factor
+	      and the destination color is componentwise subtracted  from  the
+	      product  of  the source factor and the source color.  The result
+	      is clamped to the range [0, 1].
+
+		     Rr = max (0 , Rs sR - Rd dR )
+		     Gr = max (0 , Gs sG - Gd dG )
+		     Br = max (0 , Bs sB - Bd dB )
+		     Ar = max (0 , As sA - Ad dA )
+
+       GL_FUNC_REVERSE_SUBTRACT
+	      Is like GL_FUNC_ADD except the product of the source factor  and
+	      the source color is componentwise subtracted from the product of
+	      the destination factor and the destination color.  The result is
+	      clamped to the range [0, 1].
+
+		     Rr = max (0 , Rd dR - Rs sR )
+		     Gr = max (0 , Gd dG - Gs sG )
+		     Br = max (0 , Bd dB - Bs sB )
+		     Ar = max (0 , Ad dA - As sA )
+
+       The  GL_MIN  and GL_MAX equations are useful for applications that ana-
+       lyze
+       image data (image thresholding against a constant color, for  example).
+       The  GL_FUNC_ADD  equation is useful for antialiasing and transparency,
+       among other things.
+
+       Initially, the blend equation is set to GL_FUNC_ADD.
+
+
+NOTES
+       glBlendEquation is part of the GL_ARB_imaging  subset.  glBlendEquation
+       is  present  only  if  GL_ARB_imaging  is  returned when glGetString is
+       called with GL_EXTENSIONS as its argument.
+
+       The GL_MIN, and GL_MAX equations do not use the source  or  destination
+       factors, only the source and destination colors.
+
+
+ERRORS
+       GL_INVALID_ENUM	is  generated  if  mode  is  not  one  of GL_FUNC_ADD,
+       GL_FUNC_SUBTRACT, GL_FUNC_REVERSE_SUBTRACT, GL_MAX, or GL_MIN.
+
+       GL_INVALID_OPERATION  is  generated  if	glBlendEquation  is   executed
+       between	the  execution	of  glBegin and the corresponding execution of
+       glEnd.
+
+ASSOCIATED GETS
+       glGet with an argument of GL_BLEND_EQUATION
+
+SEE ALSO
+       glGetString, glBlendColor, glBlendFunc
+
+
+
+							   GLBLENDEQUATION(3G)

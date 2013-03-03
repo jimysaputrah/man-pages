@@ -1,0 +1,73 @@
+GLDRAWARRAYS(3G)		  OpenGL 3.3		      GLDRAWARRAYS(3G)
+
+
+
+NAME
+       glDrawArrays - render primitives from array data
+
+C SPECIFICATION
+       void glDrawArrays(GLenum mode, GLint first, GLsizei count);
+
+PARAMETERS
+       mode
+	   Specifies what kind of primitives to render. Symbolic constants
+	   GL_POINTS, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINES,
+	   GL_LINE_STRIP_ADJACENCY, GL_LINES_ADJACENCY, GL_TRIANGLE_STRIP,
+	   GL_TRIANGLE_FAN, GL_TRIANGLES, GL_TRIANGLE_STRIP_ADJACENCY and
+	   GL_TRIANGLES_ADJACENCY are accepted.
+
+       first
+	   Specifies the starting index in the enabled arrays.
+
+       count
+	   Specifies the number of indices to be rendered.
+
+DESCRIPTION
+       glDrawArrays specifies multiple geometric primitives with very few
+       subroutine calls. Instead of calling a GL procedure to pass each
+       individual vertex, normal, texture coordinate, edge flag, or color, you
+       can prespecify separate arrays of vertices, normals, and colors and use
+       them to construct a sequence of primitives with a single call to
+       glDrawArrays.
+
+       When glDrawArrays is called, it uses count sequential elements from
+       each enabled array to construct a sequence of geometric primitives,
+       beginning with element first.  mode specifies what kind of primitives
+       are constructed and how the array elements construct those primitives.
+
+       Vertex attributes that are modified by glDrawArrays have an unspecified
+       value after glDrawArrays returns. Attributes that aren't modified
+       remain well defined.
+
+NOTES
+       GL_LINE_STRIP_ADJACENCY, GL_LINES_ADJACENCY,
+       GL_TRIANGLE_STRIP_ADJACENCY and GL_TRIANGLES_ADJACENCY are available
+       only if the GL version is 3.2 or greater.
+
+ERRORS
+       GL_INVALID_ENUM is generated if mode is not an accepted value.
+
+
+       GL_INVALID_VALUE is generated if count is negative.
+
+
+       GL_INVALID_OPERATION is generated if a non-zero buffer object name is
+       bound to an enabled array and the buffer object's data store is
+       currently mapped.
+
+
+       GL_INVALID_OPERATION is generated if a geometry shader is active and
+       mode is incompatible with the input primitive type of the geometry
+       shader in the currently installed program object.
+
+SEE ALSO
+       glDrawArraysInstanced(), glDrawElements(), glDrawRangeElements(),
+
+COPYRIGHT
+       Copyright (C) 1991-2006 Silicon Graphics, Inc. This document is
+       licensed under the SGI Free Software B License. For details, see
+       http://oss.sgi.com/projects/FreeB/.
+
+
+
+OpenGL 3.3			  03/08/2011		      GLDRAWARRAYS(3G)

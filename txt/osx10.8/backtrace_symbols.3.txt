@@ -1,0 +1,58 @@
+
+backtrace(3)		 BSD Library Functions Manual		  backtrace(3)
+
+NAME
+     backtrace, backtrace_symbols, backtrace_symbols_fd -- call stack back-
+     trace and display functions
+
+SYNOPSIS
+     #include <execinfo.h>
+
+     int
+     backtrace(void** array, int size);
+
+     char**
+     backtrace_symbols(void* const* array, int size);
+
+     void
+     backtrace_symbols_fd(void* const* array, int size, int fd);
+
+DESCRIPTION
+     These routines provide a mechanism to examine the current thread's call
+     stack.
+
+     backtrace() writes the function return addresses of the current call
+     stack to the array of pointers referenced by array.  At most, size point-
+     ers are written.  The number of pointers actually written to array is
+     returned.
+
+     backtrace_symbols() attempts to transform a call stack obtained by
+     backtrace() into an array of human-readable strings using dladdr().  The
+     array of strings returned has size elements.  It is allocated using
+     malloc() and should be released using free().  There is no need to free
+     the individual strings in the array.
+
+     backtrace_symbols_fd() performs the same operation as
+     backtrace_symbols(), but the resulting strings are immediately written to
+     the file descriptor fd, and are not returned.
+
+EXAMPLE
+	 #include <execinfo.h>
+	 #include <stdio.h>
+	 ...
+	 void* callstack[128];
+	 int i, frames = backtrace(callstack, 128);
+	 char** strs = backtrace_symbols(callstack, frames);
+	 for (i = 0; i < frames; ++i) {
+	     printf("%s\n", strs[i]);
+	 }
+	 free(strs);
+	 ...
+
+HISTORY
+     These functions first appeared in Mac OS X 10.5.
+
+SEE ALSO
+     dladdr(3), malloc(3)
+
+Mac OS X		       February 15, 2007		      Mac OS X

@@ -1,0 +1,80 @@
+GLLOGICOP(3G)							 GLLOGICOP(3G)
+
+
+
+NAME
+       glLogicOp - specify a logical pixel operation for color index rendering
+
+
+C SPECIFICATION
+       void glLogicOp( GLenum opcode )
+
+
+PARAMETERS
+       opcode  Specifies a symbolic constant that selects a logical operation.
+	       The  following symbols are accepted: GL_CLEAR, GL_SET, GL_COPY,
+	       GL_COPY_INVERTED, GL_NOOP, GL_INVERT, GL_AND,  GL_NAND,	GL_OR,
+	       GL_NOR,	 GL_XOR,  GL_EQUIV,  GL_AND_REVERSE,  GL_AND_INVERTED,
+	       GL_OR_REVERSE,  and  GL_OR_INVERTED.  The  initial   value   is
+	       GL_COPY.
+
+DESCRIPTION
+       glLogicOp  specifies a logical operation that, when enabled, is applied
+       between the incoming color index or RGBA color and the color  index  or
+       RGBA  color  at	the  corresponding  location  in the frame buffer.  To
+       enable or disable the logical operation, call  glEnable	and  glDisable
+       using   the  symbolic  constant	GL_COLOR_LOGIC_OP  for	RGBA  mode  or
+       GL_INDEX_LOGIC_OP for color index mode. The initial value  is  disabled
+       for both operations.
+
+
+	Opcode		   Resulting Operation
+	GL_CLEAR	   0
+	GL_SET		   1
+	GL_COPY 	   s
+	GL_COPY_INVERTED   ~s
+	GL_NOOP 	   d
+	GL_INVERT	   ~d
+	GL_AND		   s & d
+	GL_NAND 	   ~(s & d)
+	GL_OR		   s | d
+	GL_NOR		   ~(s | d)
+	GL_XOR		   s ^ d
+	GL_EQUIV	   ~(s ^ d)
+	GL_AND_REVERSE	   s & ~d
+	GL_AND_INVERTED    ~s & d
+	GL_OR_REVERSE	   s | ~d
+	GL_OR_INVERTED	   ~s | d
+
+       opcode  is  a  symbolic	constant  chosen  from the list above.	In the
+       explanation of the logical operations, s represents the incoming  color
+       index  and d represents the index in the frame buffer.  Standard C-lan-
+       guage operators are used.  As these bitwise operators suggest, the log-
+       ical  operation is applied independently to each bit pair of the source
+       and destination indices or colors.
+
+NOTES
+       Color index logical operations are always supported. RGBA logical oper-
+       ations are supported only if the GL version is 1.1 or greater.
+
+       When  more  than one RGBA color or index buffer is enabled for drawing,
+       logical operations are performed separately for	each  enabled  buffer,
+       using  for  the	destination  value  the  contents  of that buffer (see
+       glDrawBuffer).
+
+ERRORS
+       GL_INVALID_ENUM is generated if opcode is not an accepted value.
+
+       GL_INVALID_OPERATION is generated if glLogicOp is executed between  the
+       execution of glBegin and the corresponding execution of glEnd.
+
+ASSOCIATED GETS
+       glGet with argument GL_LOGIC_OP_MODE.
+       glIsEnabled with argument GL_COLOR_LOGIC_OP or GL_INDEX_LOGIC_OP.
+
+SEE ALSO
+       glAlphaFunc, glBlendFunc, glDrawBuffer, glEnable, glStencilOp
+
+
+
+								 GLLOGICOP(3G)

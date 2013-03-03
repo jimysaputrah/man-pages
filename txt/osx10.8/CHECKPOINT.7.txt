@@ -1,0 +1,36 @@
+CHECKPOINT(7)		PostgreSQL 9.1.4 Documentation		 CHECKPOINT(7)
+
+
+
+NAME
+       CHECKPOINT - force a transaction log checkpoint
+
+SYNOPSIS
+       CHECKPOINT
+
+DESCRIPTION
+       Write-Ahead Logging (WAL) puts a checkpoint in the transaction log
+       every so often. (To adjust the automatic checkpoint interval, see the
+       run-time configuration options checkpoint_segments and
+       checkpoint_timeout.) The CHECKPOINT command forces an immediate
+       checkpoint when the command is issued, without waiting for a scheduled
+       checkpoint.
+
+       A checkpoint is a point in the transaction log sequence at which all
+       data files have been updated to reflect the information in the log. All
+       data files will be flushed to disk. Refer to Chapter 29, Reliability
+       and the Write-Ahead Log, in the documentation for more information
+       about the WAL system.
+
+       If executed during recovery, the CHECKPOINT command will force a
+       restartpoint rather than writing a new checkpoint.
+
+       Only superusers can call CHECKPOINT. The command is not intended for
+       use during normal operation.
+
+COMPATIBILITY
+       The CHECKPOINT command is a PostgreSQL language extension.
+
+
+
+PostgreSQL 9.1.4		  2012-05-31			 CHECKPOINT(7)

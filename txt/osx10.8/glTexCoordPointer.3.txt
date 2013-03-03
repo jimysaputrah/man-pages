@@ -1,0 +1,100 @@
+GLTEXCOORDPOINTER(3G)					 GLTEXCOORDPOINTER(3G)
+
+
+
+NAME
+       glTexCoordPointer - define an array of texture coordinates
+
+
+C SPECIFICATION
+       void glTexCoordPointer( GLint size,
+			       GLenum type,
+			       GLsizei stride,
+			       const GLvoid *pointer )
+
+
+PARAMETERS
+       size	Specifies the number of coordinates per array element. Must be
+		1, 2, 3 or 4. The initial value is 4.
+
+       type	Specifies the data type of each texture coordinate.   Symbolic
+		constants   GL_SHORT,	GL_INT,  GL_FLOAT,  or	GL_DOUBLE  are
+		accepted. The initial value is GL_FLOAT.
+
+       stride	Specifies the byte offset between consecutive array  elements.
+		If  stride  is	0,  the  array	elements  are understood to be
+		tightly packed. The initial value is 0.
+
+       pointer	Specifies a pointer to the first coordinate of the first  ele-
+		ment in the array.  The initial value is 0.
+
+DESCRIPTION
+       glTexCoordPointer  specifies the location and data  of an array of tex-
+       ture coordinates to use when rendering.	size specifies the  number  of
+       coordinates per element, and must be 1, 2, 3, or 4.  type specifies the
+       data type of each texture coordinate  and  stride  specifies  the  byte
+       stride  from  one  array  element  to  the  next  allowing vertices and
+       attributes to be packed into a  single  array  or  stored  in  separate
+       arrays.	 (Single-array storage may be more efficient on some implemen-
+       tations; see
+       glInterleavedArrays.)  When a texture coordinate  array	is  specified,
+       size, type, stride, and pointer are saved client-side state.
+
+       To   enable   and   disable   the   texture   coordinate   array,  call
+       glEnableClientState  and   glDisableClientState	 with	the   argument
+       GL_TEXTURE_COORD_ARRAY.	If  enabled,  the  texture coordinate array is
+       used  when   glDrawArrays,   glDrawElements,   glDrawRangeElements   or
+       glArrayElement is called.
+
+       Use glDrawArrays to construct a sequence of primitives (all of the same
+       type) from  prespecified  vertex  and  vertex  attribute  arrays.   Use
+       glArrayElement  to  specify  primitives by indexing vertices and vertex
+       attributes and glDrawElements to construct a sequence of primitives  by
+       indexing vertices and vertex attributes.
+
+NOTES
+       glTexCoordPointer  is  available  only  if  the	GL  version  is 1.1 or
+       greater.
+
+       The texture coordinate array is initially  disabled  and  it  won't  be
+       accessed  when  glArrayElement, glDrawElements, glDrawRangeElements, or
+       glDrawArrays is called.
+
+       Execution of glTexCoordPointer is not allowed between the execution  of
+       glBegin	and  the corresponding execution of glEnd, but an error may or
+       may not be generated. If no error is generated, the operation is  unde-
+       fined.
+
+       glTexCoordPointer  is  typically implemented on the client side with no
+       protocol.
+
+       The texture coordinate array parameters are client-side state  and  are
+       therefore  not  saved or restored by glPushAttrib and glPopAttrib.  Use
+       glPushClientAttrib and glPopClientAttrib instead.
+
+       When  the  GL_ARB_imaging  extension  is  supported,  glTexCoordPointer
+       updates the texture coordinate array state of the active client texture
+       unit, specified with glClientActiveTextureARB.
+
+ERRORS
+       GL_INVALID_VALUE is generated if size is not 1, 2, 3, or 4.
+
+       GL_INVALID_ENUM is generated if type is not an accepted value.
+
+       GL_INVALID_VALUE is generated if stride is negative.
+
+ASSOCIATED GETS
+       glIsEnabled with argument GL_TEXTURE_COORD_ARRAY
+       glGet with argument GL_TEXTURE_COORD_ARRAY_SIZE
+       glGet with argument GL_TEXTURE_COORD_ARRAY_TYPE
+       glGetPointerv with argument GL_TEXTURE_COORD_ARRAY_POINTER
+
+SEE ALSO
+       glArrayElement, glClientActiveTextureARB, glColorPointer, glDrawArrays,
+       glDrawElements,	 glDrawRangeElements,	glEdgeFlagPointer,   glEnable,
+       glGetPointerv,  glIndexPointer,	 glNormalPointer,   glPopClientAttrib,
+       glPushClientAttrib, glTexCoord, glVertexPointer
+
+
+
+							 GLTEXCOORDPOINTER(3G)

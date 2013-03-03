@@ -1,0 +1,71 @@
+
+POSIX_SPAWNATTR_SETBI... BSD Library Functions Manual POSIX_SPAWNATTR_SETBI...
+
+NAME
+     posix_spawnattr_setbinpref_np posix_spawnattr_getbinpref_np -- set or get
+     the spawn-binpref attribute on a posix_spawnattr_t
+
+SYNOPSIS
+     #include <spawn.h>
+
+     int
+     posix_spawnattr_setbinpref_np(posix_spawnattr_t *restrict attr,
+	 size_t count, cpu_type_t *pref, size_t *restrict ocount);
+
+     int
+     posix_spawnattr_getbinpref_np(const posix_spawnattr_t *restrict attr,
+	 size_t count, cpu_type_t *pref, size_t * restrict ocount);
+
+IMPORTANT
+     These functions represent an Apple extension to posix_spawn(2) and
+     posix_spawnp(2), and as such should not be used by programs intending
+     their code to be portable to other platforms.
+
+DESCRIPTION
+     The posix_spawnattr_setbinpref_np() function sets the universal binary
+     preferences for the spawn attribute value referenced by attr from the
+     memory containing the cpu_type_t referenced by pref with a size of count
+     elements; the actual number of elements that are set in the attribute is
+     returned in ocount.
+
+     When spawn(2) or spawnp(2) is subsequently invoked on a Universal binary
+     with the posix_spawnattr_t, the elements which were set will be used, in
+     the order they were set, to select the first element in the list which
+     matches any cpu_type_t of those available in the Universal binary.  If
+     there is no match, then the attempt to create the child process will fail
+     with the error EBADARCH.  If the cpu_type_t CPU_TYPE_ANY is the last ele-
+     ment in the list, then rather than returning EBADARCH on no match, the
+     system will instead fall back to the standard Universal binary grading
+     preference order.
+
+     The posix_spawnattr_getbinpref_np() function gets the universal binary
+     preferences for the spawn attribute value referenced by attr into the
+     memory containing the cpu_type_t referenced by pref with a prereserved
+     size of count elements; the actual number of elements that are copied
+     from the attribute is returned in ocount.
+
+RETURN VALUES
+     On success, these functions return 0; on failure they return an error
+     number from <errno.h> and modify the value of ocount.  Additionally, if
+     successful, posix_spawnattr_getbinpref_np() will modify the contents of
+     the pref array with the current attribute values.
+
+ERRORS
+     These functions may fail if:
+
+     [EINVAL]		The value specified by attr is invalid.
+
+     [EINVAL]		The value of attr is invalid.
+
+SEE ALSO
+     posix_spawn(2), posix_spawnp(2), posix_spawnattr_init(3),
+     posix_spawnattr_destroy(3), posix_spawnattr_setflags(3)
+
+STANDARDS
+     Nonstandard
+
+HISTORY
+     The posix_spawnattr_setbinpref_np() and posix_spawnattr_getbinpref_np()
+     function calls appeared in Mac OS X.
+
+Mac OS X			August 22, 2007 		      Mac OS X

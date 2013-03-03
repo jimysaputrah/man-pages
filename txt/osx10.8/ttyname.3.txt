@@ -1,0 +1,62 @@
+
+TTYNAME(3)		 BSD Library Functions Manual		    TTYNAME(3)
+
+NAME
+     isatty, ttyname, ttyslot -- get name of associated terminal (tty) from
+     file descriptor
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include <unistd.h>
+
+     int
+     isatty(int fildes);
+
+     char *
+     ttyname(int fildes);
+
+     int
+     ttyslot(void);
+
+DESCRIPTION
+     These functions operate on the system file descriptors for terminal type
+     devices.  These descriptors are not related to the standard I/O FILE
+     typedef, but refer to the special device files found in /dev and named
+     /dev/ttyxx and for which an entry exists in the initialization file
+     /etc/ttys.  (See ttys(5).)
+
+     The isatty() function determines if the file descriptor fildes refers to
+     a valid terminal type device.
+
+     The ttyname() function gets the related device name of a file descriptor
+     for which isatty() is true.
+
+     The ttyslot() function fetches the current process' control terminal num-
+     ber from the ttys(5) file entry.
+
+RETURN VALUES
+     The ttyname() function returns the null terminated name if the device is
+     found and isatty() is true; otherwise, a NULL pointer is returned.
+
+     The ttyslot() function returns the unit number of the device file if
+     found; otherwise, the value zero is returned.
+
+FILES
+     /dev/*
+     /etc/ttys
+
+SEE ALSO
+     ioctl(2), ttys(5)
+
+HISTORY
+     A isatty(), ttyname(), and ttyslot() function appeared in Version 7 AT&T
+     UNIX.
+
+BUGS
+     The ttyname() function leaves its result in an internal static object and
+     returns a pointer to that object.	Subsequent calls to ttyname() will
+     modify the same object.
+
+BSD				 June 4, 1993				   BSD

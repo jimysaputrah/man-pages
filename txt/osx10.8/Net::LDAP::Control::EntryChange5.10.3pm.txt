@@ -1,0 +1,93 @@
+Net::LDAP::Control::EnUserhContributed Perl Net::LDAP::Control::EntryChange(3)
+
+
+
+NAME
+       Net::LDAP::Control::EntryChange - LDAPv3 Entry Change Notification
+       control object
+
+SYNOPSIS
+	use Net::LDAP;
+	use Net::LDAP::Control::PersistentSearch;
+	use Net::LDAP::Constant qw(LDAP_CONTROL_ENTRYCHANGE);
+
+	$ldap = Net::LDAP->new( "ldap.mydomain.eg" );
+
+	$persist = Net::LDAP::Control::PersistentSearch->new( changeTypes => 15,
+							      changesOnly => 1,
+							      returnECs => 1 );
+
+	$srch = $ldap->search( base	=> "cn=People,dc=mydomain,dc=eg",
+			       filter	=> "(objectClass=person)",
+			       callback => \&process_entry, # call for each entry
+			       control	=> [ $persist ] );
+
+	die "error: ",$srch->code(),": ",$srch->error()  if ($srch->code());
+
+	sub process_entry {
+	  my $message = shift;
+	  my $entry = shift;
+	  my ($control) = $message->control(LDAP_CONTROL_ENTRYCHANGE);
+
+	  print $control->changeType()."\t".$entry->dn()."\n";
+	}
+
+DESCRIPTION
+       "Net::LDAP::Control::EntryChange" provides an interface for the
+       creation and manipulation of objects that represent the
+       "EntryChangeNotification" control as described by
+       draft-smith-psearch-ldap-01.txt.
+
+CONSTRUCTOR ARGUMENTS
+       In addition to the constructor arguments described in
+       Net::LDAP::Control the following are provided.
+
+       changeType
+	   An integer value telling the type of LDAP operation that the entry
+	   has undergone.  It is one of the following values (which represent
+	   the LDAP operations indicated next to them):
+
+	   1 = add
+	   2 = delete
+	   4 = modify
+	   8 = modDN
+       previousDN
+	   When changeType is 8 (for modDN) this parameter tells the entry's
+	   DN before the modDN operation.  In all other cases this value is
+	   not defined.
+
+       changeNumber
+	   This is the change number according to
+	   <draft-good-ldap-changelog-03.txt> assigned by a server for the
+	   change.  If a server supports an LDAP Change Log it should include
+	   this field.
+
+       Usually you do not need to create a "Net::LDAP::Control::EntryChange"
+       control yourself because it is provided by the server in response to an
+       option with the "Net::LDAP::Control::PersistentSearch" control.
+
+METHODS
+       As with Net::LDAP::Control each constructor argument described above is
+       also available as a method on the object which will return the current
+       value for the attribute if called without an argument, and set a new
+       value for the attribute if called with an argument.
+
+SEE ALSO
+       Net::LDAP, Net::LDAP::Control, Net::LDAP::Control::PersistentSearch
+
+AUTHOR
+       Peter Marschall <peter@adpm.de>, based on Net::LDAP::Control::Page from
+       Graham Barr <gbarr@pobox.com> and the preparatory work of Don Miller
+       <donm@uidaho.edu>.
+
+       Please report any bugs, or post any suggestions, to the perl-ldap
+       mailing list <perl-ldap@perl.org>
+
+COPYRIGHT
+       Copyright (c) 2004 Peter Marschall. All rights reserved. This program
+       is free software; you can redistribute it and/or modify it under the
+       same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-03-11Net::LDAP::Control::EntryChange(3)

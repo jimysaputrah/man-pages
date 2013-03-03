@@ -1,0 +1,106 @@
+CREATE EXTENSION(7)	PostgreSQL 9.1.4 Documentation	   CREATE EXTENSION(7)
+
+
+
+NAME
+       CREATE_EXTENSION - install an extension
+
+SYNOPSIS
+       CREATE EXTENSION [ IF NOT EXISTS ] extension_name
+	   [ WITH ] [ SCHEMA schema ]
+		    [ VERSION version ]
+		    [ FROM old_version ]
+
+DESCRIPTION
+       CREATE EXTENSION loads a new extension into the current database. There
+       must not be an extension of the same name already loaded.
+
+       Loading an extension essentially amounts to running the extension's
+       script file. The script will typically create new SQL objects such as
+       functions, data types, operators and index support methods.  CREATE
+       EXTENSION additionally records the identities of all the created
+       objects, so that they can be dropped again if DROP EXTENSION is issued.
+
+       Loading an extension requires the same privileges that would be
+       required to create its component objects. For most extensions this
+       means superuser or database owner privileges are needed. The user who
+       runs CREATE EXTENSION becomes the owner of the extension for purposes
+       of later privilege checks, as well as the owner of any objects created
+       by the extension's script.
+
+PARAMETERS
+       IF NOT EXISTS
+	   Do not throw an error if an extension with the same name already
+	   exists. A notice is issued in this case. Note that there is no
+	   guarantee that the existing extension is anything like the one that
+	   would have been created from the currently-available script file.
+
+       extension_name
+	   The name of the extension to be installed.  PostgreSQL will create
+	   the extension using details from the file
+	   SHAREDIR/extension/extension_name.control.
+
+       schema
+	   The name of the schema in which to install the extension's objects,
+	   given that the extension allows its contents to be relocated. The
+	   named schema must already exist. If not specified, and the
+	   extension's control file does not specify a schema either, the
+	   current default object creation schema is used.
+
+       version
+	   The version of the extension to install. This can be written as
+	   either an identifier or a string literal. The default version is
+	   whatever is specified in the extension's control file.
+
+       old_version
+	   FROM old_version must be specified when, and only when, you are
+	   attempting to install an extension that replaces an "old style"
+	   module that is just a collection of objects not packaged into an
+	   extension. This option causes CREATE EXTENSION to run an
+	   alternative installation script that absorbs the existing objects
+	   into the extension, instead of creating new objects. Be careful
+	   that SCHEMA specifies the schema containing these pre-existing
+	   objects.
+
+	   The value to use for old_version is determined by the extension's
+	   author, and might vary if there is more than one version of the
+	   old-style module that can be upgraded into an extension. For the
+	   standard additional modules supplied with pre-9.1 PostgreSQL, use
+	   unpackaged for old_version when updating a module to extension
+	   style.
+
+NOTES
+       Before you can use CREATE EXTENSION to load an extension into a
+       database, the extension's supporting files must be installed.
+       Information about installing the extensions supplied with PostgreSQL
+       can be found in Additional Supplied Modules.
+
+       The extensions currently available for loading can be identified from
+       the pg_available_extensions or pg_available_extension_versions system
+       views.
+
+       For information about writing new extensions, see Section 35.15,
+       "Packaging Related Objects into an Extension", in the documentation.
+
+EXAMPLES
+       Install the hstore extension into the current database:
+
+	   CREATE EXTENSION hstore;
+
+       Update a pre-9.1 installation of hstore into extension style:
+
+	   CREATE EXTENSION hstore SCHEMA public FROM unpackaged;
+
+       Be careful to specify the schema in which you installed the existing
+       hstore objects.
+
+COMPATIBILITY
+       CREATE EXTENSION is a PostgreSQL extension.
+
+SEE ALSO
+       ALTER EXTENSION (ALTER_EXTENSION(7)), DROP EXTENSION
+       (DROP_EXTENSION(7))
+
+
+
+PostgreSQL 9.1.4		  2012-05-31		   CREATE EXTENSION(7)

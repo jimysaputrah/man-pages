@@ -1,0 +1,77 @@
+GLDRAWELEMENTS(3G)					    GLDRAWELEMENTS(3G)
+
+
+
+NAME
+       glDrawElements - render primitives from array data
+
+
+C SPECIFICATION
+       void glDrawElements( GLenum mode,
+			    GLsizei count,
+			    GLenum type,
+			    const GLvoid *indices )
+
+
+PARAMETERS
+       mode	Specifies  what  kind  of primitives to render.  Symbolic con-
+		stants	GL_POINTS,  GL_LINE_STRIP,   GL_LINE_LOOP,   GL_LINES,
+		GL_TRIANGLE_STRIP,	  GL_TRIANGLE_FAN,	 GL_TRIANGLES,
+		GL_QUAD_STRIP, GL_QUADS, and GL_POLYGON are accepted.
+
+       count	Specifies the number of elements to be rendered.
+
+       type	Specifies the type of the values in indices. Must  be  one  of
+		GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, or GL_UNSIGNED_INT.
+
+       indices	Specifies  a  pointer  to  the	location where the indices are
+		stored.
+
+DESCRIPTION
+       glDrawElements specifies multiple geometric primitives  with  very  few
+       subroutine  calls.  Instead of calling a GL function to pass each indi-
+       vidual vertex, normal, texture coordinate, edge flag, or color, you can
+       prespecify separate arrays of vertices, normals, and so on and use them
+       to  construct  a  sequence  of  primitives  with  a  single   call   to
+       glDrawElements.
+
+       When  glDrawElements  is called, it uses count sequential elements from
+       an enabled array, starting at indices to construct a sequence  of  geo-
+       metric  primitives.  mode  specifies  what  kind of primitives are con-
+       structed, and how the array elements  construct	these  primitives.  If
+       more than one array is enabled, each is used. If GL_VERTEX_ARRAY is not
+       enabled, no geometric primitives are constructed.
+
+       Vertex attributes that are modified by glDrawElements have an  unspeci-
+       fied value after glDrawElements returns. For example, if GL_COLOR_ARRAY
+       is  enabled,  the  value  of  the  current  color  is  undefined  after
+       glDrawElements executes. Attributes that aren't modified maintain their
+       previous values.
+
+NOTES
+       glDrawElements is available only if the GL version is 1.1 or greater.
+
+       glDrawElements is included  in  display	lists.	If  glDrawElements  is
+       entered	into  a  display list, the necessary array data (determined by
+       the array pointers and enables) is also entered into the display  list.
+       Because	the  array  pointers  and enables are client-side state, their
+       values affect display lists when the lists are created,	not  when  the
+       lists are executed.
+
+ERRORS
+       GL_INVALID_ENUM is generated if mode is not an accepted value.
+
+       GL_INVALID_VALUE is generated if count is negative.
+
+       GL_INVALID_OPERATION is generated if glDrawElements is executed between
+       the execution of glBegin and the corresponding glEnd.
+
+SEE ALSO
+       glArrayElement,	glColorPointer,   glDrawArrays,   glDrawRangeElements,
+       glEdgeFlagPointer,  glGetPointerv, glIndexPointer, glInterleavedArrays,
+       glNormalPointer, glTexCoordPointer, glVertexPointer
+
+
+
+
+							    GLDRAWELEMENTS(3G)

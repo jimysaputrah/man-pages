@@ -1,0 +1,113 @@
+GLCOPYCOLORTABLE(3G)					  GLCOPYCOLORTABLE(3G)
+
+
+
+NAME
+       glCopyColorTable - copy pixels into a color table
+
+
+C SPECIFICATION
+       void glCopyColorTable( GLenum target,
+			      GLenum internalformat,
+			      GLint x,
+			      GLint y,
+			      GLsizei width )
+
+
+PARAMETERS
+       target	       The   color   table  target.  Must  be  GL_COLOR_TABLE,
+		       GL_POST_CONVOLUTION_COLOR_TABLE, 		    or
+		       GL_POST_COLOR_MATRIX_COLOR_TABLE.
+
+       internalformat  The  internal  storage	of the texture image.  Must be
+		       one of  the  following  symbolic  constants:  GL_ALPHA,
+		       GL_ALPHA4,     GL_ALPHA8,    GL_ALPHA12,    GL_ALPHA16,
+		       GL_LUMINANCE,	   GL_LUMINANCE4,	GL_LUMINANCE8,
+		       GL_LUMINANCE12,	 GL_LUMINANCE16,   GL_LUMINANCE_ALPHA,
+		       GL_LUMINANCE4_ALPHA4,		 GL_LUMINANCE6_ALPHA2,
+		       GL_LUMINANCE8_ALPHA8,		GL_LUMINANCE12_ALPHA4,
+		       GL_LUMINANCE12_ALPHA12,	       GL_LUMINANCE16_ALPHA16,
+		       GL_INTENSITY,	   GL_INTENSITY4,	GL_INTENSITY8,
+		       GL_INTENSITY12,	GL_INTENSITY16,  GL_R3_G3_B2,  GL_RGB,
+		       GL_RGB4,    GL_RGB5,   GL_RGB8,	 GL_RGB10,   GL_RGB12,
+		       GL_RGB16,  GL_RGBA,  GL_RGBA2,  GL_RGBA4,   GL_RGB5_A1,
+		       GL_RGBA8, GL_RGB10_A2, GL_RGBA12, GL_RGBA16.
+
+       x	       The  x coordinate of the lower-left corner of the pixel
+		       rectangle to be transferred to the color table.
+
+       y	       The y coordinate of the lower-left corner of the  pixel
+		       rectangle to be transferred to the color table.
+
+       width	       The width of the pixel rectangle.
+
+DESCRIPTION
+       glCopyColorTable  loads	a  color  table  with  pixels from the current
+       GL_READ_BUFFER (rather than from  main  memory,	as  is	the  case  for
+       glColorTable).
+
+       The  screen-aligned  pixel  rectangle  with lower-left corner at (x, y)
+       having width width and height 1 is loaded into the color table. If  any
+       pixels  within  this  region  are outside the window that is associated
+       with the GL context, the values obtained for  those  pixels  are  unde-
+       fined.
+
+       The  pixels in the rectangle are processed just as if glReadPixels were
+       called, with internalformat set to RGBA, but processing stops after the
+       final conversion to RGBA.
+
+       The four scale parameters and the four bias parameters that are defined
+       for the table are then used to scale and bias the R, G, B, and A compo-
+       nents  of  each pixel. The scale and bias parameters are set by calling
+       glColorTableParameter.
+
+       Next, the R, G, B, and A values are clamped to the range  [0,1].   Each
+       pixel  is  then converted to the internal  specified by internalformat.
+       This conversion simply maps the component values of the pixel (R, G, B,
+       and  A)	to  the  values  included  in the internal  (red, green, blue,
+       alpha, luminance, and intensity).  The mapping is as follows:
+
+
+	Internal Format     Channel mapping
+	GL_ALPHA	    A=Alpha
+	GL_LUMINANCE	    R=Luminance
+	GL_LUMINANCE_ALPHA  A=Alpha, R=Luminance
+	GL_INTENSITY	    R=Intensity
+	GL_RGB		    R=Red, G=Green, B=Blue
+	GL_RGBA 	    R=Red, G=Green, B=Blue, A=Alpha
+
+
+       Finally, the red, green, blue, alpha, luminance, and/or intensity  com-
+       ponents	of  the  resulting pixels are stored in the color table.  They
+       form a one-dimensional table with indices in the range  [0, width - 1].
+
+
+NOTES
+       glCopyColorTable  is  available only if GL_ARB_imaging is returned from
+       calling glGetString with an argument of GL_EXTENSIONS.
+
+ERRORS
+       GL_INVALID_ENUM is generated when target is not one  of	the  allowable
+       values.
+
+       GL_INVALID_VALUE is generated if width is less than zero.
+
+       GL_INVALID_VALUE  is  generated	if  internalformat  is	not one of the
+       allowable values.
+
+       GL_TABLE_TOO_LARGE is generated if the requested  color	table  is  too
+       large to be supported by the implementation.
+
+       GL_INVALID_OPERATION  is  generated  if	glCopyColorTable  is  executed
+       between the execution of glBegin and  the  corresponding  execution  of
+       glEnd.
+
+ASSOCIATED GETS
+       glGetColorTable, glGetColorTableParameter
+
+SEE ALSO
+       glColorTable, glColorTableParameter, glReadPixels
+
+
+
+							  GLCOPYCOLORTABLE(3G)

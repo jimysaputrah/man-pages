@@ -1,0 +1,3737 @@
+TclXML(n)							     TclXML(n)
+
+
+
+Steve Ball'
+______________________________________________________________________________
+
+NAME
+       ::xml::parser - XML parser support for Tcl
+
+SYNOPSIS
+       package require xml
+
+       package require parserclass
+
+       xml2.6
+
+       ::xml::sgml::xml::tclparser
+
+       ::xml::parserclass option ? arg arg ... ?
+
+       ::xml::parser ? name? ? -option value ... ?
+
+       parser option arg
+_________________________________________________________________
+
+
+DESCRIPTION
+       TclXML  provides event-based parsing of XML documents.  The application
+       may register callback scripts for certain document features,  and  when
+       the  parser  encounters	those  features while parsing the document the
+       callback is evaluated.
+
+
+       The parser may also perform other  functions,  such  as	normalisation,
+       validation  and/or  entity  expansion.	Generally, these functions are
+       under the control of configuration options.   Whether  these  functions
+       can be performed at all depends on the parser implementation.
+
+
+       The TclXML package provides a generic interface for use by a Tcl appli-
+       cation, along with a low-level interface for use by a parser  implemen-
+       tation.	 Each implementation provides a class of XML parser, and these
+       register themselves using the ::xml::parserclass create	command.   One
+       of the registered parser classes will be the default parser class.
+
+
+       Loading the package with the generic package require xml command allows
+       the package to automatically determine the default  parser  class.   In
+       order  to  select a particular parser class as the default, that class'
+       package may be loaded directly, eg.  package  require  expat.   In  all
+       cases,  all  available  parser  classes	are registered with the TclXML
+       package, the difference is simply in which one becomes the default.
+
+
+COMMANDS
+       ::xml::parserclass
+
+
+       The ::xml::parserclass command is used to manage XML parser classes.
+
+
+	      Command Options
+
+
+	      The following command options may be used:
+
+
+
+		     create   create   name   ?   -createcommand
+		     script?	 ?    -createentityparsercommand
+		     script? ? -parsecommand script? ?	-config-
+		     urecommand  script? ? -getcommand script? ?
+		     -deletecommand script?
+
+		     Creates an XML parser class with the  given
+		     name.
+
+
+		     destroy  destroy name
+
+		     Destroys an XML parser class.
+
+
+		     info  info names
+
+		     Returns  information  about  registered XML
+		     parser classes.
+
+
+
+       ::xml::parser
+
+
+       The ::xml::parser command creates an XML  parser  object.
+       The  return value of the command is the name of the newly
+       created parser.
+
+
+       The parser scans an XML document's syntactical structure,
+       evaluating  callback  scripts for each feature found.  At
+       the very least the parser will normalise the document and
+       check  the document for well-formedness.  If the document
+       is not well-formed then the  -errorcommand option will be
+       evaluated.   Some  parser  classes may perform additional
+       functions, such as validation.  Additional features  pro-
+       vided  by the various parser classes are described in the
+       section Parser Classes
+
+
+       Parsing is performed synchronously.  The  command  blocks
+       until  the  entire document has been parsed.  Parsing may
+       be terminated by an application callback, see the section
+       Callback  Return Codes.	Incremental parsing is also sup-
+       ported by using the  -final configuration option.
+
+
+	      Configuration Options
+
+
+	      The ::xml::parser command  accepts  the  following
+	      configuration options:
+
+
+
+		      -attlistdeclcommand
+		     -attlistdeclcommand script
+
+		     Specifies the prefix of a Tcl
+		     command to be evaluated when-
+		     ever an attribute list decla-
+		     ration is encountered in  the
+		     DTD  subset  of  an XML docu-
+		     ment.  The command  evaluated
+		     is: script name attrname type
+		     default value
+
+		     where:
+
+
+
+
+				   name
+				   Ele-
+				   ment
+				   type
+				   name
+
+			    attr-
+			    name
+			    Attribute
+			    name
+			    being
+			    declared
+
+			    type
+			    Attribute
+			    type
+
+			    default
+			    Attribute
+			    default,
+			    such
+			    as
+			    #IMPLIED
+
+			    value
+			    Default
+			    attribute
+			    value.
+			    Empty
+			    string
+			    if
+			    none
+			    given.
+
+
+		      -baseurl
+		     -baseurl
+		     URI
+
+		     Speci-
+		     fies the
+		     base URI
+		     for
+		     resolv-
+		     ing rel-
+		     ative
+		     URIs
+		     that may
+		     be  used
+		     in   the
+		     XML doc-
+		     ument to
+		     refer to
+		     external
+		     enti-
+		     ties.
+
+
+		      -char-
+		     acter-
+		     datacom-
+		     mand
+		     -charac-
+		     terdata-
+		     command
+		     script
+
+		     Speci-
+		     fies the
+		     prefix
+		     of a Tcl
+		     command
+		     to    be
+		     evalu-
+		     ated
+		     whenever
+		     charac-
+		     ter data
+		     is
+		     encoun-
+		     tered in
+		     the  XML
+		     document
+		     being
+		     parsed.
+		     The com-
+		     mand
+		     evalu-
+		     ated is:
+		     script
+		     data
+
+		     where:
+
+
+
+
+				   data
+				   Char-
+				   ac-
+				   ter
+				   data
+				   in
+				   the
+				   doc-
+				   u-
+				   ment
+
+
+		      -com-
+			    ment-
+			    com-
+			    mand
+			    -com-
+			    ment-
+			    com-
+			    mand
+			    script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when-
+		     ever
+		     a
+		     com-
+		     ment
+		     is
+		     encoun-
+		     tered
+		     in
+		     the
+		     XML
+		     doc-
+		     u-
+		     ment
+		     being
+		     parsed.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     data
+
+		     where:
+
+
+
+
+				   data
+				   Com-
+				   ment
+				   data
+
+
+		      -default-
+		     com-
+		     mand
+		     -default-
+		     com-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     no
+		     other
+		     call-
+		     back
+		     has
+		     been
+		     defined
+		     for
+		     a
+		     doc-
+		     u-
+		     ment
+		     fea-
+		     ture
+		     which
+		     has
+		     been
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     data
+
+		     where:
+
+
+
+
+				   data
+				   Doc-
+				   u-
+				   ment
+				   data
+
+
+		      -defaul-
+		     t-
+		     ex-
+		     pand-
+		     in-
+		     ter-
+		     nalen-
+		     ti-
+		     ties
+		     -defaul-
+		     t-
+		     ex-
+		     pand-
+		     in-
+		     ter-
+		     nalen-
+		     ti-
+		     ties
+		     boolean
+
+		     Spec-
+		     i-
+		     fies
+		     whether
+		     enti-
+		     ties
+		     declared
+		     in
+		     the
+		     inter-
+		     nal
+		     DTD
+		     sub-
+		     set
+		     are
+		     expanded
+		     with
+		     their
+		     replace-
+		     ment
+		     text.
+		     If
+		     enti-
+		     ties
+		     are
+		     not
+		     expanded
+		     then
+		     the
+		     entity
+		     ref-
+		     er-
+		     ences
+		     will
+		     be
+		     reported
+		     with
+		     no
+		     expan-
+		     sion.
+
+
+		      -doc-
+		     type-
+		     com-
+		     mand
+		     -doc-
+		     type-
+		     com-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     the
+		     doc-
+		     u-
+		     ment
+		     type
+		     dec-
+		     la-
+		     ra-
+		     tion
+		     is
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     name
+		     pub-
+		     lic
+		     sys-
+		     tem
+		     dtd
+
+		     where:
+
+
+
+
+				   name
+				   The
+				   name
+				   of
+				   the
+				   doc-
+				   u-
+				   ment
+				   ele-
+				   ment
+
+			    pub-
+				   lic
+				   Pub-
+				   lic
+				   iden-
+				   ti-
+				   fier
+				   for
+				   the
+				   exter-
+				   nal
+				   DTD
+				   sub-
+				   set
+
+			    sys-
+				   tem
+				   Sys-
+				   tem
+				   iden-
+				   ti-
+				   fier
+				   for
+				   the
+				   exter-
+				   nal
+				   DTD
+				   sub-
+				   set.
+				   Usu-
+				   ally
+				   a
+				   URI.
+
+			    dtd
+				   The
+				   inter-
+				   nal
+				   DTD
+				   sub-
+				   set
+
+
+		     See
+		     also
+		     -start-
+		     doc-
+		     type-
+		     de-
+		     clcom-
+		     mand
+		     and
+		     -end-
+		     doc-
+		     type-
+		     de-
+		     clcom-
+		     mand.
+
+
+		      -ele-
+			    ment-
+			    de-
+			    clcom-
+			    mand
+			    -ele-
+			    ment-
+			    de-
+			    clcom-
+			    mand
+			    script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     an
+		     ele-
+		     ment
+		     markup
+		     dec-
+		     la-
+		     ra-
+		     tion
+		     is
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     name
+		     model
+
+		     where:
+
+
+
+
+				   name
+				   The
+				   ele-
+				   ment
+				   type
+				   name
+
+			    model
+				   Con-
+				   tent
+				   model
+				   spec-
+				   i-
+				   fi-
+				   ca-
+				   tion
+
+
+		      -ele-
+		     mentend-
+		     com-
+		     mand
+		     -ele-
+		     mentend-
+		     com-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     an
+		     ele-
+		     ment
+		     end
+		     tag
+		     is
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     name
+		     args
+
+		     where:
+
+
+
+
+				   name
+				   The
+				   ele-
+				   ment
+				   type
+				   name
+				   that
+				   has
+				   ended
+
+			    args
+				   Addi-
+				   tional
+				   infor-
+				   ma-
+				   tion
+				   about
+				   this
+				   ele-
+				   ment
+
+
+		     Addi-
+		     tional
+		     infor-
+		     ma-
+		     tion
+		     about
+		     the
+		     ele-
+		     ment
+		     takes
+		     the
+		     form
+		     of
+		     con-
+		     fig-
+		     u-
+		     ra-
+		     tion
+		     options.
+		     Pos-
+		     si-
+		     ble
+		     options
+		     are:
+
+
+
+			    -empty
+			    boolean
+			    The
+			    empty
+			    ele-
+			    ment
+			    syn-
+			    tax
+			    was
+			    used
+			    for
+			    this
+			    ele-
+			    ment
+
+			    -names-
+			    pace
+			    uri
+			    The
+			    ele-
+			    ment
+			    is
+			    in
+			    the
+			    XML
+			    names-
+			    pace
+			    asso-
+			    ci-
+			    ated
+			    with
+			    the
+			    given
+			    URI
+
+
+		      -ele-
+		     mentstart-
+		     com-
+		     mand
+		     -ele-
+		     mentstart-
+		     com-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     an
+		     ele-
+		     ment
+		     start
+		     tag
+		     is
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     name
+		     attlist
+		     args
+
+		     where:
+
+
+
+			    name
+			    The
+			    ele-
+			    ment
+			    type
+			    name
+			    that
+			    has
+			    started
+
+			    attlist
+			    A
+			    Tcl
+			    list
+			    con-
+			    tain-
+			    ing
+			    the
+			    attributes
+			    for
+			    this
+			    ele-
+			    ment.
+			    The
+			    list
+			    of
+			    attributes
+			    is
+			    for-
+			    mat-
+			    ted
+			    as
+			    pairs
+			    of
+			    attribute
+			    names
+			    and
+			    their
+			    val-
+			    ues.
+
+			    args
+				   Addi-
+				   tional
+				   infor-
+				   ma-
+				   tion
+				   about
+				   this
+				   ele-
+				   ment
+
+
+		     Addi-
+		     tional
+		     infor-
+		     ma-
+		     tion
+		     about
+		     the
+		     ele-
+		     ment
+		     takes
+		     the
+		     form
+		     of
+		     con-
+		     fig-
+		     u-
+		     ra-
+		     tion
+		     options.
+		     Pos-
+		     si-
+		     ble
+		     options
+		     are:
+
+
+
+			    -empty
+			    boolean
+			    The
+			    empty
+			    ele-
+			    ment
+			    syn-
+			    tax
+			    was
+			    used
+			    for
+			    this
+			    ele-
+			    ment
+
+			    -names-
+			    pace
+			    uri
+			    The
+			    ele-
+			    ment
+			    is
+			    in
+			    the
+			    XML
+			    names-
+			    pace
+			    asso-
+			    ci-
+			    ated
+			    with
+			    the
+			    given
+			    URI
+
+			    -names-
+			    pacede-
+			    cls
+			    list
+			    The
+			    start
+			    tag
+			    included
+			    one
+			    or
+			    more
+			    XML
+			    Names-
+			    pace
+			    dec-
+			    la-
+			    ra-
+			    tions.
+			    list
+			    is
+			    a
+			    Tcl
+			    list
+			    giv-
+			    ing
+			    the
+			    names-
+			    paces
+			    declared.
+			    The
+			    list
+			    is
+			    for-
+			    mat-
+			    ted
+			    as
+			    pairs
+			    of
+			    val-
+			    ues,
+			    the
+			    first
+			    value
+			    is
+			    the
+			    names-
+			    pace
+			    URI
+			    and
+			    the
+			    sec-
+			    ond
+			    value
+			    is
+			    the
+			    pre-
+			    fix
+			    used
+			    for
+			    the
+			    names-
+			    pace
+			    in
+			    this
+			    doc-
+			    u-
+			    ment.
+			    A
+			    default
+			    XML
+			    names-
+			    pace
+			    dec-
+			    la-
+			    ra-
+			    tion
+			    will
+			    have
+			    an
+			    empty
+			    string
+			    for
+			    the
+			    pre-
+			    fix.
+
+
+		      -end-
+			    c-
+			    data-
+			    sec-
+			    tion-
+			    com-
+			    mand
+			    -end-
+			    c-
+			    data-
+			    sec-
+			    tion-
+			    com-
+			    mand
+			    script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     end
+		     of
+		     a
+		     CDATA
+		     sec-
+		     tion
+		     is
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     is
+		     eval-
+		     u-
+		     ated
+		     with
+		     no
+		     fur-
+		     ther
+		     argu-
+		     ments.
+
+
+		      -end-
+			    doc-
+			    type-
+			    de-
+			    clcom-
+			    mand
+			    -end-
+			    doc-
+			    type-
+			    de-
+			    clcom-
+			    mand
+			    script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     end
+		     of
+		     the
+		     doc-
+		     u-
+		     ment
+		     type
+		     dec-
+		     la-
+		     ra-
+		     tion
+		     is
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     is
+		     eval-
+		     u-
+		     ated
+		     with
+		     no
+		     fur-
+		     ther
+		     argu-
+		     ments.
+
+
+		      -enti-
+		     ty-
+		     de-
+		     clcom-
+		     mand
+		     -enti-
+		     ty-
+		     de-
+		     clcom-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     an
+		     entity
+		     dec-
+		     la-
+		     ra-
+		     tion
+		     is
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     name
+		     args
+
+		     where:
+
+
+
+			    name
+			    The
+			    name
+			    of
+			    the
+			    entity
+			    being
+			    declared
+
+			    args
+			    Addi-
+			    tional
+			    infor-
+			    ma-
+			    tion
+			    about
+			    the
+			    entity
+			    dec-
+			    la-
+			    ra-
+			    tion.
+			    An
+			    inter-
+			    nal
+			    entity
+			    shall
+			    have
+			    a
+			    sin-
+			    gle
+			    argu-
+			    ment,
+			    the
+			    replace-
+			    ment
+			    text.
+			    An
+			    exter-
+			    nal
+			    parsed
+			    entity
+			    shall
+			    have
+			    two
+			    addi-
+			    tional
+			    argu-
+			    ments,
+			    the
+			    pub-
+			    lic
+			    and
+			    sys-
+			    tem
+			    inden-
+			    ti-
+			    fiers
+			    of
+			    the
+			    exter-
+			    nal
+			    resource.
+			    An
+			    exter-
+			    nal
+			    unparsed
+			    entity
+			    shall
+			    have
+			    three
+			    addi-
+			    tional
+			    argu-
+			    ments,
+			    the
+			    pub-
+			    lic
+			    and
+			    sys-
+			    tem
+			    iden-
+			    ti-
+			    fiers
+			    fol-
+			    lowed
+			    by
+			    the
+			    nota-
+			    tion
+			    name.
+
+
+		      -enti-
+		     tyref-
+		     er-
+		     ence-
+		     com-
+		     mand
+		     -enti-
+		     tyref-
+		     er-
+		     ence-
+		     com-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     an
+		     entity
+		     ref-
+		     er-
+		     ence
+		     is
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     name
+
+		     where:
+
+
+
+
+				   name
+				   The
+				   name
+				   of
+				   the
+				   entity
+				   being
+				   ref-
+				   er-
+				   enced
+
+
+		      -errro-
+		     com-
+		     mand
+		     -error-
+		     com-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     a
+		     fatal
+		     error
+		     is
+		     detected.
+		     The
+		     error
+		     may
+		     be
+		     due
+		     to
+		     the
+		     XML
+		     doc-
+		     u-
+		     ment
+		     not
+		     being
+		     well-
+		     formed.
+		     In
+		     the
+		     case
+		     of
+		     a
+		     val-
+		     i-
+		     dat-
+		     ing
+		     parser
+		     class,
+		     the
+		     error
+		     may
+		     also
+		     be
+		     due
+		     to
+		     the
+		     XML
+		     doc-
+		     u-
+		     ment
+		     not
+		     obey-
+		     ing
+		     valid-
+		     ity
+		     con-
+		     straints.
+		     By
+		     default,
+		     a
+		     call-
+		     back
+		     script
+		     is
+		     pro-
+		     vided
+		     which
+		     causes
+		     an
+		     error
+		     return
+		     code,
+		     but
+		     an
+		     appli-
+		     ca-
+		     tion
+		     may
+		     sup-
+		     ply
+		     a
+		     script
+		     which
+		     attempts
+		     to
+		     con-
+		     tinue
+		     pars-
+		     ing.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     error-
+		     code
+		     errormsg
+
+		     where:
+
+
+
+			    error-
+			    code
+			    A
+			    sin-
+			    gle
+			    word
+			    descrip-
+			    tion
+			    of
+			    the
+			    error,
+			    intended
+			    for
+			    use
+			    by
+			    an
+			    appli-
+			    ca-
+			    tion
+
+			    errormsg
+			    A
+			    human-
+			    read-
+			    able
+			    descrip-
+			    tion
+			    of
+			    the
+			    error
+
+
+		      -exter-
+		     nalen-
+		     ti-
+		     ty-
+		     com-
+		     mand
+		     -exter-
+		     nalen-
+		     ti-
+		     ty-
+		     com-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     to
+		     resolve
+		     an
+		     exter-
+		     nal
+		     entity
+		     ref-
+		     er-
+		     ence.
+		     If
+		     the
+		     parser
+		     has
+		     been
+		     con-
+		     fig-
+		     ured
+		     to
+		     val-
+		     i-
+		     date
+		     the
+		     XML
+		     doc-
+		     u-
+		     ment,
+		     a
+		     default
+		     script
+		     is
+		     sup-
+		     plied
+		     that
+		     resolves
+		     the
+		     URI
+		     given
+		     as
+		     the
+		     sys-
+		     tem
+		     iden-
+		     ti-
+		     fier
+		     of
+		     the
+		     exter-
+		     nal
+		     entity
+		     and
+		     recur-
+		     sively
+		     parses
+		     the
+		     entity's
+		     data.
+		     If
+		     the
+		     parser
+		     has
+		     been
+		     con-
+		     fig-
+		     ured
+		     as
+		     a
+		     non-
+		     val-
+		     i-
+		     dat-
+		     ing
+		     parser,
+		     then
+		     by
+		     default
+		     exter-
+		     nal
+		     enti-
+		     ties
+		     are
+		     not
+		     resolved.
+		     This
+		     option
+		     can
+		     be
+		     used
+		     to
+		     over-
+		     ride
+		     the
+		     default
+		     be-
+		     hav-
+		     iour.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     name
+		     baseuri
+		     uri
+		     id
+
+		     where:
+
+
+
+
+				   name
+				   The
+				   Tcl
+				   com-
+				   mand
+				   name
+				   of
+				   the
+				   cur-
+				   rent
+				   parser
+
+			    baseuri
+			    An
+			    abso-
+			    lute
+			    URI
+			    for
+			    the
+			    cur-
+			    rent
+			    entity
+			    which
+			    is
+			    to
+			    be
+			    used
+			    to
+			    resolve
+			    rel-
+			    a-
+			    tive
+			    URIs
+
+			    uri
+			    The
+			    sys-
+			    tem
+			    iden-
+			    ti-
+			    fier
+			    of
+			    the
+			    exter-
+			    nal
+			    entity,
+			    usu-
+			    ally
+			    a
+			    URI
+
+			    id
+			    The
+			    pub-
+			    lic
+			    iden-
+			    ti-
+			    fier
+			    of
+			    the
+			    exter-
+			    nal
+			    entity.
+			    If
+			    no
+			    pub-
+			    lic
+			    iden-
+			    ti-
+			    fier
+			    was
+			    given
+			    in
+			    the
+			    entity
+			    dec-
+			    la-
+			    ra-
+			    tion
+			    then
+			    id
+			    will
+			    be
+			    an
+			    empty
+			    string.
+
+
+		      -final
+		     -final
+		     boolean
+
+		     Spec-
+		     i-
+		     fies
+		     whether
+		     the
+		     XML
+		     doc-
+		     u-
+		     ment
+		     being
+		     parsed
+		     is
+		     com-
+		     plete.
+		     If
+		     the
+		     doc-
+		     u-
+		     ment
+		     is
+		     to
+		     be
+		     incre-
+		     men-
+		     tally
+		     parsed
+		     then
+		     this
+		     option
+		     will
+		     be
+		     set
+		     to
+		     false,
+		     and
+		     when
+		     the
+		     last
+		     frag-
+		     ment
+		     of
+		     doc-
+		     u-
+		     ment
+		     is
+		     parsed
+		     it
+		     is
+		     set
+		     to
+		     true.
+		     For
+		     exam-
+		     ple,
+
+
+			    set parser [::xml::parser -final 0]
+			    $parser parse $data1
+			    $parser parse $data2
+			    $parser configure -final 1
+			    $parser parse $finaldata
+
+
+
+		      -ignorewhites-
+		     pace
+		     -ignorewhites-
+		     pace
+		     boolean
+
+		     If
+		     this
+		     option
+		     is
+		     set
+		     to
+		     true
+		     then
+		     spans
+		     of
+		     char-
+		     ac-
+		     ter
+		     data
+		     in
+		     the
+		     XML
+		     doc-
+		     u-
+		     ment
+		     which
+		     are
+		     com-
+		     posed
+		     only
+		     of
+		     white-
+		     space
+		     (CR,
+		     LF,
+		     space,
+		     tab)
+		     will
+		     not
+		     be
+		     reported
+		     to
+		     the
+		     appli-
+		     ca-
+		     tion.
+		     In
+		     other
+		     words,
+		     the
+		     data
+		     passed
+		     to
+		     every
+		     invo-
+		     ca-
+		     tion
+		     of
+		     the
+		     -char-
+		     ac-
+		     ter-
+		     dat-
+		     a-
+		     com-
+		     mand
+		     script
+		     will
+		     con-
+		     tain
+		     at
+		     least
+		     one
+		     non-
+		     white-
+		     space
+		     char-
+		     ac-
+		     ter.
+
+
+		      -nota-
+		     tion-
+		     de-
+		     clcom-
+		     mand
+		     -nota-
+		     tion-
+		     de-
+		     clcom-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     a
+		     nota-
+		     tion
+		     dec-
+		     la-
+		     ra-
+		     tion
+		     is
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     name
+		     uri
+
+		     where:
+
+
+
+
+				   name
+				   The
+				   name
+				   of
+				   the
+				   nota-
+				   tion
+
+			    uri
+				   An
+				   exter-
+				   nal
+				   iden-
+				   ti-
+				   fier
+				   for
+				   the
+				   nota-
+				   tion,
+				   usu-
+				   ally
+				   a
+				   URI.
+
+
+		      -not-
+		     stan-
+		     dalonecom-
+		     mand
+		     -not-
+		     stan-
+		     dalonecom-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     the
+		     parser
+		     deter-
+		     mines
+		     that
+		     the
+		     XML
+		     doc-
+		     u-
+		     ment
+		     being
+		     parsed
+		     is
+		     not
+		     a
+		     stand-
+		     alone
+		     doc-
+		     u-
+		     ment.
+
+
+		      -para-
+		     men-
+		     ti-
+		     ty-
+		     pars-
+		     ing
+		     -para-
+		     men-
+		     ti-
+		     ty-
+		     pars-
+		     ing
+		     boolean
+
+		     Con-
+		     trols
+		     whether
+		     exter-
+		     nal
+		     param-
+		     e-
+		     ter
+		     enti-
+		     ties
+		     are
+		     parsed.
+
+
+		      -param-
+		     e-
+		     ter-
+		     en-
+		     ti-
+		     ty-
+		     de-
+		     clcom-
+		     mand
+		     -param-
+		     e-
+		     ter-
+		     en-
+		     ti-
+		     ty-
+		     de-
+		     clcom-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     a
+		     param-
+		     e-
+		     ter
+		     entity
+		     dec-
+		     la-
+		     ra-
+		     tion
+		     is
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     name
+		     args
+
+		     where:
+
+
+
+
+				   name
+				   The
+				   name
+				   of
+				   the
+				   param-
+				   e-
+				   ter
+				   entity
+
+			    args
+			    For
+			    an
+			    inter-
+			    nal
+			    param-
+			    e-
+			    ter
+			    entity
+			    there
+			    is
+			    only
+			    one
+			    addi-
+			    tional
+			    argu-
+			    ment,
+			    the
+			    replace-
+			    ment
+			    text.
+			    For
+			    exter-
+			    nal
+			    param-
+			    e-
+			    ter
+			    enti-
+			    ties
+			    there
+			    are
+			    two
+			    addi-
+			    tional
+			    argu-
+			    ments,
+			    the
+			    sys-
+			    tem
+			    and
+			    pub-
+			    lic
+			    iden-
+			    ti-
+			    fiers
+			    respec-
+			    tively.
+
+
+		      -parser
+		     -parser
+		     name
+
+		     The
+		     name
+		     of
+		     the
+		     parser
+		     class
+		     to
+		     instan-
+		     ti-
+		     ate
+		     for
+		     this
+		     parser
+		     object.
+		     This
+		     option
+		     may
+		     only
+		     be
+		     spec-
+		     i-
+		     fied
+		     when
+		     the
+		     parser
+		     instance
+		     is
+		     cre-
+		     ated.
+
+
+		      -pro-
+		     cessin-
+		     gin-
+		     struc-
+		     tion-
+		     com-
+		     mand
+		     -pro-
+		     cessin-
+		     gin-
+		     struc-
+		     tion-
+		     com-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     a
+		     pro-
+		     cess-
+		     ing
+		     instruc-
+		     tion
+		     is
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     tar-
+		     get
+		     data
+
+		     where:
+
+
+
+			    tar-
+			    get
+			    The
+			    name
+			    of
+			    the
+			    pro-
+			    cess-
+			    ing
+			    instruc-
+			    tion
+			    tar-
+			    get
+
+			    data
+			    Remain-
+			    ing
+			    data
+			    from
+			    the
+			    pro-
+			    cess-
+			    ing
+			    instruc-
+			    tion
+
+
+		      -reportempty
+		     -reportempty
+		     boolean
+
+		     If
+		     this
+		     option
+		     is
+		     enabled
+		     then
+		     when
+		     an
+		     ele-
+		     ment
+		     is
+		     encoun-
+		     tered
+		     that
+		     uses
+		     the
+		     spe-
+		     cial
+		     empty
+		     ele-
+		     ment
+		     syn-
+		     tax,
+		     addi-
+		     tional
+		     argu-
+		     ments
+		     are
+		     appended
+		     to
+		     the
+		     -ele-
+		     mentstart-
+		     com-
+		     mand
+		     and
+		     -ele-
+		     mentend-
+		     com-
+		     mand
+		     call-
+		     backs.
+		     The
+		     argu-
+		     ments
+		     -empty
+		     1
+		     are
+		     appended.
+		     For
+		     exam-
+		     ple:
+		     script
+		     -empty
+		     1
+
+		      -startc-
+		     data-
+		     sec-
+		     tion-
+		     com-
+		     mand
+		     -startc-
+		     data-
+		     sec-
+		     tion-
+		     com-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     the
+		     start
+		     of
+		     a
+		     CDATA
+		     sec-
+		     tion
+		     sec-
+		     tion
+		     is
+		     encoun-
+		     tered.
+		     No
+		     argu-
+		     ments
+		     are
+		     appended
+		     to
+		     the
+		     script.
+
+
+		      -start-
+		     doc-
+		     type-
+		     de-
+		     clcom-
+		     mand
+		     -start-
+		     doc-
+		     type-
+		     de-
+		     clcom-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     at
+		     the
+		     start
+		     of
+		     a
+		     doc-
+		     u-
+		     ment
+		     type
+		     dec-
+		     la-
+		     ra-
+		     tion.
+		     No
+		     argu-
+		     ments
+		     are
+		     appended
+		     to
+		     the
+		     script.
+
+
+		      -unknow-
+		     nen-
+		     cod-
+		     ing-
+		     com-
+		     mand
+		     -unknow-
+		     nen-
+		     cod-
+		     ing-
+		     com-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     a
+		     char-
+		     ac-
+		     ter
+		     is
+		     encoun-
+		     tered
+		     with
+		     an
+		     unknown
+		     encod-
+		     ing.
+		     This
+		     option
+		     has
+		     not
+		     been
+		     imple-
+		     mented.
+
+
+		      -unparseden-
+		     ti-
+		     ty-
+		     de-
+		     clcom-
+		     mand
+		     -unparseden-
+		     ti-
+		     ty-
+		     de-
+		     clcom-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     a
+		     dec-
+		     la-
+		     ra-
+		     tion
+		     is
+		     encoun-
+		     tered
+		     for
+		     an
+		     unparsed
+		     entity.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     sys-
+		     tem
+		     pub-
+		     lic
+		     nota-
+		     tion
+
+		     where:
+
+
+
+			    sys-
+			    tem
+			    The
+			    sys-
+			    tem
+			    iden-
+			    ti-
+			    fier
+			    of
+			    the
+			    exter-
+			    nal
+			    entity,
+			    usu-
+			    ally
+			    a
+			    URI
+
+			    pub-
+				   lic
+				   The
+				   pub-
+				   lic
+				   iden-
+				   ti-
+				   fier
+				   of
+				   the
+				   exter-
+				   nal
+				   entity
+
+			    nota-
+				   tion
+				   The
+				   name
+				   of
+				   the
+				   nota-
+				   tion
+				   for
+				   the
+				   exter-
+				   nal
+				   entity
+
+
+		      -val-
+		     i-
+		     date
+		     -val-
+		     i-
+		     date
+		     boolean
+
+		     Enables
+		     val-
+		     i-
+		     da-
+		     tion
+		     of
+		     the
+		     XML
+		     doc-
+		     u-
+		     ment
+		     to
+		     be
+		     parsed.
+		     Any
+		     changes
+		     to
+		     this
+		     option
+		     are
+		     ignored
+		     after
+		     an
+		     XML
+		     doc-
+		     u-
+		     ment
+		     has
+		     started
+		     to
+		     be
+		     parsed,
+		     but
+		     the
+		     option
+		     may
+		     be
+		     changed
+		     after
+		     a
+		     reset.
+
+
+		      -warn-
+		     ing-
+		     com-
+		     mand
+		     -warn-
+		     ing-
+		     com-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     a
+		     warn-
+		     ing
+		     con-
+		     di-
+		     tion
+		     is
+		     detected.
+		     A
+		     warn-
+		     ing
+		     con-
+		     di-
+		     tion
+		     is
+		     where
+		     the
+		     XML
+		     doc-
+		     u-
+		     ment
+		     has
+		     not
+		     been
+		     authored
+		     cor-
+		     rectly,
+		     but
+		     is
+		     still
+		     well-
+		     formed
+		     and
+		     may
+		     be
+		     valid.
+		     For
+		     exam-
+		     ple,
+		     the
+		     spe-
+		     cial
+		     empty
+		     ele-
+		     ment
+		     syn-
+		     tax
+		     may
+		     be
+		     used
+		     for
+		     an
+		     ele-
+		     ment
+		     which
+		     has
+		     not
+		     been
+		     declared
+		     to
+		     have
+		     empty
+		     con-
+		     tent.
+		     By
+		     default,
+		     a
+		     call-
+		     back
+		     script
+		     is
+		     pro-
+		     vided
+		     which
+		     silently
+		     ignores
+		     the
+		     warn-
+		     ing.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     warn-
+		     ing-
+		     code
+		     warn-
+		     ingmsg
+
+		     where:
+
+
+
+			    warn-
+			    ing-
+			    code
+			    A
+			    sin-
+			    gle
+			    word
+			    descrip-
+			    tion
+			    of
+			    the
+			    warn-
+			    ing,
+			    intended
+			    for
+			    use
+			    by
+			    an
+			    appli-
+			    ca-
+			    tion
+
+			    wan-
+			    ringmsg
+			    A
+			    human-
+			    read-
+			    able
+			    descrip-
+			    tion
+			    of
+			    the
+			    warn-
+			    ing
+
+
+		      -xmlde-
+		     clcom-
+		     mand
+		     -xmlde-
+		     clcom-
+		     mand
+		     script
+
+		     Spec-
+		     i-
+		     fies
+		     the
+		     pre-
+		     fix
+		     of
+		     a
+		     Tcl
+		     com-
+		     mand
+		     to
+		     be
+		     eval-
+		     u-
+		     ated
+		     when
+		     the
+		     XML
+		     dec-
+		     la-
+		     ra-
+		     tion
+		     is
+		     encoun-
+		     tered.
+		     The
+		     com-
+		     mand
+		     eval-
+		     u-
+		     ated
+		     is:
+		     script
+		     ver-
+		     sion
+		     encod-
+		     ing
+		     stand-
+		     alone
+
+		     where:
+
+
+
+
+				   ver-
+				   sion
+				   The
+				   ver-
+				   sion
+				   num-
+				   ber
+				   of
+				   the
+				   XML
+				   spec-
+				   i-
+				   fi-
+				   ca-
+				   tion
+				   to
+				   which
+				   this
+				   doc-
+				   u-
+				   ment
+				   pur-
+				   ports
+				   to
+				   con-
+				   form
+
+			    encod-
+				   ing
+				   The
+				   char-
+				   ac-
+				   ter
+				   encod-
+				   ing
+				   of
+				   the
+				   doc-
+				   u-
+				   ment
+
+			    stand-
+			    alone
+			    A
+			    boolean
+			    declar-
+			    ing
+			    whether
+			    the
+			    doc-
+			    u-
+			    ment
+			    is
+			    stand-
+			    alone
+
+
+	      Parser
+		     Com-
+		     mand
+
+	      The
+	      ::xml::parser
+	      com-
+	      mand
+	      cre-
+	      ates
+	      a
+	      new
+	      Tcl
+	      com-
+	      mand
+	      with
+	      the
+	      same
+	      name
+	      as
+	      the
+	      parser.
+	      This
+	      com-
+	      mand
+	      may
+	      be
+	      used
+	      to
+	      invoke
+	      var-
+	      i-
+	      ous
+	      oper-
+	      a-
+	      tions
+	      on
+	      the
+	      parser
+	      object.
+	      It
+	      has
+	      the
+	      fol-
+	      low-
+	      ing
+	      gen-
+	      eral
+	      form:
+	      name
+	      option
+	      arg
+
+	       option
+	      and
+	      the
+	      arg
+	      deter-
+	      mine
+	      the
+	      exact
+	      be-
+	      hav-
+	      iour
+	      of
+	      the
+	      com-
+	      mand.
+	      The
+	      fol-
+	      low-
+	      ing
+	      com-
+	      mands
+	      are
+	      pos-
+	      si-
+	      ble
+	      for
+	      parser
+	      objects:
+
+
+
+		      cget
+		     cget
+		     -option
+
+		     Returns
+		     the
+		     cur-
+		     rent
+		     value
+		     of
+		     the
+		     con-
+		     fig-
+		     u-
+		     ra-
+		     tion
+		     option
+		     given
+		     by
+		     option.
+		     Option
+		     may
+		     have
+		     any
+		     of
+		     the
+		     val-
+		     ues
+		     accepted
+		     by
+		     the
+		     parser
+		     object.
+
+
+		      con-
+		     fig-
+		     ure
+		     con-
+		     fig-
+		     ure
+		     ?
+		     -option
+		     value
+		     ...
+		     ?
+
+		     Mod-
+		     ify
+		     the
+		     con-
+		     fig-
+		     u-
+		     ra-
+		     tion
+		     options
+		     of
+		     the
+		     parser
+		     object.
+		     Option
+		     may
+		     have
+		     any
+		     of
+		     the
+		     val-
+		     ues
+		     accepted
+		     by
+		     the
+		     parser
+		     object.
+
+
+		      enti-
+			    ty-
+			    parser
+			    enti-
+			    ty-
+			    parser
+			    ?
+			    option
+			    value
+			    ...
+			    ?
+
+		     Cre-
+		     ates
+		     a
+		     new
+		     parser
+		     object.
+		     The
+		     new
+		     object
+		     inher-
+		     its
+		     the
+		     same
+		     con-
+		     fig-
+		     u-
+		     ra-
+		     tion
+		     options
+		     as
+		     the
+		     par-
+		     ent
+		     parser
+		     object,
+		     but
+		     is
+		     able
+		     to
+		     parse
+		     XML
+		     data
+		     in
+		     a
+		     parsed
+		     entity.
+		     The
+		     option
+		     -dtd-
+		     sub-
+		     set
+		     allows
+		     markup
+		     dec-
+		     la-
+		     ra-
+		     tions
+		     to
+		     be
+		     treated
+		     as
+		     being
+		     in
+		     the
+		     inter-
+		     nal
+		     or
+		     exter-
+		     nal
+		     DTD
+		     sub-
+		     set.
+
+
+		      free
+			    free
+			    name
+
+		     Frees
+		     all
+		     resources
+		     asso-
+		     ci-
+		     ated
+		     with
+		     the
+		     parser
+		     object.
+		     The
+		     object
+		     is
+		     not
+		     usable
+		     after
+		     this
+		     com-
+		     mand
+		     has
+		     been
+		     invoked.
+
+
+		      get
+			    get
+			    name
+			    args
+
+		     Returns
+		     infor-
+		     ma-
+		     tion
+		     about
+		     the
+		     XML
+		     doc-
+		     u-
+		     ment
+		     being
+		     parsed.
+		     Each
+		     parser
+		     class
+		     pro-
+		     vides
+		     dif-
+		     fer-
+		     ent
+		     infor-
+		     ma-
+		     tion,
+		     see
+		     the
+		     doc-
+		     u-
+		     men-
+		     ta-
+		     tion
+		     for
+		     the
+		     parser
+		     class.
+
+
+		      parse
+			    parse
+			    xml
+			    args
+
+		     Parses
+		     the
+		     XML
+		     doc-
+		     u-
+		     ment.
+		     The
+		     usual
+		     desired
+		     effect
+		     is
+		     for
+		     var-
+		     i-
+		     ous
+		     appli-
+		     ca-
+		     tion
+		     call-
+		     backs
+		     to
+		     be
+		     eval-
+		     u-
+		     ated.
+		     Other
+		     func-
+		     tions
+		     will
+		     also
+		     be
+		     per-
+		     formed
+		     by
+		     the
+		     parser
+		     class,
+		     at
+		     the
+		     very
+		     least
+		     this
+		     includes
+		     check-
+		     ing
+		     the
+		     XML
+		     doc-
+		     u-
+		     ment
+		     for
+		     well-
+		     formed-
+		     ness.
+
+
+		      reset
+			    reset
+
+		     Ini-
+		     tialises
+		     the
+		     parser
+		     object
+		     in
+		     prepa-
+		     ra-
+		     tion
+		     for
+		     pars-
+		     ing
+		     a
+		     new
+		     XML
+		     doc-
+		     u-
+		     ment.
+
+
+
+
+CALL-
+       BACK
+       RETURN
+       CODES
+
+       Every
+       call-
+       back
+       script
+       eval-
+       u-
+       ated
+       by
+       a
+       parser
+       may
+       return
+       a
+       return
+       code
+       other
+       than
+       TCL_OK.
+       Return
+       codes
+       are
+       inter-
+       preted
+       as
+       fol-
+       lows:
+
+
+
+	      break
+	      Sup-
+	      presses
+	      invo-
+	      ca-
+	      tion
+	      of
+	      all
+	      fur-
+	      ther
+	      call-
+	      back
+	      scripts.
+	      The
+	      parse
+	      method
+	      returns
+	      the
+	      TCL_OK
+	      return
+	      code.
+
+	      con-
+	      tinue
+	      Sup-
+	      presses
+	      invo-
+	      ca-
+	      tion
+	      of
+	      fur-
+	      ther
+	      call-
+	      back
+	      scripts
+	      until
+	      the
+	      cur-
+	      rent
+	      ele-
+	      ment
+	      has
+	      fin-
+	      ished.
+
+	      error
+	      Sup-
+	      presses
+	      invo-
+	      ca-
+	      tion
+	      of
+	      all
+	      fur-
+	      ther
+	      call-
+	      back
+	      scripts.
+	      The
+	      parse
+	      method
+	      also
+	      returns
+	      the
+	      TCL_ERROR
+	      return
+	      code.
+
+	      default
+	      Any
+	      other
+	      return
+	      code
+	      sup-
+	      presses
+	      invo-
+	      ca-
+	      tion
+	      of
+	      all
+	      fur-
+	      ther
+	      call-
+	      back
+	      scripts.
+	      The
+	      parse
+	      method
+	      returns
+	      the
+	      same
+	      return
+	      code.
+
+
+APPLI-
+       CA-
+       TION
+       EXAM-
+       PLES
+
+       This
+       script
+       out-
+       puts
+       the
+       char-
+       ac-
+       ter
+       data
+       of
+       an
+       XML
+       doc-
+       u-
+       ment
+       read
+       from
+       stdin.
+
+
+	      package require xml
+
+	      proc cdata {data args} {
+		  puts -nonewline $data
+	      }
+
+	      set parser [::xml::parser -characterdatacommand cdata]
+	      $parser parse [read stdin]
+
+
+
+       This
+       script
+       counts
+       the
+       num-
+       ber
+       of
+       ele-
+       ments
+       in
+       an
+       XML
+       doc-
+       u-
+       ment
+       read
+       from
+       stdin.
+
+
+	      package require xml
+
+	      proc EStart {varName name attlist args} {
+		  upvar #0 $varName var
+		  incr var
+	      }
+
+	      set count 0
+	      set parser [::xml::parser -elementstartcommand [list EStart count]]
+	      $parser parse [read stdin]
+	      puts "The XML document contains $count elements"
+
+
+
+PARSER
+       CLASSES
+
+       This
+       sec-
+       tion
+       will
+       dis-
+       cuss
+       how
+       a
+       parser
+       class
+       is
+       imple-
+       mented.
+
+       Tcl
+	      Parser
+	      Class
+
+       The
+       pure-
+       Tcl
+       parser
+       class
+       requires
+       no
+       com-
+       pi-
+       la-
+       tion
+       -
+       it
+       is
+       a
+       col-
+       lec-
+       tion
+       of
+       Tcl
+       scripts.
+       This
+       parser
+       imple-
+       men-
+       ta-
+       tion
+       is
+       non-
+       val-
+       i-
+       dat-
+       ing,
+       ie.
+       it
+       can
+       only
+       check
+       well-
+       formed-
+       ness
+       in
+       a
+       doc-
+       u-
+       ment.
+       How-
+       ever,
+       by
+       enabling
+       the
+       -val-
+       i-
+       date
+       option
+       it
+       will
+       read
+       the
+       doc-
+       u-
+       ment's
+       DTD
+       and
+       resolve
+       exter-
+       nal
+       enti-
+       ties.
+
+
+       This
+       parser
+       imple-
+       men-
+       ta-
+       tion
+       aims
+       to
+       imple-
+       ment
+       XML
+       v1.0
+       and
+       sup-
+       ports
+       XML
+       Names-
+       paces.
+
+
+       Gen-
+       er-
+       ally
+       the
+       parser
+       pro-
+       duces
+       XML
+       Infoset
+       infor-
+       ma-
+       tion
+       items.
+       That
+       is,
+       it
+       gives
+       the
+       appli-
+       ca-
+       tion
+       a
+       slightly
+       higher-
+       level
+       view
+       than
+       the
+       raw
+       XML
+       syn-
+       tax.
+       For
+       exam-
+       ple,
+       it
+       does
+       not
+       report
+       CDATA
+       Sec-
+       tions.
+
+
+
+       Expat
+	      Parser
+	      Class
+
+       This
+       sec-
+       tion
+       will
+       dis-
+       cuss
+       the
+       Expat
+       parser
+       class.
+
+
+
+
+SEE
+       ALSO
+
+       TclDOM,
+       a
+       Tcl
+       inter-
+       face
+       for
+       the
+       W3C
+       Doc-
+       u-
+       ment
+       Object
+       Model.
+
+
+KEY-
+       WORDS
+
+Tcl Built-In Commands		      Tcl			     TclXML(n)

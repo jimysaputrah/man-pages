@@ -1,0 +1,321 @@
+GLTEXIMAGE1D(3G)					      GLTEXIMAGE1D(3G)
+
+
+
+NAME
+       glTexImage1D - specify a one-dimensional texture image
+
+
+C SPECIFICATION
+       void glTexImage1D( GLenum target,
+			  GLint level,
+			  GLint internalformat,
+			  GLsizei width,
+			  GLint border,
+			  GLenum format,
+			  GLenum type,
+			  const GLvoid *pixels )
+
+
+PARAMETERS
+       target	       Specifies the target texture.  Must be GL_TEXTURE_1D or
+		       GL_PROXY_TEXTURE_1D.
+
+       level	       Specifies the level-of-detail number.  Level 0  is  the
+		       base  image level.  Level n is the nth mipmap reduction
+		       image.
+
+       internalformat  Specifies the number of color components  in  the  tex-
+		       ture.   Must  be 1, 2, 3, or 4, or one of the following
+		       symbolic  constants:  GL_ALPHA,	GL_ALPHA4,  GL_ALPHA8,
+		       GL_ALPHA12,  GL_ALPHA16,  GL_LUMINANCE,	GL_LUMINANCE4,
+		       GL_LUMINANCE8,	  GL_LUMINANCE12,      GL_LUMINANCE16,
+		       GL_LUMINANCE_ALPHA,		 GL_LUMINANCE4_ALPHA4,
+		       GL_LUMINANCE6_ALPHA2,		 GL_LUMINANCE8_ALPHA8,
+		       GL_LUMINANCE12_ALPHA4,	       GL_LUMINANCE12_ALPHA12,
+		       GL_LUMINANCE16_ALPHA16,	GL_INTENSITY,	GL_INTENSITY4,
+		       GL_INTENSITY8,  GL_INTENSITY12, GL_INTENSITY16, GL_RGB,
+		       GL_R3_G3_B2,  GL_RGB4,  GL_RGB5,   GL_RGB8,   GL_RGB10,
+		       GL_RGB12,   GL_RGB16,   GL_RGBA,   GL_RGBA2,  GL_RGBA4,
+		       GL_RGB5_A1,  GL_RGBA8,	GL_RGB10_A2,   GL_RGBA12,   or
+		       GL_RGBA16.
+
+       width	       Specifies  the width of the texture image.  Must be 2^n
+		       + 2 (border) for some integer  n.  All  implementations
+		       support	texture  images  that  are  at least 64 texels
+		       wide. The height of the 1D texture image is 1.
+
+       border	       Specifies the width of the border.  Must be either 0 or
+		       1.
+
+       format	       Specifies  the format of the pixel data.  The following
+		       symbolic values are accepted:  GL_COLOR_INDEX,  GL_RED,
+		       GL_GREEN,  GL_BLUE,  GL_ALPHA, GL_RGB, GL_BGR, GL_RGBA,
+		       GL_BGRA, GL_LUMINANCE, and GL_LUMINANCE_ALPHA.
+
+       type	       Specifies the data type of the pixel data.  The follow-
+		       ing  symbolic  values  are  accepted: GL_UNSIGNED_BYTE,
+		       GL_BYTE,   GL_BITMAP,   GL_UNSIGNED_SHORT,    GL_SHORT,
+		       GL_UNSIGNED_INT, 	   GL_INT,	     GL_FLOAT,
+		       GL_UNSIGNED_BYTE_3_3_2,	   GL_UNSIGNED_BYTE_2_3_3_REV,
+		       GL_UNSIGNED_SHORT_5_6_5,   GL_UNSIGNED_SHORT_5_6_5_REV,
+		       GL_UNSIGNED_SHORT_4_4_4_4,
+		       GL_UNSIGNED_SHORT_4_4_4_4_REV,
+		       GL_UNSIGNED_SHORT_5_5_5_1,
+		       GL_UNSIGNED_SHORT_1_5_5_5_REV, GL_UNSIGNED_INT_8_8_8_8,
+		       GL_UNSIGNED_INT_8_8_8_8_REV,
+		       GL_UNSIGNED_INT_10_10_10_2,			   and
+		       GL_UNSIGNED_INT_2_10_10_10_REV.
+
+       pixels	       Specifies a pointer to the image data in memory.
+
+DESCRIPTION
+       Texturing maps a portion of a specified texture image onto each graphi-
+       cal  primitive  for  which texturing is enabled.  To enable and disable
+       one-dimensional texturing, call glEnable and  glDisable	with  argument
+       GL_TEXTURE_1D.
+
+       Texture	images	are defined with glTexImage1D.	The arguments describe
+       the parameters of the texture image, such as width, width of  the  bor-
+       der, level-of-detail number (see glTexParameter), and the internal res-
+       olution and  used  to  store  the  image.   The	last  three  arguments
+       describe  how the image is represented in memory; they are identical to
+       the pixel formats used for glDrawPixels.
+
+       If target is GL_PROXY_TEXTURE_1D, no data is read from pixels, but  all
+       of  the	texture  image state is recalculated, checked for consistency,
+       and checked against the implementation's capabilities.  If  the	imple-
+       mentation  cannot  handle  a  texture of the requested texture size, it
+       sets all of the image state to 0, but does not generate an  error  (see
+       glGetError).  To  query	for an entire mipmap array, use an image array
+       level greater than or equal to 1.
+
+       If target is GL_TEXTURE_1D, data is read from pixels as a  sequence  of
+       signed  or unsigned bytes, shorts, or longs, or single-precision float-
+       ing-point values, depending on type.  These  values  are  grouped  into
+       sets  of  one, two, three, or four values, depending on format, to form
+       elements.  If type is GL_BITMAP, the data is considered as a string  of
+       unsigned  bytes (and format must be GL_COLOR_INDEX).  Each data byte is
+       treated as eight  1-bit	elements,  with  bit  ordering	determined  by
+       GL_UNPACK_LSB_FIRST (see glPixelStore).
+
+       The  first  element  corresponds  to the left end of the texture array.
+       Subsequent elements progress left-to-right through the remaining texels
+       in  the	texture array.	The final element corresponds to the right end
+       of the texture array.
+
+       format determines the composition of each element in  pixels.   It  can
+       assume one of eleven symbolic values:
+
+       GL_COLOR_INDEX
+		 Each  element	is a single value, a color index.  The GL con-
+		 verts it to fixed point (with an unspecified number  of  zero
+		 bits to the right of the binary point), shifted left or right
+		 depending on the value and sign of GL_INDEX_SHIFT, and  added
+		 to  GL_INDEX_OFFSET  (see  glPixelTransfer).	The  resulting
+		 index is converted to a set of  color	components  using  the
+		 GL_PIXEL_MAP_I_TO_R,			  GL_PIXEL_MAP_I_TO_G,
+		 GL_PIXEL_MAP_I_TO_B,  and  GL_PIXEL_MAP_I_TO_A  tables,   and
+		 clamped to the range [0,1].
+
+       GL_RED	 Each  element	is a single red component.  The GL converts it
+		 to floating point and assembles it into an  RGBA  element  by
+		 attaching 0 for green and blue, and 1 for alpha.  Each compo-
+		 nent  is  then  multiplied  by  the   signed	scale	factor
+		 GL_c_SCALE,  added to the signed bias GL_c_BIAS.  and clamped
+		 to the range [0,1] (see glPixelTransfer).
+
+       GL_GREEN  Each element is a single green component.  The GL converts it
+		 to  floating  point  and assembles it into an RGBA element by
+		 attaching 0 for red and blue, and 1 for alpha.   Each	compo-
+		 nent	is   then   multiplied	by  the  signed  scale	factor
+		 GL_c_SCALE, added to the signed bias GL_c_BIAS,  and  clamped
+		 to the range [0,1] (see glPixelTransfer).
+
+       GL_BLUE	 Each  element is a single blue component.  The GL converts it
+		 to floating point and assembles it into an  RGBA  element  by
+		 attaching  0 for red and green, and 1 for alpha.  Each compo-
+		 nent  is  then  multiplied  by  the   signed	scale	factor
+		 GL_c_SCALE,  added  to the signed bias GL_c_BIAS, and clamped
+		 to the range [0,1] (see glPixelTransfer).
+
+       GL_ALPHA  Each element is a single alpha component.  The GL converts it
+		 to  floating  point  and assembles it into an RGBA element by
+		 attaching 0 for red, green, and blue.	Each component is then
+		 multiplied  by  the  signed scale factor GL_c_SCALE, added to
+		 the signed bias GL_c_BIAS, and clamped  to  the  range  [0,1]
+		 (see glPixelTransfer).
+
+       GL_RGB
+
+       GL_BGR	 Each  element is an RGB triple.  The GL converts it to float-
+		 ing point and assembles it into an RGBA element by  attaching
+		 1 for alpha.  Each component is then multiplied by the signed
+		 scale factor GL_c_SCALE, added to the signed bias  GL_c_BIAS,
+		 and clamped to the range [0,1] (see glPixelTransfer).
+
+       GL_RGBA
+
+       GL_BGRA	 Each element contains all four components.  Each component is
+		 then multiplied by the signed scale factor GL_c_SCALE,  added
+		 to  the signed bias GL_c_BIAS, and clamped to the range [0,1]
+		 (see glPixelTransfer).
+
+       GL_LUMINANCE
+		 Each element is a single luminance value.  The GL converts it
+		 to  floating point, then assembles it into an RGBA element by
+		 replicating the luminance value three times for  red,	green,
+		 and  blue  and attaching 1 for alpha.	Each component is then
+		 multiplied by the signed scale factor	GL_c_SCALE,  added  to
+		 the  signed  bias  GL_c_BIAS,	and clamped to the range [0,1]
+		 (see glPixelTransfer).
+
+       GL_LUMINANCE_ALPHA
+		 Each element is a luminance/alpha pair.  The GL  converts  it
+		 to  floating point, then assembles it into an RGBA element by
+		 replicating the luminance value three times for  red,	green,
+		 and  blue.   Each  component is then multiplied by the signed
+		 scale factor GL_c_SCALE, added to the signed bias  GL_c_BIAS,
+		 and clamped to the range [0,1] (see glPixelTransfer).
+
+       If an application wants to store the texture at a certain resolution or
+       in a certain , it can request the resolution and  with  internalformat.
+       The GL will choose an internal representation that closely approximates
+       that requested by internalformat, but it may not match  exactly.   (The
+       representations	specified by GL_LUMINANCE, GL_LUMINANCE_ALPHA, GL_RGB,
+       and GL_RGBA must match exactly. The numeric values 1, 2, 3, and	4  may
+       also be used to specify the preceding representations.)
+
+       Use  the  GL_PROXY_TEXTURE_1D target to try out a resolution and update
+       and recompute its best match for the requested storage resolution and .
+       To  query this state, call glGetTexLevelParameter.  If the texture can-
+       not be accommodated, texture state is set to 0.
+
+       A one-component texture image uses only the red component of  the  RGBA
+       color  from  pixels.  A two-component image uses the R and A values.  A
+       three-component image uses the R, G, and B  values.   A	four-component
+       image uses all of the RGBA components.
+
+NOTES
+       Texturing has no effect in color index mode.
+
+       If the GL_ARB_imaging extension is supported, RGBA elements may also be
+       processed by the imaging pipeline.  The following stages may be applied
+       to an RGBA color before color component clamping to the range [0, 1]:
+
+       1. Color component replacement by the color table specified for
+	  GL_COLOR_TABLE, if enabled. See glColorTable.
+
+       2. One-dimensional convolution filtering, if enabled. See
+	  glConvolutionFilter1D.
+
+	  If  a convolution filter changes the __width of the texture (by pro-
+	  cessing with a GL_CONVOLUTION_BORDER_MODE of	GL_REDUCE,  for  exam-
+	  ple), the width must 2^n + 2(border), for some integer n, after fil-
+	  tering.
+
+       3. RGBA components may be multiplied by GL_POST_CONVOLUTION_c_SCALE,
+	  and  added   to   GL_POST_CONVOLUTION_c_BIAS,   if   enabled.    See
+	  glPixelTransfer.
+
+       4. Color component replacement by the color table specified for
+	  GL_POST_CONVOLUTION_COLOR_TABLE, if enabled.	See glColorTable.
+
+       5. Transformation by the color matrix.  See glMatrixMode.
+
+       6. RGBA components may be multiplied by GL_POST_COLOR_MATRIX_c_SCALE,
+	  and	added	to   GL_POST_COLOR_MATRIX_c_BIAS,   if	enabled.   See
+	  glPixelTransfer.
+
+       7. Color component replacement by the color table specified for
+	  GL_POST_COLOR_MATRIX_COLOR_TABLE, if enabled.  See glColorTable.
+
+       The texture image can be represented by the same data  formats  as  the
+       pixels  in  a  glDrawPixels  command,  except that GL_STENCIL_INDEX and
+       GL_DEPTH_COMPONENT cannot be used.   glPixelStore  and  glPixelTransfer
+       modes   affect	texture   images   in  exactly	the  way  they	affect
+       glDrawPixels.
+
+       GL_PROXY_TEXTURE_1D may be used only  if  the  GL  version  is  1.1  or
+       greater.
+
+       Internal  formats  other  than 1, 2, 3, or 4 may be used only if the GL
+       version is 1.1 or greater.
+
+       In GL version 1.1 or greater, pixels may be a  null  pointer.  In  this
+       case  texture  memory  is  allocated  to accommodate a texture of width
+       width.  You can then download subtextures  to  initialize  the  texture
+       memory.	The image is undefined if the program tries to apply an unini-
+       tialized portion of the texture image to a primitive.
+
+       Formats	GL_BGR,  and   GL_BGRA	 and   types   GL_UNSIGNED_BYTE_3_3_2,
+       GL_UNSIGNED_BYTE_2_3_3_REV,		      GL_UNSIGNED_SHORT_5_6_5,
+       GL_UNSIGNED_SHORT_5_6_5_REV,		    GL_UNSIGNED_SHORT_4_4_4_4,
+       GL_UNSIGNED_SHORT_4_4_4_4_REV,		    GL_UNSIGNED_SHORT_5_5_5_1,
+       GL_UNSIGNED_SHORT_1_5_5_5_REV,		      GL_UNSIGNED_INT_8_8_8_8,
+       GL_UNSIGNED_INT_8_8_8_8_REV,	  GL_UNSIGNED_INT_10_10_10_2,	   and
+       GL_UNSIGNED_INT_2_10_10_10_REV are available only if the GL version  is
+       1.2 or greater.
+
+       When the GL_ARB_multitexture extension is supported, glTexImage1D spec-
+       ifies the one-dimensional texture for the current texture unit,	speci-
+       fied with glActiveTextureARB.
+
+ERRORS
+       GL_INVALID_ENUM	 is  generated	if  target  is	not  GL_TEXTURE_1D  or
+       GL_PROXY_TEXTURE_1D.
+
+       GL_INVALID_ENUM is generated if format is not an accepted
+	constant.   Format   constants	 other	 than	GL_STENCIL_INDEX   and
+       GL_DEPTH_COMPONENT are accepted.
+
+       GL_INVALID_ENUM is generated if type is not a type constant.
+
+       GL_INVALID_ENUM	is  generated  if  type is GL_BITMAP and format is not
+       GL_COLOR_INDEX.
+
+       GL_INVALID_VALUE is generated if level is less than 0.
+
+       GL_INVALID_VALUE may be generated if level is greater  than  log2(max),
+       where max is the returned value of GL_MAX_TEXTURE_SIZE.
+
+       GL_INVALID_VALUE  is  generated if internalformat is not 1, 2, 3, 4, or
+       one of the accepted resolution and  symbolic constants.
+
+       GL_INVALID_VALUE is generated if width is less than 0 or greater than 2
+       +  GL_MAX_TEXTURE_SIZE,	or if it cannot be represented as 2^n + 2(bor-
+       der) for some integer value of n.
+
+       GL_INVALID_VALUE is generated if border is not 0 or 1.
+
+       GL_INVALID_OPERATION is generated if glTexImage1D is  executed  between
+       the execution of glBegin and the corresponding execution of glEnd.
+
+       GL_INVALID_OPERATION    is    generated	  if	type	is    one   of
+       GL_UNSIGNED_BYTE_3_3_2,			   GL_UNSIGNED_BYTE_2_3_3_REV,
+       GL_UNSIGNED_SHORT_5_6_5,  or  GL_UNSIGNED_SHORT_5_6_5_REV and format is
+       not GL_RGB.
+
+       GL_INVALID_OPERATION   is    generated	 if    type    is    one    of
+       GL_UNSIGNED_SHORT_4_4_4_4,		GL_UNSIGNED_SHORT_4_4_4_4_REV,
+       GL_UNSIGNED_SHORT_5_5_5_1,		GL_UNSIGNED_SHORT_1_5_5_5_REV,
+       GL_UNSIGNED_INT_8_8_8_8, 		  GL_UNSIGNED_INT_8_8_8_8_REV,
+       GL_UNSIGNED_INT_10_10_10_2, or GL_UNSIGNED_INT_2_10_10_10_REV and  for-
+       mat is neither GL_RGBA nor GL_BGRA.
+
+ASSOCIATED GETS
+       glGetTexImage
+       glIsEnabled with argument GL_TEXTURE_1D
+
+SEE ALSO
+       glActiveTextureARB,  glColorTable, glConvolutionFilter1D, glCopyPixels,
+       glCopyTexImage1D,	glCopyTexImage2D,	  glCopyTexSubImage1D,
+       glCopyTexSubImage2D,  glCopyTexSubImage3D,  glDrawPixels, glMatrixMode,
+       glPixelStore,  glPixelTransfer,	 glTexEnv,   glTexGen,	 glTexImage2D,
+       glTexImage3D,	glTexSubImage1D,   glTexSubImage2D,   glTexSubImage3D,
+       glTexParameter
+
+
+
+
+							      GLTEXIMAGE1D(3G)

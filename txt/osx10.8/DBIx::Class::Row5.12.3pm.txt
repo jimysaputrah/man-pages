@@ -1,0 +1,470 @@
+DBIx::Class::Row(3)   User Contributed Perl Documentation  DBIx::Class::Row(3)
+
+
+
+NAME
+       DBIx::Class::Row - Basic row methods
+
+SYNOPSIS
+DESCRIPTION
+       This class is responsible for defining and doing basic operations on
+       rows derived from DBIx::Class::ResultSource objects.
+
+       Row objects are returned from DBIx::Class::ResultSets using the create,
+       find, next and all methods, as well as invocations of 'single' (
+       belongs_to, has_one or might_have) relationship accessors of
+       DBIx::Class::Row objects.
+
+METHODS
+   new
+	 my $row = My::Class->new(\%attrs);
+
+	 my $row = $schema->resultset('MySource')->new(\%colsandvalues);
+
+       Arguments: \%attrs or \%colsandvalues
+       Returns: A Row object
+
+       While you can create a new row object by calling "new" directly on this
+       class, you are better off calling it on a DBIx::Class::ResultSet
+       object.
+
+       When calling it directly, you will not get a complete, usable row
+       object until you pass or set the "result_source" attribute, to a
+       DBIx::Class::ResultSource instance that is attached to a
+       DBIx::Class::Schema with a valid connection.
+
+       $attrs is a hashref of column name, value data. It can also contain
+       some other attributes such as the "result_source".
+
+       Passing an object, or an arrayref of objects as a value will call
+       "set_from_related" in DBIx::Class::Relationship::Base for you. When
+       passed a hashref or an arrayref of hashrefs as the value, these will be
+       turned into objects via new_related, and treated as if you had passed
+       objects.
+
+       For a more involved explanation, see "create" in
+       DBIx::Class::ResultSet.
+
+       Please note that if a value is not passed to new, no value will be sent
+       in the SQL INSERT call, and the column will therefore assume whatever
+       default value was specified in your database. While DBIC will retrieve
+       the value of autoincrement columns, it will never make an explicit
+       database trip to retrieve default values assigned by the RDBMS. You can
+       explicitly request that all values be fetched back from the database by
+       calling "discard_changes", or you can supply an explicit "undef" to
+       columns with NULL as the default, and save yourself a SELECT.
+
+	CAVEAT:
+
+	The behavior described above will backfire if you use a foreign key column
+	with a database-defined default. If you call the relationship accessor on
+	an object that doesn't have a set value for the FK column, DBIC will throw
+	an exception, as it has no way of knowing the PK of the related object (if
+	there is one).
+
+   insert
+	 $row->insert;
+
+       Arguments: none
+       Returns: The Row object
+
+       Inserts an object previously created by "new" into the database if it
+       isn't already in there. Returns the object itself. To insert an
+       entirely new row into the database, use "create" in
+       DBIx::Class::ResultSet.
+
+       To fetch an uninserted row object, call new on a resultset.
+
+       This will also insert any uninserted, related objects held inside this
+       one, see "create" in DBIx::Class::ResultSet for more details.
+
+   in_storage
+	 $row->in_storage; # Get value
+	 $row->in_storage(1); # Set value
+
+       Arguments: none or 1|0
+       Returns: 1|0
+
+       Indicates whether the object exists as a row in the database or not.
+       This is set to true when "find" in DBIx::Class::ResultSet, "create" in
+       DBIx::Class::ResultSet or "insert" in DBIx::Class::ResultSet are used.
+
+       Creating a row object using "new" in DBIx::Class::ResultSet, or calling
+       "delete" on one, sets it to false.
+
+   update
+	 $row->update(\%columns?)
+
+       Arguments: none or a hashref
+       Returns: The Row object
+
+       Throws an exception if the row object is not yet in the database,
+       according to "in_storage".
+
+       This method issues an SQL UPDATE query to commit any changes to the
+       object to the database if required (see "get_dirty_columns").  It
+       throws an exception if a proper WHERE clause uniquely identifying the
+       database row can not be constructed (see significance of primary keys
+       for more details).
+
+       Also takes an optional hashref of "column_name => value" pairs to
+       update on the object first. Be aware that the hashref will be passed to
+       "set_inflated_columns", which might edit it in place, so don't rely on
+       it being the same after a call to "update".  If you need to preserve
+       the hashref, it is sufficient to pass a shallow copy to "update", e.g.
+       ( { %{ $href } } )
+
+       If the values passed or any of the column values set on the object
+       contain scalar references, e.g.:
+
+	 $row->last_modified(\'NOW()');
+	 # OR
+	 $row->update({ last_modified => \'NOW()' });
+
+       The update will pass the values verbatim into SQL. (See SQL::Abstract
+       docs).  The values in your Row object will NOT change as a result of
+       the update call, if you want the object to be updated with the actual
+       values from the database, call "discard_changes" after the update.
+
+	 $row->update()->discard_changes();
+
+       To determine before calling this method, which column values have
+       changed and will be updated, call "get_dirty_columns".
+
+       To check if any columns will be updated, call "is_changed".
+
+       To force a column to be updated, call "make_column_dirty" before this
+       method.
+
+   delete
+	 $row->delete
+
+       Arguments: none
+       Returns: The Row object
+
+       Throws an exception if the object is not in the database according to
+       "in_storage". Also throws an exception if a proper WHERE clause
+       uniquely identifying the database row can not be constructed (see
+       significance of primary keys for more details).
+
+       The object is still perfectly usable, but "in_storage" will now return
+       0 and the object must be reinserted using "insert" before it can be
+       used to "update" the row again.
+
+       If you delete an object in a class with a "has_many" relationship, an
+       attempt is made to delete all the related objects as well. To turn this
+       behaviour off, pass "cascade_delete => 0" in the $attr hashref of the
+       relationship, see DBIx::Class::Relationship. Any database-level cascade
+       or restrict will take precedence over a DBIx-Class-based cascading
+       delete, since DBIx-Class deletes the main row first and only then
+       attempts to delete any remaining related rows.
+
+       If you delete an object within a txn_do() (see "txn_do" in
+       DBIx::Class::Storage) and the transaction subsequently fails, the row
+       object will remain marked as not being in storage. If you know for a
+       fact that the object is still in storage (i.e. by inspecting the cause
+       of the transaction's failure), you can use "$obj->in_storage(1)" to
+       restore consistency between the object and the database. This would
+       allow a subsequent "$obj->delete" to work as expected.
+
+       See also "delete" in DBIx::Class::ResultSet.
+
+   get_column
+	 my $val = $row->get_column($col);
+
+       Arguments: $columnname
+       Returns: The value of the column
+
+       Throws an exception if the column name given doesn't exist according to
+       "has_column".
+
+       Returns a raw column value from the row object, if it has already been
+       fetched from the database or set by an accessor.
+
+       If an inflated value has been set, it will be deflated and returned.
+
+       Note that if you used the "columns" or the "select/as" search
+       attributes on the resultset from which $row was derived, and did not
+       include $columnname in the list, this method will return "undef" even
+       if the database contains some value.
+
+       To retrieve all loaded column values as a hash, use "get_columns".
+
+   has_column_loaded
+	 if ( $row->has_column_loaded($col) ) {
+	    print "$col has been loaded from db";
+	 }
+
+       Arguments: $columnname
+       Returns: 0|1
+
+       Returns a true value if the column value has been loaded from the
+       database (or set locally).
+
+   get_columns
+	 my %data = $row->get_columns;
+
+       Arguments: none
+       Returns: A hash of columnname, value pairs.
+
+       Returns all loaded column data as a hash, containing raw values. To get
+       just one value for a particular column, use "get_column".
+
+       See "get_inflated_columns" to get the inflated values.
+
+   get_dirty_columns
+	 my %data = $row->get_dirty_columns;
+
+       Arguments: none
+       Returns: A hash of column, value pairs
+
+       Only returns the column, value pairs for those columns that have been
+       changed on this object since the last "update" or "insert" call.
+
+       See "get_columns" to fetch all column/value pairs.
+
+   make_column_dirty
+	 $row->make_column_dirty($col)
+
+       Arguments: $columnname
+       Returns: undefined
+
+       Throws an exception if the column does not exist.
+
+       Marks a column as having been changed regardless of whether it has
+       really changed.
+
+   get_inflated_columns
+	 my %inflated_data = $obj->get_inflated_columns;
+
+       Arguments: none
+       Returns: A hash of column, object|value pairs
+
+       Returns a hash of all column keys and associated values. Values for any
+       columns set to use inflation will be inflated and returns as objects.
+
+       See "get_columns" to get the uninflated values.
+
+       See DBIx::Class::InflateColumn for how to setup inflation.
+
+   set_column
+	 $row->set_column($col => $val);
+
+       Arguments: $columnname, $value
+       Returns: $value
+
+       Sets a raw column value. If the new value is different from the old
+       one, the column is marked as dirty for when you next call "update".
+
+       If passed an object or reference as a value, this method will happily
+       attempt to store it, and a later "insert" or "update" will try and
+       stringify/numify as appropriate. To set an object to be deflated
+       instead, see "set_inflated_columns".
+
+   set_columns
+	 $row->set_columns({ $col => $val, ... });
+
+       Arguments: \%columndata
+       Returns: The Row object
+
+       Sets multiple column, raw value pairs at once.
+
+       Works as "set_column".
+
+   set_inflated_columns
+	 $row->set_inflated_columns({ $col => $val, $relname => $obj, ... });
+
+       Arguments: \%columndata
+       Returns: The Row object
+
+       Sets more than one column value at once. Any inflated values are
+       deflated and the raw values stored.
+
+       Any related values passed as Row objects, using the relation name as a
+       key, are reduced to the appropriate foreign key values and stored. If
+       instead of related row objects, a hashref of column, value data is
+       passed, will create the related object first then store.
+
+       Will even accept arrayrefs of data as a value to a "has_many" in
+       DBIx::Class::Relationship key, and create the related objects if
+       necessary.
+
+       Be aware that the input hashref might be edited in place, so don't rely
+       on it being the same after a call to "set_inflated_columns". If you
+       need to preserve the hashref, it is sufficient to pass a shallow copy
+       to "set_inflated_columns", e.g. ( { %{ $href } } )
+
+       See also "set_from_related" in DBIx::Class::Relationship::Base.
+
+   copy
+	 my $copy = $orig->copy({ change => $to, ... });
+
+       Arguments: \%replacementdata
+       Returns: The Row object copy
+
+       Inserts a new row into the database, as a copy of the original object.
+       If a hashref of replacement data is supplied, these will take
+       precedence over data in the original. Also any columns which have the
+       column info attribute "is_auto_increment => 1" are explicitly removed
+       before the copy, so that the database can insert its own
+       autoincremented values into the new object.
+
+       Relationships will be followed by the copy procedure only if the
+       relationship specifies a true value for its cascade_copy attribute.
+       "cascade_copy" is set by default on "has_many" relationships and unset
+       on all others.
+
+   store_column
+	 $row->store_column($col => $val);
+
+       Arguments: $columnname, $value
+       Returns: The value sent to storage
+
+       Set a raw value for a column without marking it as changed. This method
+       is used internally by "set_column" which you should probably be using.
+
+       This is the lowest level at which data is set on a row object, extend
+       this method to catch all data setting methods.
+
+   inflate_result
+	 Class->inflate_result($result_source, \%me, \%prefetch?)
+
+       Arguments: $result_source, \%columndata, \%prefetcheddata
+       Returns: A Row object
+
+       All DBIx::Class::ResultSet methods that retrieve data from the database
+       and turn it into row objects call this method.
+
+       Extend this method in your Result classes to hook into this process,
+       for example to rebless the result into a different class.
+
+       Reblessing can also be done more easily by setting "result_class" in
+       your Result class. See "result_class" in DBIx::Class::ResultSource.
+
+       Different types of results can also be created from a particular
+       DBIx::Class::ResultSet, see "result_class" in DBIx::Class::ResultSet.
+
+   update_or_insert
+	 $row->update_or_insert
+
+       Arguments: none
+       Returns: Result of update or insert operation
+
+       "Update"s the object if it's already in the database, according to
+       "in_storage", else "insert"s it.
+
+   insert_or_update
+	 $obj->insert_or_update
+
+       Alias for "update_or_insert"
+
+   is_changed
+	 my @changed_col_names = $row->is_changed();
+	 if ($row->is_changed()) { ... }
+
+       Arguments: none
+       Returns: 0|1 or @columnnames
+
+       In list context returns a list of columns with uncommited changes, or
+       in scalar context returns a true value if there are uncommitted
+       changes.
+
+   is_column_changed
+	 if ($row->is_column_changed('col')) { ... }
+
+       Arguments: $columname
+       Returns: 0|1
+
+       Returns a true value if the column has uncommitted changes.
+
+   result_source
+	 my $resultsource = $row->result_source;
+
+       Arguments: $result_source_instance
+       Returns: a ResultSource instance
+
+       Accessor to the DBIx::Class::ResultSource this object was created from.
+
+   register_column
+	 $column_info = { .... };
+	 $class->register_column($column_name, $column_info);
+
+       Arguments: $columnname, \%columninfo
+       Returns: undefined
+
+       Registers a column on the class. If the column_info has an 'accessor'
+       key, creates an accessor named after the value if defined; if there is
+       no such key, creates an accessor with the same name as the column
+
+       The column_info attributes are described in "add_columns" in
+       DBIx::Class::ResultSource
+
+   get_from_storage
+	 my $copy = $row->get_from_storage($attrs)
+
+       Arguments: \%attrs
+       Returns: A Row object
+
+       Fetches a fresh copy of the Row object from the database and returns
+       it.  Throws an exception if a proper WHERE clause identifying the
+       database row can not be constructed (i.e. if the original object does
+       not contain its entire
+	primary key ). If passed the \%attrs argument, will first apply these
+       attributes to the resultset used to find the row.
+
+       This copy can then be used to compare to an existing row object, to
+       determine if any changes have been made in the database since it was
+       created.
+
+       To just update your Row object with any latest changes from the
+       database, use "discard_changes" instead.
+
+       The \%attrs argument should be compatible with "ATTRIBUTES" in
+       DBIx::Class::ResultSet.
+
+   discard_changes ($attrs?)
+	 $row->discard_changes
+
+       Arguments: none or $attrs
+       Returns: self (updates object in-place)
+
+       Re-selects the row from the database, losing any changes that had been
+       made. Throws an exception if a proper "WHERE" clause identifying the
+       database row can not be constructed (i.e. if the original object does
+       not contain its entire primary key).
+
+       This method can also be used to refresh from storage, retrieving any
+       changes made since the row was last read from storage.
+
+       $attrs, if supplied, is expected to be a hashref of attributes suitable
+       for passing as the second argument to "$resultset->search($cond,
+       $attrs)";
+
+       Note: If you are using DBIx::Class::Storage::DBI::Replicated as your
+       storage, please kept in mind that if you "discard_changes" on a row
+       that you just updated or created, you should wrap the entire bit inside
+       a transaction.  Otherwise you run the risk that you insert or update to
+       the master database but read from a replicant database that has not yet
+       been updated from the master.  This will result in unexpected results.
+
+   throw_exception
+       See "throw_exception" in DBIx::Class::Schema.
+
+   id
+	 my @pk = $row->id;
+
+       Arguments: none
+       Returns: A list of primary key values
+
+       Returns the primary key(s) for a row. Can't be called as a class
+       method.	Actually implemented in DBIx::Class::PK
+
+AUTHORS
+       Matt S. Trout <mst@shadowcatsystems.co.uk>
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-07-27		   DBIx::Class::Row(3)

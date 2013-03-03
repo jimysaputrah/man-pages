@@ -1,0 +1,97 @@
+
+FENV(3) 		 BSD Library Functions Manual		       FENV(3)
+
+NAME
+     fenv -- functions providing access to the floating-point environment
+
+SYNOPSIS
+     #include <fenv.h>
+     #pragma STDC FENV_ACCESS ON
+
+DESCRIPTION
+     The header <fenv.h> declares types, macros, and functions to provide
+     access to the floating-point environment, consisting of any floating-
+     point status flags and control modes supported by the implementation.  A
+     floating-point status flag is a variable whose value is set (but not
+     cleared) when a floating-point exception is raised, which occurs as a
+     side effect of floating-point arithmetic when an exceptional condition is
+     encountered. A floating-point control mode is a variable whose value may
+     be set by the user to affect the subsequent behavior of floating-point
+     arithmetic.
+
+     Certain conventions are expected as part of the intended model for inter-
+     action with the floating-point environment:
+	   o   A function does not alter its caller's floating-point control
+	       modes, clear its caller's floating-point status flags, nor
+	       depend on the state of its caller's floating-point status flags
+	       unless the function is so documented.
+	   o   A function is assumed to require default floating-point control
+	       modes unless its documentation promises otherwise.
+	   o   A function is assumed to have the potential for raising float-
+	       ing-point exceptions unless its documentation promises other-
+	       wise.
+     Programmers should adhere to these guidelines in their usage of the func-
+     tions defined in <fenv.h>.  Failure to do so may result in bugs which are
+     extraordinarily hard to diagnose.
+
+     Note that any usage of the functions provided by <fenv.h> should occur
+     within the scope of
+
+	   #pragma STDC FENV_ACCESS ON
+
+     The FENV_ACCESS pragma provides a means to inform the compiler that the
+     program might access the floating-point environment to test status flags
+     or change the control modes.  The pragma shall occur either outside
+     external declarations (i.e.  at file scope) or preceeding all explicit
+     declarations and statements inside a compound statement.  If part of a
+     program tests floating-point status flags or sets control modes, but was
+     translated with FENV_ACCESS "off", the behavior of that program is unde-
+     fined.
+
+     The types fenv_t and fexcept_t represent the entire floating-point envi-
+     ronment and the floating-point status flags, respectively.  These should
+     be treated as opaque types, and be manipulated only via the functions
+     defined in <fenv.h>.
+
+     The macros FE_INVALID, FE_DIVBYZERO, FE_OVERFLOW, FE_UNDERFLOW, and
+     FE_INEXACT expand to integer constant expressions such that bitwise ORs
+     of any combination of the macros result in distinct values and bitwise
+     ANDs of any combinations of the macros results in zero.  These macros are
+     used in functions defined in <fenv.h> to represent floating-point excep-
+     tions and status flags.  Additionally, the macro FE_ALL_EXCEPT is defined
+     to be the bitwise OR of all floating-point exception macros defined by
+     the implementation.
+
+     The macros FE_TONEAREST, FE_TOWARDZERO, FE_DOWNWARD, and FE_UPWARD expand
+     to integer constant expressions whose values are distinct nonnegative
+     numbers.  These are intended for use with the fesetround() and
+     fegetround() functions for control of the floating-point rounding modes.
+
+     The macro FE_DFL_ENV represents the default floating-point environ-
+     ment--the one installed at program startup--and expands to a pointer to a
+     const fenv_t object.  It can be used as an argument to <fenv.h> functions
+     that manage the floating-point environment.
+
+     The feclearexcept(), feraiseexcept(), fetestexcept(), fegetexceptflag(),
+     and fesetexceptflag() functions provide access to the floating-point sta-
+     tus flags.
+
+     The fegetround() and fesetround() functions provide control of rounding
+     direction modes.
+
+     The fegetenv(), feholdexcept(), fesetenv(), and feupdateenv() functions
+     provide control of the entire floating-point environment as an abstract
+     object.
+
+     Further documentation for all of these functions is available in their
+     respective manpages, and also in section 7.6 of the C standard.
+
+SEE ALSO
+     feclearexcept(3), fegetenv(3), fegetround(3), fegetexceptflag(3),
+     feholdexcept(3), fesetenv(3), fesetround(3), feraiseexcept(3),
+     fesetexceptflag(3), feraiseexcept(3), feupdateenv(3)
+
+STANDARDS
+     These functions conform to ISO/IEC 9899:TC3.
+
+OS X				  May 9, 2011				  OS X

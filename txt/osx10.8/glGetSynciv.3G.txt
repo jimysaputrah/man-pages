@@ -1,0 +1,80 @@
+GLGETSYNCIV(3G) 		  OpenGL 3.3		       GLGETSYNCIV(3G)
+
+
+
+NAME
+       glGetSynciv - query the properties of a sync object
+
+C SPECIFICATION
+       void glGetSynciv(GLsync sync, GLenum pname, GLsizei bufSize,
+			GLsizei *length, GLint *values);
+
+PARAMETERS
+       sync
+	   Specifies the sync object whose properties to query.
+
+       pname
+	   Specifies the parameter whose value to retrieve from the sync
+	   object specified in sync.
+
+       bufSize
+	   Specifies the size of the buffer whose address is given in values.
+
+       length
+	   Specifies the address of an variable to receive the number of
+	   integers placed in values.
+
+       values
+	   Specifies the address of an array to receive the values of the
+	   queried parameter.
+
+DESCRIPTION
+       glGetSynciv retrieves properties of a sync object.  sync specifies the
+       name of the sync object whose properties to retrieve.
+
+       On success, glGetSynciv replaces up to bufSize integers in values with
+       the corresponding property values of the object being queried. The
+       actual number of integers replaced is returned in the variable whose
+       address is specified in length. If length is NULL, no length is
+       returned.
+
+       If pname is GL_OBJECT_TYPE, a single value representing the specific
+       type of the sync object is placed in values. The only type supported is
+       GL_SYNC_FENCE.
+
+       If pname is GL_SYNC_STATUS, a single value representing the status of
+       the sync object (GL_SIGNALED or GL_UNSIGNALED) is placed in values.
+
+       If pname is GL_SYNC_CONDITION, a single value representing the
+       condition of the sync object is placed in values. The only condition
+       supported is GL_SYNC_GPU_COMMANDS_COMPLETE.
+
+       If pname is GL_SYNC_FLAGS, a single value representing the flags with
+       which the sync object was created is placed in values. No flags are
+       currently supported[1].
+
+       If an error occurs, nothing will be written to values or length.
+
+ERRORS
+       GL_INVALID_VALUE is generated if sync is not the name of a sync object.
+
+
+       GL_INVALID_ENUM is generated if pname is not one of the accepted
+       tokens.
+
+SEE ALSO
+       glFenceSync(), glWaitSync(), glClientWaitSync()
+
+COPYRIGHT
+       Copyright (C) 2010 Khronos Group. This material may be distributed
+       subject to the terms and conditions set forth in the Open Publication
+       License, v 1.0, 8 June 1999.  http://opencontent.org/openpub/.
+
+NOTES
+	1. flags is expected to be used in future extensions to the sync
+	   objects.
+
+
+
+
+OpenGL 3.3			  03/08/2011		       GLGETSYNCIV(3G)

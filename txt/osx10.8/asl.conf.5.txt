@@ -1,0 +1,306 @@
+
+asl.conf(5)		    BSD File Formats Manual		   asl.conf(5)
+
+NAME
+     asl.conf -- configuration file for syslogd(8) and aslmanager(8)
+
+DESCRIPTION
+     The syslogd(8) server reads the asl.conf file at startup, and re-reads
+     the file whenever it received a HUP signal.  The aslmanager(8) daemon
+     reads the file when it starts.  See the ASLMANAGER PARAMETER SETTINGS
+     section below for details on those parameter settings.
+
+     The file may contain parameter settings, used in place of (and which will
+     override) command-line options, and may contain query-action rules that
+     trigger specific actions when syslogd receives messages that match the
+     query pattern.
+
+     Parameter setting lines in the configuration file begin with an equal
+     sign ``='', and are generally of the form:
+
+	   = parameter_name value ...
+
+     Most parameter settings require a single value, although some may take
+     several values.  See the PARAMETER SETTINGS section below for details.
+
+     Query-action rules in the file begin with a question-mark ``?'' or a
+     ``Q'', and generally have the form:
+
+	   ? query action ...
+
+     Specific actions may be followed by optional arguments.  See the QUERY-
+     ACTION RULES section below for details.
+
+PARAMETER SETTINGS
+     The following parameter-settings are recognized by syslogd.
+
+	   debug	     Enables or disables internal debugging output.
+			     This is probably of little interest to most
+			     users.  The debug parameter requires a value of
+			     ``1'' to enable debug output, or a value of ``0''
+			     to disable it.  An option file name may follow
+			     the ``0'' or ``1''.  If a file name is provided,
+			     debug messages are written to that file.  Other-
+			     wise, debug writes are treated as log messages.
+
+	   mark_time	     Sets the time interval for the mark facility.
+			     The default is 0 seconds, which indicates that
+			     mark messages are not generated.
+
+	   dup_delay	     Sets the maximum time before writing a ``last
+			     message repeated <N> times'' message in a log
+			     file when duplicate messages have been detected.
+			     The default is 30 seconds.
+
+	   utmp_ttl	     Sets the time-to-live for messages used by the
+			     utmp, wtmp, and lastlog subsystems.  The default
+			     is 31622400 seconds (approximately 1 year).
+
+	   mps_limit	     Sets the per-process message per second quota.
+			     The default is value is 500.  A value of 0 dis-
+			     ables the quota mechanism.
+
+	   max_file_size     Sets the maximum file size for individual files
+			     in the ASL data store.  The default is 25600000
+			     bytes.
+
+QUERY-ACTION RULES
+     Rules contain three components: a query; an action; and optionally,
+     parameters specific to that action.  For example:
+
+	   ? [= Sender foobar] [<= Level error] notify com.apple.foobar
+
+   Query Format
+     Queries comprise one or more message matching components, each of which
+     has the form:
+
+	   [OP KEY VAL]
+
+     OP is a comparison operator.  It can have the following values:
+
+	   T	 true (always matches)
+	   =	 equal
+	   !	 not equal
+	   >	 greater than
+	   >=	 greater than or equal to
+	   <	 less than
+	   <=	 less than or equal to
+
+     It can also be preceded by one or more modifiers:
+
+	   C	 casefold
+	   N	 numeric comparison
+	   S	 substring
+	   A	 prefix
+	   Z	 suffix
+
+     KEY and VAL are message keys and values.  For example
+
+	   [= Sender foobar]
+
+     matches any message with value ``foobar'' for the ``Sender'' key.	The
+     query
+
+	   [CA= Color gr]
+
+     matches any message with a value beginning with the letters GR, Gr, gr,
+     or gR (C meaning casefold, A meaning prefix) for the ``Color'' key.  The
+     example query above,
+
+	   [= Sender foobar] [N< Level 3]
+
+     matches any message from ``foobar'' with a level numerically less than 3
+     (string values are converted to integers, and the comparison is done on
+     the integer values).  Note that the string values may be used equiva-
+     lently for the Level key, so the example above may also be written as:
+
+	   [= Sender foobar] [< Level Error]
+
+     String values for levels may be any of the set ``emergency'', ``alert'',
+     ``critical'', ``error'', ``warning'', ``notice'', ``info, or'' ``debug''.
+     These strings may be upper, lower, or mixed case.
+
+     The ``T'' operator is useful to test for the presence of a particular
+     key.
+
+	   [T Flavor]
+
+     Will match any message that has a ``Flavor'' key, regardless of its
+     value.
+
+   Actions
+     The following actions are available.
+
+	   notify	    Causes syslogd to post a notification with
+			    notify_post().  The notification key must appear
+			    as a single parameter following the ``notify''
+			    action.
+
+	   access	    Sets read access controls for messages that match
+			    the associated query pattern.  syslogd will
+			    restrict read access to matching messages to a
+			    specific user and group.  The user ID number and
+			    group ID number must follow the ``access'' keyword
+			    as parameters.
+
+	   store	    Causes syslogd to save matching messages, either
+			    in the main ASL data store, or in a separate log
+			    message data store file is a file name is given as
+			    a parameter.  A separate data store file may be
+			    accessed using the syslog command line utility.  A
+			    new file will be created if one does not exist.
+			    If a new file is being created, the UID, GID, and
+			    mode of the file may be specified using the
+			    options ``uid=UUU'', ``gid=GGG'', and
+			    ``mode=MMMM'', where UUU and GGG are a user ID and
+			    group ID, and MMMM is a mode specification of the
+			    form ``0644'' with a leading zero for an octal
+			    number or DDD for a decimal number.
+
+			    Two other optional parameters may also follow the
+			    pathname.
+
+			    If a separate log message data store file is spec-
+			    ified as a parameter, then syslogd will open the
+			    database, save a matching message, and then close
+			    the database.  If a high volume of messages is
+			    expected, specifying the ``stayopen'' option will
+			    improve performance.
+
+			    Also, if a separate log message data store file is
+			    specified as a parameter, matching messages will
+			    be excluded from all further processing.  Adding
+			    the ``continue'' option will cause syslogd to save
+			    matching messages in the specified store file and
+			    then continue processing matching messages in
+			    accordance with the actions specified in
+			    /etc/asl.conf and /etc/syslog.conf.
+
+			    Note that if the asl.conf configuration file con-
+			    tains no matching rules for the main ASL data
+			    store, then syslogd will save all messages.
+
+	   store_directory  Causes matching messages to be stored in a log
+			    message data store file in a separate directory.
+			    The directory path name must follow as the first
+			    parameter.	The named directory must exist.
+			    syslogd will not create the directory path.
+
+			    Messages saved to a store directory are saved in
+			    files that are named ``yyyy.mm.dd.asl'', where
+			    ``yyyy'', ``mm'', and ``dd'' are the year, month
+			    (01 to 12) and day of the month (01 to 31) associ-
+			    ated with matching messages.  This has the effect
+			    of saving messages in a separate file for each
+			    day.
+
+			    The ``uid=UUU'', ``gid=GGG'', ``mode=MMMM'', and
+			    ``continue'' options available for the ``store''
+			    action may also be specified for a store direc-
+			    tory.  The uid, gid, and mode specification will
+			    be used when the individual daily store files are
+			    created.
+
+	   file 	    Causes matching messages to be stored in a log
+			    file.  The file's path name must follow as the
+			    first parameter.  The file's directory must exist.
+			    If the path already exists, it must be a plain
+			    file.  Otherwise syslogd will create the file.
+			    The file's owner will be root, and the file's
+			    group will be admin.  A file mode may be specified
+			    as an option of the form ``mode=MMMM'' as
+			    described above.  One or more UIDs may be given as
+			    the values of options of the form ``uid=UUU''.
+			    One or more GIDs may be given as the values of
+			    options of the form ``gid=GGG''.  If any UIDs or
+			    GIDs are provided, the specified users and groups
+			    will be given read access to the file.  Note that
+			    UIDs and GIDs should be defined in the local Open
+			    Directory database, since syslogd starts and may
+			    create the log file before network directory ser-
+			    vices are available.  Unknown UIDs and GIDs will
+			    be ignored when setting access controls.
+
+			    By default, log files will be written using the
+			    same format used for printing by syslog when the
+			    -F std flag is supplied.  A print format may be
+			    specified as the value of the ``format=FMT''
+			    option.  The default is ``format=std''.  Alternate
+			    file formats, including ``bsd'' and ``raw'' are
+			    supported.	Custom formats may be specified as
+			    well, using the syntax supported by syslog -F.
+			    Space and tab character in a custom format string
+			    must be escaped with a leading backslash charac-
+			    ter.  Custom format strings may include variables
+			    of the form ``$Name'' ``$(Name)'' or
+			    ``$((Name)(fmt))''.  which will be expanded to the
+			    associated with the named key.  The first form may
+			    be used in most cases.  The second form may be
+			    used if the variable is not delimited by white-
+			    space.  The third form permits the selection of
+			    alternate output formats for certain keys, such as
+			    Time and Level.  See syslog(1) for details.
+
+			    For example, the option:
+
+				  format=$((Time)(Z)) $Host $(Sender)[$(PID)] <$((Level)(str))>: $Message
+
+			    produces output similar to the ``std'' format, but
+			    using the UTC (Zulu) timezone.
+
+			    By default, files printed using the ``bsd'' and
+			    ``std'' formats will suppress printing duplicates.
+			    If two or more messages are logged within 30 sec-
+			    onds, and which differ only in time, then the sec-
+			    ond and subsequent messages will not be printed.
+			    When a different message is logged, or 30 seconds
+			    have elapsed since the initial message was logged,
+			    a line with the text
+				  --- last message repeated N times ---
+			    will be added to the file.	The default may be
+			    disabled using the ``no_dup_supress'' option.
+
+	   broadcast	    Causes syslogd to write the text of matching mes-
+			    sages to all terminal windows.  If optional text
+			    follows the ``broadcast'' keyword, then that text
+			    is written rather that the matching message text.
+
+	   ignore	    Causes a matching message to be ignored in all
+			    subsequent matching rules.
+
+ASLMANAGER PARAMETER SETTINGS
+     The following parameter-settings are recognized by aslmanager.
+
+	   aslmanager_debug  Enables or disables internal debugging output.
+			     This is probably of little interest to most
+			     users.  The debug parameter requires a value of
+			     ``1'' to enable debug output, or a value of ``0''
+			     to disable it.  Debug messages are sent to
+			     syslogd.
+
+	   store_ttl	     Sets the time-to-live in days for messages in the
+			     syslog data store.  The default is 7 days.
+
+	   max_store_size    Sets the maximum size for for the ASL data store.
+			     The default is 150000000 bytes.
+
+	   archive	     Enables or disables archiving.  The archive
+			     parameter requires a value of ``1'' to enable ar-
+			     chiving, or a value of ``0'' to disable it.  An
+			     option archive directory path may follow the
+			     ``0'' or ``1''.  If enabled, files removed from
+			     the ASL data store are moved to the archive
+			     directory.  The default archive directory path is
+			     /var/log/asl.archive.
+
+	   store_path	     The data store path used by aslmanager.  The
+			     default is /var/log/asl.  Note that this parame-
+			     ter is ignored by syslogd.
+	   archive_mode      Files copied to the archive will be given the
+			     specified access mode.  The default is 0400, so
+			     archive files will only be readable by root.
+
+SEE ALSO
+     asl(3), notify(3), syslog(1), aslmanager(8), syslogd(8).
+
+Mac OS X			 Sept 19, 2008			      Mac OS X

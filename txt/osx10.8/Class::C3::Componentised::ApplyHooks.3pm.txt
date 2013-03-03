@@ -1,0 +1,63 @@
+Class::C3::ComponentisUserAContributed)Class::C3::Componentised::ApplyHooks(3)
+
+
+
+NAME
+       Class::C3::Componentised::ApplyHooks
+
+SYNOPSIS
+	package MyComponent;
+
+	our %statistics;
+
+	use Class::C3::Componentised::ApplyHooks
+	  -before_apply => sub {
+	    my ($class, $component) = @_;
+
+	    push @{$statistics{$class}}, '-before_apply';
+	  },
+	  -after_apply	=> sub {
+	    my ($class, $component) = @_;
+
+	    push @{$statistics{$class}}, '-after_apply';
+	  }, qw(BEFORE_APPLY AFTER_APPLY);
+
+	BEFORE_APPLY { push @{$statistics{$class}}, 'BEFORE_APPLY' };
+	AFTER_APPLY { push @{$statistics{$class}}, 'AFTER_APPLY' };
+	AFTER_APPLY { use Devel::Dwarn; Dwarn %statistics };
+
+	1;
+
+DESCRIPTION
+       This package allows a given component to run methods on the class that
+       is being injected into before or after the component is injected.  Note
+       from the "SYNOPSIS" that all "Load Actions" may be run more than once.
+
+IMPORT ACTION
+       Both import actions simply run a list of coderefs that will be passed
+       the class that is being acted upon and the component that is being
+       added to the class.
+
+IMPORT OPTIONS
+   -before_apply
+       Adds a before apply action for the current component without importing
+       any subroutines into your namespace.
+
+   -after_apply
+       Adds an after apply action for the current component without importing
+       any subroutines into your namespace.
+
+EXPORTED SUBROUTINES
+   BEFORE_APPLY
+	BEFORE_APPLY { warn "about to apply $_[1] to class $_[0]"  };
+
+       Adds a before apply action for the current component.
+
+   AFTER_APPLY
+	AFTER_APPLY { warn "just applied $_[1] to class $_[0]"	};
+
+       Adds an after apply action for the current component.
+
+
+
+perl v5.12.4			  2011-Class::C3::Componentised::ApplyHooks(3)

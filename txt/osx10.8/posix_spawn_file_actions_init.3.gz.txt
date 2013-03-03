@@ -1,0 +1,65 @@
+
+POSIX_SPAWN_FILE_ACTI... BSD Library Functions Manual POSIX_SPAWN_FILE_ACTI...
+
+NAME
+     posix_spawn_file_actions_init posix_spawn_file_actions_destroy -- ini-
+     tialize or destroy spawn file actions objects
+
+SYNOPSIS
+     #include <spawn.h>
+
+     int
+     posix_spawn_file_actions_init(posix_spawn_file_actions_t *file_actions);
+
+     int
+     posix_spawn_file_actions_destroy(posix_spawn_file_actions_t *file_actions);
+
+DESCRIPTION
+     The posix_spawn_file_actions_init() function initializes the object ref-
+     erenced by file_actions, to an empty set of file actions for subsequent
+     use in a call to posix_spawn(2) or posix_spawnp(2).  A
+     posix_spawn_file_actions_t object is an opaque type that is used to col-
+     lect set of file actions specified by calls to
+     posix_spawn_file_actions_addclose(3) and
+     posix_spawn_file_actions_addopen(3) such that once the spawn operation is
+     complete, the child process will have a different set of file descriptors
+     than the parent, in the order that the operations were added to the
+     posix_spawn_file_actions_t.
+
+     Additionally, any descriptor in the parent not modified by a file action,
+     and which has the FD_CLOEXEC flag set, will be closed in the child.
+
+     The posix_spawn_file_actions_destroy() function destroys the object ref-
+     erenced by file_actions which was previously intialized by
+     posix_spawn_file_actions_init(), returning any resources obtained at the
+     time of initialization to the system for subsequent reuse.  A
+     posix_spawn_file_actions_t may be reinitialized after having been
+     destroyed, but must not be reused after destruction, unless it has been
+     reinitialized.
+
+RETURN VALUES
+     On success, these functions return 0; on failure they return an error
+     number from <errno.h>.
+
+ERRORS
+     These functions will fail and return an error if:
+
+     [ENOMEM]		Insufficient resources to initialize the
+			posix_spawn_file_actions_t object.
+
+     [EINVAL]		The posix_spawn_file_actions_t being destroyed is
+			invalid.
+
+SEE ALSO
+     posix_spawn(2), posix_spawnp(2), posix_spawn_file_actions_addclose(3),
+     posix_spawn_file_actions_addopen(3), posix_spawn_file_actions_adddup2(3)
+
+STANDARDS
+     Version 3 of the Single UNIX Specification (``SUSv3'') [SPN]
+
+HISTORY
+     The posix_spawn_file_actions_init() and
+     posix_spawn_file_actions_destroy() function calls appeared in Version 3
+     of the Single UNIX Specification (``SUSv3'') [SPN].
+
+Mac OS X			August 22, 2007 		      Mac OS X

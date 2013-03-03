@@ -1,0 +1,44 @@
+DBIx::Class::Storage::User:Contributed PerDBIx::Class::Storage::DBI::ACCESS(3)
+
+
+
+NAME
+       DBIx::Class::Storage::DBI::ACCESS - Support specific to MS Access
+
+DESCRIPTION
+       This is the base class for Microsoft Access support.
+
+       This driver supports last_insert_id, empty inserts for tables with
+       "AUTOINCREMENT" columns, nested transactions via auto_savepoint, "GUID"
+       columns via DBIx::Class::Storage::DBI::UniqueIdentifier.
+
+SUPPORTED VERSIONS
+       This module has currently only been tested on MS Access 2010.
+
+       Information about how well it works on different version of MS Access
+       is welcome (write the mailing list, or submit a ticket to RT if you
+       find bugs.)
+
+USING GUID COLUMNS
+       If you have "GUID" PKs or other "GUID" columns with auto_nextval you
+       will need to set a new_guid callback, like so:
+
+	 $schema->storage->new_guid(sub { Data::GUID->new->as_string });
+
+       Under Catalyst you can use code similar to this in your
+       Catalyst::Model::DBIC::Schema "Model.pm":
+
+	 after BUILD => sub {
+	   my $self = shift;
+	   $self->storage->new_guid(sub { Data::GUID->new->as_string });
+	 };
+
+AUTHOR
+       See "AUTHOR" in DBIx::Class and "CONTRIBUTORS" in DBIx::Class.
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-07-DBIx::Class::Storage::DBI::ACCESS(3)

@@ -1,0 +1,105 @@
+DBIx::Class::Storage::User:CDBIx::Class::Storage::DBI::Replicated::Balancer(3)
+
+
+
+NAME
+       DBIx::Class::Storage::DBI::Replicated::Balancer - A Software Load
+       Balancer
+
+SYNOPSIS
+       This role is used internally by DBIx::Class::Storage::DBI::Replicated.
+
+DESCRIPTION
+       Given a pool (DBIx::Class::Storage::DBI::Replicated::Pool) of
+       replicated database's
+       (DBIx::Class::Storage::DBI::Replicated::Replicant), defines a method by
+       which query load can be spread out across each replicant in the pool.
+
+ATTRIBUTES
+       This class defines the following attributes.
+
+   auto_validate_every ($seconds)
+       If auto_validate has some sort of value, run "validate_replicants" in
+       DBIx::Class::Storage::DBI::Replicated::Pool every $seconds.  Be careful
+       with this, because if you set it to 0 you will end up validating every
+       query.
+
+   master
+       The DBIx::Class::Storage::DBI object that is the master database all
+       the replicants are trying to follow.  The balancer needs to know it
+       since it's the ultimate fallback.
+
+   pool
+       The DBIx::Class::Storage::DBI::Replicated::Pool object that we are
+       trying to balance.
+
+   current_replicant
+       Replicant storages (slaves) handle all read only traffic.  The
+       assumption is that your database will become readbound well before it
+       becomes write bound and that being able to spread your read only
+       traffic around to multiple databases is going to help you to scale
+       traffic.
+
+       This attribute returns the next slave to handle a read request.	Your
+       "pool" attribute has methods to help you shuffle through all the
+       available replicants via its balancer object.
+
+METHODS
+       This class defines the following methods.
+
+   _build_current_replicant
+       Lazy builder for the "current_replicant_storage" attribute.
+
+   next_storage
+       This method should be defined in the class which consumes this role.
+
+       Given a pool object, return the next replicant that will serve queries.
+       The default behavior is to grab the first replicant it finds but you
+       can write your own subclasses of
+       DBIx::Class::Storage::DBI::Replicated::Balancer to support other
+       balance systems.
+
+       This returns from the pool of active replicants.  If there are no
+       active replicants, then you should have it return the master as an
+       ultimate fallback.
+
+   around: next_storage
+       Advice on next storage to add the autovalidation.  We have this broken
+       out so that it's easier to break out the auto validation into a role.
+
+       This also returns the master in the case that none of the replicants
+       are active or just just forgot to create them :)
+
+   increment_storage
+       Rolls the Storage to whatever is next in the queue, as defined by the
+       Balancer.
+
+   around: select
+       Advice on the select attribute.	Each time we use a replicant we need
+       to change it via the storage pool algorithm.  That way we are spreading
+       the load evenly (hopefully) across existing capacity.
+
+   around: select_single
+       Advice on the select_single attribute.  Each time we use a replicant we
+       need to change it via the storage pool algorithm.  That way we are
+       spreading the load evenly (hopefully) across existing capacity.
+
+   before: columns_info_for
+       Advice on the current_replicant_storage attribute.  Each time we use a
+       replicant we need to change it via the storage pool algorithm.  That
+       way we are spreading the load evenly (hopefully) across existing
+       capacity.
+
+   _get_forced_pool ($name)
+       Given an identifier, find the most correct storage object to handle the
+       query.
+
+AUTHOR
+       John Napiorkowski <jjnapiork@cpan.org>
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4		    DBIx::Class::Storage::DBI::Replicated::Balancer(3)

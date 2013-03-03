@@ -1,0 +1,70 @@
+GLDRAWARRAYS(3G)					      GLDRAWARRAYS(3G)
+
+
+
+NAME
+       glDrawArrays - render primitives from array data
+
+
+C SPECIFICATION
+       void glDrawArrays( GLenum mode,
+			  GLint first,
+			  GLsizei count )
+
+
+PARAMETERS
+       mode   Specifies what kind of primitives to render.  Symbolic constants
+	      GL_POINTS,      GL_LINE_STRIP,	  GL_LINE_LOOP,      GL_LINES,
+	      GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_TRIANGLES, GL_QUAD_STRIP,
+	      GL_QUADS, and GL_POLYGON are accepted.
+
+       first  Specifies the starting index in the enabled arrays.
+
+       count  Specifies the number of indices to be rendered.
+
+DESCRIPTION
+       glDrawArrays specifies multiple geometric primitives with very few sub-
+       routine	calls. Instead of calling a GL procedure to pass each individ-
+       ual vertex, normal, texture coordinate, edge flag, or  color,  you  can
+       prespecify  separate  arrays  of  vertices, normals, and colors and use
+       them to construct a sequence  of  primitives  with  a  single  call  to
+       glDrawArrays.
+
+       When  glDrawArrays  is  called,	it uses count sequential elements from
+       each enabled array to construct a  sequence  of	geometric  primitives,
+       beginning  with	element  first. mode specifies what kind of primitives
+       are constructed, and how the array elements construct those primitives.
+       If  GL_VERTEX_ARRAY  is not enabled, no geometric primitives are gener-
+       ated.
+
+       Vertex attributes that are modified by glDrawArrays have an unspecified
+       value  after  glDrawArrays  returns.  For example, if GL_COLOR_ARRAY is
+       enabled, the value of the current color is undefined after glDrawArrays
+       executes. Attributes that aren't modified remain well defined.
+
+NOTES
+       glDrawArrays is available only if the GL version is 1.1 or greater.
+
+       glDrawArrays  is  included in display lists. If glDrawArrays is entered
+       into a display list, the necessary array data (determined by the  array
+       pointers  and  enables)	is also entered into the display list. Because
+       the array pointers and enables  are  client-side  state,  their	values
+       affect display lists when the lists are created, not when the lists are
+       executed.
+
+ERRORS
+       GL_INVALID_ENUM is generated if mode is not an accepted value.
+
+       GL_INVALID_VALUE is generated if count is negative.
+
+       GL_INVALID_OPERATION is generated if glDrawArrays is  executed  between
+       the execution of glBegin and the corresponding glEnd.
+
+SEE ALSO
+       glArrayElement,	glColorPointer,  glDrawElements,  glDrawRangeElements,
+       glEdgeFlagPointer, glGetPointerv, glIndexPointer,  glInterleavedArrays,
+       glNormalPointer, glTexCoordPointer, glVertexPointer
+
+
+
+							      GLDRAWARRAYS(3G)

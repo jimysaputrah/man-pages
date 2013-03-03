@@ -1,0 +1,226 @@
+Regexp::Common::numberUser Contributed Perl DocumentaRegexp::Common::number(3)
+
+
+
+NAME
+       Regexp::Common::number -- provide regexes for numbers
+
+SYNOPSIS
+	   use Regexp::Common qw /number/;
+
+	   while (<>) {
+	       /^$RE{num}{int}$/		and  print "Integer\n";
+	       /^$RE{num}{real}$/		and  print "Real\n";
+	       /^$RE{num}{real}{-base => 16}$/	and  print "Hexadecimal real\n";
+	   }
+
+DESCRIPTION
+       Please consult the manual of Regexp::Common for a general description
+       of the works of this interface.
+
+       Do not use this module directly, but load it via Regexp::Common.
+
+   $RE{num}{int}{-base}{-sep}{-group}{-places}
+       Returns a pattern that matches an integer.
+
+       If "-base => B" is specified, the integer is in base B, with "2 <= B <=
+       36". For bases larger than 10, upper case letters are used. The default
+       base is 10.
+
+       If "-sep => P" is specified, the pattern P is required as a grouping
+       marker within the number. If this option is not given, no grouping
+       marker is used.
+
+       If "-group => N" is specified, digits between grouping markers must be
+       grouped in sequences of exactly N digits. The default value of N is 3.
+       If "-group => N,M" is specified, digits between grouping markers must
+       be grouped in sequences of at least N digits, and at most M digits.
+       This option is ignored unless the "-sep" option is used.
+
+       If "-places => N" is specified, the integer recognized must be exactly
+       N digits wide. If "-places => N,M" is specified, the integer must be at
+       least N wide, and at most M characters. There is no default, which
+       means that integers are unlimited in size. This option is ignored if
+       the "-sep" option is used.
+
+       For example:
+
+	$RE{num}{int}			       # match 1234567
+	$RE{num}{int}{-sep=>','}	       # match 1,234,567
+	$RE{num}{int}{-sep=>',?'}	       # match 1234567 or 1,234,567
+	$RE{num}{int}{-sep=>'.'}{-group=>4}    # match 1.2345.6789
+
+       Under "-keep" (see Regexp::Common):
+
+       $1  captures the entire number
+
+       $2  captures the optional sign of the number
+
+       $3  captures the complete set of digits
+
+   $RE{num}{real}{-base}{-radix}{-places}{-sep}{-group}{-expon}
+       Returns a pattern that matches a floating-point number.
+
+       If "-base=N" is specified, the number is assumed to be in that base
+       (with A..Z representing the digits for 11..36). By default, the base is
+       10.
+
+       If "-radix=P" is specified, the pattern P is used as the radix point
+       for the number (i.e. the "decimal point" in base 10). The default is
+       "qr/[.]/".
+
+       If "-places=N" is specified, the number is assumed to have exactly N
+       places after the radix point.  If "-places=M,N" is specified, the
+       number is assumed to have between M and N places after the radix point.
+       By default, the number of places is unrestricted.
+
+       If "-sep=P" specified, the pattern P is required as a grouping marker
+       within the pre-radix section of the number. By default, no separator is
+       allowed.
+
+       If "-group=N" is specified, digits between grouping separators must be
+       grouped in sequences of exactly N characters. The default value of N is
+       3.
+
+       If "-expon=P" is specified, the pattern P is used as the exponential
+       marker.	The default value of P is "qr/[Ee]/".
+
+       For example:
+
+	$RE{num}{real}			# matches 123.456 or -0.1234567
+	$RE{num}{real}{-places=>2}	# matches 123.45 or -0.12
+	$RE{num}{real}{-places=>'0,3'}	# matches 123.456 or 0 or 9.8
+	$RE{num}{real}{-sep=>'[,.]?'}	# matches 123,456 or 123.456
+	$RE{num}{real}{-base=>3'}	# matches 121.102
+
+       Under "-keep":
+
+       $1  captures the entire match
+
+       $2  captures the optional sign of the number
+
+       $3  captures the complete mantissa
+
+       $4  captures the whole number portion of the mantissa
+
+       $5  captures the radix point
+
+       $6  captures the fractional portion of the mantissa
+
+       $7  captures the optional exponent marker
+
+       $8  captures the entire exponent value
+
+       $9  captures the optional sign of the exponent
+
+       $10 captures the digits of the exponent
+
+   $RE{num}{dec}{-radix}{-places}{-sep}{-group}{-expon}
+       A synonym for $RE{num}{real}{-base=>10}{...}
+
+   $RE{num}{oct}{-radix}{-places}{-sep}{-group}{-expon}
+       A synonym for $RE{num}{real}{-base=>8}{...}
+
+   $RE{num}{bin}{-radix}{-places}{-sep}{-group}{-expon}
+       A synonym for $RE{num}{real}{-base=>2}{...}
+
+   $RE{num}{hex}{-radix}{-places}{-sep}{-group}{-expon}
+       A synonym for $RE{num}{real}{-base=>16}{...}
+
+   $RE{num}{decimal}{-base}{-radix}{-places}{-sep}{-group}
+       The same as $RE{num}{real}, except that an exponent isn't allowed.
+       Hence, this returns a pattern matching decimal numbers.
+
+       If "-base=N" is specified, the number is assumed to be in that base
+       (with A..Z representing the digits for 11..36). By default, the base is
+       10.
+
+       If "-radix=P" is specified, the pattern P is used as the radix point
+       for the number (i.e. the "decimal point" in base 10). The default is
+       "qr/[.]/".
+
+       If "-places=N" is specified, the number is assumed to have exactly N
+       places after the radix point.  If "-places=M,N" is specified, the
+       number is assumed to have between M and N places after the radix point.
+       By default, the number of places is unrestricted.
+
+       If "-sep=P" specified, the pattern P is required as a grouping marker
+       within the pre-radix section of the number. By default, no separator is
+       allowed.
+
+       If "-group=N" is specified, digits between grouping separators must be
+       grouped in sequences of exactly N characters. The default value of N is
+       3.
+
+       For example:
+
+	$RE{num}{decimal}		   # matches 123.456 or -0.1234567
+	$RE{num}{decimal}{-places=>2}	   # matches 123.45 or -0.12
+	$RE{num}{decimal}{-places=>'0,3'}  # matches 123.456 or 0 or 9.8
+	$RE{num}{decimal}{-sep=>'[,.]?'}   # matches 123,456 or 123.456
+	$RE{num}{decimal}{-base=>3'}	   # matches 121.102
+
+       Under "-keep":
+
+       $1  captures the entire match
+
+       $2  captures the optional sign of the number
+
+       $3  captures the complete mantissa
+
+       $4  captures the whole number portion of the mantissa
+
+       $5  captures the radix point
+
+       $6  captures the fractional portion of the mantissa
+
+   $RE{num}{square}
+       Returns a pattern that matches a (decimal) square. Because Perl's
+       arithmetic is lossy when using integers over about 53 bits, this
+       pattern only recognizes numbers less than 9000000000000000, if one uses
+       a Perl that is configured to use 64 bit integers. Otherwise, the limit
+       is 2147483647. These restrictions were introduced in versions 2.116 and
+       2.117 of Regexp::Common. Regardless whether "-keep" was set, the
+       matched number will be returned in $1.
+
+       This pattern is available for version 5.008 and up.
+
+   $RE{num}{roman}
+       Returns a pattern that matches an integer written in Roman numbers.
+       Case doesn't matter. Only the more modern style, that is, no more than
+       three repetitions of a letter, is recognized. The largest number
+       matched is MMMCMXCIX, or 3999. Larger numbers cannot be expressed using
+       ASCII characters. A future version will be able to deal with the
+       Unicode symbols to match larger Roman numbers.
+
+       Under "-keep", the number will be captured in $1.
+
+SEE ALSO
+       Regexp::Common for a general description of how to use this interface.
+
+AUTHOR
+       Damian Conway (damian@conway.org)
+
+MAINTAINANCE
+       This package is maintained by Abigail (regexp-common@abigail.be).
+
+BUGS AND IRRITATIONS
+       Bound to be plenty.
+
+       For a start, there are many common regexes missing.  Send them in to
+       regexp-common@abigail.be.
+
+LICENSE and COPYRIGHT
+       This software is Copyright (c) 2001 - 2009, Damian Conway and Abigail.
+
+       This module is free software, and maybe used under any of the following
+       licenses:
+
+	1) The Perl Artistic License.	  See the file COPYRIGHT.AL.
+	2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
+	3) The BSD Licence.		  See the file COPYRIGHT.BSD.
+	4) The MIT Licence.		  See the file COPYRIGHT.MIT.
+
+
+
+perl v5.10.1			  2010-01-02	     Regexp::Common::number(3)

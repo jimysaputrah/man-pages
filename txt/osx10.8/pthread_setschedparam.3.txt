@@ -1,0 +1,48 @@
+
+PTHREAD_SCHEDPARAM(3)	 BSD Library Functions Manual	 PTHREAD_SCHEDPARAM(3)
+
+NAME
+     pthread_getschedparam, pthread_setschedparam -- thread scheduling parame-
+     ter manipulation
+
+SYNOPSIS
+     #include <pthread.h>
+
+     int
+     pthread_getschedparam(pthread_t thread, int *restrict policy,
+	 struct sched_param *restrict param);
+
+     int
+     pthread_setschedparam(pthread_t thread, int policy,
+	 const struct sched_param *param);
+
+DESCRIPTION
+     The pthread_getschedparam() and pthread_setschedparam() functions get and
+     set the scheduling parameters of individual threads.  The scheduling pol-
+     icy for a thread can either be SCHED_FIFO (first in, first out) or
+     SCHED_RR (round-robin).  The thread priority (accessed via
+     param->sched_priority) must be at least PTHREAD_MIN_PRIORITY and no more
+     than PTHREAD_MAX_PRIORITY.
+
+RETURN VALUES
+     If successful, these functions return 0.  Otherwise, an error number is
+     returned to indicate the error.
+
+ERRORS
+     pthread_getschedparam() will fail if:
+
+     [ESRCH]		Non-existent thread thread.
+
+     pthread_setschedparam() will fail if:
+
+     [EINVAL]		Invalid value for policy.
+
+     [ENOTSUP]		Invalid value for scheduling parameters.
+
+     [ESRCH]		Non-existent thread thread.
+
+STANDARDS
+     pthread_setschedparam() and pthread_getschedparam() conform to Version 2
+     of the Single UNIX Specification (``SUSv2'')
+
+BSD				  May 1, 2000				   BSD

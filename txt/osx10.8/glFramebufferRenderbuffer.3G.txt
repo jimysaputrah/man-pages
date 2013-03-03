@@ -1,0 +1,82 @@
+GLFRAMEBUFFERRENDERB(3G)	  OpenGL 3.3	      GLFRAMEBUFFERRENDERB(3G)
+
+
+
+NAME
+       glFramebufferRenderbuffer - attach a renderbuffer as a logical buffer
+       to the currently bound framebuffer object
+
+C SPECIFICATION
+       GLsync glFramebufferRenderbuffer(GLenum target, GLenum attachment,
+					GLenum renderbuffertarget,
+					GLuint renderbuffer);
+
+PARAMETERS
+       target
+	   Specifies the framebuffer target.  target must be
+	   GL_DRAW_FRAMEBUFFER, GL_READ_FRAMEBUFFER, or GL_FRAMEBUFFER.
+	   GL_FRAMEBUFFER is equivalent to GL_DRAW_FRAMEBUFFER.
+
+       attachment
+	   Specifies the attachment point of the framebuffer.
+
+       renderbuffertarget
+	   Specifies the renderbuffer target and must be GL_RENDERBUFFER.
+
+       renderbuffer
+	   Specifies the name of an existing renderbuffer object of type
+	   renderbuffertarget to attach.
+
+DESCRIPTION
+       glFramebufferRenderbuffer attaches a renderbuffer as one of the logical
+       buffers of the currently bound framebuffer object.  renderbuffer is the
+       name of the renderbuffer object to attach and must be either zero, or
+       the name of an existing renderbuffer object of type renderbuffertarget.
+       If renderbuffer is not zero and if glFramebufferRenderbuffer is
+       successful, then the renderbuffer name renderbuffer will be used as the
+       logical buffer identified by attachment of the framebuffer currently
+       bound to target.
+
+       The value of GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE for the specified
+       attachment point is set to GL_RENDERBUFFER and the value of
+       GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME is set to renderbuffer. All other
+       state values of the attachment point specified by attachment are set to
+       their default values. No change is made to the state of the
+       renderbuuffer object and any previous attachment to the attachment
+       logical buffer of the framebuffer target is broken.
+
+       Calling glFramebufferRenderbuffer with the renderbuffer name zero will
+       detach the image, if any, identified by attachment, in the framebuffer
+       currently bound to target. All state values of the attachment point
+       specified by attachment in the object bound to target are set to their
+       default values.
+
+       Setting attachment to the value GL_DEPTH_STENCIL_ATTACHMENT is a
+       special case causing both the depth and stencil attachments of the
+       framebuffer object to be set to renderbuffer, which should have the
+       base internal format GL_DEPTH_STENCIL.
+
+ERRORS
+       GL_INVALID_ENUM is generated if target is not one of the accepted
+       tokens.
+
+
+       GL_INVALID_ENUM is generated if renderbuffertarget is not
+       GL_RENDERBUFFER.
+
+
+       GL_INVALID_OPERATION is generated if zero is bound to target.
+
+SEE ALSO
+       glGenFramebuffers(), glBindFramebuffer(), glGenRenderbuffers(),
+       glFramebufferTexture(), glFramebufferTexture1D(),
+       glFramebufferTexture2D(), glFramebufferTexture3D()
+
+COPYRIGHT
+       Copyright (C) 2010 Khronos Group. This material may be distributed
+       subject to the terms and conditions set forth in the Open Publication
+       License, v 1.0, 8 June 1999.  http://opencontent.org/openpub/.
+
+
+
+OpenGL 3.3			  03/08/2011	      GLFRAMEBUFFERRENDERB(3G)

@@ -1,0 +1,45 @@
+DBIx::Class::Storage::User:Contributed PerlDBIx::Class::Storage::DBI::mysql(3)
+
+
+
+NAME
+       DBIx::Class::Storage::DBI::mysql - Storage::DBI class implementing
+       MySQL specifics
+
+SYNOPSIS
+       Storage::DBI autodetects the underlying MySQL database, and re-blesses
+       the $storage object into this class.
+
+	 my $schema = MyDb::Schema->connect( $dsn, $user, $pass, { on_connect_call => 'set_strict_mode' } );
+
+DESCRIPTION
+       This class implements MySQL specific bits of DBIx::Class::Storage::DBI,
+       like AutoIncrement column support and savepoints. Also it augments the
+       SQL maker to support the MySQL-specific "STRAIGHT_JOIN" join type,
+       which you can use by specifying "join_type => 'straight'" in the
+       relationship attributes
+
+       It also provides a one-stop on-connect macro "set_strict_mode" which
+       sets session variables such that MySQL behaves more predictably as far
+       as the SQL standard is concerned.
+
+STORAGE OPTIONS
+   set_strict_mode
+       Enables session-wide strict options upon connecting. Equivalent to:
+
+	 ->connect ( ... , {
+	   on_connect_do => [
+	     q|SET SQL_MODE = CONCAT('ANSI,TRADITIONAL,ONLY_FULL_GROUP_BY,', @@sql_mode)|,
+	     q|SET SQL_AUTO_IS_NULL = 0|,
+	   ]
+	 });
+
+AUTHORS
+       See "CONTRIBUTORS" in DBIx::Class
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-07-2DBIx::Class::Storage::DBI::mysql(3)

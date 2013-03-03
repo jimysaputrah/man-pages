@@ -1,0 +1,50 @@
+
+LOGIN(3)		 BSD Library Functions Manual		      LOGIN(3)
+
+NAME
+     login, logout, logwtmp -- login utility functions (DEPRECATED)
+
+SYNOPSIS
+     #include <util.h>
+
+     void
+     login(struct utmp *ut);
+
+     int
+     logout(const char *line);
+
+     void
+     logwtmp(const char *line, const char *name, const char *host);
+
+DESCRIPTION
+     The login(), logout(), and logwtmp() functions are DEPRECATED; use
+     pututxline(3) instead.
+
+     These functions operate on the database of current users in
+     /var/run/utmpx and the system log file.  Superuser permission is
+     required.
+
+     The login() function updates the /var/run/utmpx files with user informa-
+     tion contained in ut (after converting to a struct utmpx, as described in
+     pututxline(3)).
+
+     The logout() function removes the entry from /var/run/utmpx corresponding
+     to the device line.
+
+     The logwtmp() function adds an entry to the system log file.  Since
+     login() will add the appropriate entry during a login, logwtmp() is usu-
+     ally used for logouts.
+
+RETURN VALUES
+     logout() returns non-zero if it was able to find and delete an entry for
+     line, and zero if there is no entry for line in /var/run/utmpx.  However,
+     there is no error indication due to lack of permissions.
+
+FILES
+     /dev/*
+     /var/run/utmpx
+
+SEE ALSO
+     pututxline(3), utmp(5), utmpx(5)
+
+BSD			       December 14, 1995			   BSD

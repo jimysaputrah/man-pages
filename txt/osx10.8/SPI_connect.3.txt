@@ -1,0 +1,34 @@
+SPI_CONNECT(3)		PostgreSQL 9.1.4 Documentation		SPI_CONNECT(3)
+
+
+
+NAME
+       SPI_connect - connect a procedure to the SPI manager
+
+SYNOPSIS
+       int SPI_connect(void)
+
+DESCRIPTION
+       SPI_connect opens a connection from a procedure invocation to the SPI
+       manager. You must call this function if you want to execute commands
+       through SPI. Some utility SPI functions can be called from unconnected
+       procedures.
+
+       If your procedure is already connected, SPI_connect will return the
+       error code SPI_ERROR_CONNECT. This could happen if a procedure that has
+       called SPI_connect directly calls another procedure that calls
+       SPI_connect. While recursive calls to the SPI manager are permitted
+       when an SQL command called through SPI invokes another function that
+       uses SPI, directly nested calls to SPI_connect and SPI_finish are
+       forbidden. (But see SPI_push and SPI_pop.)
+
+RETURN VALUE
+       SPI_OK_CONNECT
+	   on success
+
+       SPI_ERROR_CONNECT
+	   on error
+
+
+
+PostgreSQL 9.1.4		  2012-05-31			SPI_CONNECT(3)

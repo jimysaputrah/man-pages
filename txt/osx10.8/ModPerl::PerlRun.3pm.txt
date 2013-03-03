@@ -1,0 +1,58 @@
+apache_apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::ModPerl::PerlRun(3)
+
+
+
+NAME
+       ModPerl::PerlRun - Run unaltered CGI scripts under mod_perl
+
+Synopsis
+	 # httpd.conf
+	 PerlModule ModPerl::PerlRun
+	 Alias /perl-run/ /home/httpd/perl/
+	 <Location /perl-run>
+	     SetHandler perl-script
+	     PerlResponseHandler ModPerl::PerlRun
+	     PerlOptions +ParseHeaders
+	     Options +ExecCGI
+	 </Location>
+
+Description
+       META: document that for now we don't chdir() into the script's dir,
+       because it affects the whole process under threads.
+       "ModPerl::PerlRunPrefork" should be used by those who run only under
+       prefork MPM.
+
+Special Blocks
+   "BEGIN" Blocks
+       When running under the "ModPerl::PerlRun" handler "BEGIN" blocks behave
+       as follows:
+
+       o   "BEGIN" blocks defined in scripts running under the
+	   "ModPerl::PerlRun" handler are executed on each and every request.
+
+       o   "BEGIN" blocks defined in modules loaded from scripts running under
+	   "ModPerl::PerlRun" (and which weren't already loaded prior to the
+	   request) are executed on each and every request only if those
+	   modules declare no package. If a package is declared "BEGIN" blocks
+	   will be run only the first time each module is loaded, since those
+	   modules don't get reloaded on subsequent requests.
+
+       See also "BEGIN" blocks in mod_perl handlers.
+
+   "CHECK" and "INIT" Blocks
+       Same as normal mod_perl handlers.
+
+   "END" Blocks
+       Same as "ModPerl::Registry".
+
+Authors
+       Doug MacEachern
+
+       Stas Bekman
+
+See Also
+       "ModPerl::RegistryCooker" and "ModPerl::Registry".
+
+
+
+perl v5apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::ModPerl::PerlRun(3)

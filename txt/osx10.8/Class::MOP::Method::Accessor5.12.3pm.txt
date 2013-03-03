@@ -1,0 +1,84 @@
+Class::MOP::Method::AcUseroContributed Perl DocClass::MOP::Method::Accessor(3)
+
+
+
+NAME
+       Class::MOP::Method::Accessor - Method Meta Object for accessors
+
+VERSION
+       version 2.0205
+
+SYNOPSIS
+	   use Class::MOP::Method::Accessor;
+
+	   my $reader = Class::MOP::Method::Accessor->new(
+	       attribute     => $attribute,
+	       is_inline     => 1,
+	       accessor_type => 'reader',
+	   );
+
+	   $reader->body->execute($instance); # call the reader method
+
+DESCRIPTION
+       This is a subclass of "Class::MOP::Method" which is used by
+       "Class::MOP::Attribute" to generate accessor code. It handles
+       generation of readers, writers, predicates and clearers. For each type
+       of method, it can either create a subroutine reference, or actually
+       inline code by generating a string and "eval"'ing it.
+
+METHODS
+       Class::MOP::Method::Accessor->new(%options)
+	   This returns a new "Class::MOP::Method::Accessor" based on the
+	   %options provided.
+
+	   o   attribute
+
+	       This is the "Class::MOP::Attribute" for which accessors are
+	       being generated. This option is required.
+
+	   o   accessor_type
+
+	       This is a string which should be one of "reader", "writer",
+	       "accessor", "predicate", or "clearer". This is the type of
+	       method being generated. This option is required.
+
+	   o   is_inline
+
+	       This indicates whether or not the accessor should be inlined.
+	       This defaults to false.
+
+	   o   name
+
+	       The method name (without a package name). This is required.
+
+	   o   package_name
+
+	       The package name for the method. This is required.
+
+       $metamethod->accessor_type
+	   Returns the accessor type which was passed to "new".
+
+       $metamethod->is_inline
+	   Returns a boolean indicating whether or not the accessor is
+	   inlined.
+
+       $metamethod->associated_attribute
+	   This returns the Class::MOP::Attribute object which was passed to
+	   "new".
+
+       $metamethod->body
+	   The method itself is generated when the accessor object is
+	   constructed.
+
+AUTHOR
+       Stevan Little <stevan@iinteractive.com>
+
+COPYRIGHT AND LICENSE
+       This software is copyright (c) 2011 by Infinity Interactive, Inc..
+
+       This is free software; you can redistribute it and/or modify it under
+       the same terms as the Perl 5 programming language system itself.
+
+
+
+perl v5.12.4			  2011-09-06   Class::MOP::Method::Accessor(3)

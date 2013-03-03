@@ -1,0 +1,127 @@
+GLSTENCILFUNCSEPARAT(3G)	  OpenGL 3.3	      GLSTENCILFUNCSEPARAT(3G)
+
+
+
+NAME
+       glStencilFuncSeparate - set front and/or back function and reference
+       value for stencil testing
+
+C SPECIFICATION
+       void glStencilFuncSeparate(GLenum face, GLenum func, GLint ref,
+				  GLuint mask);
+
+PARAMETERS
+       face
+	   Specifies whether front and/or back stencil state is updated. Three
+	   symbolic constants are valid: GL_FRONT, GL_BACK, and
+	   GL_FRONT_AND_BACK.
+
+       func
+	   Specifies the test function. Eight symbolic constants are valid:
+	   GL_NEVER, GL_LESS, GL_LEQUAL, GL_GREATER, GL_GEQUAL, GL_EQUAL,
+	   GL_NOTEQUAL, and GL_ALWAYS. The initial value is GL_ALWAYS.
+
+       ref
+	   Specifies the reference value for the stencil test.	ref is clamped
+	   to the range 0 2 n - 1, where n is the number of bitplanes in the
+	   stencil buffer. The initial value is 0.
+
+       mask
+	   Specifies a mask that is ANDed with both the reference value and
+	   the stored stencil value when the test is done. The initial value
+	   is all 1's.
+
+DESCRIPTION
+       Stenciling, like depth-buffering, enables and disables drawing on a
+       per-pixel basis. You draw into the stencil planes using GL drawing
+       primitives, then render geometry and images, using the stencil planes
+       to mask out portions of the screen. Stenciling is typically used in
+       multipass rendering algorithms to achieve special effects, such as
+       decals, outlining, and constructive solid geometry rendering.
+
+       The stencil test conditionally eliminates a pixel based on the outcome
+       of a comparison between the reference value and the value in the
+       stencil buffer. To enable and disable the test, call glEnable() and
+       glDisable() with argument GL_STENCIL_TEST. To specify actions based on
+       the outcome of the stencil test, call glStencilOp() or
+       glStencilOpSeparate().
+
+       There can be two separate sets of func, ref, and mask parameters; one
+       affects back-facing polygons, and the other affects front-facing
+       polygons as well as other non-polygon primitives.  glStencilFunc() sets
+       both front and back stencil state to the same values, as if
+       glStencilFuncSeparate() were called with face set to GL_FRONT_AND_BACK.
+
+
+       func is a symbolic constant that determines the stencil comparison
+       function. It accepts one of eight values, shown in the following list.
+       ref is an integer reference value that is used in the stencil
+       comparison. It is clamped to the range 0 2 n - 1, where n is the number
+       of bitplanes in the stencil buffer.  mask is bitwise ANDed with both
+       the reference value and the stored stencil value, with the ANDed values
+       participating in the comparison.
+
+       If stencil represents the value stored in the corresponding stencil
+       buffer location, the following list shows the effect of each comparison
+       function that can be specified by func. Only if the comparison succeeds
+       is the pixel passed through to the next stage in the rasterization
+       process (see glStencilOp()). All tests treat stencil values as unsigned
+       integers in the range 0 2 n - 1, where n is the number of bitplanes in
+       the stencil buffer.
+
+       The following values are accepted by func:
+
+       GL_NEVER
+	   Always fails.
+
+       GL_LESS
+	   Passes if ( ref & mask ) < ( stencil & mask ).
+
+       GL_LEQUAL
+	   Passes if ( ref & mask ) <= ( stencil & mask ).
+
+       GL_GREATER
+	   Passes if ( ref & mask ) > ( stencil & mask ).
+
+       GL_GEQUAL
+	   Passes if ( ref & mask ) >= ( stencil & mask ).
+
+       GL_EQUAL
+	   Passes if ( ref & mask ) = ( stencil & mask ).
+
+       GL_NOTEQUAL
+	   Passes if ( ref & mask ) != ( stencil & mask ).
+
+       GL_ALWAYS
+	   Always passes.
+
+NOTES
+       Initially, the stencil test is disabled. If there is no stencil buffer,
+       no stencil modification can occur and it is as if the stencil test
+       always passes.
+
+ERRORS
+       GL_INVALID_ENUM is generated if func is not one of the eight accepted
+       values.
+
+ASSOCIATED GETS
+       glGet() with argument GL_STENCIL_FUNC, GL_STENCIL_VALUE_MASK,
+       GL_STENCIL_REF, GL_STENCIL_BACK_FUNC, GL_STENCIL_BACK_VALUE_MASK,
+       GL_STENCIL_BACK_REF, or GL_STENCIL_BITS
+
+
+       glIsEnabled() with argument GL_STENCIL_TEST
+
+SEE ALSO
+       glBlendFunc(), glDepthFunc(), glEnable(), glLogicOp(), glStencilFunc(),
+       glStencilMask(), glStencilMaskSeparate(), glStencilOp(),
+       glStencilOpSeparate()
+
+COPYRIGHT
+       Copyright (C) 2006 Khronos Group. This material may be distributed
+       subject to the terms and conditions set forth in the Open Publication
+       License, v 1.0, 8 June 1999.  http://opencontent.org/openpub/.
+
+
+
+OpenGL 3.3			  03/08/2011	      GLSTENCILFUNCSEPARAT(3G)

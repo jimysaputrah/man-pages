@@ -1,0 +1,97 @@
+Module::Build::PlatformPerlSProgrammers ReferModule::Build::Platform::VMS(3pm)
+
+
+
+NAME
+       Module::Build::Platform::VMS - Builder class for VMS platforms
+
+DESCRIPTION
+       This module inherits from "Module::Build::Base" and alters a few minor
+       details of its functionality.  Please see Module::Build for the general
+       docs.
+
+   Overridden Methods
+       _set_defaults
+	   Change $self->{build_script} to 'Build.com' so @Build works.
+
+       cull_args
+	   '@Build foo' on VMS will not preserve the case of 'foo'.  Rather
+	   than forcing people to write '@Build "foo"' we'll dispatch case-
+	   insensitively.
+
+       manpage_separator
+	   Use '__' instead of '::'.
+
+       prefixify
+	   Prefixify taking into account VMS' filepath syntax.
+
+       _quote_args
+	   Command-line arguments (but not the command itself) must be quoted
+	   to ensure case preservation.
+
+       have_forkpipe
+	   There is no native fork(), so some constructs depending on it are
+	   not available.
+
+       _backticks
+	   Override to ensure that we quote the arguments but not the command.
+
+       do_system
+	   Override to ensure that we quote the arguments but not the command.
+
+       oneliner
+	   Override to ensure that we do not quote the command.
+
+       _infer_xs_spec
+	   Inherit the standard version but tweak the library file name to be
+	   something Dynaloader can find.
+
+       rscan_dir
+	   Inherit the standard version but remove dots at end of name.  If
+	   the extended character set is in effect, do not remove dots from
+	   filenames with Unix path delimiters.
+
+       dist_dir
+	   Inherit the standard version but replace embedded dots with
+	   underscores because a dot is the directory delimiter on VMS.
+
+       man3page_name
+	   Inherit the standard version but chop the extra manpage delimiter
+	   off the front if there is one.  The VMS version of
+	   splitdir('[.foo]') returns '', 'foo'.
+
+       expand_test_dir
+	   Inherit the standard version but relativize the paths as the native
+	   glob() doesn't do that for us.
+
+       _detildefy
+	   The home-grown glob() does not currently handle tildes, so provide
+	   limited support here.  Expect only UNIX format file specifications
+	   for now.
+
+       find_perl_interpreter
+	   On VMS, $^X returns the fully qualified absolute path including
+	   version number.  It's logically impossible to improve on it for
+	   getting the perl we're currently running, and attempting to
+	   manipulate it is usually lossy.
+
+       localize_file_path
+	   Convert the file path to the local syntax
+
+       localize_dir_path
+	   Convert the directory path to the local syntax
+
+       ACTION_clean
+	   The home-grown glob() expands a bit too aggressively when given a
+	   bare name, so default in a zero-length extension.
+
+AUTHOR
+       Michael G Schwern <schwern@pobox.com> Ken Williams <kwilliams@cpan.org>
+       Craig A. Berry <craigberry@mac.com>
+
+SEE ALSO
+       perl(1), Module::Build(3), ExtUtils::MakeMaker(3)
+
+
+
+perl v5.10.1			  2009-08-10 Module::Build::Platform::VMS(3pm)

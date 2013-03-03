@@ -1,0 +1,80 @@
+Moose::Cookbook::Meta:UseriContributed Perl DMoose::Cookbook::Meta::Recipe5(3)
+
+
+
+NAME
+       Moose::Cookbook::Meta::Recipe5 - The "table" attribute as a metaclass
+       trait
+
+SYNOPSIS
+	 package MyApp::Meta::Class::Trait::HasTable;
+	 use Moose::Role;
+
+	 has table => (
+	     is  => 'rw',
+	     isa => 'Str',
+	 );
+
+	 package Moose::Meta::Class::Custom::Trait::HasTable;
+	 sub register_implementation { 'MyApp::Meta::Class::Trait::HasTable' }
+
+	 package MyApp::User;
+	 use Moose -traits => 'HasTable';
+
+	 __PACKAGE__->meta->table('User');
+
+DESCRIPTION
+       This recipe takes the metaclass table attribute from
+       Moose::Cookbook::Meta::Recipe4 and implements it as a metaclass trait.
+       Traits are just roles, as we saw in Moose::Cookbook::Meta::Recipe3.
+
+       The advantage of using traits is that it's easy to combine multiple
+       traits, whereas combining multiple metaclass subclasses requires
+       creating yet another subclass. With traits, Moose takes care of
+       applying them to your metaclass.
+
+   Using this Metaclass Trait in Practice
+       Once this trait has been applied to a metaclass, it looks exactly like
+       the example we saw in Moose::Cookbook::Meta::Recipe4:
+
+	 my $table = MyApp::User->meta->table;
+
+	 # the safe version
+	 $table = MyApp::User->meta->table
+	     if MyApp::User->meta->meta->can('does')
+		and MyApp::User->meta->meta->does('MyApp::Meta::Class');
+
+       The safe version is a little complicated. We have to check that the
+       metaclass object's metaclass has a "does" method, in which case we can
+       ask if the the metaclass does a given role.
+
+       It's simpler to just write:
+
+	 $table = MyApp::User->meta->table
+	     if MyApp::User->meta->can('table');
+
+       In theory, this is a little less correct, since the metaclass might be
+       getting its "table" method from a different role. In practice, you are
+       unlikely to encounter this sort of problem.
+
+SEE ALSO
+       Moose::Cookbook::Meta::Recipe3 - Labels implemented via attribute
+       traits
+
+       Moose::Cookbook::Meta::Recipe4 - Adding a "table" attribute to the
+       metaclass
+
+AUTHOR
+       Dave Rolsky <autarch@urth.org>
+
+COPYRIGHT AND LICENSE
+       Copyright 2006-2010 by Infinity Interactive, Inc.
+
+       <http://www.iinteractive.com>
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-02-27 Moose::Cookbook::Meta::Recipe5(3)

@@ -1,0 +1,83 @@
+GLNORMALPOINTER(3G)					   GLNORMALPOINTER(3G)
+
+
+
+NAME
+       glNormalPointer - define an array of normals
+
+
+C SPECIFICATION
+       void glNormalPointer( GLenum type,
+			     GLsizei stride,
+			     const GLvoid *pointer )
+
+
+PARAMETERS
+       type	Specifies the data type of each coordinate in the array.  Sym-
+		bolic  constants  GL_BYTE,  GL_SHORT,  GL_INT,	GL_FLOAT,  and
+		GL_DOUBLE are accepted. The initial value is GL_FLOAT.
+
+       stride	Specifies  the	byte  offset  between  consecutive normals. If
+		stride is 0- the initial value-the normals are	understood  to
+		be tightly packed in the array.  The initial value is 0.
+
+       pointer	Specifies  a pointer to the first coordinate of the first nor-
+		mal in the array.  The initial value is 0.
+
+DESCRIPTION
+       glNormalPointer specifies the location and data	of an array of normals
+       to  use	when  rendering.   type  specifies the data type of the normal
+       coordinates and stride gives the byte stride from  one  normal  to  the
+       next, allowing vertices and attributes to be packed into a single array
+       or stored in separate arrays.  (Single-array storage may be more  effi-
+       cient on some implementations; see glInterleavedArrays.)  When a normal
+       array is specified, type, stride, and pointer are saved as  client-side
+       state.
+
+       To  enable  and	disable the normal array, call glEnableClientState and
+       glDisableClientState with the argument GL_NORMAL_ARRAY. If enabled, the
+       normal	array	is   used   when   glDrawArrays,   glDrawElements,  or
+       glArrayElement is called.
+
+       Use glDrawArrays to construct a sequence of primitives (all of the same
+       type)  from  prespecified  vertex  and  vertex  attribute  arrays.  Use
+       glArrayElement to specify primitives by indexing  vertices  and	vertex
+       attributes  and glDrawElements to construct a sequence of primitives by
+       indexing vertices and vertex attributes.
+
+NOTES
+       glNormalPointer is available only if the GL version is 1.1 or  greater.
+
+       The  normal  array  is  initially  disabled  and  isn't	accessed  when
+       glArrayElement, glDrawElements, or glDrawArrays is called.
+
+       Execution of glNormalPointer is not allowed  between  glBegin  and  the
+       corresponding  glEnd,  but  an error may or may not be generated. If an
+       error is not generated, the operation is undefined.
+
+       glNormalPointer is typically implemented on the client side.
+
+       Since the normal array parameters are client-side state, they  are  not
+       saved	or    restored	 by   glPushAttrib   and   glPopAttrib.    Use
+       glPushClientAttrib and glPopClientAttrib instead.
+
+ERRORS
+       GL_INVALID_ENUM is generated if type is not an accepted value.
+
+       GL_INVALID_VALUE is generated if stride is negative.
+
+ASSOCIATED GETS
+       glIsEnabled with argument GL_NORMAL_ARRAY
+       glGet with argument GL_NORMAL_ARRAY_TYPE
+       glGet with argument GL_NORMAL_ARRAY_STRIDE
+       glGetPointerv with argument GL_NORMAL_ARRAY_POINTER
+
+SEE ALSO
+       glArrayElement,	  glColorPointer,    glDrawArrays,     glDrawElements,
+       glEdgeFlagPointer,     glEnable,     glGetPointerv,     glIndexPointer,
+       glInterleavedArrays,	  glPopClientAttrib,	   glPushClientAttrib,
+       glTexCoordPointer, glVertexPointer
+
+
+
+							   GLNORMALPOINTER(3G)

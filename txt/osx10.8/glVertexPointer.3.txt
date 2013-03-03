@@ -1,0 +1,91 @@
+GLVERTEXPOINTER(3G)					   GLVERTEXPOINTER(3G)
+
+
+
+NAME
+       glVertexPointer - define an array of vertex data
+
+
+C SPECIFICATION
+       void glVertexPointer( GLint size,
+			     GLenum type,
+			     GLsizei stride,
+			     const GLvoid *pointer )
+
+
+PARAMETERS
+       size	Specifies  the number of coordinates per vertex; must be 2, 3,
+		or 4. The initial value is 4.
+
+       type	Specifies the data type of each coordinate in the array.  Sym-
+		bolic  constants GL_SHORT, GL_INT, GL_FLOAT, and GL_DOUBLE are
+		accepted. The initial value is GL_FLOAT.
+
+       stride	Specifies the byte offset  between  consecutive  vertices.  If
+		stride	is 0, the vertices are understood to be tightly packed
+		in the array. The initial value is 0.
+
+       pointer	Specifies a pointer to the first coordinate of the first  ver-
+		tex in the array. The initial value is 0.
+
+DESCRIPTION
+       glVertexPointer	specifies the location and data  of an array of vertex
+       coordinates to use when rendering.  size specifies the number of  coor-
+       dinates	per  vertex  and type the data type of the coordinates. stride
+       specifies the byte stride from one vertex to the next allowing vertices
+       and  attributes	to be packed into a single array or stored in separate
+       arrays.	(Single-array storage may be more efficient on some  implemen-
+       tations;  see  glInterleavedArrays.)  When a vertex array is specified,
+       size, type, stride, and pointer are saved as client-side state.
+
+       To enable and disable the vertex array, call glEnableClientState and
+       glDisableClientState with the argument GL_VERTEX_ARRAY. If enabled, the
+       vertex	array	is   used   when   glDrawArrays,   glDrawElements,  or
+       glArrayElement is called.
+
+       Use glDrawArrays to construct a sequence of primitives (all of the same
+       type)  from  prespecified  vertex  and  vertex  attribute  arrays.  Use
+       glArrayElement to specify primitives by indexing  vertices  and	vertex
+       attributes  and glDrawElements to construct a sequence of primitives by
+       indexing vertices and vertex attributes.
+
+NOTES
+       glVertexPointer is available only if the GL version is 1.1 or  greater.
+
+       The  vertex  array  is  initially  disabled  and  isn't	accessed  when
+       glArrayElement, glDrawElements or glDrawArrays is called.
+
+       Execution of glVertexPointer is not allowed between  the  execution  of
+       glBegin	and  the corresponding execution of glEnd, but an error may or
+       may not be generated. If no error is generated, the operation is  unde-
+       fined.
+
+       glVertexPointer is typically implemented on the client side.
+
+       Vertex  array  parameters  are  client-side state and are therefore not
+       saved   or   restored   by   glPushAttrib   and	  glPopAttrib.	   Use
+       glPushClientAttrib and glPopClientAttrib instead.
+
+ERRORS
+       GL_INVALID_VALUE is generated if size is not 2, 3, or 4.
+
+       GL_INVALID_ENUM is generated if type is is not an accepted value.
+
+       GL_INVALID_VALUE is generated if stride is negative.
+
+ASSOCIATED GETS
+       glIsEnabled with argument GL_VERTEX_ARRAY
+       glGet with argument GL_VERTEX_ARRAY_SIZE
+       glGet with argument GL_VERTEX_ARRAY_TYPE
+       glGet with argument GL_VERTEX_ARRAY_STRIDE
+       glGetPointerv with argument GL_VERTEX_ARRAY_POINTER
+
+SEE ALSO
+       glArrayElement,	   glColorPointer,    glDrawArrays,    glDrawElements,
+       glDrawRangeElements,   glEdgeFlagPointer,   glEnable,	glGetPointerv,
+       glIndexPointer,		glInterleavedArrays,	      glNormalPointer,
+       glPopClientAttrib, glPushClientAttrib, glTexCoordPointer
+
+
+
+							   GLVERTEXPOINTER(3G)

@@ -1,0 +1,137 @@
+GLCOMPRESSEDTEXSUBIM(3G)	  OpenGL 3.3	      GLCOMPRESSEDTEXSUBIM(3G)
+
+
+
+NAME
+       glCompressedTexSubImage2D - specify a two-dimensional texture subimage
+       in a compressed format
+
+C SPECIFICATION
+       void glCompressedTexSubImage2D(GLenum target, GLint level,
+				      GLint xoffset, GLint yoffset,
+				      GLsizei width, GLsizei height,
+				      GLenum format, GLsizei imageSize,
+				      const GLvoid * data);
+
+PARAMETERS
+       target
+	   Specifies the target texture. Must be GL_TEXTURE_2D,
+	   GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+	   GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+	   GL_TEXTURE_CUBE_MAP_POSITIVE_Z, or GL_TEXTURE_CUBE_MAP_NEGATIVE_Z.
+
+       level
+	   Specifies the level-of-detail number. Level 0 is the base image
+	   level. Level n is the nth mipmap reduction image.
+
+       xoffset
+	   Specifies a texel offset in the x direction within the texture
+	   array.
+
+       yoffset
+	   Specifies a texel offset in the y direction within the texture
+	   array.
+
+       width
+	   Specifies the width of the texture subimage.
+
+       height
+	   Specifies the height of the texture subimage.
+
+       format
+	   Specifies the format of the compressed image data stored at address
+	   data.
+
+       imageSize
+	   Specifies the number of unsigned bytes of image data starting at
+	   the address specified by data.
+
+       data
+	   Specifies a pointer to the compressed image data in memory.
+
+DESCRIPTION
+       Texturing allows elements of an image array to be read by shaders.
+
+
+       glCompressedTexSubImage2D redefines a contiguous subregion of an
+       existing two-dimensional texture image. The texels referenced by data
+       replace the portion of the existing texture array with x indices
+       xoffset and xoffset + width - 1, and the y indices yoffset and yoffset
+       + height - 1, inclusive. This region may not include any texels outside
+       the range of the texture array as it was originally specified. It is
+       not an error to specify a subtexture with width of 0, but such a
+       specification has no effect.
+
+
+       internalformat must be a known compressed image format (such as
+       GL_RGTC) or an extension-specified compressed-texture format. The
+       format of the compressed texture image is selected by the GL
+       implementation that compressed it (see glTexImage2D()) and should be
+       queried at the time the texture was compressed with
+       glGetTexLevelParameter().
+
+       If a non-zero named buffer object is bound to the
+       GL_PIXEL_UNPACK_BUFFER target (see glBindBuffer()) while a texture
+       image is specified, data is treated as a byte offset into the buffer
+       object's data store.
+
+ERRORS
+       GL_INVALID_ENUM is generated if internalformat is of the generic
+       compressed internal formats: GL_COMPRESSED_RED, GL_COMPRESSED_RG,
+       GL_COMPRESSED_RGB, GL_COMPRESSED_RGBA.  GL_COMPRESSED_SRGB, or
+       GL_COMPRESSED_SRGB_ALPHA.
+
+
+       GL_INVALID_VALUE is generated if imageSize is not consistent with the
+       format, dimensions, and contents of the specified compressed image
+       data.
+
+
+       GL_INVALID_OPERATION is generated if parameter combinations are not
+       supported by the specific compressed internal format as specified in
+       the specific texture compression extension.
+
+
+       GL_INVALID_OPERATION is generated if a non-zero buffer object name is
+       bound to the GL_PIXEL_UNPACK_BUFFER target and the buffer object's data
+       store is currently mapped.
+
+
+       GL_INVALID_OPERATION is generated if a non-zero buffer object name is
+       bound to the GL_PIXEL_UNPACK_BUFFER target and the data would be
+       unpacked from the buffer object such that the memory reads required
+       would exceed the data store size.
+
+       Undefined results, including abnormal program termination, are
+       generated if data is not encoded in a manner consistent with the
+       extension specification defining the internal compression format.
+
+ASSOCIATED GETS
+       glGetCompressedTexImage()
+
+
+       glGet() with argument GL_TEXTURE_COMPRESSED
+
+
+       glGet() with argument GL_PIXEL_UNPACK_BUFFER_BINDING
+
+
+       glGetTexLevelParameter() with arguments GL_TEXTURE_INTERNAL_FORMAT and
+       GL_TEXTURE_COMPRESSED_IMAGE_SIZE
+
+SEE ALSO
+       glActiveTexture(), glCompressedTexImage1D(), glCompressedTexImage2D(),
+       glCompressedTexImage3D(), glCompressedTexSubImage1D(),
+       glCompressedTexSubImage3D(), glCopyTexImage1D(), glCopyTexImage2D(),
+       glCopyTexSubImage1D(), glCopyTexSubImage2D(), glCopyTexSubImage3D(),
+       glPixelStore(), glTexImage2D(), glTexImage3D(), glTexSubImage1D(),
+       glTexSubImage2D(), glTexSubImage3D(), glTexParameter()
+
+COPYRIGHT
+       Copyright (C) 1991-2006 Silicon Graphics, Inc. This document is
+       licensed under the SGI Free Software B License. For details, see
+       http://oss.sgi.com/projects/FreeB/.
+
+
+
+OpenGL 3.3			  03/08/2011	      GLCOMPRESSEDTEXSUBIM(3G)

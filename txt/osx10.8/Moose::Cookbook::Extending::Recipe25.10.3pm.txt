@@ -1,0 +1,69 @@
+Moose::Cookbook::ExtenUser:Contributed PMoose::Cookbook::Extending::Recipe2(3)
+
+
+
+NAME
+       Moose::Cookbook::Extending::Recipe2 - Providing a role for the base
+       object class
+
+SYNOPSIS
+	 package MooseX::Debugging;
+
+	 use Moose::Exporter;
+
+	 Moose::Exporter->setup_import_methods(
+	     base_class_roles => ['MooseX::Debugging::Role::Object'],
+	 );
+
+	 package MooseX::Debugging::Role::Object;
+
+	 use Moose::Role;
+
+	 after 'BUILDALL' => sub {
+	     my $self = shift;
+
+	     warn "Made a new " . ( ref $self ) . " object\n";
+	 };
+
+DESCRIPTION
+       In this example, we provide a role for the base object class that adds
+       some simple debugging output. Every time an object is created, it spits
+       out a warning saying what type of object it was.
+
+       Obviously, a real debugging role would do something more interesting,
+       but this recipe is all about how we apply that role.
+
+       In this case, with the combination of Moose::Exporter and
+       Moose::Util::MetaRole, we ensure that when a module does
+       "use MooseX::Debugging", it automatically gets the debugging role
+       applied to its base object class.
+
+       There are a few pieces of code worth looking at more closely.
+
+	 Moose::Exporter->setup_import_methods(
+	     base_class_roles => ['MooseX::Debugging::Role::Object'],
+	 );
+
+       This creates an "import" method in the "MooseX::Debugging" package.
+       Since we are not actually exporting anything, we do not pass
+       "setup_import_methods" any parameters related to exports, but we need
+       to have an "import" method to ensure that our "init_meta" method is
+       called. The "init_meta" is created by "setup_import_methods" for us,
+       since we passed the "base_class_roles" parameter. The generated
+       "init_meta" will in turn call
+       Moose::Util::MetaRole::apply_base_class_roles.
+
+AUTHOR
+       Dave Rolsky <autarch@urth.org>
+
+COPYRIGHT AND LICENSE
+       Copyright 2009 by Infinity Interactive, Inc.
+
+       <http://www.iinteractive.com>
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-0Moose::Cookbook::Extending::Recipe2(3)

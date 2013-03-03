@@ -1,0 +1,143 @@
+DBIx::Class::Manual::RUsernContributed Perl DocDBIx::Class::Manual::Reading(3)
+
+
+
+NAME
+       DBIx::Class::Manual::Reading - How to read and write DBIx::Class POD.
+
+DESCRIPTION
+       This doc should help users to understand how the examples and
+       documentation found in the DBIx::Class distribution can be interpreted.
+
+       Writers of DBIx::Class POD should also check here to make sure their
+       additions are consistent with the rest of the documentation.
+
+METHODS
+       Methods should be documented in the files which also contain the code
+       for the method, or that file should be hidden from PAUSE completely, in
+       which case the methods are documented in the file which loads it.
+       Methods may also be documented and referred to in files representing
+       the major objects or components on which they can be called.
+
+       For example, DBIx::Class::Relationship documents the methods actually
+       coded in the helper relationship classes like
+       DBIx::Class::Relationship::BelongsTo. The BelongsTo file itself is
+       hidden from PAUSE as it has no documentation. The accessors created by
+       relationships should be mentioned in DBIx::Class::Row, the major object
+       that they will be called on.
+
+   Method documentation
+       o   Each method starts with a "head2" statement of its name.
+
+	   Just the plain method name, not an example of how to call it, or a
+	   link.  This is to ensure easy linking to method documentation from
+	   other POD.
+
+       o   The header is followed by a two-item list. This contains a
+	   description of the arguments the method is expected to take, and an
+	   indication of what the method returns.
+
+	   The first item provides a list of all possible values for the
+	   arguments of the method in order, separated by ", ", preceded by
+	   the text "Arguments: "
+
+	   Example (for the belongs_to relationship):
+
+	     =item Arguments: $accessor_name, $related_class, $fk_column|\%cond|\@cond?, \%attr?
+
+	   The following possible argument sigils can be shown:
+
+	   o   $var - A scalar (string or numeric) variable.
+
+	   o   \%var - A variable containing reference to a hash.
+
+	   o   \@var - A variable containing a reference to an array.
+
+	   o   \$var - A variable containing a reference to a scalar variable.
+
+	   o   %var - A hashref variable (list of key/value pairs) - rarely
+	       used in DBIx::Class.
+
+	       Reading an argument as a hash variable will consume all
+	       subsequent method arguments, use with caution.
+
+	   o   @var - An array variable (list of values).
+
+	       Reading an argument as a array variable will consume all
+	       subsequent method arguments, use with caution.
+
+	   o   ? - Optional, should be placed after the argument type and
+	       name.
+
+		 ## Correct
+		 \%myhashref|\@myarrayref?
+
+		 ## Wrong
+		 \%myhashref?|\@myarrayref
+
+	       Applies to the entire argument.
+
+	       Optional arguments can be left out of method calls, unless the
+	       caller needs to pass in any of the following arguments. In
+	       which case the caller should pass "undef" in place of the
+	       missing argument.
+
+	   o   | - Alternate argument content types.
+
+	       At least one of these must be supplied unless the argument is
+	       also marked optional.
+
+	   The second item starts with the text "Return value:". The remainder
+	   of the line is either the text "undefined", a text describing the
+	   result of the method, or a variable with a descriptive name.
+
+	     ## Good examples
+	     =item Return value: undefined
+	     =item Return value: A schema object
+	     =item Return value: $classname
+
+	     ## Bad examples
+	     =item Return value: The names
+
+	   "undefined" means the method does not deliberately return a value,
+	   and the caller should not use or rely on anything it does return.
+	   (Perl functions always return something, usually the result of the
+	   last code statement, if there is no explicit return statement.)
+
+       o   The argument list is followed by a single paragraph describing what
+	   the method does.
+
+       o   The description paragraph is followed by another list. Each item in
+	   the list explains one of the possible argument/type combinations.
+
+	   This list may be omitted if the author feels that the variable
+	   names are self-explanatory enough to not require it. Use best
+	   judgement.
+
+       o   The argument list is followed by some examples of how to use the
+	   method, using its various types of arguments.
+
+	   The examples can also include ways to use the results if
+	   applicable. For instance, if the documentation is for a
+	   relationship type, the examples can include how to call the
+	   resulting relation accessor, how to use the relation name in a
+	   search and so on.
+
+	   If some of the examples assume default values, these should be
+	   shown with and without the actual arguments, with hints about the
+	   equivalent calls.
+
+	   The example should be followed by one or more paragraphs explaining
+	   what it does.
+
+	   Examples and explaining paragraphs can be repeated as necessary.
+
+AUTHORS
+       see DBIx::Class
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2010-10-07   DBIx::Class::Manual::Reading(3)

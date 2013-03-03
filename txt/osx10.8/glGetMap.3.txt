@@ -1,0 +1,88 @@
+GLGETMAP(3G)							  GLGETMAP(3G)
+
+
+
+NAME
+       glGetMapdv, glGetMapfv, glGetMapiv - return evaluator parameters
+
+
+C SPECIFICATION
+       void glGetMapdv( GLenum target,
+			GLenum query,
+			GLdouble *v )
+       void glGetMapfv( GLenum target,
+			GLenum query,
+			GLfloat *v )
+       void glGetMapiv( GLenum target,
+			GLenum query,
+			GLint *v )
+
+
+PARAMETERS
+       target  Specifies  the  symbolic  name  of  a map.  Accepted values are
+	       GL_MAP1_COLOR_4, 	GL_MAP1_INDEX,	       GL_MAP1_NORMAL,
+	       GL_MAP1_TEXTURE_COORD_1, 	      GL_MAP1_TEXTURE_COORD_2,
+	       GL_MAP1_TEXTURE_COORD_3, 	      GL_MAP1_TEXTURE_COORD_4,
+	       GL_MAP1_VERTEX_3,       GL_MAP1_VERTEX_4,      GL_MAP2_COLOR_4,
+	       GL_MAP2_INDEX,	  GL_MAP2_NORMAL,     GL_MAP2_TEXTURE_COORD_1,
+	       GL_MAP2_TEXTURE_COORD_2, 	      GL_MAP2_TEXTURE_COORD_3,
+	       GL_MAP2_TEXTURE_COORD_4, 	GL_MAP2_VERTEX_3,	   and
+	       GL_MAP2_VERTEX_4.
+
+       query   Specifies  which parameter to return.  Symbolic names GL_COEFF,
+	       GL_ORDER, and GL_DOMAIN are accepted.
+
+       v       Returns the requested data.
+
+DESCRIPTION
+       glMap1 and glMap2 define evaluators.  glGetMap returns evaluator param-
+       eters.  target chooses a map, query selects a specific parameter, and v
+       points to storage where the values will be returned.
+
+       The acceptable values for the target parameter  are  described  in  the
+       glMap1 and glMap2 reference pages.
+
+       query can assume the following values:
+
+       GL_COEFF       v returns the control points for the evaluator function.
+		      One-dimensional evaluators return order control  points,
+		      and  two-dimensional  evaluators	return uorder * vorder
+		      control points.  Each control  point  consists  of  one,
+		      two,  three, or four integer, single-precision floating-
+		      point,  or   double-precision   floating-point   values,
+		      depending  on the type of the evaluator.	The GL returns
+		      two-dimensional  control	points	in  row-major	order,
+		      incrementing  the  uorder  index	quickly and the vorder
+		      index after each row.  Integer values,  when  requested,
+		      are  computed  by  rounding  the internal floating-point
+		      values to the nearest integer values.
+
+       GL_ORDER       v returns the order of  the  evaluator  function.   One-
+		      dimensional evaluators return a single value, order. The
+		      initial value is 1.  Two-dimensional  evaluators	return
+		      two values, uorder and vorder. The initial value is 1,1.
+
+       GL_DOMAIN      v returns the linear u and v mapping  parameters.   One-
+		      dimensional  evaluators return two values, u1 and u2, as
+		      specified by glMap1.  Two-dimensional evaluators	return
+		      four values (u1, u2, v1, and v2) as specified by glMap2.
+		      Integer values, when requested, are computed by rounding
+		      the  internal floating-point values to the nearest inte-
+		      ger values.
+
+NOTES
+       If an error is generated, no change is made to the contents of v.
+
+ERRORS
+       GL_INVALID_ENUM is generated if	either	target	or  query  is  not  an
+       accepted value.
+
+       GL_INVALID_OPERATION  is  generated if glGetMap is executed between the
+       execution of glBegin and the corresponding execution of glEnd.
+
+SEE ALSO
+       glEvalCoord, glMap1, glMap2
+
+
+
+								  GLGETMAP(3G)

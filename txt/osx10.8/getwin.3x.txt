@@ -1,0 +1,180 @@
+curs_util(3X)							 curs_util(3X)
+
+
+
+NAME
+       delay_output, filter, flushinp, getwin, key_name, keyname, nofilter,
+       putwin, unctrl, use_env, wunctrl - miscellaneous curses utility
+       routines
+
+SYNOPSIS
+       #include <curses.h>
+
+       char *unctrl(chtype c);
+       wchar_t *wunctrl(cchar_t *c);
+       char *keyname(int c);
+       char *key_name(wchar_t w);
+       void filter(void);
+       void nofilter(void);
+       void use_env(bool f);
+       int putwin(WINDOW *win, FILE *filep);
+       WINDOW *getwin(FILE *filep);
+       int delay_output(int ms);
+       int flushinp(void);
+
+DESCRIPTION
+       The unctrl routine returns a character string which is a printable rep-
+       resentation of the character c, ignoring attributes.   Control  charac-
+       ters  are  displayed  in the ^X notation.  Printing characters are dis-
+       played as is.  The corresponding wunctrl returns a printable  represen-
+       tation of a wide-character.
+
+       The keyname routine returns a character string corresponding to the key
+       c:
+
+	  -  Printable characters are displayed as themselves,	e.g.,  a  one-
+	     character string containing the key.
+
+	  -  Control characters are displayed in the ^X notation.
+
+	  -  DEL (character 127) is displayed as ^?.
+
+	  -  Values  above  128  are either meta characters (if the screen has
+	     not been initialized, or if meta has been called with a TRUE  pa-
+	     rameter),	shown  in  the M-X notation, or are displayed as them-
+	     selves.  In the latter case, the values  may  not	be  printable;
+	     this follows the X/Open specification.
+
+	  -  Values  above 256 may be the names of the names of function keys.
+
+	  -  Otherwise (if there is no corresponding name)  the  function  re-
+	     turns  null,  to  denote an error.  X/Open also lists an "UNKNOWN
+	     KEY" return value, which some implementations return rather  than
+	     null.
+
+       The  corresponding key_name returns a character string corresponding to
+       the wide-character value w.  The two functions do not return  the  same
+       set  of strings; the latter returns null where the former would display
+       a meta character.
+
+       The filter routine, if used, must be called before initscr  or  newterm
+       are called.  The effect is that, during those calls, LINES is set to 1;
+       the capabilities clear, cup, cud, cud1, cuu1, cuu,  vpa	are  disabled;
+       and the home string is set to the value of cr.
+
+       The  nofilter  routine  cancels	the effect of a preceding filter call.
+       That allows the caller to initialize a screen on  a  different  device,
+       using  a  different  value of $TERM.  The limitation arises because the
+       filter routine modifies the in-memory copy of the terminal information.
+
+       The  use_env  routine, if used, is called before initscr or newterm are
+       called.	When called with FALSE as an argument, the values of lines and
+       columns	specified in the terminfo database will be used, even if envi-
+       ronment variables LINES and COLUMNS (used by default) are  set,	or  if
+       curses  is running in a window (in which case default behavior would be
+       to use the window size if LINES and COLUMNS are not  set).   Note  that
+       setting	LINES or COLUMNS overrides the corresponding size which may be
+       obtained from the operating system.
+
+       The putwin routine writes all data associated with window win into  the
+       file  to  which	filep points.  This information can be later retrieved
+       using the getwin function.
+
+       The getwin routine reads window related data  stored  in  the  file  by
+       putwin.	 The  routine  then creates and initializes a new window using
+       that data.  It returns a pointer to the new window.
+
+       The delay_output routine inserts an ms  millisecond  pause  in  output.
+       This  routine should not be used extensively because padding characters
+       are used rather than a CPU pause.  If no padding  character  is	speci-
+       fied, this uses napms to perform the delay.
+
+       The  flushinp  routine throws away any typeahead that has been typed by
+       the user and has not yet been read by the program.
+
+RETURN VALUE
+       Except for flushinp, routines that return an integer  return  ERR  upon
+       failure	and OK (SVr4 specifies only "an integer value other than ERR")
+       upon successful completion.
+
+       Routines that return pointers return NULL on error.
+
+       X/Open does not define any error conditions.  In this implementation
+
+	  flushinp
+	       returns an error if the terminal was not initialized.
+
+	  meta returns an error if the terminal was not initialized.
+
+	  putwin
+	       returns an error if the associated fwrite calls return  an  er-
+	       ror.
+
+PORTABILITY
+       The  XSI Curses standard, Issue 4 describes these functions.  It states
+       that unctrl and wunctrl will return a null pointer if unsuccessful, but
+       does  not  define any error conditions.	This implementation checks for
+       three cases:
+
+	      -    the parameter is a 7-bit US-ASCII code.  This is  the  case
+		   that X/Open Curses documented.
+
+	      -    the	parameter  is in the range 128-159, i.e., a C1 control
+		   code.  If use_legacy_coding has been called with a 2 param-
+		   eter,  unctrl  returns the parameter, i.e., a one-character
+		   string with the parameter as the first  character.	Other-
+		   wise, it returns ``~@'', ``~A'', etc., analogous to ``^@'',
+		   ``^A'', C0 controls.
+
+		   X/Open Curses does  not  document  whether  unctrl  can  be
+		   called  before  initializing  curses.   This implementation
+		   permits that, and returns the ``~@'', etc., values in  that
+		   case.
+
+	      -    parameter  values  outside  the 0 to 255 range.  unctrl re-
+		   turns a null pointer.
+
+       The SVr4 documentation describes the  action  of  filter  only  in  the
+       vaguest	terms.	 The  description  here is adapted from the XSI Curses
+       standard (which erroneously fails to describe the disabling of cuu).
+
+       The strings returned by unctrl in this implementation are determined at
+       compile	time,  showing C1 controls from the upper-128 codes with a `~'
+       prefix rather than `^'.	Other implementations have  different  conven-
+       tions.  For example, they may show both sets of control characters with
+       `^', and strip the parameter to 7 bits.	Or they may ignore C1 controls
+       and treat all of the upper-128 codes as printable.  This implementation
+       uses 8 bits but does not modify the  string  to	reflect  locale.   The
+       use_legacy_coding  function  allows  the caller to change the output of
+       unctrl.
+
+       Likewise, the meta function allows the caller to change the  output  of
+       keyname,  i.e.,	it  determines	whether  to  use  the  `M-' prefix for
+       ``meta'' keys (codes in the range 128 to 255).  Both  use_legacy_coding
+       and  meta succeed only after curses is initialized.  X/Open Curses does
+       not document the treatment of codes 128 to 159.	When treating them  as
+       ``meta''  keys  (or  if	keyname is called before initializing curses),
+       this implementation returns strings ``M-^@'', ``M-^A'', etc.
+
+       The keyname function may return the names of user-defined string  capa-
+       bilities  which	are defined in the terminfo entry via the -x option of
+       tic.  This implementation automatically assigns at run-time keycodes to
+       user-defined  strings  which  begin  with  "k".	 The keycodes start at
+       KEY_MAX, but are not guaranteed to be the same value for different runs
+       because	user-defined  codes  are merged from all terminal descriptions
+       which have  been  loaded.   The	use_extended_names  function  controls
+       whether	this  data  is loaded when the terminal description is read by
+       the library.
+
+       The nofilter routine is specific to ncurses.  It was not  supported  on
+       Version 7, BSD or System V implementations.  It is recommended that any
+       code depending on ncurses extensions be conditioned using  NCURSES_VER-
+       SION.
+
+SEE ALSO
+       legacy_coding(3X),   curses(3X),   curs_initscr(3X),   curs_kernel(3X),
+       curs_scr_dump(3X), legacy_coding(3X).
+
+
+
+								 curs_util(3X)

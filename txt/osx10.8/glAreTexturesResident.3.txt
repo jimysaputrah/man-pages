@@ -1,0 +1,82 @@
+GLARETEXTURESRESIDENT(3G)			     GLARETEXTURESRESIDENT(3G)
+
+
+
+NAME
+       glAreTexturesResident  -  determine  if	textures are loaded in texture
+       memory
+
+
+C SPECIFICATION
+       GLboolean glAreTexturesResident( GLsizei n,
+					const GLuint *textures,
+					GLboolean *residences )
+
+
+PARAMETERS
+       n	   Specifies the number of textures to be queried.
+
+       textures    Specifies an array containing the names of the textures  to
+		   be queried.
+
+       residences  Specifies an array in which the texture residence status is
+		   returned.  The residence status of a texture  named	by  an
+		   element  of	textures is returned in the corresponding ele-
+		   ment of residences.
+
+DESCRIPTION
+       GL establishes a ``working set'' of textures that are resident in  tex-
+       ture memory.  These textures can be bound to a texture target much more
+       efficiently than textures that are not resident.
+
+       glAreTexturesResident queries the texture residence  status  of	the  n
+       textures  named by the elements of textures.  If all the named textures
+       are resident, glAreTexturesResident returns GL_TRUE, and  the  contents
+       of residences are undisturbed.  If not all the named textures are resi-
+       dent, glAreTexturesResident returns GL_FALSE, and  detailed  status  is
+       returned  in the n elements of residences.  If an element of residences
+       is GL_TRUE, then the texture named by the corresponding element of tex-
+       tures is resident.
+
+       The  residence  status of a single bound texture may also be queried by
+       calling glGetTexParameter with the target argument set to the target to
+       which   the   texture   is   bound,  and  the  pname  argument  set  to
+       GL_TEXTURE_RESIDENT.  This is the only way that the residence status of
+       a default texture can be queried.
+
+NOTES
+       glAreTexturesResident  is  available  only  if the GL version is 1.1 or
+       greater.
+
+       glAreTexturesResident returns the residency status of the  textures  at
+       the  time  of  invocation. It does not guarantee that the textures will
+       remain resident at any other time.
+
+       If textures reside in virtual memory (there is no texture memory), they
+       are considered always resident.
+
+       Some implementations may not load a texture until the first use of that
+       texture.
+
+ERRORS
+       GL_INVALID_VALUE is generated if n is negative.
+
+       GL_INVALID_VALUE is generated if any element in textures is 0  or  does
+       not name a texture. In that case, the function returns GL_FALSE and the
+       contents of residences is indeterminate.
+
+       GL_INVALID_OPERATION is generated if glAreTexturesResident is  executed
+       between	the  execution	of  glBegin and the corresponding execution of
+       glEnd.
+
+ASSOCIATED GETS
+       glGetTexParameter with parameter name GL_TEXTURE_RESIDENT retrieves the
+       residence status of a currently bound texture.
+
+SEE ALSO
+       glBindTexture,  glGetTexParameter,  glPrioritizeTextures, glTexImage1D,
+       glTexImage2D, glTexImage3D, glTexParameter
+
+
+
+						     GLARETEXTURESRESIDENT(3G)

@@ -1,0 +1,68 @@
+GLWAITSYNC(3G)			  OpenGL 3.3			GLWAITSYNC(3G)
+
+
+
+NAME
+       glWaitSync - instruct the GL server to block until the specified sync
+       object becomes signaled
+
+C SPECIFICATION
+       void glWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout);
+
+PARAMETERS
+       sync
+	   Specifies the sync object whose status to wait on.
+
+       flags
+	   A bitfield controlling the command flushing behavior.  flags may be
+	   zero.
+
+       timeout
+	   Specifies the timeout that the server should wait before
+	   continuing.	timeout must be GL_TIMEOUT_IGNORED.
+
+DESCRIPTION
+       glWaitSync causes the GL server to block and wait until sync becomes
+       signaled.  sync is the name of an existing sync object upon which to
+       wait.  flags and timeout are currently not used and must be set to zero
+       and the special value GL_TIMEOUT_IGNORED, respectively[1].  glWaitSync
+       will always wait no longer than an implementation-dependent timeout.
+       The duration of this timeout in nanoseconds may be queried by calling
+       glGet() with the parameter GL_MAX_SERVER_WAIT_TIMEOUT. There is
+       currently no way to determine whether glWaitSync unblocked because the
+       timeout expired or because the sync object being waited on was
+       signaled.
+
+       If an error occurs, glWaitSync does not cause the GL server to block.
+
+NOTES
+       glWaitSync is available only if the GL version is 3.2 or higher.
+
+ERRORS
+       GL_INVALID_OPERATION is generated if sync is not the name of a sync
+       object.
+
+
+       GL_INVALID_VALUE is generated if flags is not zero.
+
+
+       GL_INVALID_VALUE is generated if timeout is not GL_TIMEOUT_IGNORED.
+
+SEE ALSO
+       glFenceSync(), glClientWaitSync()
+
+COPYRIGHT
+       Copyright (C) 2010 Khronos Group. This material may be distributed
+       subject to the terms and conditions set forth in the Open Publication
+       License, v 1.0, 8 June 1999.  http://opencontent.org/openpub/.
+
+NOTES
+	1. flags and timeout are placeholders for anticipated future
+	   extensions of sync object capabilities. They must have these
+	   reserved values in order that existing code calling glWaitSync
+	   operate properly in the presence of such extensions.
+
+
+
+
+OpenGL 3.3			  03/08/2011			GLWAITSYNC(3G)

@@ -1,0 +1,66 @@
+
+POSIX_SPAWNATTR_INIT(3)  BSD Library Functions Manual  POSIX_SPAWNATTR_INIT(3)
+
+NAME
+     posix_spawnattr_init posix_spawnattr_destroy -- initialize or destroy a
+     spawn attributes object
+
+SYNOPSIS
+     #include <spawn.h>
+
+     int
+     posix_spawnattr_init(posix_spawnattr_t *attr);
+
+     int
+     posix_spawnattr_destroy(posix_spawnattr_t *attr);
+
+DESCRIPTION
+     The posix_spawnattr_init() function initializes the object referenced by
+     attr, to an empty set of spawn attributes for subsequent use in a call to
+     posix_spawn(2) or posix_spawnp(2).
+
+     A posix_spawnattr_t object is an opaque type that is used to collect set
+     of spawn attributes specified by calls to posix_spawnattr_setflags(3),
+     posix_spawnattr_setpgroup(3), posix_spawnattr_setsigdefault(3),
+     posix_spawnattr_setsigmask(3), posix_spawnattr_setbinpref_np(3),
+     posix_spawnattr_setspecialport_np(3), or
+     posix_spawnattr_setexceptionports_np(3) such that once the spawn opera-
+     tion is complete, the child process will have a different set of
+     attributes than the parent.  The order of these operations is unspecified
+     and may change; programs should not depend on their ordering.
+
+     The posix_spawnattr_destroy() function destroys the object referenced by
+     attr which was previously intialized by posix_spawnattr_init(), returning
+     any resources obtained at the time of initialization to the system for
+     subsequent reuse.	A posix_spawnattr_t may be reinitialized after having
+     been destroyed, but must not be reused after destruction, unless it has
+     been reinitialized.
+
+RETURN VALUES
+     On success, these functions return 0; on failure they return an error
+     number from <errno.h>.
+
+ERRORS
+     The posix_spawnattr_init() and posix_spawnattr_destroy() functions will
+     fail and return an error if:
+
+     [ENOMEM]		Insufficient resources to initialize the
+			posix_spawnattr_t object.
+
+     [EINVAL]		The posix_spawnattr_t being destroyed is invalid.
+
+SEE ALSO
+     posix_spawn(2), posix_spawnp(2), posix_spawnattr_setflags(3),
+     posix_spawnattr_setpgroup(3), posix_spawnattr_setsigdefault(3),
+     posix_spawnattr_setsigmask(3), posix_spawnattr_setbinpref_np(3),
+     posix_spawnattr_setspecialport_np(3),
+     posix_spawnattr_setexceptionports_np(3)
+
+STANDARDS
+     Version 3 of the Single UNIX Specification (``SUSv3'') [SPN]
+
+HISTORY
+     The posix_spawn() and posix_spawnp() function calls appeared in Version 3
+     of the Single UNIX Specification (``SUSv3'') [SPN].
+
+Mac OS X			August 22, 2007 		      Mac OS X

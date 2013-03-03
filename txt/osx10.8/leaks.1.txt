@@ -1,0 +1,75 @@
+
+leaks(1)		  BSD General Commands Manual		      leaks(1)
+
+NAME
+     leaks -- Search a process's memory for unreferenced malloc buffers
+
+SYNOPSIS
+     leaks [-nocontext] [-nostacks] [-exclude symbol] pid |
+	   partial-executable-name
+
+DESCRIPTION
+     leaks identifies leaked memory -- memory that the application has allo-
+     cated, but has been lost and cannot be freed.  Specifically, leaks exam-
+     ines a specified process's memory for values that may be pointers to mal-
+     loc-allocated buffers.  Any buffer reachable from a pointer in writable
+     memory, a register, or on the stack is assumed to be memory in use.  Any
+     buffer reachable from a pointer in a reachable malloc-allocated buffer is
+     also assumed to be in use.  The buffers which are not reachable are
+     leaks; the buffers could never be freed because no pointer exists in mem-
+     ory to the buffer, and thus free() could never be called for these
+     buffers.  Such buffers waste memory; removing them can reduce swapping
+     and memory usage.	Leaks are particularly dangerous for long-running pro-
+     grams, for eventually the leaks could fill memory and cause the applica-
+     tion to crash.
+
+     leaks requires one parameter -- either the process ID or executable name
+     of the process to examine.  It also takes several arguments for modifying
+     its behavior.
+
+     For each leaked buffer that is found, leaks prints the address of the
+     leaked memory and its size.  If leaks can determine that the object is an
+     instance of an Objective-C, CoreFoundation, or C++ class, or a CFType, it
+     also specifies the name and type of the class, and the binary image that
+     implements the class.  It then prints a string or hexadecimal representa-
+     tion of the contents of the memory, unless the -nocontext option was
+     specified.
+
+     If the MallocStackLogging environment variable was set when the applica-
+     tion was launched, leaks also prints a stack trace describing where the
+     buffer was allocated.
+
+OPTIONS
+     -nocontext     Do not print the string or hex representation of leaked
+		    memory.  Although that information can be useful for rec-
+		    ognizing the contents of the buffer and understanding why
+		    it might be leaked, it can also provide overwhelming
+		    detail, and could expose confidential information from
+		    your process if you, for example, file bug reports with
+		    that output included.
+
+     -nostacks	    Do not print backtraces of leaked blocks even if the tar-
+		    get process has the MallocStackLogging environment vari-
+		    able set.
+
+     -exclude symbol
+		    Exclude leaked blocks whose backtraces include the speci-
+		    fied symbol.  This option can be repeated for multiple
+		    symbols.  This allows ignoring leaks that, for example,
+		    are allocated in libraries for which you do not have
+		    source code.
+
+SEE ALSO
+     malloc(3), heap(1), malloc_history(1), stringdups(1), vmmap(1),
+     DevToolsSecurity(1)
+
+     The developer tools for the system also include a graphical application,
+     /Developer/Applications/Instruments.app, that provides instruments that
+     give information similar to that provided by leaks. The Leaks instrument
+     performs memory leak analysis.  The Allocations instrument graphically
+     displays dynamic, real-time information about the object and memory use
+     in an application, including backtraces of where the allocations occured.
+     To use these instruments, the target application must be launched from
+     Instruments.app, whereas leaks can examine existing processes.
+
+BSD				 May 18, 2011				   BSD

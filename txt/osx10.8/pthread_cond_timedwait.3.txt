@@ -1,0 +1,59 @@
+
+PTHREAD_COND_TIMEDWAI... BSD Library Functions Manual PTHREAD_COND_TIMEDWAI...
+
+NAME
+     pthread_cond_timedwait -- wait on a condition variable for a specific
+     amount of time
+
+SYNOPSIS
+     #include <pthread.h>
+
+     int
+     pthread_cond_timedwait(pthread_cond_t *restrict cond,
+	 pthread_mutex_t *restrict mutex,
+	 const struct timespec *restrict abstime);
+
+DESCRIPTION
+     The pthread_cond_timedwait() function atomically blocks the current
+     thread waiting on the condition variable specified by cond and unblocks
+     the mutex specified by mutex.  The waiting thread unblocks only after
+     another thread calls pthread_cond_signal(3), or pthread_cond_broadcast(3)
+     with the same condition variable, or if the system time reaches the time
+     specified in abstime, and the current thread reacquires the lock on
+     mutex.
+
+     Values for struct timespec can be obtained by adding the required time
+     interval to the  the current time obtained using gettimeofday(2).
+
+     Note that struct timeval and struct timespec use different units to spec-
+     ify the time. Hence, the user should always take care to perform the time
+     unit conversions accordingly.
+
+EXAMPLE
+	struct timeval tv;
+	struct timespec ts;
+	gettimeofday(&tv, NULL);
+	ts.tv_sec = tv.tv_sec + 0;
+	ts.tv_nsec = 0;
+
+RETURN VALUES
+     If successful, the pthread_cond_timedwait() function will return zero.
+     Otherwise, an error number will be returned to indicate the error.
+
+ERRORS
+     pthread_cond_timedwait() will fail if:
+
+     [EINVAL]		The value specified by cond, mutex or abstime is
+			invalid.
+
+     [ETIMEDOUT]	The system time has reached or exceeded the time spec-
+			ified in abstime.
+
+SEE ALSO
+     pthread_cond_broadcast(3), pthread_cond_destroy(3), pthread_cond_init(3),
+     pthread_cond_signal(3), pthread_cond_wait(3), gettimeofday(2)
+
+STANDARDS
+     pthread_cond_timedwait() conforms to ISO/IEC 9945-1:1996 (``POSIX.1'').
+
+BSD				 July 28, 1998				   BSD

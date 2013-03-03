@@ -1,0 +1,49 @@
+
+FCLOSE(3)		 BSD Library Functions Manual		     FCLOSE(3)
+
+NAME
+     fclose, fcloseall -- close a stream
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include <stdio.h>
+
+     int
+     fclose(FILE *stream);
+
+     void
+     fcloseall(void);
+
+DESCRIPTION
+     The fclose() function dissociates the named stream from its underlying
+     file or set of functions.	If the stream was being used for output, any
+     buffered data is written first, using fflush(3).
+
+     The fcloseall() function calls fclose() on all open streams.
+
+RETURN VALUES
+     Upon successful completion 0 is returned.	Otherwise, EOF is returned and
+     the global variable errno is set to indicate the error.  In either case
+     no further access to the stream is possible.
+
+ERRORS
+     The fclose() function may also fail and set errno for any of the errors
+     specified for the routines close(2) or fflush(3).
+
+NOTES
+     The fclose() function does not handle NULL arguments; they will result in
+     a segmentation violation.	This is intentional - it makes it easier to
+     make sure programs written under FreeBSD are bug free.  This behaviour is
+     an implementation detail, and programs should not rely upon it.
+
+SEE ALSO
+     close(2), fflush(3), fopen(3), setbuf(3)
+
+STANDARDS
+     The fclose() function conforms to ISO/IEC 9899:1990 (``ISO C90'').
+
+     The fcloseall() function first appeared in FreeBSD 7.0.
+
+BSD				April 22, 2006				   BSD

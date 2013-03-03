@@ -1,0 +1,71 @@
+PPI::Token::Quote(3)  User Contributed Perl Documentation PPI::Token::Quote(3)
+
+
+
+NAME
+       PPI::Token::Quote - String quote abstract base class
+
+INHERITANCE
+	 PPI::Token::Quote
+	 isa PPI::Token
+	     isa PPI::Element
+
+DESCRIPTION
+       The "PPI::Token::Quote" class is never instantiated, and simply
+       provides a common abstract base class for the four quote classes.  In
+       PPI, a "quote" is limited to only the quote-like things that themselves
+       directly represent a string. (although this includes double quotes with
+       interpolated elements inside them).
+
+       The subclasses of "PPI::Token::Quote" are:
+
+       '' - PPI::Token::Quote::Single
+       "q{}" - PPI::Token::Quote::Literal
+       "" - PPI::Token::Quote::Double
+       "qq{}" - PPI::Token::Quote::Interpolate
+
+       The names are hopefully obvious enough not to have to explain what each
+       class is here. See their respective pages for more details.
+
+       Please note that although the here-doc does represent a literal string,
+       it is such a nasty piece of work that in PPI it is given the honor of
+       its own token class (PPI::Token::HereDoc).
+
+METHODS
+   string
+       The "string" method is provided by all four ::Quote classes. It won't
+       get you the actual literal Perl value, but it will strip off the
+       wrapping of the quotes.
+
+	 # The following all return foo from the ->string method
+	 'foo'
+	 "foo"
+	 q{foo}
+	 qq <foo>
+
+   literal
+       The "literal" method is provided by ::Quote:Literal and
+       ::Quote::Single.  This returns the value of the string as Perl sees it:
+       without the quote marks and with "\\" and "\'" resolved to "\" and "'".
+
+       The "literal" method is not implemented by ::Quote::Double or
+       ::Quote::Interpolate yet.
+
+SUPPORT
+       See the support section in the main module.
+
+AUTHOR
+       Adam Kennedy <adamk@cpan.org>
+
+COPYRIGHT
+       Copyright 2001 - 2011 Adam Kennedy.
+
+       This program is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+       The full text of the license can be found in the LICENSE file included
+       with this module.
+
+
+
+perl v5.12.4			  2011-02-25		  PPI::Token::Quote(3)

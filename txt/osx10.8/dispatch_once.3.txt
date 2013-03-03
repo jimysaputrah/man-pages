@@ -1,0 +1,40 @@
+
+dispatch_once(3)	 BSD Library Functions Manual	      dispatch_once(3)
+
+NAME
+     dispatch_once -- execute a block only once
+
+SYNOPSIS
+     #include <dispatch/dispatch.h>
+
+     void
+     dispatch_once(dispatch_once_t *predicate, void (^block)(void));
+
+     void
+     dispatch_once_f(dispatch_once_t *predicate, void *context,
+	 void (*function)(void *));
+
+DESCRIPTION
+     The dispatch_once() function provides a simple and efficient mechanism to
+     run an initializer exactly once, similar to pthread_once(3).  Well
+     designed code hides the use of lazy initialization.  For example:
+
+     FILE *getlogfile(void)
+     {
+	     static dispatch_once_t pred;
+	     static FILE *logfile;
+
+	     dispatch_once(&pred, ^{
+		     logfile = fopen(MY_LOG_FILE, "a");
+	     });
+
+	     return logfile;
+     }
+
+FUNDAMENTALS
+     The dispatch_once() function is a wrapper around dispatch_once_f().
+
+SEE ALSO
+     dispatch(3)
+
+Darwin				  May 1, 2009				Darwin

@@ -1,0 +1,275 @@
+GLGETACTIVEUNIFORM(3G)		  OpenGL 3.3		GLGETACTIVEUNIFORM(3G)
+
+
+
+NAME
+       glGetActiveUniform - Returns information about an active uniform
+       variable for the specified program object
+
+C SPECIFICATION
+       void glGetActiveUniform(GLuint program, GLuint index, GLsizei bufSize,
+			       GLsizei *length, GLint *size, GLenum *type,
+			       GLchar *name);
+
+PARAMETERS
+       program
+	   Specifies the program object to be queried.
+
+       index
+	   Specifies the index of the uniform variable to be queried.
+
+       bufSize
+	   Specifies the maximum number of characters OpenGL is allowed to
+	   write in the character buffer indicated by name.
+
+       length
+	   Returns the number of characters actually written by OpenGL in the
+	   string indicated by name (excluding the null terminator) if a value
+	   other than NULL is passed.
+
+       size
+	   Returns the size of the uniform variable.
+
+       type
+	   Returns the data type of the uniform variable.
+
+       name
+	   Returns a null terminated string containing the name of the uniform
+	   variable.
+
+DESCRIPTION
+       glGetActiveUniform returns information about an active uniform variable
+       in the program object specified by program. The number of active
+       uniform variables can be obtained by calling glGetProgram() with the
+       value GL_ACTIVE_UNIFORMS. A value of 0 for index selects the first
+       active uniform variable. Permissible values for index range from 0 to
+       the number of active uniform variables minus 1.
+
+       Shaders may use either built-in uniform variables, user-defined uniform
+       variables, or both. Built-in uniform variables have a prefix of "gl_"
+       and reference existing OpenGL state or values derived from such state
+       (e.g., gl_DepthRangeParameters, see the OpenGL Shading Language
+       specification for a complete list.) User-defined uniform variables have
+       arbitrary names and obtain their values from the application through
+       calls to glUniform(). A uniform variable (either built-in or
+       user-defined) is considered active if it is determined during the link
+       operation that it may be accessed during program execution. Therefore,
+       program should have previously been the target of a call to
+       glLinkProgram(), but it is not necessary for it to have been linked
+       successfully.
+
+       The size of the character buffer required to store the longest uniform
+       variable name in program can be obtained by calling glGetProgram() with
+       the value GL_ACTIVE_UNIFORM_MAX_LENGTH. This value should be used to
+       allocate a buffer of sufficient size to store the returned uniform
+       variable name. The size of this character buffer is passed in bufSize,
+       and a pointer to this character buffer is passed in name.
+
+       glGetActiveUniform returns the name of the uniform variable indicated
+       by index, storing it in the character buffer specified by name. The
+       string returned will be null terminated. The actual number of
+       characters written into this buffer is returned in length, and this
+       count does not include the null termination character. If the length of
+       the returned string is not required, a value of NULL can be passed in
+       the length argument.
+
+       The type argument will return a pointer to the uniform variable's data
+       type. The symbolic constants returned for uniform types are shown in
+       the table below.
+
+       +---------------------------------------------+--------------------------------+
+       |					     |				      |
+       |			Returned	     |			       Shader |
+       |Symbolic Contant			     | Uniform Type		      |
+       |					     |				      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT				     | float			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT_VEC2				     | vec2			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT_VEC3				     | vec3			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT_VEC4				     | vec4			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT					     | int			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_VEC2				     | ivec2			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_VEC3				     | ivec3			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_VEC4				     | ivec4			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT 			     | unsigned int		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_VEC2			     | uvec2			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_VEC3			     | uvec3			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_VEC4			     | uvec4			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_BOOL 				     | bool			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_BOOL_VEC2				     | bvec2			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_BOOL_VEC3				     | bvec3			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_BOOL_VEC4				     | bvec4			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT_MAT2				     | mat2			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT_MAT3				     | mat3			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT_MAT4				     | mat4			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT_MAT2x3 			     | mat2x3			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT_MAT2x4 			     | mat2x4			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT_MAT3x2 			     | mat3x2			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT_MAT3x4 			     | mat3x4			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT_MAT4x2 			     | mat4x2			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_FLOAT_MAT4x3 			     | mat4x3			      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_1D				     | sampler1D		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_2D				     | sampler2D		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_3D				     | sampler3D		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_CUBE 			     | samplerCube		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_1D_SHADOW			     | sampler1DShadow		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_2D_SHADOW			     | sampler2DShadow		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_1D_ARRAY			     | sampler1DArray		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_2D_ARRAY			     | sampler2DArray		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_1D_ARRAY_SHADOW		     | sampler1DArrayShadow	      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_2D_ARRAY_SHADOW		     | sampler2DArrayShadow	      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_2D_MULTISAMPLE		     | sampler2DMS		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_2D_MULTISAMPLE_ARRAY 	     | sampler2DMSArray 	      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_CUBE_SHADOW			     | samplerCubeShadow	      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_BUFFER			     | samplerBuffer		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_2D_RECT			     | sampler2DRect		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_SAMPLER_2D_RECT_SHADOW		     | sampler2DRectShadow	      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_SAMPLER_1D			     | isampler1D		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_SAMPLER_2D			     | isampler2D		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_SAMPLER_3D			     | isampler3D		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_SAMPLER_CUBE			     | isamplerCube		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_SAMPLER_1D_ARRAY 		     | isampler1DArray		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_SAMPLER_2D_ARRAY 		     | isampler2DArray		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_SAMPLER_2D_MULTISAMPLE		     | isampler2DMS		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_SAMPLER_2D_MULTISAMPLE_ARRAY	     | isampler2DMSArray	      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_SAMPLER_BUFFER			     | isamplerBuffer		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_INT_SAMPLER_2D_RECT			     | isampler2DRect		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_SAMPLER_1D		     | usampler1D		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_SAMPLER_2D		     | usampler2D		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_SAMPLER_3D		     | usampler3D		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_SAMPLER_CUBE		     | usamplerCube		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_SAMPLER_1D_ARRAY	     | usampler2DArray		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_SAMPLER_2D_ARRAY	     | usampler2DArray		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE	     | usampler2DMS		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY | usampler2DMSArray	      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_SAMPLER_BUFFER		     | usamplerBuffer		      |
+       +---------------------------------------------+--------------------------------+
+       |GL_UNSIGNED_INT_SAMPLER_2D_RECT 	     | usampler2DRect		      |
+       +---------------------------------------------+--------------------------------+
+
+       If one or more elements of an array are active, the name of the array
+       is returned in name, the type is returned in type, and the size
+       parameter returns the highest array element index used, plus one, as
+       determined by the compiler and/or linker. Only one active uniform
+       variable will be reported for a uniform array.
+
+       Uniform variables that are declared as structures or arrays of
+       structures will not be returned directly by this function. Instead,
+       each of these uniform variables will be reduced to its fundamental
+       components containing the "." and "[]" operators such that each of the
+       names is valid as an argument to glGetUniformLocation(). Each of these
+       reduced uniform variables is counted as one active uniform variable and
+       is assigned an index. A valid name cannot be a structure, an array of
+       structures, or a subcomponent of a vector or matrix.
+
+       The size of the uniform variable will be returned in size. Uniform
+       variables other than arrays will have a size of 1. Structures and
+       arrays of structures will be reduced as described earlier, such that
+       each of the names returned will be a data type in the earlier list. If
+       this reduction results in an array, the size returned will be as
+       described for uniform arrays; otherwise, the size returned will be 1.
+
+       The list of active uniform variables may include both built-in uniform
+       variables (which begin with the prefix "gl_") as well as user-defined
+       uniform variable names.
+
+       This function will return as much information as it can about the
+       specified active uniform variable. If no information is available,
+       length will be 0, and name will be an empty string. This situation
+       could occur if this function is called after a link operation that
+       failed. If an error occurs, the return values length, size, type, and
+       name will be unmodified.
+
+ERRORS
+       GL_INVALID_VALUE is generated if program is not a value generated by
+       OpenGL.
+
+       GL_INVALID_OPERATION is generated if program is not a program object.
+
+       GL_INVALID_VALUE is generated if index is greater than or equal to the
+       number of active uniform variables in program.
+
+       GL_INVALID_VALUE is generated if bufSize is less than 0.
+
+ASSOCIATED GETS
+       glGet() with argument GL_MAX_VERTEX_UNIFORM_COMPONENTS,
+       GL_MAX_GEOMETRY_UNIFORM_COMPONENTS, GL_MAX_FRAGMENT_UNIFORM_COMPONENTS,
+       or GL_MAX_COMBINED_UNIFORM_COMPONENTS.
+
+       glGetProgram() with argument GL_ACTIVE_UNIFORMS or
+       GL_ACTIVE_UNIFORM_MAX_LENGTH.
+
+       glIsProgram()
+
+SEE ALSO
+       glGetUniform(), glGetUniformLocation(), glLinkProgram(), glUniform(),
+       glUseProgram()
+
+COPYRIGHT
+       Copyright (C) 2003-2005 3Dlabs Inc. Ltd. Copyright (C) 2010 Khronos
+       Group This material may be distributed subject to the terms and
+       conditions set forth in the Open Publication License, v 1.0, 8 June
+       1999.  http://opencontent.org/openpub/.
+
+
+
+OpenGL 3.3			  03/08/2011		GLGETACTIVEUNIFORM(3G)

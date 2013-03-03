@@ -1,0 +1,86 @@
+Moose::Meta::TypeConstUsertContributed PeMoose::Meta::TypeConstraint::Union(3)
+
+
+
+NAME
+       Moose::Meta::TypeConstraint::Union - A union of Moose type constraints
+
+DESCRIPTION
+       This metaclass represents a union of type constraints. A union takes
+       multiple type constraints, and is true if any one of its member
+       constraints is true.
+
+INHERITANCE
+       "Moose::Meta::TypeConstraint::Union" is a subclass of
+       Moose::Meta::TypeConstraint.
+
+       Moose::Meta::TypeConstraint::Union->new(%options)
+	   This creates a new class type constraint based on the given
+	   %options.
+
+	   It takes the same options as its parent. It also requires an
+	   additional option, "type_constraints". This is an array reference
+	   containing the Moose::Meta::TypeConstraint objects that are the
+	   members of the union type. The "name" option defaults to the names
+	   all of these member types sorted and then joined by a pipe (|).
+
+	   The constructor sets the implementation of the constraint so that
+	   is simply calls "check" on the newly created object.
+
+	   Finally, the constructor also makes sure that the object's
+	   "coercion" attribute is a Moose::Meta::TypeCoercion::Union object.
+
+       $constraint->type_constraints
+	   This returns the array reference of "type_constraints" provided to
+	   the constructor.
+
+       $constraint->parents
+	   This returns the same constraint as the "type_constraints" method.
+
+       $constraint->check($value)
+       $constraint->validate($value)
+	   These two methods simply call the relevant method on each of the
+	   member type constraints in the union. If any type accepts the
+	   value, the value is valid.
+
+	   With "validate" the error message returned includes all of the
+	   error messages returned by the member type constraints.
+
+       $constraint->equals($type_name_or_object)
+	   A type is considered equal if it is also a union type, and the two
+	   unions have the same member types.
+
+       $constraint->find_type_for($value)
+	   This returns the first member type constraint for which
+	   "check($value)" is true, allowing you to determine which of the
+	   Union's member type constraints a given value matches.
+
+       $constraint->is_a_type_of($type_name_or_object)
+	   This returns true if any of the member type constraints return true
+	   for the "is_a_type_of" method.
+
+       $constraint->is_subtype_of
+	   This returns true if any of the member type constraints return true
+	   for the "is_a_subtype_of" method.
+
+       $constraint->create_child_type(%options)
+	   This returns a new Moose::Meta::TypeConstraint object with the type
+	   as its parent.
+
+BUGS
+       See "BUGS" in Moose for details on reporting bugs.
+
+AUTHOR
+       Stevan Little <stevan@iinteractive.com>
+
+COPYRIGHT AND LICENSE
+       Copyright 2006-2010 by Infinity Interactive, Inc.
+
+       <http://www.iinteractive.com>
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-03Moose::Meta::TypeConstraint::Union(3)

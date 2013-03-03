@@ -1,0 +1,156 @@
+
+ENDUTXENT(3)		 BSD Library Functions Manual		  ENDUTXENT(3)
+
+NAME
+     endutxent, getutxent, getutxid, getutxline, pututxline, setutxent -- user
+     accounting database functions
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include <utmpx.h>
+
+     void
+     endutxent(void);
+
+     struct utmpx *
+     getutxent(void);
+
+     struct utmpx *
+     getutxid(const struct utmpx *id);
+
+     struct utmpx *
+     getutxline(const struct utmpx *line);
+
+     struct utmpx *
+     pututxline(const struct utmpx *utx);
+
+     void
+     setutxent(void);
+
+DESCRIPTION
+     These functions provide access to the utmpx(5) user accounting database.
+
+     getutxent() reads the next entry from the database; if the database was
+     not yet open, it also opens it.  setutxent() resets the database, so that
+     the next getutxent() call will get the first entry.  endutxent() closes
+     the database.
+
+     getutxid() returns the next entry of the type specified in its argument's
+     ut_type field, or NULL if none is found.  getutxline() returns the next
+     LOGIN_PROCESS or USER_PROCESS entry which has the same name as specified
+     in the ut_line field, or NULL if no match is found.
+
+     pututxline() adds the argument utmpx(5) entry line to the accounting
+     database, replacing a previous entry for the same user if it exists.
+     Only the superuser may write to the accounting database.
+
+   The utmpx structure
+     The utmpx structure has the following definition:
+
+     struct utmpx {
+	     char ut_user[_UTX_USERSIZE];    /* login name */
+	     char ut_id[_UTX_IDSIZE];	     /* id */
+	     char ut_line[_UTX_LINESIZE];    /* tty name */
+	     pid_t ut_pid;		     /* process id creating the entry */
+	     short ut_type;		     /* type of this entry */
+	     struct timeval ut_tv;	     /* time entry was created */
+	     char ut_host[_UTX_HOSTSIZE];    /* host name */
+	     __uint32_t ut_pad[16];	     /* reserved for future use */
+     };
+
+     Valid entries for ut_type are:
+	   BOOT_TIME	    Time of a system boot.
+	   DEAD_PROCESS     A session leader exited.
+	   EMPTY	    No valid user accounting information.
+	   INIT_PROCESS     A process spawned by init(8).
+	   LOGIN_PROCESS    The session leader of a logged-in user.
+	   NEW_TIME	    Time after system clock change.
+	   OLD_TIME	    Time before system clock change.
+	   RUN_LVL	    Run level.	Provided for compatibility, not used.
+	   USER_PROCESS     A user process.
+	   SHUTDOWN_TIME    Time of system shutdown (extension to the stan-
+			    dards).
+
+     For each value of ut_type, the other fields with meaningful values are as
+     follows:
+	   BOOT_TIME	    ut_tv
+	   DEAD_PROCESS     ut_id, ut_pid, ut_tv
+	   EMPTY	    (no others)
+	   INIT_PROCESS     ut_id, ut_pid, ut_tv
+	   LOGIN_PROCESS    ut_id, ut_user (implementation-defined name of the
+			    login process), ut_pid, ut_tv
+	   NEW_TIME	    ut_tv
+	   OLD_TIME	    ut_tv
+	   RUN_LVL	    (no used)
+	   USER_PROCESS     ut_id, ut_user (login name of the user), ut_line,
+			    ut_pid, ut_host (hostname of remote user) ut_tv
+	   SHUTDOWN_TIME    ut_tv
+
+   Other extensions to the standards
+     The ut_type value may also be OR-ed with the following masks:
+	   UTMPX_AUTOFILL_MASK
+		 Depending on the main part of ut_type value, other fields are
+		 automatically filled in (as specified in the meaningful
+		 fields table above).  In particular, the ut_id field will be
+		 set using the convention of the last four characters of the
+		 ut_line field (itself filled in automatically from the tty
+		 name of the device connected to the standard input, output or
+		 error, whichever is available).  Note that it is more effi-
+		 cient to fill in as many values as are already available
+		 beforehand, rather than have then automatically filled in.
+	   UTMPX_DEAD_IF_CORRESPONDING_MASK
+		 When ut_type value is DEAD_PROCESS, a call to pututxline()
+		 will succeed only if a corresponding entry already exists
+		 with a ut_type value of USER_PROCESS.
+
+     Note that the above mask values do not show up in any file format, or in
+     any subsequent reads of the data.
+
+     To support wtmpx and lastlogx equivalent capability, pututxline() auto-
+     matically writes to the appropriate files.  Additional APIs to read these
+     files is available in endutxent_wtmp(3) and getlastlogx(3).
+
+   Backward compatibility
+     Successful calls to pututxline() will automatically write equivalent
+     entries into the utmp, wtmp and lastlog files.  Programs that read these
+     old files should work as expected.  However, directly writing to these
+     files does not make corresponding entries in utmpx and the wtmpx and
+     lastlogx equivalent files, so such write-access is deprecated.
+
+RETURN VALUES
+     getutxent() returns the next entry, or NULL on failure (end of database
+     or problems reading from the database).  getutxid() and getutxline()
+     return the matching structure on success, or NULL if no match was found.
+
+     pututxline() returns the structure that was successfully written, or NULL
+     is returned and the global variable errno is set to indicate the error.
+
+ERRORS
+     No errors are defined for the endutxent(), getutxent(), getutxid(),
+     getutxline(), and setutxent() functions.
+
+     The pututxline() function may fail if:
+
+     [EPERM]		The process does not have appropriate privileges.
+
+     [EINVAL]		The UTMPX_DEAD_IF_CORRESPONDING_MASK flags was speci-
+			fied along with DEAD_PROCESS, but no corresponding
+			entry with USER_PROCESS was found.
+
+     Other errors may be returned if UTMPX_AUTOFILL_MASK was specified, and a
+     field could not be auto-filled.
+
+SEE ALSO
+     endutxent_wtmp(3), getlastlogx(3), utmpx(5)
+
+STANDARDS
+     The endutxent(), getutxent(), getutxid(), getutxline(), pututxline(),
+     setutxent() all conform to IEEE Std 1003.1-2001 (``POSIX.1'') (XSI exten-
+     sion), and previously to X/Open Portability Guide Issue 4, Version 2
+     (``XPG4.2'').  The fields ut_user, ut_id, ut_line, ut_pid, ut_type, and
+     ut_tv conform to IEEE Std 1003.1-2001 (``POSIX.1'') (XSI extension), and
+     previously to X/Open Portability Guide Issue 4, Version 2 (``XPG4.2'').
+
+BSD				 June 29, 2006				   BSD

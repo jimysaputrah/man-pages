@@ -1,0 +1,65 @@
+GLLOADMATRIX(3G)					      GLLOADMATRIX(3G)
+
+
+
+NAME
+       glLoadMatrixd,  glLoadMatrixf  -  replace  the  current matrix with the
+       specified matrix
+
+
+C SPECIFICATION
+       void glLoadMatrixd( const GLdouble *m )
+       void glLoadMatrixf( const GLfloat *m )
+
+
+PARAMETERS
+       m  Specifies a pointer to 16 consecutive values, which are used as  the
+	  elements of a 4x4 column-major matrix.
+
+DESCRIPTION
+       glLoadMatrix  replaces  the  current matrix with the one whose elements
+       are specified by m.  The current matrix is the projection matrix,  mod-
+       elview  matrix, or texture matrix, depending on the current matrix mode
+       (see glMatrixMode).
+
+       The current matrix, M, defines a transformation	of  coordinates.   For
+       instance,  assume  M  refers  to  the modelview matrix.	If  v = (v[0],
+       v[1], v[2], v[3]) is the set of object coordinates of a vertex,	and  m
+       points  to  an  array  of 16 single- or double-precision floating-point
+       values m[0], m[1],. . .,m[15], then the modelview  transformation  M(v)
+       does the following:
+
+
+		 m[0]  m[4]  m[8]  m[12]     v[0]
+		 m[1]  m[5]  m[9]  m[13]     v[1]
+	 M(v) =  m[2]  m[6]  m[10] m[14]  X  v[2]
+		 m[3]  m[7]  m[11] m[15]     v[3]
+
+
+
+       Where ``X'' denotes matrix multiplication.
+
+       Projection and texture transformations are similarly defined.
+
+NOTES
+       While the elements of the matrix may be specified with single or double
+       precision, the GL implementation may store or operate on  these	values
+       in less than single precision.
+
+ERRORS
+       GL_INVALID_OPERATION  is  generated if glLoadMatrix is executed between
+       the execution of glBegin and the corresponding execution of glEnd.
+
+ASSOCIATED GETS
+       glGet with argument GL_MATRIX_MODE
+       glGet with argument GL_COLOR_MATRIX
+       glGet with argument GL_MODELVIEW_MATRIX
+       glGet with argument GL_PROJECTION_MATRIX
+       glGet with argument GL_TEXTURE_MATRIX
+
+SEE ALSO
+       glLoadIdentity, glMatrixMode, glMultMatrix, glPushMatrix
+
+
+
+							      GLLOADMATRIX(3G)

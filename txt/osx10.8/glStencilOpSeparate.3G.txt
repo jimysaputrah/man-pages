@@ -1,0 +1,138 @@
+GLSTENCILOPSEPARATE(3G) 	  OpenGL 3.3	       GLSTENCILOPSEPARATE(3G)
+
+
+
+NAME
+       glStencilOpSeparate - set front and/or back stencil test actions
+
+C SPECIFICATION
+       void glStencilOpSeparate(GLenum face, GLenum sfail, GLenum dpfail,
+				GLenum dppass);
+
+PARAMETERS
+       face
+	   Specifies whether front and/or back stencil state is updated. Three
+	   symbolic constants are valid: GL_FRONT, GL_BACK, and
+	   GL_FRONT_AND_BACK.
+
+       sfail
+	   Specifies the action to take when the stencil test fails. Eight
+	   symbolic constants are accepted: GL_KEEP, GL_ZERO, GL_REPLACE,
+	   GL_INCR, GL_INCR_WRAP, GL_DECR, GL_DECR_WRAP, and GL_INVERT. The
+	   initial value is GL_KEEP.
+
+       dpfail
+	   Specifies the stencil action when the stencil test passes, but the
+	   depth test fails.  dpfail accepts the same symbolic constants as
+	   sfail. The initial value is GL_KEEP.
+
+       dppass
+	   Specifies the stencil action when both the stencil test and the
+	   depth test pass, or when the stencil test passes and either there
+	   is no depth buffer or depth testing is not enabled.	dppass accepts
+	   the same symbolic constants as sfail. The initial value is GL_KEEP.
+
+DESCRIPTION
+       Stenciling, like depth-buffering, enables and disables drawing on a
+       per-pixel basis. You draw into the stencil planes using GL drawing
+       primitives, then render geometry and images, using the stencil planes
+       to mask out portions of the screen. Stenciling is typically used in
+       multipass rendering algorithms to achieve special effects, such as
+       decals, outlining, and constructive solid geometry rendering.
+
+       The stencil test conditionally eliminates a pixel based on the outcome
+       of a comparison between the value in the stencil buffer and a reference
+       value. To enable and disable the test, call glEnable() and glDisable()
+       with argument GL_STENCIL_TEST; to control it, call glStencilFunc() or
+       glStencilFuncSeparate().
+
+       There can be two separate sets of sfail, dpfail, and dppass parameters;
+       one affects back-facing polygons, and the other affects front-facing
+       polygons as well as other non-polygon primitives.  glStencilOp() sets
+       both front and back stencil state to the same values, as if
+       glStencilOpSeparate() were called with face set to GL_FRONT_AND_BACK.
+
+
+       glStencilOpSeparate takes three arguments that indicate what happens to
+       the stored stencil value while stenciling is enabled. If the stencil
+       test fails, no change is made to the pixel's color or depth buffers,
+       and sfail specifies what happens to the stencil buffer contents. The
+       following eight actions are possible.
+
+       GL_KEEP
+	   Keeps the current value.
+
+       GL_ZERO
+	   Sets the stencil buffer value to 0.
+
+       GL_REPLACE
+	   Sets the stencil buffer value to ref, as specified by
+	   glStencilFunc().
+
+       GL_INCR
+	   Increments the current stencil buffer value. Clamps to the maximum
+	   representable unsigned value.
+
+       GL_INCR_WRAP
+	   Increments the current stencil buffer value. Wraps stencil buffer
+	   value to zero when incrementing the maximum representable unsigned
+	   value.
+
+       GL_DECR
+	   Decrements the current stencil buffer value. Clamps to 0.
+
+       GL_DECR_WRAP
+	   Decrements the current stencil buffer value. Wraps stencil buffer
+	   value to the maximum representable unsigned value when decrementing
+	   a stencil buffer value of zero.
+
+       GL_INVERT
+	   Bitwise inverts the current stencil buffer value.
+
+       Stencil buffer values are treated as unsigned integers. When
+       incremented and decremented, values are clamped to 0 and 2 n - 1, where
+       n is the value returned by querying GL_STENCIL_BITS.
+
+       The other two arguments to glStencilOpSeparate specify stencil buffer
+       actions that depend on whether subsequent depth buffer tests succeed
+       (dppass) or fail (dpfail) (see glDepthFunc()). The actions are
+       specified using the same eight symbolic constants as sfail. Note that
+       dpfail is ignored when there is no depth buffer, or when the depth
+       buffer is not enabled. In these cases, sfail and dppass specify stencil
+       action when the stencil test fails and passes, respectively.
+
+NOTES
+       Initially the stencil test is disabled. If there is no stencil buffer,
+       no stencil modification can occur and it is as if the stencil test
+       always passes.
+
+ERRORS
+       GL_INVALID_ENUM is generated if face is any value other than GL_FRONT,
+       GL_BACK, or GL_FRONT_AND_BACK.
+
+
+       GL_INVALID_ENUM is generated if sfail, dpfail, or dppass is any value
+       other than the eight defined constant values.
+
+ASSOCIATED GETS
+       glGet() with argument GL_STENCIL_FAIL, GL_STENCIL_PASS_DEPTH_PASS,
+       GL_STENCIL_PASS_DEPTH_FAIL, GL_STENCIL_BACK_FAIL,
+       GL_STENCIL_BACK_PASS_DEPTH_PASS, GL_STENCIL_BACK_PASS_DEPTH_FAIL, or
+       GL_STENCIL_BITS
+
+
+       glIsEnabled() with argument GL_STENCIL_TEST
+
+SEE ALSO
+       glBlendFunc(), glDepthFunc(), glEnable(), glLogicOp(), glStencilFunc(),
+       glStencilFuncSeparate(), glStencilMask(), glStencilMaskSeparate(),
+       glStencilOp()
+
+COPYRIGHT
+       Copyright (C) 2006 Khronos Group. This material may be distributed
+       subject to the terms and conditions set forth in the Open Publication
+       License, v 1.0, 8 June 1999.  http://opencontent.org/openpub/.
+
+
+
+OpenGL 3.3			  03/08/2011	       GLSTENCILOPSEPARATE(3G)

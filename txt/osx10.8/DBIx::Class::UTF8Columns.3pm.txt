@@ -1,0 +1,88 @@
+DBIx::Class::UTF8ColumUser)Contributed Perl DocumenDBIx::Class::UTF8Columns(3)
+
+
+
+NAME
+       DBIx::Class::UTF8Columns - Force UTF8 (Unicode) flag on columns
+       (DEPRECATED)
+
+SYNOPSIS
+	   package Artist;
+	   use base 'DBIx::Class::Core';
+
+	   __PACKAGE__->load_components(qw/UTF8Columns/);
+	   __PACKAGE__->utf8_columns(qw/name description/);
+
+	   # then belows return strings with utf8 flag
+	   $artist->name;
+	   $artist->get_column('description');
+
+DESCRIPTION
+       This module allows you to get and store utf8 (unicode) column data in a
+       database that does not natively support unicode. It ensures that column
+       data is correctly serialised as a byte stream when stored and de-
+       serialised to unicode strings on retrieval.
+
+	 THE USE OF THIS MODULE (AND ITS COUSIN DBIx::Class::ForceUTF8) IS VERY
+	 STRONGLY DISCOURAGED, PLEASE READ THE WARNINGS BELOW FOR AN EXPLANATION.
+
+       If you want to continue using this module and do not want to receive
+       further warnings set the environment variable "DBIC_UTF8COLUMNS_OK" to
+       a true value.
+
+   Warning - Module does not function properly on create/insert
+       Recently (April 2010) a bug was found deep in the core of DBIx::Class
+       which affects any component attempting to perform encoding/decoding by
+       overloading store_column and get_columns. As a result of this problem
+       create sends the original column values to the database, while update
+       sends the encoded values. DBIx::Class::UTF8Columns and
+       DBIx::Class::ForceUTF8 are both affected by ths bug.
+
+       It is unclear how this bug went undetected for so long (it was
+       introduced in March 2006), No attempts to fix it will be made while the
+       implications of changing such a fundamental behavior of DBIx::Class are
+       being evaluated. However in this day and age you should not be using
+       this module anyway as Unicode is properly supported by all major
+       database engines, as explained below.
+
+       If you have specific questions about the integrity of your data in
+       light of this development - please join us on IRC or the mailing list
+       to further discuss your concerns with the team.
+
+   Warning - Native Database Unicode Support
+       If your database natively supports Unicode (as does SQLite with the
+       "sqlite_unicode" connect flag, MySQL with "mysql_enable_utf8" connect
+       flag or Postgres with the "pg_enable_utf8" connect flag), then this
+       component should not be used, and will corrupt unicode data in a subtle
+       and unexpected manner.
+
+       It is far better to do Unicode support within the database if possible
+       rather than converting data to and from raw bytes on every database
+       round trip.
+
+   Warning - Component Overloading
+       Note that this module overloads "store_column" in DBIx::Class::Row in a
+       way that may prevent other components overloading the same method from
+       working correctly. This component must be the last one before
+       DBIx::Class::Row (which is provided by DBIx::Class::Core). DBIx::Class
+       will detect such incorrect component order and issue an appropriate
+       warning, advising which components need to be loaded differently.
+
+SEE ALSO
+       Template::Stash::ForceUTF8, DBIx::Class::UUIDColumns.
+
+METHODS
+   utf8_columns
+EXTENDED METHODS
+   get_column
+   get_columns
+   store_column
+AUTHORS
+       See "CONTRIBUTORS" in DBIx::Class.
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-07-26	   DBIx::Class::UTF8Columns(3)

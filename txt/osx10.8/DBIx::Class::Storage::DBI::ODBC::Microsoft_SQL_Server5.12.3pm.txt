@@ -1,0 +1,147 @@
+DBIx::Class::Storage::DBIx::Class::Storage::DBI::ODBC::Microsoft_SQL_Server(3)
+
+
+
+NAME
+       DBIx::Class::Storage::DBI::ODBC::Microsoft_SQL_Server - Support
+       specific to Microsoft SQL Server over ODBC
+
+DESCRIPTION
+       This class implements support specific to Microsoft SQL Server over
+       ODBC.  It is loaded automatically by by DBIx::Class::Storage::DBI::ODBC
+       when it detects a MSSQL back-end.
+
+       Most of the functionality is provided from the superclass
+       DBIx::Class::Storage::DBI::MSSQL.
+
+USAGE NOTES
+   Basic Linux Setup (Debian)
+	 sudo aptitude install tdsodbc libdbd-odbc-perl unixodbc
+
+       In case it is not already there put the following in
+       "/etc/odbcinst.ini":
+
+	 [FreeTDS]
+	 Description = FreeTDS
+	 Driver      = /usr/lib/odbc/libtdsodbc.so
+	 Setup	     = /usr/lib/odbc/libtdsS.so
+	 UsageCount  = 1
+
+       Set your $dsn in connect_info as follows:
+
+	 dbi:ODBC:server=<my.host.name>;port=1433;driver=FreeTDS;tds_version=8.0
+
+       If you use the EasySoft driver (<http://www.easysoft.com>):
+
+	 dbi:ODBC:server=<my.host.name>;port=1433;driver=Easysoft ODBC-SQL Server
+
+   Basic Windows Setup
+       Use the following $dsn for the Microsoft ODBC driver:
+
+	 dbi:ODBC:driver={SQL Server};server=SERVER\SQL_SERVER_INSTANCE_NAME
+
+       And for the Native Client:
+
+	 dbi:ODBC:driver={SQL Server Native Client 10.0};server=SERVER\SQL_SERVER_INSTANCE_NAME
+
+       Go into Control Panel -> System and Security -> Administrative Tools ->
+       Data Sources (ODBC) to check driver names and to set up data sources.
+
+       Use System DSNs, not User DSNs if you want to use DSNs.
+
+       If you set up a DSN, use the following $dsn for connect_info:
+
+	 dbi:ODBC:dsn=MY_DSN
+
+MULTIPLE ACTIVE STATEMENTS
+       The following options are alternative ways to enable concurrent
+       executing statement support. Each has its own advantages and drawbacks
+       and works on different platforms. Read each section carefully.
+
+       In order of preference, they are:
+
+       o       mars
+
+       o       dynamic_cursors
+
+       o       server_cursors
+
+METHODS
+   connect_call_use_mars
+       Use as:
+
+	 on_connect_call => 'use_mars'
+
+       in your connection info, or alternatively specify it directly:
+
+	 Your::Schema->connect (
+	   $original_dsn . '; MARS_Connection=Yes',
+	   $user,
+	   $pass,
+	   \%attrs,
+	 )
+
+       Use to enable a feature of SQL Server 2005 and later, "Multiple Active
+       Result Sets". See "Does DBD::ODBC support Multiple Active Statements?"
+       in DBD::ODBC::FAQ for more information.
+
+       This does not work on FreeTDS drivers at the time of this writing, and
+       only works with the Native Client, later versions of the Windows MS
+       ODBC driver, and the Easysoft driver.
+
+   connect_call_use_dynamic_cursors
+       Use as:
+
+	 on_connect_call => 'use_dynamic_cursors'
+
+       Which will add "odbc_cursortype => 2" to your DBI connection
+       attributes, or alternatively specify the necessary flag directly:
+
+	 Your::Schema->connect (@dsn, { ... odbc_cursortype => 2 })
+
+       See "odbc_cursortype" in DBD::ODBC for more information.
+
+       If you're using FreeTDS, "tds_version" must be set to at least 8.0.
+
+       This will not work with CODE ref connect_info's.
+
+       WARNING: on FreeTDS (and maybe some other drivers) this will break
+       "SCOPE_IDENTITY()", and "SELECT @@IDENTITY" will be used instead, which
+       on SQL Server 2005 and later will return erroneous results on tables
+       which have an on insert trigger that inserts into another table with an
+       "IDENTITY" column.
+
+       WARNING: on FreeTDS, changes made in one statement (e.g. an insert) may
+       not be visible from a following statement (e.g. a select.)
+
+   connect_call_use_server_cursors
+       Use as:
+
+	 on_connect_call => 'use_server_cursors'
+
+       May allow multiple active select statements. See "odbc_SQL_ROWSET_SIZE"
+       in DBD::ODBC for more information.
+
+       Takes an optional parameter for the value to set the attribute to,
+       default is 2.
+
+       WARNING: this does not work on all versions of SQL Server, and may lock
+       up your database!
+
+       At the time of writing, this option only works on Microsoft's Windows
+       drivers, later versions of the ODBC driver and the Native Client
+       driver.
+
+   using_freetds
+       Tries to determine, to the best of our ability, whether or not you are
+       using the FreeTDS driver with DBD::ODBC.
+
+AUTHOR
+       See "AUTHOR" in DBIx::Class and "CONTRIBUTORS" in DBIx::Class.
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4	      DBIx::Class::Storage::DBI::ODBC::Microsoft_SQL_Server(3)

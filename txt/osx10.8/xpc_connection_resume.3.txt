@@ -1,0 +1,514 @@
+
+xpc_object(3)		 BSD Library Functions Manual		 xpc_object(3)
+
+NAME
+     xpc_connection_create -- creation and management of XPC connections
+
+SYNOPSIS
+     #include <xpc/xpc.h>
+
+     xpc_connection_t
+     xpc_connection_create(const char *name, dispatch_queue_t targetq);
+
+     xpc_connection_t
+     xpc_connection_create_mach_service(const char *name,
+	 dispatch_queue_t targetq, uint64_t flags);
+
+     xpc_connection_t
+     xpc_connection_create_from_endpoint(xpc_endpoint_t endpoint);
+
+     void
+     xpc_connection_set_target_queue(xpc_connection_t connection);
+
+     void
+     xpc_connection_set_event_handler(xpc_connection_t connection,
+	 xpc_handler_t handler);
+
+     void
+     xpc_connection_suspend(xpc_connection_t connection);
+
+     void
+     xpc_connection_resume(xpc_connection_t connection);
+
+     void
+     xpc_connection_send_message(xpc_connection_t connection,
+	 xpc_object_t message);
+
+     void
+     xpc_connection_send_barrier(xpc_connection_t connection,
+	 dispatch_block_t barrier);
+
+     void
+     xpc_connection_send_message_with_reply(xpc_connection_t connection,
+	 xpc_object_t message, dispatch_queue_t targetq,
+	 xpc_handler_t handler);
+
+     xpc_object_t
+     xpc_connection_send_message_with_reply_sync(xpc_connection_t connection,
+	 xpc_object_t message);
+
+     void
+     xpc_connection_cancel(xpc_connection_t connection);
+
+     const char *
+     xpc_connection_get_name(xpc_connection_t connection);
+
+     uid_t
+     xpc_connection_get_euid(xpc_connection_t connection);
+
+     gid_t
+     xpc_connection_get_guid(xpc_connection_t connection);
+
+     pid_t
+     xpc_connection_get_pid(xpc_connection_t connection);
+
+     au_asid_t
+     xpc_connection_get_asid(xpc_connection_t connection);
+
+     void
+     xpc_connection_set_context(xpc_connection_t connection, void *ctx);
+
+     void *
+     xpc_connection_get_context(xpc_connection_t connection);
+
+     void
+     xpc_connection_set_finalizer_f(xpc_connection_t connection,
+	 xpc_finalizer_t finalizer);
+
+     xpc_endpoint_t
+     xpc_endpoint_create(xpc_connection_t connection);
+
+DESCRIPTION
+     Connections are the fundamental primitives for sending and receiving mes-
+     sages.  Connections also inform the caller of certain non-message events
+     through errors.
+
+     Messages sent to a connection are sent in FIFO order, and message-send
+     operations over a connection are non-blocking. When a message is sent
+     over a connection, it is atomically enqueued on a queue which is managed
+     by the XPC runtime. As it becomes possible to successfully deliver mes-
+     sages to the remote end of the connection, messages will be dequeued from
+     the queue and delivered.
+
+     Connections may either be used to communicate with XPC services residing
+     within an application bundle or with a MachService advertised by a
+     launchd job in its launchd.plist(5).  XPC connections maintain a one-to-
+     one relationship between the local and remote ends of the connection.
+     Therefore, for every connection created to a service, the remote end will
+     see a distinct peer connection object. This model is semantically similar
+     to the accept(3) model, whereby the server listens on a single file
+     descriptor, and that listening descriptor emits new file descriptors for
+     each connection that occurs.
+
+EVENT HANDLERS
+     Each connection must have an event handler associated with it. The event
+     handler block takes one argument of type xpc_object_t.  The event handler
+     block will deliver different types of objects depending on the nature of
+     the event.
+
+     The type of object can be queried using xpc_get_type(3).  If the event
+     handler block delivers an object of type XPC_TYPE_DICTIONARY, the event
+     is a message that needs processing. If the event handler delivers an
+     object of type XPC_TYPE_ERROR, an error has occurred on the connection
+     that must be handled.
+
+     Regardless of the type of object passed to the event handler, the caller
+     will NOT implicitly gain a reference to the object. Therefore, if the
+     caller wishes to work with the object after the event handler has
+     returned, it should call xpc_retain(3) to keep a reference on the object
+     for itself from within the event handler. It is unsafe to retain the
+     object after the event handler has returned.
+
+     The event handler of a connection may be changed while the connection is
+     processing events using the xpc_connection_set_event_handler() API. Calls
+     to this API will not interrupt currently-executing invocations of the
+     connection's event handler.  Once the currently-executing event handler
+     returns, the new event handler will take effect. If called from within
+     the event handler itself, the next invocation of the event handler will
+     honor the new one set.
+
+TARGET QUEUES
+     Each connection has an associated target queue. All connection-related
+     activity will happen on an internal queue which is synchronized with the
+     target queue.  Event handler invocations are included in connection-
+     related activity. The target queue may be changed while the connection is
+     processing events using the xpc_connection_set_target_queue() API. Set-
+     ting of the target queue on a connection is asynchronous, and the caller
+     should not assume that when this API returns, the new target queue is in
+     effect.  The actual change will take place at a later time.
+
+     By default, all connections target the DISPATCH_TARGET_QUEUE_DEFAULT(3)
+     queue. This queue will be used if NULL is given as the targetq argument
+     to xpc_connection_set_target_queue(), xpc_connection_create() or
+     xpc_connection_create_mach_service()
+
+     Important: The result of calling dispatch_get_current_queue(3) from
+     within a connection's event handler is undefined and should not be con-
+     sidered reliable for attempting to avoid deadlocks.
+
+LAUNCH-ON-DEMAND
+     When the caller obtains a connection to a named service, the fact that it
+     has a connection does not imply anything about whether the remote end is
+     alive and running. Connections are virtual, and if the remote end is not
+     yet running, the act of sending a message will cause it to launch on-
+     demand.
+
+     If the caller has a connection to a named service, then the remote
+     process closing the connection or crashing will deliver the
+     XPC_ERROR_CONNECTION_INTERRUPTED error to the event handler. This error
+     is recoverable, and after receiving it, the connection is still usable.
+     If the caller had previously sent state over the connection, this error
+     indicates that that state should be updated, if needed, and resent.
+
+     NOTE: Services work best when they are as stateless as possible. Even if
+     you write perfectly bug-free code, the libraries and frameworks your ser-
+     vice links against may have bugs that could crash the service. So a ser-
+     vice must be able to recover from such abnormal exits.
+
+     One strategy for implementing a robust and recoverable service is to have
+     each client of the service maintain state for the service. If the service
+     crashes, then each client will detect that condition and resend the
+     needed state to the service so that it can resume any interrupted opera-
+     tions.
+
+PEERING
+     The local and remote ends of a connection have a one-to-one association.
+     So when a new connection to a service is created and has a message sent
+     over it, the service will receive a new connection in the event handler
+     it specified to xpc_main(3).  If the service is a MachService advertised
+     by launchd(8), then the listener connection for the named service will
+     receive the new connection in its event handler.
+
+     Even if the same process creates multiple connections to the same ser-
+     vice, each connection will be distinct. The peer connection received by
+     the service will deliver XPC_ERROR_CONNECTION_INVALID to its event han-
+     dler when the connection has been closed. These peer connections cannot
+     be re-created by the XPC runtime, and therefore they will never deliver
+     the XPC_ERROR_CONNECTION_INTERRUPTED error to their event handlers.
+
+SUSPEND AND RESUME
+     All connections are created in a suspended state. Therefore, they will
+     not begin processing messages or events until an initial call to
+     xpc_connection_resume().  Before making this first call to resume the
+     connection, the caller must set an event handler using
+     xpc_connection_set_event_handler().  Note that the initial resume does
+     not need to immediately follow setting the event handler. The caller is
+     free to delay the initial resume as long as it chooses.
+
+     Once a connection has been resumed, it may be suspended to halt the pro-
+     cessing of incoming events and outgoing messages. This behavior is useful
+     to rate-limit or throttle over-active clients who are sending too many
+     messages or to allow certain synchronization behaviors with the internal
+     state engine.
+
+     Each connection maintains a suspend count, so xpc_connection_suspend()
+     may be called multiple times on the same connection. The connection will
+     resume processing events when an equal number of calls to
+     xpc_connection_resume() have been performed on the connection, resetting
+     the suspend count to zero.
+
+     Important: All calls to xpc_connection_suspend() must be balanced by a
+     call to xpc_connection_resume() before the final reference on a connec-
+     tion is released. It is not valid to release the last reference on a sus-
+     pended connection.
+
+     Important: It is invalid to underflow the suspend count by calling
+     xpc_connection_resume() more times than xpc_connection_suspend() has been
+     called.
+
+CONTEXT
+     Connections may have associated context that can be set and retrieved
+     using the xpc_connection_set_context() and xpc_connection_get_context()
+     APIs, respectively. When setting context on a connection, an optional
+     finalizer may be specified using xpc_connection_set_finalizer_f().  The
+     function given as the finalizer argument will be invoked just before the
+     connection's memory is being deallocated. For simple context structures
+     allocated through malloc(3), this provides a convenient shortcut. For
+     example:
+
+	   struct my_context_s *ctx = malloc(sizeof(*ctx));
+	   xpc_connection_set_context(connection, ctx);
+	   xpc_connection_set_finalizer_f(connection, free);
+
+     Important: The connection object itself should not be referenced or modi-
+     fied in any way within the context of the finalizer.
+
+MESSAGE SENDING
+     Messages are sent to the remote end of a connection with the
+     xpc_connection_send_message() API. This API will enqueue the message in a
+     FIFO queue which will be drained asynchronously by the XPC runtime. The
+     caller should not assume that, when this API returns, the message has
+     been delivered to the remote end. If the caller needs to know when the
+     message has been processed by the runtime, it should call the
+     xpc_connection_send_barrier() API directly after calling
+     xpc_connection_send_message().  The supplied barrier block will be
+     invoked by the connection when the runtime has finished processing the
+     message.
+
+     Important: The caller should not assume that the remote end of the con-
+     nection has received the message before a barrier is invoked. Even though
+     the message has been delivered to the remote end, the remote end may not
+     have yet been scheduled for execution or may have suspended its end of
+     the connection. The only way for the sender to know whether the remote
+     end has received the message is to specify in its message protocol that
+     the remote end must send a message back to the sender acknowledging
+     receipt of the message.
+
+REPLY MESSAGES
+     By default, all messages sent to a connection will result in an invoca-
+     tion of the remote end's connection's event handler with that message as
+     the argument.  If the caller wishes to tie the invocation of a particular
+     block to a reply to a particular message, however, it may use the
+     xpc_connection_send_message_with_reply() API. Like
+     xpc_connection_send_message(), this API will return immediately and, when
+     the remote end sends a reply back, the supplied handler block will be
+     submitted to the supplied targetq instead of causing the connection's
+     event handler to be invoked. The reply handler block may deliver an error
+     to the caller, which indicates that the remote end will never send a
+     reply.
+
+     xpc_dictionary_create_reply(3) and sending it to its peer connection as
+     it normally would. The caller must, in turn, specify in the message
+     itself whether it expects a reply to be delivered.
+
+     CLIENT SIDE
+
+	   xpc_connection_send_message_with_reply(connection, message, replyq, ^(xpc_object_t reply) {
+		   if (xpc_get_type(reply) == XPC_TYPE_DICTIONARY) {
+			   // Process reply message that is specific to the message sent.
+		   } else {
+			   // There was an error, indicating that the caller will never receive
+			   // a reply to this message. Tear down any associated data structures.
+		   }
+	   });
+
+     SERVICE SIDE
+
+	   void
+	   handle_message(xpc_object_t message)
+	   {
+		   if (xpc_dictionary_get_bool(message, "ExpectsReply")) {
+			   // Sender has set the protocol-defined "ExpectsReply" key, and therefore
+			   // it expects the reply to be delivered specially.
+			   xpc_object_t reply = xpc_dictionary_create_reply(message);
+			   // Populate 'reply' as a normal dictionary.
+
+			   // This is the connection from which the message originated.
+			   xpc_connection_t remote = xpc_dictionary_get_remote_connection(message);
+			   xpc_connection_send_message(remote, reply);
+			   xpc_release(reply);
+		   } else {
+			   // The sender does not expect any kind of special reply.
+		   }
+	   }
+
+     Important: The invocations of reply handlers are independent of the con-
+     nection's normal incoming message stream. Therefore, reply messages are
+     delivered to the recipient independently of the connection's normal FIFO
+     semantics.
+
+SYNCHRONOUS OPERATION
+     If the caller needs to block execution until a reply to a message is
+     received, it should use the xpc_connection_send_message_with_reply_sync()
+     API. This result of this API will be the reply sent by the server. Like
+     the handler given to xpc_connection_send_message_with_reply(), this API
+     may return errors indicating that the remote end of the connection will
+     never deliver a reply.
+
+     Important: This API is primarily intended for allowing existing synchro-
+     nous API to be re- implemented in terms of XPC. But in cases where the
+     you are designing a new API that calls  out to a service to retrieve a
+     value, we strongly encourage you to have the API return the value asyn-
+     chronously using a queue/block pair rather than blocking the caller until
+     the service returns the requested value:
+
+	   void
+	   retrieve_uint64(dispatch_queue_t q, void (^reply)(uint64_t value))
+	   {
+		   xpc_object_t message = xpc_dictionary_create(NULL, NULL, 0);
+		   xpc_dictionary_set_string(message, "RetrieveValue", "uint64");
+
+		   // 'connection' is a previously-created singleton.
+		   xpc_dictionary_send_message_with_reply(_g_connection, message, q, ^(xpc_object_t reply) {
+			   if (xpc_get_type(reply) == XPC_TYPE_DICTIONARY) {
+				   uint64_t value = xpc_dictionary_get_uint64(reply, "Value");
+				   // 'reply' is captured by this block and copied to the heap. It will
+				   // be released when this block is disposed of.
+				   reply(value);
+			   } else {
+				   // Invoke 'reply' with a value indicating that there was an error.
+			   }
+			   xpc_release(message);
+		   });
+	   }
+
+     However, such a scheme may introduce unwanted complexity in the API. The
+     trade- off for making the example implementation above synchronous
+     involves factors such as where the data for the response comes from and
+     how likely it is that the API will be called on the main thread.
+
+     If the response will be constructed with data that exists in-memory in
+     the server, it is usually safe to make the API synchronous. But if con-
+     structing the response requires I/O, and it is likely to be called from
+     the main thread (or a thread which synchronizes with the main thread), we
+     highly encourage that you take the asynchronous route to avoid the risk
+     of blocking the UI.
+
+CREDENTIALS
+     Identifying information about the sending processs can be obtained from a
+     connection. Available credential information includes the sending process
+     identifer (PID), effective user identifier (EUID), effective group iden-
+     tifier (EGID) and audit session identifier (ASID).  These values can be
+     obtained with the functions xpc_connection_get_pid(),
+     xpc_connection_get_euid(), xpc_connection_get_egid() and
+     xpc_connection_get_asid() respectively.
+
+     Credentials for a connection may not be immediately available. For exam-
+     ple, when creating a new connection with xpc_connection_create(), XPC
+     will not know the credentials of the remote end of the connection until
+     it has actually exchanged messages with it. Until this credential infor-
+     mation is filled in, these methods will return sensible values to indi-
+     cate absence of crucial information.  xpc_connection_get_pid() will
+     return 0, xpc_connection_get_euid() and xpc_connection_get_egid() will
+     return -1 and xpc_connection_get_asid() will return AU_ASSIGN_ASID (see
+     setaudit_addr(2)).
+
+     For peer connections received through a listener's event handler or
+     through the handler given to xpc_main(3), credentials will be immediately
+     available.
+
+     Connection credentials have similar semantics to file descriptor creden-
+     tials.  That is, the credentials that the connection was created with are
+     "baked in" to it and do not change as a result of calls to setuid(3) and
+     friends. Use of these APIs is heavily discouraged in IPC protocols due to
+     the inherently racy nature of credential checking.
+
+     Important: PIDs on OS X roll over when they reach a relatively small
+     value, and a given PID cannot be assumed to be unique for a given boot
+     session. For services bundled with an application, this is not a practi-
+     cal concern because the application is the only process capable of look-
+     ing up its services. But MachServices advertised through launchd have a
+     much higher visibility, so extra care should be taken when checking cre-
+     dentials to mitigate fork(2) bomb-style attacks.
+
+CANCELLATION
+     A connection may be canceled when it is no longer needed. Once canceled,
+     a connection will receive the XPC_ERROR_CONNECTION_INVALID error in its
+     event handler, and no further events will be delivered.  Cancellation
+     does not affect the reference count of the connection, so if you hold
+     references to the connection, they must still be released in order for
+     all of the connection's associated resources to be freed.
+
+     Note that, if a connection receives XPC_ERROR_CONNECTION_INVALID in its
+     event handler due to other circumstances, it is already in a canceled
+     state, and therefore a call to xpc_connection_cancel() is unnecessary
+     (but harmless) in this case.
+
+     Canceling a connection on one side has effects on the other side of a
+     connection. For example, if you cancel a connection received through a
+     listener connection's event handler, the remote peer connection will
+     receive XPC_ERROR_CONNECTION_INTERRUPTED in its event handler. Even
+     though the connection was canceled, the remote end is still able to send
+     messages to the connection.
+
+     If, on the other hand, the creator of a named connection cancels the con-
+     nection, the peer connection given to the remote end through a listener
+     connection's will receive XPC_ERROR_CONNECTION_INVALID in its event han-
+     dler.
+
+     Important: As discussed previously, some connections (such as named con-
+     nections created through xpc_connection_create()) will not receive
+     XPC_ERROR_CONNECTION_INVALID in the normal course of their operation. But
+     if another part of your code can end up calling xpc_connection_cancel(),
+     then the connection's event handler must handle this error.
+
+BUNDLED SERVICES
+     Applications may include XPC service bundles in their own bundle. When
+     the application is run, the XPC runtime automatically recognizes each
+     bundled service and makes it accessible to the application through the
+     xpc_connection_create() API. To connect to a bundled service, the caller
+     must pass the CFBundleIdentifier specified in the service's Info.plist as
+     the name argument. The service itself will call xpc_main(3) to initialize
+     its runtime, and the provided event handler function will be invoked with
+     any incoming connections.
+
+     Services bundled with an application are only accessible to that applica-
+     tion. An external process cannot connect to those services.
+
+MACH SERVICES
+     If a caller wishes to connect to a MachService advertised in a
+     launchd.plist(5), it should pass the MachService name to which is wishes
+     to connect to xpc_connection_create_mach_service().  If the destination
+     service is advertised in the root Mach bootstrap (i.e. the
+     launchd.plist(5) lives in /Library/LaunchDaemons), the caller may ensure
+     that the service that it connects to is privileged and not being spoofed
+     through a man-in-the-middle attack by OR'ing the
+     XPC_CONNECTION_MACH_SERVICE_PRIVILEGED flag into the flags argument. This
+     flag will cause XPC_ERROR_CONNECTION_INVALID to be given to the event
+     handler if the service name was not found in the root Mach bootstrap. If
+     the launchd.plist(5) lives in /Library/LaunchAgents or ~/Library/LaunchA-
+     gents, then this flag should not be passed.
+
+     The launchd job using XPC is required to create a listener connection
+     manually by calling xpc_connection_create_mach_service() with the
+     XPC_CONNECTION_MACH_SERVICE_LISTENER flag OR'ed into the flags argument.
+     The XPC_CONNECTION_MACH_SERVICE_PRIVILGED flag has no effect on these
+     connections. This connection will only ever deliver new peer connections
+     to its event handler. The connections received by the event handler must
+     have an event hander set on them and resumed, just like the peer connec-
+     tions delivered to the handler given to xpc_main(3).
+
+	   int
+	   main(void)
+	   {
+		   xpc_connection_t listener = xpc_connection_create_mach_service("com.apple.myservice", NULL, XPC_CONNECTION_MACH_SERVICE_LISTENER);
+		   xpc_connection_set_event_handler(listener, ^(xpc_object_t peer) {
+			   // It is safe to case 'peer' to xpc_connection_t.
+			   xpc_connection_set_event_handler(peer, ^(xpc_object_t event) {
+				   // Handle event, whether it is a message or an error.
+			   });
+			   xpc_connection_resume(peer);
+		   });
+		   xpc_connection_resume(listener);
+
+		   dispatch_main();
+		   exit(EXIT_FAILURE);
+	   }
+
+     Important: New service names may NOT be dynamically registered using Only
+     launchd jobs may listen on certain service names, and any service name
+     that the job wishes to listen on must be declared in its
+     launchd.plist(5).	XPC may make allowances for dynamic name registration
+     in debug scenarios, but these allowances absolutely will NOT be made in
+     the production scenario.
+
+ANONYMOUS CONNECTIONS
+     If a caller wishes to create a listener connection that is not bound to a
+     particular service name, it may create an anonymous listener connection
+     by calling xpc_connection_create() and passing NULL as the name.  This
+     connection may be given to xpc_endpoint_create(3), and the result may be
+     embedded in a message. The recipient of that message will then be able to
+     create a connection from that endpoint using
+     xpc_connection_create_from_endpoint().
+
+     The resulting connection will behave like a connection to a named service
+     created using xpc_connection_create().  The fundamental difference is
+     that an anonymous connection is not backed a name that can be looked up.
+     Therefore, if an connection created from an endpoint is closed, there is
+     no guarantee that it can be re-established. So anonymous connections'
+     event handlers must always handle both the
+     XPC_ERROR_CONNECTION_INTERRUPTED and XPC_ERROR_CONNECTION_INVALID errors.
+
+     The endpoint type may be thought of as a boxed connection, in the same
+     way that the uint64 type is a boxed uint64_t.  Like other types, the col-
+     lection APIs provide primitive setters and getters for connections, so
+     instead of first boxing a connection in an endpoint, the
+     xpc_dictionary_set_connection(3), xpc_dictionary_create_connection(3),
+     xpc_array_set_connection(3), and xpc_array_create_connection(3) APIs may
+     be used.
+
+SEE ALSO
+     xpc(3), xpc_main(3), xpc_object(3), xpc_dictionary_create(3),
+     xpc_objects(3), setaudit_addr(2)
+
+Darwin				 1 July, 2011				Darwin

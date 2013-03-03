@@ -1,0 +1,81 @@
+GLUPERSPECTIVE(3G)					    GLUPERSPECTIVE(3G)
+
+
+
+NAME
+       gluPerspective - set up a perspective projection matrix
+
+
+C SPECIFICATION
+       void gluPerspective( GLdouble fovy,
+			    GLdouble aspect,
+			    GLdouble zNear,
+			    GLdouble zFar )
+
+
+PARAMETERS
+       fovy    Specifies  the field of view angle, in degrees, in the y direc-
+	       tion.
+
+       aspect  Specifies the aspect ratio that determines the field of view in
+	       the x direction.  The aspect ratio is the ratio of x (width) to
+	       y (height).
+
+       zNear   Specifies the distance from the viewer  to  the	near  clipping
+	       plane (always positive).
+
+       zFar    Specifies  the  distance  from  the  viewer to the far clipping
+	       plane (always positive).
+
+DESCRIPTION
+       gluPerspective specifies a viewing frustum into	the  world  coordinate
+       system.	 In  general,  the aspect ratio in gluPerspective should match
+       the aspect ratio of the associated viewport. For example, aspect =  2.0
+       means  the  viewer's angle of view is twice as wide in x as it is in y.
+       If the viewport is twice as wide as it is tall, it displays  the  image
+       without distortion.
+
+       The  matrix  generated  by  gluPerspective  is multipled by the current
+       matrix, just as if glMultMatrix were called with the generated  matrix.
+       To  load  the perspective matrix onto the current matrix stack instead,
+       precede the call to gluPerspective with a call to glLoadIdentity.
+
+       Given f defined as follows:
+
+			       f  = cotangent(fovy/2)
+
+       The generated matrix is
+	     f
+	------------	   0		  0		 0
+	   aspect
+
+
+	    0		   f		  0		 0
+
+				      zFar+zNear    2*zFar*zNear
+	    0		   0	      ----------    ------------
+				      zNear-zFar     zNear-zFar
+
+	    0		   0		  -1		 0
+
+
+
+NOTES
+       Depth buffer precision is affected by the values  specified  for  zNear
+       and  zFar.   The greater the ratio of zFar to zNear is, the less effec-
+       tive the depth buffer will be at distinguishing between	surfaces  that
+       are near each other.  If
+
+				   r = zFar/zNear
+
+
+       roughly	log2(r)  bits  of  depth buffer precision are lost.  Because r
+       approaches infinity as zNear approaches 0, zNear must never be  set  to
+       0.
+
+SEE ALSO
+       glFrustum, glLoadIdentity, glMultMatrix, gluOrtho2D
+
+
+
+							    GLUPERSPECTIVE(3G)

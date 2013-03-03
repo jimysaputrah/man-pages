@@ -1,0 +1,76 @@
+Net::LDAP::Control::SyUserqContributed Perl Net::LDAP::Control::SyncRequest(3)
+
+
+
+NAME
+       Net::LDAP::Control::SyncRequest - LDAPv3 Sync Request control object
+
+SYNOPSIS
+	use Net::LDAP;
+	use Net::LDAP::Control::SyncRequest;
+	use Net::LDAP::Constant qw(
+	 LDAP_SYNC_REFRESH_ONLY
+	 LDAP_SYNC_REFRESH_AND_PERSIST
+	 LDAP_SUCCESS );
+
+	$ldap = Net::LDAP->new( "ldap.mydomain.eg" );
+
+	$req = Net::LDAP::Control::SyncRequest->new( mode => LDAP_SYNC_REFRESH_ONLY );
+	my $mesg = $ldap->search(base=> 'dc=mydomain,dc='eg',
+				 scope	  => 'sub',
+				 control  => [ $req ],
+				 callback => \&searchCallback, # call for each entry
+				 filter   => "(objectClass=*)",
+				 attrs	  => [ '*']);
+	sub searchCallback {
+	  my $message = shift;
+	  my $entry = shift;
+	  my @controls = $message->control;
+
+	  if($controls[0]->isa('Net::LDAP::Control::SyncState')) {
+	    print "Received Sync State Control\n";
+	    print $entry->dn()."\n";
+	    print 'State: '.$controls[0]->state."\n".', entryUUID: '.$controls[0]->entryUUID.', cookie: '.$controls[0]->cookie;
+	  } elsif($controls[0]->isa('Net::LDAP::Control::SyncDone')) {
+	    print "Received Sync Done Control\n";
+	    print 'Cookie: '.$controls[0]->cookie.', refreshDeletes: '.$controls[0]->refreshDeletes;
+	  }
+	}
+
+DESCRIPTION
+       "Net::LDAP::Control::SyncRequest" provides an interface for the
+       creation and manipulation of objects that represent the "Sync Request
+       Control" as described by RFC 4533.
+
+CONSTRUCTOR ARGUMENTS
+       In addition to the constructor arguments described in
+       Net::LDAP::Control the following are provided.
+
+       mode
+       cookie
+       reloadHint
+
+METHODS
+       As with Net::LDAP::Control each constructor argument described above is
+       also avaliable as a method on the object which will return the current
+       value for the attribute if called without an argument, and set a new
+       value for the attribute if called with an argument.
+
+SEE ALSO
+       Net::LDAP, Net::LDAP::Control, Net::LDAP::Control::SyncState,
+       Net::LDAP::Control::SyncDone, http://www.ietf.org/rfc/rfc4533.txt
+
+AUTHOR
+       Mathieu Parent <math.parent@gmail.com>
+
+       Please report any bugs, or post any suggestions, to the perl-ldap
+       mailing list <perl-ldap@perl.org>
+
+COPYRIGHT
+       Copyright (c) 2008 Mathieu Parent. All rights reserved. This program is
+       free software; you can redistribute it and/or modify it under the same
+       terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-03-11Net::LDAP::Control::SyncRequest(3)

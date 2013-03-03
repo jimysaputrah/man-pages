@@ -1,0 +1,82 @@
+GLGETACTIVEUNIFORMNA(3G)	  OpenGL 3.3	      GLGETACTIVEUNIFORMNA(3G)
+
+
+
+NAME
+       glGetActiveUniformName - query the name of an active uniform
+
+C SPECIFICATION
+       void glGetActiveUniformName(GLuint program, GLuint uniformIndex,
+				   GLsizei bufSize, GLsizei *length,
+				   GLchar *uniformName);
+
+PARAMETERS
+       program
+	   Specifies the program containing the active uniform index
+	   uniformIndex.
+
+       uniformIndex
+	   Specifies the index of the active uniform whose name to query.
+
+       bufSize
+	   Specifies the size of the buffer, in units of GLchar, of the buffer
+	   whose address is specified in uniformName.
+
+       length
+	   Specifies the address of a variable that will receive the number of
+	   characters that were or would have been written to the buffer
+	   addressed by uniformName.
+
+       uniformName
+	   Specifies the address of a buffer into which the GL will place the
+	   name of the active uniform at uniformIndex within program.
+
+DESCRIPTION
+       glGetActiveUniformName returns the name of the active uniform at
+       uniformIndex within program. If uniformName is not NULL, up to bufSize
+       characters (including a nul-terminator) will be written into the array
+       whose address is specified by uniformName. If length is not NULL, the
+       number of characters that were (or would have been) written into
+       uniformName (not including the nul-terminator) will be placed in the
+       variable whose address is specified in length. If length is NULL, no
+       length is returned. The length of the longest uniform name in program
+       is given by the value of GL_ACTIVE_UNIFORM_MAX_LENGTH, which can be
+       queried with glGetProgram().
+
+       If glGetActiveUniformName is not successful, nothing is written to
+       length or uniformName.
+
+
+       program must be the name of a program for which the command
+       glLinkProgram() has been issued in the past. It is not necessary for
+       program to have been linked successfully. The link could have failed
+       because the number of active uniforms exceeded the limit.
+
+
+       uniformIndex must be an active uniform index of the program program, in
+       the range zero to GL_ACTIVE_UNIFORMS - 1. The value of
+       GL_ACTIVE_UNIFORMS can be queried with glGetProgram().
+
+ERRORS
+       GL_INVALID_VALUE is generated if uniformIndex is greater than or equal
+       to the value of GL_ACTIVE_UNIFORMS.
+
+
+       GL_INVALID_VALUE is generated if bufSize is negative.
+
+
+       GL_INVALID_VALUE is generated if program is not the name of a program
+       object for which glLinkProgram() has been issued.
+
+SEE ALSO
+       glGetActiveUniform(), glGetUniformIndices(), glGetProgram(),
+       glLinkProgram()
+
+COPYRIGHT
+       Copyright (C) 2010 Khronos Group. This material may be distributed
+       subject to the terms and conditions set forth in the Open Publication
+       License, v 1.0, 8 June 1999.  http://opencontent.org/openpub/.
+
+
+
+OpenGL 3.3			  03/08/2011	      GLGETACTIVEUNIFORMNA(3G)

@@ -1,0 +1,58 @@
+sasl_listmech(10 July 2001)			   sasl_listmech(10 July 2001)
+
+
+
+NAME
+       sasl_listmech - Retrieve a list of the supported SASL mechanisms
+
+SYNOPSIS
+       #include <sasl/sasl.h>
+
+
+       int sasl_listmech(sasl_conn_t *conn,
+			const char *user,
+			const char *prefix,
+			const char *sep,
+			const char *suffix,
+			const char **result,
+			unsigned *plen,
+			int *pcount);
+
+
+DESCRIPTION
+       sasl_listmech()	returns  a  string  listing  the SASL names of all the
+       mechanisms available to the specified user. This is typically given  to
+       the  client  through  a	capability command or initial server response.
+       Client applications need this list so that they	know  what  mechanisms
+       the server supports.
+
+       conn the SASL context for this connection user (optional) restricts the
+       mechanism list to only those available to the user.  prefix appended to
+       beginning  of result sep appended between mechanisms suffix appended to
+       end of result result NULL terminated result string (allocated/freed  by
+       library) plen length of result filled in by library. May be NULL pcount
+       Number of mechanisms available (filled in by library). May be NULL
+
+       Example:
+
+       sasl_listmech(conn,NULL,"(",",",")",&mechlist,NULL,NULL);
+
+       may give the string
+       (ANONYMOUS,KERBEROS_V4,DIGEST-MD5)
+       as a result
+
+
+
+RETURN VALUE
+       Returns SASL_OK on success. SASL error code on failure.
+
+
+CONFORMING TO
+       RFC 2222
+
+SEE ALSO
+       sasl(3), sasl_errors(3), sasl_server_new(3), sasl_client_new(3)
+
+
+
+SASL man pages			     SASL	   sasl_listmech(10 July 2001)

@@ -1,0 +1,73 @@
+Moose::Meta::AttributeUsertContrMoose::Meta::Attribute::Native::Trait::Bool(3)
+
+
+
+NAME
+       Moose::Meta::Attribute::Native::Trait::Bool - Helper trait for Bool
+       attributes
+
+SYNOPSIS
+	 package Room;
+	 use Moose;
+
+	 has 'is_lit' => (
+	     traits    => ['Bool'],
+	     is        => 'rw',
+	     isa       => 'Bool',
+	     default   => 0,
+	     handles   => {
+		 illuminate  => 'set',
+		 darken      => 'unset',
+		 flip_switch => 'toggle',
+		 is_dark     => 'not',
+	     },
+	 );
+
+	 my $room = Room->new();
+	 $room->illuminate;	# same as $room->is_lit(1);
+	 $room->darken; 	# same as $room->is_lit(0);
+	 $room->flip_switch;	# same as $room->is_lit(not $room->is_lit);
+	 return $room->is_dark; # same as !$room->is_lit
+
+DESCRIPTION
+       This provides a simple boolean attribute, which supports most of the
+       basic math operations.
+
+PROVIDED METHODS
+       These methods are implemented in
+       Moose::Meta::Attribute::Native::MethodProvider::Bool. It is important
+       to note that all those methods do in place modification of the value
+       stored in the attribute.
+
+       set Sets the value to 1.
+
+       unset
+	   Set the value to 0.
+
+       toggle
+	   Toggles the value. If it's true, set to false, and vice versa.
+
+       not Equivalent of 'not $value'.
+
+METHODS
+       meta
+       has_method_provider
+       method_provider
+
+BUGS
+       See "BUGS" in Moose for details on reporting bugs.
+
+AUTHOR
+       Jason May
+
+COPYRIGHT AND LICENSE
+       Copyright 2007-2009 by Infinity Interactive, Inc.
+
+       <http://www.iinteractive.com>
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			Moose::Meta::Attribute::Native::Trait::Bool(3)

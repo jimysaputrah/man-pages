@@ -1,0 +1,91 @@
+Moose::Cookbook::ExtenUser:Contributed PMoose::Cookbook::Extending::Recipe4(3)
+
+
+
+NAME
+       Moose::Cookbook::Extending::Recipe4 - Acting like Moose.pm and
+       providing sugar Moose-style
+
+SYNOPSIS
+	 package MyApp::Mooseish;
+
+	 use Moose ();
+	 use Moose::Exporter;
+
+	 Moose::Exporter->setup_import_methods(
+	     with_meta => ['has_table'],
+	     also      => 'Moose',
+	 );
+
+	 sub init_meta {
+	     shift;
+	     return Moose->init_meta( @_, metaclass => 'MyApp::Meta::Class' );
+	 }
+
+	 sub has_table {
+	     my $meta = shift;
+	     $meta->table(shift);
+	 }
+
+	 package MyApp::Meta::Class;
+	 use Moose;
+
+	 extends 'Moose::Meta::Class';
+
+	 has 'table' => ( is => 'rw' );
+
+DESCRIPTION
+       This recipe expands on the use of Moose::Exporter we saw in
+       Moose::Cookbook::Extending::Recipe1. Instead of providing our own
+       object base class, we provide our own metaclass class, and we also
+       export a "has_table" sugar function.
+
+       Given the above code, you can now replace all instances of "use Moose"
+       with "use MyApp::Mooseish". Similarly, "no Moose" is now replaced with
+       "no MyApp::Mooseish".
+
+       The "with_meta" parameter specifies a list of functions that should be
+       wrapped before exporting. The wrapper simply ensures that the importing
+       package name is the first argument to the function, so we can do
+       "my $caller = shift;".
+
+       See the Moose::Exporter docs for more details on its API.
+
+USING MyApp::Mooseish
+       The purpose of all this code is to provide a Moose-like interface.
+       Here's what it would look like in actual use:
+
+	 package MyApp::User;
+
+	 use MyApp::Mooseish;
+
+	 has_table 'User';
+
+	 has 'username' => ( is => 'ro' );
+	 has 'password' => ( is => 'ro' );
+
+	 sub login { ... }
+
+	 no MyApp::Mooseish;
+
+       All of the normal Moose sugar ("has()", "with()", etc) is available
+       when you "use MyApp::Mooseish".
+
+CONCLUSION
+       Providing sugar functions can make your extension look much more Moose-
+       ish. See Fey::ORM for a more extensive example.
+
+AUTHOR
+       Dave Rolsky <autarch@urth.org>
+
+COPYRIGHT AND LICENSE
+       Copyright 2006-2010 by Infinity Interactive, Inc.
+
+       <http://www.iinteractive.com>
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-0Moose::Cookbook::Extending::Recipe4(3)

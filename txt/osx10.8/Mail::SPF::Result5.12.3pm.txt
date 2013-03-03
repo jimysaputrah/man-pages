@@ -1,0 +1,245 @@
+Mail::SPF::Result(3)  User Contributed Perl Documentation Mail::SPF::Result(3)
+
+
+
+NAME
+       Mail::SPF::Result - SPF result class
+
+SYNOPSIS
+       For the general usage of Mail::SPF::Result objects in code that calls
+       Mail::SPF, see Mail::SPF.  For the detailed interface of
+       Mail::SPF::Result and its derivatives, see below.
+
+   Throwing results
+	   package Mail::SPF::Foo;
+	   use Error ':try';
+	   use Mail::SPF::Result;
+
+	   sub foo {
+	       if (...) {
+		   $server->throw_result('pass', $request)
+	       }
+	       else {
+		   $server->throw_result('permerror', $request, 'Invalid foo');
+	       }
+	   }
+
+   Catching results
+	   package Mail::SPF::Bar;
+	   use Error ':try';
+	   use Mail::SPF::Foo;
+
+	   try {
+	       Mail::SPF::Foo->foo();
+	   }
+	   catch Mail::SPF::Result with {
+	       my ($result) = @_;
+	       ...
+	   };
+
+   Using results
+	   my $result_name     = $result->name;
+	   my $result_code     = $result->code;
+	   my $request	       = $result->request;
+	   my $local_exp       = $result->local_explanation;
+	   my $authority_exp   = $result->authority_explanation
+	       if $result->can('authority_explanation');
+	   my $spf_header      = $result->received_spf_header;
+
+DESCRIPTION
+       An object of class Mail::SPF::Result represents the result of an SPF
+       request.
+
+       There is usually no need to construct an SPF result object directly
+       using the "new" constructor.  Instead, use the "throw" class method to
+       signal to the calling code that a definite SPF result has been
+       determined.  In other words, use Mail::SPF::Result and its derivatives
+       just like exceptions.  See Error or "eval" in perlfunc for how to
+       handle exceptions in Perl.
+
+   Constructor
+       The following constructor is provided:
+
+       new($server, $request): returns Mail::SPF::Result
+       new($server, $request, $text): returns Mail::SPF::Result
+	   Creates a new SPF result object and associates the given
+	   Mail::SPF::Server and Mail::SPF::Request objects with it.  An
+	   optional result text may be specified.
+
+   Class methods
+       The following class methods are provided:
+
+       throw($server, $request): throws Mail::SPF::Result
+       throw($server, $request, $text): throws Mail::SPF::Result
+	   Throws a new SPF result object, associating the given
+	   Mail::SPF::Server and Mail::SPF::Request objects with it.  An
+	   optional result text may be specified.
+
+	   Note:  Do not write code invoking "throw" on literal result class
+	   names as this would ignore any derivative result classes provided
+	   by Mail::SPF extension modules.  Invoke the "throw_result" method
+	   on a Mail::SPF::Server object instead.
+
+       name: returns string
+	   Abstract.  Returns the result name of the result class (or object).
+	   For classes of the Mail::SPF::Result::* hierarchy, this roughly
+	   corresponds to the trailing part of the class name.	For example,
+	   returns "neutral-by-default" if invoked on
+	   Mail::SPF::Result::NeutralByDefault.  Also see the "code" method.
+	   This method may also be used as an instance method.
+
+	   This method must be implemented by sub-classes of Mail::SPF::Result
+	   for which the result name differs from the result code.
+
+       class: returns class
+       class($name): returns class
+	   Maps the given result name to the corresponding
+	   Mail::SPF::Result::* class, or returns the result base class (the
+	   class on which it is invoked) if no result name is given.  If an
+	   unknown result name is specified, returns undef.
+
+       isa_by_name($name): returns boolean
+	   If the class (or object) on which this method is invoked represents
+	   the given result name (or a derivative name), returns true.
+	   Returns false otherwise.  This method may also be used as an
+	   instance method.
+
+	   For example,
+	   "Mail::SPF::Result::NeutralByDefault->isa_by_name('neutral')"
+	   returns true.
+
+       code: returns string
+	   Abstract.  Returns the basic SPF result code ("pass", "fail",
+	   "softfail", "neutral", "none", "error", "permerror", "temperror")
+	   of the result class on which it is invoked.	All valid result codes
+	   are valid result names as well, the reverse however does not apply.
+	   This method may also be used as an instance method.
+
+	   This method is abstract and must be implemented by sub-classes of
+	   Mail::SPF::Result.
+
+       is_code($code): returns boolean
+	   If the class (or object) on which this method is invoked represents
+	   the given result code, returns true.  Returns false otherwise.
+	   This method may also be used as an instance method.
+
+	   Note:  The "isa_by_name" method provides a superset of this
+	   method's functionality.
+
+       received_spf_header_name: returns string
+	   Returns 'Received-SPF' as the field name for "Received-SPF" header
+	   fields.  This method should be overridden by Mail::SPF extension
+	   modules that provide non-standard features (such as local policy)
+	   with the capacity to dilute the purity of SPF results, in order not
+	   to deceive users of the header field into mistaking it as an
+	   indication of a natural SPF result.
+
+   Instance methods
+       The following instance methods are provided:
+
+       throw: throws Mail::SPF::Result
+       throw($server, $request): throws Mail::SPF::Result
+       throw($server, $request, $text): throws Mail::SPF::Result
+	   Re-throws an existing SPF result object.  If Mail::SPF::Server and
+	   Mail::SPF::Request objects are specified, associates them with the
+	   result object, replacing the prior server and request objects.  If
+	   a result text is specified as well, overrides the prior result
+	   text.
+
+       server: returns Mail::SPF::Server
+	   Returns the Mail::SPF server object that produced the result at
+	   hand.
+
+       request: returns Mail::SPF::Request
+	   Returns the SPF request that led to the result at hand.
+
+       text: returns string
+	   Returns the text message of the result object.
+
+       stringify: returns string
+	   Returns the result's name and text message formatted as a string.
+	   You can simply use a Mail::SPF::Result object as a string for the
+	   same effect, see "OVERLOADING".
+
+       local_explanation: returns string; throws Mail::SPF::EDNSError,
+       Mail::SPF::EInvalidMacroString
+	   Returns a locally generated explanation for the result.
+
+	   The local explanation is prefixed with the authority domain whose
+	   sender policy is responsible for the result.  If the responsible
+	   sender policy referred to another domain's policy (using the
+	   "include" mechanism or the "redirect" modifier), that other domain
+	   which is directly responsible for the result is also included in
+	   the local explanation's head.  For example:
+
+	       example.com: <local-explanation>
+
+	   The authority domain "example.com"'s sender policy is directly
+	   responsible for the result.
+
+	       example.com ... other.example.org: <local-explanation>
+
+	   The authority domain "example.com" (directly or indirectly)
+	   referred to the domain "other.example.org", whose sender policy
+	   then led to the result.
+
+       received_spf_header: returns string
+	   Returns a string containing an appropriate "Received-SPF" header
+	   field for the result object.  The header field is not line-wrapped
+	   and contains no trailing newline character.
+
+OVERLOADING
+       If a Mail::SPF::Result object is used as a string, the "stringify"
+       method is used to convert the object into a string.
+
+RESULT CLASSES
+       The following result classes are provided:
+
+       o   Mail::SPF::Result::Pass
+
+       o   Mail::SPF::Result::Fail
+
+       o   Mail::SPF::Result::SoftFail
+
+       o   Mail::SPF::Result::Neutral
+
+	   o   Mail::SPF::Result::NeutralByDefault
+
+	       This is a special case of the "neutral" result that is thrown
+	       as a default when "falling off" the end of the record during
+	       evaluation.  See RFC 4408, 4.7.
+
+       o   Mail::SPF::Result::None
+
+       o   Mail::SPF::Result::Error
+
+	   o   Mail::SPF::Result::PermError
+
+	   o   Mail::SPF::Result::TempError
+
+       The following result classes have additional functionality:
+
+       Mail::SPF::Result::Fail
+	   The following additional instance method is provided:
+
+	   authority_explanation: returns string; throws Mail::SPF::EDNSError,
+	   Mail::SPF::EInvalidMacroString
+	       Returns the authority domain's explanation for the result.  Be
+	       aware that the authority domain may be a malicious party and
+	       thus the authority explanation should not be trusted blindly.
+	       See RFC 4408, 10.5, for a detailed discussion of this issue.
+
+SEE ALSO
+       Mail::SPF, Mail::SPF::Server, Error, "eval" in perlfunc
+
+       <http://www.ietf.org/rfc/rfc4408.txt>
+
+       For availability, support, and license information, see the README file
+       included with Mail::SPF.
+
+AUTHORS
+       Julian Mehnle <julian@mehnle.net>
+
+
+
+perl v5.12.4			  2012-06-20		  Mail::SPF::Result(3)

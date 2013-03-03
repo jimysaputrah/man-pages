@@ -1,0 +1,45 @@
+
+BSEARCH(3)		 BSD Library Functions Manual		    BSEARCH(3)
+
+NAME
+     bsearch, bsearch_b -- binary search of a sorted table
+
+SYNOPSIS
+     #include <stdlib.h>
+
+     void *
+     bsearch(const void *key, const void *base, size_t nel, size_t width,
+	 int (*compar) (const void *, const void *));
+
+     void *
+     bsearch_b(const void *key, const void *base, size_t nel, size_t width,
+	 int (^compar) (const void *, const void *));
+
+DESCRIPTION
+     The bsearch() function searches an array of nel objects, the initial mem-
+     ber of which is pointed to by base, for a member that matches the object
+     pointed to by key.  The size (in bytes) of each member of the array is
+     specified by width.
+
+     The contents of the array should be in ascending sorted order according
+     to the comparison function referenced by compar.  The compar routine is
+     expected to have two arguments which point to the key object and to an
+     array member, in that order.  It should return an integer which is less
+     than, equal to, or greater than zero if the key object is found, respec-
+     tively, to be less than, to match, or be greater than the array member.
+
+     The bsearch_b() function is like bsearch() except the callback compar is
+     a block pointer instead of a function pointer.
+
+RETURN VALUES
+     The bsearch() and bsearch_b() functions returns a pointer to a matching
+     member of the array, or a null pointer if no match is found.  If two mem-
+     bers compare as equal, which member is matched is unspecified.
+
+SEE ALSO
+     db(3), lsearch(3), qsort(3)
+
+STANDARDS
+     The bsearch() function conforms to ISO/IEC 9899:1990 (``ISO C90'').
+
+BSD				 May 20, 2008				   BSD

@@ -1,0 +1,78 @@
+Moose::Meta::AttributeUsertCoMoose::Meta::Attribute::Native::Trait::Counter(3)
+
+
+
+NAME
+       Moose::Meta::Attribute::Native::Trait::Counter - Helper trait for
+       counters
+
+SYNOPSIS
+	 package MyHomePage;
+	 use Moose;
+
+	 has 'counter' => (
+	     traits    => ['Counter'],
+	     is        => 'ro',
+	     isa       => 'Num',
+	     default   => 0,
+	     handles   => {
+		 inc_counter   => 'inc',
+		 dec_counter   => 'dec',
+		 reset_counter => 'reset',
+	     },
+	 );
+
+	 my $page = MyHomePage->new();
+	 $page->inc_counter; # same as $page->counter( $page->counter + 1 );
+	 $page->dec_counter; # same as $page->counter( $page->counter - 1 );
+
+	 my $count_by_twos = 2;
+	 $page->inc_counter($count_by_twos);
+
+DESCRIPTION
+       This module provides a simple counter attribute, which can be
+       incremented and decremented by arbitrary amounts.  The default amount
+       of change is one.
+
+PROVIDED METHODS
+       These methods are implemented in
+       Moose::Meta::Attribute::Native::MethodProvider::Counter. It is
+       important to note that all those methods do in place modification of
+       the value stored in the attribute.
+
+       set($value)
+	   Set the counter to the specified value.
+
+       inc($arg)
+	   Increase the attribute value by the amount of the argument.	No
+	   argument increments the value by 1.
+
+       dec($arg)
+	   Decrease the attribute value by the amount of the argument.	No
+	   argument decrements the value by 1.
+
+       reset
+	   Resets the value stored in this slot to it's default value.
+
+METHODS
+       meta
+       method_provider
+       has_method_provider
+
+BUGS
+       See "BUGS" in Moose for details on reporting bugs.
+
+AUTHOR
+       Stevan Little <stevan@iinteractive.com>
+
+COPYRIGHT AND LICENSE
+       Copyright 2007-2009 by Infinity Interactive, Inc.
+
+       <http://www.iinteractive.com>
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1		     Moose::Meta::Attribute::Native::Trait::Counter(3)

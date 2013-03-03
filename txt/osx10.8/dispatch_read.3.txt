@@ -1,0 +1,73 @@
+
+dispatch_read(3)	 BSD Library Functions Manual	      dispatch_read(3)
+
+NAME
+     dispatch_read, dispatch_write -- asynchronously read from and write to
+     file descriptors
+
+SYNOPSIS
+     #include <dispatch/dispatch.h>
+
+     void
+     dispatch_read(int fd, size_t length, dispatch_queue_t queue,
+	 void (^handler)(dispatch_data_t data, int error));
+
+     void
+     dispatch_write(int fd, dispatch_data_t data, dispatch_queue_t queue,
+	 void (^handler)(dispatch_data_t data, int error)));
+
+DESCRIPTION
+     The dispatch_read() and dispatch_write() functions asynchronously read
+     from and write to POSIX file descriptors. They can be thought of as asyn-
+     chronous, callback-based versions of the fread() and fwrite() functions
+     provided by the standard C library. They are convenience functions based
+     on the dispatch_io_read(3) and dispatch_io_write(3) functions, intended
+     for simple one-shot read or write requests. Multiple request on the same
+     file desciptor are better handled with the full underlying dispatch I/O
+     channel functions.
+
+BEHAVIOR
+     The dispatch_read() function schedules an asynchronous read operation on
+     the file descriptor fd.  Once the file descriptor is readable, the system
+     will read as much data as is currently available, up to the specified
+     length, starting at the current file pointer position. The given handler
+     block will be submitted to queue when the operation completes or an error
+     occurs. The block will be passed a dispatch data object with the result
+     of the read operation. If an error occurred while reading from the file
+     descriptor, the error parameter to the block will be set to the appropri-
+     ate POSIX error code and data will contain any data that could be read
+     successfully. If the file pointer position is at end-of-file, emtpy data
+     and zero error will be passed to the handler block.
+
+     The dispatch_write() function schedules an asynchronous write operation
+     on the file descriptor fd.  The system will attempt to write the entire
+     contents of the provided data object to fd at the current file pointer
+     position. The given handler block will be submitted to queue when the
+     operation completes or an error occurs. If the write operation completed
+     successfully, the error parameter to the block will be set to zero, oth-
+     erwise it will be set to the appropriate POSIX error code and the data
+     parameter will contain any data that could not be written.
+
+CAVEATS
+     The data object passed to a handler block is released by the system when
+     the block returns. If data is needed outside of the handler block, it
+     must concatenate, copy, or retain it.
+
+     Once an asynchronous read or write operation has been submitted on a file
+     descriptor fd, the system takes control of that file descriptor until the
+     handler block is executed. During this time the application must not
+     manipulate fd directly, in particular it is only safe to close fd from
+     the handler block (or after it has returned).
+
+     If multiple asynchronous read or write operations are submitted to the
+     same file descriptor, they will be performed in order, but their handlers
+     will only be submitted once all operations have completed and control
+     over the file descriptor has been relinquished. For details on this and
+     on the interaction with dispatch I/O channels created from the same file
+     descriptor, see FILEDESCRIPTOR OWNERSHIP in dispatch_io_create(3).
+
+SEE ALSO
+     dispatch(3), dispatch_data_create(3), dispatch_io_create(3),
+     dispatch_io_read(3), fread(3)
+
+Darwin			       December 1, 2010 			Darwin

@@ -1,0 +1,130 @@
+GLCONVOLUTIONPARAMETER(3G)			    GLCONVOLUTIONPARAMETER(3G)
+
+
+
+NAME
+       glConvolutionParameterf,  glConvolutionParameteri, glConvolutionParame-
+       terfv, glConvolutionParameteriv - set convolution parameters
+
+
+C SPECIFICATION
+       void glConvolutionParameterf( GLenum target,
+				     GLenum pname,
+				     GLfloat params )
+       void glConvolutionParameteri( GLenum target,
+				     GLenum pname,
+				     GLint params )
+
+PARAMETERS
+       target  The target for the  convolution	parameter.   Must  be  one  of
+	       GL_CONVOLUTION_1D, GL_CONVOLUTION_2D, or GL_SEPARABLE_2D.
+
+       pname   The parameter to be set.  Must be GL_CONVOLUTION_BORDER_MODE.
+
+       params  The    parameter    value.    Must   be	 one   of   GL_REDUCE,
+	       GL_CONSTANT_BORDER, GL_REPLICATE_BORDER.
+
+
+
+C SPECIFICATION
+       void glConvolutionParameterfv( GLenum target,
+				      GLenum pname,
+				      const GLfloat *params )
+       void glConvolutionParameteriv( GLenum target,
+				      GLenum pname,
+				      const GLint *params )
+
+PARAMETERS
+       target The target for  the  convolution	parameter.   Must  be  one  of
+	      GL_CONVOLUTION_1D, GL_CONVOLUTION_2D, or GL_SEPARABLE_2D.
+
+       pname  The    parameter	  to	be    set.     Must    be    one    of
+	      GL_CONVOLUTION_BORDER_MODE,	  GL_CONVOLUTION_BORDER_COLOR,
+	      GL_CONVOLUTION_FILTER_SCALE, or GL_CONVOLUTION_FILTER_BIAS.
+
+       params The  parameter  value.   If pname is GL_CONVOLUTION_BORDER_MODE,
+	      params  must  be	one  of  GL_REDUCE,   GL_CONSTANT_BORDER,   or
+	      GL_REPLICATE_BORDER.  Otherwise, must be a vector of four values
+	      (for red, green, blue, and alpha, respectively) to be  used  for
+	      scaling  (when pname is GL_CONVOLUTION_FILTER_SCALE), or biasing
+	      (when pname is GL_CONVOLUTION_FILTER_BIAS) a convolution	filter
+	      kernel  or  setting  the	constant  border  color (when pname is
+	      GL_CONVOLUTION_BORDER_COLOR.
+
+DESCRIPTION
+       glConvolutionParameter sets the value of a convolution parameter.
+
+       target	selects   the	convolution    filter	 to    be    affected:
+       GL_CONVOLUTION_1D,  GL_CONVOLUTION_2D,  or  GL_SEPARABLE_2D for the 1D,
+       2D, or separable 2D filter, respectively.
+
+       pname selects the parameter to be changed.  GL_CONVOLUTION_FILTER_SCALE
+       and GL_CONVOLUTION_FILTER_BIAS affect the definition of the convolution
+       filter kernel; see  glConvolutionFilter1D,  glConvolutionFilter2D,  and
+       glSeparableFilter2D for details.  In these cases, params is an array of
+       four values to be applied  to  red,  green,  blue,  and	alpha  values,
+       respectively.  The initial value for GL_CONVOLUTION_FILTER_SCALE is (1,
+       1, 1, 1), and the initial value for GL_CONVOLUTION_FILTER_BIAS  is  (0,
+       0, 0, 0).
+
+       A  pname  value	of GL_CONVOLUTION_BORDER_MODE controls the convolution
+       border mode. The accepted modes are:
+
+       GL_REDUCE
+	      The image resulting from convolution is smaller than the	source
+	      image.   If  the	filter	width  is Wf and height is Hf, and the
+	      source image width is Ws and height is Hs,  then	the  convolved
+	      image  width will be Ws - Wf + 1 and height will be Hs - Hf + 1.
+	      (If this reduction would generate an image with zero or negative
+	      width  and/or  height,  the output is simply null, with no error
+	      generated.)  The coordinates of the image resulting from	convo-
+	      lution  are  zero through Ws - Wf in width and zero through Hs -
+	      Hf in height.
+
+       GL_CONSTANT_BORDER
+	      The image resulting from convolution is the  same  size  as  the
+	      source  image,  and  processed  as if the source image were sur-
+	      rounded  by  pixels  with   their   color   specified   by   the
+	      GL_CONVOLUTION_BORDER_COLOR.
+
+       GL_REPLICATE_BORDER
+	      The  image  resulting  from  convolution is the same size as the
+	      source image, and processed as if the  outermost	pixel  on  the
+	      border of the source image were replicated.
+
+NOTES
+       glConvolutionParameter  is  present  only if GL_ARB_imaging is returned
+       when glGetString is called with an argument of GL_EXTENSIONS.
+
+       In cases where errors can result  from  the  specification  of  invalid
+       image  dimensions,  it  is  the	dimensions  after convolution that are
+       tested,	not  the  dimensions  of  the  source  image.	For   example,
+       glTexImage1D  requires  power-of-two image size.  When GL_REDUCE border
+       mode is in effect, the source image  must  be  larger  than  the  final
+       power-of-two size by one less than the size of the 1D filter kernel.
+
+ERRORS
+       GL_INVALID_ENUM is generated if target is not one of the allowable val-
+       ues.
+
+       GL_INVALID_ENUM is generated if pname is not one of the allowable  val-
+       ues.
+
+       GL_INVALID_ENUM is generated if pname is GL_CONVOLUTION_BORDER_MODE and
+       params	is   not   one	 of    GL_REDUCE,    GL_CONSTANT_BORDER,    or
+       GL_REPLICATE_BORDER.
+
+       GL_INVALID_OPERATION is generated if glConvolutionParameter is executed
+       between the execution of glBegin and  the  corresponding  execution  of
+       glEnd.
+
+ASSOCIATED GETS
+       glGetConvolutionParameter
+
+SEE ALSO
+       glConvolutionFilter1D,	 glConvolutionFilter2D,   glSeparableFilter2D,
+       glGetConvolutionParameter
+
+
+
+						    GLCONVOLUTIONPARAMETER(3G)

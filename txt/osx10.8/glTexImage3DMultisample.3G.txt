@@ -1,0 +1,109 @@
+GLTEXIMAGE3DMULTISAM(3G)	  OpenGL 3.3	      GLTEXIMAGE3DMULTISAM(3G)
+
+
+
+NAME
+       glTexImage3DMultisample - establish the data storage, format,
+       dimensions, and number of samples of a multisample texture's image
+
+C SPECIFICATION
+       void glTexImage3DMultisample(GLenum target, GLsizei samples,
+				    GLint internalformat, GLsizei width,
+				    GLsizei height, GLsizei depth,
+				    GLboolean fixedsamplelocations);
+
+PARAMETERS
+       target
+	   Specifies the target of the operation.  target must be
+	   GL_TEXTURE_2D_MULTISAMPLE_ARRAY or
+	   GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY.
+
+       samples
+	   The number of samples in the multisample texture's image.
+
+       internalformat
+	   The internal format to be used to store the multisample texture's
+	   image.  internalformat must specify a color-renderable,
+	   depth-renderable, or stencil-renderable format.
+
+       width
+	   The width of the multisample texture's image, in texels.
+
+       height
+	   The height of the multisample texture's image, in texels.
+
+       fixedsamplelocations
+	   Specifies whether the image will use identical sample locations and
+	   the same number of samples for all texels in the image, and the
+	   sample locations will not depend on the internal format or size of
+	   the image.
+
+DESCRIPTION
+       glTexImage3DMultisample establishes the data storage, format,
+       dimensions and number of samples of a multisample texture's image.
+
+
+       target must be GL_TEXTURE_2D_MULTISAMPLE_ARRAY or
+       GL_PROXY_TEXTURE_2D_MULTISAMPLE_ARRAY.  width and heightare the
+       dimensions in texels of the texture, and must be in the range zero to
+       GL_MAX_TEXTURE_SIZE - 1.  depth is the number of array slices in the
+       array texture's image.  samples specifies the number of samples in the
+       image and must be in the range zero to GL_MAX_SAMPLES - 1.
+
+
+       internalformat must be a color-renderable, depth-renderable, or
+       stencil-renderable format.
+
+       If fixedsamplelocations is GL_TRUE, the image will use identical sample
+       locations and the same number of samples for all texels in the image,
+       and the sample locations will not depend on the internal format or size
+       of the image.
+
+       When a multisample texture is accessed in a shader, the access takes
+       one vector of integers describing which texel to fetch and an integer
+       corresponding to the sample numbers describing which sample within the
+       texel to fetch. No standard sampling instructions are allowed on the
+       multisample texture targets.
+
+NOTES
+       glTexImage2DMultisample is available only if the GL version is 3.2 or
+       greater.
+
+ERRORS
+       GL_INVALID_OPERATION is generated if internalformat is a depth- or
+       stencil-renderable format and samples is greater than the value of
+       GL_MAX_DEPTH_TEXTURE_SAMPLES.
+
+
+       GL_INVALID_OPERATION is generated if internalformat is a
+       color-renderable format and samples is greater than the value of
+       GL_MAX_COLOR_TEXTURE_SAMPLES.
+
+
+       GL_INVALID_OPERATION is generated if internalformat is a signed or
+       unsigned integer format and samples is greater than the value of
+       GL_MAX_INTEGER_SAMPLES.
+
+
+       GL_INVALID_VALUE is generated if either width or height negative or is
+       greater than GL_MAX_TEXTURE_SIZE.
+
+
+       GL_INVALID_VALUE is generated if depth is negative or is greater than
+       GL_MAX_ARRAY_TEXTURE_LAYERS.
+
+
+       GL_INVALID_VALUE is generated if samples is greater than
+       GL_MAX_SAMPLES.
+
+SEE ALSO
+       glTexImage3D(), glTexImage2DMultisample()
+
+COPYRIGHT
+       Copyright (C) 2010 Khronos Group. This material may be distributed
+       subject to the terms and conditions set forth in the Open Publication
+       License, v 1.0, 8 June 1999.  http://opencontent.org/openpub/.
+
+
+
+OpenGL 3.3			  03/08/2011	      GLTEXIMAGE3DMULTISAM(3G)

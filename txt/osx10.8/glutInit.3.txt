@@ -1,0 +1,82 @@
+glutInit(3GLUT) 		     GLUT		       glutInit(3GLUT)
+
+
+
+NAME
+       glutInit - initialize the GLUT library.
+
+SYNTAX
+       #include <GLUT/glut.h>
+
+       void glutInit(int *argcp, char **argv);
+
+ARGUMENTS
+       argcp	 A  pointer  to  the  program's  unmodified argc variable from
+		 main.	Upon return, the value pointed to  by  argcp  will  be
+		 updated,  because  glutInit extracts any command line options
+		 intended for the GLUT library.
+
+       argv	 The program's unmodified argv variable from main. Like argcp,
+		 the  data  for argv will be updated because glutInit extracts
+		 any command line options understood by the GLUT library.
+
+DESCRIPTION
+       glutInit will initialize the GLUT library and negotiate a session  with
+       the window system. During this process, glutInit may cause the termina-
+       tion of the GLUT program with an error message to the user if GLUT can-
+       not  be	properly  initialized.	Examples of this situation include the
+       failure to connect to the window system, the lack of window system sup-
+       port for OpenGL, and invalid command line options.
+
+       glutInit  also processes command line options, but the specific options
+       parse are window system dependent.
+
+X IMPLEMENTATION NOTES
+       The X Window System specific options parsed by glutInit are as follows:
+
+       -display DISPLAY
+	       Specify the X server to connect to. If not specified, the value
+	       of the DISPLAY environment variable is used.
+
+       -geometry WxH+X+Y
+	       Determines where window's should be created on the screen.  The
+	       parameter following -geometry should be formatted as a standard
+	       X geometry specification.  The effect of using this  option  is
+	       to  change  the GLUT initial size and initial position the same
+	       as if glutInitWindowSize or glutInitWindowPosition were	called
+	       directly.
+
+       -iconic Requests all top-level windows be created in an iconic state.
+
+       -indirect
+	       Force the use of indirect OpenGL rendering contexts.
+
+       -direct Force  the use of direct OpenGL rendering contexts (not all GLX
+	       implementations support direct  rendering  contexts).  A  fatal
+	       error  is generated if direct rendering is not supported by the
+	       OpenGL implementation.
+
+	       If neither -indirect or -direct are used to force a  particular
+	       behavior, GLUT will attempt to use direct rendering if possible
+	       and otherwise fallback to indirect rendering.
+
+       -gldebug
+	       After processing callbacks and/or events, check	if  there  are
+	       any  OpenGL  errors  by	calling  glGetError.   If  an error is
+	       reported, print out a warning by looking up the error code with
+	       gluErrorString.	 Using	this  option  is  helpful in detecting
+	       OpenGL run-time errors.
+
+       -sync   Enable synchronous X protocol transactions.  This option  makes
+	       it easier to track down potential   X protocol errors.
+
+SEE ALSO
+       glutCreateWindow, glutInitWindowPosition, glutInitWindowSize, glutMain-
+       Loop
+
+AUTHOR
+       Mark J. Kilgard (mjk@nvidia.com)
+
+
+
+GLUT				      3.7		       glutInit(3GLUT)

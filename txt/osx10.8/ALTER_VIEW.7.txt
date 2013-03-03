@@ -1,0 +1,64 @@
+ALTER VIEW(7)		PostgreSQL 9.1.4 Documentation		 ALTER VIEW(7)
+
+
+
+NAME
+       ALTER_VIEW - change the definition of a view
+
+SYNOPSIS
+       ALTER VIEW name ALTER [ COLUMN ] column SET DEFAULT expression
+       ALTER VIEW name ALTER [ COLUMN ] column DROP DEFAULT
+       ALTER VIEW name OWNER TO new_owner
+       ALTER VIEW name RENAME TO new_name
+       ALTER VIEW name SET SCHEMA new_schema
+
+DESCRIPTION
+       ALTER VIEW changes various auxiliary properties of a view. (If you want
+       to modify the view's defining query, use CREATE OR REPLACE VIEW.)
+
+       You must own the view to use ALTER VIEW. To change a view's schema, you
+       must also have CREATE privilege on the new schema. To alter the owner,
+       you must also be a direct or indirect member of the new owning role,
+       and that role must have CREATE privilege on the view's schema. (These
+       restrictions enforce that altering the owner doesn't do anything you
+       couldn't do by dropping and recreating the view. However, a superuser
+       can alter ownership of any view anyway.)
+
+PARAMETERS
+       name
+	   The name (optionally schema-qualified) of an existing view.
+
+       SET/DROP DEFAULT
+	   These forms set or remove the default value for a column. A default
+	   value associated with a view column is inserted into INSERT
+	   statements on the view before the view's ON INSERT rule is applied,
+	   if the INSERT does not specify a value for the column.
+
+       new_owner
+	   The user name of the new owner of the view.
+
+       new_name
+	   The new name for the view.
+
+       new_schema
+	   The new schema for the view.
+
+NOTES
+       For historical reasons, ALTER TABLE can be used with views too; but the
+       only variants of ALTER TABLE that are allowed with views are equivalent
+       to the ones shown above.
+
+EXAMPLES
+       To rename the view foo to bar:
+
+	   ALTER VIEW foo RENAME TO bar;
+
+COMPATIBILITY
+       ALTER VIEW is a PostgreSQL extension of the SQL standard.
+
+SEE ALSO
+       CREATE VIEW (CREATE_VIEW(7)), DROP VIEW (DROP_VIEW(7))
+
+
+
+PostgreSQL 9.1.4		  2012-05-31			 ALTER VIEW(7)

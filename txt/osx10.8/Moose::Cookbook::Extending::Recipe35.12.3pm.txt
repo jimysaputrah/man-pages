@@ -1,0 +1,86 @@
+Moose::Cookbook::ExtenUser:Contributed PMoose::Cookbook::Extending::Recipe3(3)
+
+
+
+NAME
+       Moose::Cookbook::Extending::Recipe3 - Providing an alternate base
+       object class
+
+VERSION
+       version 2.0205
+
+SYNOPSIS
+	 package MyApp::Base;
+	 use Moose;
+
+	 extends 'Moose::Object';
+
+	 before 'new' => sub { warn "Making a new " . $_[0] };
+
+	 no Moose;
+
+	 package MyApp::UseMyBase;
+	 use Moose ();
+	 use Moose::Exporter;
+
+	 Moose::Exporter->setup_import_methods( also => 'Moose' );
+
+	 sub init_meta {
+	     shift;
+	     return Moose->init_meta( @_, base_class => 'MyApp::Base' );
+	 }
+
+DESCRIPTION
+       A common extension is to provide an alternate base class. One way to do
+       that is to make a "MyApp::base" and add "extends 'MyApp::Base'" to
+       every class in your application. That's pretty tedious. Instead, you
+       can create a Moose-alike module that sets the base object class to
+       "MyApp::Base" for you.
+
+       Then, instead of writing "use Moose" you can write
+       "use MyApp::UseMyBase".
+
+       In this particular example, our base class issues some debugging output
+       every time a new object is created, but you can think of some more
+       interesting things to do with your own base class.
+
+       This uses the magic of Moose::Exporter. When we call
+       "Moose::Exporter->setup_import_methods( also => 'Moose' )" it builds
+       "import" and "unimport" methods for you. The "also => 'Moose'" bit says
+       that we want to export everything that Moose does.
+
+       The "import" method that gets created will call our "init_meta" method,
+       passing it "for_caller => $caller" as its arguments. The $caller is set
+       to the class that actually imported us in the first place.
+
+       See the Moose::Exporter docs for more details on its API.
+
+USING MyApp::UseMyBase
+       To actually use our new base class, we simply use "MyApp::UseMyBase"
+       instead of "Moose". We get all the Moose sugar plus our new base class.
+
+	 package Foo;
+
+	 use MyApp::UseMyBase;
+
+	 has 'size' => ( is => 'rw' );
+
+	 no MyApp::UseMyBase;
+
+CONCLUSION
+       This is an awful lot of magic for a simple base class. You will often
+       want to combine a metaclass trait with a base class extension, and
+       that's when this technique is useful.
+
+AUTHOR
+       Stevan Little <stevan@iinteractive.com>
+
+COPYRIGHT AND LICENSE
+       This software is copyright (c) 2011 by Infinity Interactive, Inc..
+
+       This is free software; you can redistribute it and/or modify it under
+       the same terms as the Perl 5 programming language system itself.
+
+
+
+perl v5.12.4			  2011-0Moose::Cookbook::Extending::Recipe3(3)

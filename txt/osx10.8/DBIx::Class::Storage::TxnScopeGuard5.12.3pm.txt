@@ -1,0 +1,48 @@
+DBIx::Class::Storage::UsercContributed PDBIx::Class::Storage::TxnScopeGuard(3)
+
+
+
+NAME
+       DBIx::Class::Storage::TxnScopeGuard - Scope-based transaction handling
+
+SYNOPSIS
+	sub foo {
+	  my ($self, $schema) = @_;
+
+	  my $guard = $schema->txn_scope_guard;
+
+	  # Multiple database operations here
+
+	  $guard->commit;
+	}
+
+DESCRIPTION
+       An object that behaves much like Scope::Guard, but hardcoded to do the
+       right thing with transactions in DBIx::Class.
+
+METHODS
+   new
+       Creating an instance of this class will start a new transaction (by
+       implicitly calling "txn_begin" in DBIx::Class::Storage. Expects a
+       DBIx::Class::Storage object as its only argument.
+
+   commit
+       Commit the transaction, and stop guarding the scope. If this method is
+       not called and this object goes out of scope (e.g. an exception is
+       thrown) then the transaction is rolled back, via "txn_rollback" in
+       DBIx::Class::Storage
+
+SEE ALSO
+       "txn_scope_guard" in DBIx::Class::Schema.
+
+AUTHOR
+       Ash Berlin, 2008.
+
+       Inspired by Scope::Guard by chocolateboy.
+
+       This module is free software. It may be used, redistributed and/or
+       modified under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-0DBIx::Class::Storage::TxnScopeGuard(3)

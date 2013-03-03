@@ -1,0 +1,105 @@
+DBIx::Class::InflateCoUser(Contributed Perl DocumDBIx::Class::InflateColumn(3)
+
+
+
+NAME
+       DBIx::Class::InflateColumn - Automatically create references from
+       column data
+
+SYNOPSIS
+	   # In your table classes
+	   __PACKAGE__->inflate_column('column_name', {
+	       inflate => sub { ... },
+	       deflate => sub { ... },
+	   });
+
+DESCRIPTION
+       This component translates column data into references, i.e. "inflating"
+       the column data. It also "deflates" references into an appropriate
+       format for the database.
+
+       It can be used, for example, to automatically convert to and from
+       DateTime objects for your date and time fields. There's a convenience
+       component to actually do that though, try
+       DBIx::Class::InflateColumn::DateTime.
+
+       It will handle all types of references except scalar references. It
+       will not handle scalar values, these are ignored and thus passed
+       through to SQL::Abstract. This is to allow setting raw values to "just
+       work". Scalar references are passed through to the database to deal
+       with, to allow such settings as " \'year + 1'" and " \'DEFAULT' " to
+       work.
+
+       If you want to filter plain scalar values and replace them with
+       something else, see DBIx::Class::FilterColumn.
+
+METHODS
+   inflate_column
+       Instruct DBIx::Class to inflate the given column.
+
+       In addition to the column name, you must provide "inflate" and
+       "deflate" methods. The "inflate" method is called when you access the
+       field, while the "deflate" method is called when the field needs to
+       used by the database.
+
+       For example, if you have a table "events" with a timestamp field named
+       "insert_time", you could inflate the column in the corresponding table
+       class using something like:
+
+	   __PACKAGE__->inflate_column('insert_time', {
+	       inflate => sub { DateTime::Format::Pg->parse_datetime(shift); },
+	       deflate => sub { DateTime::Format::Pg->format_datetime(shift); },
+	   });
+
+       (Replace DateTime::Format::Pg with the appropriate module for your
+       database, or consider DateTime::Format::DBI.)
+
+       The coderefs you set for inflate and deflate are called with two
+       parameters, the first is the value of the column to be
+       inflated/deflated, the second is the row object itself. Thus you can
+       call "->result_source->schema->storage->dbh" in your inflate/defalte
+       subs, to feed to DateTime::Format::DBI.
+
+       In this example, calls to an event's "insert_time" accessor return a
+       DateTime object. This DateTime object is later "deflated" when used in
+       the database layer.
+
+   get_inflated_column
+	 my $val = $obj->get_inflated_column($col);
+
+       Fetch a column value in its inflated state.  This is directly analogous
+       to "get_column" in DBIx::Class::Row in that it only fetches a column
+       already retrieved from the database, and then inflates it.  Throws an
+       exception if the column requested is not an inflated column.
+
+   set_inflated_column
+	 my $copy = $obj->set_inflated_column($col => $val);
+
+       Sets a column value from an inflated value.  This is directly analogous
+       to "set_column" in DBIx::Class::Row.
+
+   store_inflated_column
+	 my $copy = $obj->store_inflated_column($col => $val);
+
+       Sets a column value from an inflated value without marking the column
+       as dirty. This is directly analogous to "store_column" in
+       DBIx::Class::Row.
+
+SEE ALSO
+       DBIx::Class::Core - This component is loaded as part of the "core"
+       DBIx::Class components; generally there is no need to load it directly
+
+AUTHOR
+       Matt S. Trout <mst@shadowcatsystems.co.uk>
+
+CONTRIBUTORS
+       Daniel Westermann-Clark <danieltwc@cpan.org> (documentation)
+
+       Jess Robinson <cpan@desert-island.demon.co.uk>
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-05-10	 DBIx::Class::InflateColumn(3)

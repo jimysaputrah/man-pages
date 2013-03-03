@@ -1,0 +1,74 @@
+SQL::Translator::ParseUserBContributed)SQL::Translator::Parser::DBIx::Class(3)
+
+
+
+NAME
+       SQL::Translator::Parser::DBIx::Class - Create a SQL::Translator schema
+       from a DBIx::Class::Schema instance
+
+SYNOPSIS
+	## Via DBIx::Class
+	use MyApp::Schema;
+	my $schema = MyApp::Schema->connect("dbi:SQLite:something.db");
+	$schema->create_ddl_dir();
+	## or
+	$schema->deploy();
+
+	## Standalone
+	use MyApp::Schema;
+	use SQL::Translator;
+
+	my $schema = MyApp::Schema->connect;
+	my $trans  = SQL::Translator->new (
+	     parser	 => 'SQL::Translator::Parser::DBIx::Class',
+	     parser_args => {
+		 package => $schema,
+		 add_fk_index => 0,
+		 sources => [qw/
+		   Artist
+		   CD
+		 /],
+	     },
+	     producer	 => 'SQLite',
+	    ) or die SQL::Translator->error;
+	my $out = $trans->translate() or die $trans->error;
+
+DESCRIPTION
+       This class requires SQL::Translator installed to work.
+
+       "SQL::Translator::Parser::DBIx::Class" reads a DBIx::Class schema,
+       interrogates the columns, and stuffs it all in an $sqlt_schema object.
+
+       Its primary use is in deploying database layouts described as a set of
+       DBIx::Class classes, to a database. To do this, see "deploy" in
+       DBIx::Class::Schema.
+
+       This can also be achieved by having DBIx::Class export the schema as a
+       set of SQL files ready for import into your database, or passed to
+       other machines that need to have your application installed but don't
+       have SQL::Translator installed. To do this see "create_ddl_dir" in
+       DBIx::Class::Schema.
+
+PARSER OPTIONS
+   add_fk_index
+       Create an index for each foreign key.  Enabled by default, as having
+       indexed foreign key columns is normally the sensible thing to do.
+
+   sources
+       Arguments: \@class_names
+
+       Limit the amount of parsed sources by supplying an explicit list of
+       source names.
+
+SEE ALSO
+       SQL::Translator, DBIx::Class::Schema
+
+AUTHORS
+       See "CONTRIBUTORS" in DBIx::Class.
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-SQL::Translator::Parser::DBIx::Class(3)

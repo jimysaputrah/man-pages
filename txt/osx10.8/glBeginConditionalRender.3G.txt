@@ -1,0 +1,93 @@
+GLBEGINCONDITIONALRE(3G)	  OpenGL 3.3	      GLBEGINCONDITIONALRE(3G)
+
+
+
+NAME
+       glBeginConditionalRender - start conditional rendering
+
+C SPECIFICATION
+       void glBeginConditionalRender(GLuint id, GLenum mode);
+
+PARAMETERS
+       id
+	   Specifies the name of an occlusion query object whose results are
+	   used to determine if the rendering commands are discarded.
+
+       mode
+	   Specifies how glBeginConditionalRender interprets the results of
+	   the occlusion query.
+
+C SPECIFICATION
+       void glEndConditionalRender(void);
+
+DESCRIPTION
+       Conditional rendering is started using glBeginConditionalRender and
+       ended using glEndConditionalRender. During conditional rendering, all
+       vertex array commands, as well as glClear() and glClearBuffer() have no
+       effect if the (GL_SAMPLES_PASSED) result of the query object id is
+       zero, or if the (GL_ANY_SAMPLES_PASSED) result is GL_FALSE. The results
+       of commands setting the current vertex state, such as glVertexAttrib()
+       are undefined. If the (GL_SAMPLES_PASSED) result is non-zero or if the
+       (GL_ANY_SAMPLES_PASSED) result is GL_TRUE, such commands are not
+       discarded. The id parameter to glBeginConditionalRender must be the
+       name of a query object previously returned from a call to
+       glGenQueries().	mode specifies how the results of the query object are
+       to be interpreted. If mode is GL_QUERY_WAIT, the GL waits for the
+       results of the query to be available and then uses the results to
+       determine if subsequent rendering commands are discarded. If mode is
+       GL_QUERY_NO_WAIT, the GL may choose to unconditionally execute the
+       subsequent rendering commands without waiting for the query to
+       complete.
+
+       If mode is GL_QUERY_BY_REGION_WAIT, the GL will also wait for occlusion
+       query results and discard rendering commands if the result of the
+       occlusion query is zero. If the query result is non-zero, subsequent
+       rendering commands are executed, but the GL may discard the results of
+       the commands for any region of the framebuffer that did not contribute
+       to the sample count in the specified occlusion query. Any such
+       discarding is done in an implementation-dependent manner, but the
+       rendering command results may not be discarded for any samples that
+       contributed to the occlusion query sample count. If mode is
+       GL_QUERY_BY_REGION_NO_WAIT, the GL operates as in
+       GL_QUERY_BY_REGION_WAIT, but may choose to unconditionally execute the
+       subsequent rendering commands without waiting for the query to
+       complete.
+
+NOTES
+       glBeginConditionalRender and glEndConditionalRender are available only
+       if the GL version is 3.0 or greater.
+
+       The GL_ANY_SAMPLES_PASSED query result is available only if the GL
+       version is 3.3 or greater.
+
+ERRORS
+       GL_INVALID_VALUE is generated if id is not the name of an existing
+       query object.
+
+
+       GL_INVALID_ENUM is generated if mode is not one of the accepted tokens.
+
+
+       GL_INVALID_OPERATION is generated if glBeginConditionalRender is called
+       while conditional rendering is active, or if glEndConditionalRender is
+       called while conditional rendering is inactive.
+
+
+       GL_INVALID_OPERATION is generated if id is the name of a query object
+       with a target other than GL_SAMPLES_PASSED or GL_ANY_SAMPLES_PASSED.
+
+
+       GL_INVALID_OPERATION is generated if id is the name of a query
+       currently in progress.
+
+SEE ALSO
+       glGenQueries(), glDeleteQueries(), glBeginQuery()
+
+COPYRIGHT
+       Copyright (C) 2009 Khronos Group. This material may be distributed
+       subject to the terms and conditions set forth in the Open Publication
+       License, v 1.0, 8 June 1999.  http://opencontent.org/openpub/.
+
+
+
+OpenGL 3.3			  03/08/2011	      GLBEGINCONDITIONALRE(3G)
