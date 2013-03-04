@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="These functions are intended to be used as callbacks to configure how a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>cache_callbacks -- Pre-defined cache callbacks used to configure a cache</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+cache_callbacks(3)	 BSD Library Functions Manual	    cache_callbacks(3)
+
+NAME
+     cache_callbacks -- Pre-defined cache callbacks used to configure a cache
+
+SYNOPSIS
+     #include <cache.h>
+     #include <cache_callbacks.h>
+
+     uintptr_t
+     cache_key_hash_cb_cstring(void *key, void *unused);
+
+     uintptr_t
+     cache_key_hash_cb_integer(void *key, void *unused);
+
+     bool
+     cache_key_is_equal_cb_cstring(void *key1, void *key2, void *unused);
+
+     bool
+     cache_key_is_equal_cb_integer(void *key1, void *key2, void *unused);
+
+     void
+     cache_release_cb_free(void *key_or_value, void *unused);
+
+     void
+     cache_value_make_purgeable_cb(void *value, void *unused);
+
+     bool
+     cache_value_make_nonpurgeable_cb(void *value, void *unused);
+
+     uintptr_t
+     cache_hash_byte_string(const char *data, size_t bytes);
+
+DESCRIPTION
+     These functions are intended to be used as callbacks to configure how a
+     cache functions.  They should be set in the cache_attributes_t passed
+     into cache_create. They support common key types and offer support for
+     using purgeable memory to allocate cache values.
+
+     cache_key_hash_cb_cstring() A key_hash_cb() function for NULL-terminated
+     cstring keys.
+
+     cache_key_hash_cb_integer() A key_hash_cb() function for integer keys.
+
+     cache_key_is_equal_cb_cstring() A key_is_equal_cb() function for cstring
+     keys.
+
+     cache_key_is_equal_cb_integer() A key_is_equal_cb() function for integer
+     keys.
+
+     cache_release_cb_free() Can be used for key_release_cb() or
+     value_release_cb() for keys/values allocated from malloc and family.
+
+     cache_value_make_purgeable_cb() Can be used for value_make_purgeable()
+     with values allocated from the purgeable malloc zone (see malloc/mal-
+     loc.h).  Calls malloc_make_purgeable() on value when it is unreferenced
+     in order to reduce paging under memory pressure.
+
+     value_make_purgeable() with values allocated from the purgeable malloc
+     zone (see malloc/malloc.h).  Calls malloc_make_purgeable() on value when
+     it is unreferenced in order to reduce paging under memory pressure.
+
+     cache_hash_byte_string() Calculates a hash from a bytes string data of
+     length bytes.
+
+SEE ALSO
+     libcache(3) cache_create(3)
+
+Darwin				  May 7, 2009				Darwin
+    </pre></body>
+
+</html>

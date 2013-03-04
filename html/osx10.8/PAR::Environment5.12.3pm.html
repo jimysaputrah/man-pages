@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="PAR uses various environment variables both during the building process..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>PAR::Environment - Index and reference of PAR environment variables</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+PAR::Environment(3)   User Contributed Perl Documentation  PAR::Environment(3)
+
+
+
+NAME
+       PAR::Environment - Index and reference of PAR environment variables
+
+DESCRIPTION
+       PAR uses various environment variables both during the building process
+       of executables or PAR archives and the use of them. Since the wealth of
+       combinations and settings might confuse one or the other (like me),
+       this document is intended to document all environment variables which
+       PAR uses.
+
+       Wherever I want to refer to the $ENV{FOO} environment hash entry, I
+       will usually talk about the "FOO" variable for brevity.
+
+INDEX OF ENVIRONMENT VARIABLES
+       Please note that this is still very, very incomplete! Contributions
+       welcome!
+
+       For each variable, there should be a description what it contains, when
+       it can be expected to exist (and contain meaningful information), when
+       it is sensible to define it yourself, and what effect this has.
+
+       Of course, the description may use examples.
+
+   PAR_0
+       If the running program is run from within a PAR archive or pp-produced
+       executable, this variable contains the name of the extracted program
+       (i.e. .pl file). This is useful of you want to open the source code
+       file of the running program.
+
+       For example, if you package a file foo.pl into bar.par and run foo.pl
+       with this command
+
+	 par.pl foo.par bar.pl
+
+       then the "PAR_0" variable will contain something like
+       "/tmp/par-youser/cache-b175f53eb731da9594e0dde337d66013ddf25a44/495829f0.pl"
+       where "youser" is your username and
+       "/tmp/par-youser/cache-b175f53eb731da9594e0dde337d66013ddf25a44/" is
+       the PAR cache directory ("PAR_TEMP").
+
+       The name of the PAR cache directory can take a number of different
+       forms, so use "PAR_0" if you want to find the extracted program's .pl
+       file -- attempting to construct the name yourself requires complex
+       logic that has already produced the value in "PAR_0".
+
+       This works the same for executable binaries (.exe, ...).
+
+       If you are looking for the name and path of the pp-ed binary file,
+       please refer to the "PAR_PROGNAME" variable.
+
+   PAR_ARGC, PAR_ARGV_0, PAR_ARGV_...
+       You should not rely on these variables outside of the PAR binary loader
+       code.
+
+       These variables are set when a non-dependent pp-ed binary executable
+       runs. The initially executed process extracts another binary and runs
+       it as a child process. In order to pass its command line arguments to
+       the child, the parent process sets "PAR_ARG*" as they would be used in
+       C programs: "PAR_ARGC" has the number of arguments, "PAR_ARGV_0" has
+       the name of the executable, "PAR_ARGV_*" are the command line
+       arguments.
+
+       If you would like to access the name of the running program (script or
+       binary), please refer to "PAR_0" and "PAR_PROGNAME" instead!
+
+       Related: "PAR_SPAWNED", "PAR_0", "PAR_PROGNAME"
+
+   PAR_CLEAN
+       Users should set "PAR_GLOBAL_CLEAN" instead.  Recreated from
+       "PAR_GLOBAL_CLEAN" and the value of "-C" from the YAML file by the PAR
+       loader, and used within loader to control the initial behavior of
+       extraction, and the final behavior of cleanup.  The user can reference
+       "PAR_CLEAN" in the application to determine which of these behaviors is
+       being used for this run of the application.
+
+   PAR_DEBUG
+       Users should set "PAR_GLOBAL_DEBUG" instead.
+
+       If this variable is set to a true value and par.pl is run, verbose
+       output is sent to STDOUT or the logging filehandle.  This is overridden
+       by the "-q" option to par.pl, for steps after argument parsing occurs.
+
+       This currently only influences par.pl. Whether this is the intended
+       behaviour remains to be verified.
+
+   PAR_GLOBAL_CLEAN
+       Setting "PAR_GLOBAL_CLEAN" alters the behavior of par applications
+       which see that environment variable at launch.  "PAR_GLOBAL_CLEAN"
+       overrides the "-C" option.  Settings of 0 and 1 are supported.  0
+       corresponds to not using "-C" on the pp command line; 1 corresponds to
+       using "-C" on the pp command line.  "PAR_GLOBAL_CLEAN" is ignored if
+       "PAR_GLOBAL_TEMP" is set, yet it controls the form of "PAR_TEMP" when
+       "PAR_GLOBAL_TEMP" is not set.
+
+   PAR_GLOBAL_DEBUG
+       The PAR loader becomes more verbose when "PAR_DEBUG" is set.  Setting
+       "PAR_GLOBAL_DEBUG" guarantees that "PAR_DEBUG" will be set internally,
+       initially.  See "PAR_DEBUG" for more details.
+
+   PAR_GLOBAL_TEMP
+       Contributes to the calculation of "PAR_TEMP", and is further explained
+       there.
+
+   PAR_GLOBAL_TMPDIR
+       Contributes to the calculation of "PAR_TEMP", and is further explained
+       there.
+
+   PAR_INITIALIZED
+       This environment variable is for internal use by the PAR binary loader
+       only.  Documented only to avoid surprises if spawned applications
+       expect to see a value initialized by the user.
+
+   PAR_PROGNAME
+       "PAR_PROGNAME" is set to the fully-qualified path name of the
+       executable program.  On Windows, this is reliably obtained from the
+       "GetModuleFileName" API.  On other OSes, if the C runtime is given a
+       qualified path name, it is used, or the unqualified file name given is
+       qualified by walking the path.  This is reasonably reliable given
+       normal program spawning conventions, but cannot be guaranteed to be
+       correct in all circumstances.
+
+   PAR_APP_REUSE
+       Strictly internal. Skip this section if you're not a PAR developer.
+
+       The variable shouldn't ever be exposed to user code and packaged
+       applications should not depend on it being set or not.
+
+       If an application has been packaged with the "--reusable" option, the
+       bootstrapping code will set this environment variable to the name of
+       the program that is to be run instead of the packaged program.  The
+       main.pl loader script fetches the file name, deletes the environment
+       variable, and then runs the given program.
+
+   PAR_RUN
+       This environment variable was set during constructions of "PAR::Packer"
+       objects (usually during pp runs only) by versions of PAR up to 0.957.
+       Since PAR 0.958, this variable is unused.
+
+   PAR_SPAWNED
+       This variable is used internally by the parl binary loader to signal
+       the child process that it's the child.
+
+       You should not rely on this variable outside of the PAR binary loader
+       code. For a slightly more detailed discussion, please refer to the
+       who_am_i.txt documentation file in the PAR source distribution which
+       was contributed by Alan Stewart. Related: "PAR_ARGC", "PAR_ARGV_*"
+
+       Documented only to avoid surprises if spawned applications expect to
+       see a value initialized by the user.
+
+   PAR_TEMP
+       Users should set "PAR_GLOBAL_TEMP" instead.  "PAR_TEMP" is calculated
+       from a variety of other variables.  See the "NOTES" section in the pod
+       for PAR.pm for a complete description of how the calculation proceeds.
+       "PAR_TEMP", once calculated, is used as the location where PAR stores
+       its extracted, temporary file cache.
+
+   PAR_TMPDIR
+       Contributes to the calculation of "PAR_TEMP", and is further explained
+       there.  Users should set "PAR_GLOBAL_TMPDIR" instead.
+
+   PAR_VERBATIM
+       The "PAR_VERBATIM" variable controls the way Perl code is packaged into
+       a PAR archive or binary executable. If it is set to a true value during
+       the packaging process, modules (and scripts) are not passed through the
+       default "PAR::Filter::PodStrip" filter which removes all POD
+       documentation from the code. Note that the "PAR::Filter::PatchContent"
+       filter is still applied.
+
+       The "-F" option to the pp tool overrides the "PAR_VERBATIM" setting.
+       That means if you set "PAR_VERBATIM=1" but specify "-F PodStrip" on the
+       "pp" command line, the "PodStrip" filter will be applied.
+
+       "PAR_VERBATIM" is not used by the PAR application.
+
+   PAR_VERBOSE
+       Setting this environment variable to a positive integer has the same
+       effect as using the "-verbose" switch to pp.
+
+   PP_OPTS
+       During a pp run, the contents of the "PP_OPTS" variable are treated as
+       if they were part of the command line. In newer versions of PAR, you
+       can also write options to a file and execute pp as follows to read the
+       options from the file:
+
+	 pp @FILENAME
+
+       That can, of course, be combined with other command line arguments to
+       pp or the "PP_OPTS" variable.
+
+   TMP, TEMP, TMPDIR, TEMPDIR
+       Please refer to "PAR_TMPDIR".
+
+SEE ALSO
+       The PAR homepage at <http://par.perl.org>.
+
+       PAR, PAR::Tutorial, PAR::FAQ (For a more current FAQ, refer to the
+       homepage.)
+
+       par.pl, parl, pp
+
+       PAR::Dist for details on PAR distributions.
+
+AUTHORS
+       Steffen Mueller <smueller@cpan.org>
+
+       <http://par.perl.org/> is the official PAR website.  You can write to
+       the mailing list at <par@perl.org>, or send an empty mail to
+       <par-subscribe@perl.org> to participate in the discussion.
+
+       Please submit bug reports to <bug-par@rt.cpan.org>. If you need
+       support, however, joining the <par@perl.org> mailing list is preferred.
+
+COPYRIGHT
+       PAR: Copyright 2003-2010 by Audrey Tang, <cpan@audreyt.org>.
+
+       This document: Copyright 2006-2010 by Steffen Mueller,
+       <smueller@cpan.org>
+
+       Some information has been taken from Alan Stewart's extra documentation
+       in the contrib/ folder of the PAR distribution.
+
+       This program or documentation is free software; you can redistribute it
+       and/or modify it under the same terms as Perl itself.
+
+       See <http://www.perl.com/perl/misc/Artistic.html>
+
+
+
+perl v5.12.4			  2010-06-02		   PAR::Environment(3)
+    </pre></body>
+
+</html>

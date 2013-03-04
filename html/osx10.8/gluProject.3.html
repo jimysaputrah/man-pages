@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="gluProject transforms the  specified  object  coordinates  into	window..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>gluProject - map object coordinates to window coordinates</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLUPROJECT(3G)							GLUPROJECT(3G)
+
+
+
+NAME
+       gluProject - map object coordinates to window coordinates
+
+
+C SPECIFICATION
+       GLint gluProject( GLdouble objX,
+			 GLdouble objY,
+			 GLdouble objZ,
+			 const GLdouble *model,
+			 const GLdouble *proj,
+			 const GLint *view,
+			 GLdouble* winX,
+			 GLdouble* winY,
+			 GLdouble* winZ )
+
+
+PARAMETERS
+       objX, objY, objZ
+		       Specify the object coordinates.
+
+       model	       Specifies  the  current	modelview  matrix  (as	from a
+		       glGetDoublev call).
+
+       proj	       Specifies the current  projection  matrix  (as  from  a
+		       glGetDoublev call).
+
+       view	       Specifies the current viewport (as from a glGetIntegerv
+		       call).
+
+       winX, winY, winZ
+		       Return the computed window coordinates.
+
+DESCRIPTION
+       gluProject transforms the  specified  object  coordinates  into	window
+       coordinates  using model, proj, and view. The result is stored in winX,
+       winY, and winZ. A return value of GL_TRUE indicates success,  a	return
+       value of GL_FALSE indicates failure.
+
+       To compute the coordinates, let v = (objX, objY, objZ, 1.0) represented
+       as a matrix with 4 rows and 1 column.  Then gluProject computes	v'  as
+       follows:
+
+				   v' = P X M X v
+
+       where  P  is  the current projection matrix proj, M is the current mod-
+       elview matrix model (both represented as 4x4 matrices  in  column-major
+       order) 'X' represents matrix multiplication.
+
+       The window coordinates are then computed as follows:
+
+       winX = view(0) + view(2) * (v'(0)+1)/2
+
+       winY = view(1) + view(3) * (v'(1)+1)/2
+
+       winZ = (v'(2) + 1) / 2
+
+
+
+SEE ALSO
+       glGet, gluUnProject
+
+
+
+
+								GLUPROJECT(3G)
+    </pre></body>
+
+</html>

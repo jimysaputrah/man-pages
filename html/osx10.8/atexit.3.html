@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The atexit() function registers the function func to be called at program..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>atexit -- register a function to be called on exit</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+ATEXIT(3)		 BSD Library Functions Manual		     ATEXIT(3)
+
+NAME
+     atexit -- register a function to be called on exit
+
+SYNOPSIS
+     #include <stdlib.h>
+
+     int
+     atexit(void (*func)(void));
+
+     int
+     atexit_b(void (^block)(void));
+
+DESCRIPTION
+     The atexit() function registers the function func to be called at program
+     exit, whether via exit(3) or via return from the program's main().  Func-
+     tions so registered are called in reverse order; no arguments are passed.
+
+     The atexit_b() function is like atexit() except the callback is a block
+     pointer instead of a function pointer.
+
+	   Note: The Block_copy() function (defined in <Blocks.h>) is used by
+	   atexit_b() to make a copy of the block, especially for the case
+	   when a stack-based block might go out of scope when the subroutine
+	   returns.
+
+     These callbacks must not call exit(); if it should be necessary to termi-
+     nate the process while in such a function, the _exit(2) function should
+     be used.  (Alternatively, the callbacks may cause abnormal process termi-
+     nation, for example by calling abort(3).)
+
+     At least 32 callbacks can always be registered; more are allowed as long
+     as sufficient memory can be allocated.
+
+RETURN VALUES
+     The atexit() and atexit_b() functions return the value 0 if successful;
+     otherwise the value -1 is returned and the global variable errno is set
+     to indicate the error.
+
+ERRORS
+     [ENOMEM]		No memory was available to add the function to the
+			list.  The existing list of functions is unmodified.
+
+SEE ALSO
+     exit(3)
+
+STANDARDS
+     The atexit() function conforms to ISO/IEC 9899:1990 (``ISO C90'').
+
+BSD				 May 20, 2008				   BSD
+    </pre></body>
+
+</html>

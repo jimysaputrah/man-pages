@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="If you've already read Moose::Cookbook::Basics::Recipe3, then this..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Moose::Cookbook::Basics::Recipe8 - Builder methods and lazy_build</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Moose::Cookbook::BasicUsereContributed PerlMoose::Cookbook::Basics::Recipe8(3)
+
+
+
+NAME
+       Moose::Cookbook::Basics::Recipe8 - Builder methods and lazy_build
+
+SYNOPSIS
+	 package BinaryTree;
+	 use Moose;
+
+	 has 'node' => (is => 'rw', isa => 'Any');
+
+	 has 'parent' => (
+	     is        => 'rw',
+	     isa       => 'BinaryTree',
+	     predicate => 'has_parent',
+	     weak_ref  => 1,
+	 );
+
+	 has 'left' => (
+	     is        => 'rw',
+	     isa       => 'BinaryTree',
+	     predicate => 'has_left',
+	     lazy      => 1,
+	     builder   => '_build_child_tree',
+	 );
+
+	 has 'right' => (
+	     is        => 'rw',
+	     isa       => 'BinaryTree',
+	     predicate => 'has_right',
+	     lazy      => 1,
+	     builder   => '_build_child_tree',
+	 );
+
+	 before 'right', 'left' => sub {
+	     my ($self, $tree) = @_;
+	     $tree->parent($self) if defined $tree;
+	 };
+
+	 sub _build_child_tree {
+	     my $self = shift;
+
+	     return BinaryTree->new( parent => $self );
+	 }
+
+DESCRIPTION
+       If you've already read Moose::Cookbook::Basics::Recipe3, then this
+       example should look very familiar. In fact, all we've done here is
+       replace the attribute's "default" parameter with a "builder".
+
+       In this particular case, the "default" and "builder" options act in
+       exactly the same way. When the "left" or "right" attribute is read,
+       Moose calls the builder method to initialize the attribute.
+
+       Note that Moose calls the builder method on the object which has the
+       attribute. Here's an example:
+
+	 my $tree = BinaryTree->new();
+
+	 my $left = $tree->left();
+
+       When "$tree->left()" is called, Moose calls
+       "$tree->_build_child_tree()" in order to populate the "left" attribute.
+       If we had passed "left" to the original constructor, the builder would
+       not be called.
+
+       There are some differences between "default" and "builder". Notably, a
+       builder is subclassable, and can be composed from a role. See
+       Moose::Manual::Attributes for more details.
+
+   The lazy_build shortcut
+       The "lazy_build" attribute option can be used as sugar to specify a
+       whole set of attribute options at once:
+
+	 has 'animal' => (
+	     is 	=> 'ro',
+	     isa	=> 'Animal',
+	     lazy_build => 1,
+	 );
+
+       This is a shorthand for:
+
+	 has 'animal' => (
+	     is        => 'ro',
+	     isa       => 'Animal',
+	     required  => 1,
+	     lazy      => 1,
+	     builder   => '_build_animal',
+	     predicate => 'has_animal',
+	     clearer   => 'clear_animal',
+	 );
+
+       If your attribute starts with an underscore, Moose is smart and will do
+       the right thing with the "predicate" and "clearer", making them both
+       start with an underscore. The "builder" method always starts with an
+       underscore.
+
+       You can read more about "lazy_build" in Moose::Manual::Attributes
+
+CONCLUSION
+       The "builder" option is a more OO-friendly version of the "default"
+       functionality. It also separates the default-generating code into a
+       well-defined method. Sprinkling your attribute definitions with
+       anonymous subroutines can be quite ugly and hard to follow.
+
+AUTHOR
+       Dave Rolsky <autarch@urth.org>
+
+COPYRIGHT AND LICENSE
+       Copyright 2006-2010 by Infinity Interactive, Inc.
+
+       <http://www.iinteractive.com>
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-02-2Moose::Cookbook::Basics::Recipe8(3)
+    </pre></body>
+
+</html>

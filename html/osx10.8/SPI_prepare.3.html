@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="SPI_prepare creates and returns an execution plan for the specified..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>SPI_prepare - prepare a plan for a command, without executing it yet</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+SPI_PREPARE(3)		PostgreSQL 9.1.4 Documentation		SPI_PREPARE(3)
+
+
+
+NAME
+       SPI_prepare - prepare a plan for a command, without executing it yet
+
+SYNOPSIS
+       SPIPlanPtr SPI_prepare(const char * command, int nargs, Oid * argtypes)
+
+DESCRIPTION
+       SPI_prepare creates and returns an execution plan for the specified
+       command, but doesn't execute the command. This function should only be
+       called from a connected procedure.
+
+       When the same or a similar command is to be executed repeatedly, it
+       might be advantageous to perform the planning only once.  SPI_prepare
+       converts a command string into an execution plan that can be executed
+       repeatedly using SPI_execute_plan.
+
+       A prepared command can be generalized by writing parameters ($1, $2,
+       etc.) in place of what would be constants in a normal command. The
+       actual values of the parameters are then specified when
+       SPI_execute_plan is called. This allows the prepared command to be used
+       over a wider range of situations than would be possible without
+       parameters.
+
+       The plan returned by SPI_prepare can be used only in the current
+       invocation of the procedure, since SPI_finish frees memory allocated
+       for a plan. But a plan can be saved for longer using the function
+       SPI_saveplan.
+
+ARGUMENTS
+       const char * command
+	   command string
+
+       int nargs
+	   number of input parameters ($1, $2, etc.)
+
+       Oid * argtypes
+	   pointer to an array containing the OIDs of the data types of the
+	   parameters
+
+RETURN VALUE
+       SPI_prepare returns a non-null pointer to an execution plan. On error,
+       NULL will be returned, and SPI_result will be set to one of the same
+       error codes used by SPI_execute, except that it is set to
+       SPI_ERROR_ARGUMENT if command is NULL, or if nargs is less than 0, or
+       if nargs is greater than 0 and argtypes is NULL.
+
+NOTES
+       SPIPlanPtr is declared as a pointer to an opaque struct type in spi.h.
+       It is unwise to try to access its contents directly, as that makes your
+       code much more likely to break in future revisions of PostgreSQL.
+
+       There is a disadvantage to using parameters: since the planner does not
+       know the values that will be supplied for the parameters, it might make
+       worse planning choices than it would make for a normal command with all
+       constants visible.
+
+
+
+PostgreSQL 9.1.4		  2012-05-31			SPI_PREPARE(3)
+    </pre></body>
+
+</html>

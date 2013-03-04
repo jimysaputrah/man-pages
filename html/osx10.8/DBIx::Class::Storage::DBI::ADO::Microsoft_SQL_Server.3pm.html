@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The MSSQL specific functionality is provided by..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>DBIx::Class::Storage::DBI::ADO::Microsoft_SQL_Server - Support for</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+DBIx::Class::Storage::UDBIx::Class::Storage::DBI::ADO::Microsoft_SQL_Server(3)
+
+
+
+NAME
+       DBIx::Class::Storage::DBI::ADO::Microsoft_SQL_Server - Support for
+       Microsoft SQL Server via DBD::ADO
+
+SYNOPSIS
+       This subclass supports MSSQL server connections via DBD::ADO.
+
+DESCRIPTION
+       The MSSQL specific functionality is provided by
+       DBIx::Class::Storage::DBI::MSSQL.
+
+EXAMPLE DSN
+	 dbi:ADO:provider=sqlncli10;server=EEEBOX\SQLEXPRESS
+
+CAVEATS
+   identities
+       "_identity_method" is set to @@identity, as "SCOPE_IDENTITY()" doesn't
+       work with DBD::ADO. See "IMPLEMENTATION NOTES" in
+       DBIx::Class::Storage::DBI::MSSQL for caveats regarding this.
+
+   truncation bug
+       There is a bug with MSSQL ADO providers where data gets truncated based
+       on the size of the bind sizes in the first prepare call:
+
+       <https://rt.cpan.org/Ticket/Display.html?id=52048>
+
+       The "ado_size" workaround is used (see "ADO Providers" in DBD::ADO)
+       with the approximate maximum size of the data_type of the bound column,
+       or 8000 (maximum VARCHAR size) if the data_type is not available.
+
+       This code is incomplete and may be buggy. Particularly, "VARCHAR(MAX)"
+       is not supported yet. The data_type list for other DBs is also
+       incomplete. Please report problems (and send patches.)
+
+   fractional seconds
+       Fractional seconds with DBIx::Class::InflateColumn::DateTime are not
+       currently supported, datetimes are truncated at the second.
+
+AUTHOR
+       See "AUTHOR" in DBIx::Class and "CONTRIBUTORS" in DBIx::Class.
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4	       DBIx::Class::Storage::DBI::ADO::Microsoft_SQL_Server(3)
+    </pre></body>
+
+</html>

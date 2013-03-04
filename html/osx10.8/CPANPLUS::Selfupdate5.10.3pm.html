@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>CPANPLUS::Selfupdate</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+CPANPLUS::Selfupdate(3pPerl Programmers Reference GuiCPANPLUS::Selfupdate(3pm)
+
+
+
+NAME
+       CPANPLUS::Selfupdate
+
+SYNOPSIS
+	   $su	   = $cb->selfupdate_object;
+
+	   @feats  = $su->list_features;
+	   @feats  = $su->list_enabled_features;
+
+	   @mods   = map { $su->modules_for_feature( $_ ) } @feats;
+	   @mods   = $su->list_core_dependencies;
+	   @mods   = $su->list_core_modules;
+
+	   for ( @mods ) {
+	       print $_->name " should be version " . $_->version_required;
+	       print "Installed version is not uptodate!"
+		   unless $_->is_installed_version_sufficient;
+	   }
+
+	   $ok	   = $su->selfupdate( update => 'all', latest => 0 );
+
+METHODS
+   $self = CPANPLUS::Selfupdate->new( $backend_object );
+       Sets up a new selfupdate object. Called automatically when a new
+       backend object is created.
+
+   @cat = $self->list_categories
+       Returns a list of categories that the "selfupdate" method accepts.
+
+       See "selfupdate" for details.
+
+   %list = $self->list_modules_to_update( update =>
+       "core|dependencies|enabled_features|features|all", [latest => BOOL] )
+       List which modules "selfupdate" would upgrade. You can update either
+       the core (CPANPLUS itself), the core dependencies, all features you
+       have currently turned on, or all features available, or everything.
+
+       The "latest" option determines whether it should update to the latest
+       version on CPAN, or if the minimal required version for CPANPLUS is
+       good enough.
+
+       Returns a hash of feature names and lists of module objects to be
+       upgraded based on the category you provided. For example:
+
+	   %list = $self->list_modules_to_update( update => 'core' );
+
+       Would return:
+
+	   ( core => [ $module_object_for_cpanplus ] );
+
+   $bool = $self->selfupdate( update =>
+       "core|dependencies|enabled_features|features|all", [latest => BOOL,
+       force => BOOL] )
+       Selfupdate CPANPLUS. You can update either the core (CPANPLUS itself),
+       the core dependencies, all features you have currently turned on, or
+       all features available, or everything.
+
+       The "latest" option determines whether it should update to the latest
+       version on CPAN, or if the minimal required version for CPANPLUS is
+       good enough.
+
+       Returns true on success, false on error.
+
+   @features = $self->list_features
+       Returns a list of features that are supported by CPANPLUS.
+
+   @features = $self->list_enabled_features
+       Returns a list of features that are enabled in your current CPANPLUS
+       installation.
+
+   @mods = $self->modules_for_feature( FEATURE [,AS_HASH] )
+       Returns a list of "CPANPLUS::Selfupdate::Module" objects which
+       represent the modules required to support this feature.
+
+       For a list of features, call the "list_features" method.
+
+       If the "AS_HASH" argument is provided, no module objects are returned,
+       but a hashref where the keys are names of the modules, and values are
+       their minimum versions.
+
+   @mods = $self->list_core_dependencies( [AS_HASH] )
+       Returns a list of "CPANPLUS::Selfupdate::Module" objects which
+       represent the modules that comprise the core dependencies of CPANPLUS.
+
+       If the "AS_HASH" argument is provided, no module objects are returned,
+       but a hashref where the keys are names of the modules, and values are
+       their minimum versions.
+
+   @mods = $self->list_core_modules( [AS_HASH] )
+       Returns a list of "CPANPLUS::Selfupdate::Module" objects which
+       represent the modules that comprise the core of CPANPLUS.
+
+       If the "AS_HASH" argument is provided, no module objects are returned,
+       but a hashref where the keys are names of the modules, and values are
+       their minimum versions.
+
+CPANPLUS::Selfupdate::Module
+       "CPANPLUS::Selfupdate::Module" extends "CPANPLUS::Module" objects by
+       providing accessors to aid in selfupdating CPANPLUS.
+
+       These objects are returned by all methods of "CPANPLUS::Selfupdate"
+       that return module objects.
+
+   $version = $mod->version_required
+       Returns the version of this module required for CPANPLUS.
+
+   $bool = $mod->is_installed_version_sufficient
+       Returns true if the installed version of this module is sufficient for
+       CPANPLUS, or false if it is not.
+
+BUG REPORTS
+       Please report bugs or other issues to <bug-cpanplus@rt.cpan.org<gt>.
+
+AUTHOR
+       This module by Jos Boumans <kane@cpan.org>.
+
+COPYRIGHT
+       The CPAN++ interface (of which this module is a part of) is copyright
+       (c) 2001 - 2007, Jos Boumans <kane@cpan.org>. All rights reserved.
+
+       This library is free software; you may redistribute and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2009-05-03	     CPANPLUS::Selfupdate(3pm)
+    </pre></body>
+
+</html>

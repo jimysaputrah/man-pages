@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Use gluNurbsSurface within a NURBS (Non-Uniform Rational B-Spline) sur-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>gluNurbsSurface - define the shape of a NURBS surface</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLUNURBSSURFACE(3G)					   GLUNURBSSURFACE(3G)
+
+
+
+NAME
+       gluNurbsSurface - define the shape of a NURBS surface
+
+
+C SPECIFICATION
+       void gluNurbsSurface( GLUnurbs* nurb,
+			     GLint sKnotCount,
+			     GLfloat* sKnots,
+			     GLint tKnotCount,
+			     GLfloat* tKnots,
+			     GLint sStride,
+			     GLint tStride,
+			     GLfloat* control,
+			     GLint sOrder,
+			     GLint tOrder,
+			     GLenum type )
+
+
+PARAMETERS
+       nurb	   Specifies	 the	 NURBS	   object     (created	  with
+		   gluNewNurbsRenderer).
+
+       sKnotCount  Specifies the number of knots in the  parametric  u	direc-
+		   tion.
+
+       sKnots	   Specifies  an array of sKnotCount nondecreasing knot values
+		   in the parametric u direction.
+
+       tKnotCount  Specifies the number of knots in the  parametric  v	direc-
+		   tion.
+
+       tKnots	   Specifies  an array of tKnotCount nondecreasing knot values
+		   in the parametric v direction.
+
+       sStride	   Specifies the  offset  (as  a  number  of  single-precision
+		   floating point values) between successive control points in
+		   the parametric u direction in control.
+
+       tStride	   Specifies the offset  (in  single-precision	floating-point
+		   values) between successive control points in the parametric
+		   v direction in control.
+
+       control	   Specifies an array containing control points for the  NURBS
+		   surface.   The offsets between successive control points in
+		   the parametric u and v directions are given by sStride  and
+		   tStride.
+
+       sOrder	   Specifies  the order of the NURBS surface in the parametric
+		   u direction. The order is one more than the degree, hence a
+		   surface that is cubic in u has a u order of 4.
+
+       tOrder	   Specifies  the order of the NURBS surface in the parametric
+		   v direction. The order is one more than the degree, hence a
+		   surface that is cubic in v has a v order of 4.
+
+       type	   Specifies type of the surface. type can be any of the valid
+		   two-dimensional evaluator types (such  as  GL_MAP2_VERTEX_3
+		   or GL_MAP2_COLOR_4).
+
+DESCRIPTION
+       Use gluNurbsSurface within a NURBS (Non-Uniform Rational B-Spline) sur-
+       face definition to describe the shape of a NURBS  surface  (before  any
+       trimming). To mark the beginning of a NURBS surface definition, use the
+       gluBeginSurface command.  To mark the end of a  NURBS  surface  defini-
+       tion,  use  the	gluEndSurface  command.  Call gluNurbsSurface within a
+       NURBS surface definition only.
+
+       Positional, texture, and color coordinates are associated with  a  sur-
+       face  by  presenting  each  as  a  separate  gluNurbsSurface  between a
+       gluBeginSurface/gluEndSurface  pair.  No  more	than   one   call   to
+       gluNurbsSurface	for  each  of color, position, and texture data can be
+       made within a single gluBeginSurface/gluEndSurface  pair.  Exactly  one
+       call  must  be  made to describe the position of the surface (a type of
+       GL_MAP2_VERTEX_3 or GL_MAP2_VERTEX_4).
+
+       A NURBS surface can be trimmed by using the commands gluNurbsCurve  and
+       gluPwlCurve between calls to gluBeginTrim and gluEndTrim.
+
+       Note  that  a  gluNurbsSurface with sKnotCount knots in the u direction
+       and tKnotCount knots in the v direction with orders sOrder  and	tOrder
+       must  have  (sKnotCount	-  sOrder) times (tKnotCount - tOrder) control
+       points.
+
+EXAMPLE
+       The following commands render a textured NURBS  surface	with  normals;
+       the texture coordinates and normals are also NURBS surfaces:
+
+       gluBeginSurface(nobj);
+	  gluNurbsSurface(nobj, ..., GL_MAP2_TEXTURE_COORD_2);
+	  gluNurbsSurface(nobj, ..., GL_MAP2_NORMAL);
+	  gluNurbsSurface(nobj, ..., GL_MAP2_VERTEX_4); gluEndSurface(nobj);
+
+
+SEE ALSO
+       gluBeginSurface,   gluBeginTrim,   gluNewNurbsRenderer,	gluNurbsCurve,
+       gluPwlCurve
+
+
+
+
+							   GLUNURBSSURFACE(3G)
+    </pre></body>
+
+</html>

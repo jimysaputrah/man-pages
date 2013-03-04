@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This trait provides native delegation methods for boolean values. A..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Moose::Meta::Attribute::Native::Trait::Bool - Helper trait for Bool</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Moose::Meta::AttributeUsertContrMoose::Meta::Attribute::Native::Trait::Bool(3)
+
+
+
+NAME
+       Moose::Meta::Attribute::Native::Trait::Bool - Helper trait for Bool
+       attributes
+
+VERSION
+       version 2.0205
+
+SYNOPSIS
+	 package Room;
+	 use Moose;
+
+	 has 'is_lit' => (
+	     traits  => ['Bool'],
+	     is      => 'rw',
+	     isa     => 'Bool',
+	     default => 0,
+	     handles => {
+		 illuminate  => 'set',
+		 darken      => 'unset',
+		 flip_switch => 'toggle',
+		 is_dark     => 'not',
+	     },
+	 );
+
+	 my $room = Room->new();
+	 $room->illuminate;	   # same as $room->is_lit(1);
+	 $room->darken; 	   # same as $room->is_lit(0);
+	 $room->flip_switch;	   # same as $room->is_lit(not $room->is_lit);
+	 return $room->is_dark;    # same as !$room->is_lit
+
+DESCRIPTION
+       This trait provides native delegation methods for boolean values. A
+       boolean is a scalar which can be 1, 0, "", or "undef".
+
+DEFAULT TYPE
+       If you don't provide an "isa" value for your attribute, it will default
+       to "Bool".
+
+PROVIDED METHODS
+       None of these methods accept arguments.
+
+       o   set
+
+	   Sets the value to 1 and returns 1.
+
+       o   unset
+
+	   Set the value to 0 and returns 0.
+
+       o   toggle
+
+	   Toggles the value. If it's true, set to false, and vice versa.
+
+	   Returns the new value.
+
+       o   not
+
+	   Equivalent of 'not $value'.
+
+BUGS
+       See "BUGS" in Moose for details on reporting bugs.
+
+AUTHOR
+       Stevan Little <stevan@iinteractive.com>
+
+COPYRIGHT AND LICENSE
+       This software is copyright (c) 2011 by Infinity Interactive, Inc..
+
+       This is free software; you can redistribute it and/or modify it under
+       the same terms as the Perl 5 programming language system itself.
+
+
+
+perl v5.12.4			Moose::Meta::Attribute::Native::Trait::Bool(3)
+    </pre></body>
+
+</html>

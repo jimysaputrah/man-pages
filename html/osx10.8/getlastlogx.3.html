@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The getlastlogx() function looks up the entry for the user with user id..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>getlastlogx, getlastlogxbyname, getutmp, getutmpx, utmpxname -- user</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GETLASTLOGX(3)		 BSD Library Functions Manual		GETLASTLOGX(3)
+
+NAME
+     getlastlogx, getlastlogxbyname, getutmp, getutmpx, utmpxname -- user
+     accounting database functions
+
+SYNOPSIS
+     #include <utmpx.h>
+
+     struct lastlogx *
+     getlastlogx(uid_t uid, struct lastlogx *ll);
+
+     struct lastlogx *
+     getlastlogxbyname(const char *name, struct lastlogx *ll);
+
+     void
+     getutmp(const struct utmpx *ux, struct utmp *u);
+
+     void
+     getutmpx(const struct utmp *u, struct utmpx *ux);
+
+     int
+     utmpxname(const char *fname);
+
+DESCRIPTION
+     The getlastlogx() function looks up the entry for the user with user id
+     uid and returns it in ll.	If the provided ll is NULL, the necessary
+     space will be allocated by getlastlogx() and should be free()d by the
+     caller.  The getlastlogxbyname() function is similar to getlastlogx(),
+     except the user name is passed.
+
+     getutmp() function fills out the entries in the struct utmp u with the
+     data provided in the struct utmpx ux.  getutmpx() does the opposite,
+     filling out the entries in the struct utmpx ux with the data provided in
+     the struct utmp u, and initializing all the unknown fields to 0.  The
+     sole exception is the ut_type field, which will be initialized to
+     USER_PROCESS.
+
+     A struct lastlogx is defined like this:
+
+     struct lastlogx {
+	     struct timeval ll_tv;	     /* time entry was created */
+	     char ll_line[_UTX_LINESIZE];    /* tty name */
+	     char ll_host[_UTX_HOSTSIZE];    /* host name */
+     };
+
+     The utmpxname() function sets the default utmpx(5) database file name to
+     fname.
+
+RETURN VALUES
+     getlastlogx() and getlastlogxbyname() return the found entry on success,
+     or NULL if it could not open the database, could not find an entry match-
+     ing uid or name, or could not allocate the necessary space (in case ll
+     was NULL).
+
+     utmpxname() returns 1 on success, or 0 if the supplied file name was too
+     long or did not end with `x'.
+
+SEE ALSO
+     endutxent(3), utmpx(5)
+
+HISTORY
+     The functions getutmp(), getutmpx(), and utmpxname() first appeared in
+     Solaris.  getlastlogx first appeared in NetBSD 2.0.
+
+BSD				 Dec 26, 2005				   BSD
+    </pre></body>
+
+</html>

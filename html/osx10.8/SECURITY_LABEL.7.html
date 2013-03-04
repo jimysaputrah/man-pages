@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="SECURITY LABEL applies a security label to a database object. An..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>SECURITY_LABEL - define or change a security label applied to an object</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+SECURITY LABEL(7)	PostgreSQL 9.1.4 Documentation	     SECURITY LABEL(7)
+
+
+
+NAME
+       SECURITY_LABEL - define or change a security label applied to an object
+
+SYNOPSIS
+       SECURITY LABEL [ FOR provider ] ON
+       {
+	 TABLE object_name |
+	 COLUMN table_name.column_name |
+	 AGGREGATE agg_name (agg_type [, ...] ) |
+	 DOMAIN object_name |
+	 FOREIGN TABLE object_name
+	 FUNCTION function_name ( [ [ argmode ] [ argname ] argtype [, ...] ] ) |
+	 LARGE OBJECT large_object_oid |
+	 [ PROCEDURAL ] LANGUAGE object_name |
+	 SCHEMA object_name |
+	 SEQUENCE object_name |
+	 TYPE object_name |
+	 VIEW object_name
+       } IS 'label'
+
+DESCRIPTION
+       SECURITY LABEL applies a security label to a database object. An
+       arbitrary number of security labels, one per label provider, can be
+       associated with a given database object. Label providers are loadable
+       modules which register themselves by using the function
+       register_label_provider.
+
+	   Note
+	   register_label_provider is not an SQL function; it can only be
+	   called from C code loaded into the backend.
+
+       The label provider determines whether a given label is valid and
+       whether it is permissible to assign that label to a given object. The
+       meaning of a given label is likewise at the discretion of the label
+       provider.  PostgreSQL places no restrictions on whether or how a label
+       provider must interpret security labels; it merely provides a mechanism
+       for storing them. In practice, this facility is intended to allow
+       integration with label-based mandatory access control (MAC) systems
+       such as SE-Linux. Such systems make all access control decisions based
+       on object labels, rather than traditional discretionary access control
+       (DAC) concepts such as users and groups.
+
+PARAMETERS
+       object_name, table_name.column_name, agg_name, function_name
+	   The name of the object to be labeled. Names of tables, aggregates,
+	   domains, foreign tables, functions, sequences, types, and views can
+	   be schema-qualified.
+
+       provider
+	   The name of the provider with which this label is to be associated.
+	   The named provider must be loaded and must consent to the proposed
+	   labeling operation. If exactly one provider is loaded, the provider
+	   name may be omitted for brevity.
+
+       arg_type
+	   An input data type on which the aggregate function operates. To
+	   reference a zero-argument aggregate function, write * in place of
+	   the list of input data types.
+
+       argmode
+	   The mode of a function argument: IN, OUT, INOUT, or VARIADIC. If
+	   omitted, the default is IN. Note that SECURITY LABEL ON FUNCTION
+	   does not actually pay any attention to OUT arguments, since only
+	   the input arguments are needed to determine the function's
+	   identity. So it is sufficient to list the IN, INOUT, and VARIADIC
+	   arguments.
+
+       argname
+	   The name of a function argument. Note that SECURITY LABEL ON
+	   FUNCTION does not actually pay any attention to argument names,
+	   since only the argument data types are needed to determine the
+	   function's identity.
+
+       argtype
+	   The data type(s) of the function's arguments (optionally
+	   schema-qualified), if any.
+
+       large_object_oid
+	   The OID of the large object.
+
+       PROCEDURAL
+	   This is a noise word.
+
+       label
+	   The new security label, written as a string literal; or NULL to
+	   drop the security label.
+
+EXAMPLES
+       The following example shows how the security label of a table might be
+       changed.
+
+	   SECURITY LABEL FOR selinux ON TABLE mytable IS 'system_u:object_r:sepgsql_table_t:s0';
+
+COMPATIBILITY
+       There is no SECURITY LABEL command in the SQL standard.
+
+SEE ALSO
+       sepgsql, dummy_seclabel
+
+
+
+PostgreSQL 9.1.4		  2012-05-31		     SECURITY LABEL(7)
+    </pre></body>
+
+</html>

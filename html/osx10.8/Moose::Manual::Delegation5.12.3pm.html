@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Moose::Manual::Delegation - Attribute delegation</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Moose::Manual::DelegatUser3Contributed Perl DocumeMoose::Manual::Delegation(3)
+
+
+
+NAME
+       Moose::Manual::Delegation - Attribute delegation
+
+VERSION
+       version 2.0205
+
+WHAT IS DELEGATION?
+       Delegation is a feature that lets you create "proxy" methods that do
+       nothing more than call some other method on an attribute. This lets you
+       simplify a complex set of "has-a" relationships and present a single
+       unified API from one class.
+
+       With delegation, consumers of a class don't need to know about all the
+       objects it contains, reducing the amount of API they need to learn.
+
+       Delegations are defined as a mapping between one or more methods
+       provided by the "real" class (the delegatee), and a set of
+       corresponding methods in the delegating class. The delegating class can
+       re-use the method names provided by the delegatee or provide its own
+       names.
+
+       Delegation is also a great way to wrap an existing class, especially a
+       non-Moose class or one that is somehow hard (or impossible) to
+       subclass.
+
+DEFINING A MAPPING
+       Moose offers a number of options for defining a delegation's mapping,
+       ranging from simple to complex.
+
+       The simplest form is to simply specify a list of methods:
+
+	 package Website;
+
+	 use Moose;
+
+	 has 'uri' => (
+	     is      => 'ro',
+	     isa     => 'URI',
+	     handles => [qw( host path )],
+	 );
+
+       With this definition, we can call "$website->host" and it "just works".
+       Under the hood, Moose will call "$website->uri->host" for you. Note
+       that $website is not automatically passed to the "host" method; the
+       invocant is "$website->uri".
+
+       We can also define a mapping as a hash reference. This allows you to
+       rename methods as part of the mapping:
+
+	 package Website;
+
+	 use Moose;
+
+	 has 'uri' => (
+	     is      => 'ro',
+	     isa     => 'URI',
+	     handles => {
+		 hostname => 'host',
+		 path	  => 'path',
+	     },
+	 );
+
+       In this example, we've created a "$website->hostname" method, rather
+       than using "URI.pm"'s name, "host".
+
+       These two mapping forms are the ones you will use most often. The
+       remaining methods are a bit more complex.
+
+	 has 'uri' => (
+	     is      => 'ro',
+	     isa     => 'URI',
+	     handles => qr/^(?:host|path|query.*)/,
+	 );
+
+       This is similar to the array version, except it uses the regex to match
+       against all the methods provided by the delegatee. In order for this to
+       work, you must provide an "isa" parameter for the attribute, and it
+       must be a class. Moose uses this to introspect the delegatee class and
+       determine what methods it provides.
+
+       You can use a role name as the value of "handles":
+
+	 has 'uri' => (
+	     is      => 'ro',
+	     isa     => 'URI',
+	     handles => 'HasURI',
+	 );
+
+       Moose will introspect the role to determine what methods it provides
+       and create a mapping for each of those methods.
+
+       Finally, you can also provide a sub reference to generate a mapping.
+       You probably won't need this version often (if ever). See the Moose
+       docs for more details on exactly how this works.
+
+NATIVE DELEGATION
+       Native delegations allow you to delegate to standard Perl data
+       structures as if they were objects.
+
+	 has 'queue' => (
+	     traits  => ['Array'],
+	     isa     => 'ArrayRef[Item]',
+	     default => sub { [ ] },
+	     handles => {
+		 add_item  => 'push',
+		 next_item => 'shift',
+	     },
+	 )
+
+       The "Array" trait in the "traits" parameter tells Moose that you would
+       like to use the set of Array helpers. Moose will then create "add_item"
+       and "next_item" methods that "just work". Behind the scenes "add_item"
+       is something like
+
+	 sub add_item {
+	     my ($self, @items) = @_;
+
+	     for my $item (@items) {
+		 $Item_TC->validate($item);
+	     }
+
+	     push @{ $self->queue }, @items;
+	 }
+
+       Moose includes the following traits for native delegation:
+
+       o   Array
+
+       o   Bool
+
+       o   Code
+
+       o   Counter
+
+       o   Hash
+
+       o   Number
+
+       o   String
+
+CURRYING
+       Currying allows you to create a method with some pre-set parameters.
+       You can create a curried delegation method:
+
+	   package Spider;
+	   use Moose;
+
+	   has request => (
+	       is      => 'ro'
+	       isa     => 'HTTP::Request',
+	       handles => {
+		   set_user_agent => [ header => 'UserAgent' ],
+	       },
+	   )
+
+       With this definition, calling "$spider->set_user_agent('MyClient')"
+       will call "$spider->request->header('UserAgent', 'MyClient')" behind
+       the scenes.
+
+       Note that with currying, the currying always starts with the first
+       parameter to a method ($_[0]). Any arguments you pass to the delegation
+       come after the curried arguments.
+
+MISSING ATTRIBUTES
+       It is perfectly valid to delegate methods to an attribute which is not
+       required or can be undefined. When a delegated method is called, Moose
+       will throw a runtime error if the attribute does not contain an object.
+
+AUTHOR
+       Stevan Little <stevan@iinteractive.com>
+
+COPYRIGHT AND LICENSE
+       This software is copyright (c) 2011 by Infinity Interactive, Inc..
+
+       This is free software; you can redistribute it and/or modify it under
+       the same terms as the Perl 5 programming language system itself.
+
+
+
+perl v5.12.4			  2011-09-06	  Moose::Manual::Delegation(3)
+    </pre></body>
+
+</html>

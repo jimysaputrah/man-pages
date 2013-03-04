@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="xsanadmin is a utility for administering services.  In general, it gives..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>xsanadmin -- command-line interface to Mac OS X Server administrative</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+xsanadmin(8)		  BSD System Manager's Manual		  xsanadmin(8)
+
+NAME
+     xsanadmin -- command-line interface to Mac OS X Server administrative
+     daemon for Xsan
+
+SYNOPSIS
+     xsanadmin [-d | -x] command [command_args]
+
+     xsanadmin [-h | -v]
+
+DESCRIPTION
+     xsanadmin is a utility for administering services.  In general, it gives
+     you access to the same functionality present in the Xsan Admin applica-
+     tion. It must be run by root.
+
+OPTIONS
+     The following options are available:
+     -d
+     --debug	Print command to the terminal.
+
+     -h
+     --help	Print usage summary and exit.
+
+     -v
+     --version	Print build version and exit.
+
+     -x
+     --xml	Generate output as XML instead of key-value pairs.
+
+USAGE
+     Except when requesting information with xsanadmin -h or xsanadmin -v, you
+     must specify a command to select a specific function to perform. Each
+     command accepts its own arguments.
+
+COMMAND SUMMARY
+     Here are brief descriptions of all the xsanadmin commands:
+
+     list    Returns a list of all available services.
+
+     start service
+	     Starts the specified service.
+
+     stop service
+	     Stops the specified service.
+
+     status service
+	     Returns whether or not the service is running.
+
+     fullstatus service
+	     Returns service specific status information. This generally cor-
+	     responds to the information shown in the status panel of the Xsan
+	     Admin application.
+
+     settings command_args
+	     This command is used to read and write settings information. It
+	     can take arguments from the command line or standard input.  set
+	     can be used instead of settings.
+
+     command command_args
+	     Allows service specific commands to be performed.	com can be
+	     used instead of command.
+
+COMMAND ARGUMENTS
+     Input and output is done using key value pairs.  Keys are specified using
+     colon separated strings, with the first element being the service name
+     (eg. afp:idleDisconnectFlag:adminUsers).  Values have types.  If the
+     value is in quotes, it is always considered to be a string.  Otherwise
+     numbers (5, 10, 8.2) and booleans (yes or no) are converted to the appro-
+     priate type.  Assignments are always of the form key = value (eg.
+     afp:guestAccess = yes).
+
+     If only one key needs to be specified (or set), it can be placed on the
+     command line after the command (eg. xsanadmin set afp:guestAccess = yes).
+     However, in some case when doing settings or command, multiple key/value
+     pairs need to be specified.  In this case, leaving them out of the argu-
+     ment list (eg.  xsanadmin settings) will cause the program to read either
+     keys or key/value pairs from the standard input until an end of file
+     (EOF) is reached.	The keys or key/value pairs must be one per line.
+
+     For settings, if no values are specified for the keys, the key value will
+     be read and printed.  Otherwise if there is a key/value pair of the form
+     key = value, the value will be set and then echoed back to the output.
+     In general, the best approach is to fetch the settings for an individual
+     service (eg.  xsanadmin settings afp > dumpfile and then using the output
+     as a template for changing settings.  Any output when fetching settings
+     can be fed in to set values.
+
+     When setting array values, special notation is needed.  There are two
+     types of arrays.  Some arrays have special id keys that allow you to
+     access individual array elements.	These are accessed using the special
+     key _array_id followed by the value of the id tag (eg. web:Mod-
+     ules:_array_id:dav_module).  To add a new element to such an array, you
+     need to have a special line with a "create" value. For example, to add a
+     new web site to the web configuration, you would need:
+
+	     web:Sites:_array_id:MySite = create
+	     web:Sites:_array_id:MySite:enabled = yes
+		 etc.
+
+     To delete an element of an array, use the "delete" value (eg.
+     web:Sites:_array_id:MySite = delete).
+
+     For command, you always need to specify the command type (eg. afp:command
+     = getConnectedUsers).  Commands are highly specific to the individual
+     services.	See the examples sections for some possible commands.
+
+EXAMPLES
+     xsanadmin settings all > outfile
+	     Stores settings from all services into a file.
+
+     xsanadmin settings < outfile
+	     Will take any settings file and set the values.
+
+     xsanadmin command < commandFile
+	     Will execute a command specified in commandFile. Some examples of
+	     commands are:
+
+		 info:command = getHardwareInfo
+		 info:variant = withQuotaUsage
+
+FILES
+     /usr/sbin/xsanadmin
+
+SEE ALSO
+     xsanmgrd(8)
+
+Mac OS X			04 January 2005 		      Mac OS X
+    </pre></body>
+
+</html>

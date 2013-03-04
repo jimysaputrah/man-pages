@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Mail::DKIM::Canonicalization::Base - base class for canonicalization</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Mail::DKIM::CanonicaliUseroContributed PeMail::DKIM::Canonicalization::Base(3)
+
+
+
+NAME
+       Mail::DKIM::Canonicalization::Base - base class for canonicalization
+       methods
+
+SYNOPSIS
+	 # canonicalization results get output to STDOUT
+	 my $method = new Mail::DKIM::Canonicalization::relaxed(
+			   output_fh => *STDOUT,
+			   Signature => $dkim_signature);
+
+	 # add headers
+	 $method->add_header("Subject: this is the subject\015\012");
+	 $method->finish_header;
+
+	 # add body
+	 $method->add_body("This is the body.\015\012");
+	 $method->add_body("Another two lines\015\012of the body.\015\012");
+	 $method->finish_body;
+
+	 # this adds the signature to the end
+	 $method->finish_message;
+
+CONSTRUCTOR
+       Use the new() method of the desired canonicalization implementation
+       class to construct a canonicalization object. E.g.
+
+	 my $method = new Mail::DKIM::Canonicalization::relaxed(
+			   output_fh => *STDOUT,
+			   Signature => $dkim_signature);
+
+       The constructors accept these arguments:
+
+       Signature
+	   (Required) Provide the DKIM signature being constructed (if the
+	   message is being signed), or the DKIM signature being verified (if
+	   the message is being verified). The canonicalization method either
+	   writes parameters to the signature, or reads parameters from the
+	   signature (e.g. the h= tag).
+
+       output
+	   If specified, the canonicalized message will be passed to this
+	   object with the PRINT method.
+
+       output_digest
+	   If specified, the canonicalized message will be added to this
+	   digest.  (Uses the add() method.)
+
+       output_fh
+	   If specified, the canonicalized message will be written to this
+	   file handle.
+
+       If none of the output parameters are specified, then the canonicalized
+       message is appended to an internal buffer. The contents of this buffer
+       can be accessed using the result() method.
+
+METHODS
+   add_body() - feeds part of the body into the canonicalization
+	 $method->add_body("This is the body.\015\012");
+	 $method->add_body("Another two lines\015\012of the body.\015\012");
+
+       The body should be fed one or more "lines" at a time.  I.e. do not feed
+       part of a line.
+
+   result()
+	 my $result = $method->result;
+
+       If you did not specify an object or handle to send the output to, the
+       result of the canonicalization is stored in the canonicalization method
+       itself, and can be accessed using this method.
+
+SEE ALSO
+       Mail::DKIM
+
+AUTHOR
+       Jason Long, <jlong@messiah.edu>
+
+COPYRIGHT AND LICENSE
+       Copyright (C) 2006-2007 by Messiah College
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself, either Perl version 5.8.6 or, at
+       your option, any later version of Perl 5 you may have available.
+
+
+
+perl v5.10.1			  2009-07Mail::DKIM::Canonicalization::Base(3)
+    </pre></body>
+
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Please consult the manual of Regexp::Common for a general description..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Regexp::Common::list -- provide regexes for lists</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Regexp::Common::list(3User Contributed Perl DocumentatiRegexp::Common::list(3)
+
+
+
+NAME
+       Regexp::Common::list -- provide regexes for lists
+
+SYNOPSIS
+	   use Regexp::Common qw /list/;
+
+	   while (<>) {
+	       /$RE{list}{-pat => '\w+'}/	   and print "List of words";
+	       /$RE{list}{-pat => $RE{num}{real}}/ and print "List of numbers";
+	   }
+
+DESCRIPTION
+       Please consult the manual of Regexp::Common for a general description
+       of the works of this interface.
+
+       Do not use this module directly, but load it via Regexp::Common.
+
+   $RE{list}{-pat}{-sep}{-lastsep}
+       Returns a pattern matching a list of (at least two) substrings.
+
+       If "-pat=P" is specified, it defines the pattern for each substring in
+       the list. By default, P is "qr/.*?\S/". In Regexp::Common 0.02 or
+       earlier, the default pattern was "qr/.*?/". But that will match a
+       single space, causing unintended parsing of "a, b, and c" as a list of
+       four elements instead of 3 (with "-word" being "(?:and)").  One
+       consequence is that a list of the form "a,,b" will no longer be parsed.
+       Use the pattern "qr /.*?/" to be able to parse this, but see the
+       previous remark.
+
+       If "-sep=P" is specified, it defines the pattern P to be used as a
+       separator between each pair of substrings in the list, except the final
+       two.  By default P is "qr/\s*,\s*/".
+
+       If "-lastsep=P" is specified, it defines the pattern P to be used as a
+       separator between the final two substrings in the list.	By default P
+       is the same as the pattern specified by the "-sep" flag.
+
+       For example:
+
+	     $RE{list}{-pat=>'\w+'}		   # match a list of word chars
+	     $RE{list}{-pat=>$RE{num}{real}}	   # match a list of numbers
+	     $RE{list}{-sep=>"\t"}		   # match a tab-separated list
+	     $RE{list}{-lastsep=>',\s+and\s+'}	   # match a proper English list
+
+       Under "-keep":
+
+       $1  captures the entire list
+
+       $2  captures the last separator
+
+   $RE{list}{conj}{-word=PATTERN}
+       An alias for $RE{list}{-lastsep=>'\s*,?\s*PATTERN\s*'}
+
+       If "-word" is not specified, the default pattern is "qr/and|or/".
+
+       For example:
+
+	     $RE{list}{conj}{-word=>'et'}	 # match Jean, Paul, et Satre
+	     $RE{list}{conj}{-word=>'oder'}	 # match Bonn, Koln oder Hamburg
+
+   $RE{list}{and}
+       An alias for $RE{list}{conj}{-word=>'and'}
+
+   $RE{list}{or}
+       An alias for $RE{list}{conj}{-word=>'or'}
+
+SEE ALSO
+       Regexp::Common for a general description of how to use this interface.
+
+AUTHOR
+       Damian Conway (damian@conway.org)
+
+MAINTAINANCE
+       This package is maintained by Abigail (regexp-common@abigail.be).
+
+BUGS AND IRRITATIONS
+       Bound to be plenty.
+
+       For a start, there are many common regexes missing.  Send them in to
+       regexp-common@abigail.be.
+
+LICENSE and COPYRIGHT
+       This software is Copyright (c) 2001 - 2009, Damian Conway and Abigail.
+
+       This module is free software, and maybe used under any of the following
+       licenses:
+
+	1) The Perl Artistic License.	  See the file COPYRIGHT.AL.
+	2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
+	3) The BSD Licence.		  See the file COPYRIGHT.BSD.
+	4) The MIT Licence.		  See the file COPYRIGHT.MIT.
+
+
+
+perl v5.12.4			  2010-02-23	       Regexp::Common::list(3)
+    </pre></body>
+
+</html>

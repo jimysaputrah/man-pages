@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="SPI_push should be called before executing another procedure that might..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>SPI_push - push SPI stack to allow recursive SPI usage</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+SPI_PUSH(3)		PostgreSQL 9.1.4 Documentation		   SPI_PUSH(3)
+
+
+
+NAME
+       SPI_push - push SPI stack to allow recursive SPI usage
+
+SYNOPSIS
+       void SPI_push(void)
+
+DESCRIPTION
+       SPI_push should be called before executing another procedure that might
+       itself wish to use SPI. After SPI_push, SPI is no longer in a
+       "connected" state, and SPI function calls will be rejected unless a
+       fresh SPI_connect is done. This ensures a clean separation between your
+       procedure's SPI state and that of another procedure you call. After the
+       other procedure returns, call SPI_pop to restore access to your own SPI
+       state.
+
+       Note that SPI_execute and related functions automatically do the
+       equivalent of SPI_push before passing control back to the SQL execution
+       engine, so it is not necessary for you to worry about this when using
+       those functions. Only when you are directly calling arbitrary code that
+       might contain SPI_connect calls do you need to issue SPI_push and
+       SPI_pop.
+
+
+
+PostgreSQL 9.1.4		  2012-05-31			   SPI_PUSH(3)
+    </pre></body>
+
+</html>

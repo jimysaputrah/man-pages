@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="In this example, we demonstrate how to exercise fine-grained control..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Moose::Cookbook::Roles::Recipe2 - Advanced Role Composition - method</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Moose::Cookbook::RolesUsercContributed Perl Moose::Cookbook::Roles::Recipe2(3)
+
+
+
+NAME
+       Moose::Cookbook::Roles::Recipe2 - Advanced Role Composition - method
+       exclusion and aliasing
+
+SYNOPSIS
+	 package Restartable;
+	 use Moose::Role;
+
+	 has 'is_paused' => (
+	     is      => 'rw',
+	     isa     => 'Bool',
+	     default => 0,
+	 );
+
+	 requires 'save_state', 'load_state';
+
+	 sub stop { 1 }
+
+	 sub start { 1 }
+
+	 package Restartable::ButUnreliable;
+	 use Moose::Role;
+
+	 with 'Restartable' => {
+	     -alias => {
+		 stop  => '_stop',
+		 start => '_start'
+	     },
+	     -excludes => [ 'stop', 'start' ],
+	 };
+
+	 sub stop {
+	     my $self = shift;
+
+	     $self->explode() if rand(1) > .5;
+
+	     $self->_stop();
+	 }
+
+	 sub start {
+	     my $self = shift;
+
+	     $self->explode() if rand(1) > .5;
+
+	     $self->_start();
+	 }
+
+	 package Restartable::ButBroken;
+	 use Moose::Role;
+
+	 with 'Restartable' => { -excludes => [ 'stop', 'start' ] };
+
+	 sub stop {
+	     my $self = shift;
+
+	     $self->explode();
+	 }
+
+	 sub start {
+	     my $self = shift;
+
+	     $self->explode();
+	 }
+
+DESCRIPTION
+       In this example, we demonstrate how to exercise fine-grained control
+       over what methods we consume from a role. We have a "Restartable" role
+       which provides an "is_paused" attribute, and two methods, "stop" and
+       "start".
+
+       Then we have two more roles which implement the same interface, each
+       putting their own spin on the "stop" and "start" methods.
+
+       In the "Restartable::ButUnreliable" role, we want to provide a new
+       implementation of "stop" and "start", but still have access to the
+       original implementation. To do this, we alias the methods from
+       "Restartable" to private methods, and provide wrappers around the
+       originals (1).
+
+       Note that aliasing simply adds a name, so we also need to exclude the
+       methods with their original names.
+
+	 with 'Restartable' => {
+	     -alias => {
+		 stop  => '_stop',
+		 start => '_start'
+	     },
+	     -excludes => [ 'stop', 'start' ],
+	 };
+
+       In the "Restartable::ButBroken" role, we want to provide an entirely
+       new behavior for "stop" and "start". We exclude them entirely when
+       composing the "Restartable" role into "Restartable::ButBroken".
+
+       It's worth noting that the "-excludes" parameter also accepts a single
+       string as an argument if you just want to exclude one method.
+
+	 with 'Restartable' => { -excludes => [ 'stop', 'start' ] };
+
+CONCLUSION
+       Exclusion and renaming are a power tool that can be handy, especially
+       when building roles out of other roles. In this example, all of our
+       roles implement the "Restartable" role. Each role provides same API,
+       but each has a different implementation under the hood.
+
+       You can also use the method aliasing and excluding features when
+       composing a role into a class.
+
+FOOTNOTES
+       (1) The mention of wrapper should tell you that we could do the same
+	   thing using method modifiers, but for the sake of this example, we
+	   don't.
+
+AUTHOR
+       Dave Rolsky <autarch@urth.org>
+
+COPYRIGHT AND LICENSE
+       Copyright 2006-2010 by Infinity Interactive, Inc.
+
+       <http://www.iinteractive.com>
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-02-27Moose::Cookbook::Roles::Recipe2(3)
+    </pre></body>
+
+</html>

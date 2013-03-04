@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="A convenience class used to perform operations on a specific column of..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>DBIx::Class::ResultSetColumn - helpful methods for messing</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+DBIx::Class::ResultSetUsermContributed Perl DocDBIx::Class::ResultSetColumn(3)
+
+
+
+NAME
+	 DBIx::Class::ResultSetColumn - helpful methods for messing
+	 with a single column of the resultset
+
+SYNOPSIS
+	 $rs = $schema->resultset('CD')->search({ artist => 'Tool' });
+	 $rs_column = $rs->get_column('year');
+	 $max_year = $rs_column->max; #returns latest year
+
+DESCRIPTION
+       A convenience class used to perform operations on a specific column of
+       a resultset.
+
+METHODS
+   new
+	 my $obj = DBIx::Class::ResultSetColumn->new($rs, $column);
+
+       Creates a new resultset column object from the resultset and column
+       passed as params. Used internally by "get_column" in
+       DBIx::Class::ResultSet.
+
+   as_query
+       Arguments: none
+       Return Value: \[ $sql, @bind ]
+
+       Returns the SQL query and bind vars associated with the invocant.
+
+       This is generally used as the RHS for a subquery.
+
+   next
+       Arguments: none
+       Return Value: $value
+
+       Returns the next value of the column in the resultset (or "undef" if
+       there is none).
+
+       Much like "next" in DBIx::Class::ResultSet but just returning the one
+       value.
+
+   all
+       Arguments: none
+       Return Value: @values
+
+       Returns all values of the column in the resultset (or "undef" if there
+       are none).
+
+       Much like "all" in DBIx::Class::ResultSet but returns values rather
+       than row objects.
+
+   reset
+       Arguments: none
+       Return Value: $self
+
+       Resets the underlying resultset's cursor, so you can iterate through
+       the elements of the column again.
+
+       Much like "reset" in DBIx::Class::ResultSet.
+
+   first
+       Arguments: none
+       Return Value: $value
+
+       Resets the underlying resultset and returns the next value of the
+       column in the resultset (or "undef" if there is none).
+
+       Much like "first" in DBIx::Class::ResultSet but just returning the one
+       value.
+
+   single
+       Arguments: none
+       Return Value: $value
+
+       Much like "single" in DBIx::Class::ResultSet fetches one and only one
+       column value using the cursor directly. If additional rows are present
+       a warning is issued before discarding the cursor.
+
+   min
+       Arguments: none
+       Return Value: $lowest_value
+
+	 my $first_year = $year_col->min();
+
+       Wrapper for ->func. Returns the lowest value of the column in the
+       resultset (or "undef" if there are none).
+
+   min_rs
+       Arguments: none
+       Return Value: $resultset
+
+	 my $rs = $year_col->min_rs();
+
+       Wrapper for ->func_rs for function MIN().
+
+   max
+       Arguments: none
+       Return Value: $highest_value
+
+	 my $last_year = $year_col->max();
+
+       Wrapper for ->func. Returns the highest value of the column in the
+       resultset (or "undef" if there are none).
+
+   max_rs
+       Arguments: none
+       Return Value: $resultset
+
+	 my $rs = $year_col->max_rs();
+
+       Wrapper for ->func_rs for function MAX().
+
+   sum
+       Arguments: none
+       Return Value: $sum_of_values
+
+	 my $total = $prices_col->sum();
+
+       Wrapper for ->func. Returns the sum of all the values in the column of
+       the resultset. Use on varchar-like columns at your own risk.
+
+   sum_rs
+       Arguments: none
+       Return Value: $resultset
+
+	 my $rs = $year_col->sum_rs();
+
+       Wrapper for ->func_rs for function SUM().
+
+   func
+       Arguments: $function
+       Return Value: $function_return_value
+
+	 $rs = $schema->resultset("CD")->search({});
+	 $length = $rs->get_column('title')->func('LENGTH');
+
+       Runs a query using the function on the column and returns the value.
+       Produces the following SQL:
+
+	 SELECT LENGTH( title ) FROM cd me
+
+   func_rs
+       Arguments: $function
+       Return Value: $resultset
+
+       Creates the resultset that "func()" uses to run its query.
+
+   throw_exception
+       See "throw_exception" in DBIx::Class::Schema for details.
+
+AUTHORS
+       Luke Saunders <luke.saunders@gmail.com>
+
+       Jess Robinson
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-05-10   DBIx::Class::ResultSetColumn(3)
+    </pre></body>
+
+</html>

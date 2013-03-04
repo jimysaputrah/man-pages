@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The prlsrvctl utility is used to manage Parallels Server...." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>prlsrvctl - utility for managing Parallels Server.</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+prlsrvctl(8)							  prlsrvctl(8)
+
+
+
+NAME
+       prlsrvctl - utility for managing Parallels Server.
+
+SYNOPSIS
+       prlsrvctl info [--license]
+
+       prlsrvctl   set	 [--mem-limit	<auto|size>]  [-s,--min-security-level
+       <low|normal|high>]  [-c,--cep   <on|off>]   [--cluster-mode   <on|off>]
+       [{--device    <device>	--assignment   <host|vm>}]   [--backup-storage
+       <user[[:passwd]@server[:port]]>] [--backup-path <path>] [OPTIONS]
+
+       prlsrvctl install-license -k,--key <key> [-n,--name <name>]  [-c,--com-
+       pany <name>] [OPTIONS]
+
+       prlsrvctl update-license  [OPTIONS]
+
+       prlsrvctl shutdown [-f,--force] [OPTIONS]
+
+       prlsrvctl user list [OPTIONS]
+
+       prlsrvctl user set --def-vm-home <path>
+
+       prlsrvctl   problem-report  [{--send  [--proxy  <user[:password]@proxy-
+       host[:port]> | --no-proxy]}] [--stand-alone]
+
+       prlsrvctl  net	add   <vnetwork_id>   [-i,--ifname   <if>]   [-m,--mac
+       <mac_address>]	 [-t,--type   <bridged|host-only>]   [-d,--description
+       <description>] [--ip <ip[/mask]>]  [--dhcp-ip  <ip>]  [--ip-scope-start
+       <ip>] [--ip-scope-end <ip>]
+
+       prlsrvctl   net	 set   <vnetwork_id>   [-i,--ifname   <if>]  [-m,--mac
+       <mac_address>]	[-t,--type   <bridged|host-only>]    [-d,--description
+       <description>]  [-n,--name  <new_name>]	[--ip  <ip[/mask]>] [--dhcp-ip
+       <ip>] [--ip-scope-start <ip>] [--ip-scope-end <ip>]
+
+       prlsrvctl net del <vnetwork_id>
+
+       prlsrvctl net info <vnetwork_id>
+
+       prlsrvctl net list
+
+       prlsrvctl privnet add <private_network_id> [-a,--ipadd <ip[/mask]>]
+
+       prlsrvctl privnet  set  <private_network_id>  [-a,--ipadd  <ip[/mask]>]
+       [-d,--ipdel <ip[/mask]>]
+
+       prlsrvctl privnet del <private_network_id>
+
+       prlsrvctl privnet list
+
+       prlsrvctl usb list [OPTIONS]
+
+       prlsrvctl usb set <usb_dev_id> <vm_uuid | vm_name> [OPTIONS]
+
+       prlsrvctl usb del <usb_dev_id> [OPTIONS]
+
+       prlsrvctl cttemplate list
+
+       prlsrvctl cttemplate remove <name> [<os_template_name>]
+
+
+DESCRIPTION
+       The prlsrvctl utility is used to manage Parallels Server.
+
+OPTIONS
+   Flags
+       The  following  flags  can  be used with the majority of prlsrvctl com-
+       mands.
+
+       -l,--login user[[:passwd]@server
+	   Connect to the remote Parallels server  using  the  IP  address  or
+	   hostname  of  server  and  the specified credentials (i.e. the user
+	   username and passwd password).  If  no  connection  parameters  are
+	   specified,  prlsrvctl  assumes that the command is run on the local
+	   server.
+
+       --timeout <sec>
+	   Specify custom operation timeout in seconds (by default any	opera-
+	   tion has infinit timeout).
+
+   Configuring Parallels Server parameters
+       set [SET_OPTIONS]
+	   This command is used to set and configure various VM parameters.
+	   The following options can be used with the set command:
+
+       --mem-limit <auto|size>
+	   Set	the total memory allocated to Parallels Server and its virtual
+	   machines.
+	   auto - optimize the memory usage.
+	   size - set memory size manually.
+
+       -s,--min-security-level <low|normal|high>
+	   Specifies the minimum allowable security level that can be used  by
+	   users to connect to the server:
+	   low - none of the transmitted data is encrypted.
+	   normal - only the most important data is encrypted.
+	   high - all transmitted data is encrypted.
+
+       -c,--cep <on|off>
+	   Enables/disables  the participation in the Customer Experience Pro-
+	   gram.
+
+       --cluster-mode <on|off>
+	   Enables/disables the special operation mode for  the  participation
+	   in the high availability cluster.
+
+       --device <device> --assignment <host|vm>
+	   Set assignment mode for VTd devices.
+
+       --backup-path <path>
+	   Set the backup location on the local server.
+
+       --backup-storage <user[[:passwd]@server[:port]]>
+	   Set the default backup server.
+
+   Managing Parallels server
+       install-license -k,--key <key> [-n,--name <name>] [-c,--company <name>]
+	   Install Parallels license.
+
+       update-license 4
+	   Update current Parallels license.
+
+       shutdown
+	   Shut down the Parallels server.
+
+       info
+	   Show detailed information about the Parallels server configuration.
+	   If the --license option is specified, only the license info is dis-
+	   played.
+
+       problem-report  [{--send  [--proxy <user[:password]@proxyhost[:port]> |
+       --no-proxy]}] [--stand-alone]
+	   Generate  a	problem report. If the --send option is specified, the
+	   report will be sent to the report server. The --stand-alone	option
+	   allows  you	to generate a report when the Parallels Server service
+	   is not running.
+
+   Listing Parallels server users
+       user list
+	   Lists the Parallels server users.
+
+   Configuring user settings
+       user set
+	   This command is used to manage the settings of the  user  currently
+	   logged in to the Parallels server.
+
+       You can use the following option with the command:
+
+       --def-vm-home <path>
+	   Set	the  default location on the Parallels server for storing vir-
+	   tual machines of the current user.
+
+   Configuring Parallels Server Virtual Networks
+       net [NET_OPTIONS]
+	   This command is used to manage Virtual Networks  on	the  Parallels
+	   server.   vnetwork_id  denotes the Virtual Network you want to con-
+	   figure.
+	   The following actions can be used with the net command:
+	   add Create a new Virtual Network.
+	   set Update the Virtual Network's properties.
+	   del Remove the specified Virtual Network.
+	   info Show detailed information about the specified Virtual Network.
+	   list List the available Virtual Networks on the Parallels server.
+
+       The following options can be used with the net actions:
+
+       -i,--ifname <if>
+	   Set	the  name of the network card on the Parallels server to which
+	   the Virtual Network will be bound.
+
+       -m,--mac <mac>
+	   Set the MAC address of the network card on the Parallels server  to
+	   which  the Virtual Network will be bound. The network card with the
+	   specified MAC address must exist on the Parallels server.
+
+       -t,--type <bridged|host-only>
+	   Specifies the type of the Virtual Network.
+	   bridged A virtual machine connected to this type of Virtual Network
+	   appears as an independent computer on the network.
+	   host-only  A virtual machine connected to this type of Virtual Net-
+	   work can access only the Parallels server and the virtual  machines
+	   connected to the same Virtual Network.
+
+       -d,--description <description>
+	   Set the Virtual Network description.
+
+       -n,--name <new_name>
+	   Set a new name for the Virtual Network.
+
+       --ip <ip[/mask]>
+	   Set	an  IP	address  and  subnet  mask  for  the Parallels virtual
+	   adapter.
+
+       --dhcp-ip <ip>
+	   Set an IP address for the Parallels virtual DHCPv4 server.
+
+       --ip-scope-start <ip>
+	   Set a start IP address for the pool of IP addresses.
+
+       --ip-scope-end <ip>
+	   Set an end IP address for the pool of IP addresses.
+
+   Configuring Parallels Server IP private networks
+       privnet [PRIVNET_OPTIONS]
+	   This command is used to manage IP private networks on the Parallels
+	   server.  private_network_id denotes the IP private network you want
+	   to configure.
+	   The following actions can be used with the privnet command:
+	   add Create a new IP private network.
+	   set Update the IP private network's properties.
+	   del Remove the specified IP private network.
+	   list List the  available  IP  private  networks  on	the  Parallels
+	   server.
+
+       The following options can be used with the privnet command:
+
+       -a,--ipadd <if>
+	   Add	the  IP subnet to the list of subnets in the specified IP pri-
+	   vate network.
+
+       -d,--ipdel <if>
+	   Remove the IP subnet from the list of subnets in the  specified  IP
+	   private network.
+
+   Configuring Automatic USB Device Assignments
+       usb list
+	   List  the  USB  devices  installed  on the server together with the
+	   information on their assignments for the current user.
+
+       usb set <usb_dev_id> <vm_uuid | vm_name>
+	   Assign the USB device with ID <usb_dev_id> to the  virtual  machine
+	   <vm_uuid>.  This USB device will be connected to the specified vir-
+	   tual machine when you start	the  virtual  machine  or  attach  the
+	   device to the Parallels server.
+
+       usb del <usb_dev_id>
+	   Remove the assignment for the USB device with ID <usb_dev_id>.
+
+   Configuring templates for Containers
+       cttemplate list
+	   List  the  OS  and application templates installed on the Parallels
+	   server.
+
+       cttemplate remove <name> [<os_template_name>]
+	   Remove the specified OS or application template from the  Parallels
+	   server.   To  delete an application template, you need to addition-
+	   ally indicate the os_template_name parameter.
+
+       plugin list
+	   List all installed Parallels plugins.
+
+       plugin refresh
+	   Refresh installed Parallels plugins.
+
+DIAGNOSTICS
+       prlsrvctl returns 0 upon successful command  execution.	If  a  command
+       fails, it returns the appropriate error code.
+
+SEE ALSO
+       prlctl(8)
+
+COPYRIGHT
+       Copyright (C) Parallels, 2010. All rights reserved.
+
+
+
+Parallels Server	       22 November 2010 		  prlsrvctl(8)
+    </pre></body>
+
+</html>

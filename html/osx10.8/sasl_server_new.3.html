@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="sasl_server_new() creates a new SASL context. This context will be used..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>sasl_server_new - Create a new server authentication object</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+sasl_server_new(16 May 2001)			  sasl_server_new(16 May 2001)
+
+
+
+NAME
+       sasl_server_new - Create a new server authentication object
+
+
+
+SYNOPSIS
+       #include <sasl/sasl.h>
+
+       int sasl_server_new(const char *service,
+		       const char *serverFQDN,
+		       const char *user_realm,
+		       const char *iplocalport,
+		       const char *ipremoteport,
+		       const sasl_callback_t *callbacks,
+		       unsigned flags,
+		       sasl_conn_t ** pconn);
+
+
+DESCRIPTION
+       sasl_server_new() creates a new SASL context. This context will be used
+       for all SASL calls for one connection. It handles  both	authentication
+       and integrity/encyption layers after authentication.
+
+       service	is  the  registered  name of the service (usually the protocol
+       name) using SASL (e.g. "imap").
+
+       serverFQDN is the fully qualified server domain name.  NULL  means  use
+       gethostname().  This is useful for multi-homed servers.
+
+       user_realm  is the domain of the user agent. This is usually not neces-
+       sary (NULL is default)
+
+       iplocalport is the IP and port of the local side of the connection,  or
+       NULL.   If  iplocalport is NULL it will disable mechanisms that require
+       IP address information.	This strings must be in one of	the  following
+       formats:   "a.b.c.d;port"  (IPv4),  "e:f:g:h:i:j:k:l;port"  (IPv6),  or
+       "e:f:g:h:i:j:a.b.c.d;port" (IPv6)
+
+       ipremoteport is the IP and port of the remote side of  the  connection,
+       or NULL (see iplocalport)
+
+       flags are connection flags (see below)
+
+       pconn  is  a pointer to the conection context allocated by the library.
+       This structure will be used for all future SASL calls for this  connec-
+       tion.
+
+
+       Connection Flags
+
+       SASL_SUCCESS_DATA
+	       The protocol supports a server-last send
+
+       SASL_NEED_PROXY
+	       Force  the use of a mechanism that supports an authorization id
+	       that is not the authentication id.
+
+
+RETURN VALUE
+       sasl_server_new() returns an integer which corresponds to  one  of  the
+       SASL  error  codes. SASL_OK is the only one that indicates success. All
+       others indicate errors and should either be handled or the  authentica-
+       tion session should be quit.
+
+
+CONFORMING TO
+       RFC 2222
+
+SEE ALSO
+       sasl(3),   sasl_errors(3),  sasl_server_init(3),  sasl_server_start(3),
+       sasl_server_step(3), sasl_setprop(3)
+
+
+
+SASL man pages			     SASL	  sasl_server_new(16 May 2001)
+    </pre></body>
+
+</html>

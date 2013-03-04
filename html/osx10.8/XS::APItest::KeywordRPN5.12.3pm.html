@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module supplies plugged-in keywords, using the new mechanism in..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>XS::APItest::KeywordRPN - write arithmetic expressions in RPN</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+XS::APItest::KeywordRPNPerl)Programmers Reference XS::APItest::KeywordRPN(3pm)
+
+
+
+NAME
+       XS::APItest::KeywordRPN - write arithmetic expressions in RPN
+
+SYNOPSIS
+	       use XS::APItest::KeywordRPN qw(rpn calcrpn);
+
+	       $triangle = rpn($n $n 1 + * 2 /);
+
+	       calcrpn $triangle { $n $n 1 + * 2 / }
+
+DESCRIPTION
+       This module supplies plugged-in keywords, using the new mechanism in
+       Perl 5.11.2, that allow arithmetic to be expressed in reverse Polish
+       notation, in an otherwise Perl program.	This module has serious
+       limitations and is not intended for real use: its purpose is only to
+       test the keyword plugin mechanism.  For that purpose it is part of the
+       Perl core source distribution, and is not meant to be installed.
+
+   RPN expression syntax
+       Tokens of an RPN expression may be separated by whitespace, but such
+       separation is usually not required.  It is required only where
+       unseparated tokens would look like a longer token.  For example, "12 34
+       +" can be written as "12 34+", but not as "1234 +".
+
+       An RPN expression may be any of:
+
+       1234
+	   A sequence of digits is an unsigned decimal literal number.
+
+       $foo
+	   An alphanumeric name preceded by dollar sign refers to a Perl
+	   scalar variable.  Only variables declared with "my" or "state" are
+	   supported.  If the variable's value is not a native integer, it
+	   will be converted to an integer, by Perl's usual mechanisms, at the
+	   time it is evaluated.
+
+       A B "+"
+	   Sum of A and B.
+
+       A B "-"
+	   Difference of A and B, the result of subtracting B from A.
+
+       A B "*"
+	   Product of A and B.
+
+       A B "/"
+	   Quotient when A is divided by B, rounded towards zero.  Division by
+	   zero generates an exception.
+
+       A B "%"
+	   Remainder when A is divided by B with the quotient rounded towards
+	   zero.  Division by zero generates an exception.
+
+       Because the arithmetic operators all have fixed arity and are
+       postfixed, there is no need for operator precedence, nor for a grouping
+       operator to override precedence.  This is half of the point of RPN.
+
+       An RPN expression can also be interpreted in another way, as a sequence
+       of operations on a stack, one operation per token.  A literal or
+       variable token pushes a value onto the stack.  A binary operator pulls
+       two items off the stack, performs a calculation with them, and pushes
+       the result back onto the stack.	The stack starts out empty, and at the
+       end of the expression there must be exactly one value left on the
+       stack.
+
+OPERATORS
+       These are the operators being added to the Perl language.
+
+       rpn(EXPRESSION)
+	   This construct is a Perl expression.  EXPRESSION must be an RPN
+	   arithmetic expression, as described above.  The RPN expression is
+	   evaluated, and its value is returned as the value of the Perl
+	   expression.
+
+       calcrpn VARIABLE { EXPRESSION }
+	   This construct is a complete Perl statement.  (No semicolon should
+	   follow the closing brace.)  VARIABLE must be a Perl scalar "my"
+	   variable, and EXPRESSION must be an RPN arithmetic expression as
+	   described above.  The RPN expression is evaluated, and its value is
+	   assigned to the variable.
+
+BUGS
+       This module only performs arithmetic on native integers, and only a
+       small subset of the arithmetic operations that Perl offers.  This is
+       due to it being intended only for demonstration and test purposes.
+
+       The RPN parser is liable to leak memory when a parse error occurs.  It
+       doesn't leak on success, however.
+
+SEE ALSO
+       Devel::Declare, "PL_keyword_plugin" in perlapi
+
+AUTHOR
+       Andrew Main (Zefram) <zefram@fysh.org>
+
+COPYRIGHT
+       Copyright (C) 2009 Andrew Main (Zefram) <zefram@fysh.org>
+
+LICENSE
+       This module is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-06-07	  XS::APItest::KeywordRPN(3pm)
+    </pre></body>
+
+</html>

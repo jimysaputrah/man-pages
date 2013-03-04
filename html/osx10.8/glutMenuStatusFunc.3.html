@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glutMenuStatusFunc  sets the global menu status callback so a GLUT pro-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glutMenuStatusFunc - sets the global menu status callback.</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+glutMenuStatusFunc(3GLUT)	     GLUT	     glutMenuStatusFunc(3GLUT)
+
+
+
+NAME
+       glutMenuStatusFunc - sets the global menu status callback.
+
+SYNTAX
+       #include <GLUT/glut.h>
+
+       void glutMenuStatusFunc(void (*func)(int status, int x, int y));
+       void glutMenuStateFunc(void (*func)(int status));
+
+ARGUMENTS
+       func	 The new menu status (or state) callback function.
+
+DESCRIPTION
+       glutMenuStatusFunc  sets the global menu status callback so a GLUT pro-
+       gram can determine when a menu is in use or not.  When  a  menu	status
+       callback   is   registered,   it   will	 be   called  with  the  value
+       GLUT_MENU_IN_USE for its value parameter when pop-up menus are  in  use
+       by   the  user;	and  the  callback  will  be  called  with  the  value
+       GLUT_MENU_NOT_IN_USE for its status parameter when pop-up menus are  no
+       longer  in  use. The x and y parameters indicate the location in window
+       coordinates of the button press that caused the menu to go into use, or
+       the  location  where the menu was released (may be outside the window).
+       The func parameter names the callback function.	Other  callbacks  con-
+       tinue  to operate (except mouse motion callbacks) when pop-up menus are
+       in use so the menu status callback allows a program to  suspend	anima-
+       tion  or other tasks when menus are in use. The cascading and unmapping
+       of sub-menus from an initial pop-up menu does not generate menu	status
+       callbacks. There is a single menu status callback for GLUT.
+
+       When  the  menu status callback is called, the current menu will be set
+       to  the	initial  pop-up  menu  in  both   the	GLUT_MENU_IN_USE   and
+       GLUT_MENU_NOT_IN_USE  cases. The current window will be set to the win-
+       dow from which the initial menu was popped up from, also in both cases.
+
+       Passing	NULL to glutMenuStatusFunc disables the generation of the menu
+       status callback.
+
+       glutMenuStateFunc is a deprecated  version  of  the  glutMenuStatusFunc
+       routine.  The  only  difference is glutMenuStateFunc callback prototype
+       does not deliver the two additional x and y coordinates.
+
+SEE ALSO
+       glutCreateMenu, glutCreateWindow
+
+AUTHOR
+       Mark J. Kilgard (mjk@nvidia.com)
+
+
+
+GLUT				      3.7	     glutMenuStatusFunc(3GLUT)
+    </pre></body>
+
+</html>

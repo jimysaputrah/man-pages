@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The dladdr() function queries dyld (the dynamic linker) for information..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>dladdr -- find the image containing a given address</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+DLADDR(3)		 BSD Library Functions Manual		     DLADDR(3)
+
+NAME
+     dladdr -- find the image containing a given address
+
+SYNOPSIS
+     #include <dlfcn.h>
+
+     int
+     dladdr(const void* addr, Dl_info* info);
+
+DESCRIPTION
+     The dladdr() function queries dyld (the dynamic linker) for information
+     about the image containing the address addr.  The information is returned
+     in the structure specified by info.  The structure contains at least the
+     following members:
+
+     const char* dli_fname     The pathname of the shared object containing
+			       the address.
+
+     void* dli_fbase	       The base address (mach_header) at which the
+			       image is mapped into the address space of the
+			       calling process.
+
+     const char* dli_sname     The name of the nearest run-time symbol with a
+			       value less than or equal to addr.
+
+     void* dli_saddr	       The value of the symbol returned in dli_sname.
+
+     The dladdr() function is available only in dynamically linked programs.
+
+ERRORS
+     If an image containing addr cannot be found, dladdr() returns 0.  On suc-
+     cess, a non-zero value is returned.
+
+     If the image containing addr is found, but no nearest symbol was found,
+     the dli_sname and dli_saddr fields are set to NULL.
+
+SEE ALSO
+     dyld(3), dlopen(3)
+
+HISTORY
+     The dladdr() function first appeared in the Solaris operating system.
+
+AUTHORS
+     Mac OS X 10.3 incorporated the dlcompat package written by Jorge Acereda
+     <jacereda@users.sourceforge.net> and Peter O'Gorman <ogor-
+     man@users.sourceforge.net>.
+
+     In Mac OS X 10.4, dlopen was rewritten to be a native part of dyld.
+
+     This man page was borrowed from FreeBSD and modified.
+
+BUGS
+     This implementation is almost bug-compatible with the Solaris implementa-
+     tion.  The following bugs are present:
+
+     o	 Returning 0 as an indication of failure goes against long-standing
+	 Unix tradition.
+
+BSD			      September 24, 2004			   BSD
+    </pre></body>
+
+</html>

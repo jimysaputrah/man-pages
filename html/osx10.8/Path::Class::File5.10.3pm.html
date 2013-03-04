@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The "Path::Class::File" class contains functionality for manipulating..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Path::Class::File - Objects representing files</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Path::Class::File(3)  User Contributed Perl Documentation Path::Class::File(3)
+
+
+
+NAME
+       Path::Class::File - Objects representing files
+
+SYNOPSIS
+	 use Path::Class qw(file);  # Export a short constructor
+
+	 my $file = file('foo', 'bar.txt');  # Path::Class::File object
+	 my $file = Path::Class::File->new('foo', 'bar.txt'); # Same thing
+
+	 # Stringifies to 'foo/bar.txt' on Unix, 'foo\bar.txt' on Windows, etc.
+	 print "file: $file\n";
+
+	 if ($file->is_absolute) { ... }
+	 if ($file->is_relative) { ... }
+
+	 my $v = $file->volume; # Could be 'C:' on Windows, empty string
+				# on Unix, 'Macintosh HD:' on Mac OS
+
+	 $file->cleanup; # Perform logical cleanup of pathname
+	 $file->resolve; # Perform physical cleanup of pathname
+
+	 my $dir = $file->dir;	# A Path::Class::Dir object
+
+	 my $abs = $file->absolute; # Transform to absolute path
+	 my $rel = $file->relative; # Transform to relative path
+
+DESCRIPTION
+       The "Path::Class::File" class contains functionality for manipulating
+       file names in a cross-platform way.
+
+METHODS
+       $file = Path::Class::File->new( <dir1>, <dir2>, ..., <file> )
+       $file = file( <dir1>, <dir2>, ..., <file> )
+	   Creates a new "Path::Class::File" object and returns it.  The
+	   arguments specify the path to the file.  Any volume may also be
+	   specified as the first argument, or as part of the first argument.
+	   You can use platform-neutral syntax:
+
+	     my $dir = file( 'foo', 'bar', 'baz.txt' );
+
+	   or platform-native syntax:
+
+	     my $dir = dir( 'foo/bar/baz.txt' );
+
+	   or a mixture of the two:
+
+	     my $dir = dir( 'foo/bar', 'baz.txt' );
+
+	   All three of the above examples create relative paths.  To create
+	   an absolute path, either use the platform native syntax for doing
+	   so:
+
+	     my $dir = dir( '/var/tmp/foo.txt' );
+
+	   or use an empty string as the first argument:
+
+	     my $dir = dir( '', 'var', 'tmp', 'foo.txt' );
+
+	   If the second form seems awkward, that's somewhat intentional -
+	   paths like "/var/tmp" or "\Windows" aren't cross-platform concepts
+	   in the first place, so they probably shouldn't appear in your code
+	   if you're trying to be cross-platform.  The first form is perfectly
+	   fine, because paths like this may come from config files, user
+	   input, or whatever.
+
+       $file->stringify
+	   This method is called internally when a "Path::Class::File" object
+	   is used in a string context, so the following are equivalent:
+
+	     $string = $file->stringify;
+	     $string = "$file";
+
+       $file->volume
+	   Returns the volume (e.g. "C:" on Windows, "Macintosh HD:" on Mac
+	   OS, etc.) of the object, if any.  Otherwise, returns the empty
+	   string.
+
+       $file->basename
+	   Returns the name of the file as a string, without the directory
+	   portion (if any).
+
+       $file->is_dir
+	   Returns a boolean value indicating whether this object represents a
+	   directory.  Not surprisingly, "Path::Class::File" objects always
+	   return false, and "Path::Class::Dir" objects always return true.
+
+       $file->is_absolute
+	   Returns true or false depending on whether the file refers to an
+	   absolute path specifier (like "/usr/local/foo.txt" or
+	   "\Windows\Foo.txt").
+
+       $file->is_absolute
+	   Returns true or false depending on whether the file refers to a
+	   relative path specifier (like "lib/foo.txt" or ".\Foo.txt").
+
+       $file->cleanup
+	   Performs a logical cleanup of the file path.  For instance:
+
+	     my $file = file('/foo//baz/./foo.txt')->cleanup;
+	     # $file now represents '/foo/baz/foo.txt';
+
+       $dir->resolve
+	   Performs a physical cleanup of the file path.  For instance:
+
+	     my $dir = dir('/foo/baz/../foo.txt')->resolve;
+	     # $dir now represents '/foo/foo.txt', assuming no symlinks
+
+	   This actually consults the filesystem to verify the validity of the
+	   path.
+
+       $dir = $file->dir
+	   Returns a "Path::Class::Dir" object representing the directory
+	   containing this file.
+
+       $dir = $file->parent
+	   A synonym for the "dir()" method.
+
+       $abs = $file->absolute
+	   Returns a "Path::Class::File" object representing $file as an
+	   absolute path.  An optional argument, given as either a string or a
+	   "Path::Class::Dir" object, specifies the directory to use as the
+	   base of relativity - otherwise the current working directory will
+	   be used.
+
+       $rel = $file->relative
+	   Returns a "Path::Class::File" object representing $file as a
+	   relative path.  An optional argument, given as either a string or a
+	   "Path::Class::Dir" object, specifies the directory to use as the
+	   base of relativity - otherwise the current working directory will
+	   be used.
+
+       $foreign = $file->as_foreign($type)
+	   Returns a "Path::Class::File" object representing $file as it would
+	   be specified on a system of type $type.  Known types include
+	   "Unix", "Win32", "Mac", "VMS", and "OS2", i.e. anything for which
+	   there is a subclass of "File::Spec".
+
+	   Any generated objects (subdirectories, files, parents, etc.) will
+	   also retain this type.
+
+       $foreign = Path::Class::File->new_foreign($type, @args)
+	   Returns a "Path::Class::File" object representing a file as it
+	   would be specified on a system of type $type.  Known types include
+	   "Unix", "Win32", "Mac", "VMS", and "OS2", i.e. anything for which
+	   there is a subclass of "File::Spec".
+
+	   The arguments in @args are the same as they would be specified in
+	   "new()".
+
+       $fh = $file->open($mode, $permissions)
+	   Passes the given arguments, including $file, to "IO::File->new"
+	   (which in turn calls "IO::File->open" and returns the result as an
+	   "IO::File" object.  If the opening fails, "undef" is returned and
+	   $! is set.
+
+       $fh = $file->openr()
+	   A shortcut for
+
+	    $fh = $file->open('r') or die "Can't read $file: $!";
+
+       $fh = $file->openw()
+	   A shortcut for
+
+	    $fh = $file->open('w') or die "Can't write $file: $!";
+
+       $file->touch
+	   Sets the modification and access time of the given file to right
+	   now, if the file exists.  If it doesn't exist, "touch()" will make
+	   it exist, and - YES! - set its modification and access time to now.
+
+       $file->slurp()
+	   In a scalar context, returns the contents of $file in a string.  In
+	   a list context, returns the lines of $file (according to how $/ is
+	   set) as a list.  If the file can't be read, this method will throw
+	   an exception.
+
+	   If you want "chomp()" run on each line of the file, pass a true
+	   value for the "chomp" or "chomped" parameters:
+
+	     my @lines = $file->slurp(chomp => 1);
+
+       $file->remove()
+	   This method will remove the file in a way that works well on all
+	   platforms, and returns a boolean value indicating whether or not
+	   the file was successfully removed.
+
+	   "remove()" is better than simply calling Perl's "unlink()"
+	   function, because on some platforms (notably VMS) you actually may
+	   need to call "unlink()" several times before all versions of the
+	   file are gone - the "remove()" method handles this process for you.
+
+       $st = $file->stat()
+	   Invokes "File::stat::stat()" on this file and returns a
+	   "File::stat" object representing the result.
+
+       $st = $file->lstat()
+	   Same as "stat()", but if $file is a symbolic link, "lstat()" stats
+	   the link instead of the file the link points to.
+
+AUTHOR
+       Ken Williams, kwilliams@cpan.org
+
+SEE ALSO
+       Path::Class, Path::Class::Dir, File::Spec
+
+
+
+perl v5.10.1			  2012-06-20		  Path::Class::File(3)
+    </pre></body>
+
+</html>

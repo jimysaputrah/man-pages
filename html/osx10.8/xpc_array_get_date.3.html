@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>xpc_array_create -- creation and management of XPC arrays</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+xpc_array_create(3)	 BSD Library Functions Manual	   xpc_array_create(3)
+
+NAME
+     xpc_array_create -- creation and management of XPC arrays
+
+SYNOPSIS
+     #include <xpc/xpc.h>
+
+     xpc_object_t
+     xpc_array_create(const xpc_object_t *objects, size_t count);
+
+     void
+     xpc_array_set_value(xpc_object_t array, size_t index,
+	 xpc_object_t value);
+
+     void
+     xpc_array_append_value(xpc_object_t array, xpc_object_t value);
+
+     xpc_object_t
+     xpc_array_get_value(xpc_object_t array, size_t index);
+
+     size_t
+     xpc_array_get_count(xpc_object_t array);
+
+     bool
+     xpc_array_apply(xpc_object_t array, xpc_array_applier_t applier);
+
+     void
+     xpc_array_set_bool(xpc_object_t array, size_t index, bool value);
+
+     void
+     xpc_array_set_int64(xpc_object_t array, size_t index, int64_t value);
+
+     void
+     xpc_array_set_uint64(xpc_object_t array, size_t index, uint64_t value);
+
+     void
+     xpc_array_set_double(xpc_object_t array, size_t index, double value);
+
+     void
+     xpc_array_set_date(xpc_object_t array, size_t index, int64_t value);
+
+     void
+     xpc_array_set_data(xpc_object_t array, size_t index, const void *bytes,
+	 size_t length);
+
+     void
+     xpc_array_set_string(xpc_object_t array, size_t index,
+	 const char *value);
+
+     void
+     xpc_array_set_uuid(xpc_object_t array, size_t index, const uuid_t value);
+
+     void
+     xpc_array_set_fd(xpc_object_t array, size_t index, int value);
+
+     void
+     xpc_array_set_connection(xpc_object_t array, size_t index,
+	 xpc_connection_t value);
+
+     bool
+     xpc_array_get_bool(xpc_object_t array, size_t index);
+
+     int64_t
+     xpc_array_get_int64(xpc_object_t array, size_t index);
+
+     uint64_t
+     xpc_array_get_uint64(xpc_object_t array, size_t index);
+
+     double
+     xpc_array_get_double(xpc_object_t array, size_t index);
+
+     int64_t
+     xpc_array_get_date(xpc_object_t array, size_t index);
+
+     const void *
+     xpc_array_get_data(xpc_object_t array, size_t index, size_t *length);
+
+     const uint8_t *
+     xpc_array_get_uuid(xpc_object_t array, size_t index);
+
+     const char *
+     xpc_array_get_string(xpc_object_t array, size_t index);
+
+     int
+     xpc_array_get_fd(xpc_object_t array, size_t index);
+
+     xpc_connection_t
+     xpc_array_get_connection(xpc_object_t array, size_t index);
+
+ARRAYS
+     XPC arrays are collections of XPC objects ordered by index. The index is
+     zero-based. XPC arrays are contiguous, and values must exist at all
+     indexes between zero and the greatest index of the array. A hole in the
+     array can be simulated by using a null object as returned by
+     xpc_null_create(3).
+
+CREATION
+     The xpc_array_create() function returns a newly created array. The caller
+     may optionally provide objects, a C array of XPC object references, to
+     initialize the array. The count is used to specify the size of the C
+     array.  If objects is NULL, then count must be zero. If count specifies
+     more elements than are actually present in values or if values is NULL
+     and count is non-zero, the behavior is undefined.
+
+GETTING AND SETTING VALUES
+     The xpc_array_append_value() function may be used to append a value to
+     the end of an array.  This operation increases the count of the values in
+     the array by one.
+
+     The value of a specific index in the array may be set using the
+     xpc_array_set_value() function.  The value must be non-NULL, and the
+     index must already exist (i.e. less than the count provided at creation
+     or extended through previous append operations).
+
+     The value at a specific index of an array may be retrieved using the
+     xpc_array_get_value() function.  The result of getting a non-existing
+     index (i.e. one that was not specified at creation or through a previous
+     append operation) in undefined.
+
+PRIMITIVE GET AND SET FUNCTIONS
+     Various functions exist for retrieving primitive C and operating system
+     types directly from an array without the need for an intermediate boxed
+     object. See xpc_object(3) for more information.
+
+     The special XPC_ARRAY_APPEND constant may be used to append a value to
+     the end of the array instead of operating on a specific index.
+
+SEE ALSO
+     xpc_object(3), xpc_objects(3), xpc_dictionary_create(3)
+
+Darwin				 1 July, 2011				Darwin
+    </pre></body>
+
+</html>

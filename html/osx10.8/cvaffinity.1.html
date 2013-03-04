@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="cvaffinity  can	be used to set an affinity for a specific storage pool..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>cvaffinity - Set an affinity type</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+CVAFFINITY(1)							 CVAFFINITY(1)
+
+
+
+NAME
+       cvaffinity - Set an affinity type
+
+SYNOPSIS
+       cvaffinity -s <key> filename
+
+       cvaffinity -l filename
+
+       cvaffinity -d filename
+
+
+
+
+
+
+DESCRIPTION
+       cvaffinity  can	be used to set an affinity for a specific storage pool
+       on a file or directory, or list the current affinity.  An  affinity  is
+       created	in  a  storage	pool  through  the  volume  configuration (see
+       snfs_config(5).) It is a name, up to eight (8) characters, describing a
+       special	media  type.  Use  cvadmin  (1)  to see what affinity sets are
+       assigned to the configured storage pools.
+
+       If the affinity does not exist for any of the storage pools,  then  the
+       allocation  will  occur on the non-exclusive storage pool.  If there is
+       no non-exclusive storage pool, an ENOSPC is returned.
+
+
+USAGE
+       -s     <key> is the Affinity Key to associate with the file  or	direc-
+	      tory  and  is  defined  as a the affinity keyword in the storage
+	      pool section of the file system configuration. Use  the  program
+	      'cvadmin'  to  see the Affinity Keys active in this file system.
+	      For files with an Affinity, new blocks allocated	to  that  file
+	      are  placed  on a storage pool with the specified Affinity.  For
+	      directories with an Affinity new files created in that directory
+	      inherit the Affinity from the directory.
+
+
+       -l     This  option  says  to  just list the affinity for the specified
+	      file and exit.
+
+
+       -d     This option says to delete the affinity from the specified  file
+	      or directory, if one exists.
+
+
+       <filename>
+	      Specifies  any  file  or directory on the targeted volume.  When
+	      the -k option (set session affinity) is specified, or  no  other
+	      option  is specified, the filename option is used as a read-only
+	      reference handle in order to access the volume.	When  the  -s,
+	      -d,  or  -l  options are used, the filename option specifies the
+	      file or directory operated on.
+
+EXAMPLES
+       List the affinity on the file /usr/clips/foo.
+
+	  rock # cvaffinity -l /usr/clips/foo
+
+       Set this file or directory to use the storage pool that has  the  jmfn8
+       affinity type.
+
+	  rock # cvaffinity -s jmfn8 /usr/clips/filename
+
+       Remove  the  affinity  from  the  /usr/clips/mydir, if one is currently
+       assigned.
+
+	  rock # cvaffinity -d /usr/clips/mydir
+
+
+SEE ALSO
+       snfs_config(5), cvadmin(1)
+
+
+
+Xsan File System		 December 2005			 CVAFFINITY(1)
+    </pre></body>
+
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Please consult the manual of Regexp::Common for a general description..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Regexp::Common::delimited -- provides a regex for delimited strings</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Regexp::Common::delimiUser3Contributed Perl DocumeRegexp::Common::delimited(3)
+
+
+
+NAME
+       Regexp::Common::delimited -- provides a regex for delimited strings
+
+SYNOPSIS
+	   use Regexp::Common qw /delimited/;
+
+	   while (<>) {
+	       /$RE{delimited}{-delim=>'"'}/  and print 'a \" delimited string';
+	       /$RE{delimited}{-delim=>'/'}/  and print 'a \/ delimited string';
+	   }
+
+DESCRIPTION
+       Please consult the manual of Regexp::Common for a general description
+       of the works of this interface.
+
+       Do not use this module directly, but load it via Regexp::Common.
+
+   $RE{delimited}{-delim}{-esc}
+       Returns a pattern that matches a single-character-delimited substring,
+       with optional internal escaping of the delimiter.
+
+       When "-delim=S" is specified, each character in the sequence S is a
+       possible delimiter. There is no default delimiter, so this flag must
+       always be specified.
+
+       If "-esc=S" is specified, each character in the sequence S is the
+       delimiter for the corresponding character in the "-delim=S" list.  The
+       default escape is backslash.
+
+       For example:
+
+	  $RE{delimited}{-delim=>'"'}		 # match "a \" delimited string"
+	  $RE{delimited}{-delim=>'"'}{-esc=>'"'} # match "a "" delimited string"
+	  $RE{delimited}{-delim=>'/'}		 # match /a \/ delimited string/
+	  $RE{delimited}{-delim=>q{'"}} 	 # match "string" or 'string'
+
+       Under "-keep" (See Regexp::Common):
+
+       $1  captures the entire match
+
+       $2  captures the opening delimiter (provided only one delimiter was
+	   specified)
+
+       $3  captures delimited portion of the string (provided only one
+	   delimiter was specified)
+
+       $4  captures the closing delimiter (provided only one delimiter was
+	   specified)
+
+   $RE{quoted}{-esc}
+       A synonym for $RE{delimited}{q{-delim='"`}{...}}
+
+SEE ALSO
+       Regexp::Common for a general description of how to use this interface.
+
+AUTHOR
+       Damian Conway (damian@conway.org)
+
+MAINTAINANCE
+       This package is maintained by Abigail (regexp-common@abigail.be).
+
+BUGS AND IRRITATIONS
+       Bound to be plenty.
+
+       For a start, there are many common regexes missing.  Send them in to
+       regexp-common@abigail.be.
+
+LICENSE and COPYRIGHT
+       This software is Copyright (c) 2001 - 2009, Damian Conway and Abigail.
+
+       This module is free software, and maybe used under any of the following
+       licenses:
+
+	1) The Perl Artistic License.	  See the file COPYRIGHT.AL.
+	2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
+	3) The BSD Licence.		  See the file COPYRIGHT.BSD.
+	4) The MIT Licence.		  See the file COPYRIGHT.MIT.
+
+
+
+perl v5.12.4			  2010-02-23	  Regexp::Common::delimited(3)
+    </pre></body>
+
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="As a full "round-trip" parser, PPI records every last byte in a file..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>PPI::Token::Whitespace - Tokens representing ordinary white space</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+PPI::Token::WhitespaceUser Contributed Perl DocumentaPPI::Token::Whitespace(3)
+
+
+
+NAME
+       PPI::Token::Whitespace - Tokens representing ordinary white space
+
+INHERITANCE
+	 PPI::Token::Whitespace
+	 isa PPI::Token
+	     isa PPI::Element
+
+DESCRIPTION
+       As a full "round-trip" parser, PPI records every last byte in a file
+       and ensure that it is included in the PPI::Document object.
+
+       This even includes whitespace. In fact, Perl documents are seen as
+       "floating in a sea of whitespace", and thus any document will contain
+       vast quantities of "PPI::Token::Whitespace" objects.
+
+       For the most part, you shouldn't notice them. Or at least, you
+       shouldn't have to notice them.
+
+       This means doing things like consistently using the "S for significant"
+       series of PPI::Node and PPI::Element methods to do things.
+
+       If you want the nth child element, you should be using "schild" rather
+       than "child", and likewise "snext_sibling", "sprevious_sibling", and so
+       on and so forth.
+
+METHODS
+       Again, for the most part you should really not need to do anything very
+       significant with whitespace.
+
+       But there are a couple of convenience methods provided, beyond those
+       provided by the parent PPI::Token and PPI::Element classes.
+
+   null
+       Because PPI sees documents as sitting on a sort of substrate made of
+       whitespace, there are a couple of corner cases that get particularly
+       nasty if they don't find whitespace in certain places.
+
+       Imagine walking down the beach to go into the ocean, and then quite
+       unexpectedly falling off the side of the planet. Well it's somewhat
+       equivalent to that, including the whole screaming death bit.
+
+       The "null" method is a convenience provided to get some internals out
+       of some of these corner cases.
+
+       Specifically it create a whitespace token that represents nothing, or
+       at least the null string ''. It's a handy way to have some "whitespace"
+       right where you need it, without having to have any actual characters.
+
+   tidy
+       "tidy" is a convenience method for removing unneeded whitespace.
+
+       Specifically, it removes any whitespace from the end of a line.
+
+       Note that this doesn't include POD, where you may well need to keep
+       certain types of whitespace. The entire POD chunk lives in its own
+       PPI::Token::Pod object.
+
+SUPPORT
+       See the support section in the main module.
+
+AUTHOR
+       Adam Kennedy <adamk@cpan.org>
+
+COPYRIGHT
+       Copyright 2001 - 2011 Adam Kennedy.
+
+       This program is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+       The full text of the license can be found in the LICENSE file included
+       with this module.
+
+
+
+perl v5.12.4			  2011-02-25	     PPI::Token::Whitespace(3)
+    </pre></body>
+
+</html>

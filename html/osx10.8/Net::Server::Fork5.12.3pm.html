@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Please read the pod on Net::Server first.  This module is a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Net::Server::Fork - Net::Server personality</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Net::Server::Fork(3)  User Contributed Perl Documentation Net::Server::Fork(3)
+
+
+
+NAME
+       Net::Server::Fork - Net::Server personality
+
+SYNOPSIS
+	 use Net::Server::Fork;
+	 @ISA = qw(Net::Server::Fork);
+
+	 sub process_request {
+	    #...code...
+	 }
+
+	 __PACKAGE__->run();
+
+DESCRIPTION
+       Please read the pod on Net::Server first.  This module is a
+       personality, or extension, or sub class, of the Net::Server module.
+
+       This personality binds to one or more ports and then waits for a client
+       connection.  When a connection is received, the server forks a child.
+       The child handles the request and then closes.
+
+       With the exception of parent/child signaling, this module will work
+       (with basic functionality) on Win32 systems.
+
+ARGUMENTS
+       check_for_dead
+	   Number of seconds to wait before looking for dead children.	This
+	   only takes place if the maximum number of child processes
+	   (max_servers) has been reached.  Default is 60 seconds.
+
+       max_servers
+	   The maximum number of children to fork.  The server will not accept
+	   connections until there are free children. Default is 256 children.
+
+       max_dequeue
+	   The maximum number of dequeue processes to start.  If a value of
+	   zero or undef is given, no dequeue processes will be started.  The
+	   number of running dequeue processes will be checked by the
+	   check_for_dead variable.
+
+       check_for_dequeue
+	   Seconds to wait before forking off a dequeue process.  It is
+	   intended to use the dequeue process to take care of items such as
+	   mail queues.  If a value of undef is given, no dequeue processes
+	   will be started.
+
+CONFIGURATION FILE
+       See Net::Server.
+
+PROCESS FLOW
+       Process flow follows Net::Server until the post_accept phase.  At this
+       point a child is forked.  The parent is immediately able to wait for
+       another request.  The child handles the request and then exits.
+
+HOOKS
+       The Fork server has the following hooks in addition to the hooks
+       provided by the Net::Server base class.	See Net::Server
+
+       "$self->pre_accept_hook()"
+	   This hook occurs just before the accept is called.
+
+       "$self->pre_fork_hook()"
+	   This hook occurs just after accept but before the fork.
+
+       "$self->post_accept_hook()"
+	   This hook occurs in the child after the accept and fork.
+
+       "$self->run_dequeue()"
+	   This hook only gets called in conjuction with the check_for_dequeue
+	   setting.
+
+TO DO
+       See Net::Server
+
+AUTHOR
+       Paul Seamons <paul@seamons.com>
+
+       Rob Brown <bbb@cpan.org>
+
+SEE ALSO
+       Please see also Net::Server::INET, Net::Server::PreFork,
+       Net::Server::MultiType, Net::Server::SIG Net::Server::Single
+
+
+
+perl v5.12.4			  2007-02-02		  Net::Server::Fork(3)
+    </pre></body>
+
+</html>

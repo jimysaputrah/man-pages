@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Certain	aspects of GL behavior, when there is room for interpretation,..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glHint - specify implementation-specific hints</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLHINT(3G)							    GLHINT(3G)
+
+
+
+NAME
+       glHint - specify implementation-specific hints
+
+
+C SPECIFICATION
+       void glHint( GLenum target,
+		    GLenum mode )
+
+
+PARAMETERS
+       target  Specifies  a  symbolic  constant  indicating the behavior to be
+	       controlled.	    GL_FOG_HINT,	  GL_LINE_SMOOTH_HINT,
+	       GL_PERSPECTIVE_CORRECTION_HINT,	  GL_POINT_SMOOTH_HINT,    and
+	       GL_POLYGON_SMOOTH_HINT are accepted.
+
+       mode    Specifies a symbolic constant indicating the desired  behavior.
+	       GL_FASTEST, GL_NICEST, and GL_DONT_CARE are accepted.
+
+DESCRIPTION
+       Certain	aspects of GL behavior, when there is room for interpretation,
+       can be controlled with hints.  A hint is specified with two  arguments.
+       target is a symbolic constant indicating the behavior to be controlled,
+       and mode is another symbolic constant indicating the desired  behavior.
+       The  initial value for each target is GL_DONT_CARE.  mode can be one of
+       the following:
+
+       GL_FASTEST	   The most efficient option should be chosen.
+
+       GL_NICEST	   The most correct, or highest quality, option should
+			   be chosen.
+
+       GL_DONT_CARE	   No preference.
+
+       Though  the implementation aspects that can be hinted are well defined,
+       the interpretation of the hints depends	on  the  implementation.   The
+       hint  aspects  that  can be specified with target, along with suggested
+       semantics, are as follows:
+
+       GL_FOG_HINT	   Indicates the accuracy of fog calculation.  If per-
+			   pixel  fog calculation is not efficiently supported
+			   by the GL implementation, hinting  GL_DONT_CARE  or
+			   GL_FASTEST  can result in per-vertex calculation of
+			   fog effects.
+
+       GL_LINE_SMOOTH_HINT Indicates  the  sampling  quality  of   antialiased
+			   lines.   If	a  larger  filter function is applied,
+			   hinting GL_NICEST can result in  more  pixel  frag-
+			   ments being generated during rasterization,
+
+       GL_PERSPECTIVE_CORRECTION_HINT
+			   Indicates  the quality of color and texture coordi-
+			   nate   interpolation.    If	 perspective-corrected
+			   parameter  interpolation  is  not  efficiently sup-
+			   ported   by	 the   GL   implementation,    hinting
+			   GL_DONT_CARE  or  GL_FASTEST  can  result in simple
+			   linear interpolation of colors and/or texture coor-
+			   dinates.
+
+       GL_POINT_SMOOTH_HINT
+			   Indicates   the  sampling  quality  of  antialiased
+			   points.  If a larger filter	function  is  applied,
+			   hinting  GL_NICEST  can  result in more pixel frag-
+			   ments being generated during rasterization,
+
+       GL_POLYGON_SMOOTH_HINT
+			   Indicates the sampling quality of antialiased poly-
+			   gons.   Hinting  GL_NICEST can result in more pixel
+			   fragments being generated during rasterization,  if
+			   a larger filter function is applied.
+
+NOTES
+       The interpretation of hints depends on the implementation.  Some imple-
+       mentations ignore glHint settings.
+
+ERRORS
+       GL_INVALID_ENUM is generated  if  either  target  or  mode  is  not  an
+       accepted value.
+
+       GL_INVALID_OPERATION  is  generated  if	glHint is executed between the
+       execution of glBegin and the corresponding execution of glEnd.
+
+
+
+								    GLHINT(3G)
+    </pre></body>
+
+</html>

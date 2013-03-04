@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This class provides methods to describe the relationships between the..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>DBIx::Class::Relationship::Base - Inter-table relationships</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+DBIx::Class::RelationsUser:Contributed Perl DBIx::Class::Relationship::Base(3)
+
+
+
+NAME
+       DBIx::Class::Relationship::Base - Inter-table relationships
+
+SYNOPSIS
+	 __PACKAGE__->add_relationship(
+	   spiders => 'My::DB::Result::Creatures',
+	   sub {
+	     my $args = shift;
+	     return {
+	       "$args->{foreign_alias}.id"   => { -ident => "$args->{self_alias}.id" },
+	       "$args->{foreign_alias}.type" => 'arachnid'
+	     };
+	   },
+	 );
+
+DESCRIPTION
+       This class provides methods to describe the relationships between the
+       tables in your database model. These are the "bare bones" relationships
+       methods, for predefined ones, look in DBIx::Class::Relationship.
+
+METHODS
+   add_relationship
+       Arguments: 'relname', 'Foreign::Class', $condition, $attrs
+
+	 __PACKAGE__->add_relationship('relname',
+				       'Foreign::Class',
+				       $condition, $attrs);
+
+       Create a custom relationship between one result source and another
+       source, indicated by its class name.
+
+       condition
+
+       The condition argument describes the "ON" clause of the "JOIN"
+       expression used to connect the two sources when creating SQL queries.
+
+       To create simple equality joins, supply a hashref containing the remote
+       table column name as the key(s), and the local table column name as the
+       value(s), for example given:
+
+	 My::Schema::Author->has_many(
+	   books => 'My::Schema::Book',
+	   { 'foreign.author_id' => 'self.id' }
+	 );
+
+       A query like:
+
+	 $author_rs->search_related('books')->next
+
+       will result in the following "JOIN" clause:
+
+	 ... FROM author me LEFT JOIN book books ON books.author_id = me.id ...
+
+       This describes a relationship between the "Author" table and the "Book"
+       table where the "Book" table has a column "author_id" containing the ID
+       value of the "Author".
+
+       "foreign" and "self" are pseudo aliases and must be entered literally.
+       They will be replaced with the actual correct table alias when the SQL
+       is produced.
+
+       Similarly:
+
+	 My::Schema::Book->has_many(
+	   editions => 'My::Schema::Edition',
+	   {
+	     'foreign.publisher_id' => 'self.publisher_id',
+	     'foreign.type_id'	    => 'self.type_id',
+	   }
+	 );
+
+	 ...
+
+	 $book_rs->search_related('editions')->next
+
+       will result in the "JOIN" clause:
+
+	 ... FROM book me
+	     LEFT JOIN edition editions ON
+		  editions.publisher_id = me.publisher_id
+	      AND editions.type_id = me.type_id ...
+
+       This describes the relationship from "Book" to "Edition", where the
+       "Edition" table refers to a publisher and a type (e.g. "paperback"):
+
+       As is the default in SQL::Abstract, the key-value pairs will be "AND"ed
+       in the result. "OR" can be achieved with an arrayref, for example a
+       condition like:
+
+	 My::Schema::Item->has_many(
+	   related_item_links => My::Schema::Item::Links,
+	   [
+	     { 'foreign.left_itemid'  => 'self.id' },
+	     { 'foreign.right_itemid' => 'self.id' },
+	   ],
+	 );
+
+       will translate to the following "JOIN" clause:
+
+	... FROM item me JOIN item_relations related_item_links ON
+		related_item_links.left_itemid = me.id
+	     OR related_item_links.right_itemid = me.id ...
+
+       This describes the relationship from "Item" to "Item::Links", where
+       "Item::Links" is a many-to-many linking table, linking items back to
+       themselves in a peer fashion (without a "parent-child" designation)
+
+       To specify joins which describe more than a simple equality of column
+       values, the custom join condition coderef syntax can be used. For
+       example:
+
+	 My::Schema::Artist->has_many(
+	   cds_80s => 'My::Schema::CD',
+	   sub {
+	     my $args = shift;
+
+	     return {
+	       "$args->{foreign_alias}.artist" => { -ident => "$args->{self_alias}.artistid" },
+	       "$args->{foreign_alias}.year"   => { '>', "1979", '<', "1990" },
+	     };
+	   }
+	 );
+
+	 ...
+
+	 $artist_rs->search_related('cds_80s')->next;
+
+       will result in the "JOIN" clause:
+
+	 ... FROM artist me LEFT JOIN cd cds_80s ON
+	       cds_80s.artist = me.artistid
+	   AND cds_80s.year < ?
+	   AND cds_80s.year > ?
+
+       with the bind values:
+
+	  '1990', '1979'
+
+       "$args->{foreign_alias}" and "$args->{self_alias}" are supplied the
+       same values that would be otherwise substituted for "foreign" and
+       "self" in the simple hashref syntax case.
+
+       The coderef is expected to return a valid SQL::Abstract query-
+       structure, just like what one would supply as the first argument to
+       "search" in DBIx::Class::ResultSet. The return value will be passed
+       directly to SQL::Abstract and the resulting SQL will be used verbatim
+       as the "ON" clause of the "JOIN" statement associated with this
+       relationship.
+
+       While every coderef-based condition must return a valid "ON" clause, it
+       may elect to additionally return a simplified join-free condition
+       hashref when invoked as "$row_object->relationship", as opposed to
+       "$rs->related_resultset('relationship')". In this case $row_object is
+       passed to the coderef as "$args->{self_rowobj}", so a user can do the
+       following:
+
+	 sub {
+	   my $args = shift;
+
+	   return (
+	     {
+	       "$args->{foreign_alias}.artist" => { -ident => "$args->{self_alias}.artistid" },
+	       "$args->{foreign_alias}.year"   => { '>', "1979", '<', "1990" },
+	     },
+	     $args->{self_rowobj} && {
+	       "$args->{foreign_alias}.artist" => $args->{self_rowobj}->artistid,
+	       "$args->{foreign_alias}.year"   => { '>', "1979", '<', "1990" },
+	     },
+	   );
+	 }
+
+       Now this code:
+
+	   my $artist = $schema->resultset("Artist")->find({ id => 4 });
+	   $artist->cds_80s->all;
+
+       Can skip a "JOIN" altogether and instead produce:
+
+	   SELECT cds_80s.cdid, cds_80s.artist, cds_80s.title, cds_80s.year, cds_80s.genreid, cds_80s.single_track
+	     FROM cd cds_80s
+	     WHERE cds_80s.artist = ?
+	       AND cds_80s.year < ?
+	       AND cds_80s.year > ?
+
+       With the bind values:
+
+	   '4', '1990', '1979'
+
+       Note that in order to be able to use $row->create_related, the coderef
+       must not only return as its second such a "simple" condition hashref
+       which does not depend on joins being available, but the hashref must
+       contain only plain values/deflatable objects, such that the result can
+       be passed directly to "set_from_related" in
+       DBIx::Class::Relationship::Base. For instance the "year" constraint in
+       the above example prevents the relationship from being used to to
+       create related objects (an exception will be thrown).
+
+       In order to allow the user to go truly crazy when generating a custom
+       "ON" clause, the $args hashref passed to the subroutine contains some
+       extra metadata. Currently the supplied coderef is executed as:
+
+	 $relationship_info->{cond}->({
+	   self_alias	     => The alias of the invoking resultset ('me' in case of a row object),
+	   foreign_alias     => The alias of the to-be-joined resultset (often matches relname),
+	   self_resultsource => The invocant's resultsource,
+	   foreign_relname   => The relationship name (does *not* always match foreign_alias),
+	   self_rowobj	     => The invocant itself in case of $row_obj->relationship
+	 });
+
+       attributes
+
+       The standard ResultSet attributes may be used as relationship
+       attributes. In particular, the 'where' attribute is useful for
+       filtering relationships:
+
+	    __PACKAGE__->has_many( 'valid_users', 'MyApp::Schema::User',
+	       { 'foreign.user_id' => 'self.user_id' },
+	       { where => { valid => 1 } }
+	   );
+
+       The following attributes are also valid:
+
+       join_type
+	   Explicitly specifies the type of join to use in the relationship.
+	   Any SQL join type is valid, e.g. "LEFT" or "RIGHT". It will be
+	   placed in the SQL command immediately before "JOIN".
+
+       proxy => $column | \@columns | \%column
+	   \@columns
+	       An arrayref containing a list of accessors in the foreign class
+	       to create in the main class. If, for example, you do the
+	       following:
+
+		 MyApp::Schema::CD->might_have(liner_notes => 'MyApp::Schema::LinerNotes',
+		   undef, {
+		     proxy => [ qw/notes/ ],
+		   });
+
+	       Then, assuming MyApp::Schema::LinerNotes has an accessor named
+	       notes, you can do:
+
+		 my $cd = MyApp::Schema::CD->find(1);
+		 $cd->notes('Notes go here'); # set notes -- LinerNotes object is
+					      # created if it doesn't exist
+
+	   \%column
+	       A hashref where each key is the accessor you want installed in
+	       the main class, and its value is the name of the original in
+	       the fireign class.
+
+		 MyApp::Schema::Track->belongs_to( cd => 'DBICTest::Schema::CD', 'cd', {
+		     proxy => { cd_title => 'title' },
+		 });
+
+	       This will create an accessor named "cd_title" on the $track row
+	       object.
+
+	   NOTE: you can pass a nested struct too, for example:
+
+	     MyApp::Schema::Track->belongs_to( cd => 'DBICTest::Schema::CD', 'cd', {
+	       proxy => [ 'year', { cd_title => 'title' } ],
+	     });
+
+       accessor
+	   Specifies the type of accessor that should be created for the
+	   relationship.  Valid values are "single" (for when there is only a
+	   single related object), "multi" (when there can be many), and
+	   "filter" (for when there is a single related object, but you also
+	   want the relationship accessor to double as a column accessor). For
+	   "multi" accessors, an add_to_* method is also created, which calls
+	   "create_related" for the relationship.
+
+       is_foreign_key_constraint
+	   If you are using SQL::Translator to create SQL for you and you find
+	   that it is creating constraints where it shouldn't, or not creating
+	   them where it should, set this attribute to a true or false value
+	   to override the detection of when to create constraints.
+
+       cascade_copy
+	   If "cascade_copy" is true on a "has_many" relationship for an
+	   object, then when you copy the object all the related objects will
+	   be copied too. To turn this behaviour off, pass "cascade_copy => 0"
+	   in the $attr hashref.
+
+	   The behaviour defaults to "cascade_copy => 1" for "has_many"
+	   relationships.
+
+       cascade_delete
+	   By default, DBIx::Class cascades deletes across "has_many",
+	   "has_one" and "might_have" relationships. You can disable this
+	   behaviour on a per-relationship basis by supplying "cascade_delete
+	   => 0" in the relationship attributes.
+
+	   The cascaded operations are performed after the requested delete,
+	   so if your database has a constraint on the relationship, it will
+	   have deleted/updated the related records or raised an exception
+	   before DBIx::Class gets to perform the cascaded operation.
+
+       cascade_update
+	   By default, DBIx::Class cascades updates across "has_one" and
+	   "might_have" relationships. You can disable this behaviour on a
+	   per-relationship basis by supplying "cascade_update => 0" in the
+	   relationship attributes.
+
+	   This is not a RDMS style cascade update - it purely means that when
+	   an object has update called on it, all the related objects also
+	   have update called. It will not change foreign keys automatically -
+	   you must arrange to do this yourself.
+
+       on_delete / on_update
+	   If you are using SQL::Translator to create SQL for you, you can use
+	   these attributes to explicitly set the desired "ON DELETE" or "ON
+	   UPDATE" constraint type. If not supplied the SQLT parser will
+	   attempt to infer the constraint type by interrogating the
+	   attributes of the opposite relationship. For any 'multi'
+	   relationship with "cascade_delete => 1", the corresponding
+	   belongs_to relationship will be created with an "ON DELETE CASCADE"
+	   constraint. For any relationship bearing "cascade_copy => 1" the
+	   resulting belongs_to constraint will be "ON UPDATE CASCADE". If you
+	   wish to disable this autodetection, and just use the RDBMS' default
+	   constraint type, pass "on_delete => undef" or "on_delete => ''",
+	   and the same for "on_update" respectively.
+
+       is_deferrable
+	   Tells SQL::Translator that the foreign key constraint it creates
+	   should be deferrable. In other words, the user may request that the
+	   constraint be ignored until the end of the transaction. Currently,
+	   only the PostgreSQL producer actually supports this.
+
+       add_fk_index
+	   Tells SQL::Translator to add an index for this constraint. Can also
+	   be specified globally in the args to "deploy" in
+	   DBIx::Class::Schema or "create_ddl_dir" in DBIx::Class::Schema.
+	   Default is on, set to 0 to disable.
+
+   register_relationship
+       Arguments: $relname, $rel_info
+
+       Registers a relationship on the class. This is called internally by
+       DBIx::Class::ResultSourceProxy to set up Accessors and Proxies.
+
+   related_resultset
+       Arguments: $relationship_name
+       Return Value: $related_resultset
+
+	 $rs = $cd->related_resultset('artist');
+
+       Returns a DBIx::Class::ResultSet for the relationship named
+       $relationship_name.
+
+   search_related
+	 @objects = $rs->search_related('relname', $cond, $attrs);
+	 $objects_rs = $rs->search_related('relname', $cond, $attrs);
+
+       Run a search on a related resultset. The search will be restricted to
+       the item or items represented by the DBIx::Class::ResultSet it was
+       called upon. This method can be called on a ResultSet, a Row or a
+       ResultSource class.
+
+   search_related_rs
+	 ( $objects_rs ) = $rs->search_related_rs('relname', $cond, $attrs);
+
+       This method works exactly the same as search_related, except that it
+       guarantees a resultset, even in list context.
+
+   count_related
+	 $obj->count_related('relname', $cond, $attrs);
+
+       Returns the count of all the items in the related resultset, restricted
+       by the current item or where conditions. Can be called on a "ResultSet"
+       in DBIx::Class::Manual::Glossary or a "Row" in
+       DBIx::Class::Manual::Glossary object.
+
+   new_related
+	 my $new_obj = $obj->new_related('relname', \%col_data);
+
+       Create a new item of the related foreign class. If called on a Row
+       object, it will magically set any foreign key columns of the new object
+       to the related primary key columns of the source object for you.  The
+       newly created item will not be saved into your storage until you call
+       "insert" in DBIx::Class::Row on it.
+
+   create_related
+	 my $new_obj = $obj->create_related('relname', \%col_data);
+
+       Creates a new item, similarly to new_related, and also inserts the
+       item's data into your storage medium. See the distinction between
+       "create" and "new" in DBIx::Class::ResultSet for details.
+
+   find_related
+	 my $found_item = $obj->find_related('relname', @pri_vals | \%pri_vals);
+
+       Attempt to find a related object using its primary key or unique
+       constraints.  See "find" in DBIx::Class::ResultSet for details.
+
+   find_or_new_related
+	 my $new_obj = $obj->find_or_new_related('relname', \%col_data);
+
+       Find an item of a related class. If none exists, instantiate a new item
+       of the related class. The object will not be saved into your storage
+       until you call "insert" in DBIx::Class::Row on it.
+
+   find_or_create_related
+	 my $new_obj = $obj->find_or_create_related('relname', \%col_data);
+
+       Find or create an item of a related class. See "find_or_create" in
+       DBIx::Class::ResultSet for details.
+
+   update_or_create_related
+	 my $updated_item = $obj->update_or_create_related('relname', \%col_data, \%attrs?);
+
+       Update or create an item of a related class. See "update_or_create" in
+       DBIx::Class::ResultSet for details.
+
+   set_from_related
+	 $book->set_from_related('author', $author_obj);
+	 $book->author($author_obj);			  ## same thing
+
+       Set column values on the current object, using related values from the
+       given related object. This is used to associate previously separate
+       objects, for example, to set the correct author for a book, find the
+       Author object, then call set_from_related on the book.
+
+       This is called internally when you pass existing objects as values to
+       "create" in DBIx::Class::ResultSet, or pass an object to a belongs_to
+       accessor.
+
+       The columns are only set in the local copy of the object, call "update"
+       to set them in the storage.
+
+   update_from_related
+	 $book->update_from_related('author', $author_obj);
+
+       The same as "set_from_related", but the changes are immediately updated
+       in storage.
+
+   delete_related
+	 $obj->delete_related('relname', $cond, $attrs);
+
+       Delete any related item subject to the given conditions.
+
+   add_to_$rel
+       Currently only available for "has_many", "many-to-many" and 'multi'
+       type relationships.
+
+       Arguments: ($foreign_vals | $obj), $link_vals?
+
+	 my $role = $schema->resultset('Role')->find(1);
+	 $actor->add_to_roles($role);
+	     # creates a My::DBIC::Schema::ActorRoles linking table row object
+
+	 $actor->add_to_roles({ name => 'lead' }, { salary => 15_000_000 });
+	     # creates a new My::DBIC::Schema::Role row object and the linking table
+	     # object with an extra column in the link
+
+       Adds a linking table object for $obj or $foreign_vals. If the first
+       argument is a hash reference, the related object is created first with
+       the column values in the hash. If an object reference is given, just
+       the linking table object is created. In either case, any additional
+       column values for the linking table object can be specified in
+       $link_vals.
+
+   set_$rel
+       Currently only available for "many-to-many" relationships.
+
+       Arguments: (\@hashrefs | \@objs), $link_vals?
+
+	 my $actor = $schema->resultset('Actor')->find(1);
+	 my @roles = $schema->resultset('Role')->search({ role =>
+	    { '-in' => ['Fred', 'Barney'] } } );
+
+	 $actor->set_roles(\@roles);
+	    # Replaces all of $actor's previous roles with the two named
+
+	 $actor->set_roles(\@roles, { salary => 15_000_000 });
+	    # Sets a column in the link table for all roles
+
+       Replace all the related objects with the given reference to a list of
+       objects. This does a "delete" on the link table resultset to remove the
+       association between the current object and all related objects, then
+       calls "add_to_$rel" repeatedly to link all the new objects.
+
+       Note that this means that this method will not delete any objects in
+       the table on the right side of the relation, merely that it will delete
+       the link between them.
+
+       Due to a mistake in the original implementation of this method, it will
+       also accept a list of objects or hash references. This is deprecated
+       and will be removed in a future version.
+
+   remove_from_$rel
+       Currently only available for "many-to-many" relationships.
+
+       Arguments: $obj
+
+	 my $role = $schema->resultset('Role')->find(1);
+	 $actor->remove_from_roles($role);
+	     # removes $role's My::DBIC::Schema::ActorRoles linking table row object
+
+       Removes the link between the current object and the related object.
+       Note that the related object itself won't be deleted unless you call
+       ->delete() on it. This method just removes the link between the two
+       objects.
+
+AUTHORS
+       Matt S. Trout <mst@shadowcatsystems.co.uk>
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-07-26DBIx::Class::Relationship::Base(3)
+    </pre></body>
+
+</html>

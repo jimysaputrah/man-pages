@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="DBIx::Class features a fully featured compatibility layer with..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>DBIx::Class::CDBICompat - Class::DBI Compatibility layer.</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+DBIx::Class::CDBICompaUser Contributed Perl DocumentDBIx::Class::CDBICompat(3)
+
+
+
+NAME
+       DBIx::Class::CDBICompat - Class::DBI Compatibility layer.
+
+SYNOPSIS
+	 package My::CDBI;
+	 use base qw/DBIx::Class::CDBICompat/;
+
+	 ...continue as Class::DBI...
+
+DESCRIPTION
+       DBIx::Class features a fully featured compatibility layer with
+       Class::DBI and some common plugins to ease transition for existing CDBI
+       users.
+
+       This is not a wrapper or subclass of DBIx::Class but rather a series of
+       plugins.  The result being that even though you're using the Class::DBI
+       emulation layer you are still getting DBIx::Class objects.  You can use
+       all DBIx::Class features and methods via CDBICompat.  This allows you
+       to take advantage of DBIx::Class features without having to rewrite
+       your CDBI code.
+
+   Plugins
+       CDBICompat is good enough that many CDBI plugins will work with
+       CDBICompat, but many of the plugin features are better done with
+       DBIx::Class methods.
+
+       Class::DBI::AbstractSearch
+
+       "search_where()" is fully emulated using DBIC's search.	Aside from
+       emulation there's no reason to use "search_where()".
+
+       Class::DBI::Plugin::NoCache
+
+       "nocache" is fully emulated.
+
+       Class::DBI::Sweet
+
+       The features of CDBI::Sweet are better done using DBIC methods which
+       are almost exactly the same.  It even uses Data::Page.
+
+       Class::DBI::Plugin::DeepAbstractSearch
+
+       This plugin will work, but it is more efficiently done using DBIC's
+       native search facilities.  The major difference is that DBIC will not
+       infer the join for you, you have to tell it the join tables.
+
+   Choosing Features
+       In fact, this class is just a recipe containing all the features
+       emulated.  If you like, you can choose which features to emulate by
+       building your own class and loading it like this:
+
+	 package My::DB;
+	 __PACKAGE__->load_own_components(qw/CDBICompat/);
+
+       this will automatically load the features included in
+       My::DB::CDBICompat, provided it looks something like this:
+
+	 package My::DB::CDBICompat;
+	 __PACKAGE__->load_components(qw/
+	   CDBICompat::ColumnGroups
+	   CDBICompat::Retrieve
+	   CDBICompat::HasA
+	   CDBICompat::HasMany
+	   CDBICompat::MightHave
+	 /);
+
+LIMITATIONS
+   Unimplemented
+       The following methods and classes are not emulated, maybe in the
+       future.
+
+       Class::DBI::Query
+	   Deprecated in Class::DBI.
+
+       Class::DBI::Column
+	   Not documented in Class::DBI.  CDBICompat's columns() returns a
+	   plain string, not an object.
+
+       data_type()
+	   Undocumented CDBI method.
+
+   Limited Support
+       The following elements of Class::DBI have limited support.
+
+       Class::DBI::Relationship
+	   The semi-documented Class::DBI::Relationship objects returned by
+	   "meta_info($type, $col)" are mostly emulated except for their
+	   "args" method.
+
+       Relationships
+	   Relationships between tables (has_a, has_many...) must be declared
+	   after all tables in the relationship have been declared.  Thus the
+	   usual CDBI idiom of declaring columns and relationships for each
+	   class together will not work.  They must instead be done like so:
+
+	       package Foo;
+	       use base qw(Class::DBI);
+
+	       Foo->table("foo");
+	       Foo->columns( All => qw(this that bar) );
+
+	       package Bar;
+	       use base qw(Class::DBI);
+
+	       Bar->table("bar");
+	       Bar->columns( All => qw(up down) );
+
+	       # Now that Foo and Bar are declared it is safe to declare a
+	       # relationship between them
+	       Foo->has_a( bar => "Bar" );
+
+AUTHORS
+       Matt S. Trout <mst@shadowcatsystems.co.uk>
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-05-10	    DBIx::Class::CDBICompat(3)
+    </pre></body>
+
+</html>

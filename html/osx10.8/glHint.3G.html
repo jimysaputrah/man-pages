@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Certain aspects of GL behavior, when there is room for interpretation,..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glHint - specify implementation-specific hints</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLHINT(3G)			  OpenGL 3.3			    GLHINT(3G)
+
+
+
+NAME
+       glHint - specify implementation-specific hints
+
+C SPECIFICATION
+       void glHint(GLenum target, GLenum mode);
+
+PARAMETERS
+       target
+	   Specifies a symbolic constant indicating the behavior to be
+	   controlled.	GL_LINE_SMOOTH_HINT, GL_POLYGON_SMOOTH_HINT,
+	   GL_TEXTURE_COMPRESSION_HINT, and GL_FRAGMENT_SHADER_DERIVATIVE_HINT
+	   are accepted.
+
+       mode
+	   Specifies a symbolic constant indicating the desired behavior.
+	   GL_FASTEST, GL_NICEST, and GL_DONT_CARE are accepted.
+
+DESCRIPTION
+       Certain aspects of GL behavior, when there is room for interpretation,
+       can be controlled with hints. A hint is specified with two arguments.
+       target is a symbolic constant indicating the behavior to be controlled,
+       and mode is another symbolic constant indicating the desired behavior.
+       The initial value for each target is GL_DONT_CARE.  mode can be one of
+       the following:
+
+       GL_FASTEST
+
+	   The most efficient option should be chosen.
+
+       GL_NICEST
+
+	   The most correct, or highest quality, option should be chosen.
+
+       GL_DONT_CARE
+
+	   No preference.
+
+       Though the implementation aspects that can be hinted are well defined,
+       the interpretation of the hints depends on the implementation. The hint
+       aspects that can be specified with target, along with suggested
+       semantics, are as follows:
+
+       GL_FRAGMENT_SHADER_DERIVATIVE_HINT
+
+	   Indicates the accuracy of the derivative calculation for the GL
+	   shading language fragment processing built-in functions: dFdx,
+	   dFdy, and fwidth.
+
+       GL_LINE_SMOOTH_HINT
+
+	   Indicates the sampling quality of antialiased lines. If a larger
+	   filter function is applied, hinting GL_NICEST can result in more
+	   pixel fragments being generated during rasterization.
+
+       GL_POLYGON_SMOOTH_HINT
+
+	   Indicates the sampling quality of antialiased polygons. Hinting
+	   GL_NICEST can result in more pixel fragments being generated during
+	   rasterization, if a larger filter function is applied.
+
+       GL_TEXTURE_COMPRESSION_HINT
+
+	   Indicates the quality and performance of the compressing texture
+	   images. Hinting GL_FASTEST indicates that texture images should be
+	   compressed as quickly as possible, while GL_NICEST indicates that
+	   texture images should be compressed with as little image quality
+	   loss as possible.  GL_NICEST should be selected if the texture is
+	   to be retrieved by glGetCompressedTexImage() for reuse.
+
+NOTES
+       The interpretation of hints depends on the implementation. Some
+       implementations ignore glHint settings.
+
+ERRORS
+       GL_INVALID_ENUM is generated if either target or mode is not an
+       accepted value.
+
+COPYRIGHT
+       Copyright (C) 1991-2006 Silicon Graphics, Inc. This document is
+       licensed under the SGI Free Software B License. For details, see
+       http://oss.sgi.com/projects/FreeB/.
+
+
+
+OpenGL 3.3			  03/08/2011			    GLHINT(3G)
+    </pre></body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="gluUnProject maps the specified window coordinates into object  coordi-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>gluUnProject - map window coordinates to object coordinates</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLUUNPROJECT(3G)					      GLUUNPROJECT(3G)
+
+
+
+NAME
+       gluUnProject - map window coordinates to object coordinates
+
+
+C SPECIFICATION
+       GLint gluUnProject( GLdouble winX,
+			   GLdouble winY,
+			   GLdouble winZ,
+			   const GLdouble *model,
+			   const GLdouble *proj,
+			   const GLint *view,
+			   GLdouble* objX,
+			   GLdouble* objY,
+			   GLdouble* objZ )
+
+
+PARAMETERS
+       winX, winY, winZ
+		       Specify the window coordinates to be mapped.
+
+       model	       Specifies  the modelview matrix (as from a glGetDoublev
+		       call).
+
+       proj	       Specifies the projection matrix (as from a glGetDoublev
+		       call).
+
+       view	       Specifies  the viewport (as from a glGetIntegerv call).
+
+       objX, objY, objZ
+		       Returns the computed object coordinates.
+
+DESCRIPTION
+       gluUnProject maps the specified window coordinates into object  coordi-
+       nates using model, proj, and view.  The result is stored in objX, objY,
+       and objZ. A return value of GL_TRUE indicates success; a  return  value
+       of GL_FALSE indicates failure.
+
+       To  compute the coordinates (objX, objY, and objZ), gluUnProject multi-
+       plies the normalized device coordinates by the inverse of model*proj as
+       follows:
+
+
+				2(winX - view[0])
+				-----------------  - 1
+				     view[2]
+
+	   objX 		2(winY - view[1])
+	   objY   =  INV(PM)	-----------------  - 1
+	   objZ 		     view[3]
+	    W
+				     2(winZ)	   - 1
+
+					1
+
+
+       INV()  denotes matrix inversion.  W is an unused variable, included for
+       consistent matrix notation.
+
+SEE ALSO
+       glGet, gluProject
+
+
+
+							      GLUUNPROJECT(3G)
+    </pre></body>
+
+</html>

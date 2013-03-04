@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glGetMinmax returns the accumulated minimum and	maximum  pixel	values..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glGetMinmax - get minimum and maximum pixel values</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLGETMINMAX(3G) 					       GLGETMINMAX(3G)
+
+
+
+NAME
+       glGetMinmax - get minimum and maximum pixel values
+
+
+C SPECIFICATION
+       void glGetMinmax( GLenum target,
+			 GLboolean reset,
+			 GLenum format,
+			 GLenum type,
+			 GLvoid *values )
+
+
+PARAMETERS
+       target  Must be GL_MINMAX.
+
+       reset   If  GL_TRUE,  all entries in the minmax table that are actually
+	       returned are reset to their initial values.  (Other entries are
+	       unaltered.)  If GL_FALSE, the minmax table is unaltered.
+
+       format  The   of  the  data  to	be returned in values.	Must be one of
+	       GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, GL_RGB,  GL_BGR,  GL_RGBA,
+	       GL_BGRA, GL_LUMINANCE, or GL_LUMINANCE_ALPHA.
+
+       type    The  type  of the data to be returned in values.  Symbolic con-
+	       stants GL_UNSIGNED_BYTE, GL_BYTE, GL_BITMAP, GL_UNSIGNED_SHORT,
+	       GL_SHORT,	GL_UNSIGNED_INT,       GL_INT,	     GL_FLOAT,
+	       GL_UNSIGNED_BYTE_3_3_2,		   GL_UNSIGNED_BYTE_2_3_3_REV,
+	       GL_UNSIGNED_SHORT_5_6_5, 	  GL_UNSIGNED_SHORT_5_6_5_REV,
+	       GL_UNSIGNED_SHORT_4_4_4_4,	GL_UNSIGNED_SHORT_4_4_4_4_REV,
+	       GL_UNSIGNED_SHORT_5_5_5_1,	GL_UNSIGNED_SHORT_1_5_5_5_REV,
+	       GL_UNSIGNED_INT_8_8_8_8, 	  GL_UNSIGNED_INT_8_8_8_8_REV,
+	       GL_UNSIGNED_INT_10_10_10_2,  and GL_UNSIGNED_INT_2_10_10_10_REV
+	       are accepted.
+
+       values  A pointer to storage for the returned values.
+
+DESCRIPTION
+       glGetMinmax returns the accumulated minimum and	maximum  pixel	values
+       (computed on a per-component basis) in a one-dimensional image of width
+       2.  The first set of return values are the minima, and the  second  set
+       of  return  values are the maxima.  The	of the return values is deter-
+       mined by format, and their type is determined by type.
+
+       No pixel transfer operations are performed on the  return  values,  but
+       pixel  storage  modes  that  are applicable to 1-dimensional images are
+       performed.  Color components that are requested in the  specified  for-
+       mat,  but  that	are not included in the internal  of the minmax table,
+       are returned as zero.  The assignment of internal color	components  to
+       the components requested by format are as follows:
+
+
+	Internal Component     Resulting Component
+	Red		       Red
+	Green		       Green
+	Blue		       Blue
+	Alpha		       Alpha
+	Luminance	       Red
+
+
+       If  reset  is  GL_TRUE,	the  minmax table entries corresponding to the
+       return values are reset to their initial values.  Minimum  and  maximum
+       values  that  are  not  returned  are  not  modified,  even if reset is
+       GL_TRUE.
+
+NOTES
+       glGetMinmax  is	present  only  if  GL_ARB_imaging  is  returned   when
+       glGetString is called with an argument of GL_EXTENSIONS.
+
+ERRORS
+       GL_INVALID_ENUM is generated if target is not GL_MINMAX.
+
+       GL_INVALID_ENUM is generated if format is not one of the allowable val-
+       ues.
+
+       GL_INVALID_ENUM is generated if type is not one of the  allowable  val-
+       ues.
+
+       GL_INVALID_OPERATION  is  generated  if glGetMinmax is executed between
+       the execution of glBegin and the corresponding execution of glEnd.
+
+       GL_INVALID_OPERATION   is    generated	 if    type    is    one    of
+       GL_UNSIGNED_BYTE_3_3_2,			   GL_UNSIGNED_BYTE_2_3_3_REV,
+       GL_UNSIGNED_SHORT_5_6_5, or GL_UNSIGNED_SHORT_5_6_5_REV and  format  is
+       not GL_RGB.
+
+       GL_INVALID_OPERATION    is    generated	  if	type	is    one   of
+       GL_UNSIGNED_SHORT_4_4_4_4,		GL_UNSIGNED_SHORT_4_4_4_4_REV,
+       GL_UNSIGNED_SHORT_5_5_5_1,		GL_UNSIGNED_SHORT_1_5_5_5_REV,
+       GL_UNSIGNED_INT_8_8_8_8, 		  GL_UNSIGNED_INT_8_8_8_8_REV,
+       GL_UNSIGNED_INT_10_10_10_2,  or GL_UNSIGNED_INT_2_10_10_10_REV and for-
+       mat is neither GL_RGBA nor GL_BGRA.
+
+SEE ALSO
+       glMinmax, glResetMinmax, glGetMinmaxParameter
+
+
+
+							       GLGETMINMAX(3G)
+    </pre></body>
+
+</html>

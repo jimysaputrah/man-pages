@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content=""Net::DNS::RR" is the base class for DNS Resource Record (RR) objects...." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Net::DNS::RR - DNS Resource Record class</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Net::DNS::RR(3)       User Contributed Perl Documentation      Net::DNS::RR(3)
+
+
+
+NAME
+       Net::DNS::RR - DNS Resource Record class
+
+SYNOPSIS
+       "use Net::DNS::RR"
+
+DESCRIPTION
+       "Net::DNS::RR" is the base class for DNS Resource Record (RR) objects.
+       See also the manual pages for each RR type.
+
+METHODS
+       WARNING!!!  Don't assume the RR objects you receive from a query are of
+       a particular type -- always check an object's type before calling any
+       of its methods.	If you call an unknown method, you'll get a nasty
+       warning message and "Net::DNS::RR" will return "undef" to the caller.
+
+   new (from string)
+	$a     = Net::DNS::RR->new("foo.example.com. 86400 A 10.1.2.3");
+	$mx    = Net::DNS::RR->new("example.com. 7200 MX 10 mailhost.example.com.");
+	$cname = Net::DNS::RR->new("www.example.com 300 IN CNAME www1.example.com");
+	$txt   = Net::DNS::RR->new('baz.example.com 3600 HS TXT "text record"');
+
+       Returns a "Net::DNS::RR" object of the appropriate type and initialized
+       from the string passed by the user.  The format of the string is that
+       used in zone files, and is compatible with the string returned by
+       "Net::DNS::RR->string".
+
+       The name and RR type are required; all other information is optional.
+       If omitted, the TTL defaults to 0 and the RR class defaults to IN.
+       Omitting the optional fields is useful for creating the empty RDATA
+       sections required for certain dynamic update operations.  See the
+       "Net::DNS::Update" manual page for additional examples.
+
+       All names must be fully qualified.  The trailing dot (.) is optional.
+
+   new (from hash)
+	$rr = Net::DNS::RR->new(
+		name	=> "foo.example.com",
+		ttl	=> 86400,
+		class	=> "IN",
+		type	=> "A",
+		address => "10.1.2.3",
+	);
+
+	$rr = Net::DNS::RR->new(
+		name => "foo.example.com",
+		type => "A",
+	);
+
+       Returns an RR object of the appropriate type, or a "Net::DNS::RR"
+       object if the type isn't implemented.  See the manual pages for each RR
+       type to see what fields the type requires.
+
+       The "Name" and "Type" fields are required; all others are optional.  If
+       omitted, "TTL" defaults to 0 and "Class" defaults to IN.  Omitting the
+       optional fields is useful for creating the empty RDATA sections
+       required for certain dynamic update operations.
+
+       The fields are case-insensitive, but starting each with uppercase is
+       recommended.
+
+   parse
+	   ($rrobj, $offset) = Net::DNS::RR->parse(\$data, $offset);
+
+       Parses a DNS resource record at the specified location within a DNS
+       packet.	The first argument is a reference to the packet data.  The
+       second argument is the offset within the packet where the resource
+       record begins.
+
+       Returns a Net::DNS::RR object and the offset of the next location in
+       the packet.
+
+       Parsing is aborted if the object could not be created (e.g., corrupt or
+       insufficient data).
+
+   print
+	   $rr->print;
+
+       Prints the record to the standard output.  Calls the string method to
+       get the RR's string representation.
+
+   string
+	   print $rr->string, "\n";
+
+       Returns a string representation of the RR.  Calls the rdatastr method
+       to get the RR-specific data. Domain names arereturned in RFC1035
+       format, i.e. all non letter, digit, hyphen characters are represented
+       as \DDD. Besides, all domain names are expanded to fully qualified
+       domain names, with trailing dot.  This is in contrast to accessor
+       methods of individual data elements in RR objects, like name, which
+       will not return the trailing dot.
+
+   rdatastr
+	   $s = $rr->rdatastr;
+
+       Returns a string containing RR-specific data.  Subclasses will need to
+       implement this method.
+
+   name
+	   $name = $rr->name;
+
+       Returns the record's domain name.
+
+   type
+	   $type = $rr->type;
+
+       Returns the record's type.
+
+   class
+	   $class = $rr->class;
+
+       Returns the record's class.
+
+   ttl
+	   $ttl = $rr->ttl;
+
+       Returns the record's time-to-live (TTL).
+
+   rdlength
+	   $rdlength = $rr->rdlength;
+
+       Returns the length of the record's data section.
+
+   rdata
+	   $rdata = $rr->rdata
+
+       Returns the record's data section as binary data.
+
+Sorting of RR arrays
+       As of version 0.55 there is functionality to help you sort RR arrays.
+       The sorting is done by Net::DNS::rrsort(), see the Net::DNS
+       documentation. This package provides class methods to set the sorting
+       functions used for a particular RR based on a particular attribute.
+
+   set_rrsort_func
+       Net::DNS::RR::SRV->set_rrsort_func("priority",
+       sub {			    my ($a,$b)=($Net::DNS::a,$Net::DNS::b);
+			      $a->priority <=> $b->priority
+			      ||			$b->weight <=>
+       $a->weight
+			    }
+
+       Net::DNS::RR::SRV->set_rrsort_func("default_sort",
+       sub {			    my ($a,$b)=($Net::DNS::a,$Net::DNS::b);
+			      $a->priority <=> $b->priority
+			      ||			$b->weight <=>
+       $a->weight
+			    }
+
+       set_rrsort_func needs to be called as a class method. The first
+       argument is the attribute name on which the sorting will need to take
+       place. If you specify "default_sort" than that is the sort algorithm
+       that will be used in the case that rrsort() is called without an RR
+       attribute as argument.
+
+       The second argument is a reference to a function that uses the
+       variables $a and $b global to the "from Net::DNS"(!!)package for the
+       sorting. During the sorting $a and $b will contain references to
+       objects from the class you called the set_prop_sort from. In other
+       words, you can rest assured that the above sorting function will only
+       get Net::DNS::RR::SRV objects.
+
+       The above example is the sorting function that actually is implemented
+       in SRV.
+
+BUGS
+       This version of "Net::DNS::RR" does little sanity checking on user-
+       created RR objects.
+
+COPYRIGHT
+       Copyright (c) 1997-2002 Michael Fuhr.
+
+       Portions Copyright (c) 2002-2004 Chris Reinhardt.
+
+       Portions Copyright (c) 2005-2007 Olaf Kolkman
+
+       Portions Copyright (c) 2007 Dick Franks
+
+       All rights reserved.  This program is free software; you may
+       redistribute it and/or modify it under the same terms as Perl itself.
+
+       EDNS0 extensions by Olaf Kolkman.
+
+SEE ALSO
+       perl(1), Net::DNS, Net::DNS::Resolver, Net::DNS::Packet,
+       Net::DNS::Update, Net::DNS::Header, Net::DNS::Question, RFC 1035
+       Section 4.1.3
+
+
+
+perl v5.12.4			  2009-12-30		       Net::DNS::RR(3)
+    </pre></body>
+
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="These routines allow processes to exchange stateless notification events...." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>notify_post, notify_register_check, notify_register_dispatch,</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+notify(3)		 BSD Library Functions Manual		     notify(3)
+
+NAME
+     notify_post, notify_register_check, notify_register_dispatch,
+     notify_register_signal, notify_register_mach_port,
+     notify_register_file_descriptor, notify_check, notify_get_state,
+     notify_set_state, notify_suspend, notify_resume, notify_cancel -- event
+     distribution functions
+
+SYNOPSIS
+     #include <notify.h>
+
+     uint32_t
+     notify_post(const char *name);
+
+     uint32_t
+     notify_register_check(const char *name, int *out_token);
+
+     uint32_t
+     notify_register_dispatch(const char *name, int *out_token,
+	 dispatch_queue_t queue, notify_handler_t handler);
+
+     uint32_t
+     notify_register_signal(const char *name, int sig, int *out_token);
+
+     uint32_t
+     notify_register_mach_port(const char *name, mach_port_t *notify_port, int flags, int *out_token);
+
+     uint32_t
+     notify_register_file_descriptor(const char *name, int *notify_fd, int flags, int *out_token);
+
+     uint32_t
+     notify_check(int token, int *check);
+
+     uint32_t
+     notify_set_state(int token, uint64_t state);
+
+     uint32_t
+     notify_get_state(int token, uint64_t *state);
+
+     uint32_t
+     notify_suspend(int token);
+
+     uint32_t
+     notify_resume(int token);
+
+     uint32_t
+     notify_cancel(int token);
+
+DESCRIPTION
+     These routines allow processes to exchange stateless notification events.
+     Processes post notifications to a single system-wide notification server,
+     which then distributes notifications to client processes that have regis-
+     tered to receive those notifications, including processes run by other
+     users.
+
+     Notifications are associated with names in a namespace shared by all
+     clients of the system.  Clients may post notifications for names, and may
+     monitor names for posted notifications.  Clients may request notification
+     delivery by a number of different methods.
+
+     Clients desiring to monitor names in the notification system must regis-
+     ter with the system, providing a name and other information required for
+     the desired notification delivery method.	Clients are given an integer
+     token representing the registration.
+
+     The kernel provides limited queues for mach message and file descriptor
+     messages.	It is important to make sure that clients read mach ports and
+     file descriptors frequently to prevent messages from being lost due to
+     resource limitations.  Clients that use signal-based notification should
+     be aware that signals are not delivered to a process while it is running
+     in a signal handler.  This may affect the delivery of signals in close
+     succession.
+
+     Notifications may be coalesced in some cases.  Multiple events posted for
+     a name in rapid succession may result in a single notification sent to
+     clients registered for notification for that name.  Clients checking for
+     changes using the notify_check() routine cannot determine if more than
+     one event has been posted since a previous call to notify_check() for
+     that name.
+
+     "False positives" may occur in notify_check() when used with a token gen-
+     erated by notify_register_check() due to implementation constraints.
+     This behavior may vary in future releases.
+
+   notify_post
+     This routine causes the system to send a notification for the given name
+     to all clients that have registered for notifications of this name.  This
+     is the only API required for an appication that only produces notifica-
+     tions.
+
+   notify_register_check
+     Registers for passive notification for the given name.  The routine gen-
+     erates a token that may be used with the notify_check() routine to check
+     if any notifications have been posted for the name.  The check is imple-
+     mented using a shared memory scheme, making the check very fast and effi-
+     cient.  The implementation has a limited amount of shared memory, so
+     developers are encouraged to use this mechanism sparingly.  It is also
+     important to release the resources consumed by a registration with
+     notify_cancel() when they are no longer required by the application.
+
+   notify_register_dispatch
+     registers a callback handler in the form of a block which will be dis-
+     patched to the queue when a notification for the given name is received.
+     This is a convenient way to register callbacks without any management of
+     file descriptors, mach ports, or signals on the part of the application.
+     The given queue is retained by the system for the lifetime of the notifi-
+     cation.  Use notify_cancel() to release the notification and its refer-
+     ence to the queue.
+
+   notify_register_signal
+     registers a client for notification delivery via a signal.  This fits
+     well with the design of many UNIX daemons that use a signal such as
+     SIGHUP to reinitialize of reset internal state information.  Clients may
+     use the registration token generated by this routine to check for notifi-
+     cations using notify_check().  This allows the application to determine
+     if a signal was received as the result of a notification, or if the sig-
+     nal was generated by some other source.  It also permits the application
+     that registers for signal notification for multiple names to determine
+     which name was associated with the notification.
+
+   notify_register_mach_port
+     registers a client for notification delivery via mach messaging.  Notifi-
+     cations are delivered by an empty message sent to a mach port.  By
+     default, a new port is created by a call to this routine.	A mach port
+     previously created by a call to this routine may be used for notifica-
+     tions if a pointer to that port is passed in to the routine and
+     NOTIFY_REUSE is set in the flags parameter.  The notification service
+     must be able to extract send rights to the port.
+
+     Note that the kernel limits the size of the message queue for any port.
+     If it is important that notifications should not be lost due to queue
+     overflow, clients should service messages quickly, and be cautious in
+     using the same port for notifications for more than one name.
+
+     A notification message has an empty message body.	The msgh_id field in
+     the mach message header will have the value of the notification token.
+     If a port is reused for multiple notification registrations, the msgh_id
+     value may be used to determine which name generated the notification.
+
+   notify_register_file_descriptor
+     Register for notification by a write to a file descriptor.
+
+     By default, a new file descriptor is created and a pointer to it is
+     returned as the value of the "notify_fd" parameter.  A file descriptor
+     created by a previous call to this routine may be used for notifications
+     if a pointer to that file descriptor is passed in to the routine and
+     NOTIFY_REUSE is set in the flags parameter.
+
+     Note that the kernel limits the buffer space for queued writes on a file
+     descriptor.  If it is important that notifications should not be lost due
+     to queue overflow, clients should service messages quickly, and be cau-
+     tious in using the same file descriptor for notifications for more than
+     one name.
+
+     Notifications are delivered by an integer value written to the file
+     descriptor.  The value is sent in network byte order.  When converted to
+     host byte order, for example by using ntohl(), it will match the notifi-
+     cation token for which the notification was generated.
+
+   notify_check
+     Checks if any notifications have been posted for a name.  The output
+     parameter "check" is set to 0 for false, 1 for true.  A true indication
+     is returned the first time notify_check is called for a token.  Subse-
+     quent calls give a true indication when notifications have been posted
+     for the name associated with the notification token.
+
+     notify_check() may be used with any notification token produced by any of
+     the notification registration routines.  A fast check based on a shared
+     memory implementation is used when the token was generated by
+     notify_register_check().  Other tokens are checked by a call to the noti-
+     fication server.
+
+   notify_set_state
+     Set a 64-bit unsigned integer variable associated with a token.
+
+     Each registered notification key has an associated 64-bit integer vari-
+     able, which may be set using this routine and examined using the
+     notify_get_state() routine.  The state variable is free to be used by
+     clients of the notification API.  It may be used to synchronize state
+     information between cooperating processes or threads.  (Available in Mac
+     OS X 10.5 or later.)
+
+   notify_get_state
+     Get the 64-bit unsigned integer value associated with a token.  The
+     default value of a state variable is zero.  (Available in Mac OS X 10.5
+     or later.)
+
+   notify_suspend
+     Suspends delivery of notifications for a notification token.  Any notifi-
+     cations corresponding to a token that are posted while it is suspended
+     will be coalesced, and pended until notifications are resumed using
+     notify_resume().
+
+     Calls to notify_suspend() may be nested.  Notifications will resume only
+     when a matching number of calls are made to notify_resume().
+
+   notify_resume
+     Removes one level of suspension for a token previously suspended by a
+     call to notify_suspend().	When resumed, notifications will be delivered
+     normally.	A single notification will be generated if any notifications
+     were pended while the token was suspended.
+
+   notify_cancel
+     Cancel notification and free resources associated with a notification
+     token.  Mach ports and file descriptor associated with a token are
+     released (deallocated or closed) when all registration tokens associated
+     with the port or file descriptor have been cancelled.
+
+NAMESPACE CONVENTIONS
+     Names in the namespace must be NULL-terminated.  Names should be encoded
+     as UTF-8 strings.
+
+     The namespace supported by the system is unstructured, but users of this
+     API are highly encouraged to follow the reverse-ICANN domain name conven-
+     tion used for Java package names and for System Preferences on Mac OS X.
+     For example, "com.mydomain.example.event".
+
+     Apple Computer reserves the portion of the namespace prefixed by
+     "com.apple.".  This policy is not enforced in the current implementation,
+     but may be in the future.
+
+     Names in the space "user.uid.UID", where UID is a numeric user ID number
+     are reserved for processes with that UID.	Names in this protected space
+     may only be accessed or modified by processes with the effective UID
+     specified as the UID in the name.	The name "user.uid.UID" is protected
+     for the given UID, as are any names of the form "user.uid.UID.<sub-
+     path>".  In the latter case, the name must have a dot character following
+     the UID.
+
+     Third party developers are encouraged to choose a prefix for names that
+     will avoid conflicts in the shared namespace.
+
+     The portion of the namespece prefixed by the string "self." is set aside
+     for private use by applications.  That is, each client may use that part
+     of the namespace for intra-process notifications.	These notifications
+     are private to each individual process and are not propagated between
+     processes.
+
+USAGE EXAMPLES
+     A notification producer.
+
+	 #include <notify.h>
+	 ...
+
+	 notify_post("com.eg.random.event");
+
+     A client using notify_check() to determine when to invalidate a cache.
+
+	 #include <stdio.h>
+	 #include <stdlib.h>
+	 #include <notify.h>
+
+	 int
+	 main(int argc, char *argv[])
+	 {
+	     int status, token, check;
+
+	     status = notify_register_check("com.eg.update", &token);
+	     if (status != NOTIFY_STATUS_OK)
+	     {
+		fprintf(stderr, "registration failed (%u)\n", status);
+		exit(status);
+	     }
+
+	     build_my_cache();
+
+	     ...
+
+	     status = notify_check(token, &check);
+	     if ((status == NOTIFY_STATUS_OK) && (check != 0))
+	     {
+		/* An update has occurred - invalidate the cache */
+		reset_my_cache();
+	     }
+
+	     ...
+
+     A client using file descriptor notifications.
+
+	 #include <stdio.h>
+	 #include <stdlib.h>
+	 #include <string.h>
+	 #include <errno.h>
+	 #include <sys/types.h>
+	 #include <sys/time.h>
+	 #include <unistd.h>
+	 #include <notify.h>
+
+	 int
+	 main(int argc, char *argv[])
+	 {
+	     int nf, status, rtoken, qtoken, t;
+	     fd_set readfds;
+
+	     status = notify_register_file_descriptor("com.eg.random.event",
+		&nf, 0, &rtoken);
+	     if (status != NOTIFY_STATUS_OK)
+	     {
+		fprintf(stderr, "registration failed (%u)\n", status);
+		exit(status);
+	     }
+
+	     status = notify_register_file_descriptor("com.eg.random.quit",
+		 &nf, NOTIFY_REUSE, &qtoken);
+	     if (status != NOTIFY_STATUS_OK)
+	     {
+		fprintf(stderr, "registration failed (%u)\n", status);
+		exit(status);
+	     }
+
+	     FD_ZERO(&readfds);
+	     FD_SET(nf, &readfds);
+
+	     for (;;)
+	     {
+		status = select(nf+1, &readfds, NULL, NULL, NULL);
+		if (status <= 0) continue;
+		if (!FD_ISSET(nf, &readfds)) continue;
+
+		status = read(nf, &t, sizeof(int));
+		if (status < 0)
+		{
+		    perror("read");
+		    break;
+		}
+
+		t = ntohl(t);
+
+		if (t == rtoken) printf("random event\n");
+		else if (t == qtoken) break;
+	     }
+
+	     printf("shutting down\n");
+	     notify_cancel(rtoken);
+	     notify_cancel(qtoken);
+	     exit(0);
+	 }
+
+     A client using dispatch notifications.
+
+	 #include <stdio.h>
+	 #include <stdlib.h>
+	 #include <notify.h>
+	 #include <dispatch/dispatch.h>
+
+	 int
+	 main(void)
+	 {
+	     int token, status;
+
+	     status = notify_register_dispatch("com.eg.random.event", &token,
+		 dispatch_get_main_queue(), ^(int t) {
+		     printf("com.eg.random.event received!\n"); });
+
+	     dispatch_main();
+	     exit(0);
+	 }
+
+HISTORY
+     These functions first appeared in Mac OS X 10.3.
+
+SEE ALSO
+     ntohl(3), read(2), select(2), signal(3)
+
+Mac OS X		       September 3, 2008		      Mac OS X
+    </pre></body>
+
+</html>

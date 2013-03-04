@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The blend equations determine how a new pixel (the ''source'' color) is..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glBlendEquation - specify the equation used for both the RGB blend</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLBLENDEQUATION(3G)		  OpenGL 3.3		   GLBLENDEQUATION(3G)
+
+
+
+NAME
+       glBlendEquation - specify the equation used for both the RGB blend
+       equation and the Alpha blend equation
+
+C SPECIFICATION
+       void glBlendEquation(GLenum mode);
+
+PARAMETERS
+       mode
+	   specifies how source and destination colors are combined. It must
+	   be GL_FUNC_ADD, GL_FUNC_SUBTRACT, GL_FUNC_REVERSE_SUBTRACT, GL_MIN,
+	   GL_MAX.
+
+DESCRIPTION
+       The blend equations determine how a new pixel (the ''source'' color) is
+       combined with a pixel already in the framebuffer (the ''destination''
+       color). This function sets both the RGB blend equation and the alpha
+       blend equation to a single equation.
+
+       These equations use the source and destination blend factors specified
+       by either glBlendFunc() or glBlendFuncSeparate(). See glBlendFunc() or
+       glBlendFuncSeparate() for a description of the various blend factors.
+
+       In the equations that follow, source and destination color components
+       are referred to as R s G s B s A s and R d G d B d A d, respectively.
+       The result color is referred to as R r G r B r A r. The source and
+       destination blend factors are denoted s R s G s B s A and d R d G d B d
+       A, respectively. For these equations all color components are
+       understood to have values in the range 0 1.
+
+       +-----------------------------+---------------------------------------------------+---------------------------------------------------+
+       |			     |							 |						     |
+       |			Mode |			       RGB			 |			   Alpha		     |
+       |			     | Components					 | Component					     |
+       |			     |							 |						     |
+       +-----------------------------+---------------------------------------------------+---------------------------------------------------+
+       |GL_FUNC_ADD		     | <div>						 | <div>					     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				       Rr		 |				   Ar		     |
+       |			     |				       =		 |				   =		     |
+       |			     |							 |						     |
+       |			     |					   R		 |				       A	     |
+       |			     |					   s		 |				       s	     |
+       |			     |							 |						     |
+       |			     |					   ac		 |				       ac	     |
+       |			     |					   s		 |				       s	     |
+       |			     |					   R		 |				       A	     |
+       |			     |							 |						     |
+       |			     |					   +		 |				       +	     |
+       |			     |					   R		 |				       A	     |
+       |			     |					   d		 |				       d	     |
+       |			     |							 |						     |
+       |			     |					   ac		 |				       ac	     |
+       |			     |					   d		 |				       d	     |
+       |			     |					   R		 |				       A	     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |			       </div>			 |			   </div>		     |
+       |			     |			       <div>			 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				       Gr		 |						     |
+       |			     |				       =		 |						     |
+       |			     |							 |						     |
+       |			     |					   G		 |						     |
+       |			     |					   s		 |						     |
+       |			     |							 |						     |
+       |			     |					   ac		 |						     |
+       |			     |					   s		 |						     |
+       |			     |					   G		 |						     |
+       |			     |							 |						     |
+       |			     |					   +		 |						     |
+       |			     |					   G		 |						     |
+       |			     |					   d		 |						     |
+       |			     |							 |						     |
+       |			     |					   ac		 |						     |
+       |			     |					   d		 |						     |
+       |			     |					   G		 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |			       </div>			 |						     |
+       |			     |			       <div>			 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				       Br		 |						     |
+       |			     |				       =		 |						     |
+       |			     |							 |						     |
+       |			     |					   B		 |						     |
+       |			     |					   s		 |						     |
+       |			     |							 |						     |
+       |			     |					   ac		 |						     |
+       |			     |					   s		 |						     |
+       |			     |					   B		 |						     |
+       |			     |							 |						     |
+       |			     |					   +		 |						     |
+       |			     |					   B		 |						     |
+       |			     |					   d		 |						     |
+       |			     |							 |						     |
+       |			     |					   ac		 |						     |
+       |			     |					   d		 |						     |
+       |			     |					   B		 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |			       </div>			 |						     |
+       +-----------------------------+---------------------------------------------------+---------------------------------------------------+
+       |GL_FUNC_SUBTRACT	     | <div>						 | <div>					     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				       Rr		 |				   Ar		     |
+       |			     |				       =		 |				   =		     |
+       |			     |							 |						     |
+       |			     |					   R		 |				       A	     |
+       |			     |					   s		 |				       s	     |
+       |			     |							 |						     |
+       |			     |					   ac		 |				       ac	     |
+       |			     |					   s		 |				       s	     |
+       |			     |					   R		 |				       A	     |
+       |			     |							 |						     |
+       |			     |					   -		 |				       -	     |
+       |			     |					   R		 |				       A	     |
+       |			     |					   d		 |				       d	     |
+       |			     |							 |						     |
+       |			     |					   ac		 |				       ac	     |
+       |			     |					   d		 |				       d	     |
+       |			     |					   R		 |				       A	     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |			       </div>			 |			   </div>		     |
+       |			     |			       <div>			 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				       Gr		 |						     |
+       |			     |				       =		 |						     |
+       |			     |							 |						     |
+       |			     |					   G		 |						     |
+       |			     |					   s		 |						     |
+       |			     |							 |						     |
+       |			     |					   ac		 |						     |
+       |			     |					   s		 |						     |
+       |			     |					   G		 |						     |
+       |			     |							 |						     |
+       |			     |					   -		 |						     |
+       |			     |					   G		 |						     |
+       |			     |					   d		 |						     |
+       |			     |							 |						     |
+       |			     |					   ac		 |						     |
+       |			     |					   d		 |						     |
+       |			     |					   G		 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |			       </div>			 |						     |
+       |			     |			       <div>			 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				       Br		 |						     |
+       |			     |				       =		 |						     |
+       |			     |							 |						     |
+       |			     |					   B		 |						     |
+       |			     |					   s		 |						     |
+       |			     |							 |						     |
+       |			     |					   ac		 |						     |
+       |			     |					   s		 |						     |
+       |			     |					   B		 |						     |
+       |			     |							 |						     |
+       |			     |					   -		 |						     |
+       |			     |					   B		 |						     |
+       |			     |					   d		 |						     |
+       |			     |							 |						     |
+       |			     |					   ac		 |						     |
+       |			     |					   d		 |						     |
+       |			     |					   B		 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |			       </div>			 |						     |
+       +-----------------------------+---------------------------------------------------+---------------------------------------------------+
+       |GL_FUNC_REVERSE_SUBTRACT     | <div>						 | <div>					     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |					   Rr		 |				       Ar	     |
+       |			     |					   =		 |				       =	     |
+       |			     |							 |						     |
+       |			     |					       R	 |					   A	     |
+       |			     |					       d	 |					   d	     |
+       |			     |							 |						     |
+       |			     |					       ac	 |					   ac	     |
+       |			     |					       d	 |					   d	     |
+       |			     |					       R	 |					   A	     |
+       |			     |							 |						     |
+       |			     |					       -	 |					   -	     |
+       |			     |					       R	 |					   A	     |
+       |			     |					       s	 |					   s	     |
+       |			     |							 |						     |
+       |			     |					       ac	 |					   ac	     |
+       |			     |					       s	 |					   s	     |
+       |			     |					       R	 |					   A	     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				   </div>		 |			       </div>		     |
+       |			     |				   <div>		 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |					   Gr		 |						     |
+       |			     |					   =		 |						     |
+       |			     |							 |						     |
+       |			     |					       G	 |						     |
+       |			     |					       d	 |						     |
+       |			     |							 |						     |
+       |			     |					       ac	 |						     |
+       |			     |					       d	 |						     |
+       |			     |					       G	 |						     |
+       |			     |							 |						     |
+       |			     |					       -	 |						     |
+       |			     |					       G	 |						     |
+       |			     |					       s	 |						     |
+       |			     |							 |						     |
+       |			     |					       ac	 |						     |
+       |			     |					       s	 |						     |
+       |			     |					       G	 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				   </div>		 |						     |
+       |			     |				   <div>		 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |					   Br		 |						     |
+       |			     |					   =		 |						     |
+       |			     |							 |						     |
+       |			     |					       B	 |						     |
+       |			     |					       d	 |						     |
+       |			     |							 |						     |
+       |			     |					       ac	 |						     |
+       |			     |					       d	 |						     |
+       |			     |					       B	 |						     |
+       |			     |							 |						     |
+       |			     |					       -	 |						     |
+       |			     |					       B	 |						     |
+       |			     |					       s	 |						     |
+       |			     |							 |						     |
+       |			     |					       ac	 |						     |
+       |			     |					       s	 |						     |
+       |			     |					       B	 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				   </div>		 |						     |
+       +-----------------------------+---------------------------------------------------+---------------------------------------------------+
+       |GL_MIN			     | <div>						 | <div>					     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |					   Rr		 |				       Ar	     |
+       |			     |					   =		 |				       =	     |
+       |			     |							 |						     |
+       |			     |					       min	 |					   min	     |
+       |			     |					       ai	 |					   ai	     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |						       R |						   A |
+       |			     |						       s |						   s |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |						       R |						   A |
+       |			     |						       d |						   d |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				   </div>		 |			       </div>		     |
+       |			     |				   <div>		 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |					   Gr		 |						     |
+       |			     |					   =		 |						     |
+       |			     |							 |						     |
+       |			     |					       min	 |						     |
+       |			     |					       ai	 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |						       G |						     |
+       |			     |						       s |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |						       G |						     |
+       |			     |						       d |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				   </div>		 |						     |
+       |			     |				   <div>		 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |					   Br		 |						     |
+       |			     |					   =		 |						     |
+       |			     |							 |						     |
+       |			     |					       min	 |						     |
+       |			     |					       ai	 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |						       B |						     |
+       |			     |						       s |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |						       B |						     |
+       |			     |						       d |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				   </div>		 |						     |
+       +-----------------------------+---------------------------------------------------+---------------------------------------------------+
+       |GL_MAX			     | <div>						 | <div>					     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |					   Rr		 |				       Ar	     |
+       |			     |					   =		 |				       =	     |
+       |			     |							 |						     |
+       |			     |					       max	 |					   max	     |
+       |			     |					       ai	 |					   ai	     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |						       R |						   A |
+       |			     |						       s |						   s |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |						       R |						   A |
+       |			     |						       d |						   d |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				   </div>		 |			       </div>		     |
+       |			     |				   <div>		 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |					   Gr		 |						     |
+       |			     |					   =		 |						     |
+       |			     |							 |						     |
+       |			     |					       max	 |						     |
+       |			     |					       ai	 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |						       G |						     |
+       |			     |						       s |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |						       G |						     |
+       |			     |						       d |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				   </div>		 |						     |
+       |			     |				   <div>		 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |					   Br		 |						     |
+       |			     |					   =		 |						     |
+       |			     |							 |						     |
+       |			     |					       max	 |						     |
+       |			     |					       ai	 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |						       B |						     |
+       |			     |						       s |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |						       B |						     |
+       |			     |						       d |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |							 |						     |
+       |			     |				   </div>		 |						     |
+       +-----------------------------+---------------------------------------------------+---------------------------------------------------+
+
+       The results of these equations are clamped to the range 0 1.
+
+       The GL_MIN and GL_MAX equations are useful for applications that
+       analyze image data (image thresholding against a constant color, for
+       example). The GL_FUNC_ADD equation is useful for antialiasing and
+       transparency, among other things.
+
+       Initially, both the RGB blend equation and the alpha blend equation are
+       set to GL_FUNC_ADD.
+
+
+NOTES
+       The GL_MIN, and GL_MAX equations do not use the source or destination
+       factors, only the source and destination colors.
+
+ERRORS
+       GL_INVALID_ENUM is generated if mode is not one of GL_FUNC_ADD,
+       GL_FUNC_SUBTRACT, GL_FUNC_REVERSE_SUBTRACT, GL_MAX, or GL_MIN.
+
+ASSOCIATED GETS
+       glGet() with an argument of GL_BLEND_EQUATION_RGB
+
+
+       glGet() with an argument of GL_BLEND_EQUATION_ALPHA
+
+SEE ALSO
+       glBlendColor(), glBlendFunc() glBlendFuncSeparate()
+
+COPYRIGHT
+       Copyright (C) 1991-2006 Silicon Graphics, Inc. This document is
+       licensed under the SGI Free Software B License. For details, see
+       http://oss.sgi.com/projects/FreeB/.
+
+
+
+OpenGL 3.3			  03/08/2011		   GLBLENDEQUATION(3G)
+    </pre></body>
+
+</html>

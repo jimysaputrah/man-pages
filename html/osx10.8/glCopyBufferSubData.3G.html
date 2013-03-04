@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glCopyBufferSubData copies part of the data store attached to..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glCopyBufferSubData - copy part of the data store of a buffer object to</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLCOPYBUFFERSUBDATA(3G) 	  OpenGL 3.3	       GLCOPYBUFFERSUBDATA(3G)
+
+
+
+NAME
+       glCopyBufferSubData - copy part of the data store of a buffer object to
+       the data store of another buffer object
+
+C SPECIFICATION
+       void glCopyBufferSubData(GLenum readtarget, GLenum writetarget,
+				GLintptr readoffset, GLintptr writeoffset,
+				GLsizeiptr size);
+
+PARAMETERS
+       readtarget
+	   Specifies the target from whose data store data should be read.
+
+       writetarget
+	   Specifies the target to whose data store data should be written.
+
+       readoffset
+	   Specifies the offset, in basic machine units, within the data store
+	   of readtarget from which data should be read.
+
+       writeoffset
+	   Specifies the offset, in basic machine units, within the data store
+	   of writetarget to which data should be written.
+
+       size
+	   Specifies the size, in basic machine units, of the data to be
+	   copied from readtarget to writetarget.
+
+DESCRIPTION
+       glCopyBufferSubData copies part of the data store attached to
+       readtarget to the data store attached to writetarget. The number of
+       basic machine units indicated by size is copied from the source, at
+       offset readoffset to the destination at writeoffset, also in basic
+       machine units.
+
+
+       readtarget and writetarget must be GL_ARRAY_BUFFER,
+       GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
+       GL_PIXEL_PACK_BUFFER, GL_PIXEL_UNPACK_BUFFER, GL_TEXTURE_BUFFER,
+       GL_TRANSFORM_FEEDBACK_BUFFER or GL_UNIFORM_BUFFER. Any of these targets
+       may be used, although the targets GL_COPY_READ_BUFFER and
+       GL_COPY_WRITE_BUFFER are provided specifically to allow copies between
+       buffers without disturbing other GL state.
+
+
+       readoffset, writeoffset and size must all be greater than or equal to
+       zero. Furthermore, readoffset + size must not exceeed the size of the
+       buffer object bound to readtarget, and readoffset + size must not
+       exceeed the size of the buffer bound to writetarget. If the same buffer
+       object is bound to both readtarget and writetarget, then the ranges
+       specified by readoffset, writeoffset and size must not overlap.
+
+NOTES
+       glCopyBufferSubData is available only if the GL version is 3.1 or
+       greater.
+
+ERRORS
+       GL_INVALID_VALUE is generated if any of readoffset, writeoffset or size
+       is negative, if readoffset + size exceeds the size of the buffer object
+       bound to readtarget or if writeoffset + size exceeds the size of the
+       buffer object bound to writetarget.
+
+
+       GL_INVALID_VALUE is generated if the same buffer object is bound to
+       both readtarget and writetarget and the ranges [readoffset, readoffset
+       + size) and [writeoffset, writeoffset + size) overlap.
+
+
+       GL_INVALID_OPERATION is generated if zero is bound to readtarget or
+       writetarget.
+
+
+       GL_INVALID_OPERATION is generated if the buffer object bound to either
+       readtarget or writetarget is mapped.
+
+SEE ALSO
+       glGenBuffers(), glBindBuffer(), glBufferData(), glBufferSubData(),
+       glGetBufferSubData()
+
+COPYRIGHT
+       Copyright (C) 2010 Khronos Group. This material may be distributed
+       subject to the terms and conditions set forth in the Open Publication
+       License, v 1.0, 8 June 1999.  http://opencontent.org/openpub/.
+
+
+
+OpenGL 3.3			  03/08/2011	       GLCOPYBUFFERSUBDATA(3G)
+    </pre></body>
+
+</html>

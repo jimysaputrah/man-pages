@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Mutex attributes are used to specify parameters to pthread_mutex_init()...." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>pthread_mutexattr_destroy, pthread_mutexattr_getprioceiling,</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+PTHREAD_MUTEXATTR(3)	 BSD Library Functions Manual	  PTHREAD_MUTEXATTR(3)
+
+NAME
+     pthread_mutexattr_destroy, pthread_mutexattr_getprioceiling,
+     pthread_mutexattr_getprotocol, pthread_mutexattr_gettype,
+     pthread_mutexattr_init, pthread_mutexattr_setprioceiling,
+     pthread_mutexattr_setprotocol, pthread_mutexattr_settype -- mutex
+     attribute operations
+
+SYNOPSIS
+     #include <pthread.h>
+
+     int
+     pthread_mutexattr_destroy(pthread_mutexattr_t *attr);
+
+     int
+     pthread_mutexattr_getprioceiling(const pthread_mutexattr_t *restrict attr,
+	 int *restrict prioceiling);
+
+     int
+     pthread_mutexattr_getprotocol(const pthread_mutexattr_t *restrict attr,
+	 int *restrict protocol);
+
+     int
+     pthread_mutexattr_gettype(const pthread_mutexattr_t *restrict attr,
+	 int *restrict type);
+
+     int
+     pthread_mutexattr_init(pthread_mutexattr_t *attr);
+
+     int
+     pthread_mutexattr_setprioceiling(pthread_mutexattr_t *attr,
+	 int prioceiling);
+
+     int
+     pthread_mutexattr_setprotocol(pthread_mutexattr_t *attr, int protocol);
+
+     int
+     pthread_mutexattr_settype(pthread_mutexattr_t *attr, int type);
+
+DESCRIPTION
+     Mutex attributes are used to specify parameters to pthread_mutex_init().
+     One attribute object can be used in multiple calls to
+     pthread_mutex_init(), with or without modifications between calls.
+
+     The pthread_mutexattr_init() function initializes attr with all of the
+     default mutex attributes.
+
+     The pthread_mutexattr_destroy() function destroys attr.
+
+     The pthread_mutexattr_settype() function sets the mutex type value of the
+     attribute.  Valid mutex types are: PTHREAD_MUTEX_NORMAL,
+     PTHREAD_MUTEX_ERRORCHECK, PTHREAD_MUTEX_RECURSIVE, and
+     PTHREAD_MUTEX_DEFAULT.  The default mutex type for
+     pthread_mutexattr_init() is PTHREAD_MUTEX_DEFAULT.
+
+     PTHREAD_MUTEX_NORMAL mutexes do not check for usage errors.
+     PTHREAD_MUTEX_NORMAL mutexes will deadlock if reentered, and result in
+     undefined behavior if a locked mutex is unlocked by another thread.
+     Attempts to unlock an already unlocked PTHREAD_MUTEX_NORMAL mutex will
+     result in undefined behavior.
+
+     PTHREAD_MUTEX_ERRORCHECK mutexes do check for usage errors.  If an
+     attempt is made to relock a PTHREAD_MUTEX_ERRORCHECK mutex without first
+     dropping the lock, an error will be returned.  If a thread attempts to
+     unlock a PTHREAD_MUTEX_ERRORCHECK mutex that is locked by another thread,
+     an error will be returned.  If a thread attempts to unlock a
+     PTHREAD_MUTEX_ERRORCHECK thread that is unlocked, an error will be
+     returned.
+
+     PTHREAD_MUTEX_RECURSIVE mutexes allow recursive locking.  An attempt to
+     relock a PTHREAD_MUTEX_RECURSIVE mutex that is already locked by the same
+     thread succeeds.  An equivalent number of pthread_mutex_unlock(3) calls
+     are needed before the mutex will wake another thread waiting on this
+     lock.  If a thread attempts to unlock a PTHREAD_MUTEX_RECURSIVE mutex
+     that is locked by another thread, an error will be returned.  If a thread
+     attemps to unlock a PTHREAD_MUTEX_RECURSIVE thread that is unlocked, an
+     error will be returned.
+
+     PTHREAD_MUTEX_DEFAULT mutexes result in undefined behavior if reentered.
+     Unlocking a PTHREAD_MUTEX_DEFAULT mutex locked by another thread will
+     result in undefined behavior.  Attempts to unlock an already unlocked
+     PTHREAD_MUTEX_DEFAULT mutex will result in undefined behavior.
+
+     pthread_mutexattr_gettype() functions copy the type value of the
+     attribute to the location pointed to by the second parameter.
+
+     The pthread_mutexattr_set*() functions set the attribute that corresponds
+     to each function name.
+
+     The pthread_mutexattr_get*() functions copy the value of the attribute
+     that corresponds to each function name to the location pointed to by the
+     second function parameter.
+
+RETURN VALUES
+     If successful, these functions return 0.  Otherwise, an error number is
+     returned to indicate the error.
+
+ERRORS
+     pthread_mutexattr_init() will fail if:
+
+     [ENOMEM]		Out of memory.
+
+     pthread_mutexattr_destroy() will fail if:
+
+     [EINVAL]		Invalid value for attr.
+
+     pthread_mutexattr_setprioceiling() will fail if:
+
+     [EINVAL]		Invalid value for attr, or invalid value for
+			prioceiling.
+
+     pthread_mutexattr_getprioceiling() will fail if:
+
+     [EINVAL]		Invalid value for attr.
+
+     pthread_mutexattr_setprotocol() will fail if:
+
+     [EINVAL]		Invalid value for attr, or invalid value for protocol.
+
+     pthread_mutexattr_getprotocol() will fail if:
+
+     [EINVAL]		Invalid value for attr.
+
+     pthread_mutexattr_settype() will fail if:
+
+     [EINVAL]		Invalid value for attr, or invalid value for type.
+
+     pthread_mutexattr_gettype() will fail if:
+
+     [EINVAL]		Invalid value for attr.
+
+SEE ALSO
+     pthread_mutex_init(3)
+
+STANDARDS
+     pthread_mutexattr_init() and pthread_mutexattr_destroy() conform to
+     ISO/IEC 9945-1:1996 (``POSIX.1'')
+
+     pthread_mutexattr_setprioceiling(), pthread_mutexattr_getprioceiling(),
+     pthread_mutexattr_setprotocol(), pthread_mutexattr_getprotocol(),
+     pthread_mutexattr_settype(), and pthread_mutexattr_gettype() conform to
+     Version 2 of the Single UNIX Specification (``SUSv2'')
+
+BSD			       January 30, 2003 			   BSD
+    </pre></body>
+
+</html>

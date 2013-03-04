@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glGetQueryObject returns in params a selected parameter of the query..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glGetQueryObject - return parameters of a query object</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLGETQUERYOBJECT(3G)		  OpenGL 3.3		  GLGETQUERYOBJECT(3G)
+
+
+
+NAME
+       glGetQueryObject - return parameters of a query object
+
+C SPECIFICATION
+       void glGetQueryObjectiv(GLuint id, GLenum pname, GLint * params);
+
+       void glGetQueryObjectuiv(GLuint id, GLenum pname, GLuint * params);
+
+       void glGetQueryObjecti64v(GLuint id, GLenum pname, GLint64 * params);
+
+       void glGetQueryObjectui64v(GLuint id, GLenum pname, GLuint64 * params);
+
+PARAMETERS
+       id
+	   Specifies the name of a query object.
+
+       pname
+	   Specifies the symbolic name of a query object parameter. Accepted
+	   values are GL_QUERY_RESULT or GL_QUERY_RESULT_AVAILABLE.
+
+       params
+	   Returns the requested data.
+
+DESCRIPTION
+       glGetQueryObject returns in params a selected parameter of the query
+       object specified by id.
+
+
+       pname names a specific query object parameter.  pname can be as
+       follows:
+
+       GL_QUERY_RESULT
+
+	   params returns the value of the query object's passed samples
+	   counter. The initial value is 0.
+
+       GL_QUERY_RESULT_AVAILABLE
+
+	   params returns whether the passed samples counter is immediately
+	   available. If a delay would occur waiting for the query result,
+	   GL_FALSE is returned. Otherwise, GL_TRUE is returned, which also
+	   indicates that the results of all previous queries are available as
+	   well.
+
+NOTES
+       If an error is generated, no change is made to the contents of params.
+
+
+       glGetQueryObject implicitly flushes the GL pipeline so that any
+       incomplete rendering delimited by the occlusion query completes in
+       finite time.
+
+       If multiple queries are issued using the same query object id before
+       calling glGetQueryObject, the results of the most recent query will be
+       returned. In this case, when issuing a new query, the results of the
+       previous query are discarded.
+
+
+       glGetQueryObjecti64v and glGetQueryObjectui64v are available only if
+       the GL version is 3.3 or greater.
+
+ERRORS
+       GL_INVALID_ENUM is generated if pname is not an accepted value.
+
+
+       GL_INVALID_OPERATION is generated if id is not the name of a query
+       object.
+
+
+       GL_INVALID_OPERATION is generated if id is the name of a currently
+       active query object.
+
+SEE ALSO
+       glBeginQuery(), glEndQuery(), glGetQueryiv(), glIsQuery(),
+       glQueryCounter()
+
+COPYRIGHT
+       Copyright (C) 2005 Addison-Wesley. This material may be distributed
+       subject to the terms and conditions set forth in the Open Publication
+       License, v 1.0, 8 June 1999.  http://opencontent.org/openpub/.
+
+
+
+OpenGL 3.3			  03/08/2011		  GLGETQUERYOBJECT(3G)
+    </pre></body>
+
+</html>

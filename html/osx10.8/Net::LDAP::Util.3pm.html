@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Net::LDAP::Util is a collection of utility functions for use with the..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Net::LDAP::Util - Utility functions</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Net::LDAP::Util(3)    User Contributed Perl Documentation   Net::LDAP::Util(3)
+
+
+
+NAME
+       Net::LDAP::Util - Utility functions
+
+SYNOPSIS
+	 use Net::LDAP::Util qw(ldap_error_text
+				ldap_error_name
+				ldap_error_desc
+			       );
+
+	 $mesg = $ldap->search( .... );
+
+	 die "Error ",ldap_error_name($mesg) if $mesg->code;
+
+DESCRIPTION
+       Net::LDAP::Util is a collection of utility functions for use with the
+       Net::LDAP modules.
+
+FUNCTIONS
+       ldap_error_name ( ERR )
+	   Returns the name corresponding with ERR. ERR can either be an LDAP
+	   error number, or a "Net::LDAP::Message" object containing an error
+	   code. If the error is not known the a string in the form "LDAP
+	   error code %d(0x%02X)" is returned.
+
+       ldap_error_text ( ERR )
+	   Returns the text from the POD description for the given error. ERR
+	   can either be an LDAP error code, or a "Net::LDAP::Message" object
+	   containing an LDAP error code. If the error code given is unknown
+	   then "undef" is returned.
+
+       ldap_error_desc ( ERR )
+	   Returns a short text description of the error. ERR can either be an
+	   LDAP error code or a "Net::LDAP::Message" object containing an LDAP
+	   error code.
+
+       canonical_dn ( DN [ , OPTIONS ] )
+	   Returns the given DN in a canonical form. Returns undef if DN is
+	   not a valid Distinguished Name. (Note: The empty string "" is a
+	   valid DN.)  DN can either be a string or reference to an array of
+	   hashes as returned by ldap_explode_dn, which is useful when
+	   constructing a DN.
+
+	   It performs the following operations on the given DN:
+
+	   o   Removes the leading 'OID.' characters if the type is an OID
+	       instead of a name.
+
+	   o   Escapes all RFC 2253 special characters (",", "+", """, "\",
+	       "<", ">", ";", "#", "=", " "), slashes ("/"), and any other
+	       character where the ASCII code is < 32 as \hexpair.
+
+	   o   Converts all leading and trailing spaces in values to be \20.
+
+	   o   If an RDN contains multiple parts, the parts are re-ordered so
+	       that the attribute type names are in alphabetical order.
+
+	   OPTIONS is a list of name/value pairs, valid options are:
+
+	   casefold
+	       Controls case folding of attribute type names. Attribute values
+	       are not affected by this option. The default is to uppercase.
+	       Valid values are:
+
+	       lower
+		   Lowercase attribute type names.
+
+	       upper
+		   Uppercase attribute type names. This is the default.
+
+	       none
+		   Do not change attribute type names.
+
+	   mbcescape
+	       If TRUE, characters that are encoded as a multi-octet UTF-8
+	       sequence will be escaped as \(hexpair){2,*}.
+
+	   reverse
+	       If TRUE, the RDN sequence is reversed.
+
+	   separator
+	       Separator to use between RDNs. Defaults to comma (',').
+
+       ldap_explode_dn ( DN [ , OPTIONS ] )
+	   Explodes the given DN into an array of hashes and returns a
+	   reference to this array. Returns undef if DN is not a valid
+	   Distinguished Name.
+
+	   A Distinguished Name is a sequence of Relative Distinguished Names
+	   (RDNs), which themselves are sets of Attributes. For each RDN a
+	   hash is constructed with the attribute type names as keys and the
+	   attribute values as corresponding values.  These hashes are then
+	   stored in an array in the order in which they appear in the DN.
+
+	   For example, the DN 'OU=Sales+CN=J. Smith,DC=example,DC=net' is
+	   exploded to:
+	    [
+	      {
+		'OU' => 'Sales',
+		'CN' => 'J. Smith'
+	      },
+	      {
+		'DC' => 'example'
+	      },
+	      {
+		'DC' => 'net'
+	      }
+	    ]
+
+	   (RFC2253 string) DNs might also contain values, which are the bytes
+	   of the BER encoding of the X.500 AttributeValue rather than some
+	   LDAP string syntax.	These values are hex-encoded and prefixed with
+	   a #. To distinguish such BER values, ldap_explode_dn uses
+	   references to the actual values, e.g.
+	   '1.3.6.1.4.1.1466.0=#04024869,DC=example,DC=com' is exploded to:
+	    [
+	      {
+		'1.3.6.1.4.1.1466.0' => "\004\002Hi"
+	      },
+	      {
+		'DC' => 'example'
+	      },
+	      {
+		'DC' => 'com'
+	      }
+	    ];
+
+	   It also performs the following operations on the given DN:
+
+	   o   Unescape "\" followed by ",", "+", """, "\", "<", ">", ";",
+	       "#", "=", " ", or a hexpair and and strings beginning with "#".
+
+	   o   Removes the leading 'OID.' characters if the type is an OID
+	       instead of a name.
+
+	   OPTIONS is a list of name/value pairs, valid options are:
+
+	   casefold
+	       Controls case folding of attribute types names. Attribute
+	       values are not affected by this option. The default is to
+	       uppercase. Valid values are:
+
+	       lower
+		   Lowercase attribute types names.
+
+	       upper
+		   Uppercase attribute type names. This is the default.
+
+	       none
+		   Do not change attribute type names.
+
+	   reverse
+	       If TRUE, the RDN sequence is reversed.
+
+       escape_filter_value ( VALUES )
+	   Escapes the given VALUES according to RFC 2254 so that they can be
+	   safely used in LDAP filters.
+
+	   Any control characters with an ACII code < 32 as well as the
+	   characters with special meaning in LDAP filters "*", "(", ")", and
+	   "\" the backslash are converted into the representation of a
+	   backslash followed by two hex digits representing the hexadecimal
+	   value of the character.
+
+	   Returns the converted list in list mode and the first element in
+	   scalar mode.
+
+       unescape_filter_value ( VALUES )
+	   Undoes the conversion done by escape_filter_value().
+
+	   Converts any sequences of a backslash followed by two hex digits
+	   into the corresponding character.
+
+	   Returns the converted list in list mode and the first element in
+	   scalar mode.
+
+       escape_dn_value ( VALUES )
+	   Escapes the given VALUES according to RFC 2253 so that they can be
+	   safely used in LDAP DNs.
+
+	   The characters ",", "+", """, "\", "<", ">", ";", "#", "=" with a
+	   special meaning in RFC 2252 are preceeded by ba backslash.  Control
+	   characters with an ASCII code < 32 are represented as \hexpair.
+	   Finally all leading and trailing spaces are converted to sequences
+	   of \20.
+
+	   Returns the converted list in list mode and the first element in
+	   scalar mode.
+
+       unescape_dn_value ( VALUES )
+	   Undoes the conversion done by escape_dn_value().
+
+	   Any escape sequence starting with a baskslash - hexpair or special
+	   character - will be transformed back to the corresponding
+	   character.
+
+	   Returns the converted list in list mode and the first element in
+	   scalar mode.
+
+AUTHOR
+       Graham Barr <gbarr@pobox.com>
+
+COPYRIGHT
+       Copyright (c) 1999-2004 Graham Barr. All rights reserved. This program
+       is free software; you can redistribute it and/or modify it under the
+       same terms as Perl itself.
+
+       ldap_explode_dn and canonical_dn also
+
+       (c) 2002 Norbert Klasen, norbert.klasen@daasi.de, All Rights Reserved.
+
+
+
+perl v5.12.4			  2010-03-11		    Net::LDAP::Util(3)
+    </pre></body>
+
+</html>

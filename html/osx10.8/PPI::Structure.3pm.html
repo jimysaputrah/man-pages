@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="PPI::Structure is the root class for all Perl bracing structures. This..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>PPI::Structure - The base class for Perl braced structures</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+PPI::Structure(3)     User Contributed Perl Documentation    PPI::Structure(3)
+
+
+
+NAME
+       PPI::Structure - The base class for Perl braced structures
+
+INHERITANCE
+	 PPI::Structure
+	 isa PPI::Node
+	     isa PPI::Element
+
+DESCRIPTION
+       PPI::Structure is the root class for all Perl bracing structures. This
+       covers all forms of " [ ... ] ", " { ... } ", and " ( ... ) " brace
+       types, and includes cases where only one half of the pair exist.
+
+       The class PPI::Structure itself is full abstract and no objects of that
+       type should actually exist in the tree.
+
+   Elements vs Children
+       A PPI::Structure has an unusual existance. Unlike a PPI::Document or
+       PPI::Statement, which both simply contain other elements, a structure
+       both contains and consists of content.
+
+       That is, the brace tokens are not considered to be "children" of the
+       structure, but are part of it.
+
+       In practice, this will mean that while the ->elements and ->tokens
+       methods (and related) will return a list with the brace tokens at
+       either end, the ->children method explicitly will not return the brace.
+
+STRUCTURE CLASSES
+       Excluding the transient PPI::Structure::Unknown that exists briefly
+       inside the parser, there are eight types of structure.
+
+   PPI::Structure::List
+       This covers all round braces used for function arguments, in "foreach"
+       loops, literal lists, and braces used for precedence-ordering purposes.
+
+   PPI::Structure::For
+       Although not used for the "foreach" loop list, this is used for the
+       special case of the round-brace three-part semicolon-seperated "for"
+       loop expression (the traditional C style for loop).
+
+   PPI::Structure::Given
+       This is for the expression being matched in switch statements.
+
+   PPI::Structure::When
+       This is for the matching expression in "when" statements.
+
+   PPI::Structure::Condition
+       This round-brace structure covers boolean conditional braces, such as
+       for "if" and "while" blocks.
+
+   PPI::Structure::Block
+       This curly-brace and common structure is used for all form of code
+       blocks. This includes those for "if", "do" and similar, as well as
+       "grep", "map", "sort", "sub" and (labelled or anonymous) scoping
+       blocks.
+
+   PPI::Structure::Constructor
+       This class covers brace structures used for the construction of
+       anonymous "ARRAY" and "HASH" references.
+
+   PPI::Structure::Subscript
+       This class covers square-braces and curly-braces used after a ->
+       pointer to access the subscript of an "ARRAY" or "HASH".
+
+METHODS
+       "PPI::Structure" itself has very few methods. Most of the time, you
+       will be working with the more generic PPI::Element or PPI::Node
+       methods, or one of the methods that are subclass-specific.
+
+   start
+       For lack of better terminology (like "open" and "close") that has not
+       already in use for some other more important purpose, the two
+       individual braces for the structure are known within PPI as the "start"
+       and "finish" braces (at least for method purposes).
+
+       The "start" method returns the start brace for the structure (i.e. the
+       opening brace).
+
+       Returns the brace as a PPI::Token::Structure or "undef" if the
+       structure does not have a starting brace.
+
+       Under normal parsing circumstances this should never occur, but may
+       happen due to manipulation of the PDOM tree.
+
+   finish
+       The "finish" method returns the finish brace for the structure (i.e.
+       the closing brace).
+
+       Returns the brace as a PPI::Token::Structure or "undef" if the
+       structure does not have a finishing brace. This can be quite common if
+       the document is not complete (for example, from an editor where the
+       user may be halfway through typeing a subroutine).
+
+   braces
+       The "braces" method is a utility method which returns the brace type,
+       regardless of whether has both braces defined, or just the starting
+       brace, or just the ending brace.
+
+       Returns on of the three strings '[]', '{}', or '()', or "undef" on
+       error (primarily not having a start brace, as mentioned above).
+
+complete
+       The "complete" method is a convenience method that returns true if the
+       both braces are defined for the structure, or false if only one brace
+       is defined.
+
+       Unlike the top level "complete" method which checks for completeness in
+       depth, the structure complete method ONLY confirms completeness for the
+       braces, and does not recurse downwards.
+
+SUPPORT
+       See the support section in the main module.
+
+AUTHOR
+       Adam Kennedy <adamk@cpan.org>
+
+COPYRIGHT
+       Copyright 2001 - 2011 Adam Kennedy.
+
+       This program is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+       The full text of the license can be found in the LICENSE file included
+       with this module.
+
+
+
+perl v5.12.4			  2011-02-25		     PPI::Structure(3)
+    </pre></body>
+
+</html>

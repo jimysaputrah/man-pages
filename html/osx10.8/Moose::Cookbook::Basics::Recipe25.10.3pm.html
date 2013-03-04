@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The first recipe demonstrated how to build very basic Moose classes,..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Moose::Cookbook::Basics::Recipe2 - A simple BankAccount example</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Moose::Cookbook::BasicUsereContributed PerlMoose::Cookbook::Basics::Recipe2(3)
+
+
+
+NAME
+       Moose::Cookbook::Basics::Recipe2 - A simple BankAccount example
+
+SYNOPSIS
+	 package BankAccount;
+	 use Moose;
+
+	 has 'balance' => ( isa => 'Int', is => 'rw', default => 0 );
+
+	 sub deposit {
+	     my ( $self, $amount ) = @_;
+	     $self->balance( $self->balance + $amount );
+	 }
+
+	 sub withdraw {
+	     my ( $self, $amount ) = @_;
+	     my $current_balance = $self->balance();
+	     ( $current_balance >= $amount )
+		 || confess "Account overdrawn";
+	     $self->balance( $current_balance - $amount );
+	 }
+
+	 package CheckingAccount;
+	 use Moose;
+
+	 extends 'BankAccount';
+
+	 has 'overdraft_account' => ( isa => 'BankAccount', is => 'rw' );
+
+	 before 'withdraw' => sub {
+	     my ( $self, $amount ) = @_;
+	     my $overdraft_amount = $amount - $self->balance();
+	     if ( $self->overdraft_account && $overdraft_amount > 0 ) {
+		 $self->overdraft_account->withdraw($overdraft_amount);
+		 $self->deposit($overdraft_amount);
+	     }
+	 };
+
+DESCRIPTION
+       The first recipe demonstrated how to build very basic Moose classes,
+       focusing on creating and manipulating attributes. The objects in that
+       recipe were very data-oriented, and did not have much in the way of
+       behavior (i.e. methods). In this recipe, we expand upon the concepts
+       from the first recipe to include some real behavior. In particular, we
+       show how you can use a method modifier to implement new behavior for a
+       method.
+
+       The classes in the SYNOPSIS show two kinds of bank account. A simple
+       bank account has one attribute, the balance, and two behaviors,
+       depositing and withdrawing money.
+
+       We then extend the basic bank account in the CheckingAccount class.
+       This class adds another attribute, an overdraft account. It also adds
+       overdraft protection to the withdraw method. If you try to withdraw
+       more than you have, the checking account attempts to reconcile the
+       difference by withdrawing money from the overdraft account. (1)
+
+       The first class, BankAccount, introduces a new attribute feature, a
+       default value:
+
+	 has 'balance' => ( isa => 'Int', is => 'rw', default => 0 );
+
+       This says that a BankAccount has a "balance" attribute, which has an
+       "Int" type constraint, a read/write accessor, and a default value of 0.
+       This means that every instance of BankAccount that is created will have
+       its "balance" slot initialized to 0, unless some other value is
+       provided to the constructor.
+
+       The "deposit" and "withdraw" methods should be fairly self-explanatory,
+       as they are just plain old Perl 5 OO.
+
+       As you know from the first recipe, the keyword "extends" sets a class's
+       superclass. Here we see that CheckingAccount "extends" BankAccount. The
+       next line introduces yet another new attribute feature, class-based
+       type constraints:
+
+	 has 'overdraft_account' => ( isa => 'BankAccount', is => 'rw' );
+
+       Up until now, we have only seen the "Int" type constraint, which (as we
+       saw in the first recipe) is a builtin type constraint. The
+       "BankAccount" type constraint is new, and was actually defined the
+       moment we created the BankAccount class itself. In fact, Moose creates
+       a corresponding type constraint for every class in your program (2).
+
+       This means that in the first recipe, constraints for both "Point" and
+       "Point3D" were created. In this recipe, both "BankAccount" and
+       "CheckingAccount" type constraints are created automatically. Moose
+       does this as a convenience so that your classes and type constraint can
+       be kept in sync with one another. In short, Moose makes sure that it
+       will just DWIM (3).
+
+       In CheckingAccount, we see another method modifier, the "before"
+       modifier.
+
+	 before 'withdraw' => sub {
+	     my ( $self, $amount ) = @_;
+	     my $overdraft_amount = $amount - $self->balance();
+	     if ( $self->overdraft_account && $overdraft_amount > 0 ) {
+		 $self->overdraft_account->withdraw($overdraft_amount);
+		 $self->deposit($overdraft_amount);
+	     }
+	 };
+
+       Just as with the "after" modifier from the first recipe, Moose will
+       handle calling the superclass method (in this case
+       "BankAccount->withdraw").
+
+       The "before" modifier will (obviously) run before the code from the
+       superclass is run. Here, "before" modifier implements overdraft
+       protection by first checking if there are available funds in the
+       checking account. If not (and if there is an overdraft account
+       available), it transfers the amount needed into the checking account
+       (4).
+
+       As with the method modifier in the first recipe, we could use "SUPER::"
+       to get the same effect:
+
+	 sub withdraw {
+	     my ( $self, $amount ) = @_;
+	     my $overdraft_amount = $amount - $self->balance();
+	     if ( $self->overdraft_account && $overdraft_amount > 0 ) {
+		 $self->overdraft_account->withdraw($overdraft_amount);
+		 $self->deposit($overdraft_amount);
+	     }
+	     $self->SUPER::withdraw($amount);
+	 }
+
+       The benefit of taking the method modifier approach is we do not need to
+       remember to call "SUPER::withdraw" and pass it the $amount argument
+       when writing "CheckingAccount->withdraw".
+
+       This is actually more than just a convenience for forgetful
+       programmers. Using method modifiers helps isolate subclasses from
+       changes in the superclasses. For instance, if BankAccount->withdraw
+       were to add an additional argument of some kind, the version of
+       CheckingAccount->withdraw which uses "SUPER::withdraw" would not pass
+       that extra argument correctly, whereas the method modifier version
+       would automatically pass along all arguments correctly.
+
+       Just as with the first recipe, object instantiation uses the "new"
+       method, which accepts named parameters.
+
+	 my $savings_account = BankAccount->new( balance => 250 );
+
+	 my $checking_account = CheckingAccount->new(
+	     balance	       => 100,
+	     overdraft_account => $savings_account,
+	 );
+
+       And as with the first recipe, a more in-depth example can be found in
+       the t/000_recipes/moose_cookbook_basics_recipe2.t test file.
+
+CONCLUSION
+       This recipe expanded on the basic concepts from the first recipe with a
+       more "real world" use case.
+
+FOOTNOTES
+       (1) If you're paying close attention, you might realize that there's a
+	   circular loop waiting to happen here. A smarter example would have
+	   to make sure that we don't accidentally create a loop between the
+	   checking account and its overdraft account.
+
+       (2) In reality, this creation is sensitive to the order in which
+	   modules are loaded. In more complicated cases, you may find that
+	   you need to explicitly declare a class type before the
+	   corresponding is loaded.
+
+       (3) Moose does not attempt to encode a class's is-a relationships
+	   within the type constraint hierarchy. Instead, Moose just considers
+	   the class type constraint to be a subtype of "Object", and
+	   specializes the constraint check to allow for subclasses. This
+	   means that an instance of CheckingAccount will pass a "BankAccount"
+	   type constraint successfully. For more details, please refer to the
+	   Moose::Util::TypeConstraints documentation.
+
+       (4) If the overdraft account does not have the amount needed, it will
+	   throw an error. Of course, the overdraft account could also have
+	   overdraft protection. See note 1.
+
+SEE ALSO
+       Acknowledgment
+	   The BankAccount example in this recipe is directly taken from the
+	   examples in this chapter of "Practical Common Lisp":
+
+	   <http://www.gigamonkeys.com/book/object-reorientation-generic-functions.html>
+
+AUTHORS
+       Stevan Little <stevan@iinteractive.com>
+
+       Dave Rolsky <autarch@urth.org>
+
+COPYRIGHT AND LICENSE
+       Copyright 2006-2010 by Infinity Interactive, Inc.
+
+       <http://www.iinteractive.com>
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-02-2Moose::Cookbook::Basics::Recipe2(3)
+    </pre></body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This original SSL module was experimental.  It has been superceeded by..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Net::Server::Proto::SSL - Net::Server SSL protocol (deprecated - use</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Net::Server::Proto::SSUser Contributed Perl DocumentNet::Server::Proto::SSL(3)
+
+
+
+NAME
+       Net::Server::Proto::SSL - Net::Server SSL protocol (deprecated - use
+       Net::Server::Proto::SSLEAY instead).
+
+SYNOPSIS
+       This module is mostly deprecated - you will want to look at
+       Net::Server::Proto::SSLEAY instead.
+
+       See Net::Server::Proto.	See Net::Server::Proto::SSLEAY.
+
+DESCRIPTION
+       This original SSL module was experimental.  It has been superceeded by
+       Net::Server::Proto::SSLEAY If anybody has any successes or ideas for
+       improvment under SSL, please email <paul@seamons.com>.
+
+       Protocol module for Net::Server.  This module implements a secure
+       socket layer over tcp (also known as SSL).  See Net::Server::Proto.
+
+       There is a limit inherent from using IO::Socket::SSL, namely that only
+       one SSL connection can be maintained by Net::Server.  However,
+       Net::Server should also be able to maintain any number of TCP, UDP, or
+       UNIX connections in addition to the one SSL connection.
+
+       Additionally, getline support is very limited and writing directly to
+       STDOUT will not work.  This is entirely dependent upon the
+       implementation of IO::Socket::SSL.  getline may work but the client is
+       not copied to STDOUT under SSL.	It is suggested that clients sysread
+       and syswrite to the client handle (located in $self->{server}->{client}
+       or passed to the process_request subroutine as the first argument).
+
+PARAMETERS
+       In addition to the normal Net::Server parameters, any of the SSL
+       parameters from IO::Socket::SSL may also be specified.  See
+       IO::Socket::SSL for information on setting this up.
+
+BUGS
+       Christopher A Bongaarts pointed out that if the SSL negotiation is slow
+       then the server won't be accepting for that period of time (because the
+       locking of accept is around both the socket accept and the SSL
+       negotiation).  This means that as it stands now the SSL implementation
+       is susceptible to DOS attacks.  To fix this will require deviding up
+       the accept call a little bit more finely which may not yet be possible
+       with IO::Socket::SSL.  Any ideas or patches on this bug are welcome.
+
+LICENCE
+       Distributed under the same terms as Net::Server
+
+THANKS
+       Thanks to Vadim for pointing out the IO::Socket::SSL accept was
+       returning objects blessed into the wrong class.
+
+
+
+perl v5.12.4			  2010-05-04	    Net::Server::Proto::SSL(3)
+    </pre></body>
+
+</html>

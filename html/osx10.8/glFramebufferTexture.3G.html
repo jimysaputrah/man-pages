@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glFramebufferTexture, glFramebufferTexture1D, glFramebufferTexture2D,..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glFramebufferTexture - attach a level of a texture object as a logical</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLFRAMEBUFFERTEXTURE(3G)	  OpenGL 3.3	      GLFRAMEBUFFERTEXTURE(3G)
+
+
+
+NAME
+       glFramebufferTexture - attach a level of a texture object as a logical
+       buffer to the currently bound framebuffer object
+
+C SPECIFICATION
+       void glFramebufferTexture(GLenum target, GLenum attachment,
+				 GLuint texture, GLint level);
+
+       void glFramebufferTexture1D(GLenum target, GLenum attachment,
+				   GLenum textarget, GLuint texture,
+				   GLint level);
+
+       void glFramebufferTexture2D(GLenum target, GLenum attachment,
+				   GLenum textarget, GLuint texture,
+				   GLint level);
+
+       void glFramebufferTexture3D(GLenum target, GLenum attachment,
+				   GLenum textarget, GLuint texture,
+				   GLint level, GLint layer);
+
+PARAMETERS
+       target
+	   Specifies the framebuffer target.  target must be
+	   GL_DRAW_FRAMEBUFFER, GL_READ_FRAMEBUFFER, or GL_FRAMEBUFFER.
+	   GL_FRAMEBUFFER is equivalent to GL_DRAW_FRAMEBUFFER.
+
+       attachment
+	   Specifies the attachment point of the framebuffer.  attachment must
+	   be GL_COLOR_ATTACHMENTi, GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT
+	   or GL_DEPTH_STENCIL_ATTACHMMENT.
+
+       textarget
+	   For glFramebufferTexture1D, glFramebufferTexture2D and
+	   glFramebufferTexture3D, specifies what type of texture is expected
+	   in the texture parameter, or for cube map textures, which face is
+	   to be attached.
+
+       texture
+	   Specifies the texture object to attach to the framebuffer
+	   attachment point named by attachment.
+
+       level
+	   Specifies the mipmap level of texture to attach.
+
+DESCRIPTION
+       glFramebufferTexture, glFramebufferTexture1D, glFramebufferTexture2D,
+       and glFramebufferTexture attach a selected mipmap level or image of a
+       texture object as one of the logical buffers of the framebuffer object
+       currently bound to target.  target must be GL_DRAW_FRAMEBUFFER,
+       GL_READ_FRAMEBUFFER, or GL_FRAMEBUFFER.	GL_FRAMEBUFFER is equivalent
+       to GL_DRAW_FRAMEBUFFER.
+
+
+       attachment specifies the logical attachment of the framebuffer and must
+       be GL_COLOR_ATTACHMENTi, GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT or
+       GL_DEPTH_STENCIL_ATTACHMMENT.  i in GL_COLOR_ATTACHMENTi may range from
+       zero to the value of GL_MAX_COLOR_ATTACHMENTS - 1. Attaching a level of
+       a texture to GL_DEPTH_STENCIL_ATTACHMENT is equivalent to attaching
+       that level to both the GL_DEPTH_ATTACHMENT and the
+       GL_STENCIL_ATTACHMENT attachment points simultaneously.
+
+
+       textarget specifies what type of texture is named by texture, and for
+       cube map textures, specifies the face that is to be attached. If
+       texture is not zero, it must be the name of an existing texture with
+       type textarget, unless it is a cube map texture, in which case
+       textarget must be GL_TEXTURE_CUBE_MAP_POSITIVE_X
+       GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+       GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, or
+       GL_TEXTURE_CUBE_MAP_NEGATIVE_Z.
+
+       If texture is non-zero, the specified level of the texture object named
+       texture is attached to the framebfufer attachment point named by
+       attachment. For glFramebufferTexture1D, glFramebufferTexture2D, and
+       glFramebufferTexture3D, texture must be zero or the name of an existing
+       texture with a target of textarget, or texture must be the name of an
+       existing cube-map texture and textarget must be one of
+       GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+       GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+       GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, or GL_TEXTURE_CUBE_MAP_NEGATIVE_Z.
+
+       If textarget is GL_TEXTURE_RECTANGLE, GL_TEXTURE_2D_MULTISAMPLE, or
+       GL_TEXTURE_2D_MULTISAMPLE_ARRAY, then level must be zero. If textarget
+       is GL_TEXTURE_3D, then level must be greater than or equal to zero and
+       less than or equal to log2 of the value of GL_MAX_3D_TEXTURE_SIZE. If
+       textarget is one of GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+       GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+       GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, or
+       GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, then level must be greater than or
+       equal to zero and less than or equal to log2 of the value of
+       GL_MAX_CUBE_MAP_TEXTURE_SIZE. For all other values of textarget, level
+       must be greater than or equal to zero and no larger than log2 of the
+       value of GL_MAX_TEXTURE_SIZE.
+
+
+       layer specifies the layer of a 2-dimensional image within a
+       3-dimensional texture.
+
+       For glFramebufferTexture1D, if texture is not zero, then textarget must
+       be GL_TEXTURE_1D. For glFramebufferTexture2D, if texture is not zero,
+       textarget must be one of GL_TEXTURE_2D, GL_TEXTURE_RECTANGLE,
+       GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+       GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+       GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, or
+       GL_TEXTURE_2D_MULTISAMPLE. For glFramebufferTexture3D, if texture is
+       not zero, then textarget must be GL_TEXTURE_3D.
+
+NOTES
+       glFramebufferTexture is available only if the GL version is 3.2 or
+       greater.
+
+ERRORS
+       GL_INVALID_ENUM is generated if target is not one of the accepted
+       tokens.
+
+
+       GL_INVALID_ENUM is generated if renderbuffertarget is not
+       GL_RENDERBUFFER.
+
+
+       GL_INVALID_OPERATION is generated if zero is bound to target.
+
+
+       GL_INVALID_OPERATION is generated if textarget and texture are not
+       compatible.
+
+SEE ALSO
+       glGenFramebuffers(), glBindFramebuffer(), glGenRenderbuffers(),
+       glFramebufferTexture(), glFramebufferTexture1D(),
+       glFramebufferTexture2D(), glFramebufferTexture3D()
+
+COPYRIGHT
+       Copyright (C) 2010 Khronos Group. This material may be distributed
+       subject to the terms and conditions set forth in the Open Publication
+       License, v 1.0, 8 June 1999.  http://opencontent.org/openpub/.
+
+
+
+OpenGL 3.3			  03/08/2011	      GLFRAMEBUFFERTEXTURE(3G)
+    </pre></body>
+
+</html>

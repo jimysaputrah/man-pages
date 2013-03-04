@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The openpam_readline function reads a line from a file, and returns it in..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>openpam_readline -- read a line from a file</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+OPENPAM_READLINE(3)	 BSD Library Functions Manual	   OPENPAM_READLINE(3)
+
+NAME
+     openpam_readline -- read a line from a file
+
+LIBRARY
+     Pluggable Authentication Module Library (libpam, -lpam)
+
+SYNOPSIS
+     #include <sys/types.h>
+     #include <security/pam_appl.h>
+     #include <security/openpam.h>
+
+     char *
+     openpam_readline(FILE *f, int *lineno, size_t *lenp);
+
+DESCRIPTION
+     The openpam_readline function reads a line from a file, and returns it in
+     a NUL-terminated buffer allocated with malloc(3).
+
+     The openpam_readline function performs a certain amount of processing on
+     the data it reads.  Comments (introduced by a hash sign) are stripped, as
+     is leading and trailing whitespace.  Any amount of linear whitespace is
+     collapsed to a single space.  Blank lines are ignored.  If a line ends in
+     a backslash, the backslash is stripped and the next line is appended.
+
+     If lineno is not NULL, the integer variable it points to is incremented
+     every time a newline character is read.
+
+     If lenp is not NULL, the length of the line (not including the terminat-
+     ing NUL character) is stored in the variable it points to.
+
+     The caller is responsible for releasing the returned buffer by passing it
+     to free(3).
+
+RETURN VALUES
+     The openpam_readline function returns NULL on failure.
+
+SEE ALSO
+     free(3), malloc(3), pam(3)
+
+STANDARDS
+     The openpam_readline function is an OpenPAM extension.
+
+AUTHORS
+     The openpam_readline function and this manual page were developed for the
+     FreeBSD Project by ThinkSec AS and Network Associates Laboratories, the
+     Security Research Division of Network Associates, Inc. under DARPA/SPAWAR
+     contract N66001-01-C-8035 (``CBOSS''), as part of the DARPA CHATS
+     research program.
+
+BSD			       December 21, 2007			   BSD
+    </pre></body>
+
+</html>

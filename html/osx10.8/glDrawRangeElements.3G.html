@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glDrawRangeElements is a restricted form of glDrawElements().  mode,..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glDrawRangeElements - render primitives from array data</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLDRAWRANGEELEMENTS(3G) 	  OpenGL 3.3	       GLDRAWRANGEELEMENTS(3G)
+
+
+
+NAME
+       glDrawRangeElements - render primitives from array data
+
+C SPECIFICATION
+       void glDrawRangeElements(GLenum mode, GLuint start, GLuint end,
+				GLsizei count, GLenum type,
+				const GLvoid * indices);
+
+PARAMETERS
+       mode
+	   Specifies what kind of primitives to render. Symbolic constants
+	   GL_POINTS, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINES,
+	   GL_LINE_STRIP_ADJACENCY, GL_LINES_ADJACENCY, GL_TRIANGLE_STRIP,
+	   GL_TRIANGLE_FAN, GL_TRIANGLES, GL_TRIANGLE_STRIP_ADJACENCY and
+	   GL_TRIANGLES_ADJACENCY are accepted.
+
+       start
+	   Specifies the minimum array index contained in indices.
+
+       end
+	   Specifies the maximum array index contained in indices.
+
+       count
+	   Specifies the number of elements to be rendered.
+
+       type
+	   Specifies the type of the values in indices. Must be one of
+	   GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, or GL_UNSIGNED_INT.
+
+       indices
+	   Specifies a pointer to the location where the indices are stored.
+
+DESCRIPTION
+       glDrawRangeElements is a restricted form of glDrawElements().  mode,
+       start, end, and count match the corresponding arguments to
+       glDrawElements(), with the additional constraint that all values in the
+       arrays count must lie between start and end, inclusive.
+
+       Implementations denote recommended maximum amounts of vertex and index
+       data, which may be queried by calling glGet() with argument
+       GL_MAX_ELEMENTS_VERTICES and GL_MAX_ELEMENTS_INDICES. If end - start +
+       1 is greater than the value of GL_MAX_ELEMENTS_VERTICES, or if count is
+       greater than the value of GL_MAX_ELEMENTS_INDICES, then the call may
+       operate at reduced performance. There is no requirement that all
+       vertices in the range start end be referenced. However, the
+       implementation may partially process unused vertices, reducing
+       performance from what could be achieved with an optimal index set.
+
+       When glDrawRangeElements is called, it uses count sequential elements
+       from an enabled array, starting at start to construct a sequence of
+       geometric primitives.  mode specifies what kind of primitives are
+       constructed, and how the array elements construct these primitives. If
+       more than one array is enabled, each is used.
+
+       Vertex attributes that are modified by glDrawRangeElements have an
+       unspecified value after glDrawRangeElements returns. Attributes that
+       aren't modified maintain their previous values.
+
+NOTES
+       GL_LINE_STRIP_ADJACENCY, GL_LINES_ADJACENCY,
+       GL_TRIANGLE_STRIP_ADJACENCY and GL_TRIANGLES_ADJACENCY are available
+       only if the GL version is 3.2 or greater.
+
+ERRORS
+       It is an error for indices to lie outside the range start end, but
+       implementations may not check for this situation. Such indices cause
+       implementation-dependent behavior.
+
+
+       GL_INVALID_ENUM is generated if mode is not an accepted value.
+
+
+       GL_INVALID_VALUE is generated if count is negative.
+
+
+       GL_INVALID_VALUE is generated if end < start.
+
+
+       GL_INVALID_OPERATION is generated if a geometry shader is active and
+       mode is incompatible with the input primitive type of the geometry
+       shader in the currently installed program object.
+
+
+       GL_INVALID_OPERATION is generated if a non-zero buffer object name is
+       bound to an enabled array or the element array and the buffer object's
+       data store is currently mapped.
+
+ASSOCIATED GETS
+       glGet() with argument GL_MAX_ELEMENTS_VERTICES
+
+
+       glGet() with argument GL_MAX_ELEMENTS_INDICES
+
+SEE ALSO
+       glDrawArrays(), glDrawElements(), glDrawElementsBaseVertex()
+
+COPYRIGHT
+       Copyright (C) 1991-2006 Silicon Graphics, Inc. This document is
+       licensed under the SGI Free Software B License. For details, see
+       http://oss.sgi.com/projects/FreeB/.
+
+
+
+OpenGL 3.3			  03/08/2011	       GLDRAWRANGEELEMENTS(3G)
+    </pre></body>
+
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="gluScaleImage  scales  a  pixel image using the appropriate pixel store..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>gluScaleImage - scale an image to an arbitrary size</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLUSCALEIMAGE(3G)					     GLUSCALEIMAGE(3G)
+
+
+
+NAME
+       gluScaleImage - scale an image to an arbitrary size
+
+
+C SPECIFICATION
+       GLint gluScaleImage( GLenum format,
+			    GLsizei wIn,
+			    GLsizei hIn,
+			    GLenum typeIn,
+			    const void *dataIn,
+			    GLsizei wOut,
+			    GLsizei hOut,
+			    GLenum typeOut,
+			    GLvoid* dataOut )
+
+
+PARAMETERS
+       format	Specifies  the	format	of the pixel data.  The following sym-
+		bolic  values  are  valid:  GL_COLOR_INDEX,  GL_STENCIL_INDEX,
+		GL_DEPTH_COMPONENT,   GL_RED,	GL_GREEN,  GL_BLUE,  GL_ALPHA,
+		GL_RGB,   GL_RGBA,   GL_BGR,   GL_BGRA,   GL_LUMINANCE,    and
+		GL_LUMINANCE_ALPHA.
+
+       wIn, hIn Specify  in  pixels the width and height, respectively, of the
+		source image.
+
+       typeIn	Specifies  the	data  type  for  dataIn.  Must	 be   one   of
+		GL_UNSIGNED_BYTE,   GL_BYTE,   GL_BITMAP,   GL_UNSIGNED_SHORT,
+		GL_SHORT,	GL_UNSIGNED_INT,       GL_INT,	     GL_FLOAT,
+		GL_UNSIGNED_BYTE_3_3_2, 	   GL_UNSIGNED_BYTE_2_3_3_REV,
+		GL_UNSIGNED_SHORT_5_6_5,	  GL_UNSIGNED_SHORT_5_6_5_REV,
+		GL_UNSIGNED_SHORT_4_4_4_4,	GL_UNSIGNED_SHORT_4_4_4_4_REV,
+		GL_UNSIGNED_SHORT_5_5_5_1,	GL_UNSIGNED_SHORT_1_5_5_5_REV,
+		GL_UNSIGNED_INT_8_8_8_8,	  GL_UNSIGNED_INT_8_8_8_8_REV,
+		GL_UNSIGNED_INT_10_10_10_2,				   and
+		GL_UNSIGNED_INT_2_10_10_10_REV.
+
+       dataIn	Specifies a pointer to the source image.
+
+       wOut, hOut
+		Specify  the  width and height, respectively, in pixels of the
+		destination image.
+
+       typeOut	Specifies  the	data  type  for  dataOut.  Must  be   one   of
+		GL_UNSIGNED_BYTE,   GL_BYTE,   GL_BITMAP,   GL_UNSIGNED_SHORT,
+		GL_SHORT,	GL_UNSIGNED_INT,       GL_INT,	     GL_FLOAT,
+		GL_UNSIGNED_BYTE_3_3_2, 	   GL_UNSIGNED_BYTE_2_3_3_REV,
+		GL_UNSIGNED_SHORT_5_6_5,	  GL_UNSIGNED_SHORT_5_6_5_REV,
+		GL_UNSIGNED_SHORT_4_4_4_4,	GL_UNSIGNED_SHORT_4_4_4_4_REV,
+		GL_UNSIGNED_SHORT_5_5_5_1,	GL_UNSIGNED_SHORT_1_5_5_5_REV,
+		GL_UNSIGNED_INT_8_8_8_8,	  GL_UNSIGNED_INT_8_8_8_8_REV,
+		GL_UNSIGNED_INT_10_10_10_2, or GL_UNSIGNED_INT_2_10_10_10_REV.
+
+       dataOut	Specifies a pointer to the destination image.
+
+DESCRIPTION
+       gluScaleImage  scales  a  pixel image using the appropriate pixel store
+       modes to unpack data from the source image and pack data into the  des-
+       tination image.
+
+       When  shrinking an image, gluScaleImage uses a box filter to sample the
+       source image and create pixels for the destination image.  When	magni-
+       fying  an image, the pixels from the source image are linearly interpo-
+       lated to create the destination image.
+
+       A return value of zero indicates success, otherwise a GLU error code is
+       returned (see gluErrorString).
+
+       See the glReadPixels reference page for a description of the acceptable
+       values for the format, typeIn, and typeOut parameters.
+
+NOTES
+       Formats	GL_BGR,  and  GL_BGRA,	 and   types   GL_UNSIGNED_BYTE_3_3_2,
+       GL_UNSIGNED_BYTE_2_3_3_REV,		      GL_UNSIGNED_SHORT_5_6_5,
+       GL_UNSIGNED_SHORT_5_6_5_REV,		    GL_UNSIGNED_SHORT_4_4_4_4,
+       GL_UNSIGNED_SHORT_4_4_4_4_REV,		    GL_UNSIGNED_SHORT_5_5_5_1,
+       GL_UNSIGNED_SHORT_1_5_5_5_REV,		      GL_UNSIGNED_INT_8_8_8_8,
+       GL_UNSIGNED_INT_8_8_8_8_REV,	  GL_UNSIGNED_INT_10_10_10_2,	   and
+       GL_UNSIGNED_INT_2_10_10_10_REV are only available if the GL version  is
+       1.2 or greater.
+
+ERRORS
+       GLU_INVALID_VALUE is returned if wIn, hIn, wOut, or hOut is negative.
+
+       GLU_INVALID_ENUM  is  returned  if  format,  typeIn,  or typeOut is not
+       legal.
+
+       GLU_INVALID_OPERATION   is   returned   if   typeIn   or   typeOut   is
+       GL_UNSIGNED_BYTE_3_3_2  or GL_UNSIGNED_BYTE_2_3_3_REV and format is not
+       GL_RGB.
+
+       GLU_INVALID_OPERATION   is   returned   if   typeIn   or   typeOut   is
+       GL_UNSIGNED_SHORT_5_6_5	or  GL_UNSIGNED_SHORT_5_6_5_REV  and format is
+       not GL_RGB.
+
+       GLU_INVALID_OPERATION   is   returned   if   typeIn   or   typeOut   is
+       GL_UNSIGNED_SHORT_4_4_4_4  or  GL_UNSIGNED_SHORT_4_4_4_4_REV and format
+       is neither GL_RGBA nor GL_BGRA.
+
+       GLU_INVALID_OPERATION   is   returned   if   typeIn   or   typeOut   is
+       GL_UNSIGNED_SHORT_5_5_5_1  or  GL_UNSIGNED_SHORT_1_5_5_5_REV and format
+       is neither GL_RGBA nor GL_BGRA.
+
+       GLU_INVALID_OPERATION   is   returned   if   typeIn   or   typeOut   is
+       GL_UNSIGNED_INT_8_8_8_8	or  GL_UNSIGNED_INT_8_8_8_8_REV  and format is
+       neither GL_RGBA nor GL_BGRA.
+
+       GLU_INVALID_OPERATION   is   returned   if   typeIn   or   typeOut   is
+       GL_UNSIGNED_INT_10_10_10_2 or GL_UNSIGNED_INT_2_10_10_10_REV and format
+       is neither GL_RGBA nor GL_BGRA.
+
+SEE ALSO
+       glDrawPixels,   glReadPixels,   gluBuild1DMipmaps,   gluBuild2DMipmaps,
+       gluBuild3DMipmaps,  gluErrorString
+
+
+
+
+							     GLUSCALEIMAGE(3G)
+    </pre></body>
+
+</html>

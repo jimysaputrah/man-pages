@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glCopyTexSubImage3D replaces a rectangular portion of a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glCopyTexSubImage3D - copy a three-dimensional texture subimage</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLCOPYTEXSUBIMAGE3D(3G) 	  OpenGL 3.3	       GLCOPYTEXSUBIMAGE3D(3G)
+
+
+
+NAME
+       glCopyTexSubImage3D - copy a three-dimensional texture subimage
+
+C SPECIFICATION
+       void glCopyTexSubImage3D(GLenum target, GLint level, GLint xoffset,
+				GLint yoffset, GLint zoffset, GLint x,
+				GLint y, GLsizei width, GLsizei height);
+
+
+PARAMETERS
+       target
+	   Specifies the target texture. Must be GL_TEXTURE_3D
+
+       level
+	   Specifies the level-of-detail number. Level 0 is the base image
+	   level. Level n is the nth mipmap reduction image.
+
+       xoffset
+	   Specifies a texel offset in the x direction within the texture
+	   array.
+
+       yoffset
+	   Specifies a texel offset in the y direction within the texture
+	   array.
+
+       zoffset
+	   Specifies a texel offset in the z direction within the texture
+	   array.
+
+       x, y
+	   Specify the window coordinates of the lower left corner of the
+	   rectangular region of pixels to be copied.
+
+       width
+	   Specifies the width of the texture subimage.
+
+       height
+	   Specifies the height of the texture subimage.
+
+DESCRIPTION
+       glCopyTexSubImage3D replaces a rectangular portion of a
+       three-dimensional texture image with pixels from the current
+       GL_READ_BUFFER (rather than from main memory, as is the case for
+       glTexSubImage3D()).
+
+       The screen-aligned pixel rectangle with lower left corner at (x, y) and
+       with width width and height height replaces the portion of the texture
+       array with x indices xoffset through xoffset + width - 1, inclusive,
+       and y indices yoffset through yoffset + height - 1, inclusive, at z
+       index zoffset and at the mipmap level specified by level.
+
+       The pixels in the rectangle are processed exactly as if glReadPixels()
+       had been called, but the process stops just before final conversion. At
+       this point, all pixel component values are clamped to the range 0 1 and
+       then converted to the texture's internal format for storage in the
+       texel array.
+
+       The destination rectangle in the texture array may not include any
+       texels outside the texture array as it was originally specified. It is
+       not an error to specify a subtexture with zero width or height, but
+       such a specification has no effect.
+
+       If any of the pixels within the specified rectangle of the current
+       GL_READ_BUFFER are outside the read window associated with the current
+       rendering context, then the values obtained for those pixels are
+       undefined.
+
+       No change is made to the internalformat, width, height, depth, or
+       border parameters of the specified texture array or to texel values
+       outside the specified subregion.
+
+NOTES
+       glPixelStore() modes affect texture images.
+
+ERRORS
+       GL_INVALID_ENUM is generated if /target is not GL_TEXTURE_3D.
+
+
+       GL_INVALID_OPERATION is generated if the texture array has not been
+       defined by a previous glTexImage3D() operation.
+
+
+       GL_INVALID_VALUE is generated if level is less than 0.
+
+
+       GL_INVALID_VALUE may be generated if level > log 2 ai max, where max is
+       the returned value of GL_MAX_3D_TEXTURE_SIZE.
+
+
+       GL_INVALID_VALUE is generated if xoffset < - b, xoffset + width > w -
+       b, yoffset < - b, yoffset + height > h - b, zoffset < - b, or zoffset +
+       1 > d - b, where w is the GL_TEXTURE_WIDTH, h is the GL_TEXTURE_HEIGHT,
+       d is the GL_TEXTURE_DEPTH, and b is the GL_TEXTURE_BORDER of the
+       texture image being modified. Note that w, h, and d include twice the
+       border width.
+
+ASSOCIATED GETS
+       glGetTexImage()
+
+SEE ALSO
+       glCopyTexImage1D(), glCopyTexImage2D(), glCopyTexSubImage1D(),
+       glCopyTexSubImage2D(), glPixelStore(), glReadBuffer(), glTexImage1D(),
+       glTexImage2D(), glTexImage3D(), glTexParameter(), glTexSubImage1D(),
+       glTexSubImage2D(), glTexSubImage3D()
+
+COPYRIGHT
+       Copyright (C) 1991-2006 Silicon Graphics, Inc. This document is
+       licensed under the SGI Free Software B License. For details, see
+       http://oss.sgi.com/projects/FreeB/.
+
+
+
+OpenGL 3.3			  03/08/2011	       GLCOPYTEXSUBIMAGE3D(3G)
+    </pre></body>
+
+</html>

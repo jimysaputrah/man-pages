@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="These functions are used to remove a file or directory.  Various levels..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>removefile, removefile_state_alloc, removefile_state_free,</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+REMOVEFILE(3)		 BSD Library Functions Manual		 REMOVEFILE(3)
+
+NAME
+     removefile, removefile_state_alloc, removefile_state_free,
+     removefile_state_get, removefile_state_set -- remove files or directories
+
+SYNOPSIS
+     #include <removefile.h>
+
+     int
+     removefile(const char *path, removefile_state_t state,
+	 removefile_flags_t flags);
+
+     removefile_state_t
+     removefile_state_alloc(void);
+
+     int
+     removefile_state_free(removefile_state_t state);
+
+     int
+     removefile_state_get(removefile_state_t state, uint32_t key, void * dst);
+
+     int
+     removefile_state_set(removefile_state_t state, uint32_t key,
+	 const void * value);
+
+     int
+     removefile_cancel(removefile_state_t state);
+
+DESCRIPTION
+     These functions are used to remove a file or directory.  Various levels
+     of overwriting may be specified to prevent other people from recovering
+     any information about the file.
+
+     The removefile_state_alloc() function initializes a removefile_state_t
+     object (which is an opaque data type).  This object can be passed to
+     removefile().  removefile_state_get() and removefile_state_set() can be
+     used to manipulate the state (see below).	The removefile_state_free()
+     function is used to deallocate the object and its contents.
+
+     The removefile() function removes files and directories located at the
+     named path filesystem location.  The named path location can be specified
+     as either an absolute path or relative to the working directory of the
+     calling process.  If the state parameter is the return value from
+     removefile_state_alloc(), then removefile() will use the information from
+     the state object; if it is NULL, then removefile() will work normally,
+     but less control will be available to the caller.	The flags parameter
+     controls deletion options:
+
+     REMOVEFILE_RECURSIVE	    If the path location is a directory, then
+				    recursively delete the entire directory.
+
+     REMOVEFILE_KEEP_PARENT	    The file or directory at the path location
+				    is not deleted.  If specified in conjunc-
+				    tion with REMOVEFILE_RECURSIVE, then all
+				    of the contents of the directory at path
+				    location will be deleted, but not the
+				    directory itself.
+
+     REMOVEFILE_SECURE_7_PASS	    Overwrite the file with 7 US DoD compliant
+				    passes (0xF6, 0x00,  0xFF,	random, 0x00,
+				    0xFF, random).
+
+     REMOVEFILE_SECURE_35_PASS	    Overwrite the file using 35-pass Gutmann
+				    algorithm.
+
+     REMOVEFILE_SECURE_3_PASS	    Overwrite the file twice with random
+				    bytes, and then with 0xAA.
+
+     REMOVEFILE_SECURE_1_PASS	    Overwrite with a single pass of random
+				    data.
+
+     REMOVEFILE_SECURE_1_PASS_ZERO  Overwrite with a single pass of zeroes.
+
+     The removefile_state_get() and removefile_state_set() functions can be
+     used to manipulate the removefile_state_t object returned by
+     removefile_state_alloc().	In both functions, the dst or the value param-
+     eter's type depends on the key parameter that is passed in.
+
+     REMOVEFILE_STATE_CONFIRM_CALLBACK	Get or set the callback function of
+					type removefile_callback_t to be
+					called prior to file deletion.
+
+     REMOVEFILE_STATE_CONFIRM_CONTEXT	Get or set any parameters of type void
+					* that are needed for the confirm
+					callback function.
+
+     REMOVEFILE_STATE_ERROR_CALLBACK	Get or set the callback function of
+					type removefile_callback_t to be
+					called when an error is detected.
+
+     REMOVEFILE_STATE_ERROR_CONTEXT	Get or set any parameters of type void
+					* that are needed for the error call-
+					back function.
+
+     REMOVEFILE_STATE_ERRNO		Get or set the current errno of type
+					int
+
+     REMOVEFILE_STATE_STATUS_CALLBACK	Get or set the callback function of
+					type removefile_callback_t to be
+					called subsequent to file deletion.
+
+     REMOVEFILE_STATE_STATUS_CONTEXT	Get or set any parameters of type void
+					* that are needed for the status call-
+					back function.
+
+     The removefile_callback_t function pointer is defined as the following:
+
+     int (*removefile_callback_t) (removefile_state_t state, const char *path,
+     void *context)
+
+     The return value of the callback function is given as:
+
+     REMOVEFILE_PROCEED  File is deleted and removefile() continues operation
+			 as normal.
+
+     REMOVEFILE_SKIP	 Current file is not deleted and removefile() contin-
+			 ues operation as normal.
+
+     REMOVEFILE_STOP	 Current file is not deleted and removefile() exits
+			 without continuing further.
+
+     The removefile_cancel() function is used to cancel a remove that is in
+     progress.
+
+RETURN VALUES
+     The family of removefile() functions returns less than 0 on error, and 0
+     on success.
+
+ERRORS
+     removefile() will fail if:
+
+     [EACCES]		The path location specifies a file or directory for
+			which the calling process does not have proper permis-
+			sions.
+
+     [EINVAL]		A callback returned an invalid return value (not
+			REMOVEFILE_PROCEED, REMOVEFILE_SKIP, or REMOVE-
+			FILE_STOP)
+
+     [EMLINK]		The path location refers to a symbolic link.
+
+     [ENAMETOOLONG]	The resource fork name of the file exceeds the maximum
+			allowed length.
+
+     [ENOMEM]		A memory allocation failed.
+
+     [ENOTEMPTY]	The path location specifies a directory that contains
+			an immutable file which cannot be deleted.
+
+     [EPERM]		The path location specifies an immutable file that
+			cannot be deleted.
+
+     removefile_cancel() will fail if:
+
+     [EINVAL]		A NULL parameter was passed into removefile_cancel().
+
+     In addition, all functions may return an error from an underlying library
+     or system call.
+
+NOTES
+     Write protected files owned by another user cannot be removed by
+     removefile(), regardless of the permissions on the directory containing
+     the file.
+
+     If multiple of the REMOVEFILE_SECURE_1_PASS, REMOVEFILE_SECURE_7_PASS,
+     and REMOVEFILE_SECURE_35_PASS flags are specified, removefile() will pro-
+     ceed using the flag that specifies the highest number of overwriting
+     passes.
+
+     removefile() is pathname-based; this means that, when descending into a
+     hierarchy, there are potential race conditions that may add risk when run
+     with privileges.
+
+     removefile() operates on symbolic links, rather than the target of the
+     link.
+
+EXAMPLES
+	   /* Initialize a state variable */
+	   removefile_state_t s;
+	   s = removefile_state_alloc();
+	   /* Recursively remove all files and directories while keeping parent tmp directory. */
+	   removefile("/tmp", s, REMOVEFILE_RECURSIVE | REMOVEFILE_KEEP_PARENT);
+	   /* Release the state variable */
+	   removefile_state_free(s);
+
+	   /* A more complex way to call removefile() -- define a callback function */
+	   int removefile_status_callback(removefile_state_t state, const char * path, void * context) {
+	      fprintf(stderr, "File deleted: %s", path);
+	      return REMOVEFILE_PROCEED;
+	   }
+	   /* Initialize a state variable */
+	   s = removefile_state_alloc();
+	   /* Set callback function properties */
+	   removefile_state_set(s, REMOVEFILE_STATE_CONFIRM_CALLBACK, removefile_confirm_callback);
+	   removefile_state_set(s, REMOVEFILE_STATE_CONFIRM_CONTEXT, NULL);
+	   /* Recursively remove all files and directories while keeping parent tmp directory,
+	      calling a confirm callback prior to each file deletion. */
+	   removefile("/tmp", s, REMOVEFILE_RECURSIVE | REMOVEFILE_KEEP_PARENT);
+	   /* Release the state variable. */
+	   removefile_state_free(s);
+
+SEE ALSO
+     srm(1), unlink(1), sync(2), sync_volume_np(3)
+
+HISTORY
+     The removefile() API was introduced in Mac OS X 10.5.
+
+BSD				  May 4, 2007				   BSD
+    </pre></body>
+
+</html>

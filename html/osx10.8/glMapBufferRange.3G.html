@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glMapBufferRange maps all or part of the data store of a buffer object..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glMapBufferRange - map a section of a buffer object's data store</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLMAPBUFFERRANGE(3G)		  OpenGL 3.3		  GLMAPBUFFERRANGE(3G)
+
+
+
+NAME
+       glMapBufferRange - map a section of a buffer object's data store
+
+C SPECIFICATION
+       void *glMapBufferRange(GLenum target, GLintptr offset,
+			      GLsizeiptr length, GLbitfield access);
+
+PARAMETERS
+       target
+	   Specifies a binding to which the target buffer is bound.
+
+       offset
+	   Specifies a the starting offset within the buffer of the range to
+	   be mapped.
+
+       length
+	   Specifies a length of the range to be mapped.
+
+       access
+	   Specifies a combination of access flags indicating the desired
+	   access to the range.
+
+DESCRIPTION
+       glMapBufferRange maps all or part of the data store of a buffer object
+       into the client's address space.  target specifies the target to which
+       the buffer is bound and must be one of GL_ARRAY_BUFFER,
+       GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, GL_ELEMENT_ARRAY_BUFFER,
+       GL_PIXEL_PACK_BUFFER, GL_PIXEL_UNPACK_BUFFER, GL_TEXTURE_BUFFER,
+       GL_TRANSFORM_FEEDBACK_BUFFER, or GL_UNIFORM_BUFFER.  offset and length
+       indicate the range of data in the buffer object htat is to be mapped,
+       in terms of basic machine units.  access is a bitfield containing flags
+       which describe the requested mapping. These flags are described below.
+
+       If no error occurs, a pointer to the beginning of the mapped range is
+       returned once all pending operations on that buffer have completed, and
+       may be used to modify and/or query the corresponding range of the
+       buffer, according to the following flag bits set in access:
+
+       o    GL_MAP_READ_BIT indicates that the returned pointer may be used to
+	   read buffer object data. No GL error is generated if the pointer is
+	   used to query a mapping which excludes this flag, but the result is
+	   undefined and system errors (possibly including program
+	   termination) may occur.
+
+       o    GL_MAP_WRITE_BIT indicates that the returned pointer may be used
+	   to modify buffer object data. No GL error is generated if the
+	   pointer is used to modify a mapping which excludes this flag, but
+	   the result is undefined and system errors (possibly including
+	   program termination) may occur.
+
+       Furthermore, the following optional flag bits in access may be used to
+       modify the mapping:
+
+       o    GL_MAP_INVALIDATE_RANGE_BIT indicates that the previous contents
+	   of the specified range may be discarded. Data within this range are
+	   undefined with the exception of subsequently written data. No GL
+	   error is generated if sub- sequent GL operations access unwritten
+	   data, but the result is undefined and system errors (possibly
+	   including program termination) may occur. This flag may not be used
+	   in combination with GL_MAP_READ_BIT.
+
+       o    GL_MAP_INVALIDATE_BUFFER_BIT indicates that the previous contents
+	   of the entire buffer may be discarded. Data within the entire
+	   buffer are undefined with the exception of subsequently written
+	   data. No GL error is generated if subsequent GL operations access
+	   unwritten data, but the result is undefined and system errors
+	   (possibly including program termination) may occur. This flag may
+	   not be used in combination with GL_MAP_READ_BIT.
+
+       o    GL_MAP_FLUSH_EXPLICIT_BIT indicates that one or more discrete
+	   subranges of the mapping may be modified. When this flag is set,
+	   modifications to each subrange must be explicitly flushed by
+	   calling glFlushMappedBufferRange(). No GL error is set if a
+	   subrange of the mapping is modified and not flushed, but data
+	   within the corresponding subrange of the buffer are undefined. This
+	   flag may only be used in conjunction with GL_MAP_WRITE_BIT. When
+	   this option is selected, flushing is strictly limited to regions
+	   that are explicitly indicated with calls to
+	   glFlushMappedBufferRange() prior to unmap; if this option is not
+	   selected glUnmapBuffer() will automatically flush the entire mapped
+	   range when called.
+
+       o    GL_MAP_UNSYNCHRONIZED_BIT indicates that the GL should not attempt
+	   to synchronize pending operations on the buffer prior to returning
+	   from glMapBufferRange. No GL error is generated if pending
+	   operations which source or modify the buffer overlap the mapped
+	   region, but the result of such previous and any subsequent
+	   operations is undefined.
+
+       If an error occurs, glMapBufferRange returns a NULL pointer.
+
+ERRORS
+       GL_INVALID_VALUE is generated if either of offset or length is
+       negative, or if offset + length is greater than the value of
+       GL_BUFFER_SIZE.
+
+
+       GL_INVALID_VALUE is generated if access has any bits set other than
+       those defined above.
+
+
+       GL_INVALID_OPERATION is generated for any of the following conditions:
+
+       o   The buffer is already in a mapped state.
+
+       o   Neither GL_MAP_READ_BIT or GL_MAP_WRITE_BIT is set.
+
+       o    GL_MAP_READ_BIT is set and any of GL_MAP_INVALIDATE_RANGE_BIT,
+	   GL_MAP_INVALIDATE_BUFFER_BIT, or GL_MAP_UNSYNCHRONIZED_BIT is set.
+
+       o    GL_MAP_FLUSH_EXPLICIT_BIT is set and GL_MAP_WRITE_BIT is not set.
+
+
+       GL_OUT_OF_MEMORY is generated if glMapBufferRange fails because memory
+       for the mapping could not be obtained.
+
+SEE ALSO
+       glMapBuffer(), glFlushMappedBufferRange(), glBindBuffer()
+
+COPYRIGHT
+       Copyright (C) 2010 Khronos Group. This material may be distributed
+       subject to the terms and conditions set forth in the Open Publication
+       License, v 1.0, 8 June 1999.  http://opencontent.org/openpub/.
+
+
+
+OpenGL 3.3			  03/08/2011		  GLMAPBUFFERRANGE(3G)
+    </pre></body>
+
+</html>

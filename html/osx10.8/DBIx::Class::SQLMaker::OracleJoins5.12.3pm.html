@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Implements pre-ANSI joins specified in the where clause.  Instead of:..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>DBIx::Class::SQLMaker::OracleJoins - Pre-ANSI Joins-via-Where-Clause</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+DBIx::Class::SQLMaker:UsercContributed PeDBIx::Class::SQLMaker::OracleJoins(3)
+
+
+
+NAME
+       DBIx::Class::SQLMaker::OracleJoins - Pre-ANSI Joins-via-Where-Clause
+       Syntax
+
+PURPOSE
+       This module is used with Oracle < 9.0 due to lack of support for
+       standard ANSI join syntax.
+
+SYNOPSIS
+       Not intended for use directly; used as the sql_maker_class for schemas
+       and components.
+
+DESCRIPTION
+       Implements pre-ANSI joins specified in the where clause.  Instead of:
+
+	   SELECT x FROM y JOIN z ON y.id = z.id
+
+       It will write:
+
+	   SELECT x FROM y, z WHERE y.id = z.id
+
+       It should properly support left joins, and right joins.	Full outer
+       joins are not possible due to the fact that Oracle requires the entire
+       query be written to union the results of a left and right join, and by
+       the time this module is called to create the where query and table
+       definition part of the sql query, it's already too late.
+
+METHODS
+       select
+	   Overrides DBIx::Class::SQLMaker's select() method, which calls
+	   _oracle_joins() to modify the column and table list before calling
+	   next::method().
+
+BUGS
+       Does not support full outer joins (however neither really does DBIC
+       itself)
+
+SEE ALSO
+       DBIx::Class::Storage::DBI::Oracle::WhereJoins - Storage class using
+       this
+       DBIx::Class::SQLMaker - Parent module
+       DBIx::Class - Duh
+
+AUTHOR
+       Justin Wheeler "<jwheeler@datademons.com>"
+
+CONTRIBUTORS
+       David Jack Olrik "<djo@cpan.org>"
+
+LICENSE
+       This module is licensed under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-07DBIx::Class::SQLMaker::OracleJoins(3)
+    </pre></body>
+
+</html>

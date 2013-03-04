@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Fog is initially disabled.  While enabled, fog affects rasterized geom-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glFogf, glFogi, glFogfv, glFogiv - specify fog parameters</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLFOG(3G)							     GLFOG(3G)
+
+
+
+NAME
+       glFogf, glFogi, glFogfv, glFogiv - specify fog parameters
+
+
+C SPECIFICATION
+       void glFogf( GLenum pname,
+		    GLfloat param )
+       void glFogi( GLenum pname,
+		    GLint param )
+
+
+PARAMETERS
+       pname   Specifies   a   single-valued   fog   parameter.   GL_FOG_MODE,
+	       GL_FOG_DENSITY, GL_FOG_START, GL_FOG_END, and GL_FOG_INDEX  are
+	       accepted.
+
+       param   Specifies the value that pname will be set to.
+
+C SPECIFICATION
+       void glFogfv( GLenum pname,
+		     const GLfloat *params )
+       void glFogiv( GLenum pname,
+		     const GLint *params )
+
+
+PARAMETERS
+       pname  Specifies   a   fog   parameter.	 GL_FOG_MODE,  GL_FOG_DENSITY,
+	      GL_FOG_START, GL_FOG_END,  GL_FOG_INDEX,	and  GL_FOG_COLOR  are
+	      accepted.
+
+       params Specifies   the  value  or  values  to  be  assigned  to	pname.
+	      GL_FOG_COLOR requires an array of four values.  All other param-
+	      eters accept an array containing only a single value.
+
+DESCRIPTION
+       Fog is initially disabled.  While enabled, fog affects rasterized geom-
+       etry, bitmaps, and pixel blocks, but not buffer	clear  operations.  To
+       enable  and  disable  fog,  call  glEnable  and glDisable with argument
+       GL_FOG.
+
+       glFog assigns the value or values in params to the fog parameter speci-
+       fied by pname.  The following values are accepted for pname:
+
+       GL_FOG_MODE	   params  is a single integer or floating-point value
+			   that specifies the equation to be used  to  compute
+			   the	fog blend factor, f.  Three symbolic constants
+			   are accepted: GL_LINEAR, GL_EXP, and GL_EXP2.   The
+			   equations corresponding to these symbolic constants
+			   are defined below.  The initial fog mode is GL_EXP.
+
+       GL_FOG_DENSITY	   params  is a single integer or floating-point value
+			   that specifies density, the	fog  density  used  in
+			   both  exponential  fog equations.  Only nonnegative
+			   densities are accepted.  The initial fog density is
+			   1.
+
+       GL_FOG_START	   params  is a single integer or floating-point value
+			   that specifies start, the near distance used in the
+			   linear  fog equation.  The initial near distance is
+			   0.
+
+       GL_FOG_END	   params is a single integer or floating-point  value
+			   that  specifies  end,  the far distance used in the
+			   linear fog equation.  The initial far  distance  is
+			   1.
+
+       GL_FOG_INDEX	   params  is a single integer or floating-point value
+			   that specifies if, the fog color index.   The  ini-
+			   tial fog index is 0.
+
+       GL_FOG_COLOR	   params contains four integer or floating-point val-
+			   ues that specify Cf, the fog color.	Integer values
+			   are	mapped	linearly  such	that the most positive
+			   representable value maps to 1.0, and the most nega-
+			   tive  representable	value maps to -1.0.  Floating-
+			   point values are mapped  directly.	After  conver-
+			   sion, all color components are clamped to the range
+			   [0,1].  The initial fog color is (0, 0, 0, 0).
+
+       Fog blends a fog color with each rasterized pixel  fragment's  posttex-
+       turing color using a blending factor f.	Factor f is computed in one of
+       three ways, depending on the fog mode.  Let z be the  distance  in  eye
+       coordinates from the origin to the fragment being fogged.  The equation
+       for GL_LINEAR fog is
+
+			    f = (end - z) / (end - start)
+
+       The equation for GL_EXP fog is
+
+			       f = e^-(density dot z)
+
+       The equation for GL_EXP2 fog is
+
+			     f = e^-( (density dot z)^2)
+
+
+       Regardless of the fog mode, f is clamped to the range [0, 1]  after  it
+       is  computed.   Then,  if  the GL is in RGBA color mode, the fragment's
+       red, green, and blue colors, represented by Cr, are replaced by
+
+
+			       Cr' = f * Cr + (1-f) Cf
+
+
+       Fog does not affect a fragment's alpha component.
+
+       In color index mode, the fragment's color index ir is replaced by
+
+				ir' = ir + (1 - f) if
+
+
+ERRORS
+       GL_INVALID_ENUM is generated if pname is not an accepted value,	or  if
+       pname is GL_FOG_MODE and params is not an accepted value.
+
+       GL_INVALID_VALUE is generated if pname is GL_FOG_DENSITY, and params is
+       negative.
+
+       GL_INVALID_OPERATION is generated if glFog is executed between the exe-
+       cution of glBegin and the corresponding execution of glEnd.
+
+ASSOCIATED GETS
+       glIsEnabled with argument GL_FOG
+       glGet with argument GL_FOG_COLOR
+       glGet with argument GL_FOG_INDEX
+       glGet with argument GL_FOG_DENSITY
+       glGet with argument GL_FOG_START
+       glGet with argument GL_FOG_END
+       glGet with argument GL_FOG_MODE
+
+SEE ALSO
+       glEnable
+
+
+
+								     GLFOG(3G)
+    </pre></body>
+
+</html>

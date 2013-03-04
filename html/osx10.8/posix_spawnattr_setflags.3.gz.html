@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The posix_spawnattr_setflags() function sets the flags on the attributes..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>posix_spawnattr_setflags posix_spawnattr_getflags -- get or set flags on</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+POSIX_SPAWNATTR_SETFL... BSD Library Functions Manual POSIX_SPAWNATTR_SETFL...
+
+NAME
+     posix_spawnattr_setflags posix_spawnattr_getflags -- get or set flags on
+     a posix_spawnattr_t
+
+SYNOPSIS
+     #include <spawn.h>
+
+     int
+     posix_spawnattr_setflags(posix_spawnattr_t *attr, short flags);
+
+     int
+     posix_spawnattr_getflags(const posix_spawnattr_t *restrict attr,
+	 short *restrict flags);
+
+DESCRIPTION
+     The posix_spawnattr_setflags() function sets the flags on the attributes
+     object referenced by attr.
+
+     The posix_spawnattr_getflags() function retrieves the flags on the
+     attributes object referenced by attr.
+
+     The argument flags is either 0 or a logical OR of one or more of the fol-
+     lowing flags:
+
+     POSIX_SPAWN_RESETIDS	  If this bit is set, the child process will
+				  inherit the real (rather than the effective)
+				  user and group ID of the parent process.
+				  NOTE: This flag has no effect when the set-
+				  group bit is set on the process image being
+				  spawned.
+
+     POSIX_SPAWN_SETPGROUP	  If this bit is not set, then the child
+				  process inherits the parent process group;
+				  if it is set, then the child process will
+				  behave as if the setpgid(2) function had
+				  been called with a pid parameter of 0 and a
+				  pgid parameter equal to the value of the
+				  spawn-pgroup value of the posix_spawnattr_t,
+				  as set by posix_spawnattr_setpgroup(3)
+
+     POSIX_SPAWN_SETSIGDEF	  Signals set to to either be caught or to the
+				  default action in the parent process will
+				  also be set to the default action in the
+				  child process.  Signals set to be ignored in
+				  the parent process will be ignored in the
+				  child.  However, if this bit is set, then
+				  signals in the spawn-sigdefault value of the
+				  posix_spawnattr_t, as set by
+				  posix_spawnattr_setsigdefault(3) which are
+				  caught or ignored in the parent will instead
+				  be reset to their default actions in the
+				  child.
+
+     POSIX_SPAWN_SETSIGMASK	  If this bit is set, then the initial signal
+				  mask of the child process will be set to the
+				  spawn-sigmask value of the
+				  posix_spawnattr_t, as set by
+				  posix_spawnattr_setsigmask(3).
+
+     POSIX_SPAWN_SETEXEC	  Apple Extension: If this bit is set, rather
+				  than returning to the caller, posix_spawn(2)
+				  and posix_spawnp(2) will behave as a more
+				  featureful execve(2).
+
+     POSIX_SPAWN_START_SUSPENDED  Apple Extension: If this bit is set, then
+				  the child process will be created with its
+				  task suspended, permitting debuggers, pro-
+				  filers, and other programs to manipulate the
+				  process before it begins execution in user
+				  space.  This permits, for example, obtaining
+				  exact instruction counts, or debugging very
+				  early in dyld(1).
+
+     POSIX_SPAWN_CLOEXEC_DEFAULT  Apple Extension: If this bit is set, then
+				  only file descriptors explicitly described
+				  by the file_actions argument are available
+				  in the spawned process; all of the other
+				  file descriptors are automatically closed in
+				  the spawned process.
+
+RETURN VALUES
+     On success, these functions return 0; on failure they return an error
+     number from <errno.h>.  The posix_spawnattr_getflags() additionally, upon
+     successful completion, modifies the value pointed to be the attr argument
+     by making it equal to the spawn-flags attribute of the posix_spawnattr_t.
+
+ERRORS
+     These functions may fail if:
+
+     [EINVAL]		The value specified by attr is invalid.
+
+     [EINVAL]		The value of attr is invalid.
+
+SEE ALSO
+     posix_spawn(2), posix_spawnp(2), posix_spawnattr_init(3),
+     posix_spawnattr_destroy(3), posix_spawnattr_setpgroup(3),
+     posix_spawnattr_setsigdefault(3), posix_spawnattr_setsigmask(3),
+     posix_spawn_file_actions_init(3), setpgid(2), execve(2), dyld(1)
+
+STANDARDS
+     Version 3 of the Single UNIX Specification (``SUSv3'') [SPN]
+
+HISTORY
+     The posix_spawnattr_setflags() and posix_spawnattr_getflags() function
+     calls appeared in Version 3 of the Single UNIX Specification (``SUSv3'')
+     [SPN].
+
+Mac OS X		       October 28, 2010 		      Mac OS X
+    </pre></body>
+
+</html>

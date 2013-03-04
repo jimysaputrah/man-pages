@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="sysdiagnose tool gathers system diagnostic information helpful in inves-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>sysdiagnose -- gathers system-wide diagnostic information helpful in</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+sysdiagnose(1)		  BSD General Commands Manual		sysdiagnose(1)
+
+NAME
+     sysdiagnose -- gathers system-wide diagnostic information helpful in
+     investigating system performance issues.
+
+SYNOPSIS
+     sysdiagnose -h
+     sysdiagnose [-t] [-f results_directory] [process_name | pid]
+
+DESCRIPTION
+     sysdiagnose tool gathers system diagnostic information helpful in inves-
+     tigating system performance issues. A great deal of information is har-
+     vested, spanning system state and configuration.  sysdiagnose needs to be
+     run as root.  sysdiagnose can be triggered upon pressing a special key
+     chord; this is currently Control-Option-Command-Shift-Period.
+
+   What sysdiagnose Collects:
+	   o   A spindump of the system
+	   o   Several seconds of fs_usage ouput
+	   o   Several seconds of top output
+	   o   Data about kernel zones
+	   o   Status of loaded kernel extensions
+	   o   Resident memory usage of user processes
+	   o   All system logs, kernel logs, opendirectory log, windowserver
+	       log, and log of power management events
+	   o   A System Profiler report
+	   o   All spin and crash reports
+	   o   Disk usage information
+	   o   I/O Kit registry information
+	   o   Network status
+	   o   If a specific process is supplied as an argument: list of mal-
+	       loc-allocated buffers in the process's heap is collected
+	   o   If a specific process is supplied as an argument: data about
+	       unreferenced malloc buffers in the process's memory is col-
+	       lected
+	   o   If a specific process is supplied as an argument: data about
+	       the virtual memory regions allocated in the process
+
+OPTIONS
+     -h       Print full usage.
+
+     -f results_directory
+	      Specify the directory where the results will be stored. The
+	      default results directory is /var/tmp.
+
+     process_name | pid
+	      If a single process appears to be slowing down the system, pass-
+	      ing in the process name or ID as the argument gathers addition
+	      process-specific diagnostic data.
+
+     -t       Enable "Thorough Mode". See below.
+
+THOROUGH MODE
+     sysdiagnose can be run in a "Thorough Mode" in which standard data is
+     gathered as well as a kernel trace and unflattened allmemory data.
+     Enabling "Thorough Mode" for the command-line sysdiagnose and key-chord
+     sysdiagnose are independent and are performed as follows:
+
+     For "Thorough Mode" in the command-line sysdiagnose use the "-t" flag.
+
+     To enable "Thorough Mode" for special key-chord launches of sysdiagnose
+     execute "touch /var/tmp/.thoroughsysdiagnose"
+
+     To disable "Thorough Mode" for special key-chord launches of sysdiagnose
+     execute "rm /var/tmp/.thoroughsysdiagnose"
+
+   Note:
+     Gathering the kernel trace and unflattened allmemory data can increase
+     the size of sysdiagnose output by hundreds of MB as well as increase the
+     time for sysdiagnose to complete.
+
+EXIT STATUS
+     sysdiagnose exits with status 0 if there were no internal errors encoun-
+     tered during the diagnostic, or >0 when an error unrelated to external
+     state occurs or unusable input is provided by the user.
+
+Darwin				 March 3, 2013				Darwin
+    </pre></body>
+
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="CREATE FOREIGN TABLE will create a new foreign table in the current..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>CREATE_FOREIGN_TABLE - define a new foreign table</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+CREATE FOREIGN TABLE(7) PostgreSQL 9.1.4 Documentation CREATE FOREIGN TABLE(7)
+
+
+
+NAME
+       CREATE_FOREIGN_TABLE - define a new foreign table
+
+SYNOPSIS
+       CREATE FOREIGN TABLE [ IF NOT EXISTS ] table_name ( [
+	 { column_name data_type [ NULL | NOT NULL ] }
+	   [, ... ]
+       ] )
+	 SERVER server_name
+       [ OPTIONS ( option 'value' [, ... ] ) ]
+
+DESCRIPTION
+       CREATE FOREIGN TABLE will create a new foreign table in the current
+       database. The table will be owned by the user issuing the command.
+
+       If a schema name is given (for example, CREATE FOREIGN TABLE
+       myschema.mytable ...) then the table is created in the specified
+       schema. Otherwise it is created in the current schema. The name of the
+       foreign table must be distinct from the name of any other foreign
+       table, table, sequence, index, or view in the same schema.
+
+
+       CREATE FOREIGN TABLE also automatically creates a data type that
+       represents the composite type corresponding to one row of the foreign
+       table. Therefore, foreign tables cannot have the same name as any
+       existing data type in the same schema.
+
+PARAMETERS
+       IF NOT EXISTS
+	   Do not throw an error if a relation with the same name already
+	   exists. A notice is issued in this case. Note that there is no
+	   guarantee that the existing relation is anything like the one that
+	   would have been created.
+
+       table_name
+	   The name (optionally schema-qualified) of the table to be created.
+
+       column_name
+	   The name of a column to be created in the new table.
+
+       data_type
+	   The data type of the column. This can include array specifiers. For
+	   more information on the data types supported by PostgreSQL, refer
+	   to Chapter 8, Data Types, in the documentation.
+
+       NOT NULL
+	   The column is not allowed to contain null values.
+
+       NULL
+	   The column is allowed to contain null values. This is the default.
+
+	   This clause is only provided for compatibility with non-standard
+	   SQL databases. Its use is discouraged in new applications.
+
+       server_name
+	   The name of an existing server for the foreign table.
+
+       OPTIONS ( option 'value' [, ...] )
+	   Options to be associated with the new foreign table. The allowed
+	   option names and values are specific to each foreign data wrapper
+	   and are validated using the foreign-data wrapper's validator
+	   function. Option names must be unique.
+
+EXAMPLES
+       Create foreign table films with film_server:
+
+	   CREATE FOREIGN TABLE films (
+	       code	   char(5) NOT NULL,
+	       title	   varchar(40) NOT NULL,
+	       did	   integer NOT NULL,
+	       date_prod   date,
+	       kind	   varchar(10),
+	       len	   interval hour to minute
+	   )
+	   SERVER film_server;
+
+COMPATIBILITY
+       The CREATE FOREIGN TABLE command largely conforms to the SQL standard;
+       however, much as with CREATE TABLE, NULL constraints and zero-column
+       foreign tables are permitted.
+
+SEE ALSO
+       ALTER FOREIGN TABLE (ALTER_FOREIGN_TABLE(7)), DROP FOREIGN TABLE
+       (DROP_FOREIGN_TABLE(7)), CREATE TABLE (CREATE_TABLE(7)), CREATE SERVER
+       (CREATE_SERVER(7))
+
+
+
+PostgreSQL 9.1.4		  2012-05-31	       CREATE FOREIGN TABLE(7)
+    </pre></body>
+
+</html>

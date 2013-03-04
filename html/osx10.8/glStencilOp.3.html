@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Stenciling,  like  depth-buffering,  enables  and disables drawing on a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glStencilOp - set stencil test actions</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLSTENCILOP(3G) 					       GLSTENCILOP(3G)
+
+
+
+NAME
+       glStencilOp - set stencil test actions
+
+
+C SPECIFICATION
+       void glStencilOp( GLenum fail,
+			 GLenum zfail,
+			 GLenum zpass )
+
+
+PARAMETERS
+       fail   Specifies  the  action to take when the stencil test fails.  Six
+	      symbolic constants are accepted: GL_KEEP,  GL_ZERO,  GL_REPLACE,
+	      GL_INCR, GL_DECR, and GL_INVERT. The initial value is GL_KEEP.
+
+       zfail  Specifies  the  stencil action when the stencil test passes, but
+	      the depth test fails.  zfail accepts the same symbolic constants
+	      as fail. The initial value is GL_KEEP.
+
+       zpass  Specifies  the stencil action when both the stencil test and the
+	      depth test pass, or when the  stencil  test  passes  and	either
+	      there is no depth buffer or depth testing is not enabled.  zpass
+	      accepts the same symbolic constants as fail. The	initial  value
+	      is GL_KEEP.
+
+DESCRIPTION
+       Stenciling,  like  depth-buffering,  enables  and disables drawing on a
+       per-pixel basis.  You draw into the stencil  planes  using  GL  drawing
+       primitives,  then  render geometry and images, using the stencil planes
+       to mask out portions of the screen.  Stenciling is  typically  used  in
+       multipass  rendering  algorithms  to  achieve  special effects, such as
+       decals, outlining, and constructive solid geometry rendering.
+
+       The stencil test conditionally eliminates a pixel based on the  outcome
+       of a comparison between the value in the stencil buffer and a reference
+       value. To enable and disable the test, call glEnable and glDisable with
+       argument GL_STENCIL_TEST; to control it, call glStencilFunc.
+
+       glStencilOp  takes  three  arguments  that indicate what happens to the
+       stored stencil value while stenciling is enabled.  If the stencil  test
+       fails,  no  change  is  made to the pixel's color or depth buffers, and
+       fail specifies what happens to the stencil buffer contents.   The  fol-
+       lowing six actions are possible.
+
+       GL_KEEP	       Keeps the current value.
+
+       GL_ZERO	       Sets the stencil buffer value to 0.
+
+       GL_REPLACE      Sets  the  stencil buffer value to ref, as specified by
+		       glStencilFunc.
+
+       GL_INCR	       Increments the current stencil buffer value.  Clamps to
+		       the maximum representable unsigned value.
+
+       GL_DECR	       Decrements the current stencil buffer value.  Clamps to
+		       0.
+
+       GL_INVERT       Bitwise inverts the current stencil buffer value.
+
+       Stencil buffer values are treated as unsigned  integers.   When	incre-
+       mented and decremented, values are clamped to 0 and 2^n - 1, where n is
+       the value returned by querying GL_STENCIL_BITS.
+
+       The other two arguments to glStencilOp specify stencil  buffer  actions
+       that depend on whether subsequent depth buffer tests succeed (zpass) or
+       fail (zfail) (see
+       glDepthFunc).  The actions are specified using the  same  six  symbolic
+       constants  as  fail.  Note that zfail is ignored when there is no depth
+       buffer, or when the depth buffer is not enabled.  In these cases,  fail
+       and  zpass  specify  stencil  action  when  the	stencil test fails and
+       passes, respectively.
+
+NOTES
+       Initially the stencil test is disabled.	If there is no stencil buffer,
+       no  stencil  modification  can  occur and it is as if the stencil tests
+       always pass, regardless of any call to glStencilOp.
+
+ERRORS
+       GL_INVALID_ENUM is generated if fail, zfail,  or  zpass	is  any  value
+       other than the six defined constant values.
+
+       GL_INVALID_OPERATION  is  generated  if glStencilOp is executed between
+       the execution of glBegin and the corresponding execution of glEnd.
+
+ASSOCIATED GETS
+       glGet with argument GL_STENCIL_FAIL
+       glGet with argument GL_STENCIL_PASS_DEPTH_PASS
+       glGet with argument GL_STENCIL_PASS_DEPTH_FAIL
+       glGet with argument GL_STENCIL_BITS
+       glIsEnabled with argument GL_STENCIL_TEST
+
+SEE ALSO
+       glAlphaFunc,    glBlendFunc,    glDepthFunc,    glEnable,    glLogicOp,
+       glStencilFunc
+
+
+
+							       GLSTENCILOP(3G)
+    </pre></body>
+
+</html>

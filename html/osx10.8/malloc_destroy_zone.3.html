@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The malloc_create_zone() function creates a malloc zone, advising an ini-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>malloc_create_zone, malloc_destroy_zone, malloc_default_zone,</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+MALLOC_ZONE_MALLOC(3)	 BSD Library Functions Manual	 MALLOC_ZONE_MALLOC(3)
+
+NAME
+     malloc_create_zone, malloc_destroy_zone, malloc_default_zone,
+     malloc_zone_from_ptr, malloc_zone_malloc, malloc_zone_calloc,
+     malloc_zone_valloc, malloc_zone_realloc, malloc_zone_memalign,
+     malloc_zone_free -- zone-based memory allocation
+
+SYNOPSIS
+     #include <malloc/malloc.h>
+
+     malloc_zone_t *
+     malloc_create_zone(vm_size_t start_size, unsigned flags);
+
+     void
+     malloc_destroy_zone(malloc_zone_t *zone);
+
+     malloc_zone_t *
+     malloc_default_zone(void);
+
+     malloc_zone_t *
+     malloc_zone_from_ptr(const void *ptr);
+
+     void *
+     malloc_zone_malloc(malloc_zone_t *zone, size_t size);
+
+     void *
+     malloc_zone_calloc(malloc_zone_t *zone, size_t num_items, size_t size);
+
+     void *
+     malloc_zone_valloc(malloc_zone_t *zone, size_t size);
+
+     void *
+     malloc_zone_realloc(malloc_zone_t *zone, void *ptr, size_t size);
+
+     void *
+     malloc_zone_memalign(malloc_zone_t *zone, size_t alignment, size_t size);
+
+     void
+     malloc_zone_free(malloc_zone_t *zone, void *ptr);
+
+DESCRIPTION
+     The malloc_create_zone() function creates a malloc zone, advising an ini-
+     tial allocation of start_size bytes, and specifying flags The returned
+     malloc zone can be used to provide custom allocation and deallocation
+     behavior, and to retrieve additional information about the allocations in
+     that zone.  At present there are no client settable flag values recog-
+     nized by malloc_create_zone(), the flags argument should always be passed
+     as zero.
+
+     The malloc_destroy_zone() function deallocates all memory associated with
+     objects in zone as well as zone itself.
+
+     The malloc_default_zone() function returns the default system malloc
+     zone, used by malloc(3), and free(3).
+
+     The malloc_zone_from_ptr() function returns a pointer to the malloc zone
+     which contains ptr or NULL, if the pointer does not point to an allocated
+     object in any current malloc zone.
+
+     The malloc_zone_malloc(), malloc_zone_calloc(), malloc_zone_valloc(),
+     malloc_zone_realloc(), malloc_zone_memalign(), and malloc_zone_free()
+     perform the same task on zone as their non-prefixed variants, malloc(3),
+     calloc(3), valloc(3), realloc(3), posix_memalign(3), and free(3) perform
+     on the default system malloc zone.
+
+RETURN VALUES
+     The malloc_create_zone(), malloc_default_zone(), and
+     malloc_zone_from_ptr() functions return a pointer to a malloc_zone_t
+     structure, or NULL if there was an error.
+
+     The malloc_zone_malloc(), malloc_zone_calloc(), malloc_zone_valloc(),
+     malloc_zone_realloc(), and malloc_zone_memalign() functions return a
+     pointer to allocated memory.  If there is an error, they return a NULL
+     pointer.  They are not required to set errno.
+
+SEE ALSO
+     malloc(3), posix_memalign(3)
+
+BSD				 Aug 13, 2008				   BSD
+    </pre></body>
+
+</html>

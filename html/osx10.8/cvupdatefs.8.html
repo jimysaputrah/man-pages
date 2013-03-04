@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The  cvupdatefs	program  is used to commit a configuration change to a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>cvupdatefs - Commit a Xsan Volume configuration change</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+CVUPDATEFS(1)							 CVUPDATEFS(1)
+
+
+
+NAME
+       cvupdatefs - Commit a Xsan Volume configuration change
+
+SYNOPSIS
+       cvupdatefs [ -bdfFhlnSv ] [ -c < pathname > ] [
+
+       -O < ofilename > ] [ -R < NewFsName > ] [ FsName ] [ FsPath ]
+
+
+DESCRIPTION
+       The  cvupdatefs	program  is used to commit a configuration change to a
+       Xsan volume. Possible configuration changes include storage  pool  list
+       modification as well as file system journal modification.
+
+       The file system update program must be run on the machine that the File
+       System Manager (FSM) is running on. This utility reads  the  configura-
+       tion  file  and compares the configuration file against the current on-
+       disk metadata configuration. If there are differences between the  con-
+       figuration  and	the  on-disk  metadata,  the utility will display what
+       changes need to be made to bring the volume metadata up to date.
+
+       NOTE: All metadata modification must be made on a stopped volume. It is
+       recommended  that  the  volume  is  stopped  and cvfsck(1) has been run
+       before making any changes to a  volume  configuration.	Maintaining  a
+       backup  of the original volume configuration file is also strongly rec-
+       ommended.
+
+
+USAGE
+       -b     Build info - log the build information.
+
+       -c <pathname>
+	      Provide a specific path to the previous configuration file  that
+	      is to be used.  This option is used to force cvfsck to be run as
+	      a sub-process to insure that the volume meta data is  consistent
+	      prior to doing a capacity or bandwidth expansion, or any journal
+	      changes.
+
+       -C     Like the -c option, but also instructs cvfsck to check the  file
+	      system  for  name collisions that would occur on a case-insensi-
+	      tive file system.
+
+       -d     Debug - use to turn on internal debugging only.
+
+       -F     Force - do not prompt for confirmation  before  making  changes.
+	      WARNING:	Errors	in the configuration file may cause unintended
+	      results.
+
+       -f     Failure mode - do not fail if there is a configuration mismatch.
+	      Note:  This option is not intended for general use.  Use only if
+	      instructed by Apple support.  Incorrect use  may	result	in  an
+	      unusable file system.
+
+
+       -h     Help - print the synopsis for this command.
+
+
+       -l     Log - log when the update finished.
+
+       -n     Read-only - set metadata to read-only mode.
+
+       -O <path to original configuration file>
+	      Overwrite - This option is required if the configuration changes
+	      that will be applied will trigger an overwrite  of  an  existing
+	      storage  pool.  This option should be used with extreme caution.
+	      Errors in the configuration file could lead to  data  loss.  See
+	      the CORRECTING MISCONFIGURED STORAGE POOLS section.
+
+       -R <NewFsName>
+	      Rename  -  Provide  a new file system name to rename an existing
+	      file system.  The existing config file will be renamed, and  the
+	      existing	data directory containing logs will be migrated to the
+	      new name.  Note:	This option is not intended for  general  use.
+	      Use  only  if  instructed  by  Apple support.  Incorrect use may
+	      result in an unusable file system.
+
+
+       -S     Status  -  write	status	 plist	 to   /var/run/cvupdatefs_sta-
+	      tus_<FS>.plist.
+
+       -v     Verbose - turn on verbose reporting methods.
+
+
+       Once  the  volume  configuration has been changed to reflect the stripe
+       group or journal changes the cvupdatefs utility may be run.  When cvup-
+       datefs  is run it will display a listing of storage pools which will be
+       modified, followed by a prompt. If this list  accurately  reflects  the
+       changes	made  to  the  configuration  file then answering 'yes' at the
+       prompt will allow the utility to make the needed changes.
+
+       Once the utility has completed, the volume may be started again.  After
+       starting  the  volume,  the 'show' command in cvadmin(1) may be used to
+       verify the new storage pools.  The 'show' command will list all of  the
+       stripe  groups  on  the	volume,  including  the  newly created storage
+       pool(s). Also, if the location of the volume journal has  changed  this
+       too will be reflected by the cvadmin command 'show'.
+
+
+WARNINGS
+       It  is  very  important	that  the consistency of the volume be correct
+       before cvupdatefs is run. If the volume	has  a	bad  state  cvupdatefs
+       could  introduce data corruption. It is recommended that cvfsck is exe-
+       cuted on the file system before any changes are made.  If  cvfsck  does
+       not  finish  with  a  clean  file  system do not make any configuration
+       changes until the volume is clean.
+
+
+ADDING A STORAGE POOL
+       The first step in adding storage pools is to modify the	volume's  con-
+       figuration  file  to  reflect  the desired changes. For notes on volume
+       configuration format refer to snfs_config(5).  In  addition  to	adding
+       StripeGroup configuration entries, associated Disk and DiskType entries
+       for any new disks must be included.
+
+       Currently the ordering of storage pools in the configuration  file  and
+       in the metadata must match. Thus, when adding new storage pool configu-
+       ration entries to the configuration file they must always be  added  to
+       the end of the StripeGroup configuration section. cvupdatefs will abort
+       if a new storage pool is detected anywhere but the end of the file.
+
+
+INCREASING BANDWIDTH OF AN EXISTING STORAGE POOL
+       Warning: This option is not recommended for  capacity  expansion.  This
+       option is intended only for increasing I/O parallelism.
+
+       Warning:  When a storage pool is populated with file data, adding band-
+       width will increase fragmentation of the storage pool  proportional  to
+       the  amount  of pre-existing file data.	It is important to avoid frag-
+       mentation, which severely impacts performance and functionality of  the
+       volume.	 The  cvupdatefs  utility  attempts  to  determine whether the
+       requested bandwidth expansion  operation  will  introduce  unacceptably
+       high fragmentation.  If the level is determined to be unacceptable then
+       the request is rejected and cvupdatefs exits with status 2.  Therefore,
+       it  is usually recommended to relocate pre-existing file data to a dif-
+       ferent storage pool prior to performing bandwidth expansion.  If  band-
+       width  expansion is performed without relocating pre-existing file data
+       then it is recommended to utilize snfsdefrag (with the '-d' switch)  to
+       correct fragmentation after completion of cvupdatefs.
+
+       If  bandwidth  is  added to an existing storage pool the new disks must
+       exactly match the existing disks in size. All new disks must  be  added
+       to  the end in the disk list in the configuration file StripeGroup sec-
+       tion.
+
+       Bandwidth expansion can never be utilized for a storage pool containing
+       metadata  or journal.  Since storage pool zero always contains metadata
+       it is not possible to perform bandwidth expansion on storage pool zero.
+
+       WARNING: Configuration errors may result in data loss.
+
+
+MODIFYING FILE SYSTEM JOURNAL CONFIGURATION
+       cvupdatefs  will  also  detect changes in the journal configuration and
+       modify the metadata accordingly. Journal changes  include;  moving  the
+       journal	to a new storage pool, increasing the size of the journal, and
+       reducing the size of the journal.
+
+
+
+       JournalSize
+	      (Located in the Global section) Modifying this value will change
+	      the size of the on-disk journal.
+
+       Journal
+	      (Located	in the Storage Pool section) Setting this entry to yes
+	      will place the on-disk journal on the given storage pool.
+
+
+CORRECTING MISCONFIGURED STORAGE POOLS
+       cvupdatefs has a limited ability to address configuration  errors.  For
+       example,  if  a storage pool was added but the configuration file shows
+       incorrect disk sizes, this option could be used to rewrite that	stripe
+       group.  Metadata  and  Journal  storage	pools cannot be rewritten.  In
+       addition, data only storage pools  that	may  be  overwritten  must  be
+       empty.
+
+       The types of changes that can be made to a storage pool are as follows
+
+	      1) Resize disk definitions in a storage pool
+	      2) Modify stripe breadth in a storage pool
+	      3) Modify the disk list in a storage pool
+
+       When  making  changes  to  a  configuration file to fix a configuration
+       issue, the original configuration file must be kept as well.  This file
+       must  be passed in to cvupdatefs, using the -O option, so that the lay-
+       out of the existing configuration can be checked.  The -O  argument  is
+       necessary when attempting to overwrite an existing storage pool.
+
+       Warning:  Always  use  this option with extreme caution.  Configuration
+       errors could lead to data loss.
+
+
+NOTE:
+       There may only be one journal storage pool per volume.
+
+EXIT VALUES
+       cvupdatefs will return one of the following condition codes upon  exit.
+
+	       0 - No error, no changes made to the file system
+	       1 - No error, changes have been made to the file system
+	       2 - Configuration or file system state error, no changes made
+	       3 - ICB error, improper file system found, no changes made
+	       4 - Case conversion found name collisions, no changes made
+
+
+NOTES
+       IMPORTANT:  It  is  highly recommended to run cvfsck(1) prior to making
+       any configuration changes.
+
+
+
+FILES
+       /Library/Preferences/Xsan/*.cfg
+
+SEE ALSO
+       snfs_config(5), cvfsck(1), cvadmin(1)
+
+
+
+Xsan File System		 January 2010			 CVUPDATEFS(1)
+    </pre></body>
+
+</html>

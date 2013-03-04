@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Users and groups can be referred to in multiple ways.  In addition to the..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>mbr_uid_to_uuid, mbr_gid_to_uuid, mbr_uuid_to_id, mbr_sid_to_uuid,</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+MBR_UID_TO_UUID(3)	 BSD Library Functions Manual	    MBR_UID_TO_UUID(3)
+
+NAME
+     mbr_uid_to_uuid, mbr_gid_to_uuid, mbr_uuid_to_id, mbr_sid_to_uuid,
+     mbr_uuid_to_sid -- user and group identifier translation functions
+
+SYNOPSIS
+     #include <membership.h>
+
+     int
+     mbr_uid_to_uuid(uid_t id, uuid_t uu);
+
+     int
+     mbr_gid_to_uuid(gid_t id, uuid_t uu);
+
+     int
+     mbr_uuid_to_id(const uuid_t uu, uid_t *id, int *id_type);
+
+     int
+     mbr_sid_to_uuid(const nt_sid_t *sid, uuid_t uu);
+
+     int
+     mbr_uuid_to_sid(const uuid_t uu, nt_sid_t *sid);
+
+     int
+     mbr_sid_to_string(const nt_sid_t *sid, char *string);
+
+     int
+     mbr_string_to_sid(const char *string, nt_sid_t *sid);
+
+DESCRIPTION
+     Users and groups can be referred to in multiple ways.  In addition to the
+     traditional uid and gid, every user or group can be referenced by a 128
+     bit uuid.	Additionally, if the user or group is hosted on a PDC or
+     Active Directory server, it will have a 128 bit or larger sid.
+
+     These routines communicate with openditectoryd(8).
+
+     mbr_uid_to_uuid() takes a uid and looks up the associated user account.
+     It provides the the uuid for that user as an output parameter.  Note that
+     this routine will succeed and return a fabricated uuid if the input user
+     uid does not exist.  getpwuid() should be used to test for the existence
+     of a uid.
+
+     mbr_gid_to_uuid() similarly gets the uuid associated with a group.  Note
+     that this routine will succeed and return a fabricated uuid if the input
+     group gid does not exist.	getgrgid() should be used to test for the
+     existence of a gid.
+
+     mbr_uuid_to_id() takes a uuid that refers to a user or group and fetches
+     the corresponding uid or gid.  id_type is set to ID_TYPE_UID or
+     ID_TYPE_GID to indicate which type was found.  Note that mbr_uuid_to_id()
+     always returns an id even if the uuid is not found.  This returned id is
+     not persistant, but can be used to map back to the uuid during runtime.
+     To determine if the uuid exists, the returned id can be used in a call to
+     getpwuid(3) or getgrgid(3).
+
+     mbr_sid_to_uuid() takes a sid and returns the associated uuid.
+
+     mbr_uuid_to_sid() returns a sid for the associated uuid.
+
+     Two additional utility functions are available to convert between sids
+     and a string representation.  String representations may be required, for
+     example, when text files or XML files are used to save sid values.
+
+     mbr_sid_to_string() converts a sid into a string representation.  The
+     string parameter must be a buffer of at least 194 characters.  The con-
+     verted string is terminated with a nul character.
+
+     mbr_string_to_sid() converts an external string representation into a
+     sid.
+
+RETURN VALUES
+     These functions return 0 on success or one of the following error codes
+     on failure:
+
+     [EIO]		Communication with openditectoryd(8) failed.
+
+     [ENOENT]		The mapping can not be performed.
+
+     [EAUTH]		Communication with openditectoryd(8) failed due to an
+			authentication error.
+
+     [EINVAL]		Invalid arguments were provided.
+
+     [ENOMEM]		Insufficient storage space is available.
+
+     mbr_gid_to_uuid() and mbr_uid_to_uuid() return 0 (success), even if the
+     user/group does not exist.
+
+SEE ALSO
+     getpwuid(3), getgrgid(3), mbr_check_membership(3), openditectoryd(8)
+
+Mac OS X		       October 10, 2011 		      Mac OS X
+    </pre></body>
+
+</html>

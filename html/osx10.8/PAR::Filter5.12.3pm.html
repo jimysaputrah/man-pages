@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Starting with PAR 0.76, "pp -f" takes a filter name, like "Bleach", and..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>PAR::Filter - Input filter for PAR</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+PAR::Filter(3)	      User Contributed Perl Documentation	PAR::Filter(3)
+
+
+
+NAME
+       PAR::Filter - Input filter for PAR
+
+SYNOPSIS
+	   $code = 'use strict; print "Hello, World!\n";';
+	   $ref = PAR::Filter->new('PodStrip', 'Bleach')->apply(\$code);
+	   print $code;    # pod-stripped and obfuscated code
+	   print $$ref;    # same thing
+
+	   $ref = PAR::Filter->new('PodStrip', 'Bleach')->apply('file.pl');
+	   print $$ref;    # same thing, applied to file.pl
+
+DESCRIPTION
+       Starting with PAR 0.76, "pp -f" takes a filter name, like "Bleach", and
+       invokes this module to transform the programs with PAR::Filter::Bleach.
+       Similarily, "pp -F Bleach" applies the Bleach filter to all included
+       modules.
+
+       It is possible to pass in multiple such filters, which are applied in
+       turn.
+
+       The output of each such filter is expected be semantically equivalent
+       to the input, although possibly obfuscated.
+
+       The default list of filters include:
+
+       o   PAR::Filter::Bleach
+
+	   The archetypical obfuscating filter.
+
+       o   PAR::Filter::Obfuscate
+
+	   Use B::Deobfuscate to strip away indents and comments, as well as
+	   mangling variable names.
+
+       o   PAR::Filter::PatchContent
+
+	   Fix PAR-incompatible modules, applied to modules by default.
+
+       o   PAR::Filter::PodStrip
+
+	   Strip away POD sections, applied to modules by default.
+
+       o   PAR::Filter::Bytecode
+
+	   Use B::Bytecode to strip away indents and comments.	This filter is
+	   deprecated! For source hiding, have a look at PAR::Filter::Crypto
+	   instead and make sure to read about its caveats.
+
+AUTHORS
+       Audrey Tang <cpan@audreyt.org>
+
+COPYRIGHT
+       Copyright 2003-2009 by Audrey Tang <cpan@audreyt.org>.
+
+       This program is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+       See <http://www.perl.com/perl/misc/Artistic.html>
+
+
+
+perl v5.12.4			  2011-03-22			PAR::Filter(3)
+    </pre></body>
+
+</html>

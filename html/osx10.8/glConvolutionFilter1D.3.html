@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glConvolutionFilter1D  builds a one-dimensional convolution filter ker-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glConvolutionFilter1D - define a one-dimensional convolution filter</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLCONVOLUTIONFILTER1D(3G)			     GLCONVOLUTIONFILTER1D(3G)
+
+
+
+NAME
+       glConvolutionFilter1D - define a one-dimensional convolution filter
+
+
+C SPECIFICATION
+       void glConvolutionFilter1D( GLenum target,
+				   GLenum internalformat,
+				   GLsizei width,
+				   GLenum format,
+				   GLenum type,
+				   const GLvoid *image )
+
+
+PARAMETERS
+       target	       Must be GL_CONVOLUTION_1D.
+
+       internalformat  The  internal   of  the convolution filter kernel.  The
+		       allowable   values    are    GL_ALPHA,	 GL_LUMINANCE,
+		       GL_LUMINANCE_ALPHA,  GL_INTENSITY, GL_RGB, and GL_RGBA.
+
+       width	       The width of the pixel array referenced by image.
+
+       format	       The  of the pixel data in image.  The allowable	values
+		       are   GL_ALPHA,	 GL_ALPHA4,   GL_ALPHA8,   GL_ALPHA12,
+		       GL_ALPHA16, GL_LUMINANCE, GL_LUMINANCE4, GL_LUMINANCE8,
+		       GL_LUMINANCE12,	 GL_LUMINANCE16,   GL_LUMINANCE_ALPHA,
+		       GL_LUMINANCE4_ALPHA4,		 GL_LUMINANCE6_ALPHA2,
+		       GL_LUMINANCE8_ALPHA8,		GL_LUMINANCE12_ALPHA4,
+		       GL_LUMINANCE12_ALPHA12,	       GL_LUMINANCE16_ALPHA16,
+		       GL_INTENSITY,	   GL_INTENSITY4,	GL_INTENSITY8,
+		       GL_INTENSITY12,	GL_INTENSITY16,  GL_R3_G3_B2,  GL_RGB,
+		       GL_RGB4,    GL_RGB5,   GL_RGB8,	 GL_RGB10,   GL_RGB12,
+		       GL_RGB16,  GL_RGBA,  GL_RGBA2,  GL_RGBA4,   GL_RGB5_A1,
+		       GL_RGBA8, GL_RGB10_A2, GL_RGBA12, or GL_RGBA16.
+
+       type	       The  type  of  the  pixel data in image.  Symbolic con-
+		       stants	 GL_UNSIGNED_BYTE,     GL_BYTE,     GL_BITMAP,
+		       GL_UNSIGNED_SHORT,  GL_SHORT,  GL_UNSIGNED_INT, GL_INT,
+		       GL_FLOAT,		       GL_UNSIGNED_BYTE_3_3_2,
+		       GL_UNSIGNED_BYTE_2_3_3_REV,    GL_UNSIGNED_SHORT_5_6_5,
+		       GL_UNSIGNED_SHORT_5_6_5_REV, GL_UNSIGNED_SHORT_4_4_4_4,
+		       GL_UNSIGNED_SHORT_4_4_4_4_REV,
+		       GL_UNSIGNED_SHORT_5_5_5_1,
+		       GL_UNSIGNED_SHORT_1_5_5_5_REV, GL_UNSIGNED_INT_8_8_8_8,
+		       GL_UNSIGNED_INT_8_8_8_8_REV,
+		       GL_UNSIGNED_INT_10_10_10_2,			   and
+		       GL_UNSIGNED_INT_2_10_10_10_REV are accepted.
+
+       image	       Pointer to a one-dimensional array of pixel  data  that
+		       is processed to build the convolution filter kernel.
+
+DESCRIPTION
+       glConvolutionFilter1D  builds a one-dimensional convolution filter ker-
+       nel from an array of pixels.
+
+       The pixel  array  specified  by	width,	format,  type,	and  image  is
+       extracted  from	memory	and  processed	just  as  if glDrawPixels were
+       called, but processing stops after the final expansion to RGBA is  com-
+       pleted.
+
+       The R, G, B, and A components of each pixel are next scaled by the four
+       1D GL_CONVOLUTION_FILTER_SCALE parameters and biased  by  the  four  1D
+       GL_CONVOLUTION_FILTER_BIAS  parameters.	(The scale and bias parameters
+       are set by glConvolutionParameter using	the  GL_CONVOLUTION_1D	target
+       and	  the	     names	 GL_CONVOLUTION_FILTER_SCALE	   and
+       GL_CONVOLUTION_FILTER_BIAS.  The parameters themselves are  vectors  of
+       four  values  that  are applied to red, green, blue, and alpha, in that
+       order.)	The R, G, B, and A values are not clamped to [0,1] at any time
+       during this process.
+
+       Each pixel is then converted to the internal  specified by internalfor-
+       mat.  This conversion simply maps the component values of the pixel (R,
+       G, B, and A) to the values included in the internal  (red, green, blue,
+       alpha, luminance, and intensity).  The mapping is as follows:
+
+
+
+	Internal Format     Channel mapping
+	GL_ALPHA	    A=Alpha
+	GL_LUMINANCE	    R=Luminance
+	GL_LUMINANCE_ALPHA  A=Alpha, R=Luminance
+	GL_INTENSITY	    R=Intensity
+	GL_RGB		    R=Red, G=Green, B=Blue
+	GL_RGBA 	    R=Red, G=Green, B=Blue, A=Alpha
+
+
+       The red, green, blue, alpha, luminance, and/or intensity components  of
+       the  resulting  pixels are stored in floating-point rather than integer
+       They form a one-dimensional filter kernel image indexed with coordinate
+       i  such	that  i  starts at 0 and increases from left to right.	Kernel
+       location i is derived from the ith pixel, counting from 0.
+
+       Note that after a convolution is performed, the resulting color	compo-
+       nents	  are	   also      scaled	by     their	 corresponding
+       GL_POST_CONVOLUTION_c_SCALE parameters and biased by their  correspond-
+       ing  GL_POST_CONVOLUTION_c_BIAS parameters (where c takes on the values
+       RED,  GREEN,  BLUE,  and  ALPHA).   These   parameters	are   set   by
+       glPixelTransfer.
+
+NOTES
+       glConvolutionFilter1D  is  present  only  if GL_ARB_imaging is returned
+       when glGetString is called with an argument of GL_EXTENSIONS.
+
+ERRORS
+       GL_INVALID_ENUM is generated if target is not GL_CONVOLUTION_1D.
+
+       GL_INVALID_ENUM is generated if internalformat is not one of the allow-
+       able values.
+
+       GL_INVALID_VALUE  is  generated	if  width is less than zero or greater
+       than the maximum supported value.   This  value	may  be  queried  with
+       glGetConvolutionParameter   using  target  GL_CONVOLUTION_1D  and  name
+       GL_MAX_CONVOLUTION_WIDTH.
+
+       GL_INVALID_ENUM is generated if format is not one of the allowable val-
+       ues.
+
+       GL_INVALID_ENUM	is  generated if type is not one of the allowable val-
+       ues.
+
+       GL_INVALID_OPERATION is generated if glConvolutionFilter1D is  executed
+       between	the  execution	of  glBegin and the corresponding execution of
+       glEnd.
+
+       GL_INVALID_OPERATION   is   generated   if    format    is    one    of
+       GL_UNSIGNED_BYTE_3_3_2,			   GL_UNSIGNED_BYTE_2_3_3_REV,
+       GL_UNSIGNED_SHORT_5_6_5, or GL_UNSIGNED_SHORT_5_6_5_REV and type is not
+       GL_RGB.
+
+       GL_INVALID_OPERATION    is    generated	  if	format	 is   one   of
+       GL_UNSIGNED_SHORT_4_4_4_4,		GL_UNSIGNED_SHORT_4_4_4_4_REV,
+       GL_UNSIGNED_SHORT_5_5_5_1,		GL_UNSIGNED_SHORT_1_5_5_5_REV,
+       GL_UNSIGNED_INT_8_8_8_8, 		  GL_UNSIGNED_INT_8_8_8_8_REV,
+       GL_UNSIGNED_INT_10_10_10_2,  or GL_UNSIGNED_INT_2_10_10_10_REV and type
+       is neither GL_RGBA nor GL_BGRA.
+
+ASSOCIATED GETS
+       glGetConvolutionParameter, glGetConvolutionFilter
+
+SEE ALSO
+       glConvolutionFilter2D,	glSeparableFilter2D,   glConvolutionParameter,
+       glPixelTransfer
+
+
+
+						     GLCONVOLUTIONFILTER1D(3G)
+    </pre></body>
+
+</html>

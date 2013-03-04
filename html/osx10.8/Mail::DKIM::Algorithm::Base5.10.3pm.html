@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Mail::DKIM::Algorithm::Base - base class for DKIM "algorithms"</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Mail::DKIM::Algorithm:UsereContributed Perl DocuMail::DKIM::Algorithm::Base(3)
+
+
+
+NAME
+       Mail::DKIM::Algorithm::Base - base class for DKIM "algorithms"
+
+SYNOPSIS
+	 my $algorithm = new Mail::DKIM::Algorithm::rsa_sha1(
+			     Signature => $dkim_signature
+			 );
+
+	 # add headers
+	 $algorithm->add_header("Subject: this is the subject\015\012");
+	 $algorithm->finish_header;
+
+	 # add body
+	 $algorithm->add_body("This is the body.\015\012");
+	 $algorithm->add_body("Another line of the body.\015\012");
+	 $algorithm->finish_body;
+
+	 # now sign or verify...
+	 # TODO...
+
+CONSTRUCTOR
+       You should not create an object of this class directly. Instead, use
+       one of the DKIM algorithm implementation classes, such as rsa_sha1:
+
+	 my $algorithm = new Mail::DKIM::Algorithm::rsa_sha1(
+			     Signature => $dkim_signature
+			 );
+
+METHODS
+   add_body() - feeds part of the body into the algorithm/canonicalization
+	 $algorithm->add_body("This is the body.\015\012");
+	 $algorithm->add_body("Another line of the body.\015\012");
+
+       The body should be fed one "line" at a time.
+
+   add_header() - feeds a header field into the algorithm/canonicalization
+	 $algorithm->add_header("Subject: this is the subject\015\012");
+
+       The header must start with the header field name and continue through
+       any folded lines (including the embedded <CRLF> sequences). It
+       terminates with the <CRLF> at the end of the header field.
+
+   finish_body() - signals the end of the message body
+	 $algorithm->finish_body
+
+       Call this method when all lines from the body have been submitted.
+       After calling this method, use sign() or verify() to get the results
+       from the algorithm.
+
+   finish_header() - signals the end of the header field block
+	 $algorithm->finish_header;
+
+       Call this method when all the headers have been submitted.
+
+   sign() - generates a signature using a private key
+	 $base64 = $algorithm->sign($private_key);
+
+   signature() - get/set the signature worked on by this algorithm
+	 my $old_signature = $algorithm->signature;
+	 $algorithm->signature($new_signature);
+
+   verify() - verifies a signature
+	 $result = $algorithm->verify();
+
+       Must be called after finish_body().
+
+       The result is a true/false value: true indicates the signature data is
+       valid, false indicates it is invalid.
+
+       For an invalid signature, details may be obtained from
+       $algorithm->{verification_details} or $@.
+
+SEE ALSO
+       Mail::DKIM
+
+AUTHOR
+       Jason Long, <jlong@messiah.edu>
+
+COPYRIGHT AND LICENSE
+       Copyright (C) 2005-2007 by Messiah College
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself, either Perl version 5.8.6 or, at
+       your option, any later version of Perl 5 you may have available.
+
+
+
+perl v5.10.1			  2010-02-24	Mail::DKIM::Algorithm::Base(3)
+    </pre></body>
+
+</html>

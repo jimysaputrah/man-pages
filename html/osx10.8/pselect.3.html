@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The pselect() function was introduced by IEEE Std 1003.1g-2000..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>pselect -- synchronous I/O multiplexing a la POSIX.1g</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+PSELECT(3)		 BSD Library Functions Manual		    PSELECT(3)
+
+NAME
+     pselect -- synchronous I/O multiplexing a la POSIX.1g
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include <unistd.h>
+
+     int
+     pselect(int nfds, fd_set *restrict readfds, fd_set *restrict writefds,
+	 fd_set *restrict errorfds, const struct timespec *restrict timeout,
+	 const sigset_t *restrict sigmask);
+
+DESCRIPTION
+     The pselect() function was introduced by IEEE Std 1003.1g-2000
+     (``POSIX.1'') as a slightly stronger version of select(2).  The nfds,
+     readfds, writefds, and errorfds arguments are all identical to the analo-
+     gous arguments of select().  The timeout argument in pselect() points to
+     a const struct timespec, rather than the (modifiable) struct timeval used
+     by select(); as in select(), a null pointer may be passed to indicate
+     that pselect() should wait indefinitely.  Finally, sigmask specifies a
+     signal mask which is set while waiting for input.	When pselect()
+     returns, the original signal mask is restored.
+
+     See select(2) for a more detailed discussion of the semantics of this
+     interface, and for macros used to manipulate the fd_set data type.
+
+IMPLEMENTATION NOTES
+     The pselect() function is implemented in the C library as a wrapper
+     around select().
+
+RETURN VALUES
+     The pselect() function returns the same values and under the same condi-
+     tions as select().
+
+ERRORS
+     The pselect() function may fail for any of the reasons documented for
+     select(2) and (if a signal mask is provided) sigprocmask(2).
+
+SEE ALSO
+     kqueue(2), poll(2), select(2), sigprocmask(2)
+
+STANDARDS
+     The pselect() function conforms to IEEE Std 1003.1-2001 (``POSIX.1'').
+
+HISTORY
+     The pselect() function first appeared in FreeBSD 5.0.
+
+AUTHORS
+     The pselect() function and this manual page were written by Garrett
+     Wollman <wollman@FreeBSD.org>.
+
+BSD				 June 16, 2002				   BSD
+    </pre></body>
+
+</html>

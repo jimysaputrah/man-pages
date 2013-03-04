@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Building and parsing the Hop-by-Hop and Destination options is compli-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>inet6_option_space, inet6_option_init, inet6_option_append,</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+INET6_OPTION_SPACE(3)	 BSD Library Functions Manual	 INET6_OPTION_SPACE(3)
+
+NAME
+     inet6_option_space, inet6_option_init, inet6_option_append,
+     inet6_option_alloc, inet6_option_next, inet6_option_find -- IPv6 Hop-by-
+     Hop and Destination Options manipulation
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include <sys/types.h>
+     #include <netinet/in.h>
+
+     int
+     inet6_option_space(int nbytes);
+
+     int
+     inet6_option_init(void *bp, struct cmsghdr **cmsgp, int type);
+
+     int
+     inet6_option_append(struct cmsghdr *cmsg, const u_int8_t *typep,
+	 int multx, int plusy);
+
+     u_int8_t *
+     inet6_option_alloc(struct cmsghdr *cmsg, int datalen, int multx,
+	 int plusy);
+
+     int
+     inet6_option_next(const struct cmsghdr *cmsg, u_int8_t **tptrp);
+
+     int
+     inet6_option_find(const struct cmsghdr *cmsg, u_int8_t **tptrp,
+	 int type);
+
+DESCRIPTION
+     Building and parsing the Hop-by-Hop and Destination options is compli-
+     cated due to alignment constranints, padding and ancillary data manipula-
+     tion.  RFC2292 defines a set of functions to help the application.  The
+     function prototypes for these functions are all in the <netinet/in.h>
+     header.
+
+     The full description of these functions is available in RFC2292.
+
+DIAGNOSTICS
+     inet6_option_init() and inet6_option_append() return 0 on success or -1
+     on an error.
+
+     inet6_option_alloc() returns NULL on an error.
+
+     On errors, inet6_option_next() and inet6_option_find() return -1 setting
+     *tptrp to non NULL value.
+
+EXAMPLES
+     RFC2292 gives comprehensive examples in chapter 6.
+
+SEE ALSO
+     W. Stevens and M. Thomas, Advanced Sockets API for IPv6, RFC2292,
+     February 1998.
+
+     S. Deering and R. Hinden, Internet Protocol, Version 6 (IPv6)
+     Specification, RFC2460, December 1998.
+
+HISTORY
+     The implementation first appeared in KAME advanced networking kit.
+
+STANDARDS
+     The functions are documented in ``Advanced Sockets API for IPv6''
+     (RFC2292).
+
+BUGS
+BSD			       December 10, 1999			   BSD
+    </pre></body>
+
+</html>

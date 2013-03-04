@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>snfs.cfgx - Xsan Volume Configuration File</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+snfs.cfgx(5)							  snfs.cfgx(5)
+
+
+
+NAME
+       snfs.cfgx - Xsan Volume Configuration File
+
+SYNOPSIS
+       This page describes the XML-format file system configuration file first
+       introduced in StorNext 4.0 (the configDoc element will have  a  version
+       attribute of "1.0").  It is an XML 1.0 compliant format, and is hierar-
+       chical in nature.  All elements and attributes are case-sensitive.
+
+       See snfs_config(5) for details and descriptions of specific  fields  in
+       this file and for a more general overview of file system configuration.
+
+       See sncfgedit(1) for the best way to edit a configuration file from the
+       commandline.
+
+       A  volume  name	is  associated to its configuration file by the file's
+       prefix.	For example, if the volume were named projecta, then its  con-
+       figuration   file   would  be  /Library/Preferences/Xsan/projecta.cfgx.
+       There may be multiple volumes simultaneously mounted, with an FSM  pro-
+       gram  running  for each active volume.  Configuration files must reside
+       on the same system as the FSM processes that use them.
+
+ELEMENTS
+       The following describes the elements in hierarchical depth-first order.
+       See EXAMPLE CONFIGURATION FILE to see all the elements together.
+
+   configDoc
+       The  main  element  of the config is a configDoc.  This sets up the XML
+       namespace via the xmlns attribute and specifies the version of the con-
+       figuration  format  via	the version attribute.	The configDoc contains
+       all configuration information for the  Xsan  Volume  described  by  the
+       file.
+
+     o xmlns
+       Setup  the xml namespace.  If this is set to "snfs", no additional work
+       is required.  If it is setup like this:
+
+     xmlns:snfs="http://www.quantum.com/snfs"
+
+       each element in the document must be prefixed with "snfs:"  to  explic-
+       itly add them to the snfs namespace.
+
+     o version
+       The format version.  Currently must be "1.0".
+
+       Currently,  the	only element the configDoc contains is a single config
+       element.
+
+
+   config
+       Each config element contains one globals element,  one  diskTypes  ele-
+       ment,  and  one	stripeGroups  element.	It also contains the following
+       attributes:
+
+     o configVersion
+       A  generation  number  for  the	configuration  file.   This  typically
+       increases  by  one every time a changed version of the configuration is
+       written to disk.
+
+     o fsMade
+       Not used in this release
+
+     o requestType
+       Not used in this release
+
+     o name
+       A string denoting the name of the file system
+
+     o fsBlockSize
+       The blocksize of the file system.  The default value is 16384.
+
+     o journalSize
+       The size of the file system's journal.  Must be	at  least  1024  times
+       larger than the fsBlockSize.
+
+
+   globals
+       The globals element contains all global variable elements.
+
+       The  following  table  lists the globals, their default values, and the
+       valid range of values for each:
+
+	  Variable Name 		   Default Value   Min. Value  Max Value
+	  ----------------		   -------------   ----------  ---------
+	  abmFreeLimit			    false	    false	    true
+	  allocationStrategy		    round	    round, fill, balance
+	  allocSessionReservation      Deprecated
+	  allocSessionReservationSize		0	134217728  1099511627776
+	  fileLockResyncTimeout-	       20		0	      60
+	  bufferCacheSize-		      32M	     128k	      1G
+	  cvRootDir-			      "/"    valid dir with < 1024 chars
+	  dataMigrationThreadPoolSize	      128		1	FFFFFFFF
+	  debug 			 00000000	 00000000	FFFFFFFF
+	  dirWarp			    true	    false	    true
+	  eventFiles-			    true	    false	    true
+	  eventFileDir- 		  special    valid dir with < 1024 chars
+	  extentCountThreshold		    49152		0      0x1FFFC00
+	  filelocks			    false	    false	    true
+	  forcePerfectFit-		    false	    false	    true
+	  fsCapacityThreshold			0		0	     100
+	  globalSuperUser		    false	    false	    true
+	  haFsType		      HaUnmonitored   (values in snfs_config(5))
+	  inodeCacheSize		    32768	     4096	  524288
+	  inodeDeleteMax		  special	       10     0xFFFFFFFF
+	  inodeExpandInco			0		1    17179869184
+	  inodeExpandMaxo			0		1    17179869184
+	  inodeExpandMino			0		1    17179869184
+	  inodeStripeWidth			0		0  1099511627776
+	  maxConnections		       10		2	   65791
+	  maxLogSize			  1048576	  1048576     0xFFFFFFFF
+	  opHangLimitSecs		      180		0     0xFFFFFFFF
+	  perfectFitSize		   131072	     4096    17179869184
+	  quotas			    false	    false	    true
+	  remoteNotification		    false	    false	    true
+	  reservedSpace 		     true	    false	    true
+	  restoreJournal-		    false	    false	    true
+	  restoreJournalDir-		  special    valid dir with < 1024 chars
+	  restoreJournalMaxMB-			0		0	     168
+	  restoreJournalMaxHours-		0		0	  102400
+	  storageManager		    false	    false	    true
+	  stripeAlignSize		       -1	       -1     0xFFFFFFFF
+	  threadPoolSize		       16	       16     0xFFFFFFFF
+	  trimOnClose-				0		0	(2^64)-1
+	  unixDirectoryCreationModeOnWindows 0755		0	    0777
+	  unixFileCreationModeOnWindows      0644		0	    0777
+	  unixIdFabricationOnWindows	    true	  false 	   true
+	  unixNobodyGidOnWindows	    60001		0     0x7FFFFFFF
+	  unixNobodyUidOnWindows	    60001		0     0x7FFFFFFF
+	  windowsSecurity		    true	    false	    true
+	  ----------------------------------------------------------------------
+	  XSan Only Variables
+	  ----------------------------------------------------------------------
+	  enforceACLs			    false	    false	    true
+	  enableSpotlight		    false	    false	    true
+	  ----------------------------------------------------------------------
+
+       - NOTE: Not intended for general use.  Only  use  when  recommended  by
+       Apple Support.
+
+       o  NOTE:  Deprecated and will no longer be valid in a future release
+
+       Deprecated global options
+
+       The following global option has been deprecated:
+
+
+       The  AllocSessionReservation  parameter has been replaced by the Alloc-
+       SessionReservationSize parameter.  The old parameter is	supported  but
+       will be eliminated in a future release.
+
+
+
+   diskTypes
+       The diskTypes element contains one or more diskType elements.
+
+
+   diskType
+       The  diskType  element  defines	a  single  disk  type.	 It  has three
+       attributes:
+
+     o typeName
+       The name by which this disk type will be referenced in subsequent  disk
+       elements
+
+     o sectors
+       The number of sectors this disk type contains
+
+     o sectorSize
+       The size of each sector for this disk type
+
+       Put together it looks like this:
+
+     <diskType typeName="MetaDrive" sectors="99999999" sectorSize="512"/>
+
+   stripeGroups
+       The stripeGroups element contains one or more stripeGroup elements.
+
+   stripeGroup
+       The   stripeGroup  element  contains  a	storage  pool  definition.   A
+       stripegroup element contains an optional affinities element and one  or
+       more disk elements.  It also has several attributes associated with it:
+
+     o index
+       A non-negative integer denoting the order of the  storage  pool	within
+       the file system.
+
+     o name
+       A string containing the name of the storage pool
+
+     o status
+       up or down
+
+     o metadata
+       true if the storage pool contains metadata, false otherwise.
+
+     o journal
+       true  if  the storage pool contains the journal, false otherwise.  Only
+       one storage pool per file system may contain a journal.
+
+     o userdata
+       true if the storage pool contains userdata, false otherwise.
+
+     o stripeBreadth
+       The number of bytes to write to each disk in the  storage  pool	before
+       moving to the next disk.
+
+     o multipathMethod
+       One  of	the  following	multipath  methods:  rotate|static|sticky|bal-
+       ance|cycle
+
+     o read
+       true or false.
+
+     o write
+       true to enable new allocations to the stripe group, or false to disable
+       allocations.
+
+     o realTimeIOs
+       Maximum	number	of  I/O  operations  per second available to real-time
+       applications for the stripe group using the Quality  of	Service  (QoS)
+       API.
+
+     o realTimeIOsReserve
+       I/Os that should be reserved for applications not using the QoS API.
+
+     o realTimeMB
+       Maximum	number	of  MBs per second available to real-time applications
+       for the stripe group using the QoS API.
+
+     o realTimeMBReserve
+       MBs per second that should be reserved for applications not  using  the
+       QoS API.
+
+     o realTimeTokenTimeout
+       A  non-negative	integer  indicating  the number of seconds for the FSM
+       server to wait for clients to respond to a QoS  token  callback	before
+       timeout.
+
+       A stripegroup element looks like the following:
+
+    <stripeGroup index="0" name="MyStripeGroup" status="up" stripeBreadth="4194304" read="true" write="true" metadata="false" journal="false" userdata="true" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate">
+      </stripeGroup>
+
+   affinities
+       The  affinities	element is only valid in storage pools that have user-
+       data="true".  It contains one or more affinity elements.   It  has  one
+       attribute.
+
+     o exclusive
+       If  exclusive  is true, only files that have the affinities defined for
+       the storage pool associated with them will be allocated in the  storage
+       pool.   If exclusive is false, file with the associated affinities will
+       be steered to this storage pool but other files	may  be  allocated  in
+       this storage pool as well.
+
+   affinity
+       The  affinity  element  defines	an  affinity to be associated with the
+       storage pool.  An affinity is a sequence of up to  8  characters.   Any
+       characters past 8 will be truncated.
+
+       For example:
+
+     <affinity>MyAff1</affinity>
+
+   disk
+       A  disk element defines a disk to use in the storage pool.  It contains
+       the following attributes:
+
+     o index
+       Defines the order within the storage pool.  Cannot be changed after the
+       file system is made.
+
+     o diskLabel
+       The  label  of  the  disk.  See cvlabel(1) for details on how to create
+       labels.
+
+     o diskType
+       The name of a defined disk type
+
+     o ordinal
+       The global order of the disks in the file system configuration.	Cannot
+       be changed after the file system is made.
+
+       For example:
+
+    <disk index="0" diskLabel="CvfsDisk2" diskType="VideoDrive" ordinal="0"/>
+
+
+EXAMPLE CONFIGURATION FILE
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configDoc xmlns="http://www.quantum.com/snfs" version="1.0">
+  <config configVersion="0" name="example" fsBlockSize="16384" journalSize="16777216">
+    <globals>
+      <abmFreeLimit>false</abmFreeLimit>
+      <allocationStrategy>round</allocationStrategy>
+      <haFsType>HaUnmonitored</haFsType>
+      <bufferCacheSize>33554432</bufferCacheSize>
+      <cvRootDir>/</cvRootDir>
+      <storageManager>false</storageManager>
+      <dataMigrationThreadPoolSize>128</dataMigrationThreadPoolSize>
+      <debug>00000000</debug>
+      <dirWarp>true</dirWarp>
+      <extentCountThreshold>49152</extentCountThreshold>
+      <enableSpotlight>false</enableSpotlight>
+      <enforceAcls>false</enforceAcls>
+      <fileLocks>false</fileLocks>
+      <fileLockResyncTimeOut>20</fileLockResyncTimeOut>
+      <forcePerfectFit>false</forcePerfectFit>
+      <fsCapacityThreshold>0</fsCapacityThreshold>
+      <globalSuperUser>true</globalSuperUser>
+      <inodeCacheSize>32768</inodeCacheSize>
+      <inodeExpandMin>0</inodeExpandMin>
+      <inodeExpandInc>0</inodeExpandInc>
+      <inodeExpandMax>0</inodeExpandMax>
+      <inodeDeleteMax>0</inodeDeleteMax>
+      <inodeStripeWidth>0</inodeStripeWidth>
+      <maxConnections>32</maxConnections>
+      <maxLogs>4</maxLogs>
+      <remoteNotification>false</remoteNotification>
+      <reservedSpace>true</reservedSpace>
+      <fsmRealTime>false</fsmRealTime>
+      <fsmMemLocked>false</fsmMemLocked>
+      <opHangLimitSecs>300</opHangLimitSecs>
+      <perfectFitSize>131072</perfectFitSize>
+      <quotas>false</quotas>
+      <restoreJournal>false</restoreJournal>
+      <restoreJournalDir></restoreJournalDir>
+      <restoreJournalMaxHours>0</restoreJournalMaxHours>
+      <restoreJournalMaxMb>0</restoreJournalMaxMb>
+      <stripeAlignSize>-1</stripeAlignSize>
+      <trimOnClose>0</trimOnClose>
+      <threadPoolSize>32</threadPoolSize>
+      <unixDirectoryCreationModeOnWindows>644</unixDirectoryCreationModeOnWindows>
+      <unixIdFabricationOnWindows>false</unixIdFabricationOnWindows>
+      <unixFileCreationModeOnWindows>755</unixFileCreationModeOnWindows>
+      <unixNobodyUidOnWindows>60001</unixNobodyUidOnWindows>
+      <unixNobodyGidOnWindows>60001</unixNobodyGidOnWindows>
+      <windowsSecurity>true</windowsSecurity>
+      <eventFiles>true</eventFiles>
+      <eventFileDir></eventFileDir>
+      <allocSessionReservationSize>0</allocSessionReservationSize>
+    </globals>
+    <diskTypes>
+      <diskType typeName="MetaDrive" sectors="99999999" sectorSize="512"/>
+      <diskType typeName="JournalDrive" sectors="99999999" sectorSize="512"/>
+      <diskType typeName="VideoDrive" sectors="99999999" sectorSize="512"/>
+      <diskType typeName="AudioDrive" sectors="99999999" sectorSize="512"/>
+      <diskType typeName="DataDrive" sectors="99999999" sectorSize="512"/>
+    </diskTypes>
+    <stripeGroups>
+      <stripeGroup index="0" name="MetaFiles" status="up" stripeBreadth="262144" read="true" write="true" metadata="true" journal="false" userdata="false" realTimeIOs="200" realTimeIOsReserve="1" realTimeMB="200" realTimeMBReserve="1" realTimeTokenTimeout="0" multipathMethod="rotate">
+	<disk index="0" diskLabel="CvfsDisk0" diskType="MetaDrive" ordinal="0"/>
+      </stripeGroup>
+      <stripeGroup index="1" name="JournFiles" status="up" stripeBreadth="262144" read="true" write="true" metadata="false" journal="true" userdata="false" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate">
+	<disk index="0" diskLabel="CvfsDisk1" diskType="JournalDrive" ordinal="1"/>
+      </stripeGroup>
+      <stripeGroup index="2" name="VideoFiles" status="up" stripeBreadth="4194304" read="true" write="true" metadata="false" journal="false" userdata="true" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate">
+	<affinities exclusive="true">
+	  <affinity>Video</affinity>
+	</affinities>
+	<disk index="0" diskLabel="CvfsDisk2" diskType="VideoDrive" ordinal="2"/>
+	<disk index="1" diskLabel="CvfsDisk3" diskType="VideoDrive" ordinal="3"/>
+	<disk index="2" diskLabel="CvfsDisk4" diskType="VideoDrive" ordinal="4"/>
+	<disk index="3" diskLabel="CvfsDisk5" diskType="VideoDrive" ordinal="5"/>
+	<disk index="4" diskLabel="CvfsDisk6" diskType="VideoDrive" ordinal="6"/>
+	<disk index="5" diskLabel="CvfsDisk7" diskType="VideoDrive" ordinal="7"/>
+	<disk index="6" diskLabel="CvfsDisk8" diskType="VideoDrive" ordinal="8"/>
+	<disk index="7" diskLabel="CvfsDisk9" diskType="VideoDrive" ordinal="9"/>
+      </stripeGroup>
+      <stripeGroup index="3" name="AudioFiles" status="up" stripeBreadth="1048576" read="true" write="true" metadata="false" journal="false" userdata="true" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate">
+	<affinities exclusive="true">
+	  <affinity>Audio</affinity>
+	</affinities>
+	<disk index="0" diskLabel="CvfsDisk10" diskType="AudioDrive" ordinal="10"/>
+	<disk index="1" diskLabel="CvfsDisk11" diskType="AudioDrive" ordinal="11"/>
+	<disk index="2" diskLabel="CvfsDisk12" diskType="AudioDrive" ordinal="12"/>
+	<disk index="3" diskLabel="CvfsDisk13" diskType="AudioDrive" ordinal="13"/>
+      </stripeGroup>
+      <stripeGroup index="4" name="RegularFiles" status="up" stripeBreadth="262144" read="true" write="true" metadata="false" journal="false" userdata="true" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate">
+	<disk index="0" diskLabel="CvfsDisk14" diskType="DataDrive" ordinal="14"/>
+	<disk index="1" diskLabel="CvfsDisk15" diskType="DataDrive" ordinal="15"/>
+	<disk index="2" diskLabel="CvfsDisk16" diskType="DataDrive" ordinal="16"/>
+	<disk index="3" diskLabel="CvfsDisk17" diskType="DataDrive" ordinal="17"/>
+      </stripeGroup>
+    </stripeGroups>
+  </config>
+</configDoc>
+
+
+FILES
+       /Library/Preferences/Xsan/*.cfgx
+       /Library/Logs/Xsan/data/<fsname>/config_history/*.cfgx.<TIMESTAMP>
+
+SEE ALSO
+       snfs_config(5), snfs.cfg(5)
+
+
+
+Xsan File System		 December 2009			  snfs.cfgx(5)
+    </pre></body>
+
+</html>

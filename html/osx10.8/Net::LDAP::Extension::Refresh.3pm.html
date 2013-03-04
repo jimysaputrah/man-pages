@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content=""Net::LDAP::Extension::Refresh" implements the "Refresh" extended..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Net::LDAP::Extension::Refresh - LDAPv3 Refresh extension object (RFC</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Net::LDAP::Extension::UsereContributed Perl DoNet::LDAP::Extension::Refresh(3)
+
+
+
+NAME
+       Net::LDAP::Extension::Refresh - LDAPv3 Refresh extension object (RFC
+       2589)
+
+SYNOPSIS
+	use Net::LDAP;
+	use Net::LDAP::Extension::Refresh;
+
+	$ldap = Net::LDAP->new('localhost');
+	$ldap->bind('cn=admin,dc=example,dc=com', password => 'password');
+
+	$mesg = $ldap->refresh(entryName => 'cn=dynamic,dc=example,dc=com',
+	       requestTtl => 100);
+	die "error :", $mesg->code(), ": ", $mesg->error() if($mesg->code());
+	print "TTL changed to ", $mesg->get_ttl(), "\n";
+
+DESCRIPTION
+       "Net::LDAP::Extension::Refresh" implements the "Refresh" extended
+       LDAPv3 operation as described in RFC 2589
+
+       It implements no object by itself but extends the Net::LDAP object by
+       another method:
+
+METHODS
+       refresh ( OPTIONS )
+	   Send a refresh operation for an object.
+
+	   OPTIONS is a list of key/value pairs. The following keys are
+	   reconized:
+
+	   entryName
+	       This option contains the object to refresh. It must be a DN.
+
+	   requestTtl
+	       This option contains the TTL in seconds requested. The server
+	       may choose to set another value as stated in RFC 2589
+
+       get_ttl ( )
+	   Return the TTL set by the server during the previous "refresh"
+	   call.
+
+	   This method is a method of the Net::LDAP::Message response object
+	   returned in reply to "refresh()" in case the "refresh()" call
+	   succeeded.
+
+SEE ALSO
+       Net::LDAP, Net::LDAP::Extension
+
+AUTHOR
+       Etienne Bagnoud <etienne.bagnoud@irovision.ch> Adapted from Graham Barr
+       Net::LDAP::Extension::SetPassword Documentation adapted from Peter
+       Marschall Net::LDAP::Extension::SetPassword
+
+       Please report any bugs, or post any suggestions, to the perl-ldap
+       mailing list <perl-ldap@perl.org>
+
+COPYRIGHT
+       Copyright (c) 2010 Etienne Bagnoud. All rights reserved. This program
+       is free software; you can redistribute it and/or modify it under the
+       same terms as Perl itself.
+
+
+
+perl v5.12.4			  2010-03-11  Net::LDAP::Extension::Refresh(3)
+    </pre></body>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Simply launch or quit applications by their creator ID.	The Finder can..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Mac::Apps::Launch - Mac module to launch /quit applications</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Launch(3)	      User Contributed Perl Documentation	     Launch(3)
+
+
+
+NAME
+       Mac::Apps::Launch - Mac module to launch /quit applications
+
+SYNOPSIS
+	   use Mac::Apps::Launch;
+	   my @apps = qw(R*ch Arch MPGP);
+	   my $path = "HD:System Folder:Finder";
+	   LaunchApps([@apps], 1) or warn $^E; # launch and switch to front
+	   LaunchApps([@apps])	  or warn $^E; # launch and don't switch
+	   LaunchApps($app, 1)	  or warn $^E; # launch and switch to front
+	   LaunchSpecs($path, 1)  or warn $^E; # use path instead of app ID
+	   QuitApps(@apps)	  or warn $^E; # quit all @apps
+	   QuitAllApps(@apps)	  or warn $^E; # quit all except @apps
+	   IsRunning('MACS');		       # returns boolean for whether
+					       # given app ID is running
+	   SetFront('MACS')	  or warn $^E; # set Finder to front
+	   Hide('MACS') 	  or warn $^E; # hide Finder
+	   Show('Finder', 1)	  or warn $^E; # show Finder (1 == use name)
+
+DESCRIPTION
+       Simply launch or quit applications by their creator ID.	The Finder can
+       be quit in this way, though it cannot be launched in this way.
+
+       This module is used by many other modules.
+
+       This module as written does not work with MacPerls prior to 5.1.4r4.
+
+       "Hide" and "Show" do not currently work on Mac OS X.
+
+       Apps that don't have signatures under Mac OS X currently aren't
+       handled, except with LaunchSpecs().
+
+       "SetFront" and "IsRunning" can take a four-char creator ID ('MACS'), a
+       bundle ID ('com.apple.Finder'), or a path
+       (/System/Library/CoreServices/Finder.app).  They both optionally take a
+       second parameter which affirms that the data is indeed a path (for
+       those rare cases where a path might possibly look like a creator ID or
+       bundle ID ... you never know).
+
+       "IsRunning" will return the PSN of the application if it is running,
+       which you can then use for targetting the app, or converting to a PID
+       (with "Mac::Processes::GetProcessPID()"), to send signals to it.
+
+EXPORT
+       Exports functions "QuitApps", "QuitAllApps", and "LaunchApps",
+       "IsRunning", "LaunchSpecs", "SetFront", "Hide", "Show".
+
+AUTHOR
+       Chris Nandor <pudge@pobox.com>, http://pudge.net/
+
+       Copyright (c) 1999-2005 Chris Nandor.  All rights reserved.  This
+       program is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2007-01-03			     Launch(3)
+    </pre></body>
+
+</html>

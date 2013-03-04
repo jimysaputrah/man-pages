@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="natutil uses the ACP protocol to detect, configure, and extract status..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>natutil -- Query and configure supported Network Address Translation</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+natutil(8)		  BSD System Manager's Manual		    natutil(8)
+
+NAME
+     natutil -- Query and configure supported Network Address Translation
+     (NAT) devices
+
+SYNOPSIS
+     natutil [-vx] [-a auth] [-n name] {-1 | -d | -m | -s | -i | -L}
+
+     natutil [-vx] [-a auth] [-n name] {-t | -u} {-T | -U} -p ports
+
+DESCRIPTION
+     natutil uses the ACP protocol to detect, configure, and extract status
+     information from Internet gateway devices (IGDs) (such as AirPort Base
+     Stations) on the local network. Since most IGDs provide Network Address
+     Translation (NAT) service, they are often interchangably referred to as
+     "NAT devices" or simply "NATs".
+
+     The first synopsis line (with the exception of -L) returns various infor-
+     mation from NAT devices.
+
+     The second invocation modifies settings on the device. After modifying
+     settings, AirPort Base Stations must be rebooted for the changes to take
+     effect. ( servermgrd(8) also reboots the AirPort Base Station when it
+     modifies port mappings.)
+
+OPTIONS
+     The following options / commands are available:
+
+     -1       Only return data if the IGD found is also our current gateway.
+	      [AirPort only] Will only return if this base station can be
+	      autoconfigured
+
+     -a auth  [AirPort only] The authentication string to use when communicat-
+	      ing with a device protected with a password other than the
+	      default "public". Used mostly for scripted operation. Use -i to
+	      get the authentication string interactively.
+
+     -i       Get the authentication string interactively. This preferred over
+	      -a for security reasons.
+
+     -d       Reports the IGDs (Internet Gateway Devices) that were found dur-
+	      ing the discovery.
+
+     -m       Retrieves the port mapping table from the NAT.
+
+     -n name  The prefix of the targeted NAT device's name (useful in a LAN
+	      with multiple NAT devices).
+
+     -p ports
+	      A comma-separated list of the ports to tap or untap. Must be
+	      used with -t or -u.
+
+     -s       Retrieves the WAN & LAN status and configuration from the IGD.
+
+     -t       Configures the NAT to forward the given ports to this machine.
+	      Requires -p and either -T or -U.
+
+     -u       Removes the given ports from the NAT's port forwarding rules.
+	      Requires -p and either -T or -U.
+
+     -v       Verbose output. Provides progress and status information on
+	      standard output.
+
+     -x       XML output. This option provides the most information.
+
+     -L       [AirPort only] Convert existing DHCP lease into a static reser-
+	      vation so the host will receive the same IP address after each
+	      reboot.
+
+     -T       Ports will be tapped / untapped for the TCP protocol. Must be
+	      used with -t or -u.
+
+     -U       Ports will be tapped / untapped for the UDP protocol. Must be
+	      used with -t or -u.
+
+SEE ALSO
+     ifconfig(8), ipconfig(8)
+
+Mac OS X Server 10.5		 July 23, 2007		  Mac OS X Server 10.5
+    </pre></body>
+
+</html>

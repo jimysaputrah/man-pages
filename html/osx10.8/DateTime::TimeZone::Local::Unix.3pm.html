@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module provides methods for determining the local time zone on a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>DateTime::TimeZone::Local::Unix - Determine the local system's time</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+DateTime::TimeZone::LoUser:Contributed Perl DateTime::TimeZone::Local::Unix(3)
+
+
+
+NAME
+       DateTime::TimeZone::Local::Unix - Determine the local system's time
+       zone on Unix
+
+VERSION
+       version 1.41
+
+SYNOPSIS
+	 my $tz = DateTime::TimeZone->new( name => 'local' );
+
+	 my $tz = DateTime::TimeZone::Local->TimeZone();
+
+DESCRIPTION
+       This module provides methods for determining the local time zone on a
+       Unix platform.
+
+HOW THE TIME ZONE IS DETERMINED
+       This class tries the following methods of determining the local time
+       zone:
+
+       o   $ENV{TZ}
+
+	   It checks $ENV{TZ} for a valid time zone name.
+
+       o   /etc/localtime
+
+	   If this file is a symlink to an Olson database time zone file
+	   (usually in /usr/share/zoneinfo) then it uses the target file's
+	   path name to determine the time zone name. For example, if the path
+	   is /usr/share/zoneinfo/America/Chicago, the time zone is
+	   "America/Chicago".
+
+	   Some systems just copy the relevant file to /etc/localtime instead
+	   of making a symlink.  In this case, we look in /usr/share/zoneinfo
+	   for a file that has the same size and content as /etc/localtime to
+	   determine the local time zone.
+
+       o   /etc/timezone
+
+	   If this file exists, it is read and its contents are used as a time
+	   zone name.
+
+       o   /etc/TIMEZONE
+
+	   If this file exists, it is opened and we look for a line starting
+	   like "TZ = ...". If this is found, it should indicate a time zone
+	   name.
+
+       o   /etc/sysconfig/clock
+
+	   If this file exists, it is opened and we look for a line starting
+	   like "TIMEZONE = ..." or "ZONE = ...". If this is found, it should
+	   indicate a time zone name.
+
+       o   /etc/default/init
+
+	   If this file exists, it is opened and we look for a line starting
+	   like "TZ=...". If this is found, it should indicate a time zone
+	   name.
+
+AUTHOR
+       Dave Rolsky <autarch@urth.org>
+
+COPYRIGHT AND LICENSE
+       This software is copyright (c) 2011 by Dave Rolsky.
+
+       This is free software; you can redistribute it and/or modify it under
+       the same terms as the Perl 5 programming language system itself.
+
+
+
+perl v5.12.4			  2011-10-24DateTime::TimeZone::Local::Unix(3)
+    </pre></body>
+
+</html>

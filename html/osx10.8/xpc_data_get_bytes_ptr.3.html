@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Most XPC objects are boxed representations of primitive C language types..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>xpc -- boxed XPC objects reference</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+xpc_objects(3)		 BSD Library Functions Manual		xpc_objects(3)
+
+NAME
+     xpc -- boxed XPC objects reference
+
+SYNOPSIS
+     #include <xpc/xpc.h>
+
+     xpc_object_t
+     xpc_null_create(void);
+
+     xpc_object_t
+     xpc_bool_create(bool value);
+
+     bool
+     xpc_bool_get_value(xpc_object_t xbool);
+
+     xpc_object_t
+     xpc_int64_create(int64_t value);
+
+     int64_t
+     xpc_int64_get_value(xpc_object_t xint);
+
+     xpc_object_t
+     xpc_uint64_create(uint64_t value);
+
+     uint64_t
+     xpc_uint64_get_value(xpc_object_t xuint);
+
+     xpc_object_t
+     xpc_double_create(double value);
+
+     double
+     xpc_double_get_value(xpc_object_t xdouble);
+
+     xpc_object_t
+     xpc_date_create(int64_t interval);
+
+     xpc_object_t
+     xpc_date_create_from_current(void);
+
+     int64_t
+     xpc_date_get_value(xpc_object_t xdate);
+
+     xpc_object_t
+     xpc_data_create(const void *bytes, size_t length);
+
+     xpc_object_t
+     xpc_data_create_with_dispatch_data(dispatch_data_t ddata);
+
+     size_t
+     xpc_data_get_length(xpc_object_t xdata);
+
+     const void *
+     xpc_data_get_bytes_ptr(xpc_object_t xdata);
+
+     size_t
+     xpc_data_get_bytes(xpc_object_t xdata, void *buffer, size_t off,
+	 size_t length);
+
+     xpc_object_t
+     xpc_string_create(const char *string);
+
+     xpc_object_t
+     xpc_string_create_with_format(const char *fmt, ...);
+
+     xpc_object_t
+     xpc_string_create_with_format_and_arguments(const char *fmt, va_list ap);
+
+     size_t
+     xpc_string_get_length(xpc_object_t xstring);
+
+     const char *
+     xpc_string_get_string_ptr(xpc_object_t xstring);
+
+     xpc_object_t
+     xpc_uuid_create(const uuid_t uuid);
+
+     const uint8_t *
+     xpc_uuid_get_bytes(xpc_object_t xuuid);
+
+     xpc_object_t
+     xpc_fd_create(int fd);
+
+     int
+     xpc_fd_dup(xpc_object_t xfd);
+
+     xpc_object_t
+     xpc_shmem_create(void *region, size_t length);
+
+     size_t
+     xpc_shmem_map(xpc_object_t xshmem, void **region);
+
+DESCRIPTION
+     Most XPC objects are boxed representations of primitive C language types
+     or low-level operating system handles. These boxed objects are immutable.
+
+     See xpc_object(3) for information about functions common to all XPC
+     objects.
+
+PRIMITIVE TYPES
+     XPC objects can encapsulate a wide variety of primitive C language types:
+
+   INTEGERS
+     Boxed representations of 64-bit wide signed and unsigned integer types
+     may be created with xpc_int64_create() and xpc_uint64_create() respec-
+     tively. The boxed values may be retrieved using xpc_int64_get_value() and
+     xpc_uint64_get_value().
+
+   FLOATING POINT
+     Boxed representations of double-precision floating point value represen-
+     tations may be created with the xpc_double_create() function and
+     retrieved with the xpc_double_get_value() function.
+
+   DATES
+     Boxed representations of date and time values, expressed as an integral
+     number of nanoseconds before or after the Unix epoch, can be created with
+     the xpc_date_create() function and retrieved with the
+     xpc_date_get_value() function.  A date object representing the current
+     date may be created with xpc_date_create_from_current() convenience func-
+     tion.
+
+   NULL AND BOOLEAN SINGLETONS
+     Boxed representations of null and Boolean values are expressed as XPC
+     object singletons. The xpc_bool_create() function returns one of two con-
+     stant singleton Boolean values:
+	   o   XPC_BOOL_TRUE
+	   o   XPC_BOOL_FALSE
+
+     The singleton values may be compared using direct pointer equality. Simi-
+     larly, no type checking is required when retreiving these values from
+     collections:
+
+	   xpc_object_t xbool = xpc_dictionary_get_value(dictionary, "key");
+	   if (xbool == XPC_BOOL_TRUE) {
+		   // Handle the true case.
+	   } else if (xbool == XPC_BOOL_FALSE)
+		   // Handle the false case.
+	   } else {
+		   // Handle the case where there was a type mismatch or where there was no
+		   // value for the key "key".
+	   }
+
+     The xpc_null_create() function returns a constant singleton representa-
+     tion of a null value.  There is currently no defined constant for this
+     singleton.
+
+     It is safe to call xpc_retain(3) and xpc_release(3) on Boolean and null
+     objects.
+
+DATA, STRINGS AND UUIDS
+   DATA
+     Boxed representations of arbitrary byte values may be created with the
+     xpc_data_create() function which takes a pointer to a buffer and length.
+     A pointer to the underlying storage of the data object may be obtained
+     using xpc_data_get_bytes_ptr().
+
+     Important: This pointer is only valid for the lifetime of the data
+     object. The underlying storage of the pointer value must not be modified
+     by the caller. When ARC is enabled, care needs to be taken that the data
+     object is not released prematurely, see xpc_object(3) for details.
+
+     The contents of a data object may be copied to an external buffer using
+     the xpc_data_get_bytes() function. This function takes a pointer to a
+     buffer of size length to which the data will be copied.  The caller may
+     also specify a non-zero offset into the source data at which to start the
+     copy. The return value of this function is the number of bytes that were
+     copied into the buffer.  If the destination buffer is smaller than the
+     size of the source data, as many bytes as possible will be copied and the
+     return value will be equal to the number of bytes specified in length.
+
+     The underlying size of the data value may be determined using the
+     xpc_data_get_length() function.
+
+     When creating a data object, the contents of the provided buffer are
+     copied into internal storage. If the caller wishes to avoid a copy, the
+     buffer may first be encapsulated in a dispatch_data_t object and passed
+     to xpc_data_create_with_dispatch_data().  See dispatch_data_create(3) for
+     more information.
+
+     Note: When the time comes to send a message, the XPC runtime will serial-
+     ize the object graph, which will result in a copy of any data objects
+     contained therein. If you are transporting large amounts of data and are
+     performance-sensitive, you may wish to set up a shared memory region
+     using mmap(2) and xpc_shmem_create() to minimize copying.
+
+   STRINGS
+     Boxed representations of C string values may be created using the
+     xpc_string_create() function.  The XPC framework assumes all strings are
+     encoded as UTF-8 and does not support any other encodings. A pointer to
+     the C string representation of a value may be obtained using
+     xpc_string_get_string_ptr().
+
+     Important: This pointer is only valid for the lifetime of the string
+     object. The underlying storage of the pointer value must not be modified
+     by the caller.  When ARC is enabled, care needs to be taken that the
+     string object is not released prematurely, see xpc_object(3) for details.
+
+     The length of the C string value may be determined using the
+     xpc_string_get_length() function. This length is does not include the NUL
+     terminator character, similar to strlen(3).
+
+     String objects may also be constructed from printf(3) -style format
+     strings using the xpc_string_create_with_format() function.  Addition-
+     ally, the xpc_string_create_with_format_and_arguments() function allows
+     the caller to pass an existing va_list argument with which to construct
+     the formatted string.
+
+   UUIDs
+     Boxed representations of UUID byte values may be created using
+     xpc_uuid_create().  See uuid(3) for more information.  A pointer to stor-
+     age for the underlying UUID value may be obtained using
+     xpc_uuid_get_bytes().  The returned pointer may be safely passed to the
+     relevant uuid(3) functions.
+
+     Important: This pointer is only valid for the lifetime of the UUID
+     object. The underlying storage of the UUID value must not be modified by
+     the caller. When ARC is enabled, care needs to be taken that the UUID
+     object is not released prematurely, see xpc_object(3) for details.
+
+     The pattern of returning a pointer instead of copying the result into a
+     uuid_t enables some convenient code simplification. For example:
+
+	   if (uuid_compare(xpc_uuid_get_bytes(uuid_object), expected_uuid) == 0) {
+		   // They are the same.
+	   }
+
+OUT-OF-LINE TYPES
+     Boxed representations of low-level operating system primitives such as
+     file descriptors and shared memory regions may be created and shared
+     between processes as part of an XPC dictionary that is sent as a message.
+
+   FILE DESCRIPTORS
+     Boxed representations of file descriptors may be created using the
+     xpc_fd_create() function.	Once created, there is no way to retrieve the
+     original file descriptor from the boxed representation. Instead, the
+     xpc_fd_dup() function can be used to create a new file descriptor in a
+     similar manner to dup(2).	The caller is responsible for calling close(2)
+     on the descriptor returned by this function.  Multiple calls to
+     xpc_fd_dup() will produce multiple unique file descriptor values.	If a
+     failure occurs (i.e. process file descriptor table is full), the invalid
+     file descriptor value -1 will be returned.
+
+   SHARED MEMORY
+     Boxed representations of shared memory regions allocated using mmap(2)
+     with the MAP_SHARED flag passed in the flags argument may be created
+     using the xpc_shmem_create() function. Memory objects created using
+     malloc(3) are not supported.  The region argument is a pointer to the
+     beginning of the shared region and the length argument specifies the
+     length of the shared region.
+
+     The recipient of a shared memory object may map the underlying region
+     into its address space using the xpc_shmem_map() function.  As with file
+     descriptor objects, each call to this function returns a distinct but
+     equivalent mapping. On output, the region argument will point to the
+     address of the new mapping, and the return value will be the size of that
+     mapping. The caller is responsible for unmapping the region with
+     munmap(2).  If the mapping operation failed, 0 will be returned.
+
+     New mappings will be created with the maximum permission as specified by
+     the creator of the region. Currently, there is no direct way to modify
+     the permissions that the recipient of a region will have. If the caller
+     wishes to maintain read-write permissions to a region, for example, while
+     giving others read-only access, it can create an equivalent mapping with
+     the desired permissions using a combination of
+     mach_make_memory_entry_64() and mach_vm_remap().  The details of this
+     procedure are left as an exercise to the reader.
+
+SEE ALSO
+     xpc_object(3), xpc_dictionary_create(3), xpc_array_create(3),
+     xpc_connection_create(3), dispatch_data_create(3), printf(3), uuid(3),
+     dup(2), close(2)
+
+Darwin				 1 July, 2011				Darwin
+    </pre></body>
+
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Texturing maps a portion of a specified texture image onto each graphi-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>glTexSubImage2D - specify a two-dimensional texture subimage</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+GLTEXSUBIMAGE2D(3G)					   GLTEXSUBIMAGE2D(3G)
+
+
+
+NAME
+       glTexSubImage2D - specify a two-dimensional texture subimage
+
+
+C SPECIFICATION
+       void glTexSubImage2D( GLenum target,
+			     GLint level,
+			     GLint xoffset,
+			     GLint yoffset,
+			     GLsizei width,
+			     GLsizei height,
+			     GLenum format,
+			     GLenum type,
+			     const GLvoid *pixels )
+
+
+PARAMETERS
+       target	Specifies the target texture.  Must be GL_TEXTURE_2D.
+
+       level	Specifies  the	level-of-detail  number.   Level 0 is the base
+		image level.  Level n is the nth mipmap reduction image.
+
+       xoffset	Specifies a texel offset in the x direction within the texture
+		array.
+
+       yoffset	Specifies a texel offset in the y direction within the texture
+		array.
+
+       width	Specifies the width of the texture subimage.
+
+       height	Specifies the height of the texture subimage.
+
+       format	Specifies the format of the pixel data.   The  following  sym-
+		bolic  values  are accepted: GL_COLOR_INDEX, GL_RED, GL_GREEN,
+		GL_BLUE,   GL_ALPHA,   GL_RGB,	 GL_BGR,   GL_RGBA,   GL_BGRA,
+		GL_LUMINANCE, and GL_LUMINANCE_ALPHA.
+
+       type	Specifies the data type of the pixel data.  The following sym-
+		bolic  values	are   accepted:   GL_UNSIGNED_BYTE,   GL_BYTE,
+		GL_BITMAP,   GL_UNSIGNED_SHORT,   GL_SHORT,   GL_UNSIGNED_INT,
+		GL_INT, 	  GL_FLOAT,	       GL_UNSIGNED_BYTE_3_3_2,
+		GL_UNSIGNED_BYTE_2_3_3_REV,	      GL_UNSIGNED_SHORT_5_6_5,
+		GL_UNSIGNED_SHORT_5_6_5_REV,	    GL_UNSIGNED_SHORT_4_4_4_4,
+		GL_UNSIGNED_SHORT_4_4_4_4_REV,	    GL_UNSIGNED_SHORT_5_5_5_1,
+		GL_UNSIGNED_SHORT_1_5_5_5_REV,	      GL_UNSIGNED_INT_8_8_8_8,
+		GL_UNSIGNED_INT_8_8_8_8_REV,  GL_UNSIGNED_INT_10_10_10_2,  and
+		GL_UNSIGNED_INT_2_10_10_10_REV.
+
+       pixels	Specifies a pointer to the image data in memory.
+
+DESCRIPTION
+       Texturing maps a portion of a specified texture image onto each graphi-
+       cal  primitive  for  which texturing is enabled.  To enable and disable
+       two-dimensional texturing, call glEnable and  glDisable	with  argument
+       GL_TEXTURE_2D.
+
+       glTexSubImage2D	redefines  a  contiguous subregion of an existing two-
+       dimensional texture image.  The texels referenced by pixels replace the
+       portion	of the existing texture array with x indices xoffset and xoff-
+       set+width-1, inclusive, and y  indices  yoffset	and  yoffset+height-1,
+       inclusive.  This region may not include any texels outside the range of
+       the texture array as it was originally specified.  It is not  an  error
+       to  specify a subtexture with zero width or height, but such a specifi-
+       cation has no effect.
+
+NOTES
+       glTexSubImage2D is available only if the GL version is 1.1 or  greater.
+
+       Texturing has no effect in color index mode.
+
+       glPixelStore and glPixelTransfer modes affect texture images in exactly
+       the way they affect glDrawPixels.
+
+       Formats	GL_BGR,  and   GL_BGRA	 and   types   GL_UNSIGNED_BYTE_3_3_2,
+       GL_UNSIGNED_BYTE_2_3_3_REV,		      GL_UNSIGNED_SHORT_5_6_5,
+       GL_UNSIGNED_SHORT_5_6_5_REV,		    GL_UNSIGNED_SHORT_4_4_4_4,
+       GL_UNSIGNED_SHORT_4_4_4_4_REV,		    GL_UNSIGNED_SHORT_5_5_5_1,
+       GL_UNSIGNED_SHORT_1_5_5_5_REV,		      GL_UNSIGNED_INT_8_8_8_8,
+       GL_UNSIGNED_INT_8_8_8_8_REV,	  GL_UNSIGNED_INT_10_10_10_2,	   and
+       GL_UNSIGNED_INT_2_10_10_10_REV are available only if the GL version  is
+       1.2 or greater.
+
+       When  the  GL_ARB_multitexture  extension is supported, glTexSubImage2D
+       specifies a two-dimensional sub texture for the current	texture  unit,
+       specified with glActiveTextureARB.
+
+       When  the  GL_ARB_imaging  extension  is supported, the RGBA components
+       specified in pixels may be processed  by  the  imaging  pipeline.   See
+       glTexImage1D for specific details.
+
+ERRORS
+       GL_INVALID_ENUM is generated if target is not GL_TEXTURE_2D.
+
+       GL_INVALID_OPERATION  is  generated  if	the texture array has not been
+       defined by a previous glTexImage2D operation.
+
+       GL_INVALID_VALUE is generated if level is less than 0.
+
+       GL_INVALID_VALUE may be generated if level is greater  than  log2(max),
+       where max is the returned value of GL_MAX_TEXTURE_SIZE.
+
+       GL_INVALID_VALUE is generated if xoffset < -b, xoffset + width > (w-b),
+       yoffset < -b,  or  yoffset  +  height  >  (h  -	b),  where  w  is  the
+       GL_TEXTURE_WIDTH, h is the GL_TEXTURE_HEIGHT, and b is the border width
+       of the texture image being modified.  Note that w and h	include  twice
+       the border width.
+
+       GL_INVALID_VALUE is generated if width or height is less than 0.
+
+       GL_INVALID_ENUM is generated if format is not an accepted
+	constant.
+
+       GL_INVALID_ENUM is generated if type is not a type constant.
+
+       GL_INVALID_ENUM	is  generated  if  type is GL_BITMAP and format is not
+       GL_COLOR_INDEX.
+
+       GL_INVALID_OPERATION  is  generated  if	glTexSubImage2D  is   executed
+       between	the  execution	of  glBegin and the corresponding execution of
+       glEnd.
+
+       GL_INVALID_OPERATION   is    generated	 if    type    is    one    of
+       GL_UNSIGNED_BYTE_3_3_2,			   GL_UNSIGNED_BYTE_2_3_3_REV,
+       GL_UNSIGNED_SHORT_5_6_5, or GL_UNSIGNED_SHORT_5_6_5_REV and  format  is
+       not GL_RGB.
+
+       GL_INVALID_OPERATION    is    generated	  if	type	is    one   of
+       GL_UNSIGNED_SHORT_4_4_4_4,		GL_UNSIGNED_SHORT_4_4_4_4_REV,
+       GL_UNSIGNED_SHORT_5_5_5_1,		GL_UNSIGNED_SHORT_1_5_5_5_REV,
+       GL_UNSIGNED_INT_8_8_8_8, 		  GL_UNSIGNED_INT_8_8_8_8_REV,
+       GL_UNSIGNED_INT_10_10_10_2,  or GL_UNSIGNED_INT_2_10_10_10_REV and for-
+       mat is neither GL_RGBA nor GL_BGRA.
+
+ASSOCIATED GETS
+       glGetTexImage
+       glIsEnabled with argument GL_TEXTURE_2D
+
+SEE ALSO
+       glActiveTextureARB,	   glCopyTexImage1D,	     glCopyTexImage2D,
+       glCopyTexSubImage1D,	 glCopyTexSubImage2D,	  glCopyTexSubImage3D,
+       glDrawPixels,  glPixelStore,   glPixelTransfer,	 glTexEnv,   glTexGen,
+       glTexImage1D,	  glTexImage2D,     glTexImage3D,     glTexSubImage1D,
+       glTexSubImage3D, glTexParameter
+
+
+
+
+							   GLTEXSUBIMAGE2D(3G)
+    </pre></body>
+
+</html>

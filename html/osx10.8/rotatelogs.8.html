@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>rotatelogs - Piped logging program to rotate Apache logs</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+ROTATELOGS(8)			  rotatelogs			 ROTATELOGS(8)
+
+
+
+NAME
+       rotatelogs - Piped logging program to rotate Apache logs
+
+
+SYNOPSIS
+       rotatelogs [ -l ] [ -f ] logfile rotationtime|filesizeM [ offset ]
+
+
+
+SUMMARY
+       rotatelogs  is  a  simple  program for use in conjunction with Apache's
+       piped logfile feature. It supports rotation based on a time interval or
+       maximum size of the log.
+
+
+
+OPTIONS
+       -l     Causes the use of local time rather than GMT as the base for the
+	      interval or for strftime(3) formatting with size-based rotation.
+	      Note  that using -l in an environment which changes the GMT off-
+	      set (such as for BST or DST) can lead to unpredictable  results!
+
+       -f     Causes the logfile to be opened immediately, as soon as rotatel-
+	      ogs starts, instead of waiting for the first logfile entry to be
+	      read  (for  non-busy  sites,  there  may	be a substantial delay
+	      between when the server is started and when the first request is
+	      handled,	meaning  that  the associated logfile does not "exist"
+	      until then, which causes problems from  some  automated  logging
+	      tools). Available in version 2.2.9 and later.
+
+       logfile
+
+
+       rotationtime
+	      The  time  between  log  file rotations in seconds. The rotation
+	      occurs at the beginning of this interval. For  example,  if  the
+	      rotation	time  is  3600,  the  log  file will be rotated at the
+	      beginning of every hour; if the rotation time is 86400, the  log
+	      file  will  be  rotated  every night at midnight. (If no data is
+	      logged during an interval, no file will be created.)
+
+       filesizeM
+	      The maximum file size in megabytes followed by the letter  M  to
+	      specify size rather than time.
+
+       offset The  number  of  minutes	offset	from  UTC. If omitted, zero is
+	      assumed and UTC is used. For example, to use local time  in  the
+	      zone UTC -5 hours, specify a value of -300 for this argument. In
+	      most cases, -l should be used instead of specifying an offset.
+
+
+EXAMPLES
+	    CustomLog "|bin/rotatelogs /var/logs/logfile 86400" common
+
+
+
+       This creates the files /var/logs/logfile.nnnn where nnnn is the	system
+       time at which the log nominally starts (this time will always be a mul-
+       tiple of the rotation time, so you can synchronize  cron  scripts  with
+       it).  At  the end of each rotation time (here after 24 hours) a new log
+       is started.
+
+
+	    CustomLog "|bin/rotatelogs -l /var/logs/logfile.%Y.%m.%d 86400" common
+
+
+
+       This creates the files /var/logs/logfile.yyyy.mm.dd where yyyy  is  the
+       year,  mm  is  the  month, and dd is the day of the month. Logging will
+       switch to a new file every day at midnight, local time.
+
+
+	    CustomLog "|bin/rotatelogs /var/logs/logfile 5M" common
+
+
+
+       This configuration will rotate the logfile whenever it reaches  a  size
+       of 5 megabytes.
+
+
+	    ErrorLog "|bin/rotatelogs /var/logs/errorlog.%Y-%m-%d-%H_%M_%S 5M"
+
+
+
+       This  configuration will rotate the error logfile whenever it reaches a
+       size of 5 megabytes, and the suffix to the logfile name will be created
+       of the form errorlog.YYYY-mm-dd-HH_MM_SS.
+
+
+PORTABILITY
+       The  following  logfile format string substitutions should be supported
+       by all strftime(3) implementations, see the strftime(3)	man  page  for
+       library-specific extensions.
+
+
+       o %A - full weekday name (localized)
+
+
+       o %a - 3-character weekday name (localized)
+
+
+       o %B - full month name (localized)
+
+
+       o %b - 3-character month name (localized)
+
+
+       o %c - date and time (localized)
+
+
+       o %d - 2-digit day of month
+
+
+       o %H - 2-digit hour (24 hour clock)
+
+
+       o %I - 2-digit hour (12 hour clock)
+
+
+       o %j - 3-digit day of year
+
+
+       o %M - 2-digit minute
+
+
+       o %m - 2-digit month
+
+
+       o %p - am/pm of 12 hour clock (localized)
+
+
+       o %S - 2-digit second
+
+
+       o %U - 2-digit week of year (Sunday first day of week)
+
+
+       o %W - 2-digit week of year (Monday first day of week)
+
+
+       o %w - 1-digit weekday (Sunday first day of week)
+
+
+       o %X - time (localized)
+
+
+       o %x - date (localized)
+
+
+       o %Y - 4-digit year
+
+
+       o %y - 2-digit year
+
+
+       o %Z - time zone name
+
+
+       o %% - literal `%'
+
+
+
+
+Apache HTTP Server		  2010-11-06			 ROTATELOGS(8)
+    </pre></body>
+
+</html>

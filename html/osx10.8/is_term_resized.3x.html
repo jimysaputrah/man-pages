@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This is an extension to the curses library.  It provides callers with a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>is_term_resized,  resize_term,  resizeterm - change the curses terminal</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+resizeterm(3X)							resizeterm(3X)
+
+
+
+NAME
+       is_term_resized,  resize_term,  resizeterm - change the curses terminal
+       size
+
+SYNOPSIS
+       #include <curses.h>
+
+       bool is_term_resized(int lines, int columns);
+       int resize_term(int lines, int columns);
+       int resizeterm(int lines, int columns);
+
+DESCRIPTION
+       This is an extension to the curses library.  It provides callers with a
+       hook into the ncurses data to resize windows, primarily for use by pro-
+       grams running in an X Window  terminal  (e.g.,  xterm).	 The  function
+       resizeterm  resizes  the  standard and current windows to the specified
+       dimensions, and adjusts other bookkeeping  data	used  by  the  ncurses
+       library that record the window dimensions.
+
+       Most  of the work is done by the inner function resize_term.  The outer
+       function resizeterm adds bookkeeping for the  SIGWINCH  handler.   When
+       resizing  the  windows,	resize_term  blank-fills  the  areas  that are
+       extended.  The calling application should  fill	in  these  areas  with
+       appropriate data.  The resize_term function attempts to resize all win-
+       dows.  However, due to the calling convention of pads, it is not possi-
+       ble  to	resize	these without additional interaction with the applica-
+       tion.
+
+       A support function is_term_resized is provided so that applications can
+       check  if  the resize_term function would modify the window structures.
+       It returns TRUE if the windows would be modified, and FALSE  otherwise.
+
+RETURN VALUE
+       Except as notes, these function return the integer ERR upon failure and
+       OK on success.  They will fail if either of  the  dimensions  are  less
+       than  or equal to zero, or if an error occurs while (re)allocating mem-
+       ory for the windows.
+
+NOTES
+       While these functions are intended to be used to support a signal  han-
+       dler  (i.e., for SIGWINCH), care should be taken to avoid invoking them
+       in a context where malloc or realloc may have been  interrupted,  since
+       it uses those functions.
+
+       If  ncurses  is	configured  to	supply	its  own SIGWINCH handler, the
+       resizeterm function ungetch's a KEY_RESIZE which will be  read  on  the
+       next  call  to  getch.	This  is used to alert an application that the
+       screen size has changed, and that it should  repaint  special  features
+       such as pads that cannot be done automatically.
+
+       If  the	environment variables LINES or COLUMNS are set, this overrides
+       the library's use of the window size obtained from the  operating  sys-
+       tem.   Thus,  even if a SIGWINCH is received, no screen size change may
+       be recorded.  In that case, no KEY_RESIZE is queued for the  next  call
+       to getch; an ERR will be returned instead.
+
+SEE ALSO
+       wresize(3X).
+
+AUTHOR
+       Thomas  Dickey  (from  an  equivalent  function written in 1988 for BSD
+       curses).
+
+
+
+								resizeterm(3X)
+    </pre></body>
+
+</html>

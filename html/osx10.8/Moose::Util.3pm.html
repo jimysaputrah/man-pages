@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module provides a set of utility functions. Many of these..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Moose::Util - Utilities for working with Moose classes</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Moose::Util(3)	      User Contributed Perl Documentation	Moose::Util(3)
+
+
+
+NAME
+       Moose::Util - Utilities for working with Moose classes
+
+VERSION
+       version 2.0205
+
+SYNOPSIS
+	 use Moose::Util qw/find_meta does_role search_class_by_role/;
+
+	 my $meta = find_meta($object) || die "No metaclass found";
+
+	 if (does_role($object, $role)) {
+	   print "The object can do $role!\n";
+	 }
+
+	 my $class = search_class_by_role($object, 'FooRole');
+	 print "Nearest class with 'FooRole' is $class\n";
+
+DESCRIPTION
+       This module provides a set of utility functions. Many of these
+       functions are intended for use in Moose itself or MooseX modules, but
+       some of them may be useful for use in your own code.
+
+EXPORTED FUNCTIONS
+       find_meta($class_or_obj)
+	   This method takes a class name or object and attempts to find a
+	   metaclass for the class, if one exists. It will not create one if
+	   it does not yet exist.
+
+       does_role($class_or_obj, $role_or_obj)
+	   Returns true if $class_or_obj does the given $role_or_obj. The role
+	   can be provided as a name or a Moose::Meta::Role object.
+
+	   The class must already have a metaclass for this to work. If it
+	   doesn't, this function simply returns false.
+
+       search_class_by_role($class_or_obj, $role_or_obj)
+	   Returns the first class in the class's precedence list that does
+	   $role_or_obj, if any. The role can be either a name or a
+	   Moose::Meta::Role object.
+
+	   The class must already have a metaclass for this to work.
+
+       apply_all_roles($applicant, @roles)
+	   This function applies one or more roles to the given $applicant The
+	   applicant can be a role name, class name, or object.
+
+	   The $applicant must already have a metaclass object.
+
+	   The list of @roles should a list of names or Moose::Meta::Role
+	   objects, each of which can be followed by an optional hash
+	   reference of options ("-excludes" and "-alias").
+
+       ensure_all_roles($applicant, @roles)
+	   This function is similar to "apply_all_roles", but only applies
+	   roles that $applicant does not already consume.
+
+       with_traits($class_name, @role_names)
+	   This function creates a new class from $class_name with each of
+	   @role_names applied. It returns the name of the new class.
+
+       get_all_attribute_values($meta, $instance)
+	   Returns a hash reference containing all of the $instance's
+	   attributes. The keys are attribute names.
+
+       get_all_init_args($meta, $instance)
+	   Returns a hash reference containing all of the "init_arg" values
+	   for the instance's attributes. The values are the associated
+	   attribute values. If an attribute does not have a defined
+	   "init_arg", it is skipped.
+
+	   This could be useful in cloning an object.
+
+       resolve_metaclass_alias($category, $name, %options)
+       resolve_metatrait_alias($category, $name, %options)
+	   Resolves a short name to a full class name. Short names are often
+	   used when specifying the "metaclass" or "traits" option for an
+	   attribute:
+
+	       has foo => (
+		   metaclass => "Bar",
+	       );
+
+	   The name resolution mechanism is covered in "Metaclass and Trait
+	   Name Resolution" in Moose.
+
+       meta_class_alias($to[, $from])
+       meta_attribute_alias($to[, $from])
+	   Create an alias from the class $from (or the current package, if
+	   $from is unspecified), so that "Metaclass and Trait Name
+	   Resolution" in Moose works properly.
+
+       english_list(@items)
+	   Given a list of scalars, turns them into a proper list in English
+	   ("one and two", "one, two, three, and four"). This is used to help
+	   us make nicer error messages.
+
+TODO
+       Here is a list of possible functions to write
+
+       discovering original method from modified method
+       search for origin class of a method or attribute
+
+BUGS
+       See "BUGS" in Moose for details on reporting bugs.
+
+AUTHOR
+       Stevan Little <stevan@iinteractive.com>
+
+COPYRIGHT AND LICENSE
+       This software is copyright (c) 2011 by Infinity Interactive, Inc..
+
+       This is free software; you can redistribute it and/or modify it under
+       the same terms as the Perl 5 programming language system itself.
+
+
+
+perl v5.12.4			  2011-09-06			Moose::Util(3)
+    </pre></body>
+
+</html>

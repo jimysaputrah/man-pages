@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="If your version of Sybase does not support placeholders, then your..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>DBIx::Class::Storage::DBI::Sybase::ASE - Sybase ASE SQL Server support</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+DBIx::Class::Storage::User:ContributeDBIx::Class::Storage::DBI::Sybase::ASE(3)
+
+
+
+NAME
+       DBIx::Class::Storage::DBI::Sybase::ASE - Sybase ASE SQL Server support
+       for DBIx::Class
+
+SYNOPSIS
+       This subclass supports DBD::Sybase for real (non-Microsoft) Sybase
+       databases.
+
+DESCRIPTION
+       If your version of Sybase does not support placeholders, then your
+       storage will be reblessed to
+       DBIx::Class::Storage::DBI::Sybase::ASE::NoBindVars.  You can also
+       enable that driver explicitly, see the documentation for more details.
+
+       With this driver there is unfortunately no way to get the
+       "last_insert_id" without doing a "SELECT MAX(col)". This is done safely
+       in a transaction (locking the table.) See "INSERTS WITH PLACEHOLDERS".
+
+       A recommended connect_info setting:
+
+	 on_connect_call => [['datetime_setup'], ['blob_setup', log_on_update => 0]]
+
+METHODS
+   connect_call_blob_setup
+       Used as:
+
+	 on_connect_call => [ [ 'blob_setup', log_on_update => 0 ] ]
+
+       Does "$dbh->{syb_binary_images} = 1;" to return "IMAGE" data as raw
+       binary instead of as a hex string.
+
+       Recommended.
+
+       Also sets the "log_on_update" value for blob write operations. The
+       default is 1, but 0 is better if your database is configured for it.
+
+       See
+       "Handling_IMAGE/TEXT_data_with_syb_ct_get_data()/syb_ct_send_data()" in
+       DBD::Sybase.
+
+   connect_call_datetime_setup
+       Used as:
+
+	 on_connect_call => 'datetime_setup'
+
+       In connect_info to set:
+
+	 $dbh->syb_date_fmt('ISO_strict'); # output fmt: 2004-08-21T14:36:48.080Z
+	 $dbh->do('set dateformat mdy');   # input fmt:  08/13/1979 18:08:55.080
+
+       This works for both "DATETIME" and "SMALLDATETIME" columns, note that
+       "SMALLDATETIME" columns only have minute precision.
+
+Schema::Loader Support
+       As of version 0.05000, DBIx::Class::Schema::Loader should work well
+       with most versions of Sybase ASE.
+
+FreeTDS
+       This driver supports DBD::Sybase compiled against FreeTDS
+       (<http://www.freetds.org/>) to the best of our ability, however it is
+       recommended that you recompile DBD::Sybase against the Sybase Open
+       Client libraries. They are a part of the Sybase ASE distribution:
+
+       The Open Client FAQ is here:
+       <http://www.isug.com/Sybase_FAQ/ASE/section7.html>.
+
+       Sybase ASE for Linux (which comes with the Open Client libraries) may
+       be downloaded here:
+       <http://response.sybase.com/forms/ASE_Linux_Download>.
+
+       To see if you're using FreeTDS check "$schema->storage->using_freetds",
+       or run:
+
+	 perl -MDBI -le 'my $dbh = DBI->connect($dsn, $user, $pass); print $dbh->{syb_oc_version}'
+
+       It is recommended to set "tds version" for your ASE server to 5.0 in
+       "/etc/freetds/freetds.conf".
+
+       Some versions or configurations of the libraries involved will not
+       support placeholders, in which case the storage will be reblessed to
+       DBIx::Class::Storage::DBI::Sybase::ASE::NoBindVars.
+
+       In some configurations, placeholders will work but will throw implicit
+       type conversion errors for anything that's not expecting a string. In
+       such a case, the "auto_cast" option from
+       DBIx::Class::Storage::DBI::AutoCast is automatically set, which you may
+       enable on connection with connect_call_set_auto_cast.  The type info
+       for the "CAST"s is taken from the "data_type" in
+       DBIx::Class::ResultSource definitions in your Result classes, and are
+       mapped to a Sybase type (if it isn't already) using a mapping based on
+       SQL::Translator.
+
+       In other configurations, placeholders will work just as they do with
+       the Sybase Open Client libraries.
+
+       Inserts or updates of TEXT/IMAGE columns will NOT work with FreeTDS.
+
+INSERTS WITH PLACEHOLDERS
+       With placeholders enabled, inserts are done in a transaction so that
+       there are no concurrency issues with getting the inserted identity
+       value using "SELECT MAX(col)", which is the only way to get the
+       "IDENTITY" value in this mode.
+
+       In addition, they are done on a separate connection so that it's
+       possible to have active cursors when doing an insert.
+
+       When using "DBIx::Class::Storage::DBI::Sybase::ASE::NoBindVars"
+       transactions are unnecessary and not used, as there are no concurrency
+       issues with "SELECT @@IDENTITY" which is a session variable.
+
+TRANSACTIONS
+       Due to limitations of the TDS protocol and DBD::Sybase, you cannot
+       begin a transaction while there are active cursors, nor can you use
+       multiple active cursors within a transaction. An active cursor is, for
+       example, a ResultSet that has been executed using "next" or "first" but
+       has not been exhausted or reset.
+
+       For example, this will not work:
+
+	 $schema->txn_do(sub {
+	   my $rs = $schema->resultset('Book');
+	   while (my $row = $rs->next) {
+	     $schema->resultset('MetaData')->create({
+	       book_id => $row->id,
+	       ...
+	     });
+	   }
+	 });
+
+       This won't either:
+
+	 my $first_row = $large_rs->first;
+	 $schema->txn_do(sub { ... });
+
+       Transactions done for inserts in "AutoCommit" mode when placeholders
+       are in use are not affected, as they are done on an extra database
+       handle.
+
+       Some workarounds:
+
+       o   use DBIx::Class::Storage::DBI::Replicated
+
+       o   connect another Schema
+
+       o   load the data from your cursor with "all" in DBIx::Class::ResultSet
+
+MAXIMUM CONNECTIONS
+       The TDS protocol makes separate connections to the server for active
+       statements in the background. By default the number of such connections
+       is limited to 25, on both the client side and the server side.
+
+       This is a bit too low for a complex DBIx::Class application, so on
+       connection the client side setting is set to 256 (see "maxConnect" in
+       DBD::Sybase.) You can override it to whatever setting you like in the
+       DSN.
+
+       See
+       <http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.help.ase_15.0.sag1/html/sag1/sag1272.htm>
+       for information on changing the setting on the server side.
+
+DATES
+       See "connect_call_datetime_setup" to setup date formats for
+       DBIx::Class::InflateColumn::DateTime.
+
+TEXT/IMAGE COLUMNS
+       DBD::Sybase compiled with FreeTDS will NOT allow you to insert or
+       update "TEXT/IMAGE" columns.
+
+       Setting "$dbh->{LongReadLen}" will also not work with FreeTDS use
+       either:
+
+	 $schema->storage->dbh->do("SET TEXTSIZE $bytes");
+
+       or
+
+	 $schema->storage->set_textsize($bytes);
+
+       instead.
+
+       However, the "LongReadLen" you pass in connect_info is used to execute
+       the equivalent "SET TEXTSIZE" command on connection.
+
+       See "connect_call_blob_setup" for a connect_info setting you need to
+       work with "IMAGE" columns.
+
+BULK API
+       The experimental DBD::Sybase Bulk API support is used for populate in
+       void context, in a transaction on a separate connection.
+
+       To use this feature effectively, use a large number of rows for each
+       populate call, eg.:
+
+	 while (my $rows = $data_source->get_100_rows()) {
+	   $rs->populate($rows);
+	 }
+
+       NOTE: the add_columns calls in your "Result" classes must list columns
+       in database order for this to work. Also, you may have to unset the
+       "LANG" environment variable before loading your app, as "BCP -Y" is not
+       yet supported in DBD::Sybase .
+
+       When inserting IMAGE columns using this method, you'll need to use
+       "connect_call_blob_setup" as well.
+
+COMPUTED COLUMNS
+       If you have columns such as:
+
+	 created_dtm AS getdate()
+
+       represent them in your Result classes as:
+
+	 created_dtm => {
+	   data_type => undef,
+	   default_value => \'getdate()',
+	   is_nullable => 0,
+	   inflate_datetime => 1,
+	 }
+
+       The "data_type" must exist and must be "undef". Then empty inserts will
+       work on tables with such columns.
+
+TIMESTAMP COLUMNS
+       "timestamp" columns in Sybase ASE are not really timestamps, see:
+       http://dba.fyicenter.com/Interview-Questions/SYBASE/The_timestamp_datatype_in_Sybase_.html
+       <http://dba.fyicenter.com/Interview-
+       Questions/SYBASE/The_timestamp_datatype_in_Sybase_.html>.
+
+       They should be defined in your Result classes as:
+
+	 ts => {
+	   data_type => 'timestamp',
+	   is_nullable => 0,
+	   inflate_datetime => 0,
+	 }
+
+       The "<inflate_datetime =" 0>> is necessary if you use
+       DBIx::Class::InflateColumn::DateTime, and most people do, and still
+       want to be able to read these values.
+
+       The values will come back as hexadecimal.
+
+TODO
+       o   Transitions to AutoCommit=0 (starting a transaction) mode by
+	   exhausting any active cursors, using eager cursors.
+
+       o   Real limits and limited counts using stored procedures deployed on
+	   startup.
+
+       o   Blob update with a LIKE query on a blob, without invalidating the
+	   WHERE condition.
+
+       o   bulk_insert using prepare_cached (see comments.)
+
+AUTHOR
+       See "AUTHOR" in DBIx::Class and "CONTRIBUTORS" in DBIx::Class.
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  201DBIx::Class::Storage::DBI::Sybase::ASE(3)
+    </pre></body>
+
+</html>

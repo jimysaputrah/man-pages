@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module is the guts of CPANPLUS -- it inherits from all other..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>CPANPLUS::Internals</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+CPANPLUS::Internals(3pmPerl Programmers Reference GuidCPANPLUS::Internals(3pm)
+
+
+
+NAME
+       CPANPLUS::Internals
+
+SYNOPSIS
+	   my $internals   = CPANPLUS::Internals->_init( _conf => $conf );
+	   my $backend	   = CPANPLUS::Internals->_retrieve_id( $ID );
+
+DESCRIPTION
+       This module is the guts of CPANPLUS -- it inherits from all other
+       modules in the CPANPLUS::Internals::* namespace, thus defying normal
+       rules of OO programming -- but if you're reading this, you already know
+       what's going on ;)
+
+       Please read the "CPANPLUS::Backend" documentation for the normal API.
+
+ACCESSORS
+       _conf
+	   Get/set the configure object
+
+       _id Get/set the id
+
+METHODS
+   $internals = CPANPLUS::Internals->_init( _conf => CONFIG_OBJ )
+       "_init" creates a new CPANPLUS::Internals object.
+
+       You have to pass it a valid "CPANPLUS::Configure" object.
+
+       Returns the object on success, or dies on failure.
+
+   $bool = $internals->_flush( list => \@caches )
+       Flushes the designated caches from the "CPANPLUS" object.
+
+       Returns true on success, false if one or more caches could not be be
+       flushed.
+
+   $bool = $internals->_register_callback( name => CALLBACK_NAME, code =>
+       CODEREF );
+       Registers a callback for later use by the internal libraries.
+
+       Here is a list of the currently used callbacks:
+
+       install_prerequisite
+	   Is called when the user wants to be "asked" about what to do with
+	   prerequisites. Should return a boolean indicating true to install
+	   the prerequisite and false to skip it.
+
+       send_test_report
+	   Is called when the user should be prompted if he wishes to send the
+	   test report. Should return a boolean indicating true to send the
+	   test report and false to skip it.
+
+       munge_test_report
+	   Is called when the test report message has been composed, giving
+	   the user a chance to programatically alter it. Should return the
+	   (munged) message to be sent.
+
+       edit_test_report
+	   Is called when the user should be prompted to edit test reports
+	   about to be sent out by Test::Reporter. Should return a boolean
+	   indicating true to edit the test report in an editor and false to
+	   skip it.
+
+       proceed_on_test_failure
+	   Is called when 'make test' or 'Build test' fails. Should return a
+	   boolean indicating whether the install should continue even if the
+	   test failed.
+
+       munge_dist_metafile
+	   Is called when the "CPANPLUS::Dist::*" metafile is created, like
+	   "control" for "CPANPLUS::Dist::Deb", giving the user a chance to
+	   programatically alter it. Should return the (munged) text to be
+	   written to the metafile.
+
+   $bool = $internals->_add_to_includepath( directories => \@dirs )
+       Adds a list of directories to the include path.	This means they get
+       added to @INC as well as $ENV{PERL5LIB}.
+
+       Returns true on success, false on failure.
+
+   $id = CPANPLUS::Internals->_last_id
+       Return the id of the last object stored.
+
+   $id = CPANPLUS::Internals->_store_id( $internals )
+       Store this object; return its id.
+
+   $obj = CPANPLUS::Internals->_retrieve_id( $ID )
+       Retrieve an object based on its ID -- return false on error.
+
+   CPANPLUS::Internals->_remove_id( $ID )
+       Remove the object marked by $ID from storage.
+
+   @objs = CPANPLUS::Internals->_return_all_objects
+       Return all stored objects.
+
+
+
+perl v5.10.1			  2009-07-07	      CPANPLUS::Internals(3pm)
+    </pre></body>
+
+</html>

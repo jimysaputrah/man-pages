@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="DomainKeys sender signing policies are described in..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>Mail::DKIM::DkPolicy - represents a DomainKeys Sender Signing Policy</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+Mail::DKIM::DkPolicy(3User Contributed Perl DocumentatiMail::DKIM::DkPolicy(3)
+
+
+
+NAME
+       Mail::DKIM::DkPolicy - represents a DomainKeys Sender Signing Policy
+       record
+
+DESCRIPTION
+       DomainKeys sender signing policies are described in
+       RFC4870(historical). It is a record published in the message sender's
+       (i.e. the person who transmitted the message) DNS that describes how
+       they sign messages.
+
+CONSTRUCTORS
+   fetch() - fetch a sender signing policy from DNS
+	 my $policy = Mail::DKIM::DkPolicy->fetch(
+			  Protocol => "dns",
+			  Sender => 'joe@example.org',
+		      );
+
+       The following named arguments are accepted:
+
+       Protocol
+	   always specify "dns"
+
+       Author
+	   the "author" of the message for which policy is being checked.
+	   This is the first email address in the "From" header.  According to
+	   RFC 2822, section 3.6.2, the "From" header lists who is responsible
+	   for writing the message.
+
+       Sender
+	   the "sender" of the message for which policy is being checked.
+	   This is the first email address in the "Sender" header, or if there
+	   is not a "Sender" header, the "From" header.  According to RFC
+	   2822, section 3.6.2, the "Sender" header lists who is responsible
+	   for transmitting the message.
+
+       Depending on what type of policy is being checked, both the Sender and
+       Author fields may need to be specified.
+
+       If a DNS error or timeout occurs, an exception is thrown.
+
+       Otherwise, a policy object of some sort will be returned.  If no policy
+       is actually published, then the "default policy" will be returned.  To
+       check when this happens, use
+
+	 my $is_default = $policy->is_implied_default_policy;
+
+   new() - construct a default policy object
+	 my $policy = Mail::DKIM::DkPolicy->new;
+
+   parse() - gets a policy object by parsing a string
+	 my $policy = Mail::DKIM::DkPolicy->parse(
+			  String => "o=~; t=y"
+		      );
+
+METHODS
+   apply() - apply the policy to the results of a DKIM verifier
+	 my $result = $policy->apply($dkim_verifier);
+
+       The caller must provide an instance of Mail::DKIM::Verifier, one which
+       has already been fed the message being verified.
+
+       Possible results are:
+
+       accept
+	   The message is approved by the sender signing policy.
+
+       reject
+	   The message is rejected by the sender signing policy.
+
+       neutral
+	   The message is neither approved nor rejected by the sender signing
+	   policy. It can be considered suspicious.
+
+   flags() - get or set the flags (t=) tag
+       A vertical-bar separated list of flags.
+
+   is_implied_default_policy() - is this policy implied?
+	 my $is_implied = $policy->is_implied_default_policy;
+
+       If you fetch the policy for a particular domain, but that domain does
+       not have a policy published, then the "default policy" is in effect.
+       Use this method to detect when that happens.
+
+   location() - where the policy was fetched from
+       DomainKeys policies only have per-domain policies, so this will be the
+       domain where the policy was published.
+
+       If nothing is published for the domain, and the default policy was
+       returned instead, the location will be "undef".
+
+   note() - get or set the human readable notes (n=) tag
+       Human readable notes regarding the record. Undef if no notes specified.
+
+   policy() - get or set the outbound signing policy (o=) tag
+	 my $sp = $policy->policy;
+
+       Outbound signing policy for the entity. Possible values are:
+
+       "~" The default. The domain may sign some (but not all) email.
+
+       "-" The domain signs all email.
+
+   signall() - true if policy is "-"
+   testing() - checks the testing flag
+	 my $testing = $policy->testing;
+
+       If nonzero, the testing flag is set on the signing policy, and the
+       verify should not consider a message suspicious based on this policy.
+
+AUTHOR
+       Jason Long, <jlong@messiah.edu>
+
+COPYRIGHT AND LICENSE
+       Copyright (C) 2006-2009 by Messiah College
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself, either Perl version 5.8.6 or, at
+       your option, any later version of Perl 5 you may have available.
+
+
+
+perl v5.10.1			  2009-07-29	       Mail::DKIM::DkPolicy(3)
+    </pre></body>
+
+</html>

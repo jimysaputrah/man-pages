@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The pthread_join() function suspends execution of the calling thread..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <title>pthread_join -- wait for thread termination</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+PTHREAD_JOIN(3) 	 BSD Library Functions Manual	       PTHREAD_JOIN(3)
+
+NAME
+     pthread_join -- wait for thread termination
+
+SYNOPSIS
+     #include <pthread.h>
+
+     int
+     pthread_join(pthread_t thread, void **value_ptr);
+
+DESCRIPTION
+     The pthread_join() function suspends execution of the calling thread
+     until the target thread terminates, unless the target thread has already
+     terminated.
+
+     On return from a successful pthread_join() call with a non-NULL value_ptr
+     argument, the value passed to pthread_exit() by the terminating thread is
+     stored in the location referenced by value_ptr.  When a pthread_join()
+     returns successfully, the target thread has been terminated.  The results
+     of multiple simultaneous calls to pthread_join(), specifying the same
+     target thread, are undefined.  If the thread calling pthread_join() is
+     cancelled, the target thread is not detached.
+
+RETURN VALUES
+     If successful,  the pthread_join() function will return zero.  Otherwise,
+     an error number will be returned to indicate the error.
+
+ERRORS
+     pthread_join() will fail if:
+
+     [EDEADLK]		A deadlock was detected or the value of thread speci-
+			fies the calling thread.
+
+     [EINVAL]		The implementation has detected that the value speci-
+			fied by thread does not refer to a joinable thread.
+
+     [ESRCH]		No thread could be found corresponding to that speci-
+			fied by the given thread ID, thread.
+
+SEE ALSO
+     wait(2), pthread_create(3)
+
+STANDARDS
+     pthread_join() conforms to ISO/IEC 9945-1:1996 (``POSIX.1'').
+
+BSD				 April 4, 1996				   BSD
+    </pre></body>
+
+</html>
