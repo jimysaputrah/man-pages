@@ -6,16 +6,18 @@ class Util:
     header = """<!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+        <meta name="description" content="{description}..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
         <title>{title_name}</title>
+        <META NAME="robots" CONTENT="all" />
     </head>
     """
 
     footer = """
 </html>"""
 
-    def print_header(self, name):
-        print self.header.format(title_name=name.rstrip().strip())
+    def print_header(self, name, desc):
+        print self.header.format(title_name=name.rstrip().strip(), description=desc.rstrip().strip())
 
     def print_footer(self):
         print self.footer
@@ -26,15 +28,29 @@ body = "<body><pre>\n"
 line = sys.stdin.readline()
 while line:
     body = body + line
-    if line.startswith("NAME"):
+    if line.lower().startswith("name"):
         break
     else:
         line = sys.stdin.readline()
 
+name = sys.stdin.readline()
+body = body + name
+
+
 line = sys.stdin.readline()
+while line:
+    body = body + line
+    if line.lower().startswith("description"):
+        break
+    else:
+        line = sys.stdin.readline()
+
+desc = sys.stdin.readline()
+body = body + desc
+
 
 util = Util()
-util.print_header(line)
+util.print_header(name, desc)
 
 line = sys.stdin.readline()
 while line:
