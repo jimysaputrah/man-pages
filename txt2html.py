@@ -25,30 +25,30 @@ class Util:
         print self.footer
 
 
-body = "<body><pre>\n"
+content = "\n"
 
 line = sys.stdin.readline()
 while line:
-    body = body + line
+    content = content + line
     if line.lower().startswith("name"):
         break
     else:
         line = sys.stdin.readline()
 
 name = sys.stdin.readline()
-body = body + name
+content = content + name
 
 
 line = sys.stdin.readline()
 while line:
-    body = body + line
+    content = content + line
     if line.lower().startswith("description"):
         break
     else:
         line = sys.stdin.readline()
 
 desc = sys.stdin.readline()
-body = body + desc
+content = content + desc
 
 
 util = Util()
@@ -56,9 +56,11 @@ util.print_header(name, desc)
 
 line = sys.stdin.readline()
 while line:
-    body = body + line
+    content = content + line
     line = sys.stdin.readline()
 
-body = body + "    </pre></body>"
+content = content.replace("<", "&lt").replace(">", "&gt")
+
+body = "<content><pre>\n" + content + "    </pre></body>"
 print body
 util.print_footer()
