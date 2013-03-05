@@ -3,6 +3,7 @@ import sys
 
 
 class Util:
+
     header = """<!DOCTYPE html>
 <html>
     <head>
@@ -15,6 +16,8 @@ class Util:
 
     footer = """
 </html>"""
+
+    google_analytics_js = """<script type="text/javascript" src="../js/ga.js"></script>"""
 
     def print_header(self, name, desc):
         print self.header.format(title_name=name.rstrip().strip(), description=desc.rstrip().strip())
@@ -57,6 +60,6 @@ while line:
     body = body + line
     line = sys.stdin.readline()
 
-body = body + "    </pre></body>"
+body = body + "    </pre>" + util.google_analytics_js + "</body>"
 print body
 util.print_footer()
