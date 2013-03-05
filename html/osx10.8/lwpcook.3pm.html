@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document contain some examples that show typical usage of the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>lwpcook - The libwww-perl cookbook</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 lwpcook(3)	      User Contributed Perl Documentation	    lwpcook(3)
 
 
@@ -52,23 +54,23 @@ GET
        handle the response returned.
 
 	 use LWP::UserAgent;
-	 $ua = LWP::UserAgent->new;
-	 $ua->agent("$0/0.1 " . $ua->agent);
-	 # $ua->agent("Mozilla/8.0") # pretend we are very capable browser
+	 $ua = LWP::UserAgent-&gtnew;
+	 $ua-&gtagent("$0/0.1 " . $ua-&gtagent);
+	 # $ua-&gtagent("Mozilla/8.0") # pretend we are very capable browser
 
-	 $req = HTTP::Request->new(
-	    GET => 'http://search.cpan.org/dist/libwww-perl/');
-	 $req->header('Accept' => 'text/html');
+	 $req = HTTP::Request-&gtnew(
+	    GET =&gt 'http://search.cpan.org/dist/libwww-perl/');
+	 $req-&gtheader('Accept' =&gt 'text/html');
 
 	 # send request
-	 $res = $ua->request($req);
+	 $res = $ua-&gtrequest($req);
 
 	 # check the outcome
-	 if ($res->is_success) {
-	    print $res->decoded_content;
+	 if ($res-&gtis_success) {
+	    print $res-&gtdecoded_content;
 	 }
 	 else {
-	    print "Error: " . $res->status_line . "\n";
+	    print "Error: " . $res-&gtstatus_line . "\n";
 	 }
 
        The lwp-request program (alias GET) that is distributed with the
@@ -98,15 +100,15 @@ POST
        common POST operation is to access a WWW form application:
 
 	 use LWP::UserAgent;
-	 $ua = LWP::UserAgent->new;
+	 $ua = LWP::UserAgent-&gtnew;
 
-	 my $req = HTTP::Request->new(
-	     POST => 'http://rt.cpan.org/Public/Dist/Display.html');
-	 $req->content_type('application/x-www-form-urlencoded');
-	 $req->content('Status=Active&Name=libwww-perl');
+	 my $req = HTTP::Request-&gtnew(
+	     POST =&gt 'http://rt.cpan.org/Public/Dist/Display.html');
+	 $req-&gtcontent_type('application/x-www-form-urlencoded');
+	 $req-&gtcontent('Status=Active&Name=libwww-perl');
 
-	 my $res = $ua->request($req);
-	 print $res->as_string;
+	 my $res = $ua-&gtrequest($req);
+	 print $res-&gtas_string;
 
        Lazy people use the HTTP::Request::Common module to set up a suitable
        POST request message (it handles all the escaping issues) and has a
@@ -114,12 +116,12 @@ POST
 
 	 use HTTP::Request::Common qw(POST);
 	 use LWP::UserAgent;
-	 $ua = LWP::UserAgent->new;
+	 $ua = LWP::UserAgent-&gtnew;
 
 	 my $req = POST 'http://rt.cpan.org/Public/Dist/Display.html',
-		       [ Status => 'Active', Name => 'libwww-perl' ];
+		       [ Status =&gt 'Active', Name =&gt 'libwww-perl' ];
 
-	 print $ua->request($req)->as_string;
+	 print $ua-&gtrequest($req)-&gtas_string;
 
        The lwp-request program (alias POST) that is distributed with the
        library can also be used for posting data.
@@ -134,19 +136,19 @@ PROXIES
        requests:
 
 	 use LWP::UserAgent;
-	 $ua = LWP::UserAgent->new;
-	 $ua->env_proxy; # initialize from environment variables
+	 $ua = LWP::UserAgent-&gtnew;
+	 $ua-&gtenv_proxy; # initialize from environment variables
 	 # or
-	 $ua->proxy(ftp  => 'http://proxy.myorg.com');
-	 $ua->proxy(wais => 'http://proxy.myorg.com');
-	 $ua->no_proxy(qw(no se fi));
+	 $ua-&gtproxy(ftp  =&gt 'http://proxy.myorg.com');
+	 $ua-&gtproxy(wais =&gt 'http://proxy.myorg.com');
+	 $ua-&gtno_proxy(qw(no se fi));
 
-	 my $req = HTTP::Request->new(GET => 'wais://xxx.com/');
-	 print $ua->request($req)->as_string;
+	 my $req = HTTP::Request-&gtnew(GET =&gt 'wais://xxx.com/');
+	 print $ua-&gtrequest($req)-&gtas_string;
 
        The LWP::Simple interface will call env_proxy() for you automatically.
-       Applications that use the $ua->env_proxy() method will normally not use
-       the $ua->proxy() and $ua->no_proxy() methods.
+       Applications that use the $ua-&gtenv_proxy() method will normally not use
+       the $ua-&gtproxy() and $ua-&gtno_proxy() methods.
 
        Some proxies also require that you send it a username/password in order
        to let requests through.  You should be able to add the required
@@ -154,13 +156,13 @@ PROXIES
 
 	use LWP::UserAgent;
 
-	$ua = LWP::UserAgent->new;
-	$ua->proxy(['http', 'ftp'] => 'http://username:password@proxy.myorg.com');
+	$ua = LWP::UserAgent-&gtnew;
+	$ua-&gtproxy(['http', 'ftp'] =&gt 'http://username:password@proxy.myorg.com');
 
-	$req = HTTP::Request->new('GET',"http://www.perl.com");
+	$req = HTTP::Request-&gtnew('GET',"http://www.perl.com");
 
-	$res = $ua->request($req);
-	print $res->decoded_content if $res->is_success;
+	$res = $ua-&gtrequest($req);
+	print $res-&gtdecoded_content if $res-&gtis_success;
 
        Replace "proxy.myorg.com", "username" and "password" with something
        suitable for your site.
@@ -170,10 +172,10 @@ ACCESS TO PROTECTED DOCUMENTS
        this:
 
 	 use LWP::UserAgent;
-	 $ua = LWP::UserAgent->new;
-	 $req = HTTP::Request->new(GET => 'http://www.linpro.no/secret/');
-	 $req->authorization_basic('aas', 'mypassword');
-	 print $ua->request($req)->as_string;
+	 $ua = LWP::UserAgent-&gtnew;
+	 $req = HTTP::Request-&gtnew(GET =&gt 'http://www.linpro.no/secret/');
+	 $req-&gtauthorization_basic('aas', 'mypassword');
+	 print $ua-&gtrequest($req)-&gtas_string;
 
        The other alternative is to provide a subclass of LWP::UserAgent that
        overrides the get_basic_credentials() method. Study the lwp-request
@@ -187,13 +189,13 @@ COOKIES
 	 use LWP::UserAgent;
 	 use HTTP::Cookies;
 
-	 $ua = LWP::UserAgent->new;
-	 $ua->cookie_jar(HTTP::Cookies->new(file => "lwpcookies.txt",
-					    autosave => 1));
+	 $ua = LWP::UserAgent-&gtnew;
+	 $ua-&gtcookie_jar(HTTP::Cookies-&gtnew(file =&gt "lwpcookies.txt",
+					    autosave =&gt 1));
 
 	 # and then send requests just as you used to do
-	 $res = $ua->request(HTTP::Request->new(GET => "http://no.yahoo.com/"));
-	 print $res->status_line, "\n";
+	 $res = $ua-&gtrequest(HTTP::Request-&gtnew(GET =&gt "http://no.yahoo.com/"));
+	 print $res-&gtstatus_line, "\n";
 
        As you visit sites that send you cookies to keep, then the file
        lwpcookies.txt" will grow.
@@ -210,14 +212,14 @@ HTTPS
 
 	 use LWP::UserAgent;
 
-	 my $ua = LWP::UserAgent->new;
-	 my $req = HTTP::Request->new(GET => 'https://www.helsinki.fi/');
-	 my $res = $ua->request($req);
-	 if ($res->is_success) {
-	     print $res->as_string;
+	 my $ua = LWP::UserAgent-&gtnew;
+	 my $req = HTTP::Request-&gtnew(GET =&gt 'https://www.helsinki.fi/');
+	 my $res = $ua-&gtrequest($req);
+	 if ($res-&gtis_success) {
+	     print $res-&gtas_string;
 	 }
 	 else {
-	     print "Failed: ", $res->status_line, "\n";
+	     print "Failed: ", $res-&gtstatus_line, "\n";
 	 }
 
 MIRRORING
@@ -227,10 +229,10 @@ MIRRORING
 	 use LWP::Simple;
 
 	 %mirrors = (
-	    'http://www.sn.no/' 		      => 'sn.html',
-	    'http://www.perl.com/'		      => 'perl.html',
-	    'http://search.cpan.org/distlibwww-perl/' => 'lwp.html',
-	    'gopher://gopher.sn.no/'		      => 'gopher.html',
+	    'http://www.sn.no/' 		      =&gt 'sn.html',
+	    'http://www.perl.com/'		      =&gt 'perl.html',
+	    'http://search.cpan.org/distlibwww-perl/' =&gt 'lwp.html',
+	    'gopher://gopher.sn.no/'		      =&gt 'gopher.html',
 	 );
 
 	 while (($url, $localfile) = each(%mirrors)) {
@@ -246,38 +248,38 @@ MIRRORING
 LARGE DOCUMENTS
        If the document you want to fetch is too large to be kept in memory,
        then you have two alternatives.	You can instruct the library to write
-       the document content to a file (second $ua->request() argument is a
+       the document content to a file (second $ua-&gtrequest() argument is a
        file name):
 
 	 use LWP::UserAgent;
-	 $ua = LWP::UserAgent->new;
+	 $ua = LWP::UserAgent-&gtnew;
 
-	 my $req = HTTP::Request->new(GET =>
+	 my $req = HTTP::Request-&gtnew(GET =&gt
 	    'http://www.cpan.org/authors/Gisle_Aas/libwww-perl-6.02.tar.gz');
-	 $res = $ua->request($req, "libwww-perl.tar.gz");
-	 if ($res->is_success) {
+	 $res = $ua-&gtrequest($req, "libwww-perl.tar.gz");
+	 if ($res-&gtis_success) {
 	    print "ok\n";
 	 }
 	 else {
-	    print $res->status_line, "\n";
+	    print $res-&gtstatus_line, "\n";
 	 }
 
-       Or you can process the document as it arrives (second $ua->request()
+       Or you can process the document as it arrives (second $ua-&gtrequest()
        argument is a code reference):
 
 	 use LWP::UserAgent;
-	 $ua = LWP::UserAgent->new;
+	 $ua = LWP::UserAgent-&gtnew;
 	 $URL = 'ftp://ftp.unit.no/pub/rfc/rfc-index.txt';
 
 	 my $expected_length;
 	 my $bytes_received = 0;
 	 my $res =
-	    $ua->request(HTTP::Request->new(GET => $URL),
+	    $ua-&gtrequest(HTTP::Request-&gtnew(GET =&gt $URL),
 		      sub {
 			  my($chunk, $res) = @_;
 			  $bytes_received += length($chunk);
 			  unless (defined $expected_length) {
-			     $expected_length = $res->content_length || 0;
+			     $expected_length = $res-&gtcontent_length || 0;
 			  }
 			  if ($expected_length) {
 			       printf STDERR "%d%% - ",
@@ -288,7 +290,7 @@ LARGE DOCUMENTS
 			  # XXX Should really do something with the chunk itself
 			  # print $chunk;
 		      });
-	  print $res->status_line, "\n";
+	  print $res-&gtstatus_line, "\n";
 
 COPYRIGHT
        Copyright 1996-2001, Gisle Aas
@@ -299,6 +301,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-05-01			    lwpcook(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

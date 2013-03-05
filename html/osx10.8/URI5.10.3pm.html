@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module implements the "URI" class.	Objects of this class..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>URI - Uniform Resource Identifiers (absolute and relative)</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 URI(3)		      User Contributed Perl Documentation		URI(3)
 
 
@@ -16,23 +18,23 @@ NAME
        URI - Uniform Resource Identifiers (absolute and relative)
 
 SYNOPSIS
-	$u1 = URI->new("http://www.perl.com");
-	$u2 = URI->new("foo", "http");
-	$u3 = $u2->abs($u1);
-	$u4 = $u3->clone;
-	$u5 = URI->new("HTTP://WWW.perl.com:80")->canonical;
+	$u1 = URI-&gtnew("http://www.perl.com");
+	$u2 = URI-&gtnew("foo", "http");
+	$u3 = $u2-&gtabs($u1);
+	$u4 = $u3-&gtclone;
+	$u5 = URI-&gtnew("HTTP://WWW.perl.com:80")-&gtcanonical;
 
-	$str = $u->as_string;
+	$str = $u-&gtas_string;
 	$str = "$u";
 
-	$scheme = $u->scheme;
-	$opaque = $u->opaque;
-	$path	= $u->path;
-	$frag	= $u->fragment;
+	$scheme = $u-&gtscheme;
+	$opaque = $u-&gtopaque;
+	$path	= $u-&gtpath;
+	$frag	= $u-&gtfragment;
 
-	$u->scheme("ftp");
-	$u->host("ftp.perl.com");
-	$u->path("cpan/");
+	$u-&gtscheme("ftp");
+	$u-&gthost("ftp.perl.com");
+	$u-&gtpath("cpan/");
 
 DESCRIPTION
        This module implements the "URI" class.	Objects of this class
@@ -56,9 +58,9 @@ DESCRIPTION
        is missing, but implied by the context of the URI reference.  The three
        forms of URI reference syntax are summarized as follows:
 
-	 <scheme>:<scheme-specific-part>#<fragment>
-	 <scheme>://<authority><path>?<query>#<fragment>
-	 <path>?<query>#<fragment>
+	 &ltscheme&gt:&ltscheme-specific-part&gt#&ltfragment&gt
+	 &ltscheme&gt://&ltauthority&gt&ltpath&gt?&ltquery&gt#&ltfragment&gt
+	 &ltpath&gt?&ltquery&gt#&ltfragment&gt
 
        The components into which a URI reference can be divided depend on the
        scheme.	The "URI" class provides methods to get and set the individual
@@ -68,11 +70,11 @@ DESCRIPTION
 CONSTRUCTORS
        The following methods construct new "URI" objects:
 
-       $uri = URI->new( $str )
-       $uri = URI->new( $str, $scheme )
+       $uri = URI-&gtnew( $str )
+       $uri = URI-&gtnew( $str, $scheme )
 	   Constructs a new URI object.  The string representation of a URI is
 	   given as argument, together with an optional scheme specification.
-	   Common URI wrappers like "" and <>, as well as leading and trailing
+	   Common URI wrappers like "" and &lt&gt, as well as leading and trailing
 	   white space, are automatically removed from the $str argument
 	   before it is processed further.
 
@@ -90,25 +92,25 @@ CONSTRUCTORS
 	   restricted (see URI::Escape).  Characters outside this set are
 	   automatically escaped by the URI constructor.
 
-       $uri = URI->new_abs( $str, $base_uri )
+       $uri = URI-&gtnew_abs( $str, $base_uri )
 	   Constructs a new absolute URI object.  The $str argument can denote
 	   a relative or absolute URI.	If relative, then it is absolutized
 	   using $base_uri as base. The $base_uri must be an absolute URI.
 
-       $uri = URI::file->new( $filename )
-       $uri = URI::file->new( $filename, $os )
+       $uri = URI::file-&gtnew( $filename )
+       $uri = URI::file-&gtnew( $filename, $os )
 	   Constructs a new file URI from a file name.	See URI::file.
 
-       $uri = URI::file->new_abs( $filename )
-       $uri = URI::file->new_abs( $filename, $os )
+       $uri = URI::file-&gtnew_abs( $filename )
+       $uri = URI::file-&gtnew_abs( $filename, $os )
 	   Constructs a new absolute file URI from a file name.  See
 	   URI::file.
 
-       $uri = URI::file->cwd
+       $uri = URI::file-&gtcwd
 	   Returns the current working directory as a file URI.  See
 	   URI::file.
 
-       $uri->clone
+       $uri-&gtclone
 	   Returns a copy of the $uri.
 
 COMMON METHODS
@@ -129,10 +131,10 @@ COMMON METHODS
 
        The common methods available for all URI are:
 
-       $uri->scheme
-       $uri->scheme( $new_scheme )
+       $uri-&gtscheme
+       $uri-&gtscheme( $new_scheme )
 	   Sets and returns the scheme part of the $uri.  If the $uri is
-	   relative, then $uri->scheme returns "undef".  If called with an
+	   relative, then $uri-&gtscheme returns "undef".  If called with an
 	   argument, it updates the scheme of $uri, possibly changing the
 	   class of $uri, and returns the old scheme value.  The method croaks
 	   if the new scheme name is illegal; a scheme name must begin with a
@@ -143,39 +145,39 @@ COMMON METHODS
 	   possible).
 
 	   Letter case does not matter for scheme names.  The string returned
-	   by $uri->scheme is always lowercase.  If you want the scheme just
+	   by $uri-&gtscheme is always lowercase.  If you want the scheme just
 	   as it was written in the URI in its original case, you can use the
-	   $uri->_scheme method instead.
+	   $uri-&gt_scheme method instead.
 
-       $uri->opaque
-       $uri->opaque( $new_opaque )
+       $uri-&gtopaque
+       $uri-&gtopaque( $new_opaque )
 	   Sets and returns the scheme-specific part of the $uri (everything
 	   between the scheme and the fragment) as an escaped string.
 
-       $uri->path
-       $uri->path( $new_path )
-	   Sets and returns the same value as $uri->opaque unless the URI
+       $uri-&gtpath
+       $uri-&gtpath( $new_path )
+	   Sets and returns the same value as $uri-&gtopaque unless the URI
 	   supports the generic syntax for hierarchical namespaces.  In that
 	   case the generic method is overridden to set and return the part of
 	   the URI between the host name and the fragment.
 
-       $uri->fragment
-       $uri->fragment( $new_frag )
+       $uri-&gtfragment
+       $uri-&gtfragment( $new_frag )
 	   Returns the fragment identifier of a URI reference as an escaped
 	   string.
 
-       $uri->as_string
+       $uri-&gtas_string
 	   Returns a URI object to a plain ASCII string.  URI objects are also
 	   converted to plain strings automatically by overloading.  This
 	   means that $uri objects can be used as plain strings in most Perl
 	   constructs.
 
-       $uri->as_iri
+       $uri-&gtas_iri
 	   Returns a Unicode string representing the URI.  Escaped UTF-8
 	   sequences representing non-ASCII characters are turned into their
 	   corresponding Unicode code point.
 
-       $uri->canonical
+       $uri-&gtcanonical
 	   Returns a normalized version of the URI.  The rules for
 	   normalization are scheme-dependent.	They usually involve
 	   lowercasing the scheme and Internet host name components, removing
@@ -186,7 +188,7 @@ COMMON METHODS
 	   For efficiency reasons, if the $uri is already in normalized form,
 	   then a reference to it is returned instead of a copy.
 
-       $uri->eq( $other_uri )
+       $uri-&gteq( $other_uri )
        URI::eq( $first_uri, $other_uri )
 	   Tests whether two URI references are equal.	URI references that
 	   normalize to the same string are considered equal.  The method can
@@ -196,18 +198,18 @@ COMMON METHODS
 	   If you need to test whether two "URI" object references denote the
 	   same object, use the '==' operator.
 
-       $uri->abs( $base_uri )
+       $uri-&gtabs( $base_uri )
 	   Returns an absolute URI reference.  If $uri is already absolute,
 	   then a reference to it is simply returned.  If the $uri is
 	   relative, then a new absolute URI is constructed by combining the
 	   $uri and the $base_uri, and returned.
 
-       $uri->rel( $base_uri )
+       $uri-&gtrel( $base_uri )
 	   Returns a relative URI reference if it is possible to make one that
 	   denotes the same resource relative to $base_uri.  If not, then $uri
 	   is simply returned.
 
-       $uri->secure
+       $uri-&gtsecure
 	   Returns a TRUE value if the URI is considered to point to a
 	   resource on a secure channel, such as an SSL or TLS encrypted one.
 
@@ -217,26 +219,26 @@ GENERIC METHODS
        schemes below indicate which these are.	Unknown schemes are assumed to
        support the generic syntax, and therefore the following methods:
 
-       $uri->authority
-       $uri->authority( $new_authority )
+       $uri-&gtauthority
+       $uri-&gtauthority( $new_authority )
 	   Sets and returns the escaped authority component of the $uri.
 
-       $uri->path
-       $uri->path( $new_path )
+       $uri-&gtpath
+       $uri-&gtpath( $new_path )
 	   Sets and returns the escaped path component of the $uri (the part
 	   between the host name and the query or fragment).  The path can
 	   never be undefined, but it can be the empty string.
 
-       $uri->path_query
-       $uri->path_query( $new_path_query )
+       $uri-&gtpath_query
+       $uri-&gtpath_query( $new_path_query )
 	   Sets and returns the escaped path and query components as a single
 	   entity.  The path and the query are separated by a "?" character,
 	   but the query can itself contain "?".
 
-       $uri->path_segments
-       $uri->path_segments( $segment, ... )
+       $uri-&gtpath_segments
+       $uri-&gtpath_segments( $segment, ... )
 	   Sets and returns the path.  In a scalar context, it returns the
-	   same value as $uri->path.  In a list context, it returns the
+	   same value as $uri-&gtpath.  In a list context, it returns the
 	   unescaped path segments that make up the path.  Path segments that
 	   have parameters are returned as an anonymous array.	The first
 	   element is the unescaped path segment proper;  subsequent elements
@@ -248,17 +250,17 @@ GENERIC METHODS
 	   path_segment, i.e. the path "/foo/bar" have 3 path_segments; "",
 	   "foo" and "bar".
 
-       $uri->query
-       $uri->query( $new_query )
+       $uri-&gtquery
+       $uri-&gtquery( $new_query )
 	   Sets and returns the escaped query component of the $uri.
 
-       $uri->query_form
-       $uri->query_form( $key1 => $val1, $key2 => $val2, ... )
-       $uri->query_form( $key1 => $val1, $key2 => $val2, ..., $delim )
-       $uri->query_form( \@key_value_pairs )
-       $uri->query_form( \@key_value_pairs, $delim )
-       $uri->query_form( \%hash )
-       $uri->query_form( \%hash, $delim )
+       $uri-&gtquery_form
+       $uri-&gtquery_form( $key1 =&gt $val1, $key2 =&gt $val2, ... )
+       $uri-&gtquery_form( $key1 =&gt $val1, $key2 =&gt $val2, ..., $delim )
+       $uri-&gtquery_form( \@key_value_pairs )
+       $uri-&gtquery_form( \@key_value_pairs, $delim )
+       $uri-&gtquery_form( \%hash )
+       $uri-&gtquery_form( \%hash, $delim )
 	   Sets and returns query components that use the
 	   application/x-www-form-urlencoded format.  Key/value pairs are
 	   separated by "&", and the key is separated from the value by a "="
@@ -277,11 +279,11 @@ GENERIC METHODS
 	   the same effect as passing the key repeatedly with one value at a
 	   time.  All the following statements have the same effect:
 
-	       $uri->query_form(foo => 1, foo => 2);
-	       $uri->query_form(foo => [1, 2]);
-	       $uri->query_form([ foo => 1, foo => 2 ]);
-	       $uri->query_form([ foo => [1, 2] ]);
-	       $uri->query_form({ foo => [1, 2] });
+	       $uri-&gtquery_form(foo =&gt 1, foo =&gt 2);
+	       $uri-&gtquery_form(foo =&gt [1, 2]);
+	       $uri-&gtquery_form([ foo =&gt 1, foo =&gt 2 ]);
+	       $uri-&gtquery_form([ foo =&gt [1, 2] ]);
+	       $uri-&gtquery_form({ foo =&gt [1, 2] });
 
 	   The $delim parameter can be passed as ";" to force the key/value
 	   pairs to be delimited by ";" instead of "&" in the query string.
@@ -293,9 +295,9 @@ GENERIC METHODS
 	   The "URI::QueryParam" module can be loaded to add further methods
 	   to manipulate the form of a URI.  See URI::QueryParam for details.
 
-       $uri->query_keywords
-       $uri->query_keywords( $keywords, ... )
-       $uri->query_keywords( \@keywords )
+       $uri-&gtquery_keywords
+       $uri-&gtquery_keywords( $keywords, ... )
+       $uri-&gtquery_keywords( \@keywords )
 	   Sets and returns query components that use the keywords separated
 	   by "+" format.
 
@@ -309,8 +311,8 @@ SERVER METHODS
        For schemes where the authority component denotes an Internet host, the
        following methods are available in addition to the generic methods.
 
-       $uri->userinfo
-       $uri->userinfo( $new_userinfo )
+       $uri-&gtuserinfo
+       $uri-&gtuserinfo( $new_userinfo )
 	   Sets and returns the escaped userinfo part of the authority
 	   component.
 
@@ -319,43 +321,43 @@ SERVER METHODS
 	   clear text (such as URI) has proven to be a security risk in almost
 	   every case where it has been used.
 
-       $uri->host
-       $uri->host( $new_host )
+       $uri-&gthost
+       $uri-&gthost( $new_host )
 	   Sets and returns the unescaped hostname.
 
 	   If the $new_host string ends with a colon and a number, then this
 	   number also sets the port.
 
 	   For IPv6 addresses the brackets around the raw address is removed
-	   in the return value from $uri->host.  When setting the host
+	   in the return value from $uri-&gthost.  When setting the host
 	   attribute to an IPv6 address you can use a raw address or one
 	   enclosed in brackets.  The address needs to be enclosed in brackets
 	   if you want to pass in a new port value as well.
 
-       $uri->ihost
+       $uri-&gtihost
 	   Returns the host in Unicode form.  Any IDNA A-labels are turned
 	   into U-labels.
 
-       $uri->port
-       $uri->port( $new_port )
+       $uri-&gtport
+       $uri-&gtport( $new_port )
 	   Sets and returns the port.  The port is a simple integer that
 	   should be greater than 0.
 
 	   If a port is not specified explicitly in the URI, then the URI
 	   scheme's default port is returned. If you don't want the default
-	   port substituted, then you can use the $uri->_port method instead.
+	   port substituted, then you can use the $uri-&gt_port method instead.
 
-       $uri->host_port
-       $uri->host_port( $new_host_port )
+       $uri-&gthost_port
+       $uri-&gthost_port( $new_host_port )
 	   Sets and returns the host and port as a single unit.  The returned
 	   value includes a port, even if it matches the default port.	The
 	   host part and the port part are separated by a colon: ":".
 
 	   For IPv6 addresses the bracketing is preserved; thus
-	   URI->new("http://[::1]/")->host_port returns "[::1]:80".  Contrast
-	   this with $uri->host which will remove the brackets.
+	   URI-&gtnew("http://[::1]/")-&gthost_port returns "[::1]:80".  Contrast
+	   this with $uri-&gthost which will remove the brackets.
 
-       $uri->default_port
+       $uri-&gtdefault_port
 	   Returns the default port of the URI scheme to which $uri belongs.
 	   For http this is the number 80, for ftp this is the number 21, etc.
 	   The default port for a scheme can not be changed.
@@ -372,7 +374,7 @@ SCHEME-SPECIFIC SUPPORT
 
 	   "URI" objects belonging to the data scheme support the common
 	   methods and two new methods to access their scheme-specific
-	   components: $uri->media_type and $uri->data.  See URI::data for
+	   components: $uri-&gtmedia_type and $uri-&gtdata.  See URI::data for
 	   details.
 
        file:
@@ -382,7 +384,7 @@ SCHEME-SPECIFIC SUPPORT
 
 	   "URI" objects belonging to the file scheme support the common and
 	   generic methods.  In addition, they provide two methods for mapping
-	   file URIs back to local file names; $uri->file and $uri->dir.  See
+	   file URIs back to local file names; $uri-&gtfile and $uri-&gtdir.  See
 	   URI::file for details.
 
        ftp:
@@ -392,18 +394,18 @@ SCHEME-SPECIFIC SUPPORT
 
 	   "URI" objects belonging to the ftp scheme support the common,
 	   generic and server methods.	In addition, they provide two methods
-	   for accessing the userinfo sub-components: $uri->user and
-	   $uri->password.
+	   for accessing the userinfo sub-components: $uri-&gtuser and
+	   $uri-&gtpassword.
 
        gopher:
 	   The gopher URI scheme is specified in
-	   <draft-murali-url-gopher-1996-12-04> and will hopefully be
+	   &ltdraft-murali-url-gopher-1996-12-04&gt and will hopefully be
 	   available as a RFC 2396 based specification.
 
 	   "URI" objects belonging to the gopher scheme support the common,
 	   generic and server methods. In addition, they support some methods
-	   for accessing gopher-specific path components: $uri->gopher_type,
-	   $uri->selector, $uri->search, $uri->string.
+	   for accessing gopher-specific path components: $uri-&gtgopher_type,
+	   $uri-&gtselector, $uri-&gtsearch, $uri-&gtstring.
 
        http:
 	   The http URI scheme is specified in RFC 2616.  The scheme is used
@@ -426,13 +428,13 @@ SCHEME-SPECIFIC SUPPORT
 
 	   "URI" objects belonging to the ldap scheme support the common,
 	   generic and server methods as well as ldap-specific methods:
-	   $uri->dn, $uri->attributes, $uri->scope, $uri->filter,
-	   $uri->extensions.  See URI::ldap for details.
+	   $uri-&gtdn, $uri-&gtattributes, $uri-&gtscope, $uri-&gtfilter,
+	   $uri-&gtextensions.  See URI::ldap for details.
 
        ldapi:
 	   Like the ldap URI scheme, but uses a UNIX domain socket.  The
 	   server methods are not supported, and the local socket path is
-	   available as $uri->un_path.	The ldapi scheme is used by the
+	   available as $uri-&gtun_path.	The ldapi scheme is used by the
 	   OpenLDAP package.  There is no real specification for it, but it is
 	   mentioned in various OpenLDAP manual pages.
 
@@ -449,26 +451,26 @@ SCHEME-SPECIFIC SUPPORT
 
 	   "URI" objects belonging to the mailto scheme support the common
 	   methods and the generic query methods.  In addition, they support
-	   the following mailto-specific methods: $uri->to, $uri->headers.
+	   the following mailto-specific methods: $uri-&gtto, $uri-&gtheaders.
 
 	   Note that the "foo@example.com" part of a mailto is not the
 	   "userinfo" and "host" but instead the "path".  This allows a mailto
 	   URI to contain multiple comma separated email addresses.
 
        mms:
-	   The mms URL specification can be found at <http://sdp.ppona.com/>.
+	   The mms URL specification can be found at &lthttp://sdp.ppona.com/&gt.
 	   "URI" objects belonging to the mms scheme support the common,
 	   generic, and server methods, with the exception of userinfo and
 	   query-related sub-components.
 
        news:
 	   The news, nntp and snews URI schemes are specified in
-	   <draft-gilman-news-url-01> and will hopefully be available as an
+	   &ltdraft-gilman-news-url-01&gt and will hopefully be available as an
 	   RFC 2396 based specification soon.
 
 	   "URI" objects belonging to the news scheme support the common,
 	   generic and server methods.	In addition, they provide some methods
-	   to access the path: $uri->group and $uri->message.
+	   to access the path: $uri-&gtgroup and $uri-&gtmessage.
 
        nntp:
 	   See news scheme.
@@ -479,7 +481,7 @@ SCHEME-SPECIFIC SUPPORT
 
 	   "URI" objects belonging to the pop scheme support the common,
 	   generic and server methods.	In addition, they provide two methods
-	   to access the userinfo components: $uri->user and $uri->auth
+	   to access the userinfo components: $uri-&gtuser and $uri-&gtauth
 
        rlogin:
 	   An old specification of the rlogin URI scheme is found in RFC 1738.
@@ -498,17 +500,17 @@ SCHEME-SPECIFIC SUPPORT
 
        rsync:
 	   Information about rsync is available from
-	   <http://rsync.samba.org/>.  "URI" objects belonging to the rsync
+	   &lthttp://rsync.samba.org/&gt.  "URI" objects belonging to the rsync
 	   scheme support the common, generic and server methods.  In
 	   addition, they provide methods to access the userinfo sub-
-	   components: $uri->user and $uri->password.
+	   components: $uri-&gtuser and $uri-&gtpassword.
 
        sip:
 	   The sip URI specification is described in sections 19.1 and 25 of
 	   RFC 3261.  "URI" objects belonging to the sip scheme support the
 	   common, generic, and server methods with the exception of path
 	   related sub-components.  In addition, they provide two methods to
-	   get and set sip parameters: $uri->params_form and $uri->params.
+	   get and set sip parameters: $uri-&gtparams_form and $uri-&gtparams.
 
        sips:
 	   See sip scheme.  Its syntax is the same as sip, but the default
@@ -529,41 +531,41 @@ SCHEME-SPECIFIC SUPPORT
 	   the common, generic and server methods.
 
        ssh:
-	   Information about ssh is available at <http://www.openssh.com/>.
+	   Information about ssh is available at &lthttp://www.openssh.com/&gt.
 	   "URI" objects belonging to the ssh scheme support the common,
 	   generic and server methods. In addition, they provide methods to
-	   access the userinfo sub-components: $uri->user and $uri->password.
+	   access the userinfo sub-components: $uri-&gtuser and $uri-&gtpassword.
 
        urn:
 	   The syntax of Uniform Resource Names is specified in RFC 2141.
 	   "URI" objects belonging to the urn scheme provide the common
-	   methods, and also the methods $uri->nid and $uri->nss, which return
+	   methods, and also the methods $uri-&gtnid and $uri-&gtnss, which return
 	   the Namespace Identifier and the Namespace-Specific String
 	   respectively.
 
 	   The Namespace Identifier basically works like the Scheme identifier
 	   of URIs, and further divides the URN namespace.  Namespace
 	   Identifier assignments are maintained at
-	   <http://www.iana.org/assignments/urn-namespaces>.
+	   &lthttp://www.iana.org/assignments/urn-namespaces&gt.
 
 	   Letter case is not significant for the Namespace Identifier.  It is
-	   always returned in lower case by the $uri->nid method.  The
-	   $uri->_nid method can be used if you want it in its original case.
+	   always returned in lower case by the $uri-&gtnid method.  The
+	   $uri-&gt_nid method can be used if you want it in its original case.
 
        urn:isbn:
 	   The "urn:isbn:" namespace contains International Standard Book
 	   Numbers (ISBNs) and is described in RFC 3187.  A "URI" object
 	   belonging to this namespace has the following extra methods (if the
-	   Business::ISBN module is available): $uri->isbn,
-	   $uri->isbn_publisher_code, $uri->isbn_group_code (formerly
+	   Business::ISBN module is available): $uri-&gtisbn,
+	   $uri-&gtisbn_publisher_code, $uri-&gtisbn_group_code (formerly
 	   isbn_country_code, which is still supported by issues a deprecation
-	   warning), $uri->isbn_as_ean.
+	   warning), $uri-&gtisbn_as_ean.
 
        urn:oid:
 	   The "urn:oid:" namespace contains Object Identifiers (OIDs) and is
 	   described in RFC 3061.  An object identifier consists of sequences
 	   of digits separated by dots.  A "URI" object belonging to this
-	   namespace has an additional method called $uri->oid that can be
+	   namespace has an additional method called $uri-&gtoid that can be
 	   used to get/set the oid value.  In a list context, oid numbers are
 	   returned as separate elements.
 
@@ -579,24 +581,24 @@ CONFIGURATION VARIABLES
 	   to a TRUE value.  The difference is demonstrated by the following
 	   examples:
 
-	     URI->new("http:foo")->abs("http://host/a/b")
-		 ==>  "http:foo"
+	     URI-&gtnew("http:foo")-&gtabs("http://host/a/b")
+		 ==&gt  "http:foo"
 
 	     local $URI::ABS_ALLOW_RELATIVE_SCHEME = 1;
-	     URI->new("http:foo")->abs("http://host/a/b")
-		 ==>  "http:/host/a/foo"
+	     URI-&gtnew("http:foo")-&gtabs("http://host/a/b")
+		 ==&gt  "http:/host/a/foo"
 
        $URI::ABS_REMOTE_LEADING_DOTS
 	   You can also have the abs() method ignore excess ".."  segments in
 	   the relative URI by setting $URI::ABS_REMOTE_LEADING_DOTS to a TRUE
 	   value.  The difference is demonstrated by the following examples:
 
-	     URI->new("../../../foo")->abs("http://host/a/b")
-		 ==> "http://host/../../foo"
+	     URI-&gtnew("../../../foo")-&gtabs("http://host/a/b")
+		 ==&gt "http://host/../../foo"
 
 	     local $URI::ABS_REMOTE_LEADING_DOTS = 1;
-	     URI->new("../../../foo")->abs("http://host/a/b")
-		 ==> "http://host/foo"
+	     URI-&gtnew("../../../foo")-&gtabs("http://host/a/b")
+		 ==&gt "http://host/foo"
 
        $URI::DEFAULT_QUERY_FORM_DELIMITER
 	   This value can be set to ";" to have the query form "key=value"
@@ -609,7 +611,7 @@ BUGS
        them. Example:
 
 	  /(...)/ || die;
-	  $u->query("$1");
+	  $u-&gtquery("$1");
 
 PARSING URIs WITH REGEXP
        As an alternative to this module, the following (official) regular
@@ -628,11 +630,11 @@ SEE ALSO
        RFC 2396: "Uniform Resource Identifiers (URI): Generic Syntax",
        Berners-Lee, Fielding, Masinter, August 1998.
 
-       <http://www.iana.org/assignments/uri-schemes>
+       &lthttp://www.iana.org/assignments/uri-schemes&gt
 
-       <http://www.iana.org/assignments/urn-namespaces>
+       &lthttp://www.iana.org/assignments/urn-namespaces&gt
 
-       <http://www.w3.org/Addressing/>
+       &lthttp://www.w3.org/Addressing/&gt
 
 COPYRIGHT
        Copyright 1995-2009 Gisle Aas.
@@ -658,6 +660,6 @@ AUTHORS / ACKNOWLEDGMENTS
 
 
 perl v5.10.1			  2010-03-14				URI(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

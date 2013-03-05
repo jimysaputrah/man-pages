@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module can serve as a transparent interface to any TIEHASH package..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MLDBM - store multi-level Perl hash structure in single level tied hash</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MLDBM(3)	      User Contributed Perl Documentation	      MLDBM(3)
 
 
@@ -62,7 +64,7 @@ DESCRIPTION
 	       $obj = tie %o, ....
 	       $obj = tied %o;
 
-       $MLDBM::UseDB  or   $OBJ->UseDB([TIEDOBJECT])
+       $MLDBM::UseDB  or   $OBJ-&gtUseDB([TIEDOBJECT])
 	   The global $MLDBM::UseDB can be set to default to something other
 	   than "SDBM_File", in case you have a more efficient DBM, or if you
 	   want to use this with some other TIEHASH implementation.
@@ -74,7 +76,7 @@ DESCRIPTION
 	   when called without arguments.  It can be called with any object
 	   that implements Perl's TIEHASH interface, to set that value.
 
-       $MLDBM::Serializer  or	$OBJ->Serializer([SZROBJECT])
+       $MLDBM::Serializer  or	$OBJ-&gtSerializer([SZROBJECT])
 	   The global $MLDBM::Serializer can be set to the name of the
 	   serializing package to be used. Currently can be set to one of
 	   "Data::Dumper", "Storable", or "FreezeThaw". Defaults to
@@ -96,7 +98,7 @@ DESCRIPTION
        we specify when to apply them.  Failure to respect this will usually
        lead to an exception.
 
-       $MLDBM::DumpMeth    or  $OBJ->DumpMeth([METHNAME])
+       $MLDBM::DumpMeth    or  $OBJ-&gtDumpMeth([METHNAME])
 	   If the serializer provides alternative serialization methods, this
 	   can be used to set them.
 
@@ -114,7 +116,7 @@ DESCRIPTION
 
 	   FreezeThaw does not honor this attribute.
 
-       $MLDBM::Key  or	$OBJ->Key([KEYSTRING])
+       $MLDBM::Key  or	$OBJ-&gtKey([KEYSTRING])
 	   If the serializer only deals with part of the data (perhaps because
 	   the TIEHASH object can natively store some types of data), it may
 	   need a unique key string to recognize the data it handles.  This
@@ -126,7 +128,7 @@ DESCRIPTION
 
 	   Storable and FreezeThaw do not honor this attribute.
 
-       $MLDBM::RemoveTaint  or	$OBJ->RemoveTaint([BOOL])
+       $MLDBM::RemoveTaint  or	$OBJ-&gtRemoveTaint([BOOL])
 	   If the serializer can optionally untaint any retrieved data subject
 	   to taint checks in Perl, this can be used to request that feature.
 	   Data that comes from external sources (like disk-files) must always
@@ -154,28 +156,28 @@ EXAMPLES
 	   $c = [\ 'c'];
 	   $b = {};
 	   $a = [1, $b, $c];
-	   $b->{a} = $a;
-	   $b->{b} = $a->[1];
-	   $b->{c} = $a->[2];
+	   $b-&gt{a} = $a;
+	   $b-&gt{b} = $a-&gt[1];
+	   $b-&gt{c} = $a-&gt[2];
 	   @o{qw(a b c)} = ($a, $b, $c);
 
 	   #
 	   # to see what was stored
 	   #
 	   use Data::Dumper;
-	   print Data::Dumper->Dump([@o{qw(a b c)}], [qw(a b c)]);
+	   print Data::Dumper-&gtDump([@o{qw(a b c)}], [qw(a b c)]);
 
 	   #
 	   # to modify data in a substructure
 	   #
 	   $tmp = $o{a};
-	   $tmp->[0] = 'foo';
+	   $tmp-&gt[0] = 'foo';
 	   $o{a} = $tmp;
 
 	   #
 	   # can access the underlying DBM methods transparently
 	   #
-	   #print $dbm->fd, "\n";	       # DB_File method
+	   #print $dbm-&gtfd, "\n";	       # DB_File method
 
        Here is another small example using Storable, in a portable format:
 
@@ -183,7 +185,7 @@ EXAMPLES
 
 	   tie %o, 'MLDBM', 'testmldbm', O_CREAT|O_RDWR, 0640 or die $!;
 
-	   (tied %o)->DumpMeth('portable');    # Ask for portable binary
+	   (tied %o)-&gtDumpMeth('portable');    # Ask for portable binary
 	   $o{'ENV'} = \%ENV;		       # Stores the whole environment
 
 BUGS
@@ -199,7 +201,7 @@ BUGS
 	   Instead, that must be written as:
 
 		   $tmp = $mldb{key};			   # retrieve value
-		   $tmp->{subkey}[3] = 'stuff';
+		   $tmp-&gt{subkey}[3] = 'stuff';
 		   $mldb{key} = $tmp;			   # store value
 
 	   This limitation exists because the perl TIEHASH interface currently
@@ -239,14 +241,14 @@ WARNINGS
 		   tie %h, 'MLDBM', ...;
 		   my $root = $h{something};		      # FETCH _once_
 		   for my $k (keys %$root) {
-		       print $k->[0]{foo}{bar};
+		       print $k-&gt[0]{foo}{bar};
 		   }
 
 AUTHORS
-       Gurusamy Sarathy <gsar@umich.edu>.
+       Gurusamy Sarathy &ltgsar@umich.edu&gt.
 
        Support for multiple serializing packages by Raphael Manfredi
-       <Raphael_Manfredi@grenoble.hp.com>.
+       &ltRaphael_Manfredi@grenoble.hp.com&gt.
 
        Test suite fixes for perl 5.8.0 done by Josh Chamas.
 
@@ -271,6 +273,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2012-06-20			      MLDBM(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

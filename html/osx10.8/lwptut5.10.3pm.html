@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="LWP (short for "Library for WWW in Perl") is a very popular group of..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>lwptut -- An LWP Tutorial</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 lwptut(3)	      User Contributed Perl Documentation	     lwptut(3)
 
 
@@ -86,7 +88,7 @@ DESCRIPTION
        HTTP::Response is a class for the responses (or error messages) that
        you get back from those requests.
 
-       The basic idiom is "$response = $browser->get($url)", or more fully
+       The basic idiom is "$response = $browser-&gtget($url)", or more fully
        illustrated:
 
 	 # Early in your program:
@@ -94,24 +96,24 @@ DESCRIPTION
 	 use LWP 5.64; # Loads all important LWP classes, and makes
 		       #  sure your version is reasonably recent.
 
-	 my $browser = LWP::UserAgent->new;
+	 my $browser = LWP::UserAgent-&gtnew;
 
 	 ...
 
 	 # Then later, whenever you need to make a get request:
 	 my $url = 'http://freshair.npr.org/dayFA.cfm?todayDate=current';
 
-	 my $response = $browser->get( $url );
-	 die "Can't get $url -- ", $response->status_line
-	  unless $response->is_success;
+	 my $response = $browser-&gtget( $url );
+	 die "Can't get $url -- ", $response-&gtstatus_line
+	  unless $response-&gtis_success;
 
-	 die "Hey, I was expecting HTML, not ", $response->content_type
-	  unless $response->content_type eq 'text/html';
+	 die "Hey, I was expecting HTML, not ", $response-&gtcontent_type
+	  unless $response-&gtcontent_type eq 'text/html';
 	    # or whatever content-type you're equipped to deal with
 
 	 # Otherwise, process the content somehow:
 
-	 if($response->decoded_content =~ m/jazz/i) {
+	 if($response-&gtdecoded_content =~ m/jazz/i) {
 	   print "They're talking about jazz today on Fresh Air!\n";
 	 }
 	 else {
@@ -125,20 +127,20 @@ DESCRIPTION
        object, which will have some interesting attributes:
 
        o   A status code indicating success or failure (which you can test
-	   with "$response->is_success").
+	   with "$response-&gtis_success").
 
        o   An HTTP status line that is hopefully informative if there's
-	   failure (which you can see with "$response->status_line", returning
+	   failure (which you can see with "$response-&gtstatus_line", returning
 	   something like "404 Not Found").
 
        o   A MIME content-type like "text/html", "image/gif",
 	   "application/xml", etc., which you can see with
-	   "$response->content_type"
+	   "$response-&gtcontent_type"
 
        o   The actual content of the response, in
-	   "$response->decoded_content".  If the response is HTML, that's
+	   "$response-&gtdecoded_content".  If the response is HTML, that's
 	   where the HTML source will be; if it's a GIF, then
-	   "$response->decoded_content" will be the binary GIF data.
+	   "$response-&gtdecoded_content" will be the binary GIF data.
 
        o   And dozens of other convenient and more specific methods that are
 	   documented in the docs for HTTP::Response, and its superclasses
@@ -146,34 +148,34 @@ DESCRIPTION
 
    Adding Other HTTP Request Headers
        The most commonly used syntax for requests is "$response =
-       $browser->get($url)", but in truth, you can add extra HTTP header lines
+       $browser-&gtget($url)", but in truth, you can add extra HTTP header lines
        to the request by adding a list of key-value pairs after the URL, like
        so:
 
-	 $response = $browser->get( $url, $key1, $value1, $key2, $value2, ... );
+	 $response = $browser-&gtget( $url, $key1, $value1, $key2, $value2, ... );
 
        For example, here's how to send some more Netscape-like headers, in
        case you're dealing with a site that would otherwise reject your
        request:
 
 	 my @ns_headers = (
-	  'User-Agent' => 'Mozilla/4.76 [en] (Win98; U)',
-	  'Accept' => 'image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*',
-	  'Accept-Charset' => 'iso-8859-1,*,utf-8',
-	  'Accept-Language' => 'en-US',
+	  'User-Agent' =&gt 'Mozilla/4.76 [en] (Win98; U)',
+	  'Accept' =&gt 'image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*',
+	  'Accept-Charset' =&gt 'iso-8859-1,*,utf-8',
+	  'Accept-Language' =&gt 'en-US',
 	 );
 
 	 ...
 
-	 $response = $browser->get($url, @ns_headers);
+	 $response = $browser-&gtget($url, @ns_headers);
 
        If you weren't reusing that array, you could just go ahead and do this:
 
-	 $response = $browser->get($url,
-	  'User-Agent' => 'Mozilla/4.76 [en] (Win98; U)',
-	  'Accept' => 'image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*',
-	  'Accept-Charset' => 'iso-8859-1,*,utf-8',
-	  'Accept-Language' => 'en-US',
+	 $response = $browser-&gtget($url,
+	  'User-Agent' =&gt 'Mozilla/4.76 [en] (Win98; U)',
+	  'Accept' =&gt 'image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*',
+	  'Accept-Charset' =&gt 'iso-8859-1,*,utf-8',
+	  'Accept-Language' =&gt 'en-US',
 	 );
 
        If you were only ever changing the 'User-Agent' line, you could just
@@ -181,7 +183,7 @@ DESCRIPTION
        the like) to whatever you like, using the LWP::UserAgent "agent"
        method:
 
-	  $browser->agent('Mozilla/4.76 [en] (Win98; U)');
+	  $browser-&gtagent('Mozilla/4.76 [en] (Win98; U)');
 
    Enabling Cookies
        A default LWP::UserAgent object acts like a browser with its cookies
@@ -196,17 +198,17 @@ DESCRIPTION
        To give a browser an in-memory empty cookie jar, you set its
        "cookie_jar" attribute like so:
 
-	 $browser->cookie_jar({});
+	 $browser-&gtcookie_jar({});
 
        To give it a copy that will be read from a file on disk, and will be
        saved to it when the program is finished running, set the "cookie_jar"
        attribute like this:
 
 	 use HTTP::Cookies;
-	 $browser->cookie_jar( HTTP::Cookies->new(
-	   'file' => '/some/where/cookies.lwp',
+	 $browser-&gtcookie_jar( HTTP::Cookies-&gtnew(
+	   'file' =&gt '/some/where/cookies.lwp',
 	       # where to read/write cookies
-	   'autosave' => 1,
+	   'autosave' =&gt 1,
 	       # save it to disk when done
 	 ));
 
@@ -217,12 +219,12 @@ DESCRIPTION
 	 use HTTP::Cookies;
 	   # yes, loads HTTP::Cookies::Netscape too
 
-	 $browser->cookie_jar( HTTP::Cookies::Netscape->new(
-	   'file' => 'c:/Program Files/Netscape/Users/DIR-NAME-HERE/cookies.txt',
+	 $browser-&gtcookie_jar( HTTP::Cookies::Netscape-&gtnew(
+	   'file' =&gt 'c:/Program Files/Netscape/Users/DIR-NAME-HERE/cookies.txt',
 	       # where to read cookies
 	 ));
 
-       You could add an "'autosave' => 1" line as further above, but at time
+       You could add an "'autosave' =&gt 1" line as further above, but at time
        of writing, it's uncertain whether Netscape might discard some of the
        cookies you could be writing back to disk.
 
@@ -230,24 +232,24 @@ DESCRIPTION
        Many HTML forms send data to their server using an HTTP POST request,
        which you can send with this syntax:
 
-	$response = $browser->post( $url,
+	$response = $browser-&gtpost( $url,
 	  [
-	    formkey1 => value1,
-	    formkey2 => value2,
+	    formkey1 =&gt value1,
+	    formkey2 =&gt value2,
 	    ...
 	  ],
 	);
 
        Or if you need to send HTTP headers:
 
-	$response = $browser->post( $url,
+	$response = $browser-&gtpost( $url,
 	  [
-	    formkey1 => value1,
-	    formkey2 => value2,
+	    formkey1 =&gt value1,
+	    formkey2 =&gt value2,
 	    ...
 	  ],
-	  headerkey1 => value1,
-	  headerkey2 => value2,
+	  headerkey1 =&gt value1,
+	  headerkey2 =&gt value2,
 	);
 
        For example, the following program makes a search request to AltaVista
@@ -257,22 +259,22 @@ DESCRIPTION
 	 use strict;
 	 use warnings;
 	 use LWP 5.64;
-	 my $browser = LWP::UserAgent->new;
+	 my $browser = LWP::UserAgent-&gtnew;
 
 	 my $word = 'tarragon';
 
 	 my $url = 'http://www.altavista.com/sites/search/web';
-	 my $response = $browser->post( $url,
-	   [ 'q' => $word,  # the Altavista query string
-	     'pg' => 'q', 'avkw' => 'tgz', 'kl' => 'XX',
+	 my $response = $browser-&gtpost( $url,
+	   [ 'q' =&gt $word,  # the Altavista query string
+	     'pg' =&gt 'q', 'avkw' =&gt 'tgz', 'kl' =&gt 'XX',
 	   ]
 	 );
-	 die "$url error: ", $response->status_line
-	  unless $response->is_success;
-	 die "Weird content type at $url -- ", $response->content_type
-	  unless $response->content_is_html;
+	 die "$url error: ", $response-&gtstatus_line
+	  unless $response-&gtis_success;
+	 die "Weird content type at $url -- ", $response-&gtcontent_type
+	  unless $response-&gtcontent_is_html;
 
-	 if( $response->decoded_content =~ m{AltaVista found ([0-9,]+) results} ) {
+	 if( $response-&gtdecoded_content =~ m{AltaVista found ([0-9,]+) results} ) {
 	   # The substring will be like "AltaVista found 2,345 results"
 	   print "$word: $1\n";
 	 }
@@ -293,15 +295,15 @@ DESCRIPTION
        the URI class:
 
 	 use URI;
-	 my $url = URI->new( 'http://us.imdb.com/Tsearch' );
+	 my $url = URI-&gtnew( 'http://us.imdb.com/Tsearch' );
 	   # makes an object representing the URL
 
-	 $url->query_form(  # And here the form data pairs:
-	   'title'    => 'Blade Runner',
-	   'restrict' => 'Movies and TV',
+	 $url-&gtquery_form(  # And here the form data pairs:
+	   'title'    =&gt 'Blade Runner',
+	   'restrict' =&gt 'Movies and TV',
 	 );
 
-	 my $response = $browser->get($url);
+	 my $response = $browser-&gtget($url);
 
        See chapter 5 of Perl & LWP for a longer discussion of HTML forms and
        of form data, and chapters 6 through 9 for a longer discussion of
@@ -310,8 +312,8 @@ DESCRIPTION
    Absolutizing URLs
        The URI class that we just mentioned above provides all sorts of
        methods for accessing and modifying parts of URLs (such as asking sort
-       of URL it is with "$url->scheme", and asking what host it refers to
-       with "$url->host", and so on, as described in the docs for the URI
+       of URL it is with "$url-&gtscheme", and asking what host it refers to
+       with "$url-&gthost", and so on, as described in the docs for the URI
        class.  However, the methods of most immediate interest are the
        "query_form" method seen above, and now the "new_abs" method for taking
        a probably-relative URL string (like "../foo.html") and getting back an
@@ -319,7 +321,7 @@ DESCRIPTION
        here:
 
 	 use URI;
-	 $abs = URI->new_abs($maybe_relative, $base);
+	 $abs = URI-&gtnew_abs($maybe_relative, $base);
 
        For example, consider this program that matches URLs in the HTML list
        of new modules in CPAN:
@@ -327,15 +329,15 @@ DESCRIPTION
 	 use strict;
 	 use warnings;
 	 use LWP;
-	 my $browser = LWP::UserAgent->new;
+	 my $browser = LWP::UserAgent-&gtnew;
 
 	 my $url = 'http://www.cpan.org/RECENT.html';
-	 my $response = $browser->get($url);
-	 die "Can't get $url -- ", $response->status_line
-	  unless $response->is_success;
+	 my $response = $browser-&gtget($url);
+	 die "Can't get $url -- ", $response-&gtstatus_line
+	  unless $response-&gtis_success;
 
-	 my $html = $response->decoded_content;
-	 while( $html =~ m/<A HREF=\"(.*?)\"/g ) {
+	 my $html = $response-&gtdecoded_content;
+	 while( $html =~ m/&ltA HREF=\"(.*?)\"/g ) {
 	   print "$1\n";
 	 }
 
@@ -353,11 +355,11 @@ DESCRIPTION
        use the URI module's "new_abs" method, by changing the "while" loop to
        this:
 
-	 while( $html =~ m/<A HREF=\"(.*?)\"/g ) {
-	   print URI->new_abs( $1, $response->base ) ,"\n";
+	 while( $html =~ m/&ltA HREF=\"(.*?)\"/g ) {
+	   print URI-&gtnew_abs( $1, $response-&gtbase ) ,"\n";
 	 }
 
-       (The "$response->base" method from HTTP::Message is for returning what
+       (The "$response-&gtbase" method from HTTP::Message is for returning what
        URL should be used for resolving relative URLs -- it's usually just the
        same as the URL that you requested.)
 
@@ -382,12 +384,12 @@ DESCRIPTION
        LWP::UserAgent objects have many attributes for controlling how they
        work.  Here are a few notable ones:
 
-       o   "$browser->timeout(15);"
+       o   "$browser-&gttimeout(15);"
 
 	   This sets this browser object to give up on requests that don't
 	   answer within 15 seconds.
 
-       o   "$browser->protocols_allowed( [ 'http', 'gopher'] );"
+       o   "$browser-&gtprotocols_allowed( [ 'http', 'gopher'] );"
 
 	   This sets this browser object to not speak any protocols other than
 	   HTTP and gopher. If it tries accessing any other kind of URL (like
@@ -395,26 +397,26 @@ DESCRIPTION
 	   connecting, but instead will immediately return an error code 500,
 	   with a message like "Access to 'ftp' URIs has been disabled".
 
-       o   "use LWP::ConnCache; $browser->conn_cache(LWP::ConnCache->new());"
+       o   "use LWP::ConnCache; $browser-&gtconn_cache(LWP::ConnCache-&gtnew());"
 
 	   This tells the browser object to try using the HTTP/1.1 "Keep-
 	   Alive" feature, which speeds up requests by reusing the same socket
 	   connection for multiple requests to the same server.
 
-       o   "$browser->agent( 'SomeName/1.23 (more info here maybe)' )"
+       o   "$browser-&gtagent( 'SomeName/1.23 (more info here maybe)' )"
 
 	   This changes how the browser object will identify itself in the
 	   default "User-Agent" line is its HTTP requests.  By default, it'll
 	   send "libwww-perl/versionnumber", like "libwww-perl/5.65".  You can
 	   change that to something more descriptive like this:
 
-	     $browser->agent( 'SomeName/3.14 (contact@robotplexus.int)' );
+	     $browser-&gtagent( 'SomeName/3.14 (contact@robotplexus.int)' );
 
 	   Or if need be, you can go in disguise, like this:
 
-	     $browser->agent( 'Mozilla/4.0 (compatible; MSIE 5.12; Mac_PowerPC)' );
+	     $browser-&gtagent( 'Mozilla/4.0 (compatible; MSIE 5.12; Mac_PowerPC)' );
 
-       o   "push @{ $ua->requests_redirectable }, 'POST';"
+       o   "push @{ $ua-&gtrequests_redirectable }, 'POST';"
 
 	   This tells this browser to obey redirection responses to POST
 	   requests (like most modern interactive browsers), even though the
@@ -432,10 +434,10 @@ DESCRIPTION
        so:
 
 	 use LWP::RobotUA;
-	 my $browser = LWP::RobotUA->new('YourSuperBot/1.34', 'you@yoursite.com');
+	 my $browser = LWP::RobotUA-&gtnew('YourSuperBot/1.34', 'you@yoursite.com');
 	   # Your bot's name and your email address
 
-	 my $response = $browser->get($url);
+	 my $response = $browser-&gtget($url);
 
        But HTTP::RobotUA adds these features:
 
@@ -445,8 +447,8 @@ DESCRIPTION
 	   $response) a 403 error with a message "Forbidden by robots.txt".
 	   That is, if you have this line:
 
-	     die "$url -- ", $response->status_line, "\nAborted"
-	      unless $response->is_success;
+	     die "$url -- ", $response-&gtstatus_line, "\nAborted"
+	      unless $response-&gtis_success;
 
 	   then the program would die with an error message like this:
 
@@ -457,11 +459,11 @@ DESCRIPTION
 	   server was too recently, then it will pause (via "sleep") to avoid
 	   making too many requests too often. How long it will pause for, is
 	   by default one minute -- but you can control it with the
-	   "$browser->delay( minutes )" attribute.
+	   "$browser-&gtdelay( minutes )" attribute.
 
 	   For example, this code:
 
-	     $browser->delay( 7/60 );
+	     $browser-&gtdelay( 7/60 );
 
 	   ...means that this browser will pause when it needs to avoid
 	   talking to any given server more than once every 7 seconds.
@@ -481,10 +483,10 @@ DESCRIPTION
        Specifically:
 
 	 use LWP::UserAgent;
-	 my $browser = LWP::UserAgent->new;
+	 my $browser = LWP::UserAgent-&gtnew;
 
 	 # And before you go making any requests:
-	 $browser->env_proxy;
+	 $browser-&gtenv_proxy;
 
        For more information on proxy parameters, see the LWP::UserAgent
        documentation, specifically the "proxy", "env_proxy", and "no_proxy"
@@ -516,16 +518,16 @@ DESCRIPTION
        In LWP, if you just request that URL, like this:
 
 	 use LWP;
-	 my $browser = LWP::UserAgent->new;
+	 my $browser = LWP::UserAgent-&gtnew;
 
 	 my $url =
 	  'http://www.unicode.org/mail-arch/unicode-ml/y2002-m08/0067.html';
-	 my $response = $browser->get($url);
+	 my $response = $browser-&gtget($url);
 
-	 die "Error: ", $response->header('WWW-Authenticate') || 'Error accessing',
+	 die "Error: ", $response-&gtheader('WWW-Authenticate') || 'Error accessing',
 	   #  ('WWW-Authenticate' is the realm-name)
-	   "\n ", $response->status_line, "\n at $url\n Aborting"
-	  unless $response->is_success;
+	   "\n ", $response-&gtstatus_line, "\n at $url\n Aborting"
+	  unless $response-&gtis_success;
 
        Then you'll get this error:
 
@@ -541,29 +543,29 @@ DESCRIPTION
        and password that it can try using for that realm at that host.	The
        syntax is:
 
-	 $browser->credentials(
+	 $browser-&gtcredentials(
 	   'servername:portnumber',
 	   'realm-name',
-	  'username' => 'password'
+	  'username' =&gt 'password'
 	 );
 
        In most cases, the port number is 80, the default TCP/IP port for HTTP;
        and you usually call the "credentials" method before you make any
        requests.  For example:
 
-	 $browser->credentials(
+	 $browser-&gtcredentials(
 	   'reports.mybazouki.com:80',
 	   'web_server_usage_reports',
-	   'plinky' => 'banjo123'
+	   'plinky' =&gt 'banjo123'
 	 );
 
        So if we add the following to the program above, right after the
-       "$browser = LWP::UserAgent->new;" line...
+       "$browser = LWP::UserAgent-&gtnew;" line...
 
-	 $browser->credentials(  # add this to our $browser 's "key ring"
+	 $browser-&gtcredentials(  # add this to our $browser 's "key ring"
 	   'www.unicode.org:80',
 	   'Unicode-MailList-Archives',
-	   'unicode-ml' => 'unicode'
+	   'unicode-ml' =&gt 'unicode'
 	 );
 
        ...then when we run it, the request succeeds, instead of causing the
@@ -576,12 +578,12 @@ DESCRIPTION
 
 	 use LWP;
 	 my $url = 'https://www.paypal.com/';	# Yes, HTTPS!
-	 my $browser = LWP::UserAgent->new;
-	 my $response = $browser->get($url);
-	 die "Error at $url\n ", $response->status_line, "\n Aborting"
-	  unless $response->is_success;
+	 my $browser = LWP::UserAgent-&gtnew;
+	 my $response = $browser-&gtget($url);
+	 die "Error at $url\n ", $response-&gtstatus_line, "\n Aborting"
+	  unless $response-&gtis_success;
 	 print "Whee, it worked!  I got that ",
-	  $response->content_type, " document!\n";
+	  $response-&gtcontent_type, " document!\n";
 
        If your LWP installation doesn't have HTTPS support set up, then the
        response will be unsuccessful, and you'll get this error message:
@@ -601,7 +603,7 @@ DESCRIPTION
    Getting Large Documents
        When you're requesting a large (or at least potentially large)
        document, a problem with the normal way of using the request methods
-       (like "$response = $browser->get($url)") is that the response object in
+       (like "$response = $browser-&gtget($url)") is that the response object in
        memory will have to hold the whole document -- in memory. If the
        response is a thirty megabyte file, this is likely to be quite an
        imposition on this process's memory usage.
@@ -609,18 +611,18 @@ DESCRIPTION
        A notable alternative is to have LWP save the content to a file on
        disk, instead of saving it up in memory.  This is the syntax to use:
 
-	 $response = $ua->get($url,
-				':content_file' => $filespec,
+	 $response = $ua-&gtget($url,
+				':content_file' =&gt $filespec,
 			     );
 
        For example,
 
-	 $response = $ua->get('http://search.cpan.org/',
-				':content_file' => '/tmp/sco.html'
+	 $response = $ua-&gtget('http://search.cpan.org/',
+				':content_file' =&gt '/tmp/sco.html'
 			     );
 
        When you use this ":content_file" option, the $response will have all
-       the normal header lines, but "$response->content" will be empty.
+       the normal header lines, but "$response-&gtcontent" will be empty.
 
        Note that this ":content_file" option isn't supported under older
        versions of LWP, so you should consider adding "use LWP 5.66;" to check
@@ -631,7 +633,7 @@ DESCRIPTION
        syntax, which does the same thing:
 
 	 use HTTP::Request::Common;
-	 $response = $ua->request( GET($url), $filespec );
+	 $response = $ua-&gtrequest( GET($url), $filespec );
 
 SEE ALSO
        Remember, this article is just the most rudimentary introduction to LWP
@@ -646,7 +648,7 @@ SEE ALSO
 	   browsers"
 
        o   HTTP::Response -- the class for objects that represent the response
-	   to a LWP response, as in "$response = $browser->get(...)"
+	   to a LWP response, as in "$response = $browser-&gtget(...)"
 
        o   HTTP::Message and HTTP::Headers -- classes that provide more
 	   methods to HTTP::Response.
@@ -666,9 +668,9 @@ SEE ALSO
        o   HTML::LinkExtor -- class for finding links in HTML documents
 
        o   The book Perl & LWP by Sean M. Burke.  O'Reilly & Associates, 2002.
-	   ISBN: 0-596-00178-9, <http://www.oreilly.com/catalog/perllwp/>.
+	   ISBN: 0-596-00178-9, &lthttp://www.oreilly.com/catalog/perllwp/&gt.
 	   The whole book is also available free online:
-	   <http://lwp.interglacial.com>.
+	   &lthttp://lwp.interglacial.com&gt.
 
 COPYRIGHT
        Copyright 2002, Sean M. Burke.  You can redistribute this document
@@ -680,6 +682,6 @@ AUTHOR
 
 
 perl v5.10.1			  2010-03-14			     lwptut(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

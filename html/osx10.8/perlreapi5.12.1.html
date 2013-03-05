@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="As of Perl 5.9.5 there is a new interface for plugging and using other..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlreapi - perl regular expression plugin interface</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLREAPI(1)	       Perl Programmers Reference Guide 	  PERLREAPI(1)
 
 
@@ -99,9 +101,9 @@ Callbacks
        By the time the comp callback is called, some of these flags have
        already had effect (noted below where applicable). However most of
        their effect occurs after the comp callback has run in routines that
-       read the "rx->extflags" field which it populates.
+       read the "rx-&gtextflags" field which it populates.
 
-       In general the flags should be preserved in "rx->extflags" after
+       In general the flags should be preserved in "rx-&gtextflags" after
        compilation, although the regex engine might want to add or delete some
        of them to invoke or disable some special behavior in perl. The flags
        along with any special behavior they cause are documented below:
@@ -109,7 +111,7 @@ Callbacks
        The pattern modifiers:
 
        "/m" - RXf_PMf_MULTILINE
-	   If this is in "rx->extflags" it will be passed to "Perl_fbm_instr"
+	   If this is in "rx-&gtextflags" it will be passed to "Perl_fbm_instr"
 	   by "pp_split" which will treat the subject string as a multi-line
 	   string.
 
@@ -126,7 +128,7 @@ Callbacks
        Additional flags:
 
        RXf_PMf_LOCALE
-	   Set if "use locale" is in effect. If present in "rx->extflags"
+	   Set if "use locale" is in effect. If present in "rx-&gtextflags"
 	   "split" will use the locale dependent definition of whitespace
 	   under when RXf_SKIPWHITE or RXf_WHITE are in effect. Under ASCII
 	   whitespace is defined as per isSPACE, and by the internal macros
@@ -146,14 +148,14 @@ Callbacks
 	   The regex engine can then check for it and set the SKIPWHITE and
 	   WHITE extflags. To do this the perl engine does:
 
-	       if (flags & RXf_SPLIT && r->prelen == 1 && r->precomp[0] == ' ')
-		   r->extflags |= (RXf_SKIPWHITE|RXf_WHITE);
+	       if (flags & RXf_SPLIT && r-&gtprelen == 1 && r-&gtprecomp[0] == ' ')
+		   r-&gtextflags |= (RXf_SKIPWHITE|RXf_WHITE);
 
        These flags can be set during compilation to enable optimizations in
        the "split" operator.
 
        RXf_SKIPWHITE
-	   If the flag is present in "rx->extflags" "split" will delete
+	   If the flag is present in "rx-&gtextflags" "split" will delete
 	   whitespace from the start of the subject string before it's
 	   operated on. What is considered whitespace depends on whether the
 	   subject is a UTF-8 string and whether the "RXf_PMf_LOCALE" flag is
@@ -297,7 +299,7 @@ Callbacks
 
 	   package main;
 
-	   tie my $sv => "CatptureVar";
+	   tie my $sv =&gt "CatptureVar";
 	   $sv =~ y/a/b/;
 
        Because $sv is "undef" when the "y///" operator is applied to it the
@@ -314,10 +316,10 @@ Callbacks
        Get the "length" of a capture variable. There's a special callback for
        this so that perl doesn't have to do a FETCH and run "length" on the
        result, since the length is (in perl's case) known from an offset
-       stored in "rx->offs" this is much more efficient:
+       stored in "rx-&gtoffs" this is much more efficient:
 
-	   I32 s1  = rx->offs[paren].start;
-	   I32 s2  = rx->offs[paren].end;
+	   I32 s1  = rx-&gtoffs[paren].start;
+	   I32 s2  = rx-&gtoffs[paren].end;
 	   I32 len = t1 - s1;
 
        This is a little bit more complex in the case of UTF-8, see what
@@ -386,7 +388,7 @@ Callbacks
        the object.
 
        The package this method returns should also have the internal "Regexp"
-       package in its @ISA. "qr//->isa("Regexp")" should always be true
+       package in its @ISA. "qr//-&gtisa("Regexp")" should always be true
        regardless of what engine is being used.
 
        Example implementation might be:
@@ -403,7 +405,7 @@ Callbacks
 
 	   use re::engine::Example;
 	   my $re = qr//;
-	   $re->meth; # dispatched to re::engine::Example::meth()
+	   $re-&gtmeth; # dispatched to re::engine::Example::meth()
 
        To retrieve the "REGEXP" object from the scalar in an XS function use
        the "SvRX" macro, see "REGEXP Functions" in perlapi.
@@ -512,7 +514,7 @@ The REGEXP structure
    "mother_re"
        TODO, see
        http://www.mail-archive.com/perl5-changes@perl.org/msg17328.html
-       <http://www.mail-archive.com/perl5-changes@perl.org/msg17328.html>
+       &lthttp://www.mail-archive.com/perl5-changes@perl.org/msg17328.html&gt
 
    "extflags"
        This will be used by perl to see what flags the regexp was compiled
@@ -577,10 +579,10 @@ The REGEXP structure
 	       I32 end;
 	   } regexp_paren_pair;
 
-       If "->offs[num].start" or "->offs[num].end" is "-1" then that capture
-       buffer did not match. "->offs[0].start/end" represents $& (or
-       "${^MATCH" under "//p") and "->offs[paren].end" matches $$paren where
-       $paren = 1>.
+       If "-&gtoffs[num].start" or "-&gtoffs[num].end" is "-1" then that capture
+       buffer did not match. "-&gtoffs[0].start/end" represents $& (or
+       "${^MATCH" under "//p") and "-&gtoffs[paren].end" matches $$paren where
+       $paren = 1&gt.
 
    "precomp" "prelen"
        Used for optimisations. "precomp" holds a copy of the pattern that was
@@ -592,8 +594,8 @@ The REGEXP structure
 
        The relevant snippet from "Perl_pp_regcomp":
 
-	       if (!re || !re->precomp || re->prelen != (I32)len ||
-		   memNE(re->precomp, t, len))
+	       if (!re || !re-&gtprecomp || re-&gtprelen != (I32)len ||
+		   memNE(re-&gtprecomp, t, len))
 	       /* Compile a new pattern */
 
    "paren_names"
@@ -655,6 +657,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-06-07			  PERLREAPI(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

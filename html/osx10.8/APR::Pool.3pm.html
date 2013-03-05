@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""APR::Pool" provides an access to APR pools, which are used for an easy..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>APR::Pool - Perl API for APR pools</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apache_mod_perapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::APR::Pool(3)
 
 
@@ -18,35 +20,35 @@ NAME
 Synopsis
 	 use APR::Pool ();
 
-	 my $sp = $r->pool->new;
-	 my $sp2 = APR::Pool->new;
+	 my $sp = $r-&gtpool-&gtnew;
+	 my $sp2 = APR::Pool-&gtnew;
 
 	 # $sp3 is a subpool of $sp,
-	 # which in turn is a subpool of $r->pool
-	 $sp3 = $sp->new;
-	 print '$r->pool is an ancestor of $sp3'
-	     if $r->pool->is_ancestor($sp3);
-	 # but sp2 is not a sub-pool of $r->pool
-	 print '$r->pool is not an ancestor of $sp2'
-	     unless $r->pool->is_ancestor($sp2);
+	 # which in turn is a subpool of $r-&gtpool
+	 $sp3 = $sp-&gtnew;
+	 print '$r-&gtpool is an ancestor of $sp3'
+	     if $r-&gtpool-&gtis_ancestor($sp3);
+	 # but sp2 is not a sub-pool of $r-&gtpool
+	 print '$r-&gtpool is not an ancestor of $sp2'
+	     unless $r-&gtpool-&gtis_ancestor($sp2);
 
 	 # $sp4 and $sp are the same pool (though you can't
 	 # compare the handle as variables)
-	 my $sp4 = $sp3->parent_get;
+	 my $sp4 = $sp3-&gtparent_get;
 
 
 	 # register a dummy cleanup function
 	 # that just prints the passed args
-	 $sp->cleanup_register(sub { print @{ $_[0] || [] } }, [1..3]);
+	 $sp-&gtcleanup_register(sub { print @{ $_[0] || [] } }, [1..3]);
 
 	 # tag the pool
-	 $sp->tag("My very best pool");
+	 $sp-&gttag("My very best pool");
 
 	 # clear the pool
-	 $sp->clear();
+	 $sp-&gtclear();
 
 	 # destroy sub pool
-	 $sp2->destroy;
+	 $sp2-&gtdestroy;
 
 Description
        "APR::Pool" provides an access to APR pools, which are used for an easy
@@ -77,8 +79,8 @@ API
    "cleanup_register"
        Register cleanup callback to run
 
-	 $pool->cleanup_register($callback);
-	 $pool->cleanup_register($callback, $arg);
+	 $pool-&gtcleanup_register($callback);
+	 $pool-&gtcleanup_register($callback, $arg);
 
        obj: $pool ( "APR::Pool object" )
 	   The pool object to register the cleanup callback for
@@ -112,12 +114,12 @@ API
 
        No arguments, using anon sub as a cleanup callback:
 
-	 $r->pool->cleanup_register(sub { warn "running cleanup" });
+	 $r-&gtpool-&gtcleanup_register(sub { warn "running cleanup" });
 
        One or more arguments using a cleanup code reference:
 
-	 $r->pool->cleanup_register(\&cleanup, $r);
-	 $r->pool->cleanup_register(\&cleanup, [$r, $foo]);
+	 $r-&gtpool-&gtcleanup_register(\&cleanup, $r);
+	 $r-&gtpool-&gtcleanup_register(\&cleanup, [$r, $foo]);
 	 sub cleanup {
 	     my @args = (@_ && ref $_[0] eq ARRAY) ? @{ +shift } : shift;
 	     my $r = shift @args;
@@ -126,13 +128,13 @@ API
 
        No arguments, using a function name as a cleanup callback:
 
-	 $r->pool->cleanup_register('foo');
+	 $r-&gtpool-&gtcleanup_register('foo');
 
    "clear"
        Clear all memory in the pool and run all the registered cleanups. This
        also destroys all sub-pools.
 
-	 $pool->clear();
+	 $pool-&gtclear();
 
        obj: $pool ( "APR::Pool object" )
 	   The pool to clear
@@ -155,7 +157,7 @@ API
    "destroy"
        Destroy the pool.
 
-	 $pool->destroy();
+	 $pool-&gtdestroy();
 
        obj: $pool ( "APR::Pool object" )
 	   The pool to destroy
@@ -169,7 +171,7 @@ API
    "is_ancestor"
        Determine if pool a is an ancestor of pool b
 
-	 $ret = $pool_a->is_ancestor($pool_b);
+	 $ret = $pool_a-&gtis_ancestor($pool_b);
 
        obj: $pool_a ( "APR::Pool object" )
 	   The pool to search
@@ -186,15 +188,15 @@ API
        is an ancestor of that sub-pool:
 
 	 use APR::Pool ();
-	 my $pp = $r->pool;
-	 my $sp = $pp->new();
-	 $pp->is_ancestor($sp) or die "Don't mess with genes!";
+	 my $pp = $r-&gtpool;
+	 my $sp = $pp-&gtnew();
+	 $pp-&gtis_ancestor($sp) or die "Don't mess with genes!";
 
    "new"
        Create a new sub-pool
 
-	 my $pool_child = $pool_parent->new;
-	 my $pool_child = APR::Pool->new;
+	 my $pool_child = $pool_parent-&gtnew;
+	 my $pool_child = APR::Pool-&gtnew;
 
        obj: $pool_parent ( "APR::Pool object" )
 	   The parent pool.
@@ -203,7 +205,7 @@ API
 	   can use this object method as a class method, in which case the
 	   sub-pool will be created from the global pool:
 
-	     my $pool_child = APR::Pool->new;
+	     my $pool_child = APR::Pool-&gtnew;
 
        ret: $pool_child ( "APR::Pool object" )
 	   The child sub-pool
@@ -213,7 +215,7 @@ API
    "parent_get"
        Get the parent pool
 
-	 $parent_pool = $child_pool->parent_get();
+	 $parent_pool = $child_pool-&gtparent_get();
 
        obj: $child_pool ( "APR::Pool object" )
 	   the child pool
@@ -230,7 +232,7 @@ API
 	 sub ancestry_count {
 	     my $child = shift;
 	     my $gen = 0;
-	     while (my $parent = $child->parent_get) {
+	     while (my $parent = $child-&gtparent_get) {
 		 $gen++;
 		 $child = $parent;
 	     }
@@ -240,7 +242,7 @@ API
    "tag"
        Tag a pool (give it a name)
 
-	 $pool->tag($tag);
+	 $pool-&gttag($tag);
 
        obj: $pool ( "APR::Pool object" )
 	   The pool to tag
@@ -292,6 +294,6 @@ Authors
 
 
 perl v5.12.4  apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::APR::Pool(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

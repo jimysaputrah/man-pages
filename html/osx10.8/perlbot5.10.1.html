@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The following collection of tricks and hints is intended to whet..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlbot - Bag'o Object Tricks (the BOT)</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLBOT(1)	       Perl Programmers Reference Guide 	    PERLBOT(1)
 
 
@@ -79,8 +81,8 @@ INSTANCE VARIABLES
 		       my $type = shift;
 		       my %params = @_;
 		       my $self = {};
-		       $self->{'High'} = $params{'High'};
-		       $self->{'Low'}  = $params{'Low'};
+		       $self-&gt{'High'} = $params{'High'};
+		       $self-&gt{'Low'}  = $params{'Low'};
 		       bless $self, $type;
 	       }
 
@@ -91,20 +93,20 @@ INSTANCE VARIABLES
 		       my $type = shift;
 		       my %params = @_;
 		       my $self = [];
-		       $self->[0] = $params{'Left'};
-		       $self->[1] = $params{'Right'};
+		       $self-&gt[0] = $params{'Left'};
+		       $self-&gt[1] = $params{'Right'};
 		       bless $self, $type;
 	       }
 
 	       package main;
 
-	       $a = Foo->new( 'High' => 42, 'Low' => 11 );
-	       print "High=$a->{'High'}\n";
-	       print "Low=$a->{'Low'}\n";
+	       $a = Foo-&gtnew( 'High' =&gt 42, 'Low' =&gt 11 );
+	       print "High=$a-&gt{'High'}\n";
+	       print "Low=$a-&gt{'Low'}\n";
 
-	       $b = Bar->new( 'Left' => 78, 'Right' => 40 );
-	       print "Left=$b->[0]\n";
-	       print "Right=$b->[1]\n";
+	       $b = Bar-&gtnew( 'Left' =&gt 78, 'Right' =&gt 40 );
+	       print "Left=$b-&gt[0]\n";
+	       print "Right=$b-&gt[1]\n";
 
 SCALAR INSTANCE VARIABLES
        An anonymous scalar can be used when only one instance variable is
@@ -121,7 +123,7 @@ SCALAR INSTANCE VARIABLES
 
 	       package main;
 
-	       $a = Foo->new( 42 );
+	       $a = Foo-&gtnew( 42 );
 	       print "a=$$a\n";
 
 INSTANCE VARIABLE INHERITANCE
@@ -135,7 +137,7 @@ INSTANCE VARIABLE INHERITANCE
 	       sub new {
 		       my $type = shift;
 		       my $self = {};
-		       $self->{'buz'} = 42;
+		       $self-&gt{'buz'} = 42;
 		       bless $self, $type;
 	       }
 
@@ -144,16 +146,16 @@ INSTANCE VARIABLE INHERITANCE
 
 	       sub new {
 		       my $type = shift;
-		       my $self = Bar->new;
-		       $self->{'biz'} = 11;
+		       my $self = Bar-&gtnew;
+		       $self-&gt{'biz'} = 11;
 		       bless $self, $type;
 	       }
 
 	       package main;
 
-	       $a = Foo->new;
-	       print "buz = ", $a->{'buz'}, "\n";
-	       print "biz = ", $a->{'biz'}, "\n";
+	       $a = Foo-&gtnew;
+	       print "buz = ", $a-&gt{'buz'}, "\n";
+	       print "biz = ", $a-&gt{'biz'}, "\n";
 
 OBJECT RELATIONSHIPS
        The following demonstrates how one might implement "containing" and
@@ -164,7 +166,7 @@ OBJECT RELATIONSHIPS
 	       sub new {
 		       my $type = shift;
 		       my $self = {};
-		       $self->{'buz'} = 42;
+		       $self-&gt{'buz'} = 42;
 		       bless $self, $type;
 	       }
 
@@ -173,16 +175,16 @@ OBJECT RELATIONSHIPS
 	       sub new {
 		       my $type = shift;
 		       my $self = {};
-		       $self->{'Bar'} = Bar->new;
-		       $self->{'biz'} = 11;
+		       $self-&gt{'Bar'} = Bar-&gtnew;
+		       $self-&gt{'biz'} = 11;
 		       bless $self, $type;
 	       }
 
 	       package main;
 
-	       $a = Foo->new;
-	       print "buz = ", $a->{'Bar'}->{'buz'}, "\n";
-	       print "biz = ", $a->{'biz'}, "\n";
+	       $a = Foo-&gtnew;
+	       print "buz = ", $a-&gt{'Bar'}-&gt{'buz'}, "\n";
+	       print "biz = ", $a-&gt{'biz'}, "\n";
 
 OVERRIDING SUPERCLASS METHODS
        The following example demonstrates how to override a superclass method
@@ -209,24 +211,24 @@ OVERRIDING SUPERCLASS METHODS
 	       sub grr { print "grumble\n" }
 	       sub goo {
 		       my $self = shift;
-		       $self->SUPER::goo();
+		       $self-&gtSUPER::goo();
 	       }
 	       sub mumble {
 		       my $self = shift;
-		       $self->SUPER::mumble();
+		       $self-&gtSUPER::mumble();
 	       }
 	       sub google {
 		       my $self = shift;
-		       $self->SUPER::google();
+		       $self-&gtSUPER::google();
 	       }
 
 	       package main;
 
-	       $foo = Foo->new;
-	       $foo->mumble;
-	       $foo->grr;
-	       $foo->goo;
-	       $foo->google;
+	       $foo = Foo-&gtnew;
+	       $foo-&gtmumble;
+	       $foo-&gtgrr;
+	       $foo-&gtgoo;
+	       $foo-&gtgoogle;
 
        Note that "SUPER" refers to the superclasses of the current package
        ("Foo"), not to the superclasses of $self.
@@ -244,19 +246,19 @@ USING RELATIONSHIP WITH SDBM
 
 	       sub TIEHASH {
 		   my $type = shift;
-		   my $ref  = SDBM_File->new(@_);
-		   bless {'dbm' => $ref}, $type;
+		   my $ref  = SDBM_File-&gtnew(@_);
+		   bless {'dbm' =&gt $ref}, $type;
 	       }
 	       sub FETCH {
 		   my $self = shift;
-		   my $ref  = $self->{'dbm'};
-		   $ref->FETCH(@_);
+		   my $ref  = $self-&gt{'dbm'};
+		   $ref-&gtFETCH(@_);
 	       }
 	       sub STORE {
 		   my $self = shift;
 		   if (defined $_[0]){
-		       my $ref = $self->{'dbm'};
-		       $ref->STORE(@_);
+		       my $ref = $self-&gt{'dbm'};
+		       $ref-&gtSTORE(@_);
 		   } else {
 		       die "Cannot STORE an undefined key in Mydbm\n";
 		   }
@@ -290,7 +292,7 @@ THINKING OF CODE REUSE
 	       }
 	       sub bar {
 		       my $self = shift;
-		       $self->FOO::private::BAZ;
+		       $self-&gtFOO::private::BAZ;
 	       }
 
 	       package FOO::private;
@@ -301,8 +303,8 @@ THINKING OF CODE REUSE
 
 	       package main;
 
-	       $a = FOO->new;
-	       $a->bar;
+	       $a = FOO-&gtnew;
+	       $a-&gtbar;
 
        Now we try to override the BAZ() method.  We would like FOO::bar() to
        call GOOP::BAZ(), but this cannot happen because FOO::bar() explicitly
@@ -316,7 +318,7 @@ THINKING OF CODE REUSE
 	       }
 	       sub bar {
 		       my $self = shift;
-		       $self->FOO::private::BAZ;
+		       $self-&gtFOO::private::BAZ;
 	       }
 
 	       package FOO::private;
@@ -338,8 +340,8 @@ THINKING OF CODE REUSE
 
 	       package main;
 
-	       $a = GOOP->new;
-	       $a->bar;
+	       $a = GOOP-&gtnew;
+	       $a-&gtbar;
 
        To create reusable code we must modify class FOO, flattening class
        FOO::private.  The next example shows a reusable class FOO which allows
@@ -353,7 +355,7 @@ THINKING OF CODE REUSE
 	       }
 	       sub bar {
 		       my $self = shift;
-		       $self->BAZ;
+		       $self-&gtBAZ;
 	       }
 
 	       sub BAZ {
@@ -373,8 +375,8 @@ THINKING OF CODE REUSE
 
 	       package main;
 
-	       $a = GOOP->new;
-	       $a->bar;
+	       $a = GOOP-&gtnew;
+	       $a-&gtbar;
 
 CLASS CONTEXT AND THE OBJECT
        Use the object to solve package and class context problems.  Everything
@@ -395,12 +397,12 @@ CLASS CONTEXT AND THE OBJECT
 
 	       package Bar;
 
-	       %fizzle = ( 'Password' => 'XYZZY' );
+	       %fizzle = ( 'Password' =&gt 'XYZZY' );
 
 	       sub new {
 		       my $type = shift;
 		       my $self = {};
-		       $self->{'fizzle'} = \%fizzle;
+		       $self-&gt{'fizzle'} = \%fizzle;
 		       bless $self, $type;
 	       }
 
@@ -411,29 +413,29 @@ CLASS CONTEXT AND THE OBJECT
 		       # or %Foo::fizzle.  The object already knows which
 		       # we should use, so just ask it.
 		       #
-		       my $fizzle = $self->{'fizzle'};
+		       my $fizzle = $self-&gt{'fizzle'};
 
-		       print "The word is ", $fizzle->{'Password'}, "\n";
+		       print "The word is ", $fizzle-&gt{'Password'}, "\n";
 	       }
 
 	       package Foo;
 	       @ISA = qw( Bar );
 
-	       %fizzle = ( 'Password' => 'Rumple' );
+	       %fizzle = ( 'Password' =&gt 'Rumple' );
 
 	       sub new {
 		       my $type = shift;
-		       my $self = Bar->new;
-		       $self->{'fizzle'} = \%fizzle;
+		       my $self = Bar-&gtnew;
+		       $self-&gt{'fizzle'} = \%fizzle;
 		       bless $self, $type;
 	       }
 
 	       package main;
 
-	       $a = Bar->new;
-	       $b = Foo->new;
-	       $a->enter;
-	       $b->enter;
+	       $a = Bar-&gtnew;
+	       $b = Foo-&gtnew;
+	       $a-&gtenter;
+	       $b-&gtenter;
 
 INHERITING A CONSTRUCTOR
        An inheritable constructor should use the second form of bless() which
@@ -462,8 +464,8 @@ INHERITING A CONSTRUCTOR
 
 	       package main;
 
-	       $a = BAR->new;
-	       $a->baz;
+	       $a = BAR-&gtnew;
+	       $a-&gtbaz;
 
 DELEGATION
        Some classes, such as SDBM_File, cannot be effectively subclassed
@@ -485,8 +487,8 @@ DELEGATION
 
 	       sub TIEHASH {
 		       my $type = shift;
-		       my $ref = SDBM_File->new(@_);
-		       bless {'delegate' => $ref};
+		       my $ref = SDBM_File-&gtnew(@_);
+		       bless {'delegate' =&gt $ref};
 	       }
 
 	       sub AUTOLOAD {
@@ -502,7 +504,7 @@ DELEGATION
 		       $AUTOLOAD =~ s/^Mydbm:://;
 
 		       # Pass the message to the delegate.
-		       $self->{'delegate'}->$AUTOLOAD(@_);
+		       $self-&gt{'delegate'}-&gt$AUTOLOAD(@_);
 	       }
 
 	       package main;
@@ -518,6 +520,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-02-12			    PERLBOT(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

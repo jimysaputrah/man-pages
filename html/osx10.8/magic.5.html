@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This manual page documents the format of the magic file as used by the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>magic -- file command's magic pattern file</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 
 MAGIC(5)		    BSD File Formats Manual		      MAGIC(5)
 
@@ -206,9 +208,9 @@ DESCRIPTION
 
 	      Numeric values may be preceded by a character indicating the
 	      operation to be performed.  It may be =, to specify that the
-	      value from the file must equal the specified value, <, to spec-
+	      value from the file must equal the specified value, &lt, to spec-
 	      ify that the value from the file must be less than the specified
-	      value, >, to specify that the value from the file must be
+	      value, &gt, to specify that the value from the file must be
 	      greater than the specified value, &, to specify that the value
 	      from the file must have set all of the bits that are set in the
 	      specified value, ^, to specify that the value from the file must
@@ -223,11 +225,11 @@ DESCRIPTION
 	      is octal, and 0x13 is hexadecimal.
 
 	      For string values, the string from the file must match the spec-
-	      ified string.  The operators =, < and > (but not &) can be
+	      ified string.  The operators =, &lt and &gt (but not &) can be
 	      applied to strings.  The length used for matching is that of the
 	      string argument in the magic file.  This means that a line can
 	      match any non-empty string (usually used to then print the
-	      string), with >\0 (because all non-empty strings are greater
+	      string), with &gt\0 (because all non-empty strings are greater
 	      than the empty string).
 
 	      The special test x always evaluates to true.  message The mes-
@@ -262,9 +264,9 @@ DESCRIPTION
 
      Some file formats contain additional information which is to be printed
      along with the file type or need additional tests to determine the true
-     file type.  These additional tests are introduced by one or more > char-
-     acters preceding the offset.  The number of > on the line indicates the
-     level of the test; a line with no > at the beginning is considered to be
+     file type.  These additional tests are introduced by one or more &gt char-
+     acters preceding the offset.  The number of &gt on the line indicates the
+     level of the test; a line with no &gt at the beginning is considered to be
      at level 0.  Tests are arranged in a tree-like hierarchy: If a the test
      on a line at level n succeeds, all following tests at level n+1 are per-
      formed, and the messages printed if the tests succeed, untile a line with
@@ -272,11 +274,11 @@ DESCRIPTION
      messages to get just the "if/then" effect, in the following way:
 
 	   0	  string   MZ
-	   >0x18  leshort  <0x40   MS-DOS executable
-	   >0x18  leshort  >0x3f   extended PC executable (e.g., MS Windows)
+	   &gt0x18  leshort  &lt0x40   MS-DOS executable
+	   &gt0x18  leshort  &gt0x3f   extended PC executable (e.g., MS Windows)
 
      Offsets do not need to be constant, but can also be read from the file
-     being examined.  If the first character following the last > is a ( then
+     being examined.  If the first character following the last &gt is a ( then
      the string after the parenthesis is interpreted as an indirect offset.
      That means that the number after the parenthesis is used as an offset in
      the file.	The value at that offset is read, and is used again as an off-
@@ -294,11 +296,11 @@ DESCRIPTION
 
 	   # MS Windows executables are also valid MS-DOS executables
 	   0	       string  MZ
-	   >0x18       leshort <0x40   MZ executable (MS-DOS)
+	   &gt0x18       leshort &lt0x40   MZ executable (MS-DOS)
 	   # skip the whole block below if it is not an extended executable
-	   >0x18       leshort >0x3f
-	   >>(0x3c.l)  string  PE\0\0  PE executable (MS-Windows)
-	   >>(0x3c.l)  string  LX\0\0  LX executable (OS/2)
+	   &gt0x18       leshort &gt0x3f
+	   &gt&gt(0x3c.l)  string  PE\0\0  PE executable (MS-Windows)
+	   &gt&gt(0x3c.l)  string  LX\0\0  LX executable (OS/2)
 
      This strategy of examining has a drawback: You must make sure that you
      eventually print something, or users may get empty output (like, when
@@ -312,9 +314,9 @@ DESCRIPTION
 	   0	       string  MZ
 	   # sometimes, the value at 0x18 is less that 0x40 but there's still an
 	   # extended executable, simply appended to the file
-	   >0x18       leshort <0x40
-	   >>(4.s*512) leshort 0x014c  COFF executable (MS-DOS, DJGPP)
-	   >>(4.s*512) leshort !0x014c MZ executable (MS-DOS)
+	   &gt0x18       leshort &lt0x40
+	   &gt&gt(4.s*512) leshort 0x014c  COFF executable (MS-DOS, DJGPP)
+	   &gt&gt(4.s*512) leshort !0x014c MZ executable (MS-DOS)
 
      Sometimes you do not know the exact offset as this depends on the length
      or position (when indirection was used before) of preceding fields.  You
@@ -322,40 +324,40 @@ DESCRIPTION
      using `&' as a prefix to the offset:
 
 	   0	       string  MZ
-	   >0x18       leshort >0x3f
-	   >>(0x3c.l)  string  PE\0\0	 PE executable (MS-Windows)
+	   &gt0x18       leshort &gt0x3f
+	   &gt&gt(0x3c.l)  string  PE\0\0	 PE executable (MS-Windows)
 	   # immediately following the PE signature is the CPU type
-	   >>>&0       leshort 0x14c	 for Intel 80386
-	   >>>&0       leshort 0x184	 for DEC Alpha
+	   &gt&gt&gt&0       leshort 0x14c	 for Intel 80386
+	   &gt&gt&gt&0       leshort 0x184	 for DEC Alpha
 
      Indirect and relative offsets can be combined:
 
 	   0		 string  MZ
-	   >0x18	 leshort <0x40
-	   >>(4.s*512)	 leshort !0x014c MZ executable (MS-DOS)
+	   &gt0x18	 leshort &lt0x40
+	   &gt&gt(4.s*512)	 leshort !0x014c MZ executable (MS-DOS)
 	   # if it's not COFF, go back 512 bytes and add the offset taken
 	   # from byte 2/3, which is yet another way of finding the start
 	   # of the extended executable
-	   >>>&(2.s-514) string  LE	 LE executable (MS Windows VxD driver)
+	   &gt&gt&gt&(2.s-514) string  LE	 LE executable (MS Windows VxD driver)
 
      Or the other way around:
 
 	   0		     string  MZ
-	   >0x18	     leshort >0x3f
-	   >>(0x3c.l)	     string  LE\0\0  LE executable (MS-Windows)
+	   &gt0x18	     leshort &gt0x3f
+	   &gt&gt(0x3c.l)	     string  LE\0\0  LE executable (MS-Windows)
 	   # at offset 0x80 (-4, since relative offsets start at the end
 	   # of the up-level match) inside the LE header, we find the absolute
 	   # offset to the code area, where we look for a specific signature
-	   >>>(&0x7c.l+0x26) string  UPX     \b, UPX compressed
+	   &gt&gt&gt(&0x7c.l+0x26) string  UPX     \b, UPX compressed
 
      Or even both!
 
 	   0		    string  MZ
-	   >0x18	    leshort >0x3f
-	   >>(0x3c.l)	    string  LE\0\0 LE executable (MS-Windows)
+	   &gt0x18	    leshort &gt0x3f
+	   &gt&gt(0x3c.l)	    string  LE\0\0 LE executable (MS-Windows)
 	   # at offset 0x58 inside the LE header, we find the relative offset
 	   # to a data area where we look for a specific signature
-	   >>>&(&0x54.l-3)  string  UNACE  \b, ACE self-extracting archive
+	   &gt&gt&gt&(&0x54.l-3)  string  UNACE  \b, ACE self-extracting archive
 
      Finally, if you have to deal with offset/length pairs in your file, even
      the second value in a parenthesized expression can be taken from the file
@@ -364,13 +366,13 @@ DESCRIPTION
      set.
 
 	   0		     string	  MZ
-	   >0x18	     leshort	  >0x3f
-	   >>(0x3c.l)	     string	  PE\0\0 PE executable (MS-Windows)
+	   &gt0x18	     leshort	  &gt0x3f
+	   &gt&gt(0x3c.l)	     string	  PE\0\0 PE executable (MS-Windows)
 	   # search for the PE section called ".idata"...
-	   >>>&0xf4	     search/0x140 .idata
+	   &gt&gt&gt&0xf4	     search/0x140 .idata
 	   # ...and go to the end of it, calculated from start+length;
 	   # these are located 14 and 10 bytes after the section name
-	   >>>>(&0xe.l+(-4)) string	  PK\3\4 \b, ZIP self-extracting archive
+	   &gt&gt&gt&gt(&0xe.l+(-4)) string	  PK\3\4 \b, ZIP self-extracting archive
 
 SEE ALSO
      file(1) - the command that reads this file.
@@ -383,6 +385,6 @@ BUGS
      which the lengths are invariant.
 
 BSD				August 30, 2008 			   BSD
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Encode::PerlIO -- a detailed document on Encode and PerlIO</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Encode::PerlIO(3pm)    Perl Programmers Reference Guide    Encode::PerlIO(3pm)
 
 
@@ -24,9 +26,9 @@ Overview
        Here is how the blind poet would modernise the encoding:
 
 	   use Encode;
-	   open(my $iliad,'<:encoding(iso-8859-7)','iliad.greek');
-	   open(my $utf8,'>:utf8','iliad.utf8');
-	   my @epic = <$iliad>;
+	   open(my $iliad,'&lt:encoding(iso-8859-7)','iliad.greek');
+	   open(my $utf8,'&gt:utf8','iliad.utf8');
+	   my @epic = &lt$iliad&gt;
 	   print $utf8 @epic;
 	   close($utf8);
 	   close($illiad);
@@ -34,7 +36,7 @@ Overview
        In addition, the new IO system can also be configured to read/write
        UTF-8 encoded characters (as noted above, this is efficient):
 
-	   open(my $fh,'>:utf8','anything');
+	   open(my $fh,'&gt:utf8','anything');
 	   print $fh "Any \x{0021} string \N{SMILEY FACE}\n";
 
        Either of the above forms of "layer" specifications can be made the
@@ -61,18 +63,18 @@ Overview
        want to bring into memory.  For example, to convert between ISO-8859-1
        (Latin 1) and UTF-8 (or UTF-EBCDIC in EBCDIC machines):
 
-	   open(F, "<:encoding(iso-8859-1)", "data.txt") or die $!;
-	   open(G, ">:utf8",		     "data.utf") or die $!;
-	   while (<F>) { print G }
+	   open(F, "&lt:encoding(iso-8859-1)", "data.txt") or die $!;
+	   open(G, "&gt:utf8",		     "data.utf") or die $!;
+	   while (&ltF&gt) { print G }
 
-	   # Could also do "print G <F>" but that would pull
+	   # Could also do "print G &ltF&gt" but that would pull
 	   # the whole file into memory just to write it out again.
 
        More examples:
 
-	   open(my $f, "<:encoding(cp1252)")
-	   open(my $g, ">:encoding(iso-8859-2)")
-	   open(my $h, ">:encoding(latin9)")	   # iso-8859-15
+	   open(my $f, "&lt:encoding(cp1252)")
+	   open(my $g, "&gt:encoding(iso-8859-2)")
+	   open(my $h, "&gt:encoding(latin9)")	   # iso-8859-15
 
        See also encoding for how to change the default encoding of the data in
        your script.
@@ -80,7 +82,7 @@ Overview
 How does it work?
        Here is a crude diagram of how filehandle, PerlIO, and Encode interact.
 
-	 filehandle <-> PerlIO	      PerlIO <-> scalar (read/printed)
+	 filehandle &lt-&gt PerlIO	      PerlIO &lt-&gt scalar (read/printed)
 			      \      /
 			       Encode
 
@@ -99,9 +101,9 @@ How does it work?
 
 	  A   B   C   ....   ~	   \x{3000}    ....
 	 41  42  43   ....  7E	 e3   80   80  ....
-	 <- buffer --------------->
-	 << encoded >>>>>>>>>>
-			      <- next buffer ------
+	 &lt- buffer ---------------&gt
+	 &lt&lt encoded &gt&gt&gt&gt&gt&gt&gt&gt&gt&gt
+			      &lt- next buffer ------
 
        Encode converts from the beginning to \x7E, leaving \xe3 in the buffer
        because it is invalid (partial character).
@@ -116,8 +118,8 @@ Line Buffering
 		     JIS208-ESC   \x{5f3e}
 	  A   B   C   ....   ~	 \e   $   B  |DAN | ....
 	 41  42  43   ....  7E	 1b  24  41  43  46 ....
-	 <- buffer --------------------------->
-	 << encoded >>>>>>>>>>>>>>>>>>>>>>>
+	 &lt- buffer ---------------------------&gt
+	 &lt&lt encoded &gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt
 
        As you see, the next buffer begins with \x43.  But \x43 is 'C' in
        ASCII, which is wrong in this case because we are now in JISX 0208 area
@@ -130,7 +132,7 @@ Line Buffering
        to ASCII at the end of the line, partial character will never happen
        when line buffer is used.
 
-       To tell PerlIO to use line buffer, implement ->needs_lines method for
+       To tell PerlIO to use line buffer, implement -&gtneeds_lines method for
        your encoding object.  See  Encode::Encoding for details.
 
        Thanks to these efforts most encodings that come with Encode support
@@ -152,9 +154,9 @@ Line Buffering
        Here is an example:
 
 	 my $use_perlio = perlio_ok($enc);
-	 my $layer = $use_perlio ? "<:raw" : "<:encoding($enc)";
+	 my $layer = $use_perlio ? "&lt:raw" : "&lt:encoding($enc)";
 	 open my $fh, $layer, $file or die "$file : $!";
-	 while(<$fh>){
+	 while(&lt$fh&gt){
 	   $_ = decode($enc, $_) unless $use_perlio;
 	   # ....
 	 }
@@ -162,11 +164,11 @@ Line Buffering
 SEE ALSO
        Encode::Encoding, Encode::Supported, Encode::PerlIO, encoding,
        perlebcdic, "open" in perlfunc, perlunicode, utf8, the Perl Unicode
-       Mailing List <perl-unicode@perl.org>
+       Mailing List &ltperl-unicode@perl.org&gt
 
 
 
 perl v5.12.4			  2011-06-01		   Encode::PerlIO(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The various "extract_..." subroutines may be used to extract a..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Text::Balanced - Extract delimited text sequences from strings.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Text::Balanced(3pm)    Perl Programmers Reference Guide    Text::Balanced(3pm)
 
 
@@ -37,7 +39,7 @@ SYNOPSIS
 
 	# Extract the initial substring of $text that is bracketed
 	# with a delimiter(s) specified by $delim (where the string
-	# in $delim contains one or more of '(){}[]<>').
+	# in $delim contains one or more of '(){}[]&lt&gt').
 
 	       ($extracted, $remainder) = extract_bracketed($text,$delim);
 
@@ -49,10 +51,10 @@ SYNOPSIS
 
 
 	# Extract the initial substring of $text that is bounded by
-	# a C<BEGIN>...C<END> pair. Don't allow nested C<BEGIN> tags
+	# a C&ltBEGIN&gt...C&ltEND&gt pair. Don't allow nested C&ltBEGIN&gt tags
 
 	       ($extracted, $remainder) =
-		       extract_tagged($text,"BEGIN","END",undef,{bad=>["BEGIN"]});
+		       extract_tagged($text,"BEGIN","END",undef,{bad=&gt["BEGIN"]});
 
 
 	# Extract the initial substring of $text that represents a
@@ -63,7 +65,7 @@ SYNOPSIS
 
 	# Extract the initial substring of $text that represents a block
 	# of Perl code, bracketed by any of character(s) specified by $delim
-	# (where the string $delim contains one or more of '(){}[]<>').
+	# (where the string $delim contains one or more of '(){}[]&lt&gt').
 
 	       ($extracted, $remainder) = extract_codeblock($text,$delim);
 
@@ -92,9 +94,9 @@ SYNOPSIS
        qr// for better performance on # repeated calls, so it only works under
        Perl 5.005 or later.
 
-	       $extract_head = gen_extract_tagged('<HEAD>','</HEAD>');
+	       $extract_head = gen_extract_tagged('&ltHEAD&gt','&lt/HEAD&gt');
 
-	       ($extracted, $remainder) = $extract_head->($text);
+	       ($extracted, $remainder) = $extract_head-&gt($text);
 
 DESCRIPTION
        The various "extract_..." subroutines may be used to extract a
@@ -157,12 +159,12 @@ DESCRIPTION
    A note about prefixes
        Prefix patterns are matched without any trailing modifiers ("/gimsox"
        etc.)  This can bite you if you're expecting a prefix specification
-       like '.*?(?=<H1>)' to skip everything up to the first <H1> tag. Such a
-       prefix pattern will only succeed if the <H1> tag is on the current
+       like '.*?(?=&ltH1&gt)' to skip everything up to the first &ltH1&gt tag. Such a
+       prefix pattern will only succeed if the &ltH1&gt tag is on the current
        line, since . normally doesn't match newlines.
 
        To overcome this limitation, you need to turn on /s matching within the
-       prefix pattern, using the "(?s)" directive: '(?s).*?(?=<H1>)'
+       prefix pattern, using the "(?s)" directive: '(?s).*?(?=&ltH1&gt)'
 
    "extract_delimited"
        The "extract_delimited" function formalizes the common idiom of
@@ -246,11 +248,11 @@ DESCRIPTION
        three optional scalar arguments: a string to extract from, a delimiter
        specifier, and a prefix pattern. As before, a missing prefix defaults
        to optional whitespace and a missing text defaults to $_. However, a
-       missing delimiter specifier defaults to '{}()[]<>' (see below).
+       missing delimiter specifier defaults to '{}()[]&lt&gt' (see below).
 
        "extract_bracketed" extracts a balanced-bracket-delimited substring
        (using any one (or more) of the user-specified delimiter brackets:
-       '(..)', '{..}', '[..]', or '<..>'). Optionally it will also respect
+       '(..)', '{..}', '[..]', or '&lt..&gt'). Optionally it will also respect
        quoted unbalanced brackets (see below).
 
        A "delimiter bracket" is a bracket in list of delimiters passed as
@@ -271,7 +273,7 @@ DESCRIPTION
 
        For example, given the string:
 
-	       $text = "{ an '[irregularly :-(] {} parenthesized >:-)' string }";
+	       $text = "{ an '[irregularly :-(] {} parenthesized &gt:-)' string }";
 
        then a call to "extract_bracketed" in a list context:
 
@@ -279,7 +281,7 @@ DESCRIPTION
 
        would return:
 
-	       ( "{ an '[irregularly :-(] {} parenthesized >:-)' string }" , "" , "" )
+	       ( "{ an '[irregularly :-(] {} parenthesized &gt:-)' string }" , "" , "" )
 
        since both sets of '{..}' brackets are properly nested and evenly
        balanced.  (In a scalar context just the first element of the array
@@ -295,14 +297,14 @@ DESCRIPTION
 
        However, the call in:
 
-	       @result = extract_bracketed( $text, '{([<' );
+	       @result = extract_bracketed( $text, '{([&lt' );
 
        would fail, returning:
 
-	       ( undef , "{ an '[irregularly :-(] {} parenthesized >:-)' string }"  );
+	       ( undef , "{ an '[irregularly :-(] {} parenthesized &gt:-)' string }"  );
 
        because the embedded pairs of '(..)'s and '[..]'s are "cross-nested"
-       and the embedded '>' is unbalanced. (In a scalar context, this call
+       and the embedded '&gt' is unbalanced. (In a scalar context, this call
        would return an empty string. In a void context, $text would be
        unchanged.)
 
@@ -314,33 +316,33 @@ DESCRIPTION
        delimiter specification, then that type of quote will be correctly
        handled.  for example, if $text is:
 
-	       $text = '<A HREF=">>>>">link</A>';
+	       $text = '&ltA HREF="&gt&gt&gt&gt"&gtlink&lt/A&gt';
 
        then
 
-	       @result = extract_bracketed( $text, '<">' );
+	       @result = extract_bracketed( $text, '&lt"&gt' );
 
        returns:
 
-	       ( '<A HREF=">>>>">', 'link</A>', "" )
+	       ( '&ltA HREF="&gt&gt&gt&gt"&gt', 'link&lt/A&gt', "" )
 
        as expected. Without the specification of """ as an embedded quoter:
 
-	       @result = extract_bracketed( $text, '<>' );
+	       @result = extract_bracketed( $text, '&lt&gt' );
 
        the result would be:
 
-	       ( '<A HREF=">', '>>>">link</A>', "" )
+	       ( '&ltA HREF="&gt', '&gt&gt&gt"&gtlink&lt/A&gt', "" )
 
        In addition to the quote delimiters "'", """, and "`", full Perl quote-
        like quoting (i.e. q{string}, qq{string}, etc) can be specified by
        including the letter 'q' as a delimiter. Hence:
 
-	       @result = extract_bracketed( $text, '<q>' );
+	       @result = extract_bracketed( $text, '&ltq&gt' );
 
        would correctly match something like this:
 
-	       $text = '<leftop: conj /and/ conj>';
+	       $text = '&ltleftop: conj /and/ conj&gt';
 
        See also: "extract_quotelike" and "extract_codeblock".
 
@@ -404,16 +406,16 @@ DESCRIPTION
 
        The various options that can be specified are:
 
-       "reject => $listref"
+       "reject =&gt $listref"
 	   The list reference contains one or more strings specifying patterns
 	   that must not appear within the tagged text.
 
 	   For example, to extract an HTML link (which should not contain
 	   nested links) use:
 
-		   extract_tagged($text, '<A>', '</A>', undef, {reject => ['<A>']} );
+		   extract_tagged($text, '&ltA&gt', '&lt/A&gt', undef, {reject =&gt ['&ltA&gt']} );
 
-       "ignore => $listref"
+       "ignore =&gt $listref"
 	   The list reference contains one or more strings specifying patterns
 	   that are not be be treated as nested tags within the tagged text
 	   (even if they would match the start tag pattern).
@@ -421,17 +423,17 @@ DESCRIPTION
 	   For example, to extract an arbitrary XML tag, but ignore "empty"
 	   elements:
 
-		   extract_tagged($text, undef, undef, undef, {ignore => ['<[^>]*/>']} );
+		   extract_tagged($text, undef, undef, undef, {ignore =&gt ['&lt[^&gt]*/&gt']} );
 
 	   (also see "gen_delimited_pat" below).
 
-       "fail => $str"
+       "fail =&gt $str"
 	   The "fail" option indicates the action to be taken if a matching
 	   end tag is not encountered (i.e. before the end of the string or
 	   some "reject" pattern matches). By default, a failure to match a
 	   closing tag causes "extract_tagged" to immediately fail.
 
-	   However, if the string value associated with <reject> is "MAX",
+	   However, if the string value associated with &ltreject&gt is "MAX",
 	   then "extract_tagged" returns the complete text up to the point of
 	   failure.  If the string is "PARA", "extract_tagged" returns only
 	   the first paragraph after the tag (up to the first line that is
@@ -446,7 +448,7 @@ DESCRIPTION
 		   $text = "/para line 1\n\nline 3\n/para line 4";
 
 		   extract_tagged($text, '/para', '/endpara', undef,
-					   {reject => '/para', fail => MAX );
+					   {reject =&gt '/para', fail =&gt MAX );
 
 		   # EXTRACTED: "/para line 1\n\nline 3\n"
 
@@ -456,7 +458,7 @@ DESCRIPTION
 		   $text = "/para line 1\n\nline 3\n/para line 4";
 
 		   extract_tagged($text, '/para', '/endpara', undef,
-				   {reject => '/para', fail => MAX );
+				   {reject =&gt '/para', fail =&gt MAX );
 
 		   # EXTRACTED: "/para line 1\n"
 
@@ -519,7 +521,7 @@ DESCRIPTION
 	       {
 		       my $text = shift;
 		       $extractor = gen_extract_tagged(@_);
-		       return $extractor->($text);
+		       return $extractor-&gt($text);
 	       }
 
        (although "extract_tagged" is not currently implemented that way, in
@@ -617,9 +619,9 @@ DESCRIPTION
 		       $quotelike = extract_quotelike($text,'.*?');
 
 	       # Replace one or more leading whitespace-separated quotelike
-	       # literals in $_ with "<QLL>"
+	       # literals in $_ with "&ltQLL&gt"
 
-		       do { $_ = join '<QLL>', (extract_quotelike)[2,1] } until $@;
+		       do { $_ = join '&ltQLL&gt', (extract_quotelike)[2,1] } until $@;
 
 
 	       # Isolate the search pattern in a quotelike operation from $text
@@ -642,20 +644,20 @@ DESCRIPTION
        contiguous substring. For example, a typical piece of code using here
        document might look like this:
 
-	       <<'EOMSG' || die;
+	       &lt&lt'EOMSG' || die;
 	       This is the message.
 	       EOMSG
 	       exit;
 
        Given this as an input string in a scalar context, "extract_quotelike"
-       would correctly return the string "<<'EOMSG'\nThis is the
+       would correctly return the string "&lt&lt'EOMSG'\nThis is the
        message.\nEOMSG", leaving the string " || die;\nexit;" in the original
        variable. In other words, the two separate pieces of the here document
        are successfully extracted and concatenated.
 
        In a list context, "extract_quotelike" would return the list
 
-       [0] "<<'EOMSG'\nThis is the message.\nEOMSG\n" (i.e. the full extracted
+       [0] "&lt&lt'EOMSG'\nThis is the message.\nEOMSG\n" (i.e. the full extracted
 	   here document, including fore and aft delimiters),
 
        [1] " || die;\nexit;" (i.e. the remainder of the input text,
@@ -663,7 +665,7 @@ DESCRIPTION
 
        [2] "" (i.e. the prefix substring -- trivial in this case),
 
-       [3] "<<" (i.e. the "name" of the quotelike operator)
+       [3] "&lt&lt" (i.e. the "name" of the quotelike operator)
 
        [4] "'EOMSG'" (i.e. the left delimiter of the here document, including
 	   any quotes),
@@ -685,7 +687,7 @@ DESCRIPTION
        extracting from a modifiable string, "extract_quotelike" silently
        rearranges the string to an equivalent piece of Perl:
 
-	       <<'EOMSG'
+	       &lt&lt'EOMSG'
 	       This is the message.
 	       EOMSG
 	       || die;
@@ -695,7 +697,7 @@ DESCRIPTION
        position after the here document, but now the rest of the line on which
        the here document starts is not skipped.
 
-       To prevent <extract_quotelike> from mucking about with the input in
+       To prevent &ltextract_quotelike&gt from mucking about with the input in
        this way (this is the only case where a list-context
        "extract_quotelike" does so), you can pass the input variable as an
        interpolated literal:
@@ -758,26 +760,26 @@ DESCRIPTION
        The ability to specify a different outermost delimiter bracket is
        useful in some circumstances. For example, in the Parse::RecDescent
        module, parser actions which are to be performed only on a successful
-       parse are specified using a "<defer:...>" directive. For example:
+       parse are specified using a "&ltdefer:...&gt" directive. For example:
 
 	       sentence: subject verb object
-			       <defer: {$::theVerb = $item{verb}} >
+			       &ltdefer: {$::theVerb = $item{verb}} &gt
 
-       Parse::RecDescent uses "extract_codeblock($text, '{}<>')" to extract
-       the code within the "<defer:...>" directive, but there's a problem.
+       Parse::RecDescent uses "extract_codeblock($text, '{}&lt&gt')" to extract
+       the code within the "&ltdefer:...&gt" directive, but there's a problem.
 
        A deferred action like this:
 
-			       <defer: {if ($count>10) {$count--}} >
+			       &ltdefer: {if ($count&gt10) {$count--}} &gt
 
        will be incorrectly parsed as:
 
-			       <defer: {if ($count>
+			       &ltdefer: {if ($count&gt
 
        because the "less than" operator is interpreted as a closing delimiter.
 
        But, by extracting the directive using
-       "extract_codeblock($text, '{}', undef, '<>')" the '>' character is only
+       "extract_codeblock($text, '{}', undef, '&lt&gt')" the '&gt' character is only
        treated as a delimited at the outermost level of the code block, so the
        directive is parsed correctly.
 
@@ -887,8 +889,8 @@ DESCRIPTION
 
 	       @fields = extract_multiple($text,
 			  [
-			       { Delim => sub { extract_delimited($_[0],q{'"}) } },
-			       { Brack => sub { extract_bracketed($_[0],'{}') } },
+			       { Delim =&gt sub { extract_delimited($_[0],q{'"}) } },
+			       { Brack =&gt sub { extract_bracketed($_[0],'{}') } },
 			  ]);
 
        This call extracts the next single substring that is a valid Perl
@@ -920,7 +922,7 @@ DESCRIPTION
 
    "gen_delimited_pat"
        The "gen_delimited_pat" subroutine takes a single (string) argument and
-	  > builds a Friedl-style optimized regex that matches a string
+	  &gt builds a Friedl-style optimized regex that matches a string
        delimited by any one of the characters in the single argument. For
        example:
 
@@ -936,9 +938,9 @@ DESCRIPTION
        tags for "extract_tagged". For example, to properly ignore "empty" XML
        elements (which might contain quoted strings):
 
-	       my $empty_tag = '<(' . gen_delimited_pat(q{'"}) . '|.)+/>';
+	       my $empty_tag = '&lt(' . gen_delimited_pat(q{'"}) . '|.)+/&gt';
 
-	       extract_tagged($text, undef, undef, undef, {ignore => [$empty_tag]} );
+	       extract_tagged($text, undef, undef, undef, {ignore =&gt [$empty_tag]} );
 
        "gen_delimited_pat" may also be called with an optional second
        argument, which specifies the "escape" character(s) to be used for each
@@ -967,8 +969,8 @@ DIAGNOSTICS
        (in this case the input text is not modified in any way).
 
        In addition, on failure in any context, the $@ variable is set.
-       Accessing "$@->{error}" returns one of the error diagnostics listed
-       below.  Accessing "$@->{pos}" returns the offset into the original
+       Accessing "$@-&gt{error}" returns one of the error diagnostics listed
+       below.  Accessing "$@-&gt{pos}" returns the offset into the original
        string at which the error was detected (although not necessarily where
        it occurred!)  Printing $@ directly produces the error message, with
        the offset appended.  On success, the $@ variable is guaranteed to be
@@ -978,7 +980,7 @@ DIAGNOSTICS
 
        "Did not find a suitable bracket: "%s""
 	   The delimiter provided to "extract_bracketed" was not one of
-	   '()[]<>{}'.
+	   '()[]&lt&gt{}'.
 
        "Did not find prefix: /%s/"
 	   A non-optional prefix was specified but wasn't found at the start
@@ -1089,6 +1091,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-02-25		   Text::Balanced(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

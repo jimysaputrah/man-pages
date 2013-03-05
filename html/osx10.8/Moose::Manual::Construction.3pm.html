@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Manual::Construction - Object construction (and destruction)</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Manual::ConstruUsernContributed Perl DocuMoose::Manual::Construction(3)
 
 
@@ -55,25 +57,25 @@ OBJECT CONSTRUCTION HOOKS
        One common use for "BUILDARGS" is to accommodate a non-hash(ref)
        calling style. For example, we might want to allow our Person class to
        be called with a single argument of a social security number,
-       "Person->new($ssn)".
+       "Person-&gtnew($ssn)".
 
        Without a "BUILDARGS" method, Moose will complain, because it expects a
        hash or hash reference. We can use the "BUILDARGS" method to
        accommodate this calling style:
 
-	 around BUILDARGS => sub {
+	 around BUILDARGS =&gt sub {
 	     my $orig  = shift;
 	     my $class = shift;
 
 	     if ( @_ == 1 && !ref $_[0] ) {
-		 return $class->$orig( ssn => $_[0] );
+		 return $class-&gt$orig( ssn =&gt $_[0] );
 	     }
 	     else {
-		 return $class->$orig(@_);
+		 return $class-&gt$orig(@_);
 	     }
 	 };
 
-       Note the call to "$class->$orig". This will call the default
+       Note the call to "$class-&gt$orig". This will call the default
        "BUILDARGS" in Moose::Object. This method takes care of distinguishing
        between a hash reference and a plain hash for you.
 
@@ -87,9 +89,9 @@ OBJECT CONSTRUCTION HOOKS
 	 sub BUILD {
 	     my $self = shift;
 
-	     if ( $self->country_of_residence eq 'USA' ) {
+	     if ( $self-&gtcountry_of_residence eq 'USA' ) {
 		 die 'All US residents must have an SSN'
-		     unless $self->has_ssn;
+		     unless $self-&gthas_ssn;
 	     }
 	 }
 
@@ -99,7 +101,7 @@ OBJECT CONSTRUCTION HOOKS
 	 sub BUILD {
 	     my $self = shift;
 
-	     debug( 'Made a new person - SSN = ', $self->ssn, );
+	     debug( 'Made a new person - SSN = ', $self-&gtssn, );
 	 }
 
        The "BUILD" method is called with the hash reference of the parameters
@@ -111,9 +113,9 @@ OBJECT CONSTRUCTION HOOKS
 	     my $self = shift;
 	     my $args = shift;
 
-	     $self->add_friend(
-		 My::User->new(
-		     user_id => $args->{user_id},
+	     $self-&gtadd_friend(
+		 My::User-&gtnew(
+		     user_id =&gt $args-&gt{user_id},
 		 )
 	     );
 	 }
@@ -122,7 +124,7 @@ OBJECT CONSTRUCTION HOOKS
 
        The interaction between multiple "BUILD" methods in an inheritance
        hierarchy is different from normal Perl methods. You should never call
-       "$self->SUPER::BUILD", nor should you ever apply a method modifier to
+       "$self-&gtSUPER::BUILD", nor should you ever apply a method modifier to
        "BUILD".
 
        Moose arranges to have all of the "BUILD" methods in a hierarchy called
@@ -138,7 +140,7 @@ OBJECT CONSTRUCTION HOOKS
 OBJECT DESTRUCTION
        Moose provides a hook for object destruction with the "DEMOLISH"
        method. As with "BUILD", you should never explicitly call
-       "$self->SUPER::DEMOLISH". Moose will arrange for all of the "DEMOLISH"
+       "$self-&gtSUPER::DEMOLISH". Moose will arrange for all of the "DEMOLISH"
        methods in your hierarchy to be called, from most to least specific.
 
        Each "DEMOLISH" method is called with a single argument.
@@ -164,7 +166,7 @@ OBJECT DESTRUCTION
        from object destruction by creating an error stack.
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -175,6 +177,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-06	Moose::Manual::Construction(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

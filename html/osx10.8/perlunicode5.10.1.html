@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Important Caveats..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlunicode - Unicode support in Perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLUNICODE(1)	       Perl Programmers Reference Guide 	PERLUNICODE(1)
 
 
@@ -178,7 +180,7 @@ DESCRIPTION
 	   combining character sequence" in Standardese--where the first
 	   character is a base character and subsequent characters are mark
 	   characters that apply to the base character.  "\X" is equivalent to
-	   "(?>\PM\pM*)".
+	   "(?&gt\PM\pM*)".
 
        o   The "tr///" operator translates characters instead of bytes.  Note
 	   that the "tr///CU" functionality has been removed.  For similar
@@ -739,7 +741,7 @@ DESCRIPTION
        syllabaries (hiragana and katakana), you can define
 
 	   sub InKana {
-	       return <<END;
+	       return &lt&ltEND;
 	   3040\t309F
 	   30A0\t30FF
 	   END
@@ -751,7 +753,7 @@ DESCRIPTION
        You could also have used the existing block property names:
 
 	   sub InKana {
-	       return <<'END';
+	       return &lt&lt'END';
 	   +utf8::InHiragana
 	   +utf8::InKatakana
 	   END
@@ -761,7 +763,7 @@ DESCRIPTION
        block ranges: in other words, you want to remove the non-characters:
 
 	   sub InKana {
-	       return <<'END';
+	       return &lt&lt'END';
 	   +utf8::InHiragana
 	   +utf8::InKatakana
 	   -utf8::IsCn
@@ -771,7 +773,7 @@ DESCRIPTION
        The negation is useful for defining (surprise!) negated classes.
 
 	   sub InNotKana {
-	       return <<'END';
+	       return &lt&lt'END';
 	   !utf8::InHiragana
 	   -utf8::InKatakana
 	   +utf8::IsCn
@@ -782,7 +784,7 @@ DESCRIPTION
        (or more) classes.
 
 	   sub InFooAndBar {
-	       return <<'END';
+	       return &lt&lt'END';
 	   +main::Foo
 	   &main::Bar
 	   END
@@ -805,7 +807,7 @@ DESCRIPTION
        example:
 
 	   sub ToUpper {
-	       return <<END;
+	       return &lt&ltEND;
 	   0061\t0063\t0041
 	   END
 	   }
@@ -820,7 +822,7 @@ DESCRIPTION
        For example:
 
 	   sub ToLower {
-	       return <<END;
+	       return &lt&ltEND;
 	   0041\t\t0061
 	   END
 	   }
@@ -832,7 +834,7 @@ DESCRIPTION
        mappings, you can find the data in the directory
        $Config{privlib}/unicore/To/.  The mapping data is returned as the
        here-document, and the "utf8::ToSpecFoo" are special exception mappings
-       derived from <$Config{privlib}>/unicore/SpecialCasing.txt.  The "Digit"
+       derived from &lt$Config{privlib}&gt/unicore/SpecialCasing.txt.  The "Digit"
        and "Fold" mappings that one can see in the directory are not directly
        user-accessible, one can use either the "Unicode::UCD" module, or just
        match case-insensitively (that's when the "Fold" mapping is used).
@@ -880,7 +882,7 @@ DESCRIPTION
 			it to a single character.
 		   [8]	should do ^ and $ also on U+000B (\v in C), FF (\f), CR (\r),
 			CRLF (\r\n), NEL (U+0085), LS (U+2028), and PS (U+2029);
-			should also affect <>, $., and script line numbers;
+			should also affect &lt&gt, $., and script line numbers;
 			should not split lines within CRLF [c] (i.e. there is no empty
 			line between \r and \n)
 		   [9]	UTF-8/UTF-EBDDIC used in perl allows not only U+10000 to U+10FFFF
@@ -952,7 +954,7 @@ DESCRIPTION
 
 		   [17] see UAX#10 "Unicode Collation Algorithms"
 		   [18] have Unicode::Collate but not integrated to regexes
-		   [19] have (?<=x) and (?=x), but look-aheads or look-behinds should see
+		   [19] have (?&lt=x) and (?=x), but look-aheads or look-behinds should see
 			outside of the target substring
 		   [20] need insensitive matching for linguistic features other than case;
 			for example, hiragana to katakana, wide and narrow, simplified Han
@@ -1168,7 +1170,7 @@ DESCRIPTION
 
        o   %ENV
 
-       o   glob (aka the <*>)
+       o   glob (aka the &lt*&gt)
 
        o   open, opendir, sysopen
 
@@ -1333,8 +1335,8 @@ BUGS
        extension, written in C, provides a "param" method that lets you store
        and retrieve data according to these prototypes:
 
-	   $self->param($name, $value); 	   # set a scalar
-	   $value = $self->param($name);	   # retrieve a scalar
+	   $self-&gtparam($name, $value); 	   # set a scalar
+	   $value = $self-&gtparam($name);	   # retrieve a scalar
 
        If it does not yet provide support for any encoding, one could write a
        derived class with such a "param" method:
@@ -1344,9 +1346,9 @@ BUGS
 	     utf8::upgrade($name);     # make sure it is UTF-8 encoded
 	     if (defined $value) {
 	       utf8::upgrade($value);  # make sure it is UTF-8 encoded
-	       return $self->SUPER::param($name,$value);
+	       return $self-&gtSUPER::param($name,$value);
 	     } else {
-	       my $ret = $self->SUPER::param($name);
+	       my $ret = $self-&gtSUPER::param($name);
 	       Encode::_utf8_on($ret); # we know, it is UTF-8 encoded
 	       return $ret;
 	     }
@@ -1390,7 +1392,7 @@ BUGS
 
        o   A filehandle that should read or write UTF-8
 
-	     if ($] > 5.007) {
+	     if ($] &gt 5.007) {
 	       binmode $fh, ":encoding(utf8)";
 	     }
 
@@ -1402,7 +1404,7 @@ BUGS
 	   (October 2002) the mentioned modules are not UTF-8-aware. Please
 	   check the documentation to verify if this is still true.
 
-	     if ($] > 5.007) {
+	     if ($] &gt 5.007) {
 	       require Encode;
 	       $val = Encode::encode_utf8($val); # make octets
 	     }
@@ -1412,14 +1414,14 @@ BUGS
 	   If you believe the scalar comes back as UTF-8, you will most likely
 	   want the UTF8 flag restored:
 
-	     if ($] > 5.007) {
+	     if ($] &gt 5.007) {
 	       require Encode;
 	       $val = Encode::decode_utf8($val);
 	     }
 
        o   Same thing, if you are really sure it is UTF-8
 
-	     if ($] > 5.007) {
+	     if ($] &gt 5.007) {
 	       require Encode;
 	       Encode::_utf8_on($val);
 	     }
@@ -1436,21 +1438,21 @@ BUGS
 
 	     sub fetchrow {
 	       my($self, $sth, $what) = @_; # $what is one of fetchrow_{array,hashref}
-	       if ($] < 5.007) {
-		 return $sth->$what;
+	       if ($] &lt 5.007) {
+		 return $sth-&gt$what;
 	       } else {
 		 require Encode;
 		 if (wantarray) {
-		   my @arr = $sth->$what;
+		   my @arr = $sth-&gt$what;
 		   for (@arr) {
 		     defined && /[^\000-\177]/ && Encode::_utf8_on($_);
 		   }
 		   return @arr;
 		 } else {
-		   my $ret = $sth->$what;
+		   my $ret = $sth-&gt$what;
 		   if (ref $ret) {
 		     for my $k (keys %$ret) {
-		       defined && /[^\000-\177]/ && Encode::_utf8_on($_) for $ret->{$k};
+		       defined && /[^\000-\177]/ && Encode::_utf8_on($_) for $ret-&gt{$k};
 		     }
 		     return $ret;
 		   } else {
@@ -1467,7 +1469,7 @@ BUGS
 	   sometimes a drag to your program. If you recognize such a
 	   situation, just remove the UTF8 flag:
 
-	     utf8::downgrade($val) if $] > 5.007;
+	     utf8::downgrade($val) if $] &gt 5.007;
 
 SEE ALSO
        perlunitut, perluniintro, Encode, open, utf8, bytes, perlretut,
@@ -1476,6 +1478,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-05-14			PERLUNICODE(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

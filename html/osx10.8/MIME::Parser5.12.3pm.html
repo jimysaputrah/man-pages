@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="You can inherit from this class to create your own subclasses that..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MIME::Parser - experimental class for parsing MIME streams</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MIME::Parser(3)       User Contributed Perl Documentation      MIME::Parser(3)
 
 
@@ -27,85 +29,85 @@ SYNOPSIS
 	   my $parser = new MIME::Parser;
 
 	   ### Tell it where to put things:
-	   $parser->output_under("/tmp");
+	   $parser-&gtoutput_under("/tmp");
 
 	   ### Parse an input filehandle:
-	   $entity = $parser->parse(\*STDIN);
+	   $entity = $parser-&gtparse(\*STDIN);
 
 	   ### Congratulations: you now have a (possibly multipart) MIME entity!
-	   $entity->dump_skeleton;	    # for debugging
+	   $entity-&gtdump_skeleton;	    # for debugging
 
    Examples of input
 	   ### Parse from filehandles:
-	   $entity = $parser->parse(\*STDIN);
-	   $entity = $parser->parse(IO::File->new("some command|");
+	   $entity = $parser-&gtparse(\*STDIN);
+	   $entity = $parser-&gtparse(IO::File-&gtnew("some command|");
 
 	   ### Parse from any object that supports getline() and read():
-	   $entity = $parser->parse($myHandle);
+	   $entity = $parser-&gtparse($myHandle);
 
 	   ### Parse an in-core MIME message:
-	   $entity = $parser->parse_data($message);
+	   $entity = $parser-&gtparse_data($message);
 
 	   ### Parse an MIME message in a file:
-	   $entity = $parser->parse_open("/some/file.msg");
+	   $entity = $parser-&gtparse_open("/some/file.msg");
 
 	   ### Parse an MIME message out of a pipeline:
-	   $entity = $parser->parse_open("gunzip - < file.msg.gz |");
+	   $entity = $parser-&gtparse_open("gunzip - &lt file.msg.gz |");
 
 	   ### Parse already-split input (as "deliver" would give it to you):
-	   $entity = $parser->parse_two("msg.head", "msg.body");
+	   $entity = $parser-&gtparse_two("msg.head", "msg.body");
 
    Examples of output control
 	   ### Keep parsed message bodies in core (default outputs to disk):
-	   $parser->output_to_core(1);
+	   $parser-&gtoutput_to_core(1);
 
 	   ### Output each message body to a one-per-message directory:
-	   $parser->output_under("/tmp");
+	   $parser-&gtoutput_under("/tmp");
 
 	   ### Output each message body to the same directory:
-	   $parser->output_dir("/tmp");
+	   $parser-&gtoutput_dir("/tmp");
 
 	   ### Change how nameless message-component files are named:
-	   $parser->output_prefix("msg");
+	   $parser-&gtoutput_prefix("msg");
 
 	   ### Put temporary files somewhere else
-	   $parser->tmp_dir("/var/tmp/mytmpdir");
+	   $parser-&gttmp_dir("/var/tmp/mytmpdir");
 
    Examples of error recovery
 	   ### Normal mechanism:
-	   eval { $entity = $parser->parse(\*STDIN) };
+	   eval { $entity = $parser-&gtparse(\*STDIN) };
 	   if ($@) {
-	       $results  = $parser->results;
-	       $decapitated = $parser->last_head;  ### get last top-level head
+	       $results  = $parser-&gtresults;
+	       $decapitated = $parser-&gtlast_head;  ### get last top-level head
 	   }
 
 	   ### Ultra-tolerant mechanism:
-	   $parser->ignore_errors(1);
-	   $entity = eval { $parser->parse(\*STDIN) };
-	   $error = ($@ || $parser->last_error);
+	   $parser-&gtignore_errors(1);
+	   $entity = eval { $parser-&gtparse(\*STDIN) };
+	   $error = ($@ || $parser-&gtlast_error);
 
 	   ### Cleanup all files created by the parse:
-	   eval { $entity = $parser->parse(\*STDIN) };
+	   eval { $entity = $parser-&gtparse(\*STDIN) };
 	   ...
-	   $parser->filer->purge;
+	   $parser-&gtfiler-&gtpurge;
 
    Examples of parser options
 	   ### Automatically attempt to RFC 2047-decode the MIME headers?
-	   $parser->decode_headers(1);		   ### default is false
+	   $parser-&gtdecode_headers(1);		   ### default is false
 
 	   ### Parse contained "message/rfc822" objects as nested MIME streams?
-	   $parser->extract_nested_messages(0);    ### default is true
+	   $parser-&gtextract_nested_messages(0);    ### default is true
 
 	   ### Look for uuencode in "text" messages, and extract it?
-	   $parser->extract_uuencode(1);	   ### default is false
+	   $parser-&gtextract_uuencode(1);	   ### default is false
 
 	   ### Should we forgive normally-fatal errors?
-	   $parser->ignore_errors(0);		   ### default is true
+	   $parser-&gtignore_errors(0);		   ### default is true
 
    Miscellaneous examples
 	   ### Convert a Mail::Internet object to a MIME::Entity:
-	   my $data = join('', (@{$mail->header}, "\n", @{$mail->body}));
-	   $entity = $parser->parse_data(\$data);
+	   my $data = join('', (@{$mail-&gtheader}, "\n", @{$mail-&gtbody}));
+	   $entity = $parser-&gtparse_data(\$data);
 
 DESCRIPTION
        You can inherit from this class to create your own subclasses that
@@ -119,9 +121,9 @@ PUBLIC INTERFACE
 	   For example:
 
 	       my $parser = new MIME::Parser;
-	       $parser->output_dir("/tmp");
-	       $parser->output_prefix("msg1");
-	       my $entity = $parser->parse(\*STDIN);
+	       $parser-&gtoutput_dir("/tmp");
+	       $parser-&gtoutput_prefix("msg1");
+	       my $entity = $parser-&gtparse(\*STDIN);
 
 	   Any arguments are passed into "init()".  Don't override this in
 	   your subclasses; override init() instead.
@@ -240,7 +242,7 @@ PUBLIC INTERFACE
 	   transfer encoding.
 
 	   To prevent double encoding on the output side
-	   MIME::Body->is_encoded is set, which tells MIME::Body not to encode
+	   MIME::Body-&gtis_encoded is set, which tells MIME::Body not to encode
 	   the data again, if encoded data was requested. This is in
 	   particular useful, when it's important that the content must not be
 	   modified, e.g. if you want to calculate OpenPGP signatures from it.
@@ -368,7 +370,7 @@ PUBLIC INTERFACE
 	   extracted, come up with a good output pathname for the extracted
 	   file.  Identical to the preferred form:
 
-		$parser->filer->output_path(...args...);
+		$parser-&gtfiler-&gtoutput_path(...args...);
 
 	   We just delegate this to the underlying filer() object.
 
@@ -378,14 +380,14 @@ PUBLIC INTERFACE
 	   there is no better "recommended filename").	Identical to the
 	   preferred form:
 
-		$parser->filer->output_prefix(...args...);
+		$parser-&gtfiler-&gtoutput_prefix(...args...);
 
 	   We just delegate this to the underlying filer() object.
 
        evil_filename NAME
 	   Instance method, DEPRECATED.  Identical to the preferred form:
 
-		$parser->filer->evil_filename(...args...);
+		$parser-&gtfiler-&gtevil_filename(...args...);
 
 	   We just delegate this to the underlying filer() object.
 
@@ -461,7 +463,7 @@ PUBLIC INTERFACE
 	   each other.	Since there's no real benefit, and since the
 	   IO::InnerFile abuse was fairly hairy and evil ("writes" to it were
 	   faked by extending the size of the inner file with the assumption
-	   that the only data you'd ever ->print() to it would be the line
+	   that the only data you'd ever -&gtprint() to it would be the line
 	   from the "outer" file, for example) it's been removed.
 
    Specifying classes to be instantiated
@@ -480,9 +482,9 @@ PUBLIC INTERFACE
 	       ...
 	       sub init {
 		   my $self = shift;
-		   $self->SUPER::init(@_);	  ### do my parent's init
-		   $self->interface(ENTITY_CLASS => 'MIME::MyEntity');
-		   $self->interface(HEAD_CLASS	 => 'MIME::MyHead');
+		   $self-&gtSUPER::init(@_);	  ### do my parent's init
+		   $self-&gtinterface(ENTITY_CLASS =&gt 'MIME::MyEntity');
+		   $self-&gtinterface(HEAD_CLASS	 =&gt 'MIME::MyHead');
 		   $self;			  ### return
 	       }
 
@@ -548,9 +550,9 @@ PUBLIC INTERFACE
 	   people who sent us bad MIME messages.
 
 	       ### Parse an input stream:
-	       eval { $entity = $parser->parse(\*STDIN) };
+	       eval { $entity = $parser-&gtparse(\*STDIN) };
 	       if (!$entity) {	  ### parse failed!
-		   my $decapitated = $parser->last_head;
+		   my $decapitated = $parser-&gtlast_head;
 		   ...
 	       }
 
@@ -578,7 +580,7 @@ OPTIMIZING YOUR PARSER
 	   tmp_to_core()	      0   (will be MUCH faster)
 
        Native I/O is much faster than object-oriented I/O.  It's much faster
-       to use <$foo> than $foo->getline.  For backwards compatibilty, this
+       to use &lt$foo&gt than $foo-&gtgetline.  For backwards compatibilty, this
        module must continue to use object-oriented I/O in most places, but if
        you use parse() with a "real" filehandle (string, globref, or subclass
        of IO::File) then MIME::Parser is able to perform some crucial
@@ -588,7 +590,7 @@ OPTIMIZING YOUR PARSER
        front-end onto parse_data().  If your OS supports it, you're far better
        off doing something like:
 
-	   $parser->parse_open("/bin/cat msg.head msg.body |");
+	   $parser-&gtparse_open("/bin/cat msg.head msg.body |");
 
    Minimizing memory
        Optimum input mechanisms:
@@ -711,7 +713,7 @@ WARNINGS
 	   Why do I say that?  Well, in RFC 2046, the syntax of a boundary is
 	   given quite clearly:
 
-		 boundary := 0*69<bchars> bcharsnospace
+		 boundary := 0*69&ltbchars&gt bcharsnospace
 
 		 bchars := bcharsnospace / " "
 
@@ -760,6 +762,6 @@ AUTHOR
 
 
 perl v5.12.4			  2011-03-08		       MIME::Parser(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

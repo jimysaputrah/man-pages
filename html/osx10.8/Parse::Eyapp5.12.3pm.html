@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Parse::Eyapp - Bottom up parser generator</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Parse::Eyapp(3)       User Contributed Perl Documentation      Parse::Eyapp(3)
 
 
@@ -207,7 +209,7 @@ THE EYAPP LANGUAGE
 	 ;
 	 typedecl:
 	       #empty
-	     | '<' IDENT '>'
+	     | '&lt' IDENT '&gt'
 	 ;
 	 symlist:
 	       symlist symbol
@@ -271,9 +273,9 @@ THE EYAPP LANGUAGE
 	     | DPREC ident
 	     | '(' optname rhs ')'
 	     | rhselt STAR
-	     | rhselt '<' STAR symbol '>'
+	     | rhselt '&lt' STAR symbol '&gt'
 	     | rhselt OPTION
-	     | rhselt '<' PLUS symbol '>'
+	     | rhselt '&lt' PLUS symbol '&gt'
 	     | rhselt PLUS
 	 ;
 	 optname:
@@ -530,7 +532,7 @@ THE BODY
 
 			      body:   rules * '%%'
 			      rules:  IDENT ':' rhss ';'
-			      rhss:   (optname rhs (prec epscode)?) <+ '|'>
+			      rhss:   (optname rhs (prec epscode)?) &lt+ '|'&gt
 
    Rules
        A rule is made of a left-hand-side symbol (the syntactic variable),
@@ -575,19 +577,19 @@ THE BODY
    Semantic Values and Semantic Actions
        In "Parse::Eyapp" a production rule
 
-				 A -> X_1 X_2 ... X_n
+				 A -&gt X_1 X_2 ... X_n
 
        can be followed by a semantic action:
 
-			   A -> X_1 X_2 ... X_n { Perl Code }
+			   A -&gt X_1 X_2 ... X_n { Perl Code }
 
        Such semantic action is nothing but Perl code that will be treated as
        an anonymous subroutine.  The semantic action associated with
-       production rule "A -> X_1 X_2 ... X_n"  is executed after any actions
+       production rule "A -&gt X_1 X_2 ... X_n"  is executed after any actions
        associated with the subtrees of "X_1", "X_2", ..., "X_n".  "Eyapp"
        parsers build the syntax tree using a left-right bottom-up traverse of
        the syntax tree. Each times the Parser visits the node associated with
-       the production "A -> X_1 X_2 ... X_n" the associated semantic action is
+       the production "A -&gt X_1 X_2 ... X_n" the associated semantic action is
        called.	Associated with each symbol of a Parse::Eyapp grammar there is
        a scalar Semantic Value or Attribute. The semantic values of terminals
        are provided by the lexical analyzer. In the calculator example (see
@@ -634,19 +636,19 @@ THE BODY
    Actions in Mid-Rule
        Actions can be inserted in the middle of a production like in:
 
-	block: '{'.bracket { $ids->begin_scope(); } declaration*.decs statement*.sts '}' { ... }
+	block: '{'.bracket { $ids-&gtbegin_scope(); } declaration*.decs statement*.sts '}' { ... }
 
        A middle production action is managed by inserting a new rule in the
        grammar and associating the semantic action with it:
 
-			    Temp: /* empty */ { $ids->begin_scope(); }
+			    Temp: /* empty */ { $ids-&gtbegin_scope(); }
 
        Middle production actions can refer to the attributes on its left. They
        count as one of the components of the production. Thus the program:
 
 	 ~/LEyapp/examples/eyapplanguageref$ cat intermediateaction2.yp
 	 %%
-	 S:  'a' { $_[1]x4 }.mid 'a' { print "\n<<$_[2], $mid, $_[3]>>\n"; }
+	 S:  'a' { $_[1]x4 }.mid 'a' { print "\n&lt&lt$_[2], $mid, $_[3]&gt&gt\n"; }
 	 ;
 	 %%
 
@@ -658,9 +660,9 @@ THE BODY
 	 ~/LEyapp/examples/eyapplanguageref$ sed -ne '1,5p' intermediateaction2.output
 	 Rules:
 	 ------
-	 0:  $start -> S $end
-	 1:  S -> 'a' @1-1 'a'
-	 2:  @1-1 -> /* empty */
+	 0:  $start -&gt S $end
+	 1:  S -&gt 'a' @1-1 'a'
+	 2:  @1-1 -&gt /* empty */
 
        We can build an executable "ia.pl" from the former grammar using
        "eyapp" option "-C":
@@ -676,33 +678,33 @@ THE BODY
 	 ----------------------------------------
 	 In state 0:
 	 Stack: 0
-	 Need token. Got >a<
+	 Need token. Got &gta&lt
 	 Shift and go to state 2.
 	 ----------------------------------------
 	 In state 2:
-	 Stack: 0->'a'->2
+	 Stack: 0-&gt'a'-&gt2
 	 Don't need token.
-	 Reduce using rule 2 (@1-1 --> /* empty */): Back to state 2, then go to state 4.
+	 Reduce using rule 2 (@1-1 --&gt /* empty */): Back to state 2, then go to state 4.
 	 ----------------------------------------
 	 In state 4:
-	 Stack: 0->'a'->2->'@1-1'->4
-	 Need token. Got >a<
+	 Stack: 0-&gt'a'-&gt2-&gt'@1-1'-&gt4
+	 Need token. Got &gta&lt
 	 Shift and go to state 5.
 	 ----------------------------------------
 	 In state 5:
-	 Stack: 0->'a'->2->'@1-1'->4->'a'->5
+	 Stack: 0-&gt'a'-&gt2-&gt'@1-1'-&gt4-&gt'a'-&gt5
 	 Don't need token.
-	 Reduce using rule 1 (S --> a @1-1 a):
-	 <<aaaa, aaaa, a>>
+	 Reduce using rule 1 (S --&gt a @1-1 a):
+	 &lt&ltaaaa, aaaa, a&gt&gt
 	 Back to state 0, then go to state 1.
 	 ----------------------------------------
 	 In state 1:
-	 Stack: 0->'S'->1
-	 Need token. Got ><
+	 Stack: 0-&gt'S'-&gt1
+	 Need token. Got &gt&lt
 	 Shift and go to state 3.
 	 ----------------------------------------
 	 In state 3:
-	 Stack: 0->'S'->1->''->3
+	 Stack: 0-&gt'S'-&gt1-&gt''-&gt3
 	 Don't need token.
 	 Accept.
 
@@ -725,7 +727,7 @@ THE BODY
 	   13		      }
 	   14	 | error  '\n'
 	   15	     {
-	   16	       $_[0]->YYErrok;
+	   16	       $_[0]-&gtYYErrok;
 	   17	       undef
 	   18	     }
 	   19  ;
@@ -740,8 +742,8 @@ THE BODY
 	   28	 | exp.left '/' exp.right
 	   29	   {
 	   30	      $_[3] and return($_[1] / $_[3]);
-	   31	      $_[0]->YYData->{ERRMSG} = "Illegal division by zero.\n";
-	   32	      $_[0]->YYError;
+	   31	      $_[0]-&gtYYData-&gt{ERRMSG} = "Illegal division by zero.\n";
+	   32	      $_[0]-&gtYYError;
 	   33	      undef
 	   34	   }
 	   35	 | '-' $exp %prec NEG	  { -$exp }
@@ -770,7 +772,7 @@ THE BODY
 
 	 examples/eyapplanguageref$ eyapp ambiguities.eyp
 	 1 shift/reduce conflict (see .output file)
-	 State 5: reduce by rule 2: exp -> exp '-' exp (default action)
+	 State 5: reduce by rule 2: exp -&gt exp '-' exp (default action)
 	 State 5: shifts:
 	   to state    3 with '-'
 
@@ -850,7 +852,7 @@ THE BODY
 	   is invalid in FORTRAN, ".LT." would be described with the keyword
 	   %nonassoc in eyapp.
 
-       To solve a shift-reduce conflict between a production "A --> SOMETHING"
+       To solve a shift-reduce conflict between a production "A --&gt SOMETHING"
        and a token 'a' you can follow this procedure:
 
        1. Edit the ".output" file
@@ -859,17 +861,17 @@ THE BODY
 	    pl@nereida:~/src/perl/YappWithDefaultAction/examples$ sed -ne '56,65p' ambiguities.output
 	    State 5:
 
-		   exp -> exp . '-' exp    (Rule 2)
-		   exp -> exp '-' exp .    (Rule 2)
+		   exp -&gt exp . '-' exp    (Rule 2)
+		   exp -&gt exp '-' exp .    (Rule 2)
 
 		   '-'	   shift, and go to state 3
 
 		   '-'	   [reduce using rule 2 (exp)]
 		   $default	   reduce using rule 2 (exp)
 
-       3. Inside the state there has to be a production of the type "A -->
+       3. Inside the state there has to be a production of the type "A --&gt
        SOMETHING." (with the dot at the end) indicating that a reduction must
-       take place. There has to be also another production of the form "A -->
+       take place. There has to be also another production of the form "A --&gt
        prefix . suffix", where suffix can start with the involved token 'a'.
        4. Decide what action shift or reduce matches the kind of trees you
        want. In this example we want "NUM - NUM - NUM" to produce a tree like
@@ -888,7 +890,7 @@ THE BODY
 	      | exp '\n'   { print "$_[1]\n" if defined($_[1]); $_[1] }
 	      | error  '\n'
 		  {
-		    $_[0]->YYErrok;
+		    $_[0]-&gtYYErrok;
 		    undef
 		  }
 
@@ -971,7 +973,7 @@ THE LEXICAL ANALYZER
 
 	 pl@nereida:~/LEyapp/examples/lexergeneration$ tail -6 simple.pl
 	 unless (caller) {
-	   exit !__PACKAGE__->main('');
+	   exit !__PACKAGE__-&gtmain('');
 	 }
 
        If no "main" was provided, "eyapp" will provide one.
@@ -1000,16 +1002,16 @@ THE LEXICAL ANALYZER
 	   --nodebug		      sets yydebug off
 	   --file filepath	      read input from filepath
 	   --commandinput string      read input from string
-	   --tree		      prints $tree->str
-	   --notree		      does not print $tree->str
-	   --info		      When printing $tree->str shows the value of TERMINALs
+	   --tree		      prints $tree-&gtstr
+	   --notree		      does not print $tree-&gtstr
+	   --info		      When printing $tree-&gtstr shows the value of TERMINALs
 	   --help		      shows this help
 	   --slurp		      read until EOF reached
 	   --noslurp		      read until CR is reached
 	   --argfile		      main() will take the input string from its @_
 	   --noargfile		      main() will not take the input string from its @_
 	   --yaml		      dumps YAML for $tree: YAML module must be installed
-	   --margin=i		      controls the indentation of $tree->str (i.e. $Parse::Eyapp::Node::INDENT)
+	   --margin=i		      controls the indentation of $tree-&gtstr (i.e. $Parse::Eyapp::Node::INDENT)
 
        If we try to feed it with an illegal input, an error message is
        emitted:
@@ -1030,20 +1032,20 @@ THE LEXICAL ANALYZER
 	    5  use simple;
 	    6
 	    7  # build a parser object
-	    8  my $parser = simple->new();
+	    8  my $parser = simple-&gtnew();
 	    9
 	   10  # take the input from the command line arguments
 	   11  # or from STDIN
 	   12  my $input = join ' ',@ARGV;
-	   13  $input = <> unless $input;
+	   13  $input = &lt&gt unless $input;
 	   14
 	   15  # set the input
-	   16  $parser->input($input);
+	   16  $parser-&gtinput($input);
 	   17
 	   18  # parse the input and get the AST
-	   19  my $tree = $parser->YYParse();
+	   19  my $tree = $parser-&gtYYParse();
 	   20
-	   21  print $tree->str()."\n";
+	   21  print $tree-&gtstr()."\n";
 
        Here is an example of execution:
 
@@ -1180,7 +1182,7 @@ THE LEXICAL ANALYZER
        white spaces:
 
 	 pl@nereida:~/LEyapp/examples/lexergeneration$ cat -n simplewithwhitescode.eyp
-	    1  %whites	{ /\G(\s*(?:#.*)?\s*)/gc and $self->tokenline($1 =~ tr{\n}{}) }
+	    1  %whites	{ /\G(\s*(?:#.*)?\s*)/gc and $self-&gttokenline($1 =~ tr{\n}{}) }
 	    2  %%
 	    3  A:    a
 	    4	   | A d
@@ -1201,17 +1203,17 @@ THE LEXICAL ANALYZER
 	    4
 	    5  use simplewithwhites;
 	    6
-	    7  my $parser = simplewithwhites->new();
+	    7  my $parser = simplewithwhites-&gtnew();
 	    8
 	    9  # take the input from the specified file
 	   10  my $fn = shift;
 	   11
-	   12  $parser->YYSlurpFile($fn);
+	   12  $parser-&gtYYSlurpFile($fn);
 	   13
 	   14  # parse the input and get the AST
-	   15  my $tree = $parser->YYParse();
+	   15  my $tree = $parser-&gtYYParse();
 	   16
-	   17  print $tree->str()."\n";
+	   17  print $tree-&gtstr()."\n";
 
        First, compile the grammar "simplewithwhites.eyp" presented above:
 
@@ -1231,7 +1233,7 @@ THE LEXICAL ANALYZER
        analyzer. In an incremental lexer the input is read and parsed in
        chunks. Read up to a point where  it is safe to parse.  In the example
        below, the lexer reads a new line each time we reach the end of the
-       input string "${$parser->YYInput}".  In the case of the arithmetic
+       input string "${$parser-&gtYYInput}".  In the case of the arithmetic
        expressions grammar below, by reading up to '\n', we are sure that the
        input is not broken in the middle of a token.  Instead of having the
        whole huge input in memory, we only keep a small substring.
@@ -1246,7 +1248,7 @@ THE LEXICAL ANALYZER
 	    7
 	    8  %%
 	    9  input:
-	   10	       |   input $line	{ print $line->str."\n" }
+	   10	       |   input $line	{ print $line-&gtstr."\n" }
 	   11  ;
 	   12
 	   13  line:	 '\n'
@@ -1270,13 +1272,13 @@ THE LEXICAL ANALYZER
 	   31  sub _Lexer {
 	   32	   my($parser)=shift;
 	   33
-	   34	   if ($parser->YYEndOfInput) {
-	   35	     my $input = <STDIN>;
+	   34	   if ($parser-&gtYYEndOfInput) {
+	   35	     my $input = &ltSTDIN&gt;
 	   36	     return('', undef) unless $input;
-	   37	     $parser->input($input);
+	   37	     $parser-&gtinput($input);
 	   38	   };
 	   39
-	   40	   for (${$parser->YYInput}) {
+	   40	   for (${$parser-&gtYYInput}) {
 	   41	       m/\G[ \t]*/gc;
 	   42	       m/\G([0-9]+(?:\.[0-9]+)?)/gc and return('NUM',$1);
 	   43	       m/\G([A-Za-z][A-Za-z0-9_]*)/gc and return('VAR',$1);
@@ -1285,7 +1287,7 @@ THE LEXICAL ANALYZER
 	   46	   }
 	   47  }
 	   48
-	   49  __PACKAGE__->lexer(\&_Lexer);
+	   49  __PACKAGE__-&gtlexer(\&_Lexer);
 
        This approach has limitations. The code will get more tangled if some
        token can take more than one line. For example, if we extend this
@@ -1298,7 +1300,7 @@ THE LEXICAL ANALYZER
 	 #!/usr/bin/perl -w
 	 use Incremental;
 
-	 Incremental->new->YYParse;
+	 Incremental-&gtnew-&gtYYParse;
 
        This is a small test input file:
 
@@ -1310,7 +1312,7 @@ THE LEXICAL ANALYZER
 
        Finally, see the results of the execution:
 
-	 pl@nereida:~/LEyapp/examples/lexergeneration$ ./useincremental.pl < inputforincremental
+	 pl@nereida:~/LEyapp/examples/lexergeneration$ ./useincremental.pl &lt inputforincremental
 	 line_4(exp_8(TERMINAL,exp_6(TERMINAL)))
 	 line_4(exp_9(exp_7(TERMINAL),exp_6(TERMINAL)))
 	 line_4(exp_8(TERMINAL,exp_6(TERMINAL)))
@@ -1322,25 +1324,25 @@ THE LEXICAL ANALYZER
 	 pl@nereida:~/LEyapp/examples/lexergeneration$ sed -ne '/Rules:/,/^$/p' Incremental.output
 	 Rules:
 	 ------
-	 0:	 $start -> input $end
-	 1:	 input -> /* empty */
-	 2:	 input -> input line
-	 3:	 line -> '\n'
-	 4:	 line -> exp '\n'
-	 5:	 line -> error '\n'
-	 6:	 exp -> NUM
-	 7:	 exp -> VAR
-	 8:	 exp -> VAR '=' exp
-	 9:	 exp -> exp '+' exp
-	 10:	 exp -> exp '-' exp
-	 11:	 exp -> exp '*' exp
-	 12:	 exp -> exp '/' exp
-	 13:	 exp -> '-' exp
-	 14:	 exp -> '(' exp ')'
+	 0:	 $start -&gt input $end
+	 1:	 input -&gt /* empty */
+	 2:	 input -&gt input line
+	 3:	 line -&gt '\n'
+	 4:	 line -&gt exp '\n'
+	 5:	 line -&gt error '\n'
+	 6:	 exp -&gt NUM
+	 7:	 exp -&gt VAR
+	 8:	 exp -&gt VAR '=' exp
+	 9:	 exp -&gt exp '+' exp
+	 10:	 exp -&gt exp '-' exp
+	 11:	 exp -&gt exp '*' exp
+	 12:	 exp -&gt exp '/' exp
+	 13:	 exp -&gt '-' exp
+	 14:	 exp -&gt '(' exp ')'
 
    Using Several Lexical Analyzers for the Same Parser
        At any time during the parsing you can use the method
-       "$parser->YYLexer" to set a new lexical analyzer.
+       "$parser-&gtYYLexer" to set a new lexical analyzer.
 
        The following grammar starts setting the lexer to  sub "Lexer1" (line
        44). It later changes the lexer to "Lexer2" (ine 24) after the token
@@ -1373,10 +1375,10 @@ THE LEXICAL ANALYZER
 	   18	   my($parser)=shift;
 	   19
 	   20	   print "In Lexer 1 \n";
-	   21	   for (${$parser->YYInput}) {
+	   21	   for (${$parser-&gtYYInput}) {
 	   22	       m/\G\s*/gc;
 	   23	       m/\G(%%)/gc and do {
-	   24		 $parser->YYLexer(\&Lexer2);
+	   24		 $parser-&gtYYLexer(\&Lexer2);
 	   25		 return ($1, undef);
 	   26	       };
 	   27	       m/\G(.)/gcs and return($1,$1);
@@ -1388,7 +1390,7 @@ THE LEXICAL ANALYZER
 	   33	   my($parser)=shift;
 	   34
 	   35	   print "In Lexer 2 \n";
-	   36	   for (${$parser->YYInput}) {
+	   36	   for (${$parser-&gtYYInput}) {
 	   37	       m/\G\s*/gc;
 	   38	       m/\GB/gc    and return('A','B');
 	   39	       m/\G(.)/gcs and die "Error. Expected 'B', found $1\n";
@@ -1396,7 +1398,7 @@ THE LEXICAL ANALYZER
 	   41	       return('', undef);
 	   42  }
 	   43
-	   44  __PACKAGE__->lexer(\&Lexer1);
+	   44  __PACKAGE__-&gtlexer(\&Lexer1);
 
        When executed, it behaves like this:
 
@@ -1435,7 +1437,7 @@ THE LEXICAL ANALYZER
 	    4  # $ ./twolexers2.pm -t -i -c 'A A %% d3 c2'
 	    5
 	    6  %%
-	    7  s:  first '%%' { $_[0]->YYLexer(\&Lexer2) } second
+	    7  s:  first '%%' { $_[0]-&gtYYLexer(\&Lexer2) } second
 	    8  ;
 	    9
 	   10  first:
@@ -1454,7 +1456,7 @@ THE LEXICAL ANALYZER
 	   23	   my($parser)=shift;
 	   24
 	   25	   print "In Lexer 2 \n";
-	   26	   for (${$parser->YYInput}) {
+	   26	   for (${$parser-&gtYYInput}) {
 	   27	       m/\G\s*/gc;
 	   28	       m/\G(\w+)/gc    and return('A',$1);
 	   29	       m/\G(.)/gcs and die "Error. Expected a word,Found $1\n";
@@ -1478,8 +1480,8 @@ USING AN EYAPP GRAMMAR
 	    2  use strict;
 	    3  use Calc;
 	    4
-	    5  my $parser = Calc->new();
-	    6  $parser->input(\<<'EOI'
+	    5  my $parser = Calc-&gtnew();
+	    6  $parser-&gtinput(\&lt&lt'EOI'
 	    7  a = 2*3	     # 1: 6
 	    8  d = 5/(a-6)   # 2: division by zero
 	    9  b = (a+1)/7   # 3: 1
@@ -1487,9 +1489,9 @@ USING AN EYAPP GRAMMAR
 	   11  a = a+1	     # 5: 7
 	   12  EOI
 	   13  );
-	   14  my $t = $parser->Run();
+	   14  my $t = $parser-&gtRun();
 	   15  print "========= Symbol Table ==============\n";
-	   16  print "$_ = $t->{$_}\n" for sort keys %$t;
+	   16  print "$_ = $t-&gt{$_}\n" for sort keys %$t;
 
        The output for this program is (the input for each output appear as a
        Perl comment on the right):
@@ -1519,9 +1521,9 @@ LISTS AND OPTIONALS
 	     | code
 	     | '(' optname rhs ')'
 	     | rhselt STAR		 /* STAR   is (%name\s*([A-Za-z_]\w*)\s*)?\*  */
-	     | rhselt '<' STAR symbol '>'
+	     | rhselt '&lt' STAR symbol '&gt'
 	     | rhselt OPTION		 /* OPTION is (%name\s*([A-Za-z_]\w*)\s*)?\?  */
-	     | rhselt '<' PLUS symbol '>'
+	     | rhselt '&lt' PLUS symbol '&gt'
 	     | rhselt PLUS		 /* PLUS   is (%name\s*([A-Za-z_]\w*)\s*)?\+  */
 
        The "STAR", "OPTION" and "PLUS" operators provide a simple mechanism to
@@ -1540,7 +1542,7 @@ LISTS AND OPTIONALS
 	   An additional  symbol may be included  to indicate lists of
 	   elements separated by such symbol. Thus
 
-				  rhss: rule <+ '|'>
+				  rhss: rule &lt+ '|'&gt
 
 	   is equivalent to:
 
@@ -1576,12 +1578,12 @@ LISTS AND OPTIONALS
 	 ~/LEyapp/examples/eyapplanguageref$ eyapp -v List3.yp; head -9 List3.output
 	 Rules:
 	 ------
-	 0:  $start -> S $end
-	 1:  PLUS-1 -> PLUS-1 'c'
-	 2:  PLUS-1 -> 'c'
-	 3:  PLUS-2 -> PLUS-2 'd'
-	 4:  PLUS-2 -> 'd'
-	 5:  S -> PLUS-1 PLUS-2
+	 0:  $start -&gt S $end
+	 1:  PLUS-1 -&gt PLUS-1 'c'
+	 2:  PLUS-1 -&gt 'c'
+	 3:  PLUS-2 -&gt PLUS-2 'd'
+	 4:  PLUS-2 -&gt 'd'
+	 5:  S -&gt PLUS-1 PLUS-2
 
        By default, the semantic action associated with a "+" returns the lists
        of attributes to which the "+" applies:
@@ -1600,14 +1602,14 @@ LISTS AND OPTIONALS
        has been explicitly requested with a call to the "YYBuildingTree"
        method:
 
-				   $self->YYBuildingTree(1);
+				   $self-&gtYYBuildingTree(1);
 
        Other ways to change the associated semantic are to use the
        "yybuildingtree" option of "YYParse":
 
-		$self->YYParse( yylex => \&_Lexer, yyerror => \&_Error,
-				  yybuildingtree => 1,
-				# yydebug => 0x1F
+		$self-&gtYYParse( yylex =&gt \&_Lexer, yyerror =&gt \&_Error,
+				  yybuildingtree =&gt 1,
+				# yydebug =&gt 0x1F
 		);
 
        In such case the associated semantic action creates a node labelled
@@ -1620,7 +1622,7 @@ LISTS AND OPTIONALS
 
        When executing the example above but under the %tree directive the
        output changes. The "-T" option tells the "eyapp" compiler to introduce
-       an implicit %tree directive>:
+       an implicit %tree directive&gt:
 
 	 ~/LEyapp/examples/eyapplanguageref$ eyapp -T List3.yp
 
@@ -1630,12 +1632,12 @@ LISTS AND OPTIONALS
 	 ~/LEyapp/examples/eyapplanguageref$ ./use_list3.pl
 	 Try input 'ccdd': ccdd
 	 $VAR1 = bless( {
-	   'children' => [
-	     bless( { 'children' => [], 'attr' => 'c', 'token' => 'c' }, 'TERMINAL' ),
-	     bless( { 'children' => [], 'attr' => 'c', 'token' => 'c' }, 'TERMINAL' )
+	   'children' =&gt [
+	     bless( { 'children' =&gt [], 'attr' =&gt 'c', 'token' =&gt 'c' }, 'TERMINAL' ),
+	     bless( { 'children' =&gt [], 'attr' =&gt 'c', 'token' =&gt 'c' }, 'TERMINAL' )
 	   ]
 	 }, '_PLUS_LIST' );
-	 $VAR1 = bless( { 'children' => [] }, '_PLUS_LIST' );
+	 $VAR1 = bless( { 'children' =&gt [] }, '_PLUS_LIST' );
 
        The node associated with the list of "d"s is empty since terminal "d"
        wasn't declared semantic.
@@ -1666,9 +1668,9 @@ LISTS AND OPTIONALS
 	 S:	 'c'+  D+
 		    {
 		       print Dumper($_[1]);
-		       print $_[1]->str."\n";
+		       print $_[1]-&gtstr."\n";
 		       print Dumper($_[2]);
-		       print $_[2]->str."\n";
+		       print $_[2]-&gtstr."\n";
 		    }
 	 ;
 
@@ -1679,7 +1681,7 @@ LISTS AND OPTIONALS
 
 	 sub Run {
 	   my ($self) = shift;
-	   return $self->YYParse( yybuildingtree => 1 );
+	   return $self-&gtYYParse( yybuildingtree =&gt 1 );
 	 }
 
        To activate the tree semantic for lists we use the "yybuildingtree"
@@ -1690,13 +1692,13 @@ LISTS AND OPTIONALS
 	 pl@nereida:~/LEyapp/examples/eyapplanguageref$ eyapp ListWithRefs1.eyp; ./use_listwithrefs1.pl
 	 Try input 'ccdd': ccdd
 	 $VAR1 = bless( {
-	   'children' => [
-	     bless( { 'children' => [], 'attr' => 'c', 'token' => 'c' }, 'TERMINAL' ),
-	     bless( { 'children' => [], 'attr' => 'c', 'token' => 'c' }, 'TERMINAL' )
+	   'children' =&gt [
+	     bless( { 'children' =&gt [], 'attr' =&gt 'c', 'token' =&gt 'c' }, 'TERMINAL' ),
+	     bless( { 'children' =&gt [], 'attr' =&gt 'c', 'token' =&gt 'c' }, 'TERMINAL' )
 	   ]
 	 }, '_PLUS_LIST' );
 	 _PLUS_LIST(TERMINAL,TERMINAL)
-	 $VAR1 = bless( { 'children' => [] }, '_PLUS_LIST' ); _PLUS_LIST
+	 $VAR1 = bless( { 'children' =&gt [] }, '_PLUS_LIST' ); _PLUS_LIST
 
        Though 'd' was declared semantic the default action associated with the
        production "D: 'd'" in line 16 returns $_[1] (that is, the scalar 'd').
@@ -1722,7 +1724,7 @@ LISTS AND OPTIONALS
 	   13
 	   14  D: 'd'
 	   15	    {
-	   16	      bless { attr => $_[1], children =>[]}, 'DES';
+	   16	      bless { attr =&gt $_[1], children =&gt[]}, 'DES';
 	   17	    }
 	   18  ;
 	   19
@@ -1730,7 +1732,7 @@ LISTS AND OPTIONALS
 	   21
 	   22  sub Run {
 	   23	 my ($self) = shift;
-	   24	 return $self->YYParse( yybuildingtree => 1 );
+	   24	 return $self-&gtYYParse( yybuildingtree =&gt 1 );
 	   25  }
 
        Now the attribute associated with "D" is a reference and appears in the
@@ -1739,19 +1741,19 @@ LISTS AND OPTIONALS
 	 ~/LEyapp/examples/eyapplanguageref$ eyapp ListWithRefs.eyp; ./use_listwithrefs.pl
 	 Try input 'ccdd': ccdd
 	 $VAR1 = bless( {
-	   'children' => [
-	     bless( { 'children' => [], 'attr' => 'c', 'token' => 'c' }, 'TERMINAL' ),
-	     bless( { 'children' => [], 'attr' => 'c', 'token' => 'c' }, 'TERMINAL' )
+	   'children' =&gt [
+	     bless( { 'children' =&gt [], 'attr' =&gt 'c', 'token' =&gt 'c' }, 'TERMINAL' ),
+	     bless( { 'children' =&gt [], 'attr' =&gt 'c', 'token' =&gt 'c' }, 'TERMINAL' )
 	   ]
 	 }, '_PLUS_LIST' );
 	 $VAR1 = bless( {
-	   'children' => [
-	     bless( { 'children' => [], 'attr' => 'd' }, 'DES' ),
-	     bless( { 'children' => [], 'attr' => 'd' }, 'DES' )
+	   'children' =&gt [
+	     bless( { 'children' =&gt [], 'attr' =&gt 'd' }, 'DES' ),
+	     bless( { 'children' =&gt [], 'attr' =&gt 'd' }, 'DES' )
 	   ]
 	 }, '_PLUS_LIST' );
 
-   Building a Tree with "Parse::Eyapp::Node->new"
+   Building a Tree with "Parse::Eyapp::Node-&gtnew"
        The former solution consisting on writing by hand the code to build the
        node may suffice when dealing with a single node.  Writing by hand the
        code to build a node is a cumbersome task.  Even worst: though the node
@@ -1768,7 +1770,7 @@ LISTS AND OPTIONALS
 	 Enter h or `h h' for help, or `man perldebug' for more help.
 
 	 main::(use_listwithrefs.pl:4):  $parser = new ListWithRefs();
-	   DB<1>  f ListWithRefs.eyp
+	   DB&lt1&gt  f ListWithRefs.eyp
 	 1	 2	 #line 3 "ListWithRefs.eyp"
 	 3
 	 4:	 use Data::Dumper;
@@ -1777,63 +1779,63 @@ LISTS AND OPTIONALS
 	 7	 #line 8 "ListWithRefs.eyp"
 	 8
 	 9:		       print Dumper($_[1]);
-	 10:		       print $_[1]->str."\n";
+	 10:		       print $_[1]-&gtstr."\n";
 
        through the command "f ListWithRefs.eyp" we inform the debugger that
        subsequent commands will refer to such file. Next we execute the
        program up to the semantic action associated with the production rule
        "S: 'c'+  D+" (line 9)
 
-	   DB<2> c 9	 # Continue up to line 9 of ListWithRefs.eyp
+	   DB&lt2&gt c 9	 # Continue up to line 9 of ListWithRefs.eyp
 	 ccdd
 	 ListWithRefs::CODE(0x84ebe5c)(ListWithRefs.eyp:9):
 	 9:		       print Dumper($_[1]);
 
        Now we are in condition to look at the contents of the arguments:
 
-	   DB<3> x $_[2]->str
+	   DB&lt3&gt x $_[2]-&gtstr
 	 0  '_PLUS_LIST_2(DES,DES)'
-	   DB<4> x $_[2]->child(0)
+	   DB&lt4&gt x $_[2]-&gtchild(0)
 	 0  DES=HASH(0x85c4568)
-	    'attr' => 'd'
-	    'children' => ARRAY(0x85c458c)
+	    'attr' =&gt 'd'
+	    'children' =&gt ARRAY(0x85c458c)
 		 empty array
 
        the "str" method works with the object $_[2] since "_PLUS_LIST_2" nodes
        inherit from "Parse::Eyapp::Node".  However, when we try with the "DES"
        node we get an error:
 
-	   DB<6> x $_[2]->child(0)->str
+	   DB&lt6&gt x $_[2]-&gtchild(0)-&gtstr
 	 Can't locate object method "str" via package "DES" at \
-	   (eval 11)[/usr/share/perl/5.8/perl5db.pl:628] line 2, <STDIN> line 1.
-	   DB<7>
+	   (eval 11)[/usr/share/perl/5.8/perl5db.pl:628] line 2, &ltSTDIN&gt line 1.
+	   DB&lt7&gt
 
        More robust than the former solution of building the node by hand is to
-       use the constructor "Parse::Eyapp::Node->new": The method
-       "Parse::Eyapp::Node->new" is uset to build forests of syntactic trees.
+       use the constructor "Parse::Eyapp::Node-&gtnew": The method
+       "Parse::Eyapp::Node-&gtnew" is uset to build forests of syntactic trees.
 
        It receives a  list of terms describing the trees and - optionally - a
        reference to a subroutine used to set up the attributes of the just
        created nodes. After the creation of the trees the sub is called by
-       "Parse::Eyapp::Node->new" with arguments the list of references to the
+       "Parse::Eyapp::Node-&gtnew" with arguments the list of references to the
        nodes (in the order in which they appear in the terms, from left to
-       right).	"Parse::Eyapp::Node->new" returns a list of references to the
+       right).	"Parse::Eyapp::Node-&gtnew" returns a list of references to the
        just created nodes. In a scalar context returns a reference to the
        first of such trees.  See an example:
 
 	 ~/LEyapp/examples$ perl -MParse::Eyapp -MData::Dumper -wde 0
 	 main::(-e:1):	 0
-	   DB<1> @t = Parse::Eyapp::Node->new('A(C,D) E(F)', sub { my $i = 0; $_->{n} = $i++ for @_ })
-	   DB<2> $Data::Dumper::Indent = 0
-	   DB<3> print Dumper($_)."\n" for @t
-	 $VAR1 = bless( {'n' => 0,'children' => [bless( {'n' => 1,'children' => []}, 'C' ),
-						 bless( {'n' => 2,'children' => []}, 'D' )
+	   DB&lt1&gt @t = Parse::Eyapp::Node-&gtnew('A(C,D) E(F)', sub { my $i = 0; $_-&gt{n} = $i++ for @_ })
+	   DB&lt2&gt $Data::Dumper::Indent = 0
+	   DB&lt3&gt print Dumper($_)."\n" for @t
+	 $VAR1 = bless( {'n' =&gt 0,'children' =&gt [bless( {'n' =&gt 1,'children' =&gt []}, 'C' ),
+						 bless( {'n' =&gt 2,'children' =&gt []}, 'D' )
 						]
 			}, 'A' );
-	 $VAR1 = bless( {'n' => 1,'children' => []}, 'C' );
-	 $VAR1 = bless( {'n' => 2,'children' => []}, 'D' );
-	 $VAR1 = bless( {'n' => 3,'children' => [bless( {'n' => 4,'children' => []}, 'F' )]}, 'E' );
-	 $VAR1 = bless( {'n' => 4,'children' => []}, 'F' );
+	 $VAR1 = bless( {'n' =&gt 1,'children' =&gt []}, 'C' );
+	 $VAR1 = bless( {'n' =&gt 2,'children' =&gt []}, 'D' );
+	 $VAR1 = bless( {'n' =&gt 3,'children' =&gt [bless( {'n' =&gt 4,'children' =&gt []}, 'F' )]}, 'E' );
+	 $VAR1 = bless( {'n' =&gt 4,'children' =&gt []}, 'F' );
 
        See the following example in which the nodes associated with 'd' are
        explicitly constructed:
@@ -1848,19 +1850,19 @@ LISTS AND OPTIONALS
 	    7  S:      'c'+  D+
 	    8		  {
 	    9		     print Dumper($_[1]);
-	   10		     print $_[1]->str."\n";
+	   10		     print $_[1]-&gtstr."\n";
 	   11		     print Dumper($_[2]);
-	   12		     print $_[2]->str."\n";
+	   12		     print $_[2]-&gtstr."\n";
 	   13		  }
 	   14  ;
 	   15
 	   16  D: 'd'.d
 	   17	    {
-	   18	      Parse::Eyapp::Node->new(
+	   18	      Parse::Eyapp::Node-&gtnew(
 	   19		'DES(TERMINAL)',
 	   20		 sub {
 	   21		   my ($DES, $TERMINAL) = @_;
-	   22		   $TERMINAL->{attr} = $d;
+	   22		   $TERMINAL-&gt{attr} = $d;
 	   23		 }
 	   24	      );
 	   25	    }
@@ -1870,11 +1872,11 @@ LISTS AND OPTIONALS
 	   29
 	   30  sub Run {
 	   31	 my ($self) = shift;
-	   32	 return $self->YYParse( yybuildingtree => 1 );
+	   32	 return $self-&gtYYParse( yybuildingtree =&gt 1 );
 	   33  }
 
-       To know more about "Parse::Eyapp::Node->new" see the section for
-       "Parse::Eyapp::Node->new"
+       To know more about "Parse::Eyapp::Node-&gtnew" see the section for
+       "Parse::Eyapp::Node-&gtnew"
 
        When the former eyapp program is executed produces the following
        output:
@@ -1882,22 +1884,22 @@ LISTS AND OPTIONALS
 	 $ eyapp ListWithRefs2.eyp; use_listwithrefs2.pl
 	 ccdd
 	 $VAR1 = bless( {
-	   'children' => [
-	     bless( { 'children' => [], 'attr' => 'c', 'token' => 'c' }, 'TERMINAL' ),
-	     bless( { 'children' => [], 'attr' => 'c', 'token' => 'c' }, 'TERMINAL' )
+	   'children' =&gt [
+	     bless( { 'children' =&gt [], 'attr' =&gt 'c', 'token' =&gt 'c' }, 'TERMINAL' ),
+	     bless( { 'children' =&gt [], 'attr' =&gt 'c', 'token' =&gt 'c' }, 'TERMINAL' )
 	   ]
 	 }, '_PLUS_LIST_1' );
 	 _PLUS_LIST_1(TERMINAL,TERMINAL)
 	 $VAR1 = bless( {
-	   'children' => [
+	   'children' =&gt [
 	     bless( {
-	       'children' => [
-		 bless( { 'children' => [], 'attr' => 'd' }, 'TERMINAL' )
+	       'children' =&gt [
+		 bless( { 'children' =&gt [], 'attr' =&gt 'd' }, 'TERMINAL' )
 	       ]
 	     }, 'DES' ),
 	     bless( {
-	       'children' => [
-		 bless( { 'children' => [], 'attr' => 'd' }, 'TERMINAL' )
+	       'children' =&gt [
+		 bless( { 'children' =&gt [], 'attr' =&gt 'd' }, 'TERMINAL' )
 	       ]
 	     }, 'DES' )
 	   ]
@@ -1908,8 +1910,8 @@ LISTS AND OPTIONALS
        Any list operator operates on the factor to its left.  A list in the
        right hand side of a production rule counts as a single symbol.
 
-       Both operators "*" and "+" can be used with the format "X <*
-       Separator>".  In such case they describe lists of "X"s separated by
+       Both operators "*" and "+" can be used with the format "X &lt*
+       Separator&gt".  In such case they describe lists of "X"s separated by
        "separator". See an example:
 
 	 pl@nereida:~/LEyapp/examples$ head -25 CsBetweenCommansAndD.eyp | cat -n
@@ -1919,20 +1921,20 @@ LISTS AND OPTIONALS
 	  4
 	  5  %{
 	  6  sub TERMINAL::info {
-	  7    $_[0]->attr;
+	  7    $_[0]-&gtattr;
 	  8  }
 	  9  %}
 	 10  %tree
 	 11  %%
 	 12  S:
-	 13	 ('c' <* ','> 'd')*
+	 13	 ('c' &lt* ','&gt 'd')*
 	 14	   {
 	 15	      print "\nNode\n";
-	 16	      print $_[1]->str."\n";
+	 16	      print $_[1]-&gtstr."\n";
 	 17	      print "\nChild 0\n";
-	 18	      print $_[1]->child(0)->str."\n";
+	 18	      print $_[1]-&gtchild(0)-&gtstr."\n";
 	 19	      print "\nChild 1\n";
-	 20	      print $_[1]->child(1)->str."\n";
+	 20	      print $_[1]-&gtchild(1)-&gtstr."\n";
 	 21	      $_[1]
 	 22	   }
 	 23  ;
@@ -1941,7 +1943,7 @@ LISTS AND OPTIONALS
 
        The rule
 
-				   S: ('c' <* ','> 'd')*
+				   S: ('c' &lt* ','&gt 'd')*
 
        has only two items in its right hand side: the (separated by commas)
        list of "c"s and the list of "d"s.  The production rule is equivalent
@@ -1951,15 +1953,15 @@ LISTS AND OPTIONALS
 	 pl@nereida:~/LEyapp/examples$ head -11 CsBetweenCommansAndD.output | cat -n
 	  1  Rules:
 	  2  ------
-	  3  0:      $start -> S $end
-	  4  1:      STAR-1 -> STAR-1 ',' 'c'
-	  5  2:      STAR-1 -> 'c'
-	  6  3:      STAR-2 -> STAR-1
-	  7  4:      STAR-2 -> /* empty */
-	  8  5:      PAREN-3 -> STAR-2 'd'
-	  9  6:      STAR-4 -> STAR-4 PAREN-3
-	 10  7:      STAR-4 -> /* empty */
-	 11  8:      S -> STAR-4
+	  3  0:      $start -&gt S $end
+	  4  1:      STAR-1 -&gt STAR-1 ',' 'c'
+	  5  2:      STAR-1 -&gt 'c'
+	  6  3:      STAR-2 -&gt STAR-1
+	  7  4:      STAR-2 -&gt /* empty */
+	  8  5:      PAREN-3 -&gt STAR-2 'd'
+	  9  6:      STAR-4 -&gt STAR-4 PAREN-3
+	 10  7:      STAR-4 -&gt /* empty */
+	 11  8:      S -&gt STAR-4
 
        The semantic action associated with "*" is to return a reference to a
        list with the attributes of the matching items.
@@ -1999,7 +2001,7 @@ LISTS AND OPTIONALS
 	  4
 	  5  %{
 	  6  sub TERMINAL::info {
-	  7    $_[0]->attr;
+	  7    $_[0]-&gtattr;
 	  8  }
 	  9  %}
 	 10  %tree
@@ -2007,14 +2009,14 @@ LISTS AND OPTIONALS
 	 12  Start: S
 	 13  ;
 	 14  S:
-	 15	 ('c' <%name Cs * ','> 'd') %name Cs_and_d *
+	 15	 ('c' &lt%name Cs * ','&gt 'd') %name Cs_and_d *
 	 16	   {
 	 17	      print "\nNode\n";
-	 18	      print $_[1]->str."\n";
+	 18	      print $_[1]-&gtstr."\n";
 	 19	      print "\nChild 0\n";
-	 20	      print $_[1]->child(0)->str."\n";
+	 20	      print $_[1]-&gtchild(0)-&gtstr."\n";
 	 21	      print "\nChild 1\n";
-	 22	      print $_[1]->child(1)->str."\n";
+	 22	      print $_[1]-&gtchild(1)-&gtstr."\n";
 	 23	      $_[1]
 	 24	   }
 	 25  ;
@@ -2055,8 +2057,8 @@ LISTS AND OPTIONALS
 	      3  %%
 	      4  S: 'c' 'c'?
 	      5       {
-	      6 	print $_[2]->str."\n";
-	      7 	print $_[2]->child(0)->attr."\n" if $_[2]->children;
+	      6 	print $_[2]-&gtstr."\n";
+	      7 	print $_[2]-&gtchild(0)-&gtattr."\n" if $_[2]-&gtchildren;
 	      8      }
 	      9  ;
 	     10
@@ -2068,13 +2070,13 @@ LISTS AND OPTIONALS
 	 pl@nereida:~/LEyapp/examples$ head -7 List5.output
 	 Rules:
 	 ------
-	 0:	 $start -> S $end
-	 1:	 OPTIONAL-1 -> 'c'
-	 2:	 OPTIONAL-1 -> /* empty */
-	 3:	 S -> 'c' OPTIONAL-1
+	 0:	 $start -&gt S $end
+	 1:	 OPTIONAL-1 -&gt 'c'
+	 2:	 OPTIONAL-1 -&gt /* empty */
+	 3:	 S -&gt 'c' OPTIONAL-1
 
        When "yybuildingtree" is false the associated attribute is a list that
-       will be empty if CX> does not show up.
+       will be empty if CX&gt does not show up.
 
        Under the %tree directive the action creates an "_OPTIONAL" node:
 
@@ -2106,10 +2108,10 @@ LISTS AND OPTIONALS
 	 pl@nereida:~/LEyapp/examples$ eyapp -v Parenthesis.eyp; head -6 Parenthesis.output
 	 Rules:
 	 ------
-	 0:	 $start -> S $end
-	 1:	 PAREN-1 -> 'a' S
-	 2:	 S -> PAREN-1 'b'
-	 3:	 S -> 'c'
+	 0:	 $start -&gt S $end
+	 1:	 PAREN-1 -&gt 'a' S
+	 2:	 S -&gt PAREN-1 'b'
+	 3:	 S -&gt 'c'
 
        By default the semantic rule associated with a parenthesis returns an
        anonymous list with the attributes of the symbols between the
@@ -2121,8 +2123,8 @@ LISTS AND OPTIONALS
 	      3  use Data::Dumper;
 	      4
 	      5  $Data::Dumper::Indent = 1;
-	      6  $parser = Parenthesis->new();
-	      7  print Dumper($parser->Run);
+	      6  $parser = Parenthesis-&gtnew();
+	      7  print Dumper($parser-&gtRun);
 	 pl@nereida:~/LEyapp/examples$ use_parenthesis.pl
 	 acb
 	 $VAR1 = [
@@ -2154,15 +2156,15 @@ LISTS AND OPTIONALS
 	  7  S:
 	  8	   (%name AS 'a' S )'b'
 	  9	     {
-	 10	       print "S -> ('a' S )'b'\n";
+	 10	       print "S -&gt ('a' S )'b'\n";
 	 11	       print "Attribute of the first symbol:\n".Dumper($_[1]);
 	 12	       print "Attribute of the second symbol: $_[2]\n";
-	 13	       $_[0]->YYBuildAST(@_[1..$#_]);
+	 13	       $_[0]-&gtYYBuildAST(@_[1..$#_]);
 	 14	     }
 	 15	 | 'c'
 	 16	     {
-	 17	       print "S -> 'c'\n";
-	 18	       my $r = Parse::Eyapp::Node->new(qw(C(TERMINAL)), sub { $_[1]->attr('c') }) ;
+	 17	       print "S -&gt 'c'\n";
+	 18	       my $r = Parse::Eyapp::Node-&gtnew(qw(C(TERMINAL)), sub { $_[1]-&gtattr('c') }) ;
 	 19	       print Dumper($r);
 	 20	       $r;
 	 21	     }
@@ -2179,7 +2181,7 @@ LISTS AND OPTIONALS
 			   goto &Parse::Eyapp::Driver::YYBuildAST;
 
        At line 18 the node for the rule is explicitly created using
-       "Parse::Eyapp::Node->new". The handler passed as second argument is
+       "Parse::Eyapp::Node-&gtnew". The handler passed as second argument is
        responsible for setting the value of the atribute "attr" of the just
        created "TERMINAL" node.
 
@@ -2187,58 +2189,58 @@ LISTS AND OPTIONALS
 
 	 pl@nereida:~/LEyapp/examples$ use_list2.pl
 	 aacbb
-	 S -> 'c'
+	 S -&gt 'c'
 	 $VAR1 = bless( {
-	   'children' => [
+	   'children' =&gt [
 	     bless( {
-	       'children' => [],
-	       'attr' => 'c'
+	       'children' =&gt [],
+	       'attr' =&gt 'c'
 	     }, 'TERMINAL' )
 	   ]
 	 }, 'C' );
 
        the first reduction occurs by the non recursive rule. The execution
-       shows the tree built by the call to "Parse::Eyapp::Node-"new> at line
+       shows the tree built by the call to "Parse::Eyapp::Node-"new&gt at line
        18.
 
        The execution continues with the reduction or reverse derivation by the
-       rule "S -> ('a' S )'b'". The action at lines 9-14 dumps the attribute
+       rule "S -&gt ('a' S )'b'". The action at lines 9-14 dumps the attribute
        associated with "('a' S)" - or, in other words,	the attribute
        associated with the variable "PAREN-1". It also dumps the attribute of
        'b':
 
-	 S -> ('a' S )'b'
+	 S -&gt ('a' S )'b'
 	 Attribute of the first symbol:
 	 $VAR1 = bless( {
-	     'children' => [
-	       bless( { 'children' => [], 'attr' => 'a', 'token' => 'a' }, 'TERMINAL' ),
-	       bless( { 'children' => [ bless( { 'children' => [], 'attr' => 'c' }, 'TERMINAL' )
+	     'children' =&gt [
+	       bless( { 'children' =&gt [], 'attr' =&gt 'a', 'token' =&gt 'a' }, 'TERMINAL' ),
+	       bless( { 'children' =&gt [ bless( { 'children' =&gt [], 'attr' =&gt 'c' }, 'TERMINAL' )
 	      ]
 	    }, 'C' )
 	   ]
 	 }, 'AS' );
        Attribute of the second symbol: b
 
-       The last reduction shown is by the rule: "S -> ('a' S )'b'":
+       The last reduction shown is by the rule: "S -&gt ('a' S )'b'":
 
-	 S -> ('a' S )'b'
+	 S -&gt ('a' S )'b'
 	 Attribute of the first symbol:
 	 $VAR1 = bless( {
-	   'children' => [
-	     bless( { 'children' => [], 'attr' => 'a', 'token' => 'a' }, 'TERMINAL' ),
+	   'children' =&gt [
+	     bless( { 'children' =&gt [], 'attr' =&gt 'a', 'token' =&gt 'a' }, 'TERMINAL' ),
 	     bless( {
-	       'children' => [
+	       'children' =&gt [
 		 bless( {
-		   'children' => [
-		     bless( { 'children' => [], 'attr' => 'a', 'token' => 'a' }, 'TERMINAL' ),
+		   'children' =&gt [
+		     bless( { 'children' =&gt [], 'attr' =&gt 'a', 'token' =&gt 'a' }, 'TERMINAL' ),
 		     bless( {
-		       'children' => [
-			 bless( { 'children' => [], 'attr' => 'c' }, 'TERMINAL' )
+		       'children' =&gt [
+			 bless( { 'children' =&gt [], 'attr' =&gt 'c' }, 'TERMINAL' )
 		       ]
 		     }, 'C' )
 		   ]
 		 }, 'AS' ),
-		 bless( { 'children' => [], 'attr' => 'b', 'token' => 'b' }, 'TERMINAL' )
+		 bless( { 'children' =&gt [], 'attr' =&gt 'b', 'token' =&gt 'b' }, 'TERMINAL' )
 	       ]
 	     }, 'S_2' )
 	   ]
@@ -2259,11 +2261,11 @@ LISTS AND OPTIONALS
 	  6  %%
 	  7  S:      'c'
 	  8		 {
-	  9		   print "S -> c\n"
+	  9		   print "S -&gt c\n"
 	 10		 }
-	 11	 |    ('a' {$num++; print "Seen <$num> 'a's\n"; $_[1] }) S 'b'
+	 11	 |    ('a' {$num++; print "Seen &lt$num&gt 'a's\n"; $_[1] }) S 'b'
 	 12		 {
-	 13		   print "S -> (a ) S b\n"
+	 13		   print "S -&gt (a ) S b\n"
 	 14		 }
 	 15  ;
 	 16  %%
@@ -2272,13 +2274,13 @@ LISTS AND OPTIONALS
 
 	 pl@nereida:~/LEyapp/examples$ use_listandaction.pl
 	 aaacbbb
-	 Seen <1> 'a's
-	 Seen <2> 'a's
-	 Seen <3> 'a's
-	 S -> c
-	 S -> (a ) S b
-	 S -> (a ) S b
-	 S -> (a ) S b
+	 Seen &lt1&gt 'a's
+	 Seen &lt2&gt 'a's
+	 Seen &lt3&gt 'a's
+	 S -&gt c
+	 S -&gt (a ) S b
+	 S -&gt (a ) S b
+	 S -&gt (a ) S b
 
 NAMES FOR ATTRIBUTES
        Attributes can be referenced by meaningful names using the dot notation
@@ -2342,21 +2344,21 @@ DEFAULT ACTIONS
 
        The file containing the "Eyapp" program must be compiled with "eyapp":
 
-	nereida:~/src/perl/YappWithDefaultAction/examples> eyapp Postfix.eyp
+	nereida:~/src/perl/YappWithDefaultAction/examples&gt eyapp Postfix.eyp
 
        Next, you have to write a client program:
 
-	nereida:~/src/perl/YappWithDefaultAction/examples> cat -n usepostfix.pl
+	nereida:~/src/perl/YappWithDefaultAction/examples&gt cat -n usepostfix.pl
 	     1	#!/usr/bin/perl -w
 	     2	use strict;
 	     3	use Postfix;
 	     4
 	     5	my $parser = new Postfix();
-	     6	$parser->Run;
+	     6	$parser-&gtRun;
 
        Now we can run the client program:
 
-	nereida:~/src/perl/YappWithDefaultAction/examples> usepostfix.pl
+	nereida:~/src/perl/YappWithDefaultAction/examples&gt usepostfix.pl
 	Write an expression: -(2*a-b*-3)
 	2 a * b 3 NEG * - NEG
 
@@ -2384,8 +2386,8 @@ DEFAULT ACTIONS
 	  7
 	  8  %defaultaction {
 	  9    my $self = shift;
-	 10    my $name = $self->YYName();
-	 11    bless { children => [ grep {ref($_)} @_] }, $name;
+	 10    my $name = $self-&gtYYName();
+	 11    bless { children =&gt [ grep {ref($_)} @_] }, $name;
 	 12  }
 	 13
 	 14  %%
@@ -2429,7 +2431,7 @@ DEFAULT ACTIONS
        object has an attribute "children" which is a reference to the list of
        children of the node.  The call to "grep"
 
-	 11    bless { children => [ grep {ref($_)} @_] }, $name;
+	 11    bless { children =&gt [ grep {ref($_)} @_] }, $name;
 
        excludes children that aren't references. Notice that the lexical
        analyzer only returns references for the "NUM" and "VAR" terminals:
@@ -2437,13 +2439,13 @@ DEFAULT ACTIONS
 	 59  sub _Lexer {
 	 60	 my($parser)=shift;
 	 61
-	 62	 for ($parser->YYData->{INPUT}) {
+	 62	 for ($parser-&gtYYData-&gt{INPUT}) {
 	 63	     s/^[ \t]+//;
 	 64	     return('',undef) unless $_;
 	 65	     s/^([0-9]+(?:\.[0-9]+)?)//
-	 66		     and return('NUM', bless { attr => $1}, 'NUM');
+	 66		     and return('NUM', bless { attr =&gt $1}, 'NUM');
 	 67	     s/^([A-Za-z][A-Za-z0-9_]*)//
-	 68		     and return('VAR',bless {attr => $1}, 'VAR');
+	 68		     and return('VAR',bless {attr =&gt $1}, 'VAR');
 	 69	     s/^(.)//s
 	 70		     and return($1, $1);
 	 71	 }
@@ -2458,7 +2460,7 @@ DEFAULT ACTIONS
 	      3  use Data::Dumper;
 	      4
 	      5  $parser = new Lhs();
-	      6  my $tree = $parser->Run;
+	      6  my $tree = $parser-&gtRun;
 	      7  $Data::Dumper::Indent = 1;
 	      8  if (defined($tree)) { print Dumper($tree); }
 	      9  else { print "Cadena no valida\n"; }
@@ -2474,17 +2476,17 @@ DEFAULT ACTIONS
 	 a=(2+3)*b
 	 $VAR1 = [
 	   bless( {
-	     'children' => [
-	       bless( { 'attr' => 'a' }, 'VAR' ),
+	     'children' =&gt [
+	       bless( { 'attr' =&gt 'a' }, 'VAR' ),
 	       bless( {
-		 'children' => [
+		 'children' =&gt [
 		   bless( {
-		     'children' => [
-		       bless( { 'attr' => '2' }, 'NUM' ),
-		       bless( { 'attr' => '3' }, 'NUM' )
+		     'children' =&gt [
+		       bless( { 'attr' =&gt '2' }, 'NUM' ),
+		       bless( { 'attr' =&gt '3' }, 'NUM' )
 		     ]
 		   }, 'PLUS' ),
-		   bless( { 'attr' => 'b' }, 'VAR' )
+		   bless( { 'attr' =&gt 'b' }, 'VAR' )
 		 ]
 	       }, 'TIMES' )
 	     ]
@@ -2506,8 +2508,8 @@ DEFAULT ACTIONS
 	    9		   exp '-' exp
 	   10		     {
 	   11		       my $self = shift;
-	   12		       $self->YYName('SUBTRACT'); # rename it
-	   13		       $self->YYBuildAST(@_); # build the node
+	   12		       $self-&gtYYName('SUBTRACT'); # rename it
+	   13		       $self-&gtYYBuildAST(@_); # build the node
 	   14		     }
 	   15	       |   %name TIMES
 	   16		   exp '*' exp
@@ -2525,12 +2527,12 @@ DEFAULT ACTIONS
 	 2-b
 	 $VAR1 = [
 	   bless( {
-	     'children' => [
+	     'children' =&gt [
 	       bless( {
-		 'attr' => '2'
+		 'attr' =&gt '2'
 	       }, 'NUM' ),
 	       bless( {
-		 'attr' => 'b'
+		 'attr' =&gt 'b'
 	       }, 'VAR' )
 	     ]
 	   }, 'SUBTRACT' )
@@ -2550,9 +2552,9 @@ GRAMMAR REUSE
 	    4  %defaultaction {
 	    5	 my $self = shift;
 	    6
-	    7	 my $action = $self->YYName;
+	    7	 my $action = $self-&gtYYName;
 	    8
-	    9	 $self->$action(@_);
+	    9	 $self-&gt$action(@_);
 	   10  }
 	   11
 	   12  %%
@@ -2569,9 +2571,9 @@ GRAMMAR REUSE
 	   23  %%
 	   24
 	   25  sub _Error {
-	   26	 my($token)=$_[0]->YYCurval;
+	   26	 my($token)=$_[0]-&gtYYCurval;
 	   27	 my($what)= $token ? "input: '$token'" : "end of input";
-	   28	 my @expected = $_[0]->YYExpect();
+	   28	 my @expected = $_[0]-&gtYYExpect();
 	   29
 	   30	 local $" = ', ';
 	   31	 die "Syntax error near $what. Expected one of these tokens: @expected\n";
@@ -2598,10 +2600,10 @@ GRAMMAR REUSE
 	   52	 $x = shift;
 	   53	 my $debug = shift;
 	   54
-	   55	 $self->YYParse(
-	   56	   yylex => \&_Lexer,
-	   57	   yyerror => \&_Error,
-	   58	   yydebug => $debug,
+	   55	 $self-&gtYYParse(
+	   56	   yylex =&gt \&_Lexer,
+	   57	   yyerror =&gt \&_Error,
+	   58	   yydebug =&gt $debug,
 	   59	 );
 	   60  }
 
@@ -2647,15 +2649,15 @@ GRAMMAR REUSE
 	   34  package main;
 	   35  use strict;
 	   36
-	   37  my $calcparser = CalcActions->new();
+	   37  my $calcparser = CalcActions-&gtnew();
 	   38  print "Write an expression: ";
-	   39  my $x = <STDIN>;
-	   40  my $e = $calcparser->Run($x);
+	   39  my $x = &ltSTDIN&gt;
+	   40  my $e = $calcparser-&gtRun($x);
 	   41
 	   42  print "$e\n";
 	   43
-	   44  my $postparser = PostActions->new();
-	   45  my $p = $postparser->Run($x);
+	   44  my $postparser = PostActions-&gtnew();
+	   45  my $p = $postparser-&gtRun($x);
 	   46
 	   47  print "$p\n";
 
@@ -2710,9 +2712,9 @@ GRAMMAR REUSE
 	   36  %%
 	   37
 	   38  sub _Error {
-	   39	 my($token)=$_[0]->YYCurval;
+	   39	 my($token)=$_[0]-&gtYYCurval;
 	   40	 my($what)= $token ? "input: '$token'" : "end of input";
-	   41	 my @expected = $_[0]->YYExpect();
+	   41	 my @expected = $_[0]-&gtYYExpect();
 	   42
 	   43	 local $" = ', ';
 	   44	 die "Syntax error near $what. Expected one of these tokens: @expected\n";
@@ -2736,8 +2738,8 @@ GRAMMAR REUSE
 	   62  sub Run {
 	   63	 my($self)=shift;
 	   64	 $x = shift;
-	   65	 $self->YYParse( yylex => \&_Lexer, yyerror => \&_Error,
-	   66	   #yydebug => 0xFF
+	   65	 $self-&gtYYParse( yylex =&gt \&_Lexer, yyerror =&gt \&_Error,
+	   66	   #yydebug =&gt 0xFF
 	   67	 );
 	   68  }
 
@@ -2766,26 +2768,26 @@ GRAMMAR REUSE
 	    3  use PostfixWithActions;
 	    4
 	    5  my $debug = shift || 0;
-	    6  my $pparser = PostfixWithActions->new();
+	    6  my $pparser = PostfixWithActions-&gtnew();
 	    7  print "Write an expression: ";
-	    8  my $x = <STDIN>;
+	    8  my $x = &ltSTDIN&gt;
 	    9
 	   10  # First, trasnlate to postfix ...
-	   11  $pparser->Run($x, $debug);
+	   11  $pparser-&gtRun($x, $debug);
 	   12
 	   13  # And then selectively substitute
 	   14  # some semantic actions
 	   15  # to obtain an infix calculator ...
 	   16  my %s;		 # symbol table
-	   17  $pparser->YYSetaction(
-	   18	 ASSIGN => sub { $s{$_[1]} = $_[3] },
-	   19	 PLUS	=> sub { $_[1] + $_[3] },
-	   20	 TIMES	=> sub { $_[1] * $_[3] },
-	   21	 DIV	=> sub { $_[1] / $_[3] },
-	   22	 NEG	=> sub { -$_[2] },
+	   17  $pparser-&gtYYSetaction(
+	   18	 ASSIGN =&gt sub { $s{$_[1]} = $_[3] },
+	   19	 PLUS	=&gt sub { $_[1] + $_[3] },
+	   20	 TIMES	=&gt sub { $_[1] * $_[3] },
+	   21	 DIV	=&gt sub { $_[1] / $_[3] },
+	   22	 NEG	=&gt sub { -$_[2] },
 	   23  );
 	   24
-	   25  $pparser->Run($x, $debug);
+	   25  $pparser-&gtRun($x, $debug);
 
        When running this program the output is:
 
@@ -2805,14 +2807,14 @@ ABSTRACT SYNTAX TREES: %tree AND %name
        %tree directive. Actually, the %tree directive is equivalent to a call
        to the "YYBuildAST" method of the parser object.
 
-       Any production production rule "A->XYZ" can be named using a directive
+       Any production production rule "A-&gtXYZ" can be named using a directive
        "%name someclass".
 
-       When reducing by a production rule "A->XYZ" the %tree directive (i.e.,
+       When reducing by a production rule "A-&gtXYZ" the %tree directive (i.e.,
        the "YYBuildAST" method) builds an anonymous hash blessed in
        "someclass".  The hash has an attribute "children" containing the
        references to the AST trees associated with the symbols in the right
-       hand side "X", C>Y>, etc.
+       hand side "X", C&gtY&gt, etc.
 
        If no explicit name was given to the production rule, "YYBuildAST"
        blesses the node in the class name resulting from the concatenation of
@@ -2830,7 +2832,7 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	   %tree	   # Let us build an abstract syntax tree ...
 
 	   %%
-	   line: exp <+ ';'>  { $_[1] } /* list of expressions separated by ';' */
+	   line: exp &lt+ ';'&gt  { $_[1] } /* list of expressions separated by ';' */
 	   ;
 
 	   exp:
@@ -2855,11 +2857,11 @@ ABSTRACT SYNTAX TREES: %tree AND %name
        generate and check the corresponding file ".output" setting the
        "outputfile" of "Parse::Eyapp":
 
-	 Parse::Eyapp->new_grammar( # Create the parser package/class
-	   input=>$grammar,
-	   classname=>'Calc', # The name of the package containing the parser
-	   firstline=>9,      # String $grammar starts at line 9 (for error diagnostics)
-	   outputfile=>'treewithoutnames'
+	 Parse::Eyapp-&gtnew_grammar( # Create the parser package/class
+	   input=&gt$grammar,
+	   classname=&gt'Calc', # The name of the package containing the parser
+	   firstline=&gt9,      # String $grammar starts at line 9 (for error diagnostics)
+	   outputfile=&gt'treewithoutnames'
 	 );
 
        The grammar with the expanded rules appears in the ".output" file:
@@ -2867,28 +2869,28 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	 lusasoft@LusaSoft:~/src/perl/Eyapp/examples/eyapplanguageref$ sed -ne '28,42p' treewithoutnames.output
 	 Rules:
 	 ------
-	 0:	 $start -> line $end
-	 1:	 PLUS-1 -> PLUS-1 ';' exp
-	 2:	 PLUS-1 -> exp
-	 3:	 line -> PLUS-1
-	 4:	 exp -> NUM
-	 5:	 exp -> VAR
-	 6:	 exp -> VAR '=' exp
-	 7:	 exp -> exp '+' exp
-	 8:	 exp -> exp '-' exp
-	 9:	 exp -> exp '*' exp
-	 10:	 exp -> exp '/' exp
-	 11:	 exp -> '-' exp
-	 12:	 exp -> '(' exp ')'
+	 0:	 $start -&gt line $end
+	 1:	 PLUS-1 -&gt PLUS-1 ';' exp
+	 2:	 PLUS-1 -&gt exp
+	 3:	 line -&gt PLUS-1
+	 4:	 exp -&gt NUM
+	 5:	 exp -&gt VAR
+	 6:	 exp -&gt VAR '=' exp
+	 7:	 exp -&gt exp '+' exp
+	 8:	 exp -&gt exp '-' exp
+	 9:	 exp -&gt exp '*' exp
+	 10:	 exp -&gt exp '/' exp
+	 11:	 exp -&gt '-' exp
+	 12:	 exp -&gt '(' exp ')'
 
        We can see now that the node "exp_9" corresponds to the production "exp
-       -> exp '*' exp".  Observe also that the Eyapp production:
+       -&gt exp '*' exp".  Observe also that the Eyapp production:
 
-				       line: exp <+ ';'>
+				       line: exp &lt+ ';'&gt
        actually produces the productions:
 
-			       1:      PLUS-1 -> PLUS-1 ';' exp
-			       2:      PLUS-1 -> exp
+			       1:      PLUS-1 -&gt PLUS-1 ';' exp
+			       2:      PLUS-1 -&gt exp
 
        and that the name of the class associated with the non empty list is
        "_PLUS_LIST".
@@ -2908,7 +2910,7 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	   %tree	   # Let us build an abstract syntax tree ...
 
 	   %%
-	   line: exp <%name EXPS + ';'>  { $_[1] } /* list of expressions separated by ';' */
+	   line: exp &lt%name EXPS + ';'&gt  { $_[1] } /* list of expressions separated by ';' */
 	   ;
 
 	   exp:
@@ -2971,11 +2973,11 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	     %name VAR
 	     ID
 	   | %name  VARARRAY
-	     $ID ('[' binary ']') <%name INDEXSPEC +>
+	     $ID ('[' binary ']') &lt%name INDEXSPEC +&gt
 	       {
 		 my $self = shift;
-		 my $node =  $self->YYBuildAST(@_);
-		 $node->{line} = $ID->[1];# $_[1]->[1]
+		 my $node =  $self-&gtYYBuildAST(@_);
+		 $node-&gt{line} = $ID-&gt[1];# $_[1]-&gt[1]
 		 return $node;
 	       }
 	 ;
@@ -3048,9 +3050,9 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	    4  S:    %name EMPTY
 	    5	      /* empty */
 	    6	   | %name SA
-	    7	      S A.f { $f->{attr} = "A"; $f; } A
+	    7	      S A.f { $f-&gt{attr} = "A"; $f; } A
 	    8	   | %name SB
-	    9	      S B.f { $f->{attr} = "B"; $f; } B
+	    9	      S B.f { $f-&gt{attr} = "B"; $f; } B
 	   10  ;
 	   11  A : %name A 'a'
 	   12  ;
@@ -3060,7 +3062,7 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 
        See the client program:
 
-	nereida:~/src/perl/YappWithDefaultAction/examples> cat -n useintermediateactiontree.pl
+	nereida:~/src/perl/YappWithDefaultAction/examples&gt cat -n useintermediateactiontree.pl
 	 1  #!/usr/bin/perl -w
 	 2  use strict;
 	 3  use Parse::Eyapp;
@@ -3070,9 +3072,9 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	 7  *A::info = *B::info = sub { $_[0]{attr} };
 	 8  }
 	 9
-	10  my $parser = intermediateactiontree->new();
-	11  my $t = $parser->Run;
-	12  print $t->str,"\n";
+	10  my $parser = intermediateactiontree-&gtnew();
+	11  my $t = $parser-&gtRun;
+	12  print $t-&gtstr,"\n";
 
        When it runs produces this output:
 
@@ -3112,7 +3114,7 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	   16
 	   17	 %%
 	   18	 line:
-	   19	     exp <%name EXPRESSION_LIST + ';'>
+	   19	     exp &lt%name EXPRESSION_LIST + ';'&gt
 	   20	       { $_[1] } /* list of expressions separated by ';' */
 	   21	 ;
 	   22
@@ -3139,12 +3141,12 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	   43	 ;
 	   44
 	   45	 %%
-	   46	 sub _Error { die "Syntax error near ".($_[0]->YYCurval?$_[0]->YYCurval:"end of file")."\n" }
+	   46	 sub _Error { die "Syntax error near ".($_[0]-&gtYYCurval?$_[0]-&gtYYCurval:"end of file")."\n" }
 	   47
 	   48	 sub _Lexer {
 	   49	   my($parser)=shift; # The parser object
 	   50
-	   51	   for ($parser->YYData->{INPUT}) { # Topicalize
+	   51	   for ($parser-&gtYYData-&gt{INPUT}) { # Topicalize
 	   52	     m{\G\s+}gc;
 	   53	     $_ eq '' and return('',undef);
 	   54	     m{\G([0-9]+(?:\.[0-9]+)?)}gc and return('NUM',$1);
@@ -3156,51 +3158,51 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	   60
 	   61	 sub Run {
 	   62	     my($self)=shift;
-	   63	     $self->YYParse( yylex => \&_Lexer, yyerror => \&_Error, );
+	   63	     $self-&gtYYParse( yylex =&gt \&_Lexer, yyerror =&gt \&_Error, );
 	   64	 }
 	   65  }; # end grammar
 	   66
 	   67  our (@all, $uminus);
 	   68
-	   69  Parse::Eyapp->new_grammar( # Create the parser package/class
-	   70	 input=>$grammar,
-	   71	 classname=>'Calc', # The name of the package containing the parser
-	   72	 firstline=>7	    # String $grammar starts at line 7 (for error diagnostics)
+	   69  Parse::Eyapp-&gtnew_grammar( # Create the parser package/class
+	   70	 input=&gt$grammar,
+	   71	 classname=&gt'Calc', # The name of the package containing the parser
+	   72	 firstline=&gt7	    # String $grammar starts at line 7 (for error diagnostics)
 	   73  );
-	   74  my $parser = Calc->new();		# Create a parser
-	   75  $parser->YYData->{INPUT} = "2*-3+b*0;--2\n"; # Set the input
-	   76  my $t = $parser->Run;			# Parse it!
+	   74  my $parser = Calc-&gtnew();		# Create a parser
+	   75  $parser-&gtYYData-&gt{INPUT} = "2*-3+b*0;--2\n"; # Set the input
+	   76  my $t = $parser-&gtRun;			# Parse it!
 	   77  local $Parse::Eyapp::Node::INDENT=2;
-	   78  print "Syntax Tree:",$t->str;
+	   78  print "Syntax Tree:",$t-&gtstr;
 	   79
 	   80  # Let us transform the tree. Define the tree-regular expressions ..
-	   81  my $p = Parse::Eyapp::Treeregexp->new( STRING => q{
+	   81  my $p = Parse::Eyapp::Treeregexp-&gtnew( STRING =&gt q{
 	   82	   { #	Example of support code
-	   83	     my %Op = (PLUS=>'+', MINUS => '-', TIMES=>'*', DIV => '/');
+	   83	     my %Op = (PLUS=&gt'+', MINUS =&gt '-', TIMES=&gt'*', DIV =&gt '/');
 	   84	   }
 	   85	   constantfold: /TIMES|PLUS|DIV|MINUS/:bin(NUM($x), NUM($y))
-	   86	     => {
+	   86	     =&gt {
 	   87	       my $op = $Op{ref($bin)};
-	   88	       $x->{attr} = eval  "$x->{attr} $op $y->{attr}";
+	   88	       $x-&gt{attr} = eval  "$x-&gt{attr} $op $y-&gt{attr}";
 	   89	       $_[0] = $NUM[0];
 	   90	     }
-	   91	   uminus: UMINUS(NUM($x)) => { $x->{attr} = -$x->{attr}; $_[0] = $NUM }
-	   92	   zero_times_whatever: TIMES(NUM($x), .) and { $x->{attr} == 0 } => { $_[0] = $NUM }
-	   93	   whatever_times_zero: TIMES(., NUM($x)) and { $x->{attr} == 0 } => { $_[0] = $NUM }
+	   91	   uminus: UMINUS(NUM($x)) =&gt { $x-&gt{attr} = -$x-&gt{attr}; $_[0] = $NUM }
+	   92	   zero_times_whatever: TIMES(NUM($x), .) and { $x-&gt{attr} == 0 } =&gt { $_[0] = $NUM }
+	   93	   whatever_times_zero: TIMES(., NUM($x)) and { $x-&gt{attr} == 0 } =&gt { $_[0] = $NUM }
 	   94	 },
-	   95	 OUTPUTFILE=> 'main.pm'
+	   95	 OUTPUTFILE=&gt 'main.pm'
 	   96  );
-	   97  $p->generate(); # Create the tranformations
+	   97  $p-&gtgenerate(); # Create the tranformations
 	   98
-	   99  $t->s($uminus); # Transform UMINUS nodes
-	  100  $t->s(@all);    # constant folding and mult. by zero
+	   99  $t-&gts($uminus); # Transform UMINUS nodes
+	  100  $t-&gts(@all);    # constant folding and mult. by zero
 	  101
 	  102  local $Parse::Eyapp::Node::INDENT=0;
-	  103  print "\nSyntax Tree after transformations:\n",$t->str,"\n";
+	  103  print "\nSyntax Tree after transformations:\n",$t-&gtstr,"\n";
 
        gives as result the following output:
 
-	nereida:~/src/perl/YappWithDefaultAction/examples> synopsis.pl
+	nereida:~/src/perl/YappWithDefaultAction/examples&gt synopsis.pl
 	Syntax Tree:
 	EXPRESSION_LIST(
 	  PLUS(
@@ -3296,7 +3298,7 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 		     sub TERMINAL::save_attributes {
 		       # $_[0] is a syntactic terminal
 		       # $_[1] is the father.
-		       push @{$_[1]->{lines}}, $_[0]->[1]; # save the line number
+		       push @{$_[1]-&gt{lines}}, $_[0]-&gt[1]; # save the line number
 		     }
 
    The	"bypass" clause and the "%no bypass" directive
@@ -3360,7 +3362,7 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	  %tree bypass	  # Let us build an abstract syntax tree ...
 
 	  %%
-	  line: exp <%name EXPRESSION_LIST + ';'>  { $_[1] }
+	  line: exp &lt%name EXPRESSION_LIST + ';'&gt  { $_[1] }
 	  ;
 
 	  exp:
@@ -3379,44 +3381,44 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 
 	our (@all, $uminus);
 
-	Parse::Eyapp->new_grammar( # Create the parser package/class
-	  input=>$grammar,
-	  classname=>'Calc', # The name of the package containing the parser
-	  firstline=>7	     # String $grammar starts at line 7 (for error diagnostics)
+	Parse::Eyapp-&gtnew_grammar( # Create the parser package/class
+	  input=&gt$grammar,
+	  classname=&gt'Calc', # The name of the package containing the parser
+	  firstline=&gt7	     # String $grammar starts at line 7 (for error diagnostics)
 	);
-	my $parser = Calc->new();		 # Create a parser
-	$parser->YYData->{INPUT} = "a=2*-3+b*0\n"; # Set the input
-	my $t = $parser->Run;			 # Parse it!
+	my $parser = Calc-&gtnew();		 # Create a parser
+	$parser-&gtYYData-&gt{INPUT} = "a=2*-3+b*0\n"; # Set the input
+	my $t = $parser-&gtRun;			 # Parse it!
 
-	print "\n************\n".$t->str."\n************\n";
+	print "\n************\n".$t-&gtstr."\n************\n";
 
 	# Let us transform the tree. Define the tree-regular expressions ..
-	my $p = Parse::Eyapp::Treeregexp->new( STRING => q{
+	my $p = Parse::Eyapp::Treeregexp-&gtnew( STRING =&gt q{
 	  { #  Example of support code
-	    my %Op = (PLUS=>'+', MINUS => '-', TIMES=>'*', DIV => '/');
+	    my %Op = (PLUS=&gt'+', MINUS =&gt '-', TIMES=&gt'*', DIV =&gt '/');
 	  }
 	  constantfold: /TIMES|PLUS|DIV|MINUS/:bin(NUM, NUM)
-	    => {
+	    =&gt {
 	      my $op = $Op{ref($_[0])};
-	      $NUM[0]->{attr} = eval  "$NUM[0]->{attr} $op $NUM[1]->{attr}";
+	      $NUM[0]-&gt{attr} = eval  "$NUM[0]-&gt{attr} $op $NUM[1]-&gt{attr}";
 	      $_[0] = $NUM[0];
 	    }
-	  zero_times_whatever: TIMES(NUM, .) and { $NUM->{attr} == 0 } => { $_[0] = $NUM }
-	  whatever_times_zero: TIMES(., NUM) and { $NUM->{attr} == 0 } => { $_[0] = $NUM }
-	  uminus: UMINUS(NUM) => { $NUM->{attr} = -$NUM->{attr}; $_[0] = $NUM }
+	  zero_times_whatever: TIMES(NUM, .) and { $NUM-&gt{attr} == 0 } =&gt { $_[0] = $NUM }
+	  whatever_times_zero: TIMES(., NUM) and { $NUM-&gt{attr} == 0 } =&gt { $_[0] = $NUM }
+	  uminus: UMINUS(NUM) =&gt { $NUM-&gt{attr} = -$NUM-&gt{attr}; $_[0] = $NUM }
 	  },
-	  OUTPUTFILE=> 'main.pm'
+	  OUTPUTFILE=&gt 'main.pm'
 	);
-	$p->generate(); # Create the tranformations
+	$p-&gtgenerate(); # Create the tranformations
 
-	$t->s(@all);	# constant folding and mult. by zero
+	$t-&gts(@all);	# constant folding and mult. by zero
 
-	print $t->str,"\n";
+	print $t-&gtstr,"\n";
 
        when running this example with input "a=2*-3+b*0\n" we obtain the
        following output:
 
-	nereida:~/src/perl/YappWithDefaultAction/examples> bypass.pl
+	nereida:~/src/perl/YappWithDefaultAction/examples&gt bypass.pl
 
 	************
 	EXPRESSION_LIST(ASSIGN(TERMINAL[a],PLUS(TIMES(NUM[2],UMINUS(NUM[3])),TIMES(VAR[b],NUM[0]))))
@@ -3492,21 +3494,21 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	   76  }; # end grammar
 	   77
 	   78
-	   79  Parse::Eyapp->new_grammar(
-	   80	 input=>$grammar,
-	   81	 classname=>'Alias',
-	   82	 firstline =>7,
-	   83	 outputfile => 'main',
+	   79  Parse::Eyapp-&gtnew_grammar(
+	   80	 input=&gt$grammar,
+	   81	 classname=&gt'Alias',
+	   82	 firstline =&gt7,
+	   83	 outputfile =&gt 'main',
 	   84  );
-	   85  my $parser = Alias->new();
-	   86  $parser->YYData->{INPUT} = "a = -(2*3+5-1)\n";
-	   87  my $t = $parser->Run;
+	   85  my $parser = Alias-&gtnew();
+	   86  $parser-&gtYYData-&gt{INPUT} = "a = -(2*3+5-1)\n";
+	   87  my $t = $parser-&gtRun;
 	   88  $Parse::Eyapp::Node::INDENT=0;
-	   89  print $t->VAR->str."\n"; 	    # a
+	   89  print $t-&gtVAR-&gtstr."\n"; 	    # a
 	   90  print "***************\n";
-	   91  print $t->exp->exp->left->str."\n";  # 2*3+5
+	   91  print $t-&gtexp-&gtexp-&gtleft-&gtstr."\n";  # 2*3+5
 	   92  print "***************\n";
-	   93  print $t->exp->exp->right->str."\n"; # 1
+	   93  print $t-&gtexp-&gtexp-&gtright-&gtstr."\n"; # 1
 
        The tree $t for the expression "a = -(2*3+5-1)\n" is:
 
@@ -3582,10 +3584,10 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	   41  %%
 	   42
 	   43  sub _Error {
-	   44	       exists $_[0]->YYData->{ERRMSG}
+	   44	       exists $_[0]-&gtYYData-&gt{ERRMSG}
 	   45	   and do {
-	   46	       print $_[0]->YYData->{ERRMSG};
-	   47	       delete $_[0]->YYData->{ERRMSG};
+	   46	       print $_[0]-&gtYYData-&gt{ERRMSG};
+	   47	       delete $_[0]-&gtYYData-&gt{ERRMSG};
 	   48	       return;
 	   49	   };
 	   50	   print "Syntax error.\n";
@@ -3594,13 +3596,13 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	   53  sub _Lexer {
 	   54	   my($parser)=shift;
 	   55
-	   56	       $parser->YYData->{INPUT}
-	   57	   or  $parser->YYData->{INPUT} = <STDIN>
+	   56	       $parser-&gtYYData-&gt{INPUT}
+	   57	   or  $parser-&gtYYData-&gt{INPUT} = &ltSTDIN&gt
 	   58	   or  return('',undef);
 	   59
-	   60	   $parser->YYData->{INPUT}=~s/^\s+//;
+	   60	   $parser-&gtYYData-&gt{INPUT}=~s/^\s+//;
 	   61
-	   62	   for ($parser->YYData->{INPUT}) {
+	   62	   for ($parser-&gtYYData-&gt{INPUT}) {
 	   63	       s/^([0-9]+(?:\.[0-9]+)?)//
 	   64		       and return('NUM',$1);
 	   65	       s/^([A-Za-z][A-Za-z0-9_]*)//
@@ -3612,38 +3614,38 @@ ABSTRACT SYNTAX TREES: %tree AND %name
 	   71
 	   72  sub Run {
 	   73	   my($self)=shift;
-	   74	   $self->YYParse( yylex => \&_Lexer, yyerror => \&_Error,
-	   75			   #yydebug =>0xFF
+	   74	   $self-&gtYYParse( yylex =&gt \&_Lexer, yyerror =&gt \&_Error,
+	   75			   #yydebug =&gt0xFF
 	   76			 );
 	   77  }
 	   78  }; # end grammar
 	   79
 	   80
 	   81  $Data::Dumper::Indent = 1;
-	   82  Parse::Eyapp->new_grammar(
-	   83	 input=>$grammar,
-	   84	 classname=>'Rule6',
-	   85	 firstline =>7,
-	   86	 outputfile => 'Calc.pm',
+	   82  Parse::Eyapp-&gtnew_grammar(
+	   83	 input=&gt$grammar,
+	   84	 classname=&gt'Rule6',
+	   85	 firstline =&gt7,
+	   86	 outputfile =&gt 'Calc.pm',
 	   87  );
-	   88  my $parser = Rule6->new();
-	   89  $parser->YYData->{INPUT} = "a = -(2*3+5-1)\n";
-	   90  my $t = $parser->Run;
+	   88  my $parser = Rule6-&gtnew();
+	   89  $parser-&gtYYData-&gt{INPUT} = "a = -(2*3+5-1)\n";
+	   90  my $t = $parser-&gtRun;
 	   91  print "\n***** Before ******\n";
 	   92  print Dumper($t);
 	   93
-	   94  my $attgram = new Language::AttributeGrammar <<'EOG';
+	   94  my $attgram = new Language::AttributeGrammar &lt&lt'EOG';
 	   95
 	   96  # Compute the expression
-	   97  NUM:    $/.val = { $<attr> }
-	   98  TIMES:  $/.val = { $<left>.val * $<right>.val }
-	   99  PLUS:   $/.val = { $<left>.val + $<right>.val }
-	  100  MINUS:  $/.val = { $<left>.val - $<right>.val }
-	  101  UMINUS: $/.val = { -$<exp>.val }
-	  102  ASSIGN: $/.val = { $<exp>.val }
+	   97  NUM:    $/.val = { $&ltattr&gt }
+	   98  TIMES:  $/.val = { $&ltleft&gt.val * $&ltright&gt.val }
+	   99  PLUS:   $/.val = { $&ltleft&gt.val + $&ltright&gt.val }
+	  100  MINUS:  $/.val = { $&ltleft&gt.val - $&ltright&gt.val }
+	  101  UMINUS: $/.val = { -$&ltexp&gt.val }
+	  102  ASSIGN: $/.val = { $&ltexp&gt.val }
 	  103  EOG
 	  104
-	  105  my $res = $attgram->apply($t, 'val');
+	  105  my $res = $attgram-&gtapply($t, 'val');
 	  106
 	  107  $Data::Dumper::Indent = 1;
 	  108  print "\n***** After ******\n";
@@ -3684,16 +3686,16 @@ SOLVING CONFLICTS WITH THE POSTPONED CONFLICT STRATEGY
    Postponed Conflict Resolution: Reduce-Reduce Conflicts
        Let us assume we have a reduce-reduce conflict between to productions
 
-			     A -> alpha .
-			     B -> beta .
+			     A -&gt alpha .
+			     B -&gt beta .
 
        for some token "@". Let also assume that production
 
-			     A -> alpha
+			     A -&gt alpha
 
        has name "ruleA" and production
 
-			     B -> beta
+			     B -&gt beta
 
        has name "ruleB".
 
@@ -3702,8 +3704,8 @@ SOLVING CONFLICTS WITH THE POSTPONED CONFLICT STRATEGY
        with the new %PREC directive. In this case at then end of the involved
        productions:
 
-			     A -> alpha %PREC IsAorB
-			     B -> beta	$PREC IsAorB
+			     A -&gt alpha %PREC IsAorB
+			     B -&gt beta	$PREC IsAorB
 
        The "IsAorB" identifier is called the conflict name.
 
@@ -3715,10 +3717,10 @@ SOLVING CONFLICTS WITH THE POSTPONED CONFLICT STRATEGY
 				 my $self = shift;
 
 				 if (looks_like_A($self)) {
-				   $self->YYSetReduce('@', 'ruleA' );
+				   $self-&gtYYSetReduce('@', 'ruleA' );
 				 }
 				 else {
-				   $self->YYSetReduce('@', 'ruleB' );
+				   $self-&gtYYSetReduce('@', 'ruleB' );
 				 }
 			      }
 
@@ -3745,7 +3747,7 @@ SOLVING CONFLICTS WITH THE POSTPONED CONFLICT STRATEGY
 	    7
 	    8  =item * File pascalenumeratedvsrange.eyp in examples/debuggintut/
 	    9
-	   10  =item * The Bison manual L<http://www.gnu.org/software/bison/manual/html_mono/bison.html>
+	   10  =item * The Bison manual L&lthttp://www.gnu.org/software/bison/manual/html_mono/bison.html&gt
 	   11
 	   12  =back
 	   13
@@ -3779,15 +3781,15 @@ SOLVING CONFLICTS WITH THE POSTPONED CONFLICT STRATEGY
 	   41	 #Receives a Parse::Eyapp object describing the grammar
 	   42	 my $self = shift;
 	   43
-	   44	 $self->tokennames(
-	   45	   '(' => 'LP',
-	   46	   '..' => 'DOTDOT',
-	   47	   ',' => 'COMMA',
-	   48	   ')' => 'RP',
-	   49	   '+' => 'PLUS',
-	   50	   '-' => 'MINUS',
-	   51	   '*' => 'TIMES',
-	   52	   '/' => 'DIV',
+	   44	 $self-&gttokennames(
+	   45	   '(' =&gt 'LP',
+	   46	   '..' =&gt 'DOTDOT',
+	   47	   ',' =&gt 'COMMA',
+	   48	   ')' =&gt 'RP',
+	   49	   '+' =&gt 'PLUS',
+	   50	   '-' =&gt 'MINUS',
+	   51	   '*' =&gt 'TIMES',
+	   52	   '/' =&gt 'DIV',
 	   53	 );
 	   54
 	   55	 # returns the handler that will give names
@@ -3834,24 +3836,24 @@ SOLVING CONFLICTS WITH THE POSTPONED CONFLICT STRATEGY
 	   96  rangeORenum: /* empty: postponed conflict resolution */
 	   97	     {
 	   98		 my $parser = shift;
-	   99		 if (${$parser->input()} =~ m{\G(?= $RESTOFLIST)}gcx) {
-	  100		     $parser->YYSetReduce(')', 'EnumID' );
+	   99		 if (${$parser-&gtinput()} =~ m{\G(?= $RESTOFLIST)}gcx) {
+	  100		     $parser-&gtYYSetReduce(')', 'EnumID' );
 	  101		   }
 	  102		   else {
-	  103		     $parser->YYSetReduce(')', 'RangeID' );
+	  103		     $parser-&gtYYSetReduce(')', 'RangeID' );
 	  104		   }
 	  105	     }
 	  106  ;
 	  107
 	  108  %%
 	  109
-	  110  __PACKAGE__->lexer(
+	  110  __PACKAGE__-&gtlexer(
 	  111	 sub {
 	  112	   my $parser = shift;
 	  113
-	  114	   for (${$parser->input()}) {	  # contextualize
+	  114	   for (${$parser-&gtinput()}) {	  # contextualize
 	  115	     m{\G(\s*)}gc;
-	  116	     $parser->tokenline($1 =~ tr{\n}{});
+	  116	     $parser-&gttokenline($1 =~ tr{\n}{});
 	  117
 	  118	     m{\Gtype\b}gic		    and return ('TYPE', 'TYPE');
 	  119
@@ -3870,7 +3872,7 @@ SOLVING CONFLICTS WITH THE POSTPONED CONFLICT STRATEGY
 	  132
 	  133  unless (caller()) {
 	  134	 $Parse::Eyapp::Node::INDENT = 1;
-	  135	 my $prompt = << 'EOP';
+	  135	 my $prompt = &lt&lt 'EOP';
 	  136  Try this input:
 	  137	   type
 	  138	   r
@@ -3888,7 +3890,7 @@ SOLVING CONFLICTS WITH THE POSTPONED CONFLICT STRATEGY
 	  150
 	  151  Press CTRL-D (CTRL-W in windows) to produce the end-of-file
 	  152  EOP
-	  153	 __PACKAGE__->main($prompt);
+	  153	 __PACKAGE__-&gtmain($prompt);
 	  154  }
 
        This example also illustrates how to modify the default production
@@ -3987,8 +3989,8 @@ SOLVING CONFLICTS WITH THE POSTPONED CONFLICT STRATEGY
 	 ~/LEyapp/examples/debuggingtut$ sed -ne '/^St.*13:/,/^St.*14/p' DynamicallyChangingTheParser.output
 	 State 13:
 
-	     ds -> D conflict . ';' ds	 (Rule 6)
-	     ds -> D conflict .  (Rule 7)
+	     ds -&gt D conflict . ';' ds	 (Rule 6)
+	     ds -&gt D conflict .  (Rule 7)
 
 	     ';' shift, and go to state 16
 
@@ -3999,11 +4001,11 @@ SOLVING CONFLICTS WITH THE POSTPONED CONFLICT STRATEGY
        The "conflict" handler below sets the LR action to reduce by the
        production with name "D1"
 
-			ds -> D
+			ds -&gt D
 
        in the presence of token ';' if indeed is the last 'D', that is, if:
 
-	      ${$self->input()} =~ m{^\s*;\s*S}
+	      ${$self-&gtinput()} =~ m{^\s*;\s*S}
 
        Otherwise we set the "shift" action via a call to the "YYSetShift"
        method.
@@ -4047,11 +4049,11 @@ SOLVING CONFLICTS WITH THE POSTPONED CONFLICT STRATEGY
 	   36	     {
 	   37	       my $self = shift;
 	   38
-	   39	       if (${$self->input()} =~ m{^\s*;\s*S}) {
-	   40		 $self->YYSetReduce(';', 'D1' )
+	   39	       if (${$self-&gtinput()} =~ m{^\s*;\s*S}) {
+	   40		 $self-&gtYYSetReduce(';', 'D1' )
 	   41	       }
 	   42	       else {
-	   43		 $self->YYSetShift(';')
+	   43		 $self-&gtYYSetShift(';')
 	   44	       }
 	   45
 	   46	       undef; # skip this node in the AST
@@ -4060,8 +4062,8 @@ SOLVING CONFLICTS WITH THE POSTPONED CONFLICT STRATEGY
 	   49
 	   50  %%
 	   51
-	   52  my $prompt = 'Provide a statement like "{D; S} {D; D; S}" and press <CR><CTRL-D>: ';
-	   53  __PACKAGE__->main($prompt) unless caller;
+	   52  my $prompt = 'Provide a statement like "{D; S} {D; D; S}" and press &ltCR&gt&ltCTRL-D&gt: ';
+	   53  __PACKAGE__-&gtmain($prompt) unless caller;
 
 NAMING SCHEMES
        Explicit names can be given to grammar productions via the %name
@@ -4100,7 +4102,7 @@ NAMING SCHEMES
 	   13  sub exp_is_NUM::info {
 	   14	 my $self = shift;
 	   15
-	   16	 $self->{attr}[0];
+	   16	 $self-&gt{attr}[0];
 	   17  }
 	   18
 	   19  *exp_is_VAR::info = *var_is_VAR::info = \&exp_is_NUM::info;
@@ -4110,13 +4112,13 @@ NAMING SCHEMES
 	   23	 #Receives a Parse::Eyapp object describing the grammar
 	   24	 my $self = shift;
 	   25
-	   26	 $self->tokennames(
-	   27	   '=' => 'ASSIGN',
-	   28	   '+' => 'PLUS',
-	   29	   '*' => 'TIMES',
-	   30	   '-' => 'MINUS',
-	   31	   '/' => 'DIV',
-	   32	   '^' => 'EXP',
+	   26	 $self-&gttokennames(
+	   27	   '=' =&gt 'ASSIGN',
+	   28	   '+' =&gt 'PLUS',
+	   29	   '*' =&gt 'TIMES',
+	   30	   '-' =&gt 'MINUS',
+	   31	   '/' =&gt 'DIV',
+	   32	   '^' =&gt 'EXP',
 	   33	 );
 	   34
 	   35	 # returns the handler that will give names
@@ -4149,8 +4151,8 @@ NAMING SCHEMES
 	   62  %%
 	   63
 	   64  unless (caller) {
-	   65	 my $t = __PACKAGE__->main(@ARGV);
-	   66	 print $t->str."\n";
+	   65	 my $t = __PACKAGE__-&gtmain(@ARGV);
+	   66	 print $t-&gtstr."\n";
 	   67  }
 
        The example uses a naming scheme that is provided by "Parse::Eyapp":
@@ -4179,13 +4181,13 @@ NAMING SCHEMES
 	   23	 #Receives a Parse::Eyapp object describing the grammar
 	   24	 my $self = shift;
 	   25
-	   26	 $self->tokennames(
-	   27	   '=' => 'ASSIGN',
-	   28	   '+' => 'PLUS',
-	   29	   '*' => 'TIMES',
-	   30	   '-' => 'MINUS',
-	   31	   '/' => 'DIV',
-	   32	   '^' => 'EXP',
+	   26	 $self-&gttokennames(
+	   27	   '=' =&gt 'ASSIGN',
+	   28	   '+' =&gt 'PLUS',
+	   29	   '*' =&gt 'TIMES',
+	   30	   '-' =&gt 'MINUS',
+	   31	   '/' =&gt 'DIV',
+	   32	   '^' =&gt 'EXP',
 	   33	 );
 	   34
 	   35	 # returns the handler that will give names
@@ -4227,11 +4229,11 @@ NAMING SCHEMES
 	    8	   return $lhs.'_is_empty';
 	    9	 }
 	   10
-	   11	 my $names = $self->{GRAMMAR}{TOKENNAMES} || {};
+	   11	 my $names = $self-&gt{GRAMMAR}{TOKENNAMES} || {};
 	   12	 for (@rhs) {
-	   13	   if ($self->is_token($_)) {
+	   13	   if ($self-&gtis_token($_)) {
 	   14	     s/^'(.*)'$/$1/;
-	   15	     my $name = $names->{$_} || '';
+	   15	     my $name = $names-&gt{$_} || '';
 	   16	     unless ($name) {
 	   17	       $name = $_ if /^\w+$/;
 	   18	     }
@@ -4254,41 +4256,41 @@ NAMING SCHEMES
        A "Parse::Eyapp" object holds the information about the "Eyapp" input
        grammar: parsing tables, conflicts, semantic actions, etc.
 
-   Parse::Eyapp->new_grammar
+   Parse::Eyapp-&gtnew_grammar
        To translate an Eyapp grammar you must use either the eyapp script or
        call the class constructor "new_grammar".  The "Parse::Eyapp" method
-       "Parse::Eyapp->new_grammar(input=>$grammar)" creates a package
+       "Parse::Eyapp-&gtnew_grammar(input=&gt$grammar)" creates a package
        containing the code that implements a LALR parser for the input
        grammar:
 
-	   my $p = Parse::Eyapp->new_grammar(
-	     input=>$translationscheme,
-	     classname=>'Grammar',
-	     firstline => 6,
-	     outputfile => 'main'
+	   my $p = Parse::Eyapp-&gtnew_grammar(
+	     input=&gt$translationscheme,
+	     classname=&gt'Grammar',
+	     firstline =&gt 6,
+	     outputfile =&gt 'main'
 	   );
-	   die $p->Warnings if $p->Warnings;
-	   my $new_parser_for_grammar = Grammar->new();
+	   die $p-&gtWarnings if $p-&gtWarnings;
+	   my $new_parser_for_grammar = Grammar-&gtnew();
 
        The method returns a "Parse::Eyapp" object.
 
        You can check the object to see if there were problems during the
        construction of the parser for your grammar:
 
-		       die $p->qtables() if $p->Warnings;
+		       die $p-&gtqtables() if $p-&gtWarnings;
 
        The method "Warnings" returns the warnings produced during the parsing.
        The absence of warnings indicates the correctness of the input program.
 
-       The call to "Parse::Eyapp->new_grammar" generates a class/package
+       The call to "Parse::Eyapp-&gtnew_grammar" generates a class/package
        containing the parser for your input grammar. Such package lives in the
        namespace determined by the "classname" argument of "new_grammar". To
        create a parser for the grammar you call the constructor "new" of the
        just created class:
 
-	   my $new_parser_for_grammar = Grammar->new();
+	   my $new_parser_for_grammar = Grammar-&gtnew();
 
-       The meaning of the arguments of	"Parse::Eyapp->new_grammar" is:
+       The meaning of the arguments of	"Parse::Eyapp-&gtnew_grammar" is:
 
        -   input
 	   The string containing the input
@@ -4310,56 +4312,56 @@ NAMING SCHEMES
 	   filename (with extension .pm) and the LALR information ambiguities
 	   and conflicts) in the specified filename with extension .output.
 
-   $eyapp->qtables
+   $eyapp-&gtqtables
        Returns a string containing information on warnings, ambiguities,
        conflicts, rules and the generated DFA tables.  Is the same information
        in "file.output" when using the command "eyapp -v file.eyp".
 
-	 my $p = Parse::Eyapp->new_grammar(
-	   input=>$eyappprogram,
-	   classname=>'SimpleC',
-	   outputfile => 'SimpleC.pm',
-	   firstline=>12,
+	 my $p = Parse::Eyapp-&gtnew_grammar(
+	   input=&gt$eyappprogram,
+	   classname=&gt'SimpleC',
+	   outputfile =&gt 'SimpleC.pm',
+	   firstline=&gt12,
 	 );
 
-	 print $p->qtables() if $p->Warnings;
+	 print $p-&gtqtables() if $p-&gtWarnings;
 
-   $eyapp->outputtables
+   $eyapp-&gtoutputtables
        It receives two arguments
 
-	 $eyapp->outputtables($path, $base)
+	 $eyapp-&gtoutputtables($path, $base)
 
        Similar to "qtables" but prints the information on warnings, conflicts
        and rules to the specified "$path/$base".
 
-   $eyapp->Warnings
+   $eyapp-&gtWarnings
        Returns the warnings resulting from compiling the grammar:
 
-	 my $p = Parse::Eyapp->new_grammar(
-	   input=>$translationscheme,
-	   classname=>'main',
-	   firstline => 6,
-	   outputfile => 'main'
+	 my $p = Parse::Eyapp-&gtnew_grammar(
+	   input=&gt$translationscheme,
+	   classname=&gt'main',
+	   firstline =&gt 6,
+	   outputfile =&gt 'main'
 	 );
-	 die $p->Warnings if $p->Warnings;
+	 die $p-&gtWarnings if $p-&gtWarnings;
 
        Returns the empty string if there were no conflicts.
 
-   $eyapp->ShowDfa
+   $eyapp-&gtShowDfa
        Returns a string with the information about the LALR generated DFA.
 
-   $eyapp->Summary
+   $eyapp-&gtSummary
        Returns a string with summary information about the compilation of the
        grammar. No arguments.
 
-   $eyapp->Conflicts
+   $eyapp-&gtConflicts
        Returns a string with summary information about the conflicts that
        arose when compiling the grammar. No arguments.
 
-   $eyapp->DfaTable
+   $eyapp-&gtDfaTable
        Returns a string with the parsing tables
 
-   $eyapp->tokennames
+   $eyapp-&gttokennames
        Used when defining a naming scheme to associate identifiers with
        (usually string) tokens.  See section NAMING SCHEMES of Parse::Eyapp
 
@@ -4424,10 +4426,10 @@ COMPILING WITH "eyapp" AND "treereg"
 	   27	 my $power;
 	   28  }
 	   29  mult2shift: TIMES($e, NUM($m))
-	   30	 and { $power = log2($m->{attr}); (1 << $power) == $m->{attr} } => {
-	   31	   $_[0]->delete(1);
-	   32	   $_[0]->{shift} = $power;
-	   33	   $_[0]->type('SHIFTLEFT');
+	   30	 and { $power = log2($m-&gt{attr}); (1 &lt&lt $power) == $m-&gt{attr} } =&gt {
+	   31	   $_[0]-&gtdelete(1);
+	   32	   $_[0]-&gt{shift} = $power;
+	   33	   $_[0]-&gttype('SHIFTLEFT');
 	   34	 }
 
        Note that auxiliary support code can be inserted at any point between
@@ -4489,12 +4491,12 @@ COMPILING WITH "eyapp" AND "treereg"
 	   26  insert_function('TERMINAL::info', \&TERMINAL::attr);
 	   27
 	   28  my $parser = new Rule5();
-	   29  $parser->slurp_file('','Arithmetic expression: ', "\n");
-	   30  my $t = $parser->Run;
-	   31  unless ($parser->YYNberr) {
-	   32	 print "***********\n",$t->str,"\n";
-	   33	 $t->s(@Shift::all);
-	   34	 print "***********\n",$t->str,"\n";
+	   29  $parser-&gtslurp_file('','Arithmetic expression: ', "\n");
+	   30  my $t = $parser-&gtRun;
+	   31  unless ($parser-&gtYYNberr) {
+	   32	 print "***********\n",$t-&gtstr,"\n";
+	   33	 $t-&gts(@Shift::all);
+	   34	 print "***********\n",$t-&gtstr,"\n";
 	   35  }
 
        Lines 25 and 26 provide the node classes "TERMINAL" and "SHIFTLEFT" of
@@ -4558,19 +4560,19 @@ COMPILING WITH "eyapp" AND "treereg"
 	   23
 	   24  sub R::TERMINAL::info { $_[0]{attr} }
 	   25
-	   26  my $parser = new Calc(yyprefix => "R::");
+	   26  my $parser = new Calc(yyprefix =&gt "R::");
 	   27			  # stdin, prompt	       , read one line at time
-	   28  $parser->slurp_file('','Arithmetic expression: ', "\n");
+	   28  $parser-&gtslurp_file('','Arithmetic expression: ', "\n");
 	   29
-	   30  my $t = $parser->YYParse;
+	   30  my $t = $parser-&gtYYParse;
 	   31
-	   32  unless ($parser->YYNberr) {
+	   32  unless ($parser-&gtYYNberr) {
 	   33	 print "\n***** Tree before the transformations ******\n";
-	   34	 print $t->str."\n";
+	   34	 print $t-&gtstr."\n";
 	   35
-	   36	 $t->s(@T::all);
+	   36	 $t-&gts(@T::all);
 	   37	 print "\n***** Tree after the transformations were applied ******\n";
-	   38	 print $t->str."\n";
+	   38	 print $t-&gtstr."\n";
 	   39  }
 
        running the program produces the following output:
@@ -4621,17 +4623,17 @@ DEPENDENCIES
        It seems that List::Util is in the core of Perl distributions since
        version 5.73:
 
-	 > perl -MModule::CoreList -e 'print Module::CoreList->first_release("List::Util")'
+	 &gt perl -MModule::CoreList -e 'print Module::CoreList-&gtfirst_release("List::Util")'
 	 5.007003
 
        and Data::Dumper is also in the core since 5.5:
 
-	 > perl -MModule::CoreList -e 'print Module::CoreList->first_release("Data::Dumper")'
+	 &gt perl -MModule::CoreList -e 'print Module::CoreList-&gtfirst_release("Data::Dumper")'
 	 5.005
 
        and Pod::Usage is also in the core since 5.6:
 
-	 > perl -MModule::CoreList -e 'print Module::CoreList->first_release("Pod::Usage")'
+	 &gt perl -MModule::CoreList -e 'print Module::CoreList-&gtfirst_release("Pod::Usage")'
 	 5.006
 
        I also recommend the following modules:
@@ -4695,14 +4697,14 @@ BUGS AND LIMITATIONS
 
 SEE ALSO
        o   The project home is at http://code.google.com/p/parse-eyapp/
-	   <http://code.google.com/p/parse-eyapp/>.  Use a subversion client
+	   &lthttp://code.google.com/p/parse-eyapp/&gt.  Use a subversion client
 	   to anonymously check out the latest project source code:
 
 	      svn checkout http://parse-eyapp.googlecode.com/svn/trunk/ parse-eyapp-read-only
 
        o   The tutorial Parsing Strings and Trees with "Parse::Eyapp" (An
 	   Introduction to Compiler Construction in seven pages) in
-	   <http://nereida.deioc.ull.es/~pl/eyapsimple/>
+	   &lthttp://nereida.deioc.ull.es/~pl/eyapsimple/&gt
 
        o   Parse::Eyapp, Parse::Eyapp::eyapplanguageref,
 	   Parse::Eyapp::debuggingtut, Parse::Eyapp::defaultactionsintro,
@@ -4712,34 +4714,34 @@ SEE ALSO
 	   Parse::Eyapp::datagenerationtut
 
        o   The pdf file in
-	   <http://nereida.deioc.ull.es/~pl/perlexamples/languageintro.pdf>
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/languageintro.pdf&gt
 
        o   The pdf file in
-	   <http://nereida.deioc.ull.es/~pl/perlexamples/debuggingtut.pdf>
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/debuggingtut.pdf&gt
 
        o   The pdf file in
-	   <http://nereida.deioc.ull.es/~pl/perlexamples/eyapplanguageref.pdf>
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/eyapplanguageref.pdf&gt
 
        o   The pdf file in
-	   <http://nereida.deioc.ull.es/~pl/perlexamples/Treeregexp.pdf>
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/Treeregexp.pdf&gt
 
        o   The pdf file in
-	   <http://nereida.deioc.ull.es/~pl/perlexamples/Node.pdf>
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/Node.pdf&gt
 
        o   The pdf file in
-	   <http://nereida.deioc.ull.es/~pl/perlexamples/YATW.pdf>
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/YATW.pdf&gt
 
        o   The pdf file in
-	   <http://nereida.deioc.ull.es/~pl/perlexamples/Eyapp.pdf>
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/Eyapp.pdf&gt
 
        o   The pdf file in
-	   <http://nereida.deioc.ull.es/~pl/perlexamples/Base.pdf>
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/Base.pdf&gt
 
        o   The pdf file in
-	   <http://nereida.deioc.ull.es/~pl/perlexamples/translationschemestut.pdf>
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/translationschemestut.pdf&gt
 
        o   The pdf file in
-	   <http://nereida.deioc.ull.es/~pl/perlexamples/treematchingtut.pdf>
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/treematchingtut.pdf&gt
 
        o   perldoc eyapp,
 
@@ -4748,19 +4750,19 @@ SEE ALSO
        o   perldoc vgg,
 
        o   The Syntax Highlight file for vim at
-	   <http://www.vim.org/scripts/script.php?script_id=2453> and
-	   <http://nereida.deioc.ull.es/~vim/>
+	   &lthttp://www.vim.org/scripts/script.php?script_id=2453&gt and
+	   &lthttp://nereida.deioc.ull.es/~vim/&gt
 
        o   Analisis Lexico y Sintactico, (Notes for a course in compiler
 	   construction) by  Casiano Rodriguez-Leon.  Available at
-	   <http://nereida.deioc.ull.es/~pl/perlexamples/> Is the more
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/&gt Is the more
 	   complete and reliable source for Parse::Eyapp. However is in
 	   Spanish.
 
        o   Parse::Yapp,
 
        o   Man pages of yacc(1) and bison(1),
-	   <http://www.delorie.com/gnu/docs/bison/bison.html>
+	   &lthttp://www.delorie.com/gnu/docs/bison/bison.html&gt
 
        o   Language::AttributeGrammar
 
@@ -4772,8 +4774,8 @@ SEE ALSO
 
        o   ocamlyacc tutorial at
 	   http://plus.kaist.ac.kr/~shoh/ocaml/ocamllex-ocamlyacc/ocamlyacc-tutorial/ocamlyacc-tutorial.html
-	   <http://plus.kaist.ac.kr/~shoh/ocaml/ocamllex-ocamlyacc/ocamlyacc-
-	   tutorial/ocamlyacc-tutorial.html>
+	   &lthttp://plus.kaist.ac.kr/~shoh/ocaml/ocamllex-ocamlyacc/ocamlyacc-
+	   tutorial/ocamlyacc-tutorial.html&gt
 
 REFERENCES
        o   The classic Dragon's book Compilers: Principles, Techniques, and
@@ -4781,16 +4783,16 @@ REFERENCES
 	   Wesley 1986)
 
        o   CS2121: The Implementation and Power of Programming Languages (See
-	   <http://www.cs.man.ac.uk/~pjj>,
-	   <http://www.cs.man.ac.uk/~pjj/complang/g2lr.html> and
-	   <http://www.cs.man.ac.uk/~pjj/cs2121/ho/ho.html>) by Pete Jinks
+	   &lthttp://www.cs.man.ac.uk/~pjj&gt,
+	   &lthttp://www.cs.man.ac.uk/~pjj/complang/g2lr.html&gt and
+	   &lthttp://www.cs.man.ac.uk/~pjj/cs2121/ho/ho.html&gt) by Pete Jinks
 
 CONTRIBUTORS
-       o Hal Finkel <http://www.halssoftware.com/>
+       o Hal Finkel &lthttp://www.halssoftware.com/&gt
 
-       o G. Williams <http://kasei.us/>
+       o G. Williams &lthttp://kasei.us/&gt
 
-       o Thomas L. Shinnick <http://search.cpan.org/~tshinnic/>
+       o Thomas L. Shinnick &lthttp://search.cpan.org/~tshinnic/&gt
 
        o Frank Leray
 
@@ -4800,7 +4802,7 @@ AUTHOR
 ACKNOWLEDGMENTS
        This work has been supported by CEE (FEDER) and the Spanish Ministry of
        Educacion y Ciencia through Plan Nacional I+D+I number
-       TIN2005-08818-C04-04 (ULL::OPLINK project <http://www.oplink.ull.es/>).
+       TIN2005-08818-C04-04 (ULL::OPLINK project &lthttp://www.oplink.ull.es/&gt).
        Support from Gobierno de Canarias was through GC02210601 (Grupos
        Consolidados).  The University of La Laguna has also supported my work
        in many ways and for many years.
@@ -4831,6 +4833,6 @@ LICENCE AND COPYRIGHT
 
 
 perl v5.12.4			  2011-02-16		       Parse::Eyapp(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

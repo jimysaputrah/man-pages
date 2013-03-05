@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="tops is a tool that performs in-place  substitutions  on  source  files..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>tops - perform in-place substitutions on code.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 TOPS(1) 							       TOPS(1)
 
 
@@ -109,7 +111,7 @@ OPTIONS
        ular syntax element rather than a literal string. The tokens  have  the
        form:
 
-       <type label>
+       &lttype label&gt
 
        where:
 
@@ -133,30 +135,30 @@ OPTIONS
        w      Matches white space, including comments.
 
        In a replacemethod rule, three subtokens are defined for each token you
-       specify	in  the  selector.  For  each  token  <foo>  in  the selector,
+       specify	in  the  selector.  For  each  token  &ltfoo&gt  in  the selector,
        replacemethod defines the following.  The  Examples  section  shows  an
        example of using one of these.
 
-       <foo_arg>
+       &ltfoo_arg&gt
 	      Represents  the tokens in the invocation of the method, that is,
 	      what is supplied for the foo argument.
 
-       <foo_type>
+       &ltfoo_type&gt
 	      Represents the type for foo that appears in the declaration.
 
-       <foo_param>
+       &ltfoo_param&gt
 	      Represents the parameter in the declaration.
 
        replacemethod also defines the following labels:
 
-       <implementation>
+       &ltimplementation&gt
 	      Represents the body of the method implementation (not  including
 	      curly braces).
 
-       <receiver>
+       &ltreceiver&gt
 	      Represents the receiver of the message.
 
-       <call> Represents  the  entire  method invocation (including the square
+       &ltcall&gt Represents  the  entire  method invocation (including the square
 	      brackets).
 
 EXAMPLES
@@ -179,24 +181,24 @@ EXAMPLES
        The following rule marks all calls to the  function  NXGetNamedObject()
        with  the  error message. same means replace this function with itself.
        NXGetNamedObject() will still appear in the file, but it will be marked
-       by  the	error  message. <b args> specifies to replace all of the argu-
+       by  the	error  message. &ltb args&gt specifies to replace all of the argu-
        ments in between the parentheses as well.
 
-	      replace "NXGetNamedObject(<b args>)" with same
+	      replace "NXGetNamedObject(&ltb args&gt)" with same
 		  error "ApplicationConversion:  NXGetNamedObject()  is  obso-
 	      lete. Replace with nib file outlets."
 
        The following rule renames the method in all occurrences, and swaps the
        second and third argument in all invocations and declarations.
 
-	      replacemethod	"browser:fillMatrix:<2>inColumn:<3>"	  with
-	      "browser:createRowsForColumn:<3>inMatrix:<2>"
+	      replacemethod	"browser:fillMatrix:&lt2&gtinColumn:&lt3&gt"	  with
+	      "browser:createRowsForColumn:&lt3&gtinMatrix:&lt2&gt"
 
        The  following rule renames the method in all occurrences. In the invo-
        cations, it reverses the value specified for the flag argument.
 
-	      replacemethod "myMethod:<flag>" with "myNewMethod:<flag>"
-		  { replace "<flag_arg>" with "!<flag_arg>" }
+	      replacemethod "myMethod:&ltflag&gt" with "myNewMethod:&ltflag&gt"
+		  { replace "&ltflag_arg&gt" with "!&ltflag_arg&gt" }
 
        The following rule renames the method initContent:style:backing:button-
        Mask:defer:   to  initWithContentRect:styleMask:backing:defer:  in  all
@@ -204,14 +206,14 @@ EXAMPLES
        for  the style argument to be unsigned int and the type for the backing
        argument to be NSBackingStoreType.
 
-	      replacemethod "<old>" with "<new>" {
-		  replace "<style_type>" with "(unsigned int)"
-		  replace "<backing_type>" with "(NSBackingStoreType)"
+	      replacemethod "&ltold&gt" with "&ltnew&gt" {
+		  replace "&ltstyle_type&gt" with "(unsigned int)"
+		  replace "&ltbacking_type&gt" with "(NSBackingStoreType)"
 		  }
-		  where   ("<old>",   "<new>")	 isOneOf   {	    ("initCon-
-	      tent:style:<style>      backing:<backing>     buttonMask:<bmask>
-	      defer:<flag>",   "initWithContentRect:styleMask:<style>	 back-
-	      ing:<backing> defer:<flag>"),
+		  where   ("&ltold&gt",   "&ltnew&gt")	 isOneOf   {	    ("initCon-
+	      tent:style:&ltstyle&gt      backing:&ltbacking&gt     buttonMask:&ltbmask&gt
+	      defer:&ltflag&gt",   "initWithContentRect:styleMask:&ltstyle&gt	 back-
+	      ing:&ltbacking&gt defer:&ltflag&gt"),
 		  }
 
        The  following  rule  renames the method minFrameWidth:forStyle:button-
@@ -222,19 +224,19 @@ EXAMPLES
        argument to be unsigned int. Within the implementation of this  method,
        it  changes all uses of the button mask argument to the style argument.
 
-	      replacemethod	 "minFrameWidth:forStyle:<style>       button-
-	      Mask:<bmask>" with "minFrameWidthWithTitle:styleMask:<style>" {
-		  replace "<style_arg>" with "<style_arg>|<bmask_arg>"
-		  replace "<style_type>" with "(unsigned int)"
+	      replacemethod	 "minFrameWidth:forStyle:&ltstyle&gt       button-
+	      Mask:&ltbmask&gt" with "minFrameWidthWithTitle:styleMask:&ltstyle&gt" {
+		  replace "&ltstyle_arg&gt" with "&ltstyle_arg&gt|&ltbmask_arg&gt"
+		  replace "&ltstyle_type&gt" with "(unsigned int)"
 		  }
-		  within  ("<implementation")  {       replace "<bmask_param>"
-	      "<style_param>"
+		  within  ("&ltimplementation")  {       replace "&ltbmask_param&gt"
+	      "&ltstyle_param&gt"
 		  }
 
 
 
 
 Apple Computer, Inc.		March 14, 1995			       TOPS(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="A complete reference for writing UNIX manual pages with the -mdoc macro..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>groff_mdoc -- reference for groff's mdoc implementation</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 
 GROFF_MDOC(7)	     BSD Miscellaneous Information Manual	 GROFF_MDOC(7)
 
@@ -224,7 +226,7 @@ TROFF IDIOSYNCRASIES
    Trailing Blank Space Characters
      Troff can be confused by blank space characters at the end of a line.  It
      is a wise preventive measure to globally remove all blank spaces from
-     <blank-space><end-of-line> character sequences.  Should the need arise to
+     &ltblank-space&gt&ltend-of-line&gt character sequences.  Should the need arise to
      use a blank character at the end of a line, it may be forced with an
      unpaddable space and the `\&' escape character.  For example,
      `string\ \&'.
@@ -344,17 +346,17 @@ CONVENTIONS
 
      Example:
 
-	   .Xx <foo> {bar1 | bar2} [-test1 [-test2 | -test3]] ...
+	   .Xx &ltfoo&gt {bar1 | bar2} [-test1 [-test2 | -test3]] ...
 
      Except stated explicitly, all macros are parsed and callable.
 
      Note that a macro takes effect up to the next nested macro.  For example,
-     `.Ic foo Aq bar' doesn't produce `foo <bar>' but `foo <bar>'.  Conse-
+     `.Ic foo Aq bar' doesn't produce `foo &ltbar&gt' but `foo &ltbar&gt'.  Conse-
      quently, a warning message is emitted for most commands if the first
      argument is a macro itself since it cancels the effect of the calling
      command completely.  Another consequence is that quoting macros never
-     insert literal quotes; `foo <bar>' has been produced by `.Ic "foo
-     <bar>"'.
+     insert literal quotes; `foo &ltbar&gt' has been produced by `.Ic "foo
+     &ltbar&gt"'.
 
      Most macros have a default width value which can be used to specify a
      label width (-width) or offset (-offset) for the `.Bl' and `.Bd' macros.
@@ -369,7 +371,7 @@ TITLE MACROS
      macros are called once at the very beginning of the document and are used
      to construct headers and footers only.
 
-     .Dt [<document title>] [<section number>] [<volume>]
+     .Dt [&ltdocument title&gt] [&ltsection number&gt] [&ltvolume&gt]
 	     The document title is the subject of the man page and must be in
 	     CAPITALS due to troff limitations.  If omitted, `UNTITLED' is
 	     used.  The section number may be a number in the range 1, ..., 9
@@ -441,7 +443,7 @@ TITLE MACROS
 
 	     This macro is neither callable nor parsed.
 
-     .Os [<operating system>] [<release>]
+     .Os [&ltoperating system&gt] [&ltrelease&gt]
 	     If the first parameter is empty, the default `BSD' is used.  This
 	     may be overridden in the local configuration file, mdoc.local.
 	     In general, the name of the operating system should be the common
@@ -487,7 +489,7 @@ TITLE MACROS
 
 	     This macro is neither callable nor parsed.
 
-     .Dd [<month> <day>, <year>]
+     .Dd [&ltmonth&gt &ltday&gt, &ltyear&gt]
 	     If `Dd' has no arguments, `Epoch' is used for the date string.
 	     If it has exactly three arguments, they are concatenated, sepa-
 	     rated with unbreakable space:
@@ -522,11 +524,11 @@ INTRODUCTION OF MANUAL AND GENERAL TEXT DOMAINS
      the content macros is a bit more involved; a typical SYNOPSIS command
      line might be displayed as:
 
-	   filter [-flag] <infile> <outfile>
+	   filter [-flag] &ltinfile&gt &ltoutfile&gt
 
      Here, filter is the command name and the bracketed string -flag is a flag
      argument designated as optional by the option brackets.  In -mdoc terms,
-     <infile> and <outfile> are called meta arguments; in this example, the
+     &ltinfile&gt and &ltoutfile&gt are called meta arguments; in this example, the
      user has to replace the meta expressions given in angle brackets with
      real file names.  Note that in this document meta arguments are used to
      describe -mdoc commands; in most man pages, meta variables are not
@@ -538,8 +540,8 @@ INTRODUCTION OF MANUAL AND GENERAL TEXT DOMAINS
 	   .Ao Ar infile Ac Ao Ar outfile Ac
 
      In the third case, discussion of commands and command syntax includes
-     both examples above, but may add more detail.  The arguments <infile> and
-     <outfile> from the example above might be referred to as operands or file
+     both examples above, but may add more detail.  The arguments &ltinfile&gt and
+     &ltoutfile&gt from the example above might be referred to as operands or file
      arguments.  Some command line argument lists are quite long:
 
 	   make  [-eiknqrstv] [-D variable] [-d flags] [-f makefile] [-I
@@ -603,7 +605,7 @@ INTRODUCTION OF MANUAL AND GENERAL TEXT DOMAINS
      with a string containing a member of the mathematical, logical or quota-
      tion set:
 
-		 {+,-,/,*,%,<,>,<=,>=,=,==,&,`,',"}
+		 {+,-,/,*,%,&lt,&gt,&lt=,&gt=,=,==,&,`,',"}
 
      The problem is that troff may assume it is supposed to actually perform
      the operation or evaluation suggested by the characters.  To prevent the
@@ -614,7 +616,7 @@ MANUAL DOMAIN
    Addresses
      The address macro identifies an address construct.
 
-	   Usage: .Ad <address> ...
+	   Usage: .Ad &ltaddress&gt ...
 
 		    .Ad addr1		addr1
 		    .Ad addr1 . 	addr1.
@@ -628,14 +630,14 @@ MANUAL DOMAIN
      The `.An' macro is used to specify the name of the author of the item
      being documented, or the name of the author of the actual manual page.
 
-	   Usage: .An <author name> ...
+	   Usage: .An &ltauthor name&gt ...
 
 		    .An "Joe Author"	    Joe Author
 
 		    .An "Joe Author" ,	    Joe Author,
 
 		    .An "Joe Author" Aq nobody@FreeBSD.org
-					    Joe Author <nobody@FreeBSD.org>
+					    Joe Author &ltnobody@FreeBSD.org&gt
 
 		    .An "Joe Author" ) ) ,  Joe Author)),
 
@@ -654,7 +656,7 @@ MANUAL DOMAIN
      The .Ar argument macro may be used whenever an argument is referenced.
      If called without arguments, the `file ...' string is output.
 
-	   Usage: .Ar [<argument>] ...
+	   Usage: .Ar [&ltargument&gt] ...
 
 		    .Ar 	     file ...
 		    .Ar file1	     file1
@@ -669,7 +671,7 @@ MANUAL DOMAIN
      The `.Cd' macro is used to demonstrate a config(8) declaration for a
      device interface in a section four manual.
 
-	   Usage: .Cd <argument> ...
+	   Usage: .Cd &ltargument&gt ...
 
 		    .Cd "device le0 at scode?"	device le0 at scode?
 
@@ -692,7 +694,7 @@ MANUAL DOMAIN
      A variable (or constant) which is defined in an include file is specified
      by the macro `.Dv'.
 
-	   Usage: .Dv <defined variable> ...
+	   Usage: .Dv &ltdefined variable&gt ...
 
 		    .Dv MAXHOSTNAMELEN	MAXHOSTNAMELEN
 		    .Dv TIOCGPGRP )	TIOCGPGRP)
@@ -705,7 +707,7 @@ MANUAL DOMAIN
      the `.Bq' general text domain macro, as it would be used in a section two
      manual page.
 
-	   Usage: .Er <errno type> ...
+	   Usage: .Er &lterrno type&gt ...
 
 		    .Er ENOENT	    ENOENT
 		    .Er ENOENT ) ;  ENOENT);
@@ -716,7 +718,7 @@ MANUAL DOMAIN
    Environment Variables
      The `.Ev' macro specifies an environment variable.
 
-	   Usage: .Ev <argument> ...
+	   Usage: .Ev &ltargument&gt ...
 
 		    .Ev DISPLAY        DISPLAY
 		    .Ev PATH .	       PATH.
@@ -730,7 +732,7 @@ MANUAL DOMAIN
      dash, the `.Cm' (command modifier) macro is identical, but without the
      dash.
 
-	   Usage: .Fl <argument> ...
+	   Usage: .Fl &ltargument&gt ...
 
 		    .Fl 	 -
 		    .Fl cfv	 -cfv
@@ -751,9 +753,9 @@ MANUAL DOMAIN
      The `.Fd' macro is used in the SYNOPSIS section with section two or three
      functions.  It is neither callable nor parsed.
 
-	   Usage: .Fd <argument> ...
+	   Usage: .Fd &ltargument&gt ...
 
-		    .Fd "#include <sys/types.h>"  #include <sys/types.h>
+		    .Fd "#include &ltsys/types.h&gt"  #include &ltsys/types.h&gt
 
      In the SYNOPSIS section a `.Fd' command causes a line break if a function
      has already been presented and a break has not occurred.  This leaves a
@@ -768,10 +770,10 @@ MANUAL DOMAIN
      While not in the SYNOPSIS section, it represents the header file enclosed
      in angle brackets.
 
-	   Usage: .In <header file>
+	   Usage: .In &ltheader file&gt
 
-		    .In stdio.h  #include <stdio.h>
-		    .In stdio.h  <stdio.h>
+		    .In stdio.h  #include &ltstdio.h&gt
+		    .In stdio.h  &ltstdio.h&gt
 
    Function Types
      This macro is intended for the SYNOPSIS section.  It may be used anywhere
@@ -780,14 +782,14 @@ MANUAL DOMAIN
      and three (it causes a line break, allowing the function name to appear
      on the next line).
 
-	   Usage: .Ft <type> ...
+	   Usage: .Ft &lttype&gt ...
 
 		    .Ft struct stat  struct stat
 
    Functions (Library Routines)
      The `.Fn' macro is modeled on ANSI C conventions.
 
-	   Usage: .Fn <function> [<parameter>] ...
+	   Usage: .Fn &ltfunction&gt [&ltparameter&gt] ...
 
 		    .Fn getchar 	     getchar()
 		    .Fn strlen ) ,	     strlen()),
@@ -835,7 +837,7 @@ MANUAL DOMAIN
      if the enclosure macros `.Fo' and `.Fc' instead of `.Fn' are used.  `.Fa'
      may also be used to refer to structure members.
 
-	   Usage: .Fa <function argument> ...
+	   Usage: .Fa &ltfunction argument&gt ...
 
 		    .Fa d_namlen ) ) ,	d_namlen)),
 		    .Fa iov_len 	iov_len
@@ -845,7 +847,7 @@ MANUAL DOMAIN
    Return Values
      The `.Rv' macro generates text for use in the RETURN VALUES section.
 
-	   Usage: .Rv [-std] [<function> ...]
+	   Usage: .Rv [-std] [&ltfunction&gt ...]
 
      For example, `.Rv -std atexit' produces:
 
@@ -859,11 +861,11 @@ MANUAL DOMAIN
    Exit Status
      The `.Ex' macro generates text for use in the DIAGNOSTICS section.
 
-	   Usage: .Ex [-std] [<utility> ...]
+	   Usage: .Ex [-std] [&ltutility&gt ...]
 
      For example, `.Ex -std cat' produces:
 
-	    The cat utility exits 0 on success, and >0 if an error occurs.
+	    The cat utility exits 0 on success, and &gt0 if an error occurs.
 
      The -std option is valid only for manual page sections 1, 6 and 8.  Cur-
      rently, this macro does nothing if used without the -std flag.
@@ -871,7 +873,7 @@ MANUAL DOMAIN
    Interactive Commands
      The `.Ic' macro designates an interactive or internal command.
 
-	   Usage: .Ic <argument> ...
+	   Usage: .Ic &ltargument&gt ...
 
 		    .Ic :wq		   :wq
 		    .Ic "do while {...}"   do while {...}
@@ -883,7 +885,7 @@ MANUAL DOMAIN
      The `.Lb' macro is used to specify the library where a particular func-
      tion is compiled in.
 
-	   Usage: .Lb <argument> ...
+	   Usage: .Lb &ltargument&gt ...
 
      Available arguments to `.Lb' and their results are:
 
@@ -934,7 +936,7 @@ MANUAL DOMAIN
      The `.Li' literal macro may be used for special characters, variable con-
      stants, etc. -- anything which should be displayed as it would be typed.
 
-	   Usage: .Li <argument> ...
+	   Usage: .Li &ltargument&gt ...
 
 		    .Li \en	     \n
 		    .Li M1 M2 M3 ;   M1 M2 M3;
@@ -955,7 +957,7 @@ MANUAL DOMAIN
      used.  While `.Ic' is nearly identical to `.Nm', it can not recall the
      first argument it was invoked with.
 
-	   Usage: .Nm [<argument>] ...
+	   Usage: .Nm [&ltargument&gt] ...
 
 		    .Nm groff_mdoc  groff_mdoc
 		    .Nm \-mdoc	    -mdoc
@@ -971,7 +973,7 @@ MANUAL DOMAIN
      option bracket respectively) may be used across one or more lines or to
      specify the exact position of the closing parenthesis.
 
-	   Usage: .Op [<option>] ...
+	   Usage: .Op [&ltoption&gt] ...
 
 		    .Op 			       []
 		    .Op Fl k			       [-k]
@@ -981,7 +983,7 @@ MANUAL DOMAIN
 		    .Op Ar objfil Op Ar corfil	       [objfil [corfil]]
 		    .Op Fl c Ar objfil Op Ar corfil ,  [-c objfil [corfil]],
 		    .Op word1 word2		       [word1 word2]
-		    .Li .Op Oo Ao option Ac Oc ...     .Op [<option>] ...
+		    .Li .Op Oo Ao option Ac Oc ...     .Op [&ltoption&gt] ...
 
      Here a typical example of the `.Oo' and `.Oc' macros:
 
@@ -1003,7 +1005,7 @@ MANUAL DOMAIN
      the `~' string is output, which represents the current user's home direc-
      tory.
 
-	   Usage: .Pa [<pathname>] ...
+	   Usage: .Pa [&ltpathname&gt] ...
 
 		    .Pa 		   ~
 		    .Pa /usr/share	   /usr/share
@@ -1014,7 +1016,7 @@ MANUAL DOMAIN
    Standards
      The `.St' macro replaces standard abbreviations with their formal names.
 
-	   Usage: .St <abbreviation> ...
+	   Usage: .St &ltabbreviation&gt ...
 
      Available pairs for ``Abbreviation/Formal Name'' are:
 
@@ -1079,7 +1081,7 @@ MANUAL DOMAIN
      SYNOPSIS section, it causes a line break (useful for old style variable
      declarations).
 
-	   Usage: .Vt <type> ...
+	   Usage: .Vt &lttype&gt ...
 
 		    .Vt extern char *optarg ;  extern char *optarg;
 		    .Vt FILE *		       FILE *
@@ -1087,7 +1089,7 @@ MANUAL DOMAIN
    Variables
      Generic variable reference.
 
-	   Usage: .Va <variable> ...
+	   Usage: .Va &ltvariable&gt ...
 
 		    .Va count		  count
 		    .Va settimer ,	  settimer,
@@ -1101,7 +1103,7 @@ MANUAL DOMAIN
      optional second argument, if a string (defining the manual section), is
      put into parentheses.
 
-	   Usage: .Xr <man page name> [<section>] ...
+	   Usage: .Xr &ltman page name&gt [&ltsection&gt] ...
 
 		    .Xr mdoc	    mdoc
 		    .Xr mdoc ,	    mdoc,
@@ -1112,53 +1114,53 @@ MANUAL DOMAIN
 
 GENERAL TEXT DOMAIN
    AT&T Macro
-	   Usage: .At [<version>] ...
+	   Usage: .At [&ltversion&gt] ...
 
 		    .At       AT&T UNIX
 		    .At v6 .  Version 6 AT&T UNIX.
 
-     The following values for <version> are possible:
+     The following values for &ltversion&gt are possible:
 
 	   32v, v1, v2, v3, v4, v5, v6, v7, V, V.1, V.2, V.3, V.4
 
    BSD Macro
 	   Usage: .Bx {-alpha | -beta | -devel} ...
-		  .Bx [<version> [<release>]] ...
+		  .Bx [&ltversion&gt [&ltrelease&gt]] ...
 
 		    .Bx 	BSD
 		    .Bx 4.3 .	4.3BSD.
 		    .Bx -devel	BSD (currently under development)
 
-     <version> will be prepended to the string `BSD'.  The following values
-     for <release> are possible:
+     &ltversion&gt will be prepended to the string `BSD'.  The following values
+     for &ltrelease&gt are possible:
 
 	   Reno, reno, Tahoe, tahoe, Lite, lite, Lite2, lite2
 
    NetBSD Macro
-	   Usage: .Nx [<version>] ...
+	   Usage: .Nx [&ltversion&gt] ...
 
 		    .Nx        NetBSD
 		    .Nx 1.4 .  NetBSD 1.4.
 
-     For possible values of <version> see the description of the `.Os' command
+     For possible values of &ltversion&gt see the description of the `.Os' command
      above in section TITLE MACROS.
 
    FreeBSD Macro
-	   Usage: .Fx [<version>] ...
+	   Usage: .Fx [&ltversion&gt] ...
 
 		    .Fx        FreeBSD
 		    .Fx 2.2 .  FreeBSD 2.2.
 
-     For possible values of <version> see the description of the `.Os' command
+     For possible values of &ltversion&gt see the description of the `.Os' command
      above in section TITLE MACROS.
 
    OpenBSD Macro
-	   Usage: .Ox [<version>] ...
+	   Usage: .Ox [&ltversion&gt] ...
 
 		    .Ox 1.0  OpenBSD 1.0
 
    BSD/OS Macro
-	   Usage: .Bsx [<version>] ...
+	   Usage: .Bsx [&ltversion&gt] ...
 
 		    .Bsx 1.0  BSD/OS 1.0
 
@@ -1171,7 +1173,7 @@ GENERAL TEXT DOMAIN
      Text may be stressed or emphasized with the `.Em' macro.  The usual font
      for emphasis is italic.
 
-	   Usage: .Em <argument> ...
+	   Usage: .Em &ltargument&gt ...
 
 		    .Em does not	  does not
 		    .Em exceed 1024 .	  exceed 1024.
@@ -1185,9 +1187,9 @@ GENERAL TEXT DOMAIN
 
      `.Bf' has the following syntax:
 
-	   .Bf <font mode>
+	   .Bf &ltfont mode&gt
 
-     <font mode> must be one of the following three types:
+     &ltfont mode&gt must be one of the following three types:
 
 	   Em | -emphasis  Same as if the `.Em' macro was used for the entire
 			   block of text.
@@ -1208,7 +1210,7 @@ GENERAL TEXT DOMAIN
      close macros which end in small letters `o' and `c' respectively.
 
 	 Quote	 Open	 Close	Function		  Result
-	 .Aq	 .Ao	 .Ac	Angle Bracket Enclosure   <string>
+	 .Aq	 .Ao	 .Ac	Angle Bracket Enclosure   &ltstring&gt
 	 .Bq	 .Bo	 .Bc	Bracket Enclosure	  [string]
 	 .Brq	 .Bro	 .Brc	Brace Enclosure 	  {string}
 	 .Dq	 .Do	 .Dc	Double Quote		  ``string''
@@ -1258,8 +1260,8 @@ GENERAL TEXT DOMAIN
 
      Examples of quoting:
 
-	   .Aq			    <>
-	   .Aq Pa ctype.h ) ,	    <ctype.h>),
+	   .Aq			    &lt&gt
+	   .Aq Pa ctype.h ) ,	    &ltctype.h&gt),
 	   .Bq			    []
 	   .Bq Em Greek , French .  [Greek, French].
 	   .Dq			    ``''
@@ -1283,7 +1285,7 @@ GENERAL TEXT DOMAIN
      should not be formatted.  Be careful to add `\&' to the word `No' if you
      really want that English word (and not the macro) as a parameter.
 
-	   Usage: .No <argument> ...
+	   Usage: .No &ltargument&gt ...
 
 		    .No test Ta with Ta tabs  test     with	tabs
 
@@ -1294,8 +1296,8 @@ GENERAL TEXT DOMAIN
      tion and its first parameter.  For example, it is useful for old style
      argument lists where there is no space between the flag and argument:
 
-	   Usage: ... <argument> Ns [<argument>] ...
-		  .Ns <argument> ...
+	   Usage: ... &ltargument&gt Ns [&ltargument&gt] ...
+		  .Ns &ltargument&gt ...
 
 		    .Op Fl I Ns Ar directory  [-Idirectory]
 
@@ -1308,7 +1310,7 @@ GENERAL TEXT DOMAIN
      The `.Sx' macro designates a reference to a section header within the
      same document.
 
-	   Usage: .Sx <section reference> ...
+	   Usage: .Sx &ltsection reference&gt ...
 
 		    .Sx FILES  FILES
 
@@ -1318,7 +1320,7 @@ GENERAL TEXT DOMAIN
      The symbolic emphasis macro is generally a boldface macro in either the
      symbolic sense or the traditional English usage.
 
-	   Usage: .Sy <symbol> ...
+	   Usage: .Sy &ltsymbol&gt ...
 
 		    .Sy Important Notice  Important Notice
 
@@ -1327,7 +1329,7 @@ GENERAL TEXT DOMAIN
    Mathematical Symbols
      Use this macro for mathematical symbols and similar things.
 
-	   Usage: .Ms <math symbol> ...
+	   Usage: .Ms &ltmath symbol&gt ...
 
 		    .Ms sigma  sigma
 
@@ -1383,7 +1385,7 @@ GENERAL TEXT DOMAIN
      The trade name macro prints its arguments in a smaller font.  Its
      intended use is to imitate a small caps fonts for uppercase acronyms.
 
-	   Usage: .Tn <symbol> ...
+	   Usage: .Tn &ltsymbol&gt ...
 
 		    .Tn DEC    DEC
 		    .Tn ASCII  ASCII
@@ -1617,7 +1619,7 @@ PAGE STRUCTURE DOMAIN
 	  macro.  It has the following syntax:
 
 		.Bd {-literal | -filled | -unfilled | -ragged | -centered}
-		     [-offset <string>] [-file <file name>] [-compact]
+		     [-offset &ltstring&gt] [-file &ltfile name&gt] [-compact]
 
 	  -ragged	     Fill, but do not adjust the right margin (only
 			     left-justify).
@@ -1633,12 +1635,12 @@ PAGE STRUCTURE DOMAIN
 	  -literal	     Display block with literal font (usually fixed-
 			     width).  Useful for source code or simple tabbed
 			     or spaced text.
-	  -file <file name>  The file whose name follows the -file flag is
+	  -file &ltfile name&gt  The file whose name follows the -file flag is
 			     read and displayed before any data enclosed with
 			     `.Bd' and `.Ed', using the selected display type.
 			     Any troff/-mdoc commands in the file will be pro-
 			     cessed.
-	  -offset <string>   If -offset is specified with one of the following
+	  -offset &ltstring&gt   If -offset is specified with one of the following
 			     strings, the string is interpreted to indicate
 			     the level of indentation for the forthcoming
 			     block of text:
@@ -1666,18 +1668,18 @@ PAGE STRUCTURE DOMAIN
 					 haps may never do the right thing
 					 within troff.
 
-			     If <string> is a valid numeric expression instead
+			     If &ltstring&gt is a valid numeric expression instead
 			     (with a scale indicator other than `u'), use that
 			     value for indentation.  The most useful scale
 			     indicators are `m' and `n', specifying the so-
 			     called Em and En square.  This is approximately
 			     the width of the letters `m' and `n' respectively
 			     of the current font (for nroff output, both scale
-			     indicators give the same values).	If <string>
+			     indicators give the same values).	If &ltstring&gt
 			     isn't a numeric expression, it is tested whether
 			     it is an -mdoc macro name, and the default offset
 			     value associated with this macro is used.
-			     Finally, if all tests fail, the width of <string>
+			     Finally, if all tests fail, the width of &ltstring&gt
 			     (typeset with a fixed-width font) is taken as the
 			     offset.
 	  -compact	     Suppress insertion of vertical space before begin
@@ -1699,11 +1701,11 @@ PAGE STRUCTURE DOMAIN
 
      It has the following syntax forms:
 
-	   .Bl {-hang | -ohang | -tag | -diag | -inset} [-width <string>]
-		[-offset <string>] [-compact]
-	   .Bl -column [-offset <string>] <string1> <string2> ...
+	   .Bl {-hang | -ohang | -tag | -diag | -inset} [-width &ltstring&gt]
+		[-offset &ltstring&gt] [-compact]
+	   .Bl -column [-offset &ltstring&gt] &ltstring1&gt &ltstring2&gt ...
 	   .Bl {-item | -enum [-nested] | -bullet | -hyphen | -dash} [-offset
-		<string>] [-compact]
+		&ltstring&gt] [-compact]
 
      And now a detailed description of the list types.
 
@@ -1931,10 +1933,10 @@ PAGE STRUCTURE DOMAIN
 
      -column  This list type generates multiple columns.  The number of col-
 	      umns and the width of each column is determined by the arguments
-	      to the -column list, <string1>, <string2>, etc.  If <stringN>
+	      to the -column list, &ltstring1&gt, &ltstring2&gt, etc.  If &ltstringN&gt
 	      starts with a `.' (dot) immediately followed by a valid -mdoc
-	      macro name, interpret <stringN> and use the width of the result.
-	      Otherwise, the width of <stringN> (typeset with a fixed-width
+	      macro name, interpret &ltstringN&gt and use the width of the result.
+	      Otherwise, the width of &ltstringN&gt (typeset with a fixed-width
 	      font) is taken as the Nth column width.
 
 	      Each `.It' argument is parsed to make a row, each column within
@@ -1944,21 +1946,21 @@ PAGE STRUCTURE DOMAIN
 	      The table:
 
 		    String    Nroff    Troff
-		    <=	      <=       <=
-		    >=	      >=       >=
+		    &lt=	      &lt=       &lt=
+		    &gt=	      &gt=       &gt=
 
 	      was produced by:
 
 	      .Bl -column -offset indent ".Sy String" ".Sy Nroff" ".Sy Troff"
 	      .It Sy String Ta Sy Nroff Ta Sy Troff
-	      .It Li <= Ta <= Ta \*(<=
-	      .It Li >= Ta >= Ta \*(>=
+	      .It Li &lt= Ta &lt= Ta \*(&lt=
+	      .It Li &gt= Ta &gt= Ta \*(&gt=
 	      .El
 
      Other keywords:
 
-     -width <string>   If <string> starts with a `.' (dot) immediately fol-
-		       lowed by a valid -mdoc macro name, interpret <string>
+     -width &ltstring&gt   If &ltstring&gt starts with a `.' (dot) immediately fol-
+		       lowed by a valid -mdoc macro name, interpret &ltstring&gt
 		       and use the width of the result.  Almost all lists in
 		       this document use this option.
 
@@ -1973,12 +1975,12 @@ PAGE STRUCTURE DOMAIN
 
 		       gives:
 
-		       -test <string>  This is a longer sentence to show how
+		       -test &ltstring&gt  This is a longer sentence to show how
 				       the -width flag works in combination
 				       with a tag list.
 
 		       (Note that the current state of -mdoc is saved before
-		       <string> is interpreted; afterwards, all variables are
+		       &ltstring&gt is interpreted; afterwards, all variables are
 		       restored again.	However, boxes (used for enclosures)
 		       can't be saved in GNU troff(1); as a consequence, argu-
 		       ments must always be balanced to avoid nasty errors.
@@ -1986,17 +1988,17 @@ PAGE STRUCTURE DOMAIN
 		       string Xc' instead if you really need only an opening
 		       angle bracket.)
 
-		       Otherwise, if <string> is a valid numeric expression
+		       Otherwise, if &ltstring&gt is a valid numeric expression
 		       (with a scale indicator other than `u'), use that value
 		       for indentation.  The most useful scale indicators are
 		       `m' and `n', specifying the so-called Em and En square.
 		       This is approximately the width of the letters `m' and
 		       `n' respectively of the current font (for nroff output,
 		       both scale indicators give the same values).  If
-		       <string> isn't a numeric expression, it is tested
+		       &ltstring&gt isn't a numeric expression, it is tested
 		       whether it is an -mdoc macro name, and the default
 		       width value associated with this macro is used.
-		       Finally, if all tests fail, the width of <string>
+		       Finally, if all tests fail, the width of &ltstring&gt
 		       (typeset with a fixed-width font) is taken as the
 		       width.
 
@@ -2007,20 +2009,20 @@ PAGE STRUCTURE DOMAIN
 		       that macro will be used; otherwise, the default width
 		       of `.No' is used.
 
-     -offset <string>  If <string> is indent, a default indent value (normally
+     -offset &ltstring&gt  If &ltstring&gt is indent, a default indent value (normally
 		       set to 6n, similar to the value used in `.Dl' or `.Bd')
-		       is used.  If <string> is a valid numeric expression
+		       is used.  If &ltstring&gt is a valid numeric expression
 		       instead (with a scale indicator other than `u'), use
 		       that value for indentation.  The most useful scale
 		       indicators are `m' and `n', specifying the so-called Em
 		       and En square.  This is approximately the width of the
 		       letters `m' and `n' respectively of the current font
 		       (for nroff output, both scale indicators give the same
-		       values).  If <string> isn't a numeric expression, it is
+		       values).  If &ltstring&gt isn't a numeric expression, it is
 		       tested whether it is an -mdoc macro name, and the
 		       default offset value associated with this macro is
 		       used.  Finally, if all tests fail, the width of
-		       <string> (typeset with a fixed-width font) is taken as
+		       &ltstring&gt (typeset with a fixed-width font) is taken as
 		       the offset.
 
      -compact	       Suppress insertion of vertical space before the list
@@ -2041,7 +2043,7 @@ MISCELLANEOUS MACROS
 
      .Fr
 
-		Usage: .Fr <function return value> ...
+		Usage: .Fr &ltfunction return value&gt ...
 
 	  Don't use this macro.  It allows a break right before the return
 	  value (usually a single digit) which is bad typographical behaviour.
@@ -2049,9 +2051,9 @@ MISCELLANEOUS MACROS
 
      .Hf  Use this macro to include a (header) file literally.	It first
 	  prints `File:' followed by the file name, then the contents of
-	  <file>.
+	  &ltfile&gt.
 
-		Usage: .Hf <file>
+		Usage: .Hf &ltfile&gt
 
 	  It is neither callable nor parsed.
 
@@ -2085,8 +2087,8 @@ PREDEFINED STRINGS
      The following strings are predefined:
 
 	   String    Nroff	 Troff	   Meaning
-	   <=	     <= 	 <=	   less equal
-	   >=	     >= 	 >=	   greater equal
+	   &lt=	     &lt= 	 &lt=	   less equal
+	   &gt=	     &gt= 	 &gt=	   greater equal
 	   Rq	     '' 	 ''	   right double quote
 	   Lq	     `` 	 ``	   left double quote
 	   ua	     ^		 ^	   upwards arrow
@@ -2095,10 +2097,10 @@ PREDEFINED STRINGS
 	   q	     "		 "	   straight double quote
 	   Pi	     pi 	 pi	   greek pi
 	   Ne	     != 	 !=	   not equal
-	   Le	     <= 	 <=	   less equal
-	   Ge	     >= 	 >=	   greater equal
-	   Lt	     <		 <	   less than
-	   Gt	     >		 >	   greater than
+	   Le	     &lt= 	 &lt=	   less equal
+	   Ge	     &gt= 	 &gt=	   greater equal
+	   Lt	     &lt		 &lt	   less than
+	   Gt	     &gt		 &gt	   greater than
 	   Pm	     +- 	 +-	   plus minus
 	   If	     infinity	 infinity  infinity
 	   Am	     &		 &	   ampersand
@@ -2133,16 +2135,16 @@ FORMATTING WITH GROFF, TROFF, AND NROFF
      `cR' to zero while calling groff(1), resulting in multiple pages instead
      of a single, very long page:
 
-	   groff -Tlatin1 -rcR=0 -mdoc foo.man > foo.txt
+	   groff -Tlatin1 -rcR=0 -mdoc foo.man &gt foo.txt
 
      For double-sided printing, set register `D' to 1:
 
-	   groff -Tps -rD1 -mdoc foo.man > foo.ps
+	   groff -Tps -rD1 -mdoc foo.man &gt foo.ps
 
      To change the document font size to 11pt or 12pt, set register `S'
      accordingly:
 
-	   groff -Tdvi -rS11 -mdoc foo.man > foo.dvi
+	   groff -Tdvi -rS11 -mdoc foo.man &gt foo.dvi
 
      Register `S' is ignored for TTY devices.
 
@@ -2181,6 +2183,6 @@ BUGS
      able to.
 
 BSD				August 28, 2005 			   BSD
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

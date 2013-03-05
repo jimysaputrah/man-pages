@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The type system provided by Moose effectively makes all of its builtin..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MooseX::Types - Organise your Moose types in libraries</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MooseX::Types(3)      User Contributed Perl Documentation     MooseX::Types(3)
 
 
@@ -23,7 +25,7 @@ SYNOPSIS
 	 package MyLibrary;
 
 	 # predeclare our own types
-	 use MooseX::Types -declare => [
+	 use MooseX::Types -declare =&gt [
 	     qw(
 		 PositiveInt
 		 NegativeInt
@@ -41,12 +43,12 @@ SYNOPSIS
 	 # type definition.
 	 subtype PositiveInt,
 	     as Int,
-	     where { $_ > 0 },
+	     where { $_ &gt 0 },
 	     message { "Int is not larger than 0" };
 
 	 subtype NegativeInt,
 	     as Int,
-	     where { $_ < 0 },
+	     where { $_ &lt 0 },
 	     message { "Int is not smaller than 0" };
 
 	 # type coercion
@@ -61,7 +63,7 @@ SYNOPSIS
 
 	 subtype ArrayRefOfAtLeastThreeNegativeInts,
 	   as ArrayRef[NegativeInt],
-	   where { scalar(@$_) > 2 };
+	   where { scalar(@$_) &gt 2 };
 
 	 subtype LotsOfInnerConstraints,
 	   as ArrayRef[ArrayRef[HashRef[Int]]];
@@ -77,11 +79,11 @@ SYNOPSIS
 
 	 # or better
 
-	 class_type MyDateTime, { class => 'DateTime' };
+	 class_type MyDateTime, { class =&gt 'DateTime' };
 
 	 coerce MyDateTime,
 	   from HashRef,
-	   via { DateTime->new(%$_) };
+	   via { DateTime-&gtnew(%$_) };
 
 	 1;
 
@@ -92,11 +94,11 @@ SYNOPSIS
 
 	 # use the exported constants as type names
 	 has 'bar',
-	     isa    => PositiveInt,
-	     is     => 'rw';
+	     isa    =&gt PositiveInt,
+	     is     =&gt 'rw';
 	 has 'baz',
-	     isa    => NegativeInt,
-	     is     => 'rw';
+	     isa    =&gt NegativeInt,
+	     is     =&gt 'rw';
 
 	 sub quux {
 	     my ($self, $value);
@@ -135,7 +137,7 @@ DESCRIPTION
 
        If you mix string-based names with types created by this module, it
        will warn, with a few exceptions. If you are declaring a "class_type()"
-       or c<role_type()> within your type library, or if you use a fully
+       or c&ltrole_type()&gt within your type library, or if you use a fully
        qualified name like "MyApp::Foo".
 
 LIBRARY DEFINITION
@@ -145,7 +147,7 @@ LIBRARY DEFINITION
 
        The only thing a library is required to do is
 
-	 use MooseX::Types -declare => \@types;
+	 use MooseX::Types -declare =&gt \@types;
 
        with @types being a list of types you wish to define in this library.
        This line will install a proper base class in your package as well as
@@ -185,8 +187,8 @@ LIBRARY USAGE
        wrapper around Sub::Exporter. This means you can do something like
        this:
 
-	 use MyLibrary TypeA => { -as => 'MyTypeA' },
-		       TypeB => { -as => 'MyTypeB' };
+	 use MyLibrary TypeA =&gt { -as =&gt 'MyTypeA' },
+		       TypeB =&gt { -as =&gt 'MyTypeB' };
 
 TYPE HANDLER FUNCTIONS
    $type
@@ -216,9 +218,9 @@ WRAPPING A LIBRARY
 
 	 sub coercion_export_generator {
 	     my $class = shift;
-	     my $code = $class->next::method(@_);
+	     my $code = $class-&gtnext::method(@_);
 	     return sub {
-		 my $value = $code->(@_);
+		 my $value = $code-&gt(@_);
 		 warn "Coercion returned undef!"
 		     unless defined $value;
 		 return $value;
@@ -233,8 +235,8 @@ WRAPPING A LIBRARY
 
 	 package Foo;
 	 use strict;
-	 use MyWrapper MyLibrary => [qw( Foo Bar )],
-		       Moose	 => [qw( Str Int )];
+	 use MyWrapper MyLibrary =&gt [qw( Foo Bar )],
+		       Moose	 =&gt [qw( Str Int )];
 
 	 ...
 	 1;
@@ -269,12 +271,12 @@ RECURSIVE SUBTYPES
        As of version 0.08, Moose::Types has experimental support for Recursive
        subtypes.  This will allow:
 
-	   subtype Tree() => as HashRef[Str|Tree];
+	   subtype Tree() =&gt as HashRef[Str|Tree];
 
        Which validates things like:
 
-	   {key=>'value'};
-	   {key=>{subkey1=>'value', subkey2=>'value'}}
+	   {key=&gt'value'};
+	   {key=&gt{subkey1=&gt'value', subkey2=&gt'value'}}
 
        And so on.  This feature is new and there may be lurking bugs so don't
        be afraid to hunt me down with patches and test cases if you have
@@ -293,7 +295,7 @@ NOTES REGARDING TYPE UNIONS
 	 use Moose;
 	 use MooseX::Types::Moose qw(HashRef Int);
 
-	 has 'attr' => ( isa => HashRef | Int );
+	 has 'attr' =&gt ( isa =&gt HashRef | Int );
 
        And everything should just work as you'd think.
 
@@ -336,8 +338,8 @@ CAVEATS
        handler functions provided by MooseX::Types, you shouldn't ever have to
        use a type's actual full name.
 
-   Argument separation ('=>' versus ',')
-       The perlop manpage has this to say about the '=>' operator: "The =>
+   Argument separation ('=&gt' versus ',')
+       The perlop manpage has this to say about the '=&gt' operator: "The =&gt
        operator is a synonym for the comma, but forces any word (consisting
        entirely of word characters) to its left to be interpreted as a string
        (as of 5.001). This includes words that might otherwise be considered a
@@ -346,14 +348,14 @@ CAVEATS
        Due to this stringification, the following will NOT work as you might
        think:
 
-	 subtype StrOrArrayRef => as Str | ArrayRef;
+	 subtype StrOrArrayRef =&gt as Str | ArrayRef;
 
        The 'StrOrArrayRef' will have its stringification activated this causes
        the subtype to not be created.  Since the bareword type constraints are
        not strings you really should not try to treat them that way.  You will
        have to use the ',' operator instead.  The author's of this package
        realize that all the Moose documention and examples nearly uniformly
-       use the '=>' version of the comma operator and this could be an issue
+       use the '=&gt' version of the comma operator and this could be an issue
        if you are converting code.
 
        Patches welcome for discussion.
@@ -366,8 +368,8 @@ CAVEATS
 	 package TypeAndSubExporter;
 
 	 use MooseX::Types::Moose qw(Str);
-	 use MooseX::Types -declare => [qw(MyStr)];
-	 use Sub::Exporter -setup => { exports => [qw(something)] };
+	 use MooseX::Types -declare =&gt [qw(MyStr)];
+	 use Sub::Exporter -setup =&gt { exports =&gt [qw(something)] };
 
 	 subtype MyStr, as Str;
 
@@ -383,8 +385,8 @@ CAVEATS
        You'll get a '"MyStr" is not exported by the TypeAndSubExporter module'
        error.  Upi can workaround by:
 
-	 - use Sub::Exporter -setup => { exports => [ qw(something) ] };
-	 + use Sub::Exporter -setup => { exports => [ qw(something MyStr) ] };
+	 - use Sub::Exporter -setup =&gt { exports =&gt [ qw(something) ] };
+	 + use Sub::Exporter -setup =&gt { exports =&gt [ qw(something MyStr) ] };
 
        This is a workaround and I am exploring how to make these modules work
        better together.  I realize this workaround will lead a lot of
@@ -408,18 +410,18 @@ ACKNOWLEDGEMENTS
        Many thanks to the "#moose" cabal on "irc.perl.org".
 
 CONTRIBUTORS
-       jnapiorkowski: John Napiorkowski <jjnapiork@cpan.org>
+       jnapiorkowski: John Napiorkowski &ltjjnapiork@cpan.org&gt
 
-       caelum: Rafael Kitover <rkitover@cpan.org>
+       caelum: Rafael Kitover &ltrkitover@cpan.org&gt
 
-       rafl: Florian Ragwitz <rafl@debian.org>
+       rafl: Florian Ragwitz &ltrafl@debian.org&gt
 
-       hdp: Hans Dieter Pearcey <hdp@cpan.org>
+       hdp: Hans Dieter Pearcey &lthdp@cpan.org&gt
 
-       autarch: Dave Rolsky <autarch@urth.org>
+       autarch: Dave Rolsky &ltautarch@urth.org&gt
 
 AUTHOR
-       Robert "phaylon" Sedlacek <rs@474.at>
+       Robert "phaylon" Sedlacek &ltrs@474.at&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Robert "phaylon" Sedlacek.
@@ -430,6 +432,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-17		      MooseX::Types(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

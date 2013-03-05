@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Same interface as "Net::HTTP" but it will never try multiple reads when..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::HTTP::NB - Non-blocking HTTP client</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::HTTP::NB(3)      User Contributed Perl Documentation     Net::HTTP::NB(3)
 
 
@@ -17,22 +19,22 @@ NAME
 
 SYNOPSIS
 	use Net::HTTP::NB;
-	my $s = Net::HTTP::NB->new(Host => "www.perl.com") || die $@;
-	$s->write_request(GET => "/");
+	my $s = Net::HTTP::NB-&gtnew(Host =&gt "www.perl.com") || die $@;
+	$s-&gtwrite_request(GET =&gt "/");
 
 	use IO::Select;
-	my $sel = IO::Select->new($s);
+	my $sel = IO::Select-&gtnew($s);
 
 	READ_HEADER: {
-	   die "Header timeout" unless $sel->can_read(10);
-	   my($code, $mess, %h) = $s->read_response_headers;
+	   die "Header timeout" unless $sel-&gtcan_read(10);
+	   my($code, $mess, %h) = $s-&gtread_response_headers;
 	   redo READ_HEADER unless $code;
 	}
 
 	while (1) {
-	   die "Body timeout" unless $sel->can_read(10);
+	   die "Body timeout" unless $sel-&gtcan_read(10);
 	   my $buf;
-	   my $n = $s->read_entity_body($buf, 1024);
+	   my $n = $s-&gtread_entity_body($buf, 1024);
 	   last unless $n;
 	   print $buf;
 	}
@@ -61,6 +63,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-03-20		      Net::HTTP::NB(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

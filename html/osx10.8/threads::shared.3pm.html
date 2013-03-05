@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="By default, variables are private to each thread, and each newly..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>threads::shared - Perl extension for sharing data structures between</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 threads::shared(3pm)   Perl Programmers Reference Guide   threads::shared(3pm)
 
 
@@ -35,7 +37,7 @@ SYNOPSIS
 	 $var = $scalar_value;
 	 $var = $shared_ref_value;
 	 $var = shared_clone($non_shared_ref_value);
-	 $var = shared_clone({'foo' => [qw/foo bar baz/]});
+	 $var = shared_clone({'foo' =&gt [qw/foo bar baz/]});
 
 	 $hsh{'foo'} = $scalar_value;
 	 $hsh{'bar'} = $shared_ref_value;
@@ -114,7 +116,7 @@ FUNCTIONS
 	     # The following are errors:
 	     #	 $var = \$bork; 		   # ref of non-shared variable
 	     #	 $hash{'bork'} = [];		   # non-shared array ref
-	     #	 push(@array, { 'x' => 1 });	   # non-shared hash ref
+	     #	 push(@array, { 'x' =&gt 1 });	   # non-shared hash ref
 
        shared_clone REF
 	   "shared_clone" takes a reference, and returns a shared version of
@@ -122,12 +124,12 @@ FUNCTIONS
 	   Any shared elements in the argument are used as is (i.e., they are
 	   not cloned).
 
-	     my $cpy = shared_clone({'foo' => [qw/foo bar baz/]});
+	     my $cpy = shared_clone({'foo' =&gt [qw/foo bar baz/]});
 
 	   Object status (i.e., the class an object is blessed into) is also
 	   cloned.
 
-	     my $obj = {'foo' => [qw/foo bar baz/]};
+	     my $obj = {'foo' =&gt [qw/foo bar baz/]};
 	     bless($obj, 'Foo');
 	     my $cpy = shared_clone($obj);
 	     print(ref($cpy), "\n");	     # Outputs 'Foo'
@@ -291,25 +293,25 @@ OBJECTS
 	 bless($bar, 'Bar');
 
 	 # Put 'bar' inside 'foo'
-	 $foo->{'bar'} = $bar;
+	 $foo-&gt{'bar'} = $bar;
 
 	 # Rebless the objects via a thread
-	 threads->create(sub {
+	 threads-&gtcreate(sub {
 	     # Rebless the outer object
 	     bless($foo, 'Yin');
 
 	     # Cannot directly rebless the inner object
-	     #bless($foo->{'bar'}, 'Yang');
+	     #bless($foo-&gt{'bar'}, 'Yang');
 
 	     # Retrieve and rebless the inner object
-	     my $obj = $foo->{'bar'};
+	     my $obj = $foo-&gt{'bar'};
 	     bless($obj, 'Yang');
-	     $foo->{'bar'} = $obj;
+	     $foo-&gt{'bar'} = $obj;
 
-	 })->join();
+	 })-&gtjoin();
 
 	 print(ref($foo),	   "\n");    # Prints 'Yin'
-	 print(ref($foo->{'bar'}), "\n");    # Prints 'Yang'
+	 print(ref($foo-&gt{'bar'}), "\n");    # Prints 'Yang'
 	 print(ref($bar),	   "\n");    # Also prints 'Yang'
 
 NOTES
@@ -330,13 +332,13 @@ BUGS AND LIMITATIONS
 	 # @arr is now empty (i.e., == ());
 
 	 # Create a 'foo' object
-	 my $foo = { 'data' => 99 };
+	 my $foo = { 'data' =&gt 99 };
 	 bless($foo, 'foo');
 
 	 # Share the object
 	 share($foo);	     # Contents are now wiped out
 	 print("ERROR: \$foo is empty\n")
-	     if (! exists($foo->{'data'}));
+	     if (! exists($foo-&gt{'data'}));
 
        Therefore, populate such variables after declaring them as shared.
        (Scalar and scalar refs are not affected by this problem.)
@@ -355,11 +357,11 @@ BUGS AND LIMITATIONS
        autovivify the elements, and neither does slicing a shared array/hash
        over non-existent indices/keys autovivify the elements.
 
-       "share()" allows you to "share($hashref->{key})" and
-       "share($arrayref->[idx])" without giving any error message.  But the
-       "$hashref->{key}" or "$arrayref->[idx]" is not shared, causing the
+       "share()" allows you to "share($hashref-&gt{key})" and
+       "share($arrayref-&gt[idx])" without giving any error message.  But the
+       "$hashref-&gt{key}" or "$arrayref-&gt[idx]" is not shared, causing the
        error "lock can only be used on shared values" to occur when you
-       attempt to "lock($hasref->{key})" or "lock($arrayref->[idx])" in
+       attempt to "lock($hasref-&gt{key})" or "lock($arrayref-&gt[idx])" in
        another thread.
 
        Using refaddr()) is unreliable for testing whether or not two shared
@@ -383,7 +385,7 @@ BUGS AND LIMITATIONS
        structures.  For example:
 
 	   my %foo :shared;
-	   $foo{'bar'} = shared_clone({'a'=>'x', 'b'=>'y', 'c'=>'z'});
+	   $foo{'bar'} = shared_clone({'a'=&gt'x', 'b'=&gt'y', 'c'=&gt'z'});
 
 	   while (my ($key, $val) = each(%{$foo{'bar'}})) {
 	       ...
@@ -404,34 +406,34 @@ BUGS AND LIMITATIONS
        View existing bug reports at, and submit any new bugs, problems,
        patches, etc.  to:
        http://rt.cpan.org/Public/Dist/Display.html?Name=threads-shared
-       <http://rt.cpan.org/Public/Dist/Display.html?Name=threads-shared>
+       &lthttp://rt.cpan.org/Public/Dist/Display.html?Name=threads-shared&gt
 
 SEE ALSO
        threads::shared Discussion Forum on CPAN:
        http://www.cpanforum.com/dist/threads-shared
-       <http://www.cpanforum.com/dist/threads-shared>
+       &lthttp://www.cpanforum.com/dist/threads-shared&gt
 
        Annotated POD for threads::shared:
        http://annocpan.org/~JDHEDDEN/threads-shared-1.32/shared.pm
-       <http://annocpan.org/~JDHEDDEN/threads-shared-1.32/shared.pm>
+       &lthttp://annocpan.org/~JDHEDDEN/threads-shared-1.32/shared.pm&gt
 
        Source repository: http://code.google.com/p/threads-shared/
-       <http://code.google.com/p/threads-shared/>
+       &lthttp://code.google.com/p/threads-shared/&gt
 
        threads, perlthrtut
 
-       <http://www.perl.com/pub/a/2002/06/11/threads.html> and
-       <http://www.perl.com/pub/a/2002/09/04/threads.html>
+       &lthttp://www.perl.com/pub/a/2002/06/11/threads.html&gt and
+       &lthttp://www.perl.com/pub/a/2002/09/04/threads.html&gt
 
        Perl threads mailing list:
-       <http://lists.cpan.org/showlist.cgi?name=iThreads>
+       &lthttp://lists.cpan.org/showlist.cgi?name=iThreads&gt
 
 AUTHOR
-       Artur Bergman <sky AT crucially DOT net>
+       Artur Bergman &ltsky AT crucially DOT net&gt
 
        Documentation borrowed from the old Thread.pm.
 
-       CPAN version produced by Jerry D. Hedden <jdhedden AT cpan DOT org>.
+       CPAN version produced by Jerry D. Hedden &ltjdhedden AT cpan DOT org&gt.
 
 LICENSE
        threads::shared is released under the same license as Perl.
@@ -439,6 +441,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-06-20		  threads::shared(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

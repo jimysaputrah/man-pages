@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Meta::Recipe2 - A meta-attribute, attributes with</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::Meta:UseriContributed Perl DMoose::Cookbook::Meta::Recipe2(3)
 
 
@@ -24,10 +26,10 @@ SYNOPSIS
 	 use Moose;
 	 extends 'Moose::Meta::Attribute';
 
-	 has label => (
-	     is        => 'rw',
-	     isa       => 'Str',
-	     predicate => 'has_label',
+	 has label =&gt (
+	     is        =&gt 'rw',
+	     isa       =&gt 'Str',
+	     predicate =&gt 'has_label',
 	 );
 
 	 package Moose::Meta::Attribute::Custom::Labeled;
@@ -36,38 +38,38 @@ SYNOPSIS
 	 package MyApp::Website;
 	 use Moose;
 
-	 has url => (
-	     metaclass => 'Labeled',
-	     is        => 'rw',
-	     isa       => 'Str',
-	     label     => "The site's URL",
+	 has url =&gt (
+	     metaclass =&gt 'Labeled',
+	     is        =&gt 'rw',
+	     isa       =&gt 'Str',
+	     label     =&gt "The site's URL",
 	 );
 
-	 has name => (
-	     is  => 'rw',
-	     isa => 'Str',
+	 has name =&gt (
+	     is  =&gt 'rw',
+	     isa =&gt 'Str',
 	 );
 
 	 sub dump {
 	     my $self = shift;
 
-	     my $meta = $self->meta;
+	     my $meta = $self-&gtmeta;
 
 	     my $dump = '';
 
-	     for my $attribute ( map { $meta->get_attribute($_) }
-		 sort $meta->get_attribute_list ) {
+	     for my $attribute ( map { $meta-&gtget_attribute($_) }
+		 sort $meta-&gtget_attribute_list ) {
 
-		 if (	$attribute->isa('MyApp::Meta::Attribute::Labeled')
-		     && $attribute->has_label ) {
-		     $dump .= $attribute->label;
+		 if (	$attribute-&gtisa('MyApp::Meta::Attribute::Labeled')
+		     && $attribute-&gthas_label ) {
+		     $dump .= $attribute-&gtlabel;
 		 }
 		 else {
-		     $dump .= $attribute->name;
+		     $dump .= $attribute-&gtname;
 		 }
 
-		 my $reader = $attribute->get_read_method;
-		 $dump .= ": " . $self->$reader . "\n";
+		 my $reader = $attribute-&gtget_read_method;
+		 $dump .= ": " . $self-&gt$reader . "\n";
 	     }
 
 	     return $dump;
@@ -75,7 +77,7 @@ SYNOPSIS
 
 	 package main;
 
-	 my $app = MyApp::Website->new( url => "http://google.com", name => "Google" );
+	 my $app = MyApp::Website-&gtnew( url =&gt "http://google.com", name =&gt "Google" );
 
 SUMMARY
        In this recipe, we begin to delve into the wonder of meta-programming.
@@ -97,8 +99,8 @@ META-ATTRIBUTE OBJECTS
        themselves.  These objects have methods and attributes. Let's look at a
        concrete example.
 
-	 has 'x' => ( isa => 'Int', is => 'ro' );
-	 has 'y' => ( isa => 'Int', is => 'rw' );
+	 has 'x' =&gt ( isa =&gt 'Int', is =&gt 'ro' );
+	 has 'y' =&gt ( isa =&gt 'Int', is =&gt 'rw' );
 
        Internally, the metaclass for "Point" has two Moose::Meta::Attribute.
        There are several methods for getting meta-attributes out of a
@@ -112,8 +114,8 @@ META-ATTRIBUTE OBJECTS
        Once you have this meta-attribute object, you can call methods on it
        like this:
 
-	 print $point->meta->get_attribute('x')->type_constraint;
-	    => Int
+	 print $point-&gtmeta-&gtget_attribute('x')-&gttype_constraint;
+	    =&gt Int
 
        To add a label to our attributes there are two steps. First, we need a
        new attribute metaclass that can store a label for an attribute.
@@ -129,10 +131,10 @@ RECIPE REVIEW
        We can subclass a Moose metaclass in the same way that we subclass
        anything else.
 
-	 has label => (
-	     is        => 'rw',
-	     isa       => 'Str',
-	     predicate => 'has_label',
+	 has label =&gt (
+	     is        =&gt 'rw',
+	     isa       =&gt 'Str',
+	     predicate =&gt 'has_label',
 	 );
 
        Again, this is standard Moose code.
@@ -157,11 +159,11 @@ RECIPE REVIEW
 
        Finally, we use it for an attribute:
 
-	 has url => (
-	     metaclass => 'Labeled',
-	     is        => 'rw',
-	     isa       => 'Str',
-	     label     => "The site's URL",
+	 has url =&gt (
+	     metaclass =&gt 'Labeled',
+	     is        =&gt 'rw',
+	     isa       =&gt 'Str',
+	     label     =&gt "The site's URL",
 	 );
 
        This looks like a normal attribute declaration, except for two things,
@@ -186,15 +188,15 @@ RECIPE REVIEW
 
        We can access this meta-attribute and its label like this:
 
-	 $website->meta->get_attribute('url')->label()
+	 $website-&gtmeta-&gtget_attribute('url')-&gtlabel()
 
-	 MyApp::Website->meta->get_attribute('url')->label()
+	 MyApp::Website-&gtmeta-&gtget_attribute('url')-&gtlabel()
 
        We also have a regular attribute, "name":
 
-	 has name => (
-	     is  => 'rw',
-	     isa => 'Str',
+	 has name =&gt (
+	     is  =&gt 'rw',
+	     isa =&gt 'Str',
 	 );
 
        This is a regular Moose attribute, because we have not specified a new
@@ -207,16 +209,16 @@ RECIPE REVIEW
 	 sub dump {
 	     my $self = shift;
 
-	     my $meta = $self->meta;
+	     my $meta = $self-&gtmeta;
 
 	     my $dump = '';
 
-	     for my $attribute ( map { $meta->get_attribute($_) }
-		 sort $meta->get_attribute_list ) {
+	     for my $attribute ( map { $meta-&gtget_attribute($_) }
+		 sort $meta-&gtget_attribute_list ) {
 
-		 if (	$attribute->isa('MyApp::Meta::Attribute::Labeled')
-		     && $attribute->has_label ) {
-		     $dump .= $attribute->label;
+		 if (	$attribute-&gtisa('MyApp::Meta::Attribute::Labeled')
+		     && $attribute-&gthas_label ) {
+		     $dump .= $attribute-&gtlabel;
 		 }
 
        This is a bit of defensive code. We cannot depend on every meta-
@@ -229,11 +231,11 @@ RECIPE REVIEW
        label, we use it, otherwise we use the attribute name:
 
 		 else {
-		     $dump .= $attribute->name;
+		     $dump .= $attribute-&gtname;
 		 }
 
-		 my $reader = $attribute->get_read_method;
-		 $dump .= ": " . $self->$reader . "\n";
+		 my $reader = $attribute-&gtget_read_method;
+		 $dump .= ": " . $self-&gt$reader . "\n";
 	     }
 
 	     return $dump;
@@ -257,18 +259,18 @@ CONCLUSION
        storing some more information. For example, you could implement a
        metaclass that expires attributes after a certain amount of time:
 
-	  has site_cache => (
-	      metaclass     => 'TimedExpiry',
-	      expires_after => { hours => 1 },
-	      refresh_with  => sub { get( $_[0]->url ) },
-	      isa	    => 'Str',
-	      is	    => 'ro',
+	  has site_cache =&gt (
+	      metaclass     =&gt 'TimedExpiry',
+	      expires_after =&gt { hours =&gt 1 },
+	      refresh_with  =&gt sub { get( $_[0]-&gturl ) },
+	      isa	    =&gt 'Str',
+	      is	    =&gt 'ro',
 	  );
 
        The sky's the limit!
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -279,6 +281,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-06 Moose::Cookbook::Meta::Recipe2(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

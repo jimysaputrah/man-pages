@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Switch.pm module implements a generalized case mechanism that..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Switch - A switch statement for Perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Switch(3pm)	       Perl Programmers Reference Guide 	   Switch(3pm)
 
 
@@ -51,8 +53,8 @@ BACKGROUND
 	       number  same    numeric or referential  match if $s == $c;
 	       or ref	       equality
 
-	       object  method  result of method call   match if $s->$c();
-	       ref     name			       match if defined $s->$c();
+	       object  method  result of method call   match if $s-&gt$c();
+	       ref     name			       match if defined $s-&gt$c();
 		       or ref
 
 	       other   other   string equality	       match if $s eq $c;
@@ -61,39 +63,39 @@ BACKGROUND
 
 	       string  regexp  pattern match	       match if $s =~ /$c/;
 
-	       array   scalar  array entry existence   match if 0<=$c && $c<@$s;
-	       ref	       array entry definition  match if defined $s->[$c];
-			       array entry truth       match if $s->[$c];
+	       array   scalar  array entry existence   match if 0&lt=$c && $c&lt@$s;
+	       ref	       array entry definition  match if defined $s-&gt[$c];
+			       array entry truth       match if $s-&gt[$c];
 
 	       array   array   array intersection      match if intersects(@$s, @$c);
 	       ref     ref     (apply this table to
 				all pairs of elements
-				$s->[$i] and
-				$c->[$j])
+				$s-&gt[$i] and
+				$c-&gt[$j])
 
 	       array   regexp  array grep	       match if grep /$c/, @$s;
 	       ref
 
-	       hash    scalar  hash entry existence    match if exists $s->{$c};
-	       ref	       hash entry definition   match if defined $s->{$c};
-			       hash entry truth        match if $s->{$c};
+	       hash    scalar  hash entry existence    match if exists $s-&gt{$c};
+	       ref	       hash entry definition   match if defined $s-&gt{$c};
+			       hash entry truth        match if $s-&gt{$c};
 
 	       hash    regexp  hash grep	       match if grep /$c/, keys %$s;
 	       ref
 
-	       sub     scalar  return value defn       match if defined $s->($c);
-	       ref	       return value truth      match if $s->($c);
+	       sub     scalar  return value defn       match if defined $s-&gt($c);
+	       ref	       return value truth      match if $s-&gt($c);
 
-	       sub     array   return value defn       match if defined $s->(@$c);
-	       ref     ref     return value truth      match if $s->(@$c);
+	       sub     array   return value defn       match if defined $s-&gt(@$c);
+	       ref     ref     return value truth      match if $s-&gt(@$c);
 
        In reality, Table 1 covers 31 alternatives, because only the equality
        and intersection tests are commutative; in all other cases, the roles
        of the $s and $c variables could be reversed to produce a different
        test. For example, instead of testing a single hash for the existence
-       of a series of keys ("match if exists $s->{$c}"), one could test for
+       of a series of keys ("match if exists $s-&gt{$c}"), one could test for
        the existence of a single key in a series of hashes ("match if exists
-       $c->{$s}").
+       $c-&gt{$s}").
 
 DESCRIPTION
        The Switch.pm module implements a generalized case mechanism that
@@ -134,15 +136,15 @@ DESCRIPTION
 
 	       # AND LATER...
 
-	       %special = ( woohoo => 1,  d'oh => 1 );
+	       %special = ( woohoo =&gt 1,  d'oh =&gt 1 );
 
-	       while (<>) {
+	       while (&lt&gt) {
 		   chomp;
 		   switch ($_) {
 		       case (%special) { print "homer\n"; }	 # if $special{$_}
 		       case /[a-z]/i   { print "alpha\n"; }	 # if $_ =~ /a-z/i
 		       case [1..9]     { print "small num\n"; }  # if $_ in [1..9]
-		       case { $_[0] >= 10 } { print "big num\n"; } # if $_ >= 10
+		       case { $_[0] &gt= 10 } { print "big num\n"; } # if $_ &gt= 10
 		       print "must be punctuation\n" case /\W/;  # if $_ ~= /\W/
 		   }
 	       }
@@ -196,7 +198,7 @@ DESCRIPTION
        For example:
 
 	       switch ($val) {
-		       case [0..9] { handle_num_any(); next if $val < 7; }
+		       case [0..9] { handle_num_any(); next if $val &lt 7; }
 		       case /\d/   { handle_dig_any(); }
 	       }
 
@@ -206,7 +208,7 @@ DESCRIPTION
        "case" block). Thus the previous example could also have been written:
 
 	       switch ($val) {
-		       case [0..9] { handle_num_any(); last if $val >= 7; next; }
+		       case [0..9] { handle_num_any(); last if $val &gt= 7; next; }
 		       case /\d/   { handle_dig_any(); }
 	       }
 
@@ -267,17 +269,17 @@ DESCRIPTION
 
 	       sub beverage {
 		   switch (shift) {
-		       case { $_[0] < 10 } { return 'milk' }
-		       case { $_[0] < 20 } { return 'coke' }
-		       case { $_[0] < 30 } { return 'beer' }
-		       case { $_[0] < 40 } { return 'wine' }
-		       case { $_[0] < 50 } { return 'malt' }
-		       case { $_[0] < 60 } { return 'Moet' }
+		       case { $_[0] &lt 10 } { return 'milk' }
+		       case { $_[0] &lt 20 } { return 'coke' }
+		       case { $_[0] &lt 30 } { return 'beer' }
+		       case { $_[0] &lt 40 } { return 'wine' }
+		       case { $_[0] &lt 50 } { return 'malt' }
+		       case { $_[0] &lt 60 } { return 'Moet' }
 		       else		   { return 'milk' }
 		   }
 	       }
 
-       (This is equivalent to writing "case (sub { $_[0] < 10 })", etc.; $_[0]
+       (This is equivalent to writing "case (sub { $_[0] &lt 10 })", etc.; $_[0]
        is the argument to the anonymous subroutine.)
 
        The need to specify each condition as a subroutine block is tiresome.
@@ -288,20 +290,20 @@ DESCRIPTION
 
 	       use Switch '__';
 
-	       __ < 2
+	       __ &lt 2
 
        is equivalent to:
 
-	       sub { $_[0] < 2 }
+	       sub { $_[0] &lt 2 }
 
        With "__", the previous ugly case statements can be rewritten:
 
-	       case  __ < 10  { return 'milk' }
-	       case  __ < 20  { return 'coke' }
-	       case  __ < 30  { return 'beer' }
-	       case  __ < 40  { return 'wine' }
-	       case  __ < 50  { return 'malt' }
-	       case  __ < 60  { return 'Moet' }
+	       case  __ &lt 10  { return 'milk' }
+	       case  __ &lt 20  { return 'coke' }
+	       case  __ &lt 30  { return 'beer' }
+	       case  __ &lt 40  { return 'wine' }
+	       case  __ &lt 50  { return 'malt' }
+	       case  __ &lt 60  { return 'Moet' }
 	       else	      { return 'milk' }
 
        The "__" subroutine makes extensive use of operator overloading to
@@ -313,13 +315,13 @@ DESCRIPTION
        boolean operators "&&" and "||" to be overloaded. So a case statement
        like this:
 
-	       case  0 <= __ && __ < 10  { return 'digit' }
+	       case  0 &lt= __ && __ &lt 10  { return 'digit' }
 
        doesn't act as expected, because when it is executed, it constructs two
        higher order subroutines and then treats the two resulting references
        as arguments to "&&":
 
-	       sub { 0 <= $_[0] } && sub { $_[0] < 10 }
+	       sub { 0 &lt= $_[0] } && sub { $_[0] &lt 10 }
 
        This boolean expression is inevitably true, since both references are
        non-false. Fortunately, the overloaded 'bool' operator catches this
@@ -363,6 +365,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-06-07			   Switch(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

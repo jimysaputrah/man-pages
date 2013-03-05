@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The four "filter_*" methods shown above are available in all the DBM..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perldbmfilter - Perl DBM Filters</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLDBMFILTER(1)       Perl Programmers Reference Guide       PERLDBMFILTER(1)
 
 
@@ -18,10 +20,10 @@ NAME
 SYNOPSIS
 	   $db = tie %hash, 'DBM', ...
 
-	   $old_filter = $db->filter_store_key	( sub { ... } );
-	   $old_filter = $db->filter_store_value( sub { ... } );
-	   $old_filter = $db->filter_fetch_key	( sub { ... } );
-	   $old_filter = $db->filter_fetch_value( sub { ... } );
+	   $old_filter = $db-&gtfilter_store_key	( sub { ... } );
+	   $old_filter = $db-&gtfilter_store_value( sub { ... } );
+	   $old_filter = $db-&gtfilter_fetch_key	( sub { ... } );
+	   $old_filter = $db-&gtfilter_fetch_value( sub { ... } );
 
 DESCRIPTION
        The four "filter_*" methods shown above are available in all the DBM
@@ -99,11 +101,11 @@ DESCRIPTION
 	     or die "Cannot open $filename: $!\n";
 
 	   # Install DBM Filters
-	   $db->filter_fetch_key  ( sub { s/\0$//    } );
-	   $db->filter_store_key  ( sub { $_ .= "\0" } );
-	   $db->filter_fetch_value(
+	   $db-&gtfilter_fetch_key  ( sub { s/\0$//    } );
+	   $db-&gtfilter_store_key  ( sub { $_ .= "\0" } );
+	   $db-&gtfilter_fetch_value(
 	       sub { no warnings 'uninitialized'; s/\0$// } );
-	   $db->filter_store_value( sub { $_ .= "\0" } );
+	   $db-&gtfilter_store_value( sub { $_ .= "\0" } );
 
 	   $hash{"abc"} = "def";
 	   my $a = $hash{"ABC"};
@@ -143,8 +145,8 @@ DESCRIPTION
 	   my $db = tie %hash, 'DB_File', $filename, O_CREAT|O_RDWR, 0666, $DB_HASH
 	     or die "Cannot open $filename: $!\n";
 
-	   $db->filter_fetch_key  ( sub { $_ = unpack("i", $_) } );
-	   $db->filter_store_key  ( sub { $_ = pack ("i", $_) } );
+	   $db-&gtfilter_fetch_key  ( sub { $_ = unpack("i", $_) } );
+	   $db-&gtfilter_store_key  ( sub { $_ = pack ("i", $_) } );
 	   $hash{123} = "def";
 	   # ...
 	   undef $db;
@@ -166,6 +168,6 @@ AUTHOR
 
 
 perl v5.10.1			  2009-02-12		      PERLDBMFILTER(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

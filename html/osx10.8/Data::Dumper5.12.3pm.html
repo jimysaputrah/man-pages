@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Given a list of scalars or reference variables, writes out their..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Data::Dumper - stringified perl data structures, suitable for both</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Data::Dumper(3pm)      Perl Programmers Reference Guide      Data::Dumper(3pm)
 
 
@@ -23,21 +25,21 @@ SYNOPSIS
 	   print Dumper($foo, $bar);
 
 	   # extended usage with names
-	   print Data::Dumper->Dump([$foo, $bar], [qw(foo *ary)]);
+	   print Data::Dumper-&gtDump([$foo, $bar], [qw(foo *ary)]);
 
 	   # configuration variables
 	   {
 	     local $Data::Dumper::Purity = 1;
-	     eval Data::Dumper->Dump([$foo, $bar], [qw(foo *ary)]);
+	     eval Data::Dumper-&gtDump([$foo, $bar], [qw(foo *ary)]);
 	   }
 
 	   # OO usage
-	   $d = Data::Dumper->new([$foo, $bar], [qw(foo *ary)]);
+	   $d = Data::Dumper-&gtnew([$foo, $bar], [qw(foo *ary)]);
 	      ...
-	   print $d->Dump;
+	   print $d-&gtDump;
 	      ...
-	   $d->Purity(1)->Terse(1)->Deepcopy(1);
-	   eval $d->Dump;
+	   $d-&gtPurity(1)-&gtTerse(1)-&gtDeepcopy(1);
+	   eval $d-&gtDump;
 
 DESCRIPTION
        Given a list of scalars or reference variables, writes out their
@@ -79,7 +81,7 @@ DESCRIPTION
        details.
 
    Methods
-       PACKAGE->new(ARRAYREF [, ARRAYREF])
+       PACKAGE-&gtnew(ARRAYREF [, ARRAYREF])
 	   Returns a newly created "Data::Dumper" object.  The first argument
 	   is an anonymous array of values to be dumped.  The optional second
 	   argument is an anonymous array of names for the values.  The names
@@ -98,7 +100,7 @@ DESCRIPTION
 	   Structure traversal is depth-first,	and proceeds in order from the
 	   first supplied value to the last.
 
-       $OBJ->Dump  or  PACKAGE->Dump(ARRAYREF [, ARRAYREF])
+       $OBJ-&gtDump  or  PACKAGE-&gtDump(ARRAYREF [, ARRAYREF])
 	   Returns the stringified form of the values stored in the object
 	   (preserving the order in which they were supplied to "new"),
 	   subject to the configuration options below.	In a list context, it
@@ -107,29 +109,29 @@ DESCRIPTION
 	   The second form, for convenience, simply calls the "new" method on
 	   its arguments before dumping the object immediately.
 
-       $OBJ->Seen([HASHREF])
+       $OBJ-&gtSeen([HASHREF])
 	   Queries or adds to the internal table of already encountered
 	   references.	You must use "Reset" to explicitly clear the table if
 	   needed.  Such references are not dumped; instead, their names are
 	   inserted wherever they are encountered subsequently.  This is
 	   useful especially for properly dumping subroutine references.
 
-	   Expects an anonymous hash of name => value pairs.  Same rules apply
+	   Expects an anonymous hash of name =&gt value pairs.  Same rules apply
 	   for names as in "new".  If no argument is supplied, will return the
-	   "seen" list of name => value pairs, in a list context.  Otherwise,
+	   "seen" list of name =&gt value pairs, in a list context.  Otherwise,
 	   returns the object itself.
 
-       $OBJ->Values([ARRAYREF])
+       $OBJ-&gtValues([ARRAYREF])
 	   Queries or replaces the internal array of values that will be
 	   dumped.  When called without arguments, returns the values.
 	   Otherwise, returns the object itself.
 
-       $OBJ->Names([ARRAYREF])
+       $OBJ-&gtNames([ARRAYREF])
 	   Queries or replaces the internal array of user supplied names for
 	   the values that will be dumped.  When called without arguments,
 	   returns the names.  Otherwise, returns the object itself.
 
-       $OBJ->Reset
+       $OBJ-&gtReset
 	   Clears the internal table of "seen" references and returns the
 	   object itself.
 
@@ -154,7 +156,7 @@ DESCRIPTION
        The method forms return the object itself when called with arguments,
        so that they can be chained together nicely.
 
-       o   $Data::Dumper::Indent  or  $OBJ->Indent([NEWVAL])
+       o   $Data::Dumper::Indent  or  $OBJ-&gtIndent([NEWVAL])
 
 	   Controls the style of indentation.  It can be set to 0, 1, 2 or 3.
 	   Style 0 spews output without any newlines, indentation, or spaces
@@ -168,24 +170,24 @@ DESCRIPTION
 	   (but the comment is on its own line, so array output consumes twice
 	   the number of lines).  Style 2 is the default.
 
-       o   $Data::Dumper::Purity  or  $OBJ->Purity([NEWVAL])
+       o   $Data::Dumper::Purity  or  $OBJ-&gtPurity([NEWVAL])
 
 	   Controls the degree to which the output can be "eval"ed to recreate
 	   the supplied reference structures.  Setting it to 1 will output
 	   additional perl statements that will correctly recreate nested
 	   references.	The default is 0.
 
-       o   $Data::Dumper::Pad  or  $OBJ->Pad([NEWVAL])
+       o   $Data::Dumper::Pad  or  $OBJ-&gtPad([NEWVAL])
 
 	   Specifies the string that will be prefixed to every line of the
 	   output.  Empty string by default.
 
-       o   $Data::Dumper::Varname  or  $OBJ->Varname([NEWVAL])
+       o   $Data::Dumper::Varname  or  $OBJ-&gtVarname([NEWVAL])
 
 	   Contains the prefix to use for tagging variable names in the
 	   output. The default is "VAR".
 
-       o   $Data::Dumper::Useqq  or  $OBJ->Useqq([NEWVAL])
+       o   $Data::Dumper::Useqq  or  $OBJ-&gtUseqq([NEWVAL])
 
 	   When set, enables the use of double quotes for representing string
 	   values.  Whitespace other than space will be represented as
@@ -195,14 +197,14 @@ DESCRIPTION
 	   default is 0.  "Dump()" will run slower if this flag is set, since
 	   the fast XSUB implementation doesn't support it yet.
 
-       o   $Data::Dumper::Terse  or  $OBJ->Terse([NEWVAL])
+       o   $Data::Dumper::Terse  or  $OBJ-&gtTerse([NEWVAL])
 
 	   When set, Data::Dumper will emit single, non-self-referential
 	   values as atoms/terms rather than statements.  This means that the
 	   $VARn names will be avoided where possible, but be advised that
 	   such output may not always be parseable by "eval".
 
-       o   $Data::Dumper::Freezer  or  $OBJ->Freezer([NEWVAL])
+       o   $Data::Dumper::Freezer  or  $OBJ-&gtFreezer([NEWVAL])
 
 	   Can be set to a method name, or to an empty string to disable the
 	   feature.  Data::Dumper will invoke that method via the object
@@ -218,11 +220,11 @@ DESCRIPTION
 	   using UNIVERSAL::can()) then the call will be skipped.  If the
 	   method dies a warning will be generated.
 
-       o   $Data::Dumper::Toaster  or  $OBJ->Toaster([NEWVAL])
+       o   $Data::Dumper::Toaster  or  $OBJ-&gtToaster([NEWVAL])
 
 	   Can be set to a method name, or to an empty string to disable the
 	   feature.  Data::Dumper will emit a method call for any objects that
-	   are to be dumped using the syntax "bless(DATA, CLASS)->METHOD()".
+	   are to be dumped using the syntax "bless(DATA, CLASS)-&gtMETHOD()".
 	   Note that this means that the method specified will have to perform
 	   any modifications required on the object (like creating new state
 	   within it, and/or reblessing it in a different package) and then
@@ -230,27 +232,27 @@ DESCRIPTION
 	   can be called via the object, and that it returns a valid object.
 	   Defaults to an empty string.
 
-       o   $Data::Dumper::Deepcopy  or	$OBJ->Deepcopy([NEWVAL])
+       o   $Data::Dumper::Deepcopy  or	$OBJ-&gtDeepcopy([NEWVAL])
 
 	   Can be set to a boolean value to enable deep copies of structures.
 	   Cross-referencing will then only be done when absolutely essential
 	   (i.e., to break reference cycles).  Default is 0.
 
-       o   $Data::Dumper::Quotekeys  or  $OBJ->Quotekeys([NEWVAL])
+       o   $Data::Dumper::Quotekeys  or  $OBJ-&gtQuotekeys([NEWVAL])
 
 	   Can be set to a boolean value to control whether hash keys are
 	   quoted.  A false value will avoid quoting hash keys when it looks
 	   like a simple string.  Default is 1, which will always enclose hash
 	   keys in quotes.
 
-       o   $Data::Dumper::Bless  or  $OBJ->Bless([NEWVAL])
+       o   $Data::Dumper::Bless  or  $OBJ-&gtBless([NEWVAL])
 
 	   Can be set to a string that specifies an alternative to the "bless"
 	   builtin operator used to create objects.  A function with the
 	   specified name should exist, and should accept the same arguments
 	   as the builtin.  Default is "bless".
 
-       o   $Data::Dumper::Pair	or  $OBJ->Pair([NEWVAL])
+       o   $Data::Dumper::Pair	or  $OBJ-&gtPair([NEWVAL])
 
 	   Can be set to a string that specifies the separator between hash
 	   keys and values. To dump nested hash, array and scalar values to
@@ -259,9 +261,9 @@ DESCRIPTION
 	   function with the specified name exists, and accepts the same
 	   arguments as the builtin.
 
-	   Default is: " => ".
+	   Default is: " =&gt ".
 
-       o   $Data::Dumper::Maxdepth  or	$OBJ->Maxdepth([NEWVAL])
+       o   $Data::Dumper::Maxdepth  or	$OBJ-&gtMaxdepth([NEWVAL])
 
 	   Can be set to a positive integer that specifies the depth beyond
 	   which we don't venture into a structure.  Has no effect when
@@ -269,7 +271,7 @@ DESCRIPTION
 	   don't want to see more than enough).  Default is 0, which means
 	   there is no maximum depth.
 
-       o   $Data::Dumper::Useperl  or  $OBJ->Useperl([NEWVAL])
+       o   $Data::Dumper::Useperl  or  $OBJ-&gtUseperl([NEWVAL])
 
 	   Can be set to a boolean value which controls whether the pure Perl
 	   implementation of "Data::Dumper" is used. The "Data::Dumper" module
@@ -280,7 +282,7 @@ DESCRIPTION
 	   Default is 0, which means the XS implementation will be used if
 	   possible.
 
-       o   $Data::Dumper::Sortkeys  or	$OBJ->Sortkeys([NEWVAL])
+       o   $Data::Dumper::Sortkeys  or	$OBJ-&gtSortkeys([NEWVAL])
 
 	   Can be set to a boolean value to control whether hash keys are
 	   dumped in sorted order. A true value will cause the keys of all
@@ -296,7 +298,7 @@ DESCRIPTION
 	   from being dumped. Default is 0, which means that hash keys are not
 	   sorted.
 
-       o   $Data::Dumper::Deparse  or  $OBJ->Deparse([NEWVAL])
+       o   $Data::Dumper::Deparse  or  $OBJ-&gtDeparse([NEWVAL])
 
 	   Can be set to a boolean value to control whether code references
 	   are turned into perl source code. If set to a true value,
@@ -320,16 +322,16 @@ EXAMPLES
 	   use Data::Dumper;
 
 	   package Foo;
-	   sub new {bless {'a' => 1, 'b' => sub { return "foo" }}, $_[0]};
+	   sub new {bless {'a' =&gt 1, 'b' =&gt sub { return "foo" }}, $_[0]};
 
 	   package Fuz; 		      # a weird REF-REF-SCALAR object
 	   sub new {bless \($_ = \ 'fu\'z'), $_[0]};
 
 	   package main;
-	   $foo = Foo->new;
-	   $fuz = Fuz->new;
+	   $foo = Foo-&gtnew;
+	   $fuz = Fuz-&gtnew;
 	   $boo = [ 1, [], "abcd", \*foo,
-		    {1 => 'a', 023 => 'b', 0x45 => 'c'},
+		    {1 =&gt 'a', 023 =&gt 'b', 0x45 =&gt 'c'},
 		    \\"p\q\'r", $foo, $fuz];
 
 	   ########
@@ -365,23 +367,23 @@ EXAMPLES
 	   $c = \@c;
 	   $b = {};
 	   $a = [1, $b, $c];
-	   $b->{a} = $a;
-	   $b->{b} = $a->[1];
-	   $b->{c} = $a->[2];
-	   print Data::Dumper->Dump([$a,$b,$c], [qw(a b c)]);
+	   $b-&gt{a} = $a;
+	   $b-&gt{b} = $a-&gt[1];
+	   $b-&gt{c} = $a-&gt[2];
+	   print Data::Dumper-&gtDump([$a,$b,$c], [qw(a b c)]);
 
 
 	   $Data::Dumper::Purity = 1;	      # fill in the holes for eval
-	   print Data::Dumper->Dump([$a, $b], [qw(*a b)]); # print as @a
-	   print Data::Dumper->Dump([$b, $a], [qw(*b a)]); # print as %b
+	   print Data::Dumper-&gtDump([$a, $b], [qw(*a b)]); # print as @a
+	   print Data::Dumper-&gtDump([$b, $a], [qw(*b a)]); # print as %b
 
 
 	   $Data::Dumper::Deepcopy = 1;       # avoid cross-refs
-	   print Data::Dumper->Dump([$b, $a], [qw(*b a)]);
+	   print Data::Dumper-&gtDump([$b, $a], [qw(*b a)]);
 
 
 	   $Data::Dumper::Purity = 0;	      # avoid cross-refs
-	   print Data::Dumper->Dump([$b, $a], [qw(*b a)]);
+	   print Data::Dumper-&gtDump([$b, $a], [qw(*b a)]);
 
 	   ########
 	   # deep structures
@@ -389,26 +391,26 @@ EXAMPLES
 
 	   $a = "pearl";
 	   $b = [ $a ];
-	   $c = { 'b' => $b };
+	   $c = { 'b' =&gt $b };
 	   $d = [ $c ];
-	   $e = { 'd' => $d };
-	   $f = { 'e' => $e };
-	   print Data::Dumper->Dump([$f], [qw(f)]);
+	   $e = { 'd' =&gt $d };
+	   $f = { 'e' =&gt $e };
+	   print Data::Dumper-&gtDump([$f], [qw(f)]);
 
 	   $Data::Dumper::Maxdepth = 3;       # no deeper than 3 refs down
-	   print Data::Dumper->Dump([$f], [qw(f)]);
+	   print Data::Dumper-&gtDump([$f], [qw(f)]);
 
 
 	   ########
 	   # object-oriented usage
 	   ########
 
-	   $d = Data::Dumper->new([$a,$b], [qw(a b)]);
-	   $d->Seen({'*c' => $c});	      # stash a ref without printing it
-	   $d->Indent(3);
-	   print $d->Dump;
-	   $d->Reset->Purity(0);	      # empty the seen cache
-	   print join "----\n", $d->Dump;
+	   $d = Data::Dumper-&gtnew([$a,$b], [qw(a b)]);
+	   $d-&gtSeen({'*c' =&gt $c});	      # stash a ref without printing it
+	   $d-&gtIndent(3);
+	   print $d-&gtDump;
+	   $d-&gtReset-&gtPurity(0);	      # empty the seen cache
+	   print join "----\n", $d-&gtDump;
 
 
 	   ########
@@ -416,11 +418,11 @@ EXAMPLES
 	   ########
 
 	   package Foo;
-	   sub new { bless { state => 'awake' }, shift }
+	   sub new { bless { state =&gt 'awake' }, shift }
 	   sub Freeze {
 	       my $s = shift;
 	       print STDERR "preparing to sleep\n";
-	       $s->{state} = 'asleep';
+	       $s-&gt{state} = 'asleep';
 	       return bless $s, 'Foo::ZZZ';
 	   }
 
@@ -428,20 +430,20 @@ EXAMPLES
 	   sub Thaw {
 	       my $s = shift;
 	       print STDERR "waking up\n";
-	       $s->{state} = 'awake';
+	       $s-&gt{state} = 'awake';
 	       return bless $s, 'Foo';
 	   }
 
 	   package Foo;
 	   use Data::Dumper;
-	   $a = Foo->new;
-	   $b = Data::Dumper->new([$a], ['c']);
-	   $b->Freezer('Freeze');
-	   $b->Toaster('Thaw');
-	   $c = $b->Dump;
+	   $a = Foo-&gtnew;
+	   $b = Data::Dumper-&gtnew([$a], ['c']);
+	   $b-&gtFreezer('Freeze');
+	   $b-&gtToaster('Thaw');
+	   $c = $b-&gtDump;
 	   print $c;
 	   $d = eval $c;
-	   print Data::Dumper->Dump([$d], ['d']);
+	   print Data::Dumper-&gtDump([$d], ['d']);
 
 
 	   ########
@@ -451,9 +453,9 @@ EXAMPLES
 	   sub foo { print "foo speaking\n" }
 	   *other = \&foo;
 	   $bar = [ \&other ];
-	   $d = Data::Dumper->new([\&other,$bar],['*other','bar']);
-	   $d->Seen({ '*foo' => \&foo });
-	   print $d->Dump;
+	   $d = Data::Dumper-&gtnew([\&other,$bar],['*other','bar']);
+	   $d-&gtSeen({ '*foo' =&gt \&foo });
+	   print $d-&gtDump;
 
 
 	   ########
@@ -472,7 +474,7 @@ EXAMPLES
 	       # in the order that you want them to be dumped
 	       return [
 		 # Sort the keys of %$foo in reverse numeric order
-		   $hash eq $foo ? (sort {$b <=> $a} keys %$hash) :
+		   $hash eq $foo ? (sort {$b &lt=&gt $a} keys %$hash) :
 		 # Only dump the odd number keys of %$bar
 		   $hash eq $bar ? (grep {$_ % 2} keys %$hash) :
 		 # Sort keys in default order for all other hashes
@@ -534,6 +536,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-07		     Data::Dumper(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

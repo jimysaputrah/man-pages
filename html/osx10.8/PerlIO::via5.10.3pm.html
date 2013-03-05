@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The PerlIO::via module allows you to develop PerlIO layers in Perl,..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>PerlIO::via - Helper class for PerlIO layers implemented in perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PerlIO::via(3pm)       Perl Programmers Reference Guide       PerlIO::via(3pm)
 
 
@@ -17,10 +19,10 @@ NAME
 
 SYNOPSIS
 	  use PerlIO::via::Layer;
-	  open($fh,"<:via(Layer)",...);
+	  open($fh,"&lt:via(Layer)",...);
 
 	  use Some::Other::Package;
-	  open($fh,">:via(Some::Other::Package)",...);
+	  open($fh,"&gt:via(Some::Other::Package)",...);
 
 DESCRIPTION
        The PerlIO::via module allows you to develop PerlIO layers in Perl,
@@ -33,8 +35,8 @@ DESCRIPTION
        PerlIO::via::StripHTML module for instance, allows you to say:
 
 	       use PerlIO::via::StripHTML;
-	       open( my $fh, "<:via(StripHTML)", "index.html" );
-	       my @line = <$fh>;
+	       open( my $fh, "&lt:via(StripHTML)", "index.html" );
+	       my @line = &lt$fh&gt;
 
        to obtain the text of an HTML-file in an array with all the HTML-tags
        automagically removed.
@@ -62,7 +64,7 @@ EXPECTED METHODS
        for this reason and to maintain some level of "compatibility" with
        TIEHANDLE classes it is passed last.
 
-       $class->PUSHED([$mode,[$fh]])
+       $class-&gtPUSHED([$mode,[$fh]])
 	   Should return an object or the class, or -1 on failure.  (Compare
 	   TIEHANDLE.)	The arguments are an optional mode string ("r", "w",
 	   "w+", ...) and a filehandle for the PerlIO layer below.  Mandatory.
@@ -72,10 +74,10 @@ EXPECTED METHODS
 	   "OPEN", "SYSOPEN", "FDOPEN" or by letting a lower layer do the
 	   open.
 
-       $obj->POPPED([$fh])
+       $obj-&gtPOPPED([$fh])
 	   Optional - called when the layer is about to be removed.
 
-       $obj->UTF8($bellowFlag,[$fh])
+       $obj-&gtUTF8($bellowFlag,[$fh])
 	   Optional - if present it will be called immediately after PUSHED
 	   has returned. It should return a true value if the layer expects
 	   data to be UTF-8 encoded. If it returns true, the result is as if
@@ -87,79 +89,79 @@ EXPECTED METHODS
 	   the UTF-8 flag clear.  The $bellowFlag argument will be true if
 	   there is a layer below and that layer was expecting UTF-8.
 
-       $obj->OPEN($path,$mode,[$fh])
+       $obj-&gtOPEN($path,$mode,[$fh])
 	   Optional - if not present a lower layer does the open.  If present,
 	   called for normal opens after the layer is pushed.  This function
 	   is subject to change as there is no easy way to get a lower layer
 	   to do the open and then regain control.
 
-       $obj->BINMODE([$fh])
+       $obj-&gtBINMODE([$fh])
 	   Optional - if not present the layer is popped on binmode($fh) or
 	   when ":raw" is pushed. If present it should return 0 on success, -1
 	   on error, or undef to pop the layer.
 
-       $obj->FDOPEN($fd,[$fh])
+       $obj-&gtFDOPEN($fd,[$fh])
 	   Optional - if not present a lower layer does the open.  If present,
 	   called after the layer is pushed for opens which pass a numeric
 	   file descriptor.  This function is subject to change as there is no
 	   easy way to get a lower layer to do the open and then regain
 	   control.
 
-       $obj->SYSOPEN($path,$imode,$perm,[$fh])
+       $obj-&gtSYSOPEN($path,$imode,$perm,[$fh])
 	   Optional - if not present a lower layer does the open.  If present,
 	   called after the layer is pushed for sysopen style opens which pass
 	   a numeric mode and permissions.  This function is subject to change
 	   as there is no easy way to get a lower layer to do the open and
 	   then regain control.
 
-       $obj->FILENO($fh)
+       $obj-&gtFILENO($fh)
 	   Returns a numeric value for a Unix-like file descriptor. Returns -1
 	   if there isn't one.	Optional.  Default is fileno($fh).
 
-       $obj->READ($buffer,$len,$fh)
+       $obj-&gtREAD($buffer,$len,$fh)
 	   Returns the number of octets placed in $buffer (must be less than
 	   or equal to $len).  Optional.  Default is to use FILL instead.
 
-       $obj->WRITE($buffer,$fh)
+       $obj-&gtWRITE($buffer,$fh)
 	   Returns the number of octets from $buffer that have been
 	   successfully written.
 
-       $obj->FILL($fh)
+       $obj-&gtFILL($fh)
 	   Should return a string to be placed in the buffer.  Optional. If
 	   not provided, must provide READ or reject handles open for reading
 	   in PUSHED.
 
-       $obj->CLOSE($fh)
+       $obj-&gtCLOSE($fh)
 	   Should return 0 on success, -1 on error.  Optional.
 
-       $obj->SEEK($posn,$whence,$fh)
+       $obj-&gtSEEK($posn,$whence,$fh)
 	   Should return 0 on success, -1 on error.  Optional.	Default is to
 	   fail, but that is likely to be changed in future.
 
-       $obj->TELL($fh)
+       $obj-&gtTELL($fh)
 	   Returns file position.  Optional.  Default to be determined.
 
-       $obj->UNREAD($buffer,$fh)
+       $obj-&gtUNREAD($buffer,$fh)
 	   Returns the number of octets from $buffer that have been
 	   successfully saved to be returned on future FILL/READ calls.
 	   Optional.  Default is to push data into a temporary layer above
 	   this one.
 
-       $obj->FLUSH($fh)
+       $obj-&gtFLUSH($fh)
 	   Flush any buffered write data.  May possibly be called on readable
 	   handles too.  Should return 0 on success, -1 on error.
 
-       $obj->SETLINEBUF($fh)
+       $obj-&gtSETLINEBUF($fh)
 	   Optional. No return.
 
-       $obj->CLEARERR($fh)
+       $obj-&gtCLEARERR($fh)
 	   Optional. No return.
 
-       $obj->ERROR($fh)
+       $obj-&gtERROR($fh)
 	   Optional. Returns error state. Default is no error until a
 	   mechanism to signal error (die?) is worked out.
 
-       $obj->EOF($fh)
+       $obj-&gtEOF($fh)
 	   Optional. Returns end-of-file state. Default is a function of the
 	   return value of FILL or READ.
 
@@ -184,7 +186,7 @@ EXAMPLES
 	   sub FILL
 	   {
 	    my ($obj,$fh) = @_;
-	    my $line = <$fh>;
+	    my $line = &lt$fh&gt;
 	    return (defined $line) ? pack("H*", $line) : undef;
 	   }
 
@@ -211,16 +213,16 @@ EXAMPLES
        "A" will become "c1")
 
 	   use PerlIO::via::Hex;
-	   open(my $fh, ">:via(Hex)", "foo.hex");
+	   open(my $fh, "&gt:via(Hex)", "foo.hex");
 
        and the following code will read the hexdump in and convert it on the
        fly back into bytes:
 
-	   open(my $fh, "<:via(Hex)", "foo.hex");
+	   open(my $fh, "&lt:via(Hex)", "foo.hex");
 
 
 
 perl v5.10.1			  2009-04-14		      PerlIO::via(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Faster alternative to Net::CIDR when merging a large number of CIDR..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::CIDR::Lite - Perl extension for merging IPv4 or IPv6 CIDR</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Lite(3) 	      User Contributed Perl Documentation	       Lite(3)
 
 
@@ -19,10 +21,10 @@ NAME
 SYNOPSIS
 	 use Net::CIDR::Lite;
 
-	 my $cidr = Net::CIDR::Lite->new;
-	 $cidr->add($cidr_address);
-	 @cidr_list = $cidr->list;
-	 @ip_ranges = $cidr->list_range;
+	 my $cidr = Net::CIDR::Lite-&gtnew;
+	 $cidr-&gtadd($cidr_address);
+	 @cidr_list = $cidr-&gtlist;
+	 @ip_ranges = $cidr-&gtlist_range;
 
 DESCRIPTION
        Faster alternative to Net::CIDR when merging a large number of CIDR
@@ -30,8 +32,8 @@ DESCRIPTION
 
 METHODS
        new()
-	    $cidr = Net::CIDR::Lite->new
-	    $cidr = Net::CIDR::Lite->new(@args)
+	    $cidr = Net::CIDR::Lite-&gtnew
+	    $cidr = Net::CIDR::Lite-&gtnew(@args)
 
 	   Creates an object to represent a list of CIDR address ranges.  No
 	   particular format is set yet; once an add method is called with a
@@ -39,33 +41,33 @@ METHODS
 	   object. Any arguments supplied are passed to add_any() (see below).
 
        add()
-	    $cidr->add($cidr_address)
+	    $cidr-&gtadd($cidr_address)
 
 	   Adds a CIDR address range to the list.
 
        add_range()
-	    $cidr->add_range($ip_range)
+	    $cidr-&gtadd_range($ip_range)
 
 	   Adds a hyphenated IP address range to the list.
 
        add_cidr()
-	    $cidr1->add_cidr($cidr2)
+	    $cidr1-&gtadd_cidr($cidr2)
 
 	   Adds address ranges from one object to another object.
 
        add_ip()
-	    $cidr->add_ip($ip_address)
+	    $cidr-&gtadd_ip($ip_address)
 
 	   Adds a single IP address to the list.
 
        add_any()
-	    $cidr->add_any($cidr_or_range_or_address);
+	    $cidr-&gtadd_any($cidr_or_range_or_address);
 
 	   Determines format of range or single ip address and calls add(),
 	   add_range(), add_cidr(), or add_ip() as appropriate.
 
-       $cidr->clean()
-	    $cidr->clean;
+       $cidr-&gtclean()
+	    $cidr-&gtclean;
 
 	   If you are going to call the list method more than once on the same
 	   data, then for optimal performance, you can call this to purge null
@@ -74,23 +76,23 @@ METHODS
 	   useful when ranges overlap or when contiguous ranges are added out
 	   of order.
 
-       $cidr->list()
-	    @cidr_list = $cidr->list;
-	    $list_ref  = $cidr->list;
+       $cidr-&gtlist()
+	    @cidr_list = $cidr-&gtlist;
+	    $list_ref  = $cidr-&gtlist;
 
 	   Returns a list of the merged CIDR addresses. Returns an array if
 	   called in list context, an array reference if not.
 
-       $cidr->list_range()
-	    @cidr_list = $cidr->list;
-	    $list_ref  = $cidr->list;
+       $cidr-&gtlist_range()
+	    @cidr_list = $cidr-&gtlist;
+	    $list_ref  = $cidr-&gtlist;
 
 	   Returns a list of the merged addresses, but in hyphenated range
 	   format. Returns an array if called in list context, an array
 	   reference if not.
 
-       $cidr->find()
-	    $found = $cidr->find($ip);
+       $cidr-&gtfind()
+	    $found = $cidr-&gtfind($ip);
 
 	   Returns true if the ip address is found in the CIDR range. False if
 	   not.  Not extremely efficient, is O(n*log(n)) to sort the ranges in
@@ -99,11 +101,11 @@ METHODS
 	   subsequent calls, but if more addresses are added to the cidr
 	   object, prep_find() must be called on the cidr object.
 
-       $cidr->bin_find()
+       $cidr-&gtbin_find()
 	   Same as find(), but forces a binary search. See also prep_find.
 
-       $cidr->prep_find()
-	    $cidr->prep_find($num);
+       $cidr-&gtprep_find()
+	    $cidr-&gtprep_find($num);
 
 	   Caches the result of sorting the ip addresses. Implicitly called on
 	   the first find call, but must be explicitly called if more
@@ -111,49 +113,49 @@ METHODS
 	   search if the number of ranges is greater than or equal to $num
 	   (default 20);
 
-       $cidr->spanner()
-	    $spanner = $cidr1->spanner($label1, $cidr2, $label2, ...);
+       $cidr-&gtspanner()
+	    $spanner = $cidr1-&gtspanner($label1, $cidr2, $label2, ...);
 
 	   Creates a spanner object to find out if multiple ip addresses are
 	   within multiple labeled address ranges. May also be called as (with
 	   or without any arguments):
 
-	    Net::CIDR::Lite::Span->new($cidr1, $label1, $cidr2, $label2, ...);
+	    Net::CIDR::Lite::Span-&gtnew($cidr1, $label1, $cidr2, $label2, ...);
 
-       $spanner->add()
-	    $spanner->add($cidr1, $label1, $cidr2, $label2,...);
+       $spanner-&gtadd()
+	    $spanner-&gtadd($cidr1, $label1, $cidr2, $label2,...);
 
 	   Adds labeled address ranges to the spanner object. The 'address
 	   range' may be a Net::CIDR::Lite object, a single CIDR address
 	   range, a single hyphenated IP address range, or a single IP
 	   address.
 
-       $spanner->find()
-	    $href = $spanner->find(@ip_addresses);
+       $spanner-&gtfind()
+	    $href = $spanner-&gtfind(@ip_addresses);
 
 	   Look up which range(s) ip addresses are in, and return a lookup
 	   table of the results, with the keys being the ip addresses, and the
 	   value a hash reference of which address ranges the ip address is
 	   in.
 
-       $spanner->bin_find()
+       $spanner-&gtbin_find()
 	   Same as find(), but forces a binary search. See also prep_find.
 
-       $spanner->prep_find()
-	    $spanner->prep_find($num);
+       $spanner-&gtprep_find()
+	    $spanner-&gtprep_find($num);
 
-	   Called implicitly the first time $spanner->find(..) is called, must
+	   Called implicitly the first time $spanner-&gtfind(..) is called, must
 	   be called again if more cidr objects are added to the spanner
 	   object. Will do a binary search if ratio of the number of ip
 	   addresses to the number of ranges is less than $num percent
 	   (default 4).
 
-       $spanner->clean()
-	    $clean_address = $spanner->clean($ip_address);
+       $spanner-&gtclean()
+	    $clean_address = $spanner-&gtclean($ip_address);
 
 	   Validates a returns a cleaned up version of an ip address (which is
 	   what you will find as the key in the result from the
-	   $spanner->find(..), not necessarily what the original argument
+	   $spanner-&gtfind(..), not necessarily what the original argument
 	   looked like). E.g. removes unnecessary leading zeros, removes null
 	   blocks from IPv6 addresses, etc.
 
@@ -162,7 +164,7 @@ CAVEATS
        enough to suit your needs.
 
 AUTHOR
-       Douglas Wilson, <dougw@cpan.org> w/numerous hints and ideas borrowed
+       Douglas Wilson, &ltdougw@cpan.org&gt w/numerous hints and ideas borrowed
        from Tye McQueen.
 
 COPYRIGHT
@@ -175,6 +177,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2006-02-13			       Lite(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

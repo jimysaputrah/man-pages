@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="In this example, we demonstrate how to exercise fine-grained control..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Roles::Recipe2 - Advanced Role Composition - method</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::RolesUsercContributed Perl Moose::Cookbook::Roles::Recipe2(3)
 
 
@@ -23,10 +25,10 @@ SYNOPSIS
 	 package Restartable;
 	 use Moose::Role;
 
-	 has 'is_paused' => (
-	     is      => 'rw',
-	     isa     => 'Bool',
-	     default => 0,
+	 has 'is_paused' =&gt (
+	     is      =&gt 'rw',
+	     isa     =&gt 'Bool',
+	     default =&gt 0,
 	 );
 
 	 requires 'save_state', 'load_state';
@@ -38,45 +40,45 @@ SYNOPSIS
 	 package Restartable::ButUnreliable;
 	 use Moose::Role;
 
-	 with 'Restartable' => {
-	     -alias => {
-		 stop  => '_stop',
-		 start => '_start'
+	 with 'Restartable' =&gt {
+	     -alias =&gt {
+		 stop  =&gt '_stop',
+		 start =&gt '_start'
 	     },
-	     -excludes => [ 'stop', 'start' ],
+	     -excludes =&gt [ 'stop', 'start' ],
 	 };
 
 	 sub stop {
 	     my $self = shift;
 
-	     $self->explode() if rand(1) > .5;
+	     $self-&gtexplode() if rand(1) &gt .5;
 
-	     $self->_stop();
+	     $self-&gt_stop();
 	 }
 
 	 sub start {
 	     my $self = shift;
 
-	     $self->explode() if rand(1) > .5;
+	     $self-&gtexplode() if rand(1) &gt .5;
 
-	     $self->_start();
+	     $self-&gt_start();
 	 }
 
 	 package Restartable::ButBroken;
 	 use Moose::Role;
 
-	 with 'Restartable' => { -excludes => [ 'stop', 'start' ] };
+	 with 'Restartable' =&gt { -excludes =&gt [ 'stop', 'start' ] };
 
 	 sub stop {
 	     my $self = shift;
 
-	     $self->explode();
+	     $self-&gtexplode();
 	 }
 
 	 sub start {
 	     my $self = shift;
 
-	     $self->explode();
+	     $self-&gtexplode();
 	 }
 
 DESCRIPTION
@@ -97,12 +99,12 @@ DESCRIPTION
        Note that aliasing simply adds a name, so we also need to exclude the
        methods with their original names.
 
-	 with 'Restartable' => {
-	     -alias => {
-		 stop  => '_stop',
-		 start => '_start'
+	 with 'Restartable' =&gt {
+	     -alias =&gt {
+		 stop  =&gt '_stop',
+		 start =&gt '_start'
 	     },
-	     -excludes => [ 'stop', 'start' ],
+	     -excludes =&gt [ 'stop', 'start' ],
 	 };
 
        In the "Restartable::ButBroken" role, we want to provide an entirely
@@ -112,7 +114,7 @@ DESCRIPTION
        It's worth noting that the "-excludes" parameter also accepts a single
        string as an argument if you just want to exclude one method.
 
-	 with 'Restartable' => { -excludes => [ 'stop', 'start' ] };
+	 with 'Restartable' =&gt { -excludes =&gt [ 'stop', 'start' ] };
 
 CONCLUSION
        Exclusion and renaming are a power tool that can be handy, especially
@@ -129,7 +131,7 @@ FOOTNOTES
 	   don't.
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -140,6 +142,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-06Moose::Cookbook::Roles::Recipe2(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="STOP! If you're just getting started writing tests, have a look at..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Test::More - yet another framework for writing test scripts</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Test::More(3pm)        Perl Programmers Reference Guide        Test::More(3pm)
 
 
@@ -16,9 +18,9 @@ NAME
        Test::More - yet another framework for writing test scripts
 
 SYNOPSIS
-	 use Test::More tests => 23;
+	 use Test::More tests =&gt 23;
 	 # or
-	 use Test::More skip_all => $reason;
+	 use Test::More skip_all =&gt $reason;
 	 # or
 	 use Test::More;   # see done_testing()
 
@@ -85,7 +87,7 @@ DESCRIPTION
        The preferred way to do this is to declare a plan when you "use
        Test::More".
 
-	 use Test::More tests => 23;
+	 use Test::More tests =&gt 23;
 
        There are cases when you will not know beforehand how many tests your
        script is going to run.	In this case, you can declare your tests at
@@ -103,7 +105,7 @@ DESCRIPTION
 
        In some cases, you'll want to completely skip an entire testing script.
 
-	 use Test::More skip_all => $skip_reason;
+	 use Test::More skip_all =&gt $skip_reason;
 
        Your script will declare a skip with the reason why you skipped and
        exit immediately with a zero (success).	See Test::Harness for details.
@@ -112,22 +114,22 @@ DESCRIPTION
        to use the 'import' option.  For example, to import everything but
        'fail', you'd do:
 
-	 use Test::More tests => 23, import => ['!fail'];
+	 use Test::More tests =&gt 23, import =&gt ['!fail'];
 
        Alternatively, you can use the plan() function.	Useful for when you
        have to calculate the number of tests.
 
 	 use Test::More;
-	 plan tests => keys %Stuff * 3;
+	 plan tests =&gt keys %Stuff * 3;
 
        or for deciding between running the tests at all:
 
 	 use Test::More;
 	 if( $^O eq 'MacOS' ) {
-	     plan skip_all => 'Test irrelevant on MacOS';
+	     plan skip_all =&gt 'Test irrelevant on MacOS';
 	 }
 	 else {
-	     plan tests => 42;
+	     plan tests =&gt 42;
 	 }
 
        done_testing
@@ -184,8 +186,8 @@ DESCRIPTION
 	   For example:
 
 	       ok( $exp{9} == 81,		    'simple exponential' );
-	       ok( Film->can('db_Main'),	    'set_db()' );
-	       ok( $p->tests == 4,		    'saw tests' );
+	       ok( Film-&gtcan('db_Main'),	    'set_db()' );
+	       ok( $p-&gttests == 4,		    'saw tests' );
 	       ok( !grep !defined $_, @items,	    'items populated' );
 
 	   (Mnemonic:  "This is ok.")
@@ -262,8 +264,8 @@ DESCRIPTION
 
 	     new_ok $obj, "Foo";
 
-	     my $clone = $obj->clone;
-	     isa_ok $obj, "Foo", "Foo->clone";
+	     my $clone = $obj-&gtclone;
+	     isa_ok $obj, "Foo", "Foo-&gtclone";
 
 	     isnt $obj, $clone, "clone() produces a different object";
 
@@ -337,7 +339,7 @@ DESCRIPTION
 	   It's especially useful when comparing greater-than or smaller-than
 	   relation between values:
 
-	       cmp_ok( $some_value, '<=', $upper_limit );
+	       cmp_ok( $some_value, '&lt=', $upper_limit );
 
        can_ok
 	     can_ok($module, @methods);
@@ -350,9 +352,9 @@ DESCRIPTION
 
 	   is almost exactly like saying:
 
-	       ok( Foo->can('this') &&
-		   Foo->can('that') &&
-		   Foo->can('whatever')
+	       ok( Foo-&gtcan('this') &&
+		   Foo-&gtcan('that') &&
+		   Foo-&gtcan('whatever')
 		 );
 
 	   only without all the typing and with a better interface.  Handy for
@@ -370,17 +372,17 @@ DESCRIPTION
 	     isa_ok($subclass, $class, $object_name);
 	     isa_ok($ref,      $type,  $ref_name);
 
-	   Checks to see if the given "$object->isa($class)".  Also checks to
+	   Checks to see if the given "$object-&gtisa($class)".  Also checks to
 	   make sure the object was defined in the first place.  Handy for
 	   this sort of thing:
 
-	       my $obj = Some::Module->new;
+	       my $obj = Some::Module-&gtnew;
 	       isa_ok( $obj, 'Some::Module' );
 
 	   where you'd otherwise have to write
 
-	       my $obj = Some::Module->new;
-	       ok( defined $obj && $obj->isa('Some::Module') );
+	       my $obj = Some::Module-&gtnew;
+	       ok( defined $obj && $obj-&gtisa('Some::Module') );
 
 	   to safeguard against your test script blowing up.
 
@@ -399,15 +401,15 @@ DESCRIPTION
 
        new_ok
 	     my $obj = new_ok( $class );
-	     my $obj = new_ok( $class => \@args );
-	     my $obj = new_ok( $class => \@args, $object_name );
+	     my $obj = new_ok( $class =&gt \@args );
+	     my $obj = new_ok( $class =&gt \@args, $object_name );
 
 	   A convenience function which combines creating an object and
 	   calling isa_ok() on that object.
 
 	   It is basically equivalent to:
 
-	       my $obj = $class->new(@args);
+	       my $obj = $class-&gtnew(@args);
 	       isa_ok $obj, $class, $object_name;
 
 	   If @args is not given, an empty list will be used.
@@ -416,7 +418,7 @@ DESCRIPTION
 	   just a single object which isa $class.
 
        subtest
-	       subtest $name => \&code;
+	       subtest $name =&gt \&code;
 
 	   subtest() runs the &code as its own little test with its own plan
 	   and its own result.	The main test counts this as a single test
@@ -425,12 +427,12 @@ DESCRIPTION
 
 	   For example...
 
-	     use Test::More tests => 3;
+	     use Test::More tests =&gt 3;
 
 	     pass("First test");
 
-	     subtest 'An example subtest' => sub {
-		 plan tests => 2;
+	     subtest 'An example subtest' =&gt sub {
+		 plan tests =&gt 2;
 
 		 pass("This is a subtest");
 		 pass("So is this");
@@ -451,8 +453,8 @@ DESCRIPTION
 	   A subtest may call "skip_all".  No tests will be run, but the
 	   subtest is considered a skip.
 
-	     subtest 'skippy' => sub {
-		 plan skip_all => 'cuz I said so';
+	     subtest 'skippy' =&gt sub {
+		 plan skip_all =&gt 'cuz I said so';
 		 pass('this test will never be run');
 	     };
 
@@ -606,7 +608,7 @@ DESCRIPTION
 	   or
 
 	       note explain \%args;
-	       Some::Class->method(%args);
+	       Some::Class-&gtmethod(%args);
 
    Conditional tests
        Sometimes running a test under certain conditions will cause the test
@@ -642,8 +644,8 @@ DESCRIPTION
 		   my $lint = new HTML::Lint;
 		   isa_ok( $lint, "HTML::Lint" );
 
-		   $lint->parse( $html );
-		   is( $lint->errors, 0, "No errors found in HTML" );
+		   $lint-&gtparse( $html );
+		   is( $lint-&gterrors, 0, "No errors found in HTML" );
 	       }
 
 	   If the user does not have HTML::Lint installed, the whole block of
@@ -677,10 +679,10 @@ DESCRIPTION
 		   local $TODO = "URI::Geller not finished";
 
 		   my $card = "Eight of clubs";
-		   is( URI::Geller->your_card, $card, 'Is THIS your card?' );
+		   is( URI::Geller-&gtyour_card, $card, 'Is THIS your card?' );
 
 		   my $spoon;
-		   URI::Geller->bend_spoon;
+		   URI::Geller-&gtbend_spoon;
 		   is( $spoon, 'bent',	  "Spoon bending, that's original" );
 	       }
 
@@ -808,7 +810,7 @@ DESCRIPTION
        can access the underlying Test::Builder object like so:
 
        builder
-	       my $test_builder = Test::More->builder;
+	       my $test_builder = Test::More-&gtbuilder;
 
 	   Returns the Test::Builder object underlying Test::More for you to
 	   play with.
@@ -847,10 +849,10 @@ CAVEATS and NOTES
 	   The work around is to change the filehandles used by Test::Builder
 	   directly.
 
-	       my $builder = Test::More->builder;
-	       binmode $builder->output,	 ":utf8";
-	       binmode $builder->failure_output, ":utf8";
-	       binmode $builder->todo_output,	 ":utf8";
+	       my $builder = Test::More-&gtbuilder;
+	       binmode $builder-&gtoutput,	 ":utf8";
+	       binmode $builder-&gtfailure_output, ":utf8";
+	       binmode $builder-&gttodo_output,	 ":utf8";
 
        Overloaded objects
 	   String overloaded objects are compared as strings (or in cmp_ok()'s
@@ -917,7 +919,7 @@ SEE ALSO
        Bundle::Test installs a whole bunch of useful test modules.
 
 AUTHORS
-       Michael G Schwern <schwern@pobox.com> with much inspiration from Joshua
+       Michael G Schwern &ltschwern@pobox.com&gt with much inspiration from Joshua
        Pritikin's Test module and lots of help from Barrie Slaymaker, Tony
        Bowden, blackstar.co.uk, chromatic, Fergal Daly and the perl-qa gang.
 
@@ -929,7 +931,7 @@ SOURCE
        http://github.com/schwern/test-more/.
 
 COPYRIGHT
-       Copyright 2001-2008 by Michael G Schwern <schwern@pobox.com>.
+       Copyright 2001-2008 by Michael G Schwern &ltschwern@pobox.com&gt.
 
        This program is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -939,6 +941,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-06-07		       Test::More(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

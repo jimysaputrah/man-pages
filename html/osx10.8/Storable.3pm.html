@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Storable package brings persistence to your Perl data structures..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Storable - persistence for Perl data structures</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Storable(3pm)	       Perl Programmers Reference Guide 	 Storable(3pm)
 
 
@@ -178,7 +180,7 @@ FORWARD COMPATIBILITY
        be changed as follows:
 
        utf8 data
-	   Perl 5.6 added support for Unicode characters with code points >
+	   Perl 5.6 added support for Unicode characters with code points &gt
 	   255, and Perl 5.8 has full support for Unicode characters in hash
 	   keys.  Perl internally encodes strings with these characters using
 	   utf8, and Storable serializes them as utf8.	By default, if an
@@ -253,7 +255,7 @@ WIZARDS ONLY
 
        Therefore, when serializing hooks are involved,
 
-	   dclone(.) <> thaw(freeze(.))
+	   dclone(.) &lt&gt thaw(freeze(.))
 
        Well, you could keep them in sync, but there's no guarantee it will
        always hold on classes somebody else wrote.  Besides, there is little
@@ -336,8 +338,8 @@ WIZARDS ONLY
 	   database pools, caches or memoized objects.
 
 	   The alternative "STORABLE_attach" method provides a solution for
-	   these shared objects. Instead of "STORABLE_freeze" -->
-	   "STORABLE_thaw", you implement "STORABLE_freeze" -->
+	   these shared objects. Instead of "STORABLE_freeze" --&gt
+	   "STORABLE_thaw", you implement "STORABLE_freeze" --&gt
 	   "STORABLE_attach" instead.
 
 	   Arguments: class is the class we are attaching to, cloning is a
@@ -408,7 +410,7 @@ WIZARDS ONLY
 
        In the above [A, C] example, the "STORABLE_freeze" hook could return:
 
-	       ("something", $self->{B})
+	       ("something", $self-&gt{B})
 
        and the B part would be serialized by the engine.  In "STORABLE_thaw",
        you would get back the reference to the B' object, deserialized for
@@ -528,13 +530,13 @@ EXAMPLES
 
 	       use Storable qw(store retrieve freeze thaw dclone);
 
-	       %color = ('Blue' => 0.1, 'Red' => 0.8, 'Black' => 0, 'White' => 1);
+	       %color = ('Blue' =&gt 0.1, 'Red' =&gt 0.8, 'Black' =&gt 0, 'White' =&gt 1);
 
 	       store(\%color, 'mycolors') or die "Can't store %a in mycolors!\n";
 
 	       $colref = retrieve('mycolors');
 	       die "Unable to retrieve from mycolors!\n" unless defined $colref;
-	       printf "Blue is still %lf\n", $colref->{'Blue'};
+	       printf "Blue is still %lf\n", $colref-&gt{'Blue'};
 
 	       $colref2 = dclone(\%color);
 
@@ -555,12 +557,12 @@ EXAMPLES
 	       use strict;
 	       my $safe = new Safe;
 	       # because of opcodes used in "use strict":
-	       $safe->permit(qw(:default require));
+	       $safe-&gtpermit(qw(:default require));
 	       local $Storable::Deparse = 1;
-	       local $Storable::Eval = sub { $safe->reval($_[0]) };
+	       local $Storable::Eval = sub { $safe-&gtreval($_[0]) };
 	       my $serialized = freeze(sub { 42 });
 	       my $code = thaw($serialized);
-	       $code->() == 42;
+	       $code-&gt() == 42;
 
 WARNING
        If you're using references as keys within your hash tables, you're
@@ -687,19 +689,19 @@ BUGS
 CREDITS
        Thank you to (in chronological order):
 
-	       Jarkko Hietaniemi <jhi@iki.fi>
-	       Ulrich Pfeifer <pfeifer@charly.informatik.uni-dortmund.de>
-	       Benjamin A. Holzman <bah@ecnvantage.com>
-	       Andrew Ford <A.Ford@ford-mason.co.uk>
-	       Gisle Aas <gisle@aas.no>
-	       Jeff Gresham <gresham_jeffrey@jpmorgan.com>
-	       Murray Nesbitt <murray@activestate.com>
-	       Marc Lehmann <pcg@opengroup.org>
-	       Justin Banks <justinb@wamnet.com>
-	       Jarkko Hietaniemi <jhi@iki.fi> (AGAIN, as perl 5.7.0 Pumpkin!)
-	       Salvador Ortiz Garcia <sog@msg.com.mx>
-	       Dominic Dunlop <domo@computer.org>
-	       Erik Haugan <erik@solbors.no>
+	       Jarkko Hietaniemi &ltjhi@iki.fi&gt
+	       Ulrich Pfeifer &ltpfeifer@charly.informatik.uni-dortmund.de&gt
+	       Benjamin A. Holzman &ltbah@ecnvantage.com&gt
+	       Andrew Ford &ltA.Ford@ford-mason.co.uk&gt
+	       Gisle Aas &ltgisle@aas.no&gt
+	       Jeff Gresham &ltgresham_jeffrey@jpmorgan.com&gt
+	       Murray Nesbitt &ltmurray@activestate.com&gt
+	       Marc Lehmann &ltpcg@opengroup.org&gt
+	       Justin Banks &ltjustinb@wamnet.com&gt
+	       Jarkko Hietaniemi &ltjhi@iki.fi&gt (AGAIN, as perl 5.7.0 Pumpkin!)
+	       Salvador Ortiz Garcia &ltsog@msg.com.mx&gt
+	       Dominic Dunlop &ltdomo@computer.org&gt
+	       Erik Haugan &lterik@solbors.no&gt
 
        for their bug reports, suggestions and contributions.
 
@@ -714,8 +716,8 @@ CREDITS
        items support.
 
 AUTHOR
-       Storable was written by Raphael Manfredi <Raphael_Manfredi@pobox.com>
-       Maintenance is now done by the perl5-porters <perl5-porters@perl.org>
+       Storable was written by Raphael Manfredi &ltRaphael_Manfredi@pobox.com&gt
+       Maintenance is now done by the perl5-porters &ltperl5-porters@perl.org&gt
 
        Please e-mail us with problems, bug fixes, comments and complaints,
        although if you have compliments you should send them to Raphael.
@@ -728,6 +730,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-07			 Storable(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

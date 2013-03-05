@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="A ResultSet is an object which stores a set of conditions representing..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::ResultSet - Represents a query used for fetching a set of</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::ResultSetUser Contributed Perl DocumentaDBIx::Class::ResultSet(3)
 
 
@@ -17,13 +19,13 @@ NAME
        results.
 
 SYNOPSIS
-	 my $users_rs	= $schema->resultset('User');
-	 while( $user = $users_rs->next) {
-	   print $user->username;
+	 my $users_rs	= $schema-&gtresultset('User');
+	 while( $user = $users_rs-&gtnext) {
+	   print $user-&gtusername;
 	 }
 
-	 my $registered_users_rs   = $schema->resultset('User')->search({ registered => 1 });
-	 my @cds_in_2005 = $schema->resultset('CD')->search({ year => 2005 })->all();
+	 my $registered_users_rs   = $schema-&gtresultset('User')-&gtsearch({ registered =&gt 1 });
+	 my @cds_in_2005 = $schema-&gtresultset('CD')-&gtsearch({ year =&gt 2005 })-&gtall();
 
 DESCRIPTION
        A ResultSet is an object which stores a set of conditions representing
@@ -37,7 +39,7 @@ DESCRIPTION
        by calling "resultset" on a DBIx::Class::Schema and passing in a Source
        name.
 
-	 my $users_rs = $schema->resultset('User');
+	 my $users_rs = $schema-&gtresultset('User');
 
        A new ResultSet is returned from calling "search" on an existing
        ResultSet. The new one will contain all the conditions of the original,
@@ -66,25 +68,25 @@ EXAMPLES
 
 	 sub get_data {
 	   my $self = shift;
-	   my $request = $self->get_request; # Get a request object somehow.
-	   my $schema = $self->result_source->schema;
+	   my $request = $self-&gtget_request; # Get a request object somehow.
+	   my $schema = $self-&gtresult_source-&gtschema;
 
-	   my $cd_rs = $schema->resultset('CD')->search({
-	     title => $request->param('title'),
-	     year => $request->param('year'),
+	   my $cd_rs = $schema-&gtresultset('CD')-&gtsearch({
+	     title =&gt $request-&gtparam('title'),
+	     year =&gt $request-&gtparam('year'),
 	   });
 
-	   $cd_rs = $self->apply_security_policy( $cd_rs );
+	   $cd_rs = $self-&gtapply_security_policy( $cd_rs );
 
-	   return $cd_rs->all();
+	   return $cd_rs-&gtall();
 	 }
 
 	 sub apply_security_policy {
 	   my $self = shift;
 	   my ($rs) = @_;
 
-	   return $rs->search({
-	     subversive => 0,
+	   return $rs-&gtsearch({
+	     subversive =&gt 0,
 	   });
 	 }
 
@@ -108,30 +110,30 @@ EXAMPLES
        with it with the same object.
 
 	 # Don't hit the DB yet.
-	 my $cd_rs = $schema->resultset('CD')->search({
-	   title => 'something',
-	   year => 2009,
+	 my $cd_rs = $schema-&gtresultset('CD')-&gtsearch({
+	   title =&gt 'something',
+	   year =&gt 2009,
 	 });
 
 	 # Each of these hits the DB individually.
-	 my $count = $cd_rs->count;
-	 my $most_recent = $cd_rs->get_column('date_released')->max();
-	 my @records = $cd_rs->all;
+	 my $count = $cd_rs-&gtcount;
+	 my $most_recent = $cd_rs-&gtget_column('date_released')-&gtmax();
+	 my @records = $cd_rs-&gtall;
 
        And it's not just limited to SELECT statements.
 
-	 $cd_rs->delete();
+	 $cd_rs-&gtdelete();
 
        This is even cooler:
 
-	 $cd_rs->create({ artist => 'Fred' });
+	 $cd_rs-&gtcreate({ artist =&gt 'Fred' });
 
        Which is the same as:
 
-	 $schema->resultset('CD')->create({
-	   title => 'something',
-	   year => 2009,
-	   artist => 'Fred'
+	 $schema-&gtresultset('CD')-&gtcreate({
+	   title =&gt 'something',
+	   year =&gt 2009,
+	   artist =&gt 'Fred'
 	 });
 
        See: "search", "count", "get_column", "all", "create".
@@ -149,11 +151,11 @@ METHODS
        Generally you won't need to construct a resultset manually.  You'll
        automatically get one from e.g. a "search" called in scalar context:
 
-	 my $rs = $schema->resultset('CD')->search({ title => '100th Window' });
+	 my $rs = $schema-&gtresultset('CD')-&gtsearch({ title =&gt '100th Window' });
 
        IMPORTANT: If called on an object, proxies to new_result instead so
 
-	 my $cd = $schema->resultset('CD')->new({ title => 'Spoon' });
+	 my $cd = $schema-&gtresultset('CD')-&gtnew({ title =&gt 'Spoon' });
 
        will return a CD object, not a ResultSet.
 
@@ -161,13 +163,13 @@ METHODS
        Arguments: $cond, \%attrs?
        Return Value: $resultset (scalar context) ||  @row_objs (list context)
 
-	 my @cds    = $cd_rs->search({ year => 2001 }); # "... WHERE year = 2001"
-	 my $new_rs = $cd_rs->search({ year => 2005 });
+	 my @cds    = $cd_rs-&gtsearch({ year =&gt 2001 }); # "... WHERE year = 2001"
+	 my $new_rs = $cd_rs-&gtsearch({ year =&gt 2005 });
 
-	 my $new_rs = $cd_rs->search([ { year => 2005 }, { year => 2004 } ]);
+	 my $new_rs = $cd_rs-&gtsearch([ { year =&gt 2005 }, { year =&gt 2004 } ]);
 			# year = 2005 OR year = 2004
 
-       In list context, "->all()" is called implicitly on the resultset, thus
+       In list context, "-&gtall()" is called implicitly on the resultset, thus
        returning a list of row objects instead. To avoid that, use
        "search_rs".
 
@@ -175,8 +177,8 @@ METHODS
        condition, call it as "search(undef, \%attrs)".
 
 	 # "SELECT name, artistid FROM $artist_table"
-	 my @all_artists = $schema->resultset('Artist')->search(undef, {
-	   columns => [qw/name artistid/],
+	 my @all_artists = $schema-&gtresultset('Artist')-&gtsearch(undef, {
+	   columns =&gt [qw/name artistid/],
 	 });
 
        For a list of attributes that can be passed to "search", see
@@ -209,21 +211,21 @@ METHODS
        Arguments: $sql_fragment, @bind_values
        Return Value: $resultset (scalar context) || @row_objs (list context)
 
-	 my @cds   = $cd_rs->search_literal('year = ? AND title = ?', qw/2001 Reload/);
-	 my $newrs = $artist_rs->search_literal('name = ?', 'Metallica');
+	 my @cds   = $cd_rs-&gtsearch_literal('year = ? AND title = ?', qw/2001 Reload/);
+	 my $newrs = $artist_rs-&gtsearch_literal('name = ?', 'Metallica');
 
        Pass a literal chunk of SQL to be added to the conditional part of the
        resultset query.
 
        CAVEAT: "search_literal" is provided for Class::DBI compatibility and
        should only be used in that context. "search_literal" is a convenience
-       method.	It is equivalent to calling $schema->search(\[]), but if you
+       method.	It is equivalent to calling $schema-&gtsearch(\[]), but if you
        want to ensure columns are bound correctly, use "search".
 
        Example of how to use "search" instead of "search_literal"
 
-	 my @cds = $cd_rs->search_literal('cdid = ? AND (artist = ? OR artist = ?)', (2, 1, 2));
-	 my @cds = $cd_rs->search(\[ 'cdid = ? AND (artist = ? OR artist = ?)', [ 'cdid', 2 ], [ 'artist', 1 ], [ 'artist', 2 ] ]);
+	 my @cds = $cd_rs-&gtsearch_literal('cdid = ? AND (artist = ? OR artist = ?)', (2, 1, 2));
+	 my @cds = $cd_rs-&gtsearch(\[ 'cdid = ? AND (artist = ? OR artist = ?)', [ 'cdid', 2 ], [ 'artist', 1 ], [ 'artist', 2 ] ]);
 
        See "Searching" in DBIx::Class::Manual::Cookbook and "Searching" in
        DBIx::Class::Manual::FAQ for searching techniques that do not require
@@ -254,7 +256,7 @@ METHODS
        constraints which are fully defined by the available condition.
 
        If no such constraint is found, "find" currently defaults to a simple
-       "search->(\%column_values)" which may or may not do what you expect.
+       "search-&gt(\%column_values)" which may or may not do what you expect.
        Note that this fallback behavior may be deprecated in further versions.
        If you need to search with arbitrary conditions - use "search". If the
        query resulting from this fallback produces more than one row, a
@@ -273,16 +275,16 @@ METHODS
 
        For example, to find a row by its primary key:
 
-	 my $cd = $schema->resultset('CD')->find(5);
+	 my $cd = $schema-&gtresultset('CD')-&gtfind(5);
 
        You can also find a row by a specific unique constraint:
 
-	 my $cd = $schema->resultset('CD')->find(
+	 my $cd = $schema-&gtresultset('CD')-&gtfind(
 	   {
-	     artist => 'Massive Attack',
-	     title  => 'Mezzanine',
+	     artist =&gt 'Massive Attack',
+	     title  =&gt 'Mezzanine',
 	   },
-	   { key => 'cd_artist_title' }
+	   { key =&gt 'cd_artist_title' }
 	 );
 
        See also "find_or_create" and "update_or_create".
@@ -292,15 +294,15 @@ METHODS
        Return Value: $new_resultset (scalar context) || @row_objs (list
        context)
 
-	 $new_rs = $cd_rs->search_related('artist', {
-	   name => 'Emo-R-Us',
+	 $new_rs = $cd_rs-&gtsearch_related('artist', {
+	   name =&gt 'Emo-R-Us',
 	 });
 
        Searches the specified relationship, optionally specifying a condition
        and attributes for matching records. See "ATTRIBUTES" for more
        information.
 
-       In list context, "->all()" is called implicitly on the resultset, thus
+       In list context, "-&gtall()" is called implicitly on the resultset, thus
        returning a list of row objects instead. To avoid that, use
        "search_related_rs".
 
@@ -321,7 +323,7 @@ METHODS
        Arguments: $cond?
        Return Value: $row_object | undef
 
-	 my $cd = $schema->resultset('CD')->single({ year => 2001 });
+	 my $cd = $schema-&gtresultset('CD')-&gtsingle({ year =&gt 2001 });
 
        Inflates the first result without creating a cursor if the resultset
        has any records in it; if not returns "undef". Used by "find" as a lean
@@ -352,7 +354,7 @@ METHODS
        Arguments: $cond?
        Return Value: $resultsetcolumn
 
-	 my $max_length = $rs->get_column('length')->max;
+	 my $max_length = $rs-&gtget_column('length')-&gtmax;
 
        Returns a DBIx::Class::ResultSetColumn instance for a column of the
        ResultSet.
@@ -362,7 +364,7 @@ METHODS
        Return Value: $resultset (scalar context) || @row_objs (list context)
 
 	 # WHERE title LIKE '%blue%'
-	 $cd_rs = $rs->search_like({ title => '%blue%'});
+	 $cd_rs = $rs-&gtsearch_like({ title =&gt '%blue%'});
 
        Performs a search, but uses "LIKE" instead of "=" as the condition.
        Note that this is simply a convenience method retained for ex
@@ -374,11 +376,11 @@ METHODS
        This method is deprecated and will be removed in 0.09. Use "search()"
        instead. An example conversion is:
 
-	 ->search_like({ foo => 'bar' });
+	 -&gtsearch_like({ foo =&gt 'bar' });
 
 	 # Becomes
 
-	 ->search({ foo => { like => 'bar' } });
+	 -&gtsearch({ foo =&gt { like =&gt 'bar' } });
 
    slice
        Arguments: $first, $last
@@ -388,7 +390,7 @@ METHODS
        from the resultset slice is called on. Indexes are from 0, i.e., to get
        the first three records, call:
 
-	 my ($one, $two, $three) = $rs->slice(0, 2);
+	 my ($one, $two, $three) = $rs-&gtslice(0, 2);
 
    next
        Arguments: none
@@ -398,13 +400,13 @@ METHODS
 
        Can be used to efficiently iterate over records in the resultset:
 
-	 my $rs = $schema->resultset('CD')->search;
-	 while (my $cd = $rs->next) {
-	   print $cd->title;
+	 my $rs = $schema-&gtresultset('CD')-&gtsearch;
+	 while (my $cd = $rs-&gtnext) {
+	   print $cd-&gttitle;
 	 }
 
        Note that you need to store the resultset object, and call "next" on
-       it.  Calling "resultset('Table')->next" repeatedly will always return
+       it.  Calling "resultset('Table')-&gtnext" repeatedly will always return
        the first record from the resultset.
 
    result_source
@@ -419,7 +421,7 @@ METHODS
        Return Value: $result_class
 
        An accessor for the class to use when creating row objects. Defaults to
-       "result_source->result_class" - which in most cases is the name of the
+       "result_source-&gtresult_class" - which in most cases is the name of the
        "table" class.
 
        Note that changing the result_class will also remove any components
@@ -433,7 +435,7 @@ METHODS
 
        Performs an SQL "COUNT" with the same query as the resultset was built
        with to find the number of elements. Passing arguments is equivalent to
-       "$rs->search ($cond, \%attrs)->count"
+       "$rs-&gtsearch ($cond, \%attrs)-&gtcount"
 
    count_rs
        Arguments: $cond, \%attrs??
@@ -442,7 +444,7 @@ METHODS
        Same as "count" but returns a DBIx::Class::ResultSetColumn object.
        This can be very handy for subqueries:
 
-	 ->search( { amount => $some_rs->count_rs->as_query } )
+	 -&gtsearch( { amount =&gt $some_rs-&gtcount_rs-&gtas_query } )
 
        As with regular resultsets the SQL query will be executed only after
        the resultset is accessed via "next" or "all". That would return the
@@ -538,7 +540,7 @@ METHODS
 
        Accepts either an arrayref of hashrefs or alternatively an arrayref of
        arrayrefs.  For the arrayref of hashrefs style each hashref should be a
-       structure suitable for submitting to a $resultset->create(...) method.
+       structure suitable for submitting to a $resultset-&gtcreate(...) method.
 
        In void context, "insert_bulk" in DBIx::Class::Storage::DBI is used to
        insert the data, as this is a faster method.
@@ -550,41 +552,41 @@ METHODS
 
        Example:  Assuming an Artist Class that has many CDs Classes relating:
 
-	 my $Artist_rs = $schema->resultset("Artist");
+	 my $Artist_rs = $schema-&gtresultset("Artist");
 
 	 ## Void Context Example
-	 $Artist_rs->populate([
-	    { artistid => 4, name => 'Manufactured Crap', cds => [
-	       { title => 'My First CD', year => 2006 },
-	       { title => 'Yet More Tweeny-Pop crap', year => 2007 },
+	 $Artist_rs-&gtpopulate([
+	    { artistid =&gt 4, name =&gt 'Manufactured Crap', cds =&gt [
+	       { title =&gt 'My First CD', year =&gt 2006 },
+	       { title =&gt 'Yet More Tweeny-Pop crap', year =&gt 2007 },
 	     ],
 	    },
-	    { artistid => 5, name => 'Angsty-Whiny Girl', cds => [
-	       { title => 'My parents sold me to a record company', year => 2005 },
-	       { title => 'Why Am I So Ugly?', year => 2006 },
-	       { title => 'I Got Surgery and am now Popular', year => 2007 }
+	    { artistid =&gt 5, name =&gt 'Angsty-Whiny Girl', cds =&gt [
+	       { title =&gt 'My parents sold me to a record company', year =&gt 2005 },
+	       { title =&gt 'Why Am I So Ugly?', year =&gt 2006 },
+	       { title =&gt 'I Got Surgery and am now Popular', year =&gt 2007 }
 	     ],
 	    },
 	 ]);
 
 	 ## Array Context Example
-	 my ($ArtistOne, $ArtistTwo, $ArtistThree) = $Artist_rs->populate([
-	   { name => "Artist One"},
-	   { name => "Artist Two"},
-	   { name => "Artist Three", cds=> [
-	   { title => "First CD", year => 2007},
-	   { title => "Second CD", year => 2008},
+	 my ($ArtistOne, $ArtistTwo, $ArtistThree) = $Artist_rs-&gtpopulate([
+	   { name =&gt "Artist One"},
+	   { name =&gt "Artist Two"},
+	   { name =&gt "Artist Three", cds=&gt [
+	   { title =&gt "First CD", year =&gt 2007},
+	   { title =&gt "Second CD", year =&gt 2008},
 	 ]}
 	 ]);
 
-	 print $ArtistOne->name; ## response is 'Artist One'
-	 print $ArtistThree->cds->count ## reponse is '2'
+	 print $ArtistOne-&gtname; ## response is 'Artist One'
+	 print $ArtistThree-&gtcds-&gtcount ## reponse is '2'
 
        For the arrayref of arrayrefs style,  the first element should be a
        list of the fieldsnames to which the remaining elements are rows being
        inserted.  For example:
 
-	 $Arstist_rs->populate([
+	 $Arstist_rs-&gtpopulate([
 	   [qw/artistid name/],
 	   [100, 'A Formally Unknown Singer'],
 	   [101, 'A singer that jumped the shark two albums ago'],
@@ -641,11 +643,11 @@ METHODS
        Arguments: \%vals, \%attrs?
        Return Value: $rowobject
 
-	 my $artist = $schema->resultset('Artist')->find_or_new(
-	   { artist => 'fred' }, { key => 'artists' });
+	 my $artist = $schema-&gtresultset('Artist')-&gtfind_or_new(
+	   { artist =&gt 'fred' }, { key =&gt 'artists' });
 
-	 $cd->cd_to_producer->find_or_new({ producer => $producer },
-					  { key => 'primary });
+	 $cd-&gtcd_to_producer-&gtfind_or_new({ producer =&gt $producer },
+					  { key =&gt 'primary });
 
        Find an existing record from this resultset using "find". if none
        exists, instantiate a new result object and return it. The object will
@@ -698,22 +700,22 @@ METHODS
        also pass new or inserted objects. New objects (not inserted yet, see
        "new"), will be inserted into their appropriate tables.
 
-       Effectively a shortcut for "->new_result(\%vals)->insert".
+       Effectively a shortcut for "-&gtnew_result(\%vals)-&gtinsert".
 
        Example of creating a new row.
 
-	 $person_rs->create({
-	   name=>"Some Person",
-	   email=>"somebody@someplace.com"
+	 $person_rs-&gtcreate({
+	   name=&gt"Some Person",
+	   email=&gt"somebody@someplace.com"
 	 });
 
        Example of creating a new row and also creating rows in a related
        "has_many" or "has_one" resultset.  Note Arrayref.
 
-	 $artist_rs->create(
-	    { artistid => 4, name => 'Manufactured Crap', cds => [
-	       { title => 'My First CD', year => 2006 },
-	       { title => 'Yet More Tweeny-Pop crap', year => 2007 },
+	 $artist_rs-&gtcreate(
+	    { artistid =&gt 4, name =&gt 'Manufactured Crap', cds =&gt [
+	       { title =&gt 'My First CD', year =&gt 2006 },
+	       { title =&gt 'Yet More Tweeny-Pop crap', year =&gt 2007 },
 	     ],
 	    },
 	 );
@@ -721,18 +723,18 @@ METHODS
        Example of creating a new row and also creating a row in a related
        "belongs_to" resultset. Note Hashref.
 
-	 $cd_rs->create({
-	   title=>"Music for Silly Walks",
-	   year=>2000,
-	   artist => {
-	     name=>"Silly Musician",
+	 $cd_rs-&gtcreate({
+	   title=&gt"Music for Silly Walks",
+	   year=&gt2000,
+	   artist =&gt {
+	     name=&gt"Silly Musician",
 	   }
 	 });
 
        WARNING
 	   When subclassing ResultSet never attempt to override this method.
 	   Since it is a simple shortcut for
-	   "$self->new_result($attrs)->insert", a lot of the internals simply
+	   "$self-&gtnew_result($attrs)-&gtinsert", a lot of the internals simply
 	   never call it, so your override will be bypassed more often than
 	   not. Override either new or insert depending on how early in the
 	   "create" process you need to intervene.
@@ -741,28 +743,28 @@ METHODS
        Arguments: \%vals, \%attrs?
        Return Value: $rowobject
 
-	 $cd->cd_to_producer->find_or_create({ producer => $producer },
-					     { key => 'primary' });
+	 $cd-&gtcd_to_producer-&gtfind_or_create({ producer =&gt $producer },
+					     { key =&gt 'primary' });
 
        Tries to find a record based on its primary key or unique constraints;
        if none is found, creates one and returns that instead.
 
-	 my $cd = $schema->resultset('CD')->find_or_create({
-	   cdid   => 5,
-	   artist => 'Massive Attack',
-	   title  => 'Mezzanine',
-	   year   => 2005,
+	 my $cd = $schema-&gtresultset('CD')-&gtfind_or_create({
+	   cdid   =&gt 5,
+	   artist =&gt 'Massive Attack',
+	   title  =&gt 'Mezzanine',
+	   year   =&gt 2005,
 	 });
 
        Also takes an optional "key" attribute, to search by a specific key or
        unique constraint. For example:
 
-	 my $cd = $schema->resultset('CD')->find_or_create(
+	 my $cd = $schema-&gtresultset('CD')-&gtfind_or_create(
 	   {
-	     artist => 'Massive Attack',
-	     title  => 'Mezzanine',
+	     artist =&gt 'Massive Attack',
+	     title  =&gt 'Mezzanine',
 	   },
-	   { key => 'cd_artist_title' }
+	   { key =&gt 'cd_artist_title' }
 	 );
 
        Note: Make sure to read the documentation of "find" and understand the
@@ -786,32 +788,32 @@ METHODS
        DBIx::Class::ResultSource.
 
    update_or_create
-       Arguments: \%col_values, { key => $unique_constraint }?
+       Arguments: \%col_values, { key =&gt $unique_constraint }?
        Return Value: $row_object
 
-	 $resultset->update_or_create({ col => $val, ... });
+	 $resultset-&gtupdate_or_create({ col =&gt $val, ... });
 
        Like "find_or_create", but if a row is found it is immediately updated
-       via "$found_row->update (\%col_values)".
+       via "$found_row-&gtupdate (\%col_values)".
 
        Takes an optional "key" attribute to search on a specific unique
        constraint.  For example:
 
 	 # In your application
-	 my $cd = $schema->resultset('CD')->update_or_create(
+	 my $cd = $schema-&gtresultset('CD')-&gtupdate_or_create(
 	   {
-	     artist => 'Massive Attack',
-	     title  => 'Mezzanine',
-	     year   => 1998,
+	     artist =&gt 'Massive Attack',
+	     title  =&gt 'Mezzanine',
+	     year   =&gt 1998,
 	   },
-	   { key => 'cd_artist_title' }
+	   { key =&gt 'cd_artist_title' }
 	 );
 
-	 $cd->cd_to_producer->update_or_create({
-	   producer => $producer,
-	   name => 'harry',
+	 $cd-&gtcd_to_producer-&gtupdate_or_create({
+	   producer =&gt $producer,
+	   name =&gt 'harry',
 	 }, {
-	   key => 'primary',
+	   key =&gt 'primary',
 	 });
 
        Note: Make sure to read the documentation of "find" and understand the
@@ -829,32 +831,32 @@ METHODS
        DBIx::Class::ResultSource.
 
    update_or_new
-       Arguments: \%col_values, { key => $unique_constraint }?
+       Arguments: \%col_values, { key =&gt $unique_constraint }?
        Return Value: $rowobject
 
-	 $resultset->update_or_new({ col => $val, ... });
+	 $resultset-&gtupdate_or_new({ col =&gt $val, ... });
 
        Like "find_or_new" but if a row is found it is immediately updated via
-       "$found_row->update (\%col_values)".
+       "$found_row-&gtupdate (\%col_values)".
 
        For example:
 
 	 # In your application
-	 my $cd = $schema->resultset('CD')->update_or_new(
+	 my $cd = $schema-&gtresultset('CD')-&gtupdate_or_new(
 	   {
-	     artist => 'Massive Attack',
-	     title  => 'Mezzanine',
-	     year   => 1998,
+	     artist =&gt 'Massive Attack',
+	     title  =&gt 'Mezzanine',
+	     year   =&gt 1998,
 	   },
-	   { key => 'cd_artist_title' }
+	   { key =&gt 'cd_artist_title' }
 	 );
 
-	 if ($cd->in_storage) {
+	 if ($cd-&gtin_storage) {
 	     # the cd was updated
 	 }
 	 else {
 	     # the cd is not yet in the database, let's insert it
-	     $cd->insert;
+	     $cd-&gtinsert;
 	 }
 
        Note: Make sure to read the documentation of "find" and understand the
@@ -910,7 +912,7 @@ METHODS
 
        Returns a related resultset for the supplied relationship name.
 
-	 $artist_rs = $schema->resultset('CD')->related_resultset('Artist');
+	 $artist_rs = $schema-&gtresultset('CD')-&gtrelated_resultset('Artist');
 
    current_source_alias
        Arguments: none
@@ -934,10 +936,10 @@ METHODS
 	 sub modified_by {
 	   my ($self, $user) = @_;
 
-	   my $me = $self->current_source_alias;
+	   my $me = $self-&gtcurrent_source_alias;
 
-	   return $self->search(
-	     "$me.modified" => $user->id,
+	   return $self-&gtsearch(
+	     "$me.modified" =&gt $user-&gtid,
 	   );
 	 }
 
@@ -948,36 +950,36 @@ METHODS
        Act as a barrier to SQL symbols.  The resultset provided will be made
        into a "virtual view" by including it as a subquery within the from
        clause.	From this point on, any joined tables are inaccessible to
-       ->search on the resultset (as if it were simply where-filtered without
+       -&gtsearch on the resultset (as if it were simply where-filtered without
        joins).	For example:
 
-	my $rs = $schema->resultset('Bar')->search({'x.name' => 'abc'},{ join => 'x' });
+	my $rs = $schema-&gtresultset('Bar')-&gtsearch({'x.name' =&gt 'abc'},{ join =&gt 'x' });
 
 	# 'x' now pollutes the query namespace
 
 	# So the following works as expected
-	my $ok_rs = $rs->search({'x.other' => 1});
+	my $ok_rs = $rs-&gtsearch({'x.other' =&gt 1});
 
 	# But this doesn't: instead of finding a 'Bar' related to two x rows (abc and
 	# def) we look for one row with contradictory terms and join in another table
 	# (aliased 'x_2') which we never use
-	my $broken_rs = $rs->search({'x.name' => 'def'});
+	my $broken_rs = $rs-&gtsearch({'x.name' =&gt 'def'});
 
-	my $rs2 = $rs->as_subselect_rs;
+	my $rs2 = $rs-&gtas_subselect_rs;
 
 	# doesn't work - 'x' is no longer accessible in $rs2, having been sealed away
-	my $not_joined_rs = $rs2->search({'x.other' => 1});
+	my $not_joined_rs = $rs2-&gtsearch({'x.other' =&gt 1});
 
 	# works as expected: finds a 'table' row related to two x rows (abc and def)
-	my $correctly_joined_rs = $rs2->search({'x.name' => 'def'});
+	my $correctly_joined_rs = $rs2-&gtsearch({'x.name' =&gt 'def'});
 
        Another example of when one might use this would be to select a subset
        of columns in a group by clause:
 
-	my $rs = $schema->resultset('Bar')->search(undef, {
-	  group_by => [qw{ id foo_id baz_id }],
-	})->as_subselect_rs->search(undef, {
-	  columns => [qw{ id foo_id }]
+	my $rs = $schema-&gtresultset('Bar')-&gtsearch(undef, {
+	  group_by =&gt [qw{ id foo_id baz_id }],
+	})-&gtas_subselect_rs-&gtsearch(undef, {
+	  columns =&gt [qw{ id foo_id }]
 	});
 
        In the above example normally columns would have to be equal to the
@@ -1008,13 +1010,13 @@ ATTRIBUTES
 
 	For descending order:
 
-	 order_by => { -desc => [qw/col1 col2 col3/] }
+	 order_by =&gt { -desc =&gt [qw/col1 col2 col3/] }
 
 	For explicit ascending order:
 
-	 order_by => { -asc => 'col' }
+	 order_by =&gt { -asc =&gt 'col' }
 
-       The old scalarref syntax (i.e. order_by => \'year DESC') is still
+       The old scalarref syntax (i.e. order_by =&gt \'year DESC') is still
        supported, although you are strongly encouraged to use the hashref
        syntax as outlined above.
 
@@ -1031,12 +1033,12 @@ ATTRIBUTES
 
        Essentially "columns" does the same as "select" and "as".
 
-	   columns => [ 'foo', { bar => 'baz' } ]
+	   columns =&gt [ 'foo', { bar =&gt 'baz' } ]
 
        is the same as
 
-	   select => [qw/foo baz/],
-	   as => [qw/foo bar/]
+	   select =&gt [qw/foo baz/],
+	   as =&gt [qw/foo bar/]
 
    +columns
        Value: \@columns
@@ -1046,9 +1048,9 @@ ATTRIBUTES
        the "include_columns" attribute, as in earlier versions of DBIC). For
        example:-
 
-	 $schema->resultset('CD')->search(undef, {
-	   '+columns' => ['artist.name'],
-	   join => ['artist']
+	 $schema-&gtresultset('CD')-&gtsearch(undef, {
+	   '+columns' =&gt ['artist.name'],
+	   join =&gt ['artist']
 	 });
 
        would return all CDs and include a 'name' column to the information
@@ -1073,11 +1075,11 @@ ATTRIBUTES
        use column names, or in the case of RDBMS back ends, function or stored
        procedure names:
 
-	 $rs = $schema->resultset('Employee')->search(undef, {
-	   select => [
+	 $rs = $schema-&gtresultset('Employee')-&gtsearch(undef, {
+	   select =&gt [
 	     'name',
-	     { count => 'employeeid' },
-	     { max => { length => 'name' }, -as => 'longest_name' }
+	     { count =&gt 'employeeid' },
+	     { max =&gt { length =&gt 'name' }, -as =&gt 'longest_name' }
 	   ]
 	 });
 
@@ -1115,13 +1117,13 @@ ATTRIBUTES
        name already exists) as shown below. The "as" attribute has nothing to
        do with the SQL-side "AS". See "select" for details.
 
-	 $rs = $schema->resultset('Employee')->search(undef, {
-	   select => [
+	 $rs = $schema-&gtresultset('Employee')-&gtsearch(undef, {
+	   select =&gt [
 	     'name',
-	     { count => 'employeeid' },
-	     { max => { length => 'name' }, -as => 'longest_name' }
+	     { count =&gt 'employeeid' },
+	     { max =&gt { length =&gt 'name' }, -as =&gt 'longest_name' }
 	   ],
-	   as => [qw/
+	   as =&gt [qw/
 	     name
 	     employee_count
 	     max_name_length
@@ -1132,12 +1134,12 @@ ATTRIBUTES
        accessor matching a column name specified in "as", the value can be
        retrieved using the accessor as normal:
 
-	 my $name = $employee->name();
+	 my $name = $employee-&gtname();
 
        If on the other hand an accessor does not exist in the object, you need
        to use "get_column" instead:
 
-	 my $employee_count = $employee->get_column('employee_count');
+	 my $employee_count = $employee-&gtget_column('employee_count');
 
        You can create your own accessors if required - see
        DBIx::Class::Manual::Cookbook for details.
@@ -1149,9 +1151,9 @@ ATTRIBUTES
        For example:
 
 	 # Get CDs by Nine Inch Nails
-	 my $rs = $schema->resultset('CD')->search(
-	   { 'artist.name' => 'Nine Inch Nails' },
-	   { join => 'artist' }
+	 my $rs = $schema-&gtresultset('CD')-&gtsearch(
+	   { 'artist.name' =&gt 'Nine Inch Nails' },
+	   { join =&gt 'artist' }
 	 );
 
        Can also contain a hash reference to refer to the other relation's
@@ -1159,18 +1161,18 @@ ATTRIBUTES
 
 	 package MyApp::Schema::Track;
 	 use base qw/DBIx::Class/;
-	 __PACKAGE__->table('track');
-	 __PACKAGE__->add_columns(qw/trackid cd position title/);
-	 __PACKAGE__->set_primary_key('trackid');
-	 __PACKAGE__->belongs_to(cd => 'MyApp::Schema::CD');
+	 __PACKAGE__-&gttable('track');
+	 __PACKAGE__-&gtadd_columns(qw/trackid cd position title/);
+	 __PACKAGE__-&gtset_primary_key('trackid');
+	 __PACKAGE__-&gtbelongs_to(cd =&gt 'MyApp::Schema::CD');
 	 1;
 
 	 # In your application
-	 my $rs = $schema->resultset('Artist')->search(
-	   { 'track.title' => 'Teardrop' },
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
+	   { 'track.title' =&gt 'Teardrop' },
 	   {
-	     join     => { cd => 'track' },
-	     order_by => 'artist.name',
+	     join     =&gt { cd =&gt 'track' },
+	     order_by =&gt 'artist.name',
 	   }
 	 );
 
@@ -1180,22 +1182,22 @@ ATTRIBUTES
        example:
 
 	 # Get CDs from 1984 with a 'Foo' track
-	 my $rs = $schema->resultset('CD')->search(
+	 my $rs = $schema-&gtresultset('CD')-&gtsearch(
 	   {
-	     'me.year' => 1984,
-	     'tracks.name' => 'Foo'
+	     'me.year' =&gt 1984,
+	     'tracks.name' =&gt 'Foo'
 	   },
-	   { join => 'tracks' }
+	   { join =&gt 'tracks' }
 	 );
 
-       If the same join is supplied twice, it will be aliased to <rel>_2 (and
+       If the same join is supplied twice, it will be aliased to &ltrel&gt_2 (and
        similarly for a third time). For e.g.
 
-	 my $rs = $schema->resultset('Artist')->search({
-	   'cds.title'	 => 'Down to Earth',
-	   'cds_2.title' => 'Popular',
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch({
+	   'cds.title'	 =&gt 'Down to Earth',
+	   'cds_2.title' =&gt 'Popular',
 	 }, {
-	   join => [ qw/cds cds/ ],
+	   join =&gt [ qw/cds cds/ ],
 	 });
 
        will return a set of all artists that have both a cd with title 'Down
@@ -1216,11 +1218,11 @@ ATTRIBUTES
        for when you know you will need the related objects, because it saves
        at least one query:
 
-	 my $rs = $schema->resultset('Tag')->search(
+	 my $rs = $schema-&gtresultset('Tag')-&gtsearch(
 	   undef,
 	   {
-	     prefetch => {
-	       cd => 'artist'
+	     prefetch =&gt {
+	       cd =&gt 'artist'
 	     }
 	   }
 	 );
@@ -1244,24 +1246,24 @@ ATTRIBUTES
        the cover image, the tracks on that cd, and the guests on those tracks.
 
 	# Assuming:
-	My::Schema::CD->belongs_to( artist	=> 'My::Schema::Artist'     );
-	My::Schema::CD->might_have( liner_note	=> 'My::Schema::LinerNotes' );
-	My::Schema::CD->has_one(    cover_image => 'My::Schema::Artwork'    );
-	My::Schema::CD->has_many(   tracks	=> 'My::Schema::Track'	    );
+	My::Schema::CD-&gtbelongs_to( artist	=&gt 'My::Schema::Artist'     );
+	My::Schema::CD-&gtmight_have( liner_note	=&gt 'My::Schema::LinerNotes' );
+	My::Schema::CD-&gthas_one(    cover_image =&gt 'My::Schema::Artwork'    );
+	My::Schema::CD-&gthas_many(   tracks	=&gt 'My::Schema::Track'	    );
 
-	My::Schema::Artist->belongs_to( record_label => 'My::Schema::RecordLabel' );
+	My::Schema::Artist-&gtbelongs_to( record_label =&gt 'My::Schema::RecordLabel' );
 
-	My::Schema::Track->has_many( guests => 'My::Schema::Guest' );
+	My::Schema::Track-&gthas_many( guests =&gt 'My::Schema::Guest' );
 
 
-	my $rs = $schema->resultset('CD')->search(
+	my $rs = $schema-&gtresultset('CD')-&gtsearch(
 	  undef,
 	  {
-	    prefetch => [
-	      { artist => 'record_label'},  # belongs_to => belongs_to
+	    prefetch =&gt [
+	      { artist =&gt 'record_label'},  # belongs_to =&gt belongs_to
 	      'liner_note',		    # might_have
 	      'cover_image',		    # has_one
-	      { tracks => 'guests' },	    # has_many => has_many
+	      { tracks =&gt 'guests' },	    # has_many =&gt has_many
 	    ]
 	  }
 	);
@@ -1293,12 +1295,12 @@ ATTRIBUTES
        However, there is one caveat to be observed: it can be dangerous to
        prefetch more than one has_many relationship on a given level. e.g.:
 
-	my $rs = $schema->resultset('CD')->search(
+	my $rs = $schema-&gtresultset('CD')-&gtsearch(
 	  undef,
 	  {
-	    prefetch => [
+	    prefetch =&gt [
 	      'tracks', 			# has_many
-	      { cd_to_producer => 'producer' }, # has_many => belongs_to (i.e. m2m)
+	      { cd_to_producer =&gt 'producer' }, # has_many =&gt belongs_to (i.e. m2m)
 	    ]
 	  }
 	);
@@ -1306,8 +1308,8 @@ ATTRIBUTES
        In fact, "DBIx::Class" will emit the following warning:
 
 	Prefetching multiple has_many rels tracks and cd_to_producer at top
-	level will explode the number of row objects retrievable via ->next
-	or ->all. Use at your own risk.
+	level will explode the number of row objects retrievable via -&gtnext
+	or -&gtall. Use at your own risk.
 
        The collapser currently can't identify duplicate tuples for multiple
        has_many relationships and as a result the second has_many relation
@@ -1319,11 +1321,11 @@ ATTRIBUTES
        properly merged with any existing "join" specification. So the
        following:
 
-	 my $rs = $schema->resultset('CD')->search(
-	  {'record_label.name' => 'Music Product Ltd.'},
+	 my $rs = $schema-&gtresultset('CD')-&gtsearch(
+	  {'record_label.name' =&gt 'Music Product Ltd.'},
 	  {
-	    join     => {artist => 'record_label'},
-	    prefetch => 'artist',
+	    join     =&gt {artist =&gt 'record_label'},
+	    prefetch =&gt 'artist',
 	  }
 	);
 
@@ -1335,12 +1337,12 @@ ATTRIBUTES
        "prefetch" implies a "+select"/"+as" with the fields of the prefetched
        relations.  So given:
 
-	 my $rs = $schema->resultset('CD')->search(
+	 my $rs = $schema-&gtresultset('CD')-&gtsearch(
 	  undef,
 	  {
-	    select   => ['cd.title'],
-	    as	     => ['cd_title'],
-	    prefetch => 'artist',
+	    select   =&gt ['cd.title'],
+	    as	     =&gt ['cd_title'],
+	    prefetch =&gt 'artist',
 	  }
 	);
 
@@ -1359,19 +1361,19 @@ ATTRIBUTES
 	   rows that match the prefetched condition will be fetched into that
 	   relationship.  This means that adding prefetch to a search() may
 	   alter what is returned by traversing a relationship. So, if you
-	   have "Artist->has_many(CDs)" and you do
+	   have "Artist-&gthas_many(CDs)" and you do
 
-	     my $artist_rs = $schema->resultset('Artist')->search({
-		 'cds.year' => 2008,
+	     my $artist_rs = $schema-&gtresultset('Artist')-&gtsearch({
+		 'cds.year' =&gt 2008,
 	     }, {
-		 join => 'cds',
+		 join =&gt 'cds',
 	     });
 
-	     my $count = $artist_rs->first->cds->count;
+	     my $count = $artist_rs-&gtfirst-&gtcds-&gtcount;
 
-	     my $artist_rs_prefetch = $artist_rs->search( {}, { prefetch => 'cds' } );
+	     my $artist_rs_prefetch = $artist_rs-&gtsearch( {}, { prefetch =&gt 'cds' } );
 
-	     my $prefetch_count = $artist_rs_prefetch->first->cds->count;
+	     my $prefetch_count = $artist_rs_prefetch-&gtfirst-&gtcds-&gtcount;
 
 	     cmp_ok( $count, '==', $prefetch_count, "Counts should be the same" );
 
@@ -1383,7 +1385,7 @@ ATTRIBUTES
 
        Makes the resultset paged and specifies the page to retrieve.
        Effectively identical to creating a non-pages resultset and then
-       calling ->page($page) on it.
+       calling -&gtpage($page) on it.
 
        If "rows" attribute is not specified it defaults to 10 rows per page.
 
@@ -1409,7 +1411,7 @@ ATTRIBUTES
        A arrayref of columns to group by. Can include columns of joined
        tables.
 
-	 group_by => [qw/ column1 column2 ... /]
+	 group_by =&gt [qw/ column1 column2 ... /]
 
    having
        Value: $condition
@@ -1418,11 +1420,11 @@ ATTRIBUTES
        and ORDER BY. It is applied to the after the grouping calculations have
        been done.
 
-	 having => { 'count_employee' => { '>=', 100 } }
+	 having =&gt { 'count_employee' =&gt { '&gt=', 100 } }
 
        or with an in-place function in which case literal SQL is required:
 
-	 having => \[ 'count(employee) >= ?', [ count => 100 ] ]
+	 having =&gt \[ 'count(employee) &gt= ?', [ count =&gt 100 ] ]
 
    distinct
        Value: (0 | 1)
@@ -1435,22 +1437,22 @@ ATTRIBUTES
 	   Adds to the WHERE clause.
 
 	     # only return rows WHERE deleted IS NULL for all searches
-	     __PACKAGE__->resultset_attributes({ where => { deleted => undef } }); )
+	     __PACKAGE__-&gtresultset_attributes({ where =&gt { deleted =&gt undef } }); )
 
-	   Can be overridden by passing "{ where => undef }" as an attribute
+	   Can be overridden by passing "{ where =&gt undef }" as an attribute
 	   to a resultset.
 
    cache
        Set to 1 to cache search results. This prevents extra SQL queries if
        you revisit rows in your ResultSet:
 
-	 my $resultset = $schema->resultset('Artist')->search( undef, { cache => 1 } );
+	 my $resultset = $schema-&gtresultset('Artist')-&gtsearch( undef, { cache =&gt 1 } );
 
-	 while( my $artist = $resultset->next ) {
+	 while( my $artist = $resultset-&gtnext ) {
 	   ... do stuff ...
 	 }
 
-	 $rs->first; # without cache, this would issue a query
+	 $rs-&gtfirst; # without cache, this would issue a query
 
        By default, searches are not cached.
 
@@ -1466,6 +1468,6 @@ ATTRIBUTES
 
 
 perl v5.12.4			  2011-07-27	     DBIx::Class::ResultSet(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

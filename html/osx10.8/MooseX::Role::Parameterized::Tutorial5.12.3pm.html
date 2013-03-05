@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MooseX::Role::Parameterized::Tutorial - why and how</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MooseX::Role::ParameteUserdContributedMooseX::Role::Parameterized::Tutorial(3)
 
 
@@ -48,17 +50,17 @@ USAGE
        "-alias" and "-excludes" to ordinary roles (though without hyphens,
        since these are not core Moose composition parameters):
 
-	   with 'MyRole::InstrumentMethod' => {
-	       method_name => 'dbh_do',
-	       log_to	   => 'query.log',
+	   with 'MyRole::InstrumentMethod' =&gt {
+	       method_name =&gt 'dbh_do',
+	       log_to	   =&gt 'query.log',
 	   };
 
        You can still combine parameterized roles. You just need to specify
        parameters immediately after the role they belong to:
 
 	   with (
-	       'My::Parameterized::Role' => {
-		   needs_better_example => 1,
+	       'My::Parameterized::Role' =&gt {
+		   needs_better_example =&gt 1,
 	       },
 	       'My::Other::Role',
 	   );
@@ -73,20 +75,20 @@ USAGE
        in Moose you use the keyword "parameter", but your parameters can use
        any options to "has".
 
-	   parameter 'delegation' => (
-	       isa	 => 'HashRef|ArrayRef|RegexpRef',
-	       predicate => 'has_delegation',
+	   parameter 'delegation' =&gt (
+	       isa	 =&gt 'HashRef|ArrayRef|RegexpRef',
+	       predicate =&gt 'has_delegation',
 	   );
 
        You do have to declare what parameters you accept, just like you have
        to declare what attributes you accept for regular Moose objects.
 
        One departure from "has" is that we create a reader accessor for you by
-       default. In other words, we assume "is => 'ro'". We create this reader
+       default. In other words, we assume "is =&gt 'ro'". We create this reader
        for convenience because generally the parameterized role is the only
        consumer of the parameters object, so data hiding is not as important
        than in the general case of "has" in Moose. If you do not want an
-       accessor, you can use "is => 'bare'".
+       accessor, you can use "is =&gt 'bare'".
 
        "role"
 
@@ -102,7 +104,7 @@ USAGE
        entirely new role. That's the whole point, after all.
 
        Due to limitations inherent in Perl, you must declare methods with
-       "method name => sub { ... }" instead of the usual "sub name { ... }".
+       "method name =&gt sub { ... }" instead of the usual "sub name { ... }".
        Your methods may, of course, close over the parameter object. This
        means that your methods may use parameters however they wish!
 
@@ -115,22 +117,22 @@ USES
 	   attributes. You can now also choose type, default value, whether
 	   it's required, traits, etc.
 
-	       parameter traits => (
-		   isa	   => 'ArrayRef',
-		   default => sub { [] },
+	       parameter traits =&gt (
+		   isa	   =&gt 'ArrayRef',
+		   default =&gt sub { [] },
 	       );
 
-	       parameter type => (
-		   isa	   => 'Str',
-		   default => 'Any',
+	       parameter type =&gt (
+		   isa	   =&gt 'Str',
+		   default =&gt 'Any',
 	       );
 
 	       role {
 		   my $p = shift;
 
-		   has action => (
-		       traits => $p->traits,
-		       isa    => $p->type,
+		   has action =&gt (
+		       traits =&gt $p-&gttraits,
+		       isa    =&gt $p-&gttype,
 		       ...
 		   );
 	       }
@@ -141,14 +143,14 @@ USES
 	   method name you wish the role to instrument, or which attributes to
 	   dump to a file.
 
-	       parameter instrument_method => (
-		   isa	    => 'Str',
-		   required => 1,
+	       parameter instrument_method =&gt (
+		   isa	    =&gt 'Str',
+		   required =&gt 1,
 	       );
 
 	       role {
 		   my $p = shift;
-		   around $p->instrument_method => sub { ... };
+		   around $p-&gtinstrument_method =&gt sub { ... };
 	       }
 
        Arbitrary execution choices
@@ -156,16 +158,16 @@ USES
 	   methods operate. For example, you can tell the role whether to save
 	   intermediate states.
 
-	       parameter save_intermediate => (
-		   isa	   => 'Bool',
-		   default => 0,
+	       parameter save_intermediate =&gt (
+		   isa	   =&gt 'Bool',
+		   default =&gt 0,
 	       );
 
 	       role {
 		   my $p = shift;
-		   method process => sub {
+		   method process =&gt sub {
 		       ...
-		       if ($p->save_intermediate) { ... }
+		       if ($p-&gtsave_intermediate) { ... }
 		       ...
 		   };
 	       }
@@ -174,20 +176,20 @@ USES
 	   Your role may be able to freeze and thaw your instances using YAML,
 	   JSON, Storable. Which backend to use can be a parameter.
 
-	       parameter format => (
-		   isa	   => (enum ['Storable', 'YAML', 'JSON']),
-		   default => 'Storable',
+	       parameter format =&gt (
+		   isa	   =&gt (enum ['Storable', 'YAML', 'JSON']),
+		   default =&gt 'Storable',
 	       );
 
 	       role {
 		   my $p = shift;
-		   if ($p->format eq 'Storable') {
-		       method freeze => \&Storable::freeze;
-		       method thaw   => \&Storable::thaw;
+		   if ($p-&gtformat eq 'Storable') {
+		       method freeze =&gt \&Storable::freeze;
+		       method thaw   =&gt \&Storable::thaw;
 		   }
-		   elsif ($p->format eq 'YAML') {
-		       method freeze => \&YAML::Dump;
-		       method thaw   => \&YAML::Load;
+		   elsif ($p-&gtformat eq 'YAML') {
+		       method freeze =&gt \&YAML::Dump;
+		       method thaw   =&gt \&YAML::Load;
 		   }
 		   ...
 	       }
@@ -203,17 +205,17 @@ USES
 		   my %args = @_;
 		   my $consumer = $args{consumer};
 
-		   $consumer->find_attribute_by_name('stack')
+		   $consumer-&gtfind_attribute_by_name('stack')
 		       or confess "You must have a 'stack' attribute";
 
-		   my $push = $consumer->find_method_by_name('push')
+		   my $push = $consumer-&gtfind_method_by_name('push')
 		       or confess "You must have a 'push' method";
 
-		   my $params = $push->parsed_signature->positional_params->params;
+		   my $params = $push-&gtparsed_signature-&gtpositional_params-&gtparams;
 		   @$params == 1
 		       or confess "Your push method must take a single parameter";
 
-		   $params->[0]->sigil eq '$'
+		   $params-&gt[0]-&gtsigil eq '$'
 		       or confess "Your push parameter must be a scalar";
 
 		   ...
@@ -222,6 +224,6 @@ USES
 
 
 perl v5.12.4			  2011MooseX::Role::Parameterized::Tutorial(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

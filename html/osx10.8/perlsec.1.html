@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Perl is designed to make it easy to program securely even when running..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlsec - Perl security</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLSEC(1)	       Perl Programmers Reference Guide 	    PERLSEC(1)
 
 
@@ -66,12 +68,12 @@ SECURITY MECHANISMS AND CONCERNS
 
        o   Symbolic methods
 
-	       $obj->$method(@args);
+	       $obj-&gt$method(@args);
 
 	   and symbolic sub references
 
 	       &{$foo}(@args);
-	       $foo->(@args);
+	       $foo-&gt(@args);
 
 	   are not checked for taintedness.  This requires extra carefulness
 	   unless you want external data to affect your control flow.  Unless
@@ -94,10 +96,10 @@ SECURITY MECHANISMS AND CONCERNS
 
 	   $arg = shift;	       # $arg is tainted
 	   $hid = $arg, 'bar';	       # $hid is also tainted
-	   $line = <>;		       # Tainted
-	   $line = <STDIN>;	       # Also tainted
+	   $line = &lt&gt;		       # Tainted
+	   $line = &ltSTDIN&gt;	       # Also tainted
 	   open FOO, "/home/me/bar" or die $!;
-	   $line = <FOO>;	       # Still tainted
+	   $line = &ltFOO&gt;	       # Still tainted
 	   $path = $ENV{'PATH'};       # Tainted, but see below
 	   $data = 'abc';	       # Not tainted
 
@@ -115,8 +117,8 @@ SECURITY MECHANISMS AND CONCERNS
 	   $path = $ENV{'PATH'};       # $path now NOT tainted
 	   system "echo $data";        # Is secure now!
 
-	   open(FOO, "< $arg");        # OK - read-only file
-	   open(FOO, "> $arg");        # Not OK - trying to write
+	   open(FOO, "&lt $arg");        # OK - read-only file
+	   open(FOO, "&gt $arg");        # Not OK - trying to write
 
 	   open(FOO,"echo $arg|");     # Not OK
 	   open(FOO,"-|")
@@ -131,10 +133,10 @@ SECURITY MECHANISMS AND CONCERNS
 	   exec "echo", $arg;	       # Insecure
 	   exec "sh", '-c', $arg;      # Very insecure!
 
-	   @files = <*.c>;	       # insecure (uses readdir() or similar)
+	   @files = &lt*.c&gt;	       # insecure (uses readdir() or similar)
 	   @files = glob('*.c');       # insecure (uses readdir() or similar)
 
-	   # In Perl releases older than 5.6.0 the <*.c> and glob('*.c') would
+	   # In Perl releases older than 5.6.0 the &lt*.c&gt and glob('*.c') would
 	   # have used an external program to do the filename expansion; but in
 	   # either case the result is tainted since the list of filenames comes
 	   # from outside of the program.
@@ -310,7 +312,7 @@ SECURITY MECHANISMS AND CONCERNS
 	       use English '-no_match_vars';
 	       die "Can't fork: $!" unless defined($pid = open(KID, "-|"));
 	       if ($pid) {	     # parent
-		   while (<KID>) {
+		   while (&ltKID&gt) {
 		       # do something
 		   }
 		   close KID;
@@ -503,7 +505,7 @@ SECURITY MECHANISMS AND CONCERNS
 	   5.8.0 a different sorting algorithm, mergesort, is used by default.
 	   Mergesort cannot misbehave on any input.
 
-       See <http://www.cs.rice.edu/~scrosby/hash/> for more information, and
+       See &lthttp://www.cs.rice.edu/~scrosby/hash/&gt for more information, and
        any computer science textbook on algorithmic complexity.
 
 SEE ALSO
@@ -512,6 +514,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-01			    PERLSEC(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

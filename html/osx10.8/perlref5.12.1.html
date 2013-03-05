@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Before release 5 of Perl it was difficult to represent complex data..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlref - Perl references and nested data structures</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLREF(1)	       Perl Programmers Reference Guide 	    PERLREF(1)
 
 
@@ -92,7 +94,7 @@ DESCRIPTION
 	   elements whose final element is itself a reference to another
 	   anonymous array of three elements.  (The multidimensional syntax
 	   described later can be used to access this.	For example, after the
-	   above, "$arrayref->[2][1]" would have the value "b".)
+	   above, "$arrayref-&gt[2][1]" would have the value "b".)
 
 	   Taking a reference to an enumerated list is not the same as using
 	   square brackets--instead it's the same as creating a list of
@@ -110,8 +112,8 @@ DESCRIPTION
 	   brackets:
 
 	       $hashref = {
-		   'Adam'  => 'Eve',
-		   'Clyde' => 'Bonnie',
+		   'Adam'  =&gt 'Eve',
+		   'Clyde' =&gt 'Bonnie',
 	       };
 
 	   Anonymous hash and array composers like these can be intermixed
@@ -211,20 +213,20 @@ DESCRIPTION
 	   also being an object.  Constructors are often named "new()".  You
 	   can call them indirectly:
 
-	       $objref = new Doggie( Tail => 'short', Ears => 'long' );
+	       $objref = new Doggie( Tail =&gt 'short', Ears =&gt 'long' );
 
 	   But that can produce ambiguous syntax in certain cases, so it's
 	   often better to use the direct method invocation approach:
 
-	       $objref	 = Doggie->new(Tail => 'short', Ears => 'long');
+	       $objref	 = Doggie-&gtnew(Tail =&gt 'short', Ears =&gt 'long');
 
 	       use Term::Cap;
-	       $terminal = Term::Cap->Tgetent( { OSPEED => 9600 });
+	       $terminal = Term::Cap-&gtTgetent( { OSPEED =&gt 9600 });
 
 	       use Tk;
-	       $main	= MainWindow->new();
-	       $menubar = $main->Frame(-relief		    => "raised",
-				       -borderwidth	    => 2)
+	       $main	= MainWindow-&gtnew();
+	       $menubar = $main-&gtFrame(-relief		    =&gt "raised",
+				       -borderwidth	    =&gt 2)
 
        6.  References of the appropriate type can spring into existence if you
 	   dereference them in a context that assumes they exist.  Because we
@@ -280,7 +282,7 @@ DESCRIPTION
 
 	       sub get_rec {
 		   my $fh = shift;
-		   return scalar <$fh>;
+		   return scalar &lt$fh&gt;
 	       }
 
    Using References
@@ -321,7 +323,7 @@ DESCRIPTION
 	       ${$arrayref}[0] = "January";
 	       ${$hashref}{"KEY"} = "VALUE";
 	       &{$coderef}(1,2,3);
-	       $globref->print("output\n");  # iff IO::Handle is loaded
+	       $globref-&gtprint("output\n");  # iff IO::Handle is loaded
 
 	   Admittedly, it's a little silly to use the curlies in this case,
 	   but the BLOCK can contain any arbitrary expression, in particular,
@@ -339,7 +341,7 @@ DESCRIPTION
 	       $$hashref{"KEY"}   = "VALUE";	   # CASE 0
 	       ${$hashref}{"KEY"} = "VALUE";	   # CASE 1
 	       ${$hashref{"KEY"}} = "VALUE";	   # CASE 2
-	       ${$hashref->{"KEY"}} = "VALUE";	   # CASE 3
+	       ${$hashref-&gt{"KEY"}} = "VALUE";	   # CASE 3
 
 	   Case 2 is also deceptive in that you're accessing a variable called
 	   %hashref, not dereferencing through $hashref to the hash it's
@@ -349,21 +351,21 @@ DESCRIPTION
 	   often enough that it gets cumbersome to use method 2.  As a form of
 	   syntactic sugar, the examples for method 2 may be written:
 
-	       $arrayref->[0] = "January";   # Array element
-	       $hashref->{"KEY"} = "VALUE";  # Hash element
-	       $coderef->(1,2,3);	     # Subroutine call
+	       $arrayref-&gt[0] = "January";   # Array element
+	       $hashref-&gt{"KEY"} = "VALUE";  # Hash element
+	       $coderef-&gt(1,2,3);	     # Subroutine call
 
 	   The left side of the arrow can be any expression returning a
 	   reference, including a previous dereference.  Note that $array[$x]
-	   is not the same thing as "$array->[$x]" here:
+	   is not the same thing as "$array-&gt[$x]" here:
 
-	       $array[$x]->{"foo"}->[0] = "January";
+	       $array[$x]-&gt{"foo"}-&gt[0] = "January";
 
 	   This is one of the cases we mentioned earlier in which references
 	   could spring into existence when in an lvalue context.  Before this
 	   statement, $array[$x] may have been undefined.  If so, it's
 	   automatically defined with a hash reference so that we can look up
-	   "{"foo"}" in it.  Likewise "$array[$x]->{"foo"}" will automatically
+	   "{"foo"}" in it.  Likewise "$array[$x]-&gt{"foo"}" will automatically
 	   get defined with an array reference so that we can look up "[0]" in
 	   it.	This process is called autovivification.
 
@@ -444,7 +446,7 @@ DESCRIPTION
 	   $$name = 1;		       # Sets $foo
 	   ${$name} = 2;	       # Sets $foo
 	   ${$name x 2} = 3;	       # Sets $foofoo
-	   $name->[0] = 4;	       # Sets $foo[0]
+	   $name-&gt[0] = 4;	       # Sets $foo[0]
 	   @$name = (); 	       # Clears @foo
 	   &$name();		       # Calls &foo() (as in Perl 4)
 	   $pack = "THAT";
@@ -552,7 +554,7 @@ DESCRIPTION
 	   @colors = qw(red blue green yellow orange purple violet);
 	   for my $name (@colors) {
 	       no strict 'refs';       # allow symbol table manipulation
-	       *$name = *{uc $name} = sub { "<FONT COLOR='$name'>@_</FONT>" };
+	       *$name = *{uc $name} = sub { "&ltFONT COLOR='$name'&gt@_&lt/FONT&gt" };
 	   }
 
        Now all those different functions appear to exist independently.  You
@@ -568,7 +570,7 @@ DESCRIPTION
        arguments of these functions (probably not a wise idea for this
        particular example), you could have written it this way instead:
 
-	   *$name = sub ($) { "<FONT COLOR='$name'>$_[0]</FONT>" };
+	   *$name = sub ($) { "&ltFONT COLOR='$name'&gt$_[0]&lt/FONT&gt" };
 
        However, since prototype checking happens at compile time, the
        assignment above happens too late to be of much use.  You could address
@@ -648,6 +650,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-01			    PERLREF(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

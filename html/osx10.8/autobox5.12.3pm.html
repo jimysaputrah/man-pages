@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The autobox pragma allows methods to be called on integers, floats,..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>autobox - call methods on native types</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 autobox(3)	      User Contributed Perl Documentation	    autobox(3)
 
 
@@ -20,38 +22,38 @@ SYNOPSIS
 
 	   # integers
 
-	       my $range = 10->to(1); # [ 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ]
+	       my $range = 10-&gtto(1); # [ 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ]
 
 	   # floats
 
-	       my $error = 3.1415927->minus(22/7)->abs();
+	       my $error = 3.1415927-&gtminus(22/7)-&gtabs();
 
 	   # strings
 
-	       my @list = 'SELECT * FROM foo'->list();
-	       my $greeting = "Hello, world!"->upper(); # "HELLO, WORLD!"
+	       my @list = 'SELECT * FROM foo'-&gtlist();
+	       my $greeting = "Hello, world!"-&gtupper(); # "HELLO, WORLD!"
 
-	       $greeting->for_each(\&character_handler);
+	       $greeting-&gtfor_each(\&character_handler);
 
 	   # arrays and array refs
 
-	       my $schwartzian = @_->map(...)->sort(...)->map(...);
-	       my $hash = [ 'SELECT * FROM foo WHERE id IN (?, ?)', 1, 2 ]->hash();
+	       my $schwartzian = @_-&gtmap(...)-&gtsort(...)-&gtmap(...);
+	       my $hash = [ 'SELECT * FROM foo WHERE id IN (?, ?)', 1, 2 ]-&gthash();
 
 	   # hashes and hash refs
 
-	       { alpha => 'beta', gamma => 'vlissides' }->for_each(...);
-	       %hash->keys();
+	       { alpha =&gt 'beta', gamma =&gt 'vlissides' }-&gtfor_each(...);
+	       %hash-&gtkeys();
 
 	   # code refs
 
-	       my $plus_five = (\&add)->curry()->(5);
-	       my $minus_three = sub { $_[0] - $_[1] }->reverse->curry->(3);
+	       my $plus_five = (\&add)-&gtcurry()-&gt(5);
+	       my $minus_three = sub { $_[0] - $_[1] }-&gtreverse-&gtcurry-&gt(3);
 
 	   # can, isa, VERSION, import and unimport can be accessed via autobox_class
 
-	       42->autobox_class->isa('MyNumber')
-	       say []->autobox_class->VERSION
+	       42-&gtautobox_class-&gtisa('MyNumber')
+	       say []-&gtautobox_class-&gtVERSION
 
 DESCRIPTION
        The autobox pragma allows methods to be called on integers, floats,
@@ -75,7 +77,7 @@ DESCRIPTION
        argument of the specified method.  Consequently, given a vanilla "use
        autobox":
 
-	   "Hello, world!"->upper()
+	   "Hello, world!"-&gtupper()
 
        is invoked as:
 
@@ -83,7 +85,7 @@ DESCRIPTION
 
        while:
 
-	   [ 1 .. 10 ]->for_each(sub { ... })
+	   [ 1 .. 10 ]-&gtfor_each(sub { ... })
 
        resolves to:
 
@@ -92,10 +94,10 @@ DESCRIPTION
        Values beginning with the array "@" and hash "%" sigils are passed by
        reference, i.e. under the default bindings:
 
-	   @array->join(', ')
-	   @{ ... }->length()
-	   %hash->keys()
-	   %$hash->values()
+	   @array-&gtjoin(', ')
+	   @{ ... }-&gtlength()
+	   %hash-&gtkeys()
+	   %$hash-&gtvalues()
 
        are equivalent to:
 
@@ -111,22 +113,22 @@ DESCRIPTION
 
        Thus:
 
-	   use autobox SCALAR => 'Foo';
-	   use autobox SCALAR => 'Bar';
+	   use autobox SCALAR =&gt 'Foo';
+	   use autobox SCALAR =&gt 'Bar';
 
        - associates SCALAR types with a synthetic class whose @ISA includes
        both "Foo" and "Bar" (in that order).
 
        Likewise:
 
-	   use autobox SCALAR => 'Foo';
-	   use autobox SCALAR => 'Bar';
-	   use autobox ARRAY  => 'Baz';
+	   use autobox SCALAR =&gt 'Foo';
+	   use autobox SCALAR =&gt 'Bar';
+	   use autobox ARRAY  =&gt 'Baz';
 
        and
 
-	   use autobox SCALAR => [ 'Foo', 'Bar' ];
-	   use autobox ARRAY  => 'Baz';
+	   use autobox SCALAR =&gt [ 'Foo', 'Bar' ];
+	   use autobox ARRAY  =&gt 'Baz';
 
        - bind SCALAR types to the "Foo" and "Bar" classes and ARRAY types to
        "Baz".
@@ -140,7 +142,7 @@ DESCRIPTION
 
 	       {
 		   # appends 'MyScalar' to the @ISA associated with SCALAR types
-		   use autobox SCALAR => 'MyScalar';
+		   use autobox SCALAR =&gt 'MyScalar';
 		   ...
 	       }
 
@@ -164,13 +166,13 @@ DESCRIPTION
 
 	   no autobox qw(SCALAR);
 
-	   []->foo(); # OK: ARRAY::foo([])
+	   []-&gtfoo(); # OK: ARRAY::foo([])
 
-	   "Hello, world!"->bar(); # runtime error
+	   "Hello, world!"-&gtbar(); # runtime error
 
        Autoboxing is not performed for barewords i.e.
 
-	   my $foo = Foo->new();
+	   my $foo = Foo-&gtnew();
 
        and:
 
@@ -188,18 +190,18 @@ DESCRIPTION
 	   my $method3 = sub { ... };
 	   my $method4 = \&some_method;
 
-	   " ... "->method1();
-	   [ ... ]->$method2();
-	   { ... }->$method3();
-	   sub { ... }->$method4();
+	   " ... "-&gtmethod1();
+	   [ ... ]-&gt$method2();
+	   { ... }-&gt$method3();
+	   sub { ... }-&gt$method4();
 
-       A native type is only asociated with a class if the type => class
+       A native type is only asociated with a class if the type =&gt class
        mapping is supplied in the "use autobox" statement. Thus the following
        will not work:
 
-	   use autobox SCALAR => 'MyScalar';
+	   use autobox SCALAR =&gt 'MyScalar';
 
-	   @array->some_array_method();
+	   @array-&gtsome_array_method();
 
        - as no class is specified for the ARRAY type. Note: the result of
        calling a method on a native type that is not associated with a class
@@ -218,10 +220,10 @@ DESCRIPTION
        - is equivalent to:
 
 	   use autobox
-	       SCALAR => 'SCALAR',
-	       ARRAY  => 'ARRAY',
-	       HASH   => 'HASH',
-	       CODE   => 'CODE';
+	       SCALAR =&gt 'SCALAR',
+	       ARRAY  =&gt 'ARRAY',
+	       HASH   =&gt 'HASH',
+	       CODE   =&gt 'CODE';
 
        This facilitates one-liners and prototypes:
 
@@ -230,7 +232,7 @@ DESCRIPTION
 	   sub SCALAR::split { [ split '', $_[0] ] }
 	   sub ARRAY::length { scalar @{$_[0]} }
 
-	   print "Hello, world!"->split->length();
+	   print "Hello, world!"-&gtsplit-&gtlength();
 
        However, using these default bindings is not recommended as there's no
        guarantee that another piece of code won't trample over the same
@@ -244,25 +246,25 @@ OPTIONS
        The following example shows the range of valid arguments:
 
 	   use autobox
-	       SCALAR	 => 'MyScalar'			   # class name
-	       ARRAY	 => 'MyNamespace::',		   # class prefix (ending in '::')
-	       HASH	 => [ 'MyHash', 'MyNamespace::' ], # one or more class names and/or prefixes
-	       CODE	 => ...,			   # any of the 3 value types above
-	       INTEGER	 => ...,			   # any of the 3 value types above
-	       FLOAT	 => ...,			   # any of the 3 value types above
-	       NUMBER	 => ...,			   # any of the 3 value types above
-	       STRING	 => ...,			   # any of the 3 value types above
-	       UNDEF	 => ...,			   # any of the 3 value types above
-	       UNIVERSAL => ...,			   # any of the 3 value types above
-	       DEFAULT	 => ...,			   # any of the 3 value types above
-	       DEBUG	 => ...;			   # boolean or coderef
+	       SCALAR	 =&gt 'MyScalar'			   # class name
+	       ARRAY	 =&gt 'MyNamespace::',		   # class prefix (ending in '::')
+	       HASH	 =&gt [ 'MyHash', 'MyNamespace::' ], # one or more class names and/or prefixes
+	       CODE	 =&gt ...,			   # any of the 3 value types above
+	       INTEGER	 =&gt ...,			   # any of the 3 value types above
+	       FLOAT	 =&gt ...,			   # any of the 3 value types above
+	       NUMBER	 =&gt ...,			   # any of the 3 value types above
+	       STRING	 =&gt ...,			   # any of the 3 value types above
+	       UNDEF	 =&gt ...,			   # any of the 3 value types above
+	       UNIVERSAL =&gt ...,			   # any of the 3 value types above
+	       DEFAULT	 =&gt ...,			   # any of the 3 value types above
+	       DEBUG	 =&gt ...;			   # boolean or coderef
 
        The INTEGER, FLOAT, NUMBER, STRING, SCALAR, ARRAY, HASH, CODE, UNDEF,
        DEFAULT and UNIVERSAL options can take three different types of value:
 
        o   A class name e.g.
 
-	       use autobox INTEGER => 'MyInt';
+	       use autobox INTEGER =&gt 'MyInt';
 
 	   This binds the specified native type to the specified class. All
 	   methods invoked on literals or values of type "key" will be
@@ -275,11 +277,11 @@ OPTIONS
 
 	   Thus:
 
-	       use autobox ARRAY => 'Prelude::';
+	       use autobox ARRAY =&gt 'Prelude::';
 
 	   is equivalent to:
 
-	       use autobox ARRAY => 'Prelude::ARRAY';
+	       use autobox ARRAY =&gt 'Prelude::ARRAY';
 
        o   A reference to an array of class names and/or namespaces. This
 	   associates multiple classes with the specified type.
@@ -294,27 +296,27 @@ OPTIONS
        Thus:
 
 	   use autobox
-	       STRING  => 'MyString',
-	       DEFAULT => 'MyDefault';
+	       STRING  =&gt 'MyString',
+	       DEFAULT =&gt 'MyDefault';
 
        is equivalent to:
 
 	   use autobox
-	       STRING  => 'MyString',
-	       SCALAR  => 'MyDefault',
-	       ARRAY   => 'MyDefault',
-	       HASH    => 'MyDefault',
-	       CODE    => 'MyDefault';
+	       STRING  =&gt 'MyString',
+	       SCALAR  =&gt 'MyDefault',
+	       ARRAY   =&gt 'MyDefault',
+	       HASH    =&gt 'MyDefault',
+	       CODE    =&gt 'MyDefault';
 
        Which in turn is equivalent to:
 
 	   use autobox
-	       INTEGER => 'MyDefault',
-	       FLOAT   => 'MyDefault',
-	       STRING  => [ 'MyString', 'MyDefault' ],
-	       ARRAY   => 'MyDefault',
-	       HASH    => 'MyDefault',
-	       CODE    => 'MyDefault';
+	       INTEGER =&gt 'MyDefault',
+	       FLOAT   =&gt 'MyDefault',
+	       STRING  =&gt [ 'MyString', 'MyDefault' ],
+	       ARRAY   =&gt 'MyDefault',
+	       HASH    =&gt 'MyDefault',
+	       CODE    =&gt 'MyDefault';
 
        Namespaces in DEFAULT values have the default type name appended,
        which, in the case of defaulted SCALAR types, is SCALAR rather than
@@ -323,32 +325,32 @@ OPTIONS
        Thus:
 
 	   use autobox
-	       ARRAY   => 'MyArray',
-	       HASH    => 'MyHash',
-	       CODE    => 'MyCode',
-	       DEFAULT => 'MyNamespace::';
+	       ARRAY   =&gt 'MyArray',
+	       HASH    =&gt 'MyHash',
+	       CODE    =&gt 'MyCode',
+	       DEFAULT =&gt 'MyNamespace::';
 
        is equivalent to:
 
 	   use autobox
-	       INTEGER => 'MyNamespace::SCALAR',
-	       FLOAT   => 'MyNamespace::SCALAR',
-	       STRING  => 'MyNamespace::SCALAR',
-	       ARRAY   => 'MyArray',
-	       HASH    => 'MyArray',
-	       CODE    => 'MyCode';
+	       INTEGER =&gt 'MyNamespace::SCALAR',
+	       FLOAT   =&gt 'MyNamespace::SCALAR',
+	       STRING  =&gt 'MyNamespace::SCALAR',
+	       ARRAY   =&gt 'MyArray',
+	       HASH    =&gt 'MyArray',
+	       CODE    =&gt 'MyCode';
 
        Any of the four default types can be exempted from defaulting to the
        DEFAULT value by supplying a value of undef:
 
 	   use autobox
-	       HASH    => undef,
-	       DEFAULT => 'MyDefault';
+	       HASH    =&gt undef,
+	       DEFAULT =&gt 'MyDefault';
 
-	   42->foo # ok: MyDefault::foo
-	   []->bar # ok: MyDefault::bar
+	   42-&gtfoo # ok: MyDefault::foo
+	   []-&gtbar # ok: MyDefault::bar
 
-	   %INC->baz # not ok: runtime error
+	   %INC-&gtbaz # not ok: runtime error
 
    UNDEF
        The pseudotype, UNDEF, can be used to autobox undefined values. These
@@ -358,19 +360,19 @@ OPTIONS
 
 	   use autobox;
 
-	   undef->foo() # runtime error
+	   undef-&gtfoo() # runtime error
 
        This works:
 
-	   use autobox UNDEF => 'MyUndef';
+	   use autobox UNDEF =&gt 'MyUndef';
 
-	   undef->foo(); # ok
+	   undef-&gtfoo(); # ok
 
        So does this:
 
-	   use autobox UNDEF => 'MyNamespace::';
+	   use autobox UNDEF =&gt 'MyNamespace::';
 
-	   undef->foo(); # ok
+	   undef-&gtfoo(); # ok
 
    NUMBER, SCALAR and UNIVERSAL
        The virtual types NUMBER, SCALAR and UNIVERSAL function as macros or
@@ -397,24 +399,24 @@ OPTIONS
 
        Thus:
 
-	   use autobox NUMBER => 'MyNumber';
+	   use autobox NUMBER =&gt 'MyNumber';
 
        is equivalent to:
 
 	   use autobox
-	       INTEGER => 'MyNumber',
-	       FLOAT   => 'MyNumber';
+	       INTEGER =&gt 'MyNumber',
+	       FLOAT   =&gt 'MyNumber';
 
        And:
 
-	   use autobox SCALAR => 'MyScalar';
+	   use autobox SCALAR =&gt 'MyScalar';
 
        is equivalent to:
 
 	   use autobox
-	       INTEGER => 'MyScalar',
-	       FLOAT   => 'MyScalar',
-	       STRING  => 'MyScalar';
+	       INTEGER =&gt 'MyScalar',
+	       FLOAT   =&gt 'MyScalar',
+	       STRING  =&gt 'MyScalar';
 
        Virtual types can also be passed to "unimport" via the "no autobox"
        syntax. This disables autoboxing for the corresponding subtypes e.g.
@@ -429,28 +431,28 @@ OPTIONS
        fine-grained control over inheritance and delegation. For instance:
 
 	   use autobox
-	       INTEGER => 'MyInteger',
-	       NUMBER  => 'MyNumber',
-	       SCALAR  => 'MyScalar';
+	       INTEGER =&gt 'MyInteger',
+	       NUMBER  =&gt 'MyNumber',
+	       SCALAR  =&gt 'MyScalar';
 
        would result in the following bindings:
 
-	   42->foo	       -> [ MyInteger, MyNumber, MyScalar ]
-	   3.1415927->bar      -> [ MyNumber, MyScalar ]
-	   "Hello, world!->baz -> [ MyScalar ]
+	   42-&gtfoo	       -&gt [ MyInteger, MyNumber, MyScalar ]
+	   3.1415927-&gtbar      -&gt [ MyNumber, MyScalar ]
+	   "Hello, world!-&gtbaz -&gt [ MyScalar ]
 
        Note that DEFAULT bindings take precedence over virtual type bindings
        i.e.
 
 	   use autobox
-	       UNIVERSAL => 'MyUniversal',
-	       DEFAULT	 => 'MyDefault'; # default SCALAR, ARRAY, HASH and CODE before UNIVERSAL
+	       UNIVERSAL =&gt 'MyUniversal',
+	       DEFAULT	 =&gt 'MyDefault'; # default SCALAR, ARRAY, HASH and CODE before UNIVERSAL
 
        is equivalent to:
 
 	 use autobox
-	     INTEGER => [ 'MyDefault', 'MyUniversal' ],
-	     FLOAT   => [ 'MyDefault', 'MyUniversal' ], # ... &c.
+	     INTEGER =&gt [ 'MyDefault', 'MyUniversal' ],
+	     FLOAT   =&gt [ 'MyDefault', 'MyUniversal' ], # ... &c.
 
    DEBUG
        "DEBUG" exposes the current bindings for the scope in which "use
@@ -470,11 +472,11 @@ OPTIONS
 
        Thus:
 
-	   use autobox DEBUG => 1, ...
+	   use autobox DEBUG =&gt 1, ...
 
        or
 
-	   use autobox DEBUG => sub { ... }, ...
+	   use autobox DEBUG =&gt sub { ... }, ...
 
        or
 
@@ -483,7 +485,7 @@ OPTIONS
 	       ...
 	   }
 
-	   use autobox DEBUG => \&my_callback, ...
+	   use autobox DEBUG =&gt \&my_callback, ...
 
 METHODS
    import
@@ -503,7 +505,7 @@ METHODS
 
 	   sub import {
 	       my $class = shift;
-	       $class->SUPER::import(STRING => 'String::Trim::Scalar');
+	       $class-&gtSUPER::import(STRING =&gt 'String::Trim::Scalar');
 	   }
 
 	   package String::Trim::Scalar;
@@ -528,7 +530,7 @@ METHODS
 
 	   use String::Trim;
 
-	   print "  Hello, world!  "->trim();
+	   print "  Hello, world!  "-&gttrim();
 
 EXPORTS
    autobox_class
@@ -536,8 +538,8 @@ EXPORTS
        "autobox_class". This can be used to call "isa", "can", "VERSION",
        "import" and "unimport". e.g.
 
-	   if (42->autobox_class->isa('SCALAR')) ...
-	   if (sub { ... }->autobox_class->can('curry')) ...
+	   if (42-&gtautobox_class-&gtisa('SCALAR')) ...
+	   if (sub { ... }-&gtautobox_class-&gtcan('curry')) ...
 
    type
        "autobox" includes an additional module, "autobox::universal", which
@@ -559,17 +561,17 @@ EXPORTS
        name suggests, can be used to install a universal method (i.e. a method
        for all "autobox" types) e.g.
 
-	   use autobox UNIVERSAL => 'autobox::universal';
+	   use autobox UNIVERSAL =&gt 'autobox::universal';
 
-	   42->type	   # INTEGER
-	   3.1415927->type # FLOAT
-	   %ENV->type	   # HASH
+	   42-&gttype	   # INTEGER
+	   3.1415927-&gttype # FLOAT
+	   %ENV-&gttype	   # HASH
 
 CAVEATS
    Performance
        Autoboxing comes at a price. Calling
 
-	   "Hello, world!"->length()
+	   "Hello, world!"-&gtlength()
 
        is slightly slower than the equivalent method call on a string-like
        object, and significantly slower than
@@ -584,26 +586,26 @@ CAVEATS
 
        For instance, while this works:
 
-	   my $curried = sub { ... }->curry();
+	   my $curried = sub { ... }-&gtcurry();
 
        this doesn't:
 
-	   my $curried = \&foo->curry();
+	   my $curried = \&foo-&gtcurry();
 
        The solution is to wrap the reference in parentheses:
 
-	   my $curried = (\&foo)->curry();
+	   my $curried = (\&foo)-&gtcurry();
 
        The same applies for signed integer and float literals:
 
 	   # this works
-	   my $range = 10->to(1);
+	   my $range = 10-&gtto(1);
 
 	   # this doesn't work
-	   my $range = -10->to(10);
+	   my $range = -10-&gtto(10);
 
 	   # this works
-	   my $range = (-10)->to(10);
+	   my $range = (-10)-&gtto(10);
 
        print BLOCK
 
@@ -612,35 +614,35 @@ CAVEATS
        denote an anonymous HASH ref) may require some further disambiguation:
 
 	   # this works (
-	   print { foo => 'bar' }->foo();
+	   print { foo =&gt 'bar' }-&gtfoo();
 
 	   # and this
-	   print { 'foo', 'bar' }->foo();
+	   print { 'foo', 'bar' }-&gtfoo();
 
 	   # and even this
-	   print { 'foo', 'bar', @_ }->foo();
+	   print { 'foo', 'bar', @_ }-&gtfoo();
 
 	   # but this doesn't
-	   print { @_ }->foo() ? 1 : 0
+	   print { @_ }-&gtfoo() ? 1 : 0
 
        In the latter case, the solution is to supply something other than a
        HASH ref literal as the first argument to "print()":
 
 	   # e.g.
-	   print STDOUT { @_ }->foo() ? 1 : 0;
+	   print STDOUT { @_ }-&gtfoo() ? 1 : 0;
 
 	   # or
 	   my $hashref = { @_ };
-	   print $hashref->foo() ? 1 : 0;
+	   print $hashref-&gtfoo() ? 1 : 0;
 
 	   # or
-	   print '', { @_ }->foo() ? 1 : 0;
+	   print '', { @_ }-&gtfoo() ? 1 : 0;
 
 	   # or
-	   print '' . { @_ }->foo() ? 1 : 0;
+	   print '' . { @_ }-&gtfoo() ? 1 : 0;
 
 	   # or even
-	   { @_ }->print_if_foo(1, 0);
+	   { @_ }-&gtprint_if_foo(1, 0);
 
        eval EXPR
 
@@ -650,20 +652,20 @@ CAVEATS
 
 	   use autobox;
 
-	   eval "42->foo";
+	   eval "42-&gtfoo";
 
        The workaround is to use autobox within the "eval" e.g.
 
-	   eval <<'EOS';
+	   eval &lt&lt'EOS';
 	       use autobox;
-	       42->foo();
+	       42-&gtfoo();
 	   EOS
 
        Note that the "eval BLOCK" form works as expected:
 
 	   use autobox;
 
-	   eval { 42->foo() }; # OK
+	   eval { 42-&gtfoo() }; # OK
 
 VERSION
        2.75
@@ -678,7 +680,7 @@ SEE ALSO
        o   Scalar::Properties
 
 AUTHOR
-       chocolateboy <chocolate@cpan.org>
+       chocolateboy &ltchocolate@cpan.org&gt
 
 COPYRIGHT
        Copyright (c) 2003-2011, chocolateboy.
@@ -689,6 +691,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-07-21			    autobox(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

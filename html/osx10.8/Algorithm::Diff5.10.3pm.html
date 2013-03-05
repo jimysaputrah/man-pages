@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Algorithm::Diff - Compute `intelligent' differences between two files /</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Algorithm::Diff(3)    User Contributed Perl Documentation   Algorithm::Diff(3)
 
 
@@ -21,26 +23,26 @@ SYNOPSIS
 
 	   # This example produces traditional 'diff' output:
 
-	   my $diff = Algorithm::Diff->new( \@seq1, \@seq2 );
+	   my $diff = Algorithm::Diff-&gtnew( \@seq1, \@seq2 );
 
-	   $diff->Base( 1 );   # Return line numbers, not indices
-	   while(  $diff->Next()  ) {
-	       next   if  $diff->Same();
+	   $diff-&gtBase( 1 );   # Return line numbers, not indices
+	   while(  $diff-&gtNext()  ) {
+	       next   if  $diff-&gtSame();
 	       my $sep = '';
-	       if(  ! $diff->Items(2)  ) {
+	       if(  ! $diff-&gtItems(2)  ) {
 		   printf "%d,%dd%d\n",
-		       $diff->Get(qw( Min1 Max1 Max2 ));
-	       } elsif(  ! $diff->Items(1)  ) {
+		       $diff-&gtGet(qw( Min1 Max1 Max2 ));
+	       } elsif(  ! $diff-&gtItems(1)  ) {
 		   printf "%da%d,%d\n",
-		       $diff->Get(qw( Max1 Min2 Max2 ));
+		       $diff-&gtGet(qw( Max1 Min2 Max2 ));
 	       } else {
 		   $sep = "---\n";
 		   printf "%d,%dc%d,%d\n",
-		       $diff->Get(qw( Min1 Max1 Min2 Max2 ));
+		       $diff-&gtGet(qw( Min1 Max1 Min2 Max2 ));
 	       }
-	       print "< $_"   for  $diff->Items(1);
+	       print "&lt $_"   for  $diff-&gtItems(1);
 	       print $sep;
-	       print "> $_"   for  $diff->Items(2);
+	       print "&gt $_"   for  $diff-&gtItems(2);
 	   }
 
 
@@ -69,9 +71,9 @@ SYNOPSIS
 	   traverse_sequences(
 	       \@seq1,
 	       \@seq2,
-	       {   MATCH     => \&callback1,
-		   DISCARD_A => \&callback2,
-		   DISCARD_B => \&callback3,
+	       {   MATCH     =&gt \&callback1,
+		   DISCARD_A =&gt \&callback2,
+		   DISCARD_B =&gt \&callback3,
 	       },
 	       \&key_generator,
 	       @extra_args,
@@ -80,10 +82,10 @@ SYNOPSIS
 	   traverse_balanced(
 	       \@seq1,
 	       \@seq2,
-	       {   MATCH     => \&callback1,
-		   DISCARD_A => \&callback2,
-		   DISCARD_B => \&callback3,
-		   CHANGE    => \&callback4,
+	       {   MATCH     =&gt \&callback1,
+		   DISCARD_A =&gt \&callback2,
+		   DISCARD_B =&gt \&callback3,
+		   CHANGE    =&gt \&callback4,
 	       },
 	       \&key_generator,
 	       @extra_args,
@@ -192,8 +194,8 @@ USAGE
 	   my @list3 = LCS( \@seq1, \@seq2 );
 
    "new"
-	   $diff = Algorithm::Diffs->new( \@seq1, \@seq2 );
-	   $diff = Algorithm::Diffs->new( \@seq1, \@seq2, \%opts );
+	   $diff = Algorithm::Diffs-&gtnew( \@seq1, \@seq2 );
+	   $diff = Algorithm::Diffs-&gtnew( \@seq1, \@seq2, \%opts );
 
        "new" computes the smallest set of additions and deletions necessary to
        turn the first sequence into the second and compactly records them in
@@ -212,32 +214,32 @@ USAGE
 
 	   Method summary:
 
-	       $obj	   = Algorithm::Diff->new( \@seq1, \@seq2, [ \%opts ] );
-	       $pos	   = $obj->Next(  [ $count : 1 ] );
-	       $revPos	   = $obj->Prev(  [ $count : 1 ] );
-	       $obj	   = $obj->Reset( [ $pos : 0 ] );
-	       $copy	   = $obj->Copy(  [ $pos, [ $newBase ] ] );
-	       $oldBase    = $obj->Base(  [ $newBase ] );
+	       $obj	   = Algorithm::Diff-&gtnew( \@seq1, \@seq2, [ \%opts ] );
+	       $pos	   = $obj-&gtNext(  [ $count : 1 ] );
+	       $revPos	   = $obj-&gtPrev(  [ $count : 1 ] );
+	       $obj	   = $obj-&gtReset( [ $pos : 0 ] );
+	       $copy	   = $obj-&gtCopy(  [ $pos, [ $newBase ] ] );
+	       $oldBase    = $obj-&gtBase(  [ $newBase ] );
 
 	   Note that all of the following methods "die" if used on an object
 	   that is "reset" (not currently pointing at any hunk).
 
-	       $bits	   = $obj->Diff(  );
-	       @items|$cnt = $obj->Same(  );
-	       @items|$cnt = $obj->Items( $seqNum );
-	       @idxs |$cnt = $obj->Range( $seqNum, [ $base ] );
-	       $minIdx	   = $obj->Min(   $seqNum, [ $base ] );
-	       $maxIdx	   = $obj->Max(   $seqNum, [ $base ] );
-	       @values	   = $obj->Get(   @names );
+	       $bits	   = $obj-&gtDiff(  );
+	       @items|$cnt = $obj-&gtSame(  );
+	       @items|$cnt = $obj-&gtItems( $seqNum );
+	       @idxs |$cnt = $obj-&gtRange( $seqNum, [ $base ] );
+	       $minIdx	   = $obj-&gtMin(   $seqNum, [ $base ] );
+	       $maxIdx	   = $obj-&gtMax(   $seqNum, [ $base ] );
+	       @values	   = $obj-&gtGet(   @names );
 
 	   Passing in "undef" for an optional argument is always treated the
 	   same as if no argument were passed in.
 
 	   "Next"
 
-	       $pos = $diff->Next();	# Move forward 1 hunk
-	       $pos = $diff->Next( 2 ); # Move forward 2 hunks
-	       $pos = $diff->Next(-5);	# Move backward 5 hunks
+	       $pos = $diff-&gtNext();	# Move forward 1 hunk
+	       $pos = $diff-&gtNext( 2 ); # Move forward 2 hunks
+	       $pos = $diff-&gtNext(-5);	# Move backward 5 hunks
 
 	   "Next" moves the object to point at the next hunk.  The object
 	   starts out "reset", which means it isn't pointing at any hunk.  If
@@ -261,17 +263,17 @@ USAGE
 
 	   "Reset"
 
-	       $diff->Reset();	   # Reset the object's position
-	       $diff->Reset($pos); # Move to the specified hunk
-	       $diff->Reset(1);    # Move to the first hunk
-	       $diff->Reset(-1);   # Move to the last hunk
+	       $diff-&gtReset();	   # Reset the object's position
+	       $diff-&gtReset($pos); # Move to the specified hunk
+	       $diff-&gtReset(1);    # Move to the first hunk
+	       $diff-&gtReset(-1);   # Move to the last hunk
 
 	   "Reset" returns the object, so, for example, you could use
-	   "$diff->Reset()->Next(-1)" to get the number of hunks.
+	   "$diff-&gtReset()-&gtNext(-1)" to get the number of hunks.
 
 	   "Copy"
 
-	       $copy = $diff->Copy( $newPos, $newBase );
+	       $copy = $diff-&gtCopy( $newPos, $newBase );
 
 	   "Copy" returns a copy of the object.  The copy and the orignal
 	   object share most of their data, so making copies takes very little
@@ -284,31 +286,31 @@ USAGE
 	   set the new position, so the following three snippets are
 	   equivalent:
 
-	       $copy = $diff->Copy($pos);
+	       $copy = $diff-&gtCopy($pos);
 
-	       $copy = $diff->Copy();
-	       $copy->Reset($pos);
+	       $copy = $diff-&gtCopy();
+	       $copy-&gtReset($pos);
 
-	       $copy = $diff->Copy()->Reset($pos);
+	       $copy = $diff-&gtCopy()-&gtReset($pos);
 
 	   "Copy" takes an optional second argument to set the base for the
 	   copy.  If you wish to change the base of the copy but leave the
 	   position the same as in the original, here are two equivalent ways:
 
-	       $copy = $diff->Copy();
-	       $copy->Base( 0 );
+	       $copy = $diff-&gtCopy();
+	       $copy-&gtBase( 0 );
 
-	       $copy = $diff->Copy(undef,0);
+	       $copy = $diff-&gtCopy(undef,0);
 
 	   Here are two equivalent way to get a "reset" copy:
 
-	       $copy = $diff->Copy(0);
+	       $copy = $diff-&gtCopy(0);
 
-	       $copy = $diff->Copy()->Reset();
+	       $copy = $diff-&gtCopy()-&gtReset();
 
 	   "Diff"
 
-	       $bits = $obj->Diff();
+	       $bits = $obj-&gtDiff();
 
 	   "Diff" returns a true value iff the current hunk contains items
 	   that are different between the two sequences.  It actually returns
@@ -339,32 +341,32 @@ USAGE
 
 	   "Items"
 
-	       $count = $diff->Items(2);
-	       @items = $diff->Items($seqNum);
+	       $count = $diff-&gtItems(2);
+	       @items = $diff-&gtItems($seqNum);
 
 	   "Items" returns the (number of) items from the specified sequence
 	   that are part of the current hunk.
 
 	   If the current hunk contains only insertions, then
-	   "$diff->Items(1)" will return an empty list (0 in a scalar conext).
-	   If the current hunk contains only deletions, then "$diff->Items(2)"
+	   "$diff-&gtItems(1)" will return an empty list (0 in a scalar conext).
+	   If the current hunk contains only deletions, then "$diff-&gtItems(2)"
 	   will return an empty list (0 in a scalar conext).
 
-	   If the hunk contains replacements, then both "$diff->Items(1)" and
-	   "$diff->Items(2)" will return different, non-empty lists.
+	   If the hunk contains replacements, then both "$diff-&gtItems(1)" and
+	   "$diff-&gtItems(2)" will return different, non-empty lists.
 
 	   Otherwise, the hunk contains identical items and all of the
 	   following will return the same lists:
 
-	       @items = $diff->Items(1);
-	       @items = $diff->Items(2);
-	       @items = $diff->Same();
+	       @items = $diff-&gtItems(1);
+	       @items = $diff-&gtItems(2);
+	       @items = $diff-&gtSame();
 
 	   "Range"
 
-	       $count = $diff->Range( $seqNum );
-	       @indices = $diff->Range( $seqNum );
-	       @indices = $diff->Range( $seqNum, $base );
+	       $count = $diff-&gtRange( $seqNum );
+	       @indices = $diff-&gtRange( $seqNum );
+	       @indices = $diff-&gtRange( $seqNum, $base );
 
 	   "Range" is like "Items" except that it returns a list of indices to
 	   the items rather than the items themselves.	By default, the index
@@ -372,19 +374,19 @@ USAGE
 	   by calling the "Base" method.  So, by default, the following two
 	   snippets return the same lists:
 
-	       @list = $diff->Items(2);
-	       @list = @seq2[ $diff->Range(2) ];
+	       @list = $diff-&gtItems(2);
+	       @list = @seq2[ $diff-&gtRange(2) ];
 
 	   You can also specify the base to use as the second argument.  So
 	   the following two snippets always return the same lists:
 
-	       @list = $diff->Items(1);
-	       @list = @seq1[ $diff->Range(1,0) ];
+	       @list = $diff-&gtItems(1);
+	       @list = @seq1[ $diff-&gtRange(1,0) ];
 
 	   "Base"
 
-	       $curBase = $diff->Base();
-	       $oldBase = $diff->Base($newBase);
+	       $curBase = $diff-&gtBase();
+	       $oldBase = $diff-&gtBase($newBase);
 
 	   "Base" sets and/or returns the current base (usually 0 or 1) that
 	   is used when you request range information.	The base defaults to 0
@@ -394,8 +396,8 @@ USAGE
 
 	   "Min"
 
-	       $min1 = $diff->Min(1);
-	       $min = $diff->Min( $seqNum, $base );
+	       $min1 = $diff-&gtMin(1);
+	       $min = $diff-&gtMin( $seqNum, $base );
 
 	   "Min" returns the first value that "Range" would return (given the
 	   same arguments) or returns "undef" if "Range" would return an empty
@@ -407,8 +409,8 @@ USAGE
 
 	   "Get"
 
-	       ( $n, $x, $r ) = $diff->Get(qw( min1 max1 range1 ));
-	       @values = $diff->Get(qw( 0min2 1max2 range2 same base ));
+	       ( $n, $x, $r ) = $diff-&gtGet(qw( min1 max1 range1 ));
+	       @values = $diff-&gtGet(qw( 0min2 1max2 range2 same base ));
 
 	   "Get" returns one or more scalar values.  You pass in a list of the
 	   names of the values you want returned.  Each name must match one of
@@ -422,8 +424,8 @@ USAGE
 	   number before "min" or "max" is the base to use.  So the following
 	   equalities hold:
 
-	       $diff->Get('min1') == $diff->Min(1)
-	       $diff->Get('0min2') == $diff->Min(2,0)
+	       $diff-&gtGet('min1') == $diff-&gtMin(1)
+	       $diff-&gtGet('0min2') == $diff-&gtMin(2,0)
 
 	   Using "Get" in a scalar context when you've passed in more than one
 	   name is a fatal error ("die" is called).
@@ -517,8 +519,8 @@ USAGE
 
 	   same 	    same
 	   before     |     after
-	   old	      <     -
-	   -	      >     new
+	   old	      &lt     -
+	   -	      &gt     new
 
        It returns a list of array refs, each pointing to an array of display
        instructions. In scalar context it returns a reference to such a list.
@@ -706,9 +708,9 @@ USAGE
 
 	   traverse_sequences(
 	       \@seq1, \@seq2,
-	       {   MATCH => $callback_1,
-		   DISCARD_A => $callback_2,
-		   DISCARD_B => $callback_3,
+	       {   MATCH =&gt $callback_1,
+		   DISCARD_A =&gt $callback_2,
+		   DISCARD_B =&gt $callback_3,
 	       }
 	   );
 
@@ -741,9 +743,9 @@ USAGE
 
 	   traverse_sequences(
 	       \@seq1, \@seq2,
-	       {   MATCH => $callback_1,
-		   DISCARD_A => $callback_2,
-		   DISCARD_B => $callback_3,
+	       {   MATCH =&gt $callback_1,
+		   DISCARD_A =&gt $callback_2,
+		   DISCARD_B =&gt $callback_3,
 	       },
 	       undef,	  # default key-gen
 	       $myArgument1,
@@ -770,10 +772,10 @@ USAGE
 
 	   traverse_balanced(
 	       \@seq1, \@seq2,
-	       {   MATCH => $callback_1,
-		   DISCARD_A => $callback_2,
-		   DISCARD_B => $callback_3,
-		   CHANGE    => $callback_4,
+	       {   MATCH =&gt $callback_1,
+		   DISCARD_A =&gt $callback_2,
+		   DISCARD_B =&gt $callback_3,
+		   CHANGE    =&gt $callback_4,
 	       }
 	   );
 
@@ -816,7 +818,7 @@ KEY GENERATION FUNCTIONS
 	   sub new
 	   {
 	       my $package = shift;
-	       return bless { name => '', ssn => '', @_ }, $package;
+	       return bless { name =&gt '', ssn =&gt '', @_ }, $package;
 	   }
 
 	   sub clone
@@ -827,14 +829,14 @@ KEY GENERATION FUNCTIONS
 
 	   sub hash
 	   {
-	       return shift()->{'ssn'};
+	       return shift()-&gt{'ssn'};
 	   }
 
-	   my $person1 = Person->new( name => 'Joe', ssn => '123-45-6789' );
-	   my $person2 = Person->new( name => 'Mary', ssn => '123-47-0000' );
-	   my $person3 = Person->new( name => 'Pete', ssn => '999-45-2222' );
-	   my $person4 = Person->new( name => 'Peggy', ssn => '123-45-9999' );
-	   my $person5 = Person->new( name => 'Frank', ssn => '000-45-9999' );
+	   my $person1 = Person-&gtnew( name =&gt 'Joe', ssn =&gt '123-45-6789' );
+	   my $person2 = Person-&gtnew( name =&gt 'Mary', ssn =&gt '123-47-0000' );
+	   my $person3 = Person-&gtnew( name =&gt 'Pete', ssn =&gt '999-45-2222' );
+	   my $person4 = Person-&gtnew( name =&gt 'Peggy', ssn =&gt '123-45-9999' );
+	   my $person5 = Person-&gtnew( name =&gt 'Frank', ssn =&gt '000-45-9999' );
 
        If you did this:
 
@@ -848,19 +850,19 @@ KEY GENERATION FUNCTIONS
        But if you did this:
 
 	   my $array1 = [ $person1, $person2, $person4 ];
-	   my $array2 = [ $person1, $person3, $person4->clone(), $person5 ];
+	   my $array2 = [ $person1, $person3, $person4-&gtclone(), $person5 ];
 	   Algorithm::Diff::diff( $array1, $array2 );
 
-       $person4 and $person4->clone() (which have the same name and SSN) would
+       $person4 and $person4-&gtclone() (which have the same name and SSN) would
        be seen as different objects. If you wanted them to be considered
        equivalent, you would have to pass in a key generation function:
 
 	   my $array1 = [ $person1, $person2, $person4 ];
-	   my $array2 = [ $person1, $person3, $person4->clone(), $person5 ];
+	   my $array2 = [ $person1, $person3, $person4-&gtclone(), $person5 ];
 	   Algorithm::Diff::diff( $array1, $array2, \&Person::hash );
 
        This would use the 'ssn' field in each Person as a comparison key, and
-       so would consider $person4 and $person4->clone() as equal.
+       so would consider $person4 and $person4-&gtclone() as equal.
 
        You may also pass additional parameters to the key generation function
        if you wish.
@@ -893,11 +895,11 @@ CREDITS
        Jason's, but Diff.pm's code was completely replaced.
 
        This code was adapted from the Smalltalk code of Mario Wolczko
-       <mario@wolczko.com>, which is available at
+       &ltmario@wolczko.com&gt, which is available at
        ftp://st.cs.uiuc.edu/pub/Smalltalk/MANCHESTER/manchester/4.0/diff.st
 
        "sdiff" and "traverse_balanced" were written by Mike Schilli
-       <m@perlmeister.com>.
+       &ltm@perlmeister.com&gt.
 
        The algorithm is that described in A Fast Algorithm for Computing
        Longest Common Subsequences, CACM, vol.20, no.5, pp.350-353, May 1977,
@@ -918,6 +920,6 @@ POD ERRORS
 
 
 perl v5.10.1			  2006-07-30		    Algorithm::Diff(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

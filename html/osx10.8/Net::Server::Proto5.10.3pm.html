@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Net::Server::Proto is an intermediate module which returns IO::Socket..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::Server::Proto - Net::Server Protocol compatibility layer</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::Server::Proto(3) User Contributed Perl DocumentationNet::Server::Proto(3)
 
 
@@ -26,7 +28,7 @@ SYNOPSIS
 
 	 use Net::Server::Proto;
 
-	 my $sock = Net::Server::Proto->object(
+	 my $sock = Net::Server::Proto-&gtobject(
 	   $default_host,    # host to use if none found in port
 	   $port,	     # port to connect to
 	   $default_proto,   # proto to use if none found in port
@@ -45,7 +47,7 @@ SYNOPSIS
 	 ### At this point the object is not connected.
 	 ### The method can gather any other information that it
 	 ### needs from the server object.
-	 my $sock = Net::Server::Proto::TCP->object(
+	 my $sock = Net::Server::Proto::TCP-&gtobject(
 	   $default_host,    # host to use if none found in port
 	   $port,	     # port to connect to
 	   $server_obj,      # Net::Server object
@@ -53,22 +55,22 @@ SYNOPSIS
 
 	 ### Log that a connection is about to occur.
 	 ### Use the facilities of the passed Net::Server object.
-	 $sock->log_connect( $server );
+	 $sock-&gtlog_connect( $server );
 
 	 ### Actually bind to port or socket file.  This
 	 ### is typically done by calling the configure method.
-	 $sock->connect();
+	 $sock-&gtconnect();
 
 	 ### Allow for rebinding to an already open fileno.
 	 ### Typically will just do an fdopen.
-	 $sock->reconnect();
+	 $sock-&gtreconnect();
 
 	 ### Return a unique identifying string for this sock that
 	 ### can be used when reconnecting.
-	 my $str = $sock->hup_string();
+	 my $str = $sock-&gthup_string();
 
 	 ### Return the proto that is being used by this module.
-	 my $proto = $sock->NS_proto();
+	 my $proto = $sock-&gtNS_proto();
 
 DESCRIPTION
        Net::Server::Proto is an intermediate module which returns IO::Socket
@@ -144,8 +146,8 @@ PORT
 
 	 sub post_bind_hook {
 	   my $self = shift;
-	   foreach my $sock ( @{ $self->{server}->{sock} } ){
-	     $self->log(2,$sock->show);
+	   foreach my $sock ( @{ $self-&gt{server}-&gt{sock} } ){
+	     $self-&gtlog(2,$sock-&gtshow);
 	   }
 	 }
 
@@ -157,7 +159,7 @@ PORT
 	 $port = "20203";
 	 $def_host  = "default_domain.com";
 	 $def_proto = "tcp";
-	 $obj = Net::Server::Proto->object($def_host,$port,$def_proto);
+	 $obj = Net::Server::Proto-&gtobject($def_host,$port,$def_proto);
 
 	 # ref	    = Net::Server::Proto::TCP
 	 # NS_host  = default_domain.com
@@ -169,7 +171,7 @@ PORT
 	 $port = "someother.com:20203";
 	 $def_host  = "default_domain.com";
 	 $def_proto = "tcp";
-	 $obj = Net::Server::Proto->object($def_host,$port,$def_proto);
+	 $obj = Net::Server::Proto-&gtobject($def_host,$port,$def_proto);
 
 	 # ref	    = Net::Server::Proto::TCP
 	 # NS_host  = someother.com
@@ -181,7 +183,7 @@ PORT
 	 $port = "someother.com:20203/udp";
 	 $def_host  = "default_domain.com";
 	 $def_proto = "tcp";
-	 $obj = Net::Server::Proto->object($def_host,$port,$def_proto);
+	 $obj = Net::Server::Proto-&gtobject($def_host,$port,$def_proto);
 
 	 # ref	    = Net::Server::Proto::UDP
 	 # NS_host  = someother.com
@@ -193,7 +195,7 @@ PORT
 	 $port = "someother.com:20203/Net::Server::Proto::UDP";
 	 $def_host  = "default_domain.com";
 	 $def_proto = "TCP";
-	 $obj = Net::Server::Proto->object($def_host,$port,$def_proto);
+	 $obj = Net::Server::Proto-&gtobject($def_host,$port,$def_proto);
 
 	 # ref	    = Net::Server::Proto::UDP
 	 # NS_host  = someother.com
@@ -205,7 +207,7 @@ PORT
 	 $port = "someother.com:20203/MyObject::TCP";
 	 $def_host  = "default_domain.com";
 	 $def_proto = "tcp";
-	 $obj = Net::Server::Proto->object($def_host,$port,$def_proto);
+	 $obj = Net::Server::Proto-&gtobject($def_host,$port,$def_proto);
 
 	 # ref	    = MyObject::TCP
 	 # NS_host  = someother.com
@@ -217,7 +219,7 @@ PORT
 	 $port = "/tmp/mysock.file|unix";
 	 $def_host  = "default_domain.com";
 	 $def_proto = "tcp";
-	 $obj = Net::Server::Proto->object($def_host,$port,$def_proto);
+	 $obj = Net::Server::Proto-&gtobject($def_host,$port,$def_proto);
 
 	 # ref	    = Net::Server::Proto::UNIX
 	 # NS_host  = undef
@@ -231,7 +233,7 @@ PORT
 	 $port = "/tmp/mysock.file|".SOCK_DGRAM."|unix";
 	 $def_host  = "";
 	 $def_proto = "tcp";
-	 $obj = Net::Server::Proto->object($def_host,$port,$def_proto);
+	 $obj = Net::Server::Proto-&gtobject($def_host,$port,$def_proto);
 
 	 # ref	    = Net::Server::Proto::UNIX
 	 # NS_host  = undef
@@ -245,7 +247,7 @@ PORT
 	 $port = "/tmp/mysock.file|".SOCK_DGRAM."|unix";
 	 $def_host  = "";
 	 $def_proto = "UNIX";
-	 $obj = Net::Server::Proto->object($def_host,$port,$def_proto);
+	 $obj = Net::Server::Proto-&gtobject($def_host,$port,$def_proto);
 
 	 # ref	    = Net::Server::Proto::UNIX
 	 # NS_host  = undef
@@ -260,6 +262,6 @@ LICENCE
 
 
 perl v5.10.1			  2007-02-02		 Net::Server::Proto(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

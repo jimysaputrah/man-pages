@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This is a perl interface to libxml2's pull-parser implementation..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>XML::LibXML::Reader - XML::LibXML::Reader - interface to libxml2 pull</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 XML::LibXML::Reader(3)User Contributed Perl DocumentatioXML::LibXML::Reader(3)
 
 
@@ -21,9 +23,9 @@ SYNOPSIS
 
 
 
-	 my $reader = new XML::LibXML::Reader(location => "file.xml")
+	 my $reader = new XML::LibXML::Reader(location =&gt "file.xml")
 		or die "cannot read file.xml\n";
-	 while ($reader->read) {
+	 while ($reader-&gtread) {
 	   processNode($reader);
 	 }
 
@@ -31,19 +33,19 @@ SYNOPSIS
 
 	 sub processNode {
 	     $reader = shift;
-	     printf "%d %d %s %d\n", ($reader->depth,
-				      $reader->nodeType,
-				      $reader->name,
-				      $reader->isEmptyElement);
+	     printf "%d %d %s %d\n", ($reader-&gtdepth,
+				      $reader-&gtnodeType,
+				      $reader-&gtname,
+				      $reader-&gtisEmptyElement);
 	 }
 
        or
 
-	 $reader = new XML::LibXML::Reader(location => "file.xml")
+	 $reader = new XML::LibXML::Reader(location =&gt "file.xml")
 		or die "cannot read file.xml\n";
-	   $reader->preservePattern('//table/tr');
-	   $reader->finish;
-	   print $reader->document->toString(1);
+	   $reader-&gtpreservePattern('//table/tr');
+	   $reader-&gtfinish;
+	   print $reader-&gtdocument-&gttoString(1);
 
 DESCRIPTION
        This is a perl interface to libxml2's pull-parser implementation
@@ -84,11 +86,11 @@ CONSTRUCTOR
        Depending on the XML source, the Reader object can be created with
        either of:
 
-	 my $reader = XML::LibXML::Reader->new( location => "file.xml", ... );
-	   my $reader = XML::LibXML::Reader->new( string => $xml_string, ... );
-	   my $reader = XML::LibXML::Reader->new( IO => $file_handle, ... );
-	   my $reader = XML::LibXML::Reader->new( FD => fileno(STDIN), ... );
-	   my $reader = XML::LibXML::Reader->new( DOM => $dom, ... );
+	 my $reader = XML::LibXML::Reader-&gtnew( location =&gt "file.xml", ... );
+	   my $reader = XML::LibXML::Reader-&gtnew( string =&gt $xml_string, ... );
+	   my $reader = XML::LibXML::Reader-&gtnew( IO =&gt $file_handle, ... );
+	   my $reader = XML::LibXML::Reader-&gtnew( FD =&gt fileno(STDIN), ... );
+	   my $reader = XML::LibXML::Reader-&gtnew( DOM =&gt $dom, ... );
 
        where ... are (optional) reader options described below in "Reader
        options" or various parser options described in XML::LibXML::Parser.
@@ -110,15 +112,15 @@ CONSTRUCTOR
        DOM Use reader API to walk through a pre-parsed XML::LibXML::Document.
 
    Reader options
-       encoding => $encoding
+       encoding =&gt $encoding
 	   override document encoding.
 
-       RelaxNG => $rng_schema
+       RelaxNG =&gt $rng_schema
 	   can be used to pass either a XML::LibXML::RelaxNG object or a
 	   filename or URL of a RelaxNG schema to the constructor. The schema
 	   is then used to validate the document as it is processed.
 
-       Schema => $xsd_schema
+       Schema =&gt $xsd_schema
 	   can be used to pass either a XML::LibXML::Schema object or a
 	   filename or URL of a W3C XSD schema to the constructor. The schema
 	   is then used to validate the document as it is processed.
@@ -232,7 +234,7 @@ METHODS EXTRACTING INFORMATION
 
        isEmptyElement ()
 	   Check if the current node is empty, this is a bit bizarre in the
-	   sense that <a/> will be considered empty while <a></a> will not.
+	   sense that &lta/&gt will be considered empty while &lta&gt&lt/a&gt will not.
 
        hasValue ()
 	   Returns true if the node can have a text value.
@@ -432,7 +434,7 @@ OTHER METHODS
 	   cost if the input is UTF-8 but can be costly if run on non-UTF-8
 	   input.
 
-       setParserProp (prop => value, ...)
+       setParserProp (prop =&gt value, ...)
 	   Change the parser processing behaviour by changing some of its
 	   internal properties. The following properties are available with
 	   this function: ``load_ext_dtd'', ``complete_attributes'',
@@ -454,8 +456,8 @@ OTHER METHODS
 DESTRUCTION
        XML::LibXML takes care of the reader object destruction when the last
        reference to the reader object goes out of scope. The document tree is
-       preserved, though, if either of $reader->document or
-       $reader->preserveNode was used and references to the document tree
+       preserved, though, if either of $reader-&gtdocument or
+       $reader-&gtpreserveNode was used and references to the document tree
        exist.
 
 NODE TYPES
@@ -463,37 +465,37 @@ NODE TYPES
        (the constant symbols are exported by default or if tag ":types" is
        used).
 
-	 XML_READER_TYPE_NONE			 => 0
-	 XML_READER_TYPE_ELEMENT		 => 1
-	 XML_READER_TYPE_ATTRIBUTE		 => 2
-	 XML_READER_TYPE_TEXT			 => 3
-	 XML_READER_TYPE_CDATA			 => 4
-	 XML_READER_TYPE_ENTITY_REFERENCE	 => 5
-	 XML_READER_TYPE_ENTITY 		 => 6
-	 XML_READER_TYPE_PROCESSING_INSTRUCTION  => 7
-	 XML_READER_TYPE_COMMENT		 => 8
-	 XML_READER_TYPE_DOCUMENT		 => 9
-	 XML_READER_TYPE_DOCUMENT_TYPE		 => 10
-	 XML_READER_TYPE_DOCUMENT_FRAGMENT	 => 11
-	 XML_READER_TYPE_NOTATION		 => 12
-	 XML_READER_TYPE_WHITESPACE		 => 13
-	 XML_READER_TYPE_SIGNIFICANT_WHITESPACE  => 14
-	 XML_READER_TYPE_END_ELEMENT		 => 15
-	 XML_READER_TYPE_END_ENTITY		 => 16
-	 XML_READER_TYPE_XML_DECLARATION	 => 17
+	 XML_READER_TYPE_NONE			 =&gt 0
+	 XML_READER_TYPE_ELEMENT		 =&gt 1
+	 XML_READER_TYPE_ATTRIBUTE		 =&gt 2
+	 XML_READER_TYPE_TEXT			 =&gt 3
+	 XML_READER_TYPE_CDATA			 =&gt 4
+	 XML_READER_TYPE_ENTITY_REFERENCE	 =&gt 5
+	 XML_READER_TYPE_ENTITY 		 =&gt 6
+	 XML_READER_TYPE_PROCESSING_INSTRUCTION  =&gt 7
+	 XML_READER_TYPE_COMMENT		 =&gt 8
+	 XML_READER_TYPE_DOCUMENT		 =&gt 9
+	 XML_READER_TYPE_DOCUMENT_TYPE		 =&gt 10
+	 XML_READER_TYPE_DOCUMENT_FRAGMENT	 =&gt 11
+	 XML_READER_TYPE_NOTATION		 =&gt 12
+	 XML_READER_TYPE_WHITESPACE		 =&gt 13
+	 XML_READER_TYPE_SIGNIFICANT_WHITESPACE  =&gt 14
+	 XML_READER_TYPE_END_ELEMENT		 =&gt 15
+	 XML_READER_TYPE_END_ENTITY		 =&gt 16
+	 XML_READER_TYPE_XML_DECLARATION	 =&gt 17
 
 STATES
        The following constants represent the values returned by "readState()".
        They are exported by default, or if tag ":states" is used:
 
-	 XML_READER_NONE      => -1
-	 XML_READER_START     =>  0
-	 XML_READER_ELEMENT   =>  1
-	 XML_READER_END       =>  2
-	 XML_READER_EMPTY     =>  3
-	 XML_READER_BACKTRACK =>  4
-	 XML_READER_DONE      =>  5
-	 XML_READER_ERROR     =>  6
+	 XML_READER_NONE      =&gt -1
+	 XML_READER_START     =&gt  0
+	 XML_READER_ELEMENT   =&gt  1
+	 XML_READER_END       =&gt  2
+	 XML_READER_EMPTY     =&gt  3
+	 XML_READER_BACKTRACK =&gt  4
+	 XML_READER_DONE      =&gt  5
+	 XML_READER_ERROR     =&gt  6
 
 SEE ALSO
        XML::LibXML::Pattern for information about compiled patterns.
@@ -503,7 +505,7 @@ SEE ALSO
        http://dotgnu.org/pnetlib-doc/System/Xml/XmlTextReader.html
 
 ORIGINAL IMPLEMENTATION
-       Heiko Klein, <H.Klein@gmx.net<gt> and Petr Pajas
+       Heiko Klein, &ltH.Klein@gmx.net&ltgt&gt and Petr Pajas
 
 AUTHORS
        Matt Sergeant, Christian Glahn, Petr Pajas
@@ -521,6 +523,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-10-07		XML::LibXML::Reader(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

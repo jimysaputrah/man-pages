@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Magic is Perl's way of enhancing variables.  This mechanism lets the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Variable::Magic - Associate user-defined magic to variables from Perl.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Variable::Magic(3)    User Contributed Perl Documentation   Variable::Magic(3)
 
 
@@ -19,12 +21,12 @@ VERSION
        Version 0.47
 
 SYNOPSIS
-	   use Variable::Magic qw<wizard cast VMG_OP_INFO_NAME>;
+	   use Variable::Magic qw&ltwizard cast VMG_OP_INFO_NAME&gt;
 
 	   { # A variable tracer
 	    my $wiz = wizard(
-	     set  => sub { print "now set to ${$_[0]}!\n" },
-	     free => sub { print "destroyed!\n" },
+	     set  =&gt sub { print "now set to ${$_[0]}!\n" },
+	     free =&gt sub { print "destroyed!\n" },
 	    );
 
 	    my $a = 1;
@@ -34,14 +36,14 @@ SYNOPSIS
 
 	   { # A hash with a default value
 	    my $wiz = wizard(
-	     data     => sub { $_[1] },
-	     fetch    => sub { $_[2] = $_[1] unless exists $_[0]->{$_[2]}; () },
-	     store    => sub { print "key $_[2] stored in $_[-1]\n" },
-	     copy_key => 1,
-	     op_info  => VMG_OP_INFO_NAME,
+	     data     =&gt sub { $_[1] },
+	     fetch    =&gt sub { $_[2] = $_[1] unless exists $_[0]-&gt{$_[2]}; () },
+	     store    =&gt sub { print "key $_[2] stored in $_[-1]\n" },
+	     copy_key =&gt 1,
+	     op_info  =&gt VMG_OP_INFO_NAME,
 	    );
 
-	    my %h = (_default => 0, apple => 2);
+	    my %h = (_default =&gt 0, apple =&gt 2);
 	    cast %h, $wiz, '_default';
 	    print $h{banana}, "\n"; # "0" (there is no 'banana' key in %h)
 	    $h{pear} = 1;	    # "key pear stored in helem"
@@ -173,22 +175,22 @@ DESCRIPTION
 FUNCTIONS
    "wizard"
 	   wizard(
-	    data     => sub { ... },
-	    get      => sub { my ($ref, $data [, $op]) = @_; ... },
-	    set      => sub { my ($ref, $data [, $op]) = @_; ... },
-	    len      => sub {
+	    data     =&gt sub { ... },
+	    get      =&gt sub { my ($ref, $data [, $op]) = @_; ... },
+	    set      =&gt sub { my ($ref, $data [, $op]) = @_; ... },
+	    len      =&gt sub {
 	     my ($ref, $data, $len [, $op]) = @_; ... ; return $newlen
 	    },
-	    clear    => sub { my ($ref, $data [, $op]) = @_; ... },
-	    free     => sub { my ($ref, $data [, $op]) = @_, ... },
-	    copy     => sub { my ($ref, $data, $key, $elt [, $op]) = @_; ... },
-	    local    => sub { my ($ref, $data [, $op]) = @_; ... },
-	    fetch    => sub { my ($ref, $data, $key [, $op]) = @_; ... },
-	    store    => sub { my ($ref, $data, $key [, $op]) = @_; ... },
-	    exists   => sub { my ($ref, $data, $key [, $op]) = @_; ... },
-	    delete   => sub { my ($ref, $data, $key [, $op]) = @_; ... },
-	    copy_key => $bool,
-	    op_info  => [ 0 | VMG_OP_INFO_NAME | VMG_OP_INFO_OBJECT ],
+	    clear    =&gt sub { my ($ref, $data [, $op]) = @_; ... },
+	    free     =&gt sub { my ($ref, $data [, $op]) = @_, ... },
+	    copy     =&gt sub { my ($ref, $data, $key, $elt [, $op]) = @_; ... },
+	    local    =&gt sub { my ($ref, $data [, $op]) = @_; ... },
+	    fetch    =&gt sub { my ($ref, $data, $key [, $op]) = @_; ... },
+	    store    =&gt sub { my ($ref, $data, $key [, $op]) = @_; ... },
+	    exists   =&gt sub { my ($ref, $data, $key [, $op]) = @_; ... },
+	    delete   =&gt sub { my ($ref, $data, $key [, $op]) = @_; ... },
+	    copy_key =&gt $bool,
+	    op_info  =&gt [ 0 | VMG_OP_INFO_NAME | VMG_OP_INFO_OBJECT ],
 	   )
 
        This function creates a 'wizard', an opaque type that holds the magic
@@ -213,7 +215,7 @@ FUNCTIONS
 	   the private data (or "undef" when no private data constructor was
 	   supplied).
 
-	   Moreover, when you pass "op_info => $num" to "wizard", the last
+	   Moreover, when you pass "op_info =&gt $num" to "wizard", the last
 	   element of @_ will be the current op name if "$num ==
 	   VMG_OP_INFO_NAME" and a "B::OP" object representing the current op
 	   if "$num == VMG_OP_INFO_OBJECT".  Both have a performance hit, but
@@ -241,7 +243,7 @@ FUNCTIONS
 		   from changing it, but be aware that there lurk dangerous
 		   side effects.  For example, it may rightfully be readonly
 		   if the key was a bareword.  You can get a copy instead by
-		   passing "copy_key => 1" to "wizard", which allows you to
+		   passing "copy_key =&gt 1" to "wizard", which allows you to
 		   safely assign to $_[2] in order to e.g. redirect the action
 		   to another key.  This however has a little performance
 		   drawback because of the copy.
@@ -262,9 +264,9 @@ FUNCTIONS
 
 	   # A simple scalar tracer
 	   my $wiz = wizard(
-	    get  => sub { print STDERR "got ${$_[0]}\n" },
-	    set  => sub { print STDERR "set to ${$_[0]}\n" },
-	    free => sub { print STDERR "${$_[0]} was deleted\n" },
+	    get  =&gt sub { print STDERR "got ${$_[0]}\n" },
+	    set  =&gt sub { print STDERR "set to ${$_[0]}\n" },
+	    free =&gt sub { print STDERR "${$_[0]} was deleted\n" },
 	   );
 
    "cast"
@@ -288,7 +290,7 @@ FUNCTIONS
        %ENV, you can use :
 
 	   use POSIX;
-	   cast $ENV{TZ}, wizard set => sub { POSIX::tzset(); () };
+	   cast $ENV{TZ}, wizard set =&gt sub { POSIX::tzset(); () };
 
        If you want to overcome the possible deletion of the 'TZ' entry, you
        have no choice but to rely on "store" uvar magic.
@@ -388,9 +390,9 @@ COOKBOOK
 	   {
 	    package Magical::UserData;
 
-	    use Variable::Magic qw<wizard cast getdata>;
+	    use Variable::Magic qw&ltwizard cast getdata&gt;
 
-	    my $wiz = wizard data => sub { \$_[1] };
+	    my $wiz = wizard data =&gt sub { \$_[1] };
 
 	    sub ud (\[$@%*&]) : lvalue {
 	     my ($var) = @_;
@@ -411,7 +413,7 @@ COOKBOOK
 	    $cb = sub { print 'Hello, ', ud(&$cb), "!\n" };
 
 	    ud(&$cb) = 'world';
-	    $cb->(); # Hello, world!
+	    $cb-&gt(); # Hello, world!
 	   }
 
    Recursively cast magic on datastructures
@@ -419,7 +421,7 @@ COOKBOOK
        "data".	This allows you to recursively cast magic on datastructures :
 
 	   my $wiz;
-	   $wiz = wizard data => sub {
+	   $wiz = wizard data =&gt sub {
 	    my ($var, $depth) = @_;
 	    $depth ||= 0;
 	    my $r = ref $var;
@@ -430,7 +432,7 @@ COOKBOOK
 	    }
 	    return $depth;
 	   },
-	   free => sub {
+	   free =&gt sub {
 	    my ($var, $depth) = @_;
 	    my $r = ref $var;
 	    print "free $r at depth $depth\n";
@@ -439,8 +441,8 @@ COOKBOOK
 
 	   {
 	    my %h = (
-	     a => [ 1, 2 ],
-	     b => { c => 3 }
+	     a =&gt [ 1, 2 ],
+	     b =&gt { c =&gt 3 }
 	    );
 	    cast %h, $wiz;
 	   }
@@ -548,7 +550,7 @@ SEE ALSO
        perltie and overload for other ways of enhancing objects.
 
 AUTHOR
-       Vincent Pit, "<perl at profvince.com>", <http://www.profvince.com>.
+       Vincent Pit, "&ltperl at profvince.com&gt", &lthttp://www.profvince.com&gt.
 
        You can contact me by mail or on "irc.perl.org" (vincent).
 
@@ -556,7 +558,7 @@ BUGS
        Please report any bugs or feature requests to "bug-variable-magic at
        rt.cpan.org", or through the web interface at
        http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Variable-Magic
-       <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Variable-Magic>. I will
+       &lthttp://rt.cpan.org/NoAuth/ReportBug.html?Queue=Variable-Magic&gt. I will
        be notified, and then you'll automatically be notified of progress on
        your bug as I make changes.
 
@@ -567,7 +569,7 @@ SUPPORT
 
        Tests code coverage report is available at
        http://www.profvince.com/perl/cover/Variable-Magic
-       <http://www.profvince.com/perl/cover/Variable-Magic>.
+       &lthttp://www.profvince.com/perl/cover/Variable-Magic&gt.
 
 COPYRIGHT & LICENSE
        Copyright 2007,2008,2009,2010,2011 Vincent Pit, all rights reserved.
@@ -578,6 +580,6 @@ COPYRIGHT & LICENSE
 
 
 perl v5.12.4			  2011-10-27		    Variable::Magic(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

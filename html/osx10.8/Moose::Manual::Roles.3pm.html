@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Manual::Roles - Roles, an alternative to deep hierarchies and</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Manual::Roles(3User Contributed Perl DocumentatiMoose::Manual::Roles(3)
 
 
@@ -50,9 +52,9 @@ A SIMPLE ROLE
 
 	 use Moose::Role;
 
-	 has 'is_broken' => (
-	     is  => 'rw',
-	     isa => 'Bool',
+	 has 'is_broken' =&gt (
+	     is  =&gt 'rw',
+	     isa =&gt 'Bool',
 	 );
 
 	 sub break {
@@ -60,7 +62,7 @@ A SIMPLE ROLE
 
 	     print "I broke\n";
 
-	     $self->is_broken(1);
+	     $self-&gtis_broken(1);
 	 }
 
        Except for our use of Moose::Role, this looks just like a class
@@ -76,22 +78,22 @@ A SIMPLE ROLE
 
 	 with 'Breakable';
 
-	 has 'engine' => (
-	     is  => 'ro',
-	     isa => 'Engine',
+	 has 'engine' =&gt (
+	     is  =&gt 'ro',
+	     isa =&gt 'Engine',
 	 );
 
        The "with" function composes roles into a class. Once that is done, the
        "Car" class has an "is_broken" attribute and a "break" method. The
        "Car" class also "does('Breakable')":
 
-	 my $car = Car->new( engine => Engine->new );
+	 my $car = Car-&gtnew( engine =&gt Engine-&gtnew );
 
-	 print $car->is_broken ? 'Busted' : 'Still working';
-	 $car->break;
-	 print $car->is_broken ? 'Busted' : 'Still working';
+	 print $car-&gtis_broken ? 'Busted' : 'Still working';
+	 $car-&gtbreak;
+	 print $car-&gtis_broken ? 'Busted' : 'Still working';
 
-	 $car->does('Breakable'); # true
+	 $car-&gtdoes('Breakable'); # true
 
        This prints:
 
@@ -107,9 +109,9 @@ A SIMPLE ROLE
 
 	 with 'Breakable';
 
-	 has 'marrow' => (
-	     is  => 'ro',
-	     isa => 'Marrow',
+	 has 'marrow' =&gt (
+	     is  =&gt 'ro',
+	     isa =&gt 'Marrow',
 	 );
 
        See also Moose::Cookbook::Roles::Recipe1 for an example.
@@ -125,15 +127,15 @@ REQUIRED METHODS
 
 	 requires 'break';
 
-	 has 'is_broken' => (
-	     is  => 'rw',
-	     isa => 'Bool',
+	 has 'is_broken' =&gt (
+	     is  =&gt 'rw',
+	     isa =&gt 'Bool',
 	 );
 
-	 after 'break' => sub {
+	 after 'break' =&gt sub {
 	     my $self = shift;
 
-	     $self->is_broken(1);
+	     $self-&gtis_broken(1);
 	 };
 
        If we try to consume this role in a class that does not have a "break"
@@ -150,16 +152,16 @@ REQUIRED METHODS
 
 	 with 'Breakable';
 
-	 has 'engine' => (
-	     is  => 'ro',
-	     isa => 'Engine',
+	 has 'engine' =&gt (
+	     is  =&gt 'ro',
+	     isa =&gt 'Engine',
 	 );
 
 	 sub break {
 	     my $self = shift;
 
-	     if ( $self->is_moving ) {
-		 $self->stop;
+	     if ( $self-&gtis_moving ) {
+		 $self-&gtstop;
 	     }
 	 }
 
@@ -197,9 +199,9 @@ REQUIRED METHODS
 
 	 use Moose;
 
-	 has 'stress' => (
-	     is  => 'rw',
-	     isa => 'Int',
+	 has 'stress' =&gt (
+	     is  =&gt 'rw',
+	     isa =&gt 'Int',
 	 );
 
 	 with 'Breakable';
@@ -267,19 +269,19 @@ METHOD EXCLUSION AND ALIASING
 
 	 use Moose;
 
-	 with 'Breakable'   => { -alias => { break => 'break_bone' } },
-	      'Breakdancer' => { -alias => { break => 'break_dance' } };
+	 with 'Breakable'   =&gt { -alias =&gt { break =&gt 'break_bone' } },
+	      'Breakdancer' =&gt { -alias =&gt { break =&gt 'break_dance' } };
 
        However, aliasing a method simply makes a copy of the method with the
        new name. We also need to exclude the original name:
 
-	 with 'Breakable' => {
-	     -alias    => { break => 'break_bone' },
-	     -excludes => 'break',
+	 with 'Breakable' =&gt {
+	     -alias    =&gt { break =&gt 'break_bone' },
+	     -excludes =&gt 'break',
 	     },
-	     'Breakdancer' => {
-	     -alias    => { break => 'break_dance' },
-	     -excludes => 'break',
+	     'Breakdancer' =&gt {
+	     -alias    =&gt { break =&gt 'break_dance' },
+	     -excludes =&gt 'break',
 	     };
 
        The excludes parameter prevents the "break" method from being composed
@@ -320,7 +322,7 @@ ADDING A ROLE TO AN OBJECT INSTANCE
 
 	 use Moose::Util qw( apply_all_roles );
 
-	 my $car = Car->new;
+	 my $car = Car-&gtnew;
 	 apply_all_roles( $car, 'Breakable' );
 
        This function can apply more than one role at a time, and will do so
@@ -329,7 +331,7 @@ ADDING A ROLE TO AN OBJECT INSTANCE
        internally when you call "with".
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -340,6 +342,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-06	       Moose::Manual::Roles(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This section of the FAQ answers questions related to manipulating..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlfaq4 - Data Manipulation</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLFAQ4(1)	       Perl Programmers Reference Guide 	   PERLFAQ4(1)
 
 
@@ -75,7 +77,7 @@ Data: Numbers
        command line. In this example, "chmod" on the command line knows that
        its first argument is octal because that's what it does:
 
-	       %prompt> chmod 644 file
+	       %prompt&gt chmod 644 file
 
        If you want to use the same literal digits (644) in Perl, you have to
        tell Perl to treat them as octal numbers either by prefixing the digits
@@ -129,7 +131,7 @@ Data: Numbers
        To see why, notice how you'll still have an issue on half-way-point
        alternation:
 
-	       for ($i = 0; $i < 1.01; $i += 0.05) { printf "%.1f ",$i}
+	       for ($i = 0; $i &lt 1.01; $i += 0.05) { printf "%.1f ",$i}
 
 	       0.0 0.1 0.1 0.2 0.2 0.2 0.3 0.3 0.4 0.4 0.5 0.5 0.6 0.7 0.7
 	       0.8 0.8 0.9 0.9 1.0 1.0
@@ -167,8 +169,8 @@ Data: Numbers
 	   Using the CPAN module "Bit::Vector":
 
 		   use Bit::Vector;
-		   $vec = Bit::Vector->new_Hex(32, "DEADBEEF");
-		   $dec = $vec->to_Dec();
+		   $vec = Bit::Vector-&gtnew_Hex(32, "DEADBEEF");
+		   $dec = $vec-&gtto_Dec();
 
        How do I convert from decimal to hexadecimal
 	   Using "sprintf":
@@ -183,15 +185,15 @@ Data: Numbers
 	   Using "Bit::Vector":
 
 		   use Bit::Vector;
-		   $vec = Bit::Vector->new_Dec(32, -559038737);
-		   $hex = $vec->to_Hex();
+		   $vec = Bit::Vector-&gtnew_Dec(32, -559038737);
+		   $hex = $vec-&gtto_Hex();
 
 	   And "Bit::Vector" supports odd bit counts:
 
 		   use Bit::Vector;
-		   $vec = Bit::Vector->new_Dec(33, 3735928559);
-		   $vec->Resize(32); # suppress leading 0 if unwanted
-		   $hex = $vec->to_Hex();
+		   $vec = Bit::Vector-&gtnew_Dec(33, 3735928559);
+		   $vec-&gtResize(32); # suppress leading 0 if unwanted
+		   $hex = $vec-&gtto_Hex();
 
        How do I convert from octal to decimal
 	   Using Perl's built in conversion of numbers with leading zeros:
@@ -205,9 +207,9 @@ Data: Numbers
 	   Using "Bit::Vector":
 
 		   use Bit::Vector;
-		   $vec = Bit::Vector->new(32);
-		   $vec->Chunk_List_Store(3, split(//, reverse "33653337357"));
-		   $dec = $vec->to_Dec();
+		   $vec = Bit::Vector-&gtnew(32);
+		   $vec-&gtChunk_List_Store(3, split(//, reverse "33653337357"));
+		   $dec = $vec-&gtto_Dec();
 
        How do I convert from decimal to octal
 	   Using "sprintf":
@@ -217,8 +219,8 @@ Data: Numbers
 	   Using "Bit::Vector":
 
 		   use Bit::Vector;
-		   $vec = Bit::Vector->new_Dec(32, -559038737);
-		   $oct = reverse join('', $vec->Chunk_List_Read(3));
+		   $vec = Bit::Vector-&gtnew_Dec(32, -559038737);
+		   $oct = reverse join('', $vec-&gtChunk_List_Read(3));
 
        How do I convert from binary to decimal
 	   Perl 5.6 lets you write binary numbers directly with the "0b"
@@ -245,8 +247,8 @@ Data: Numbers
 
 	   Using "Bit::Vector":
 
-		   $vec = Bit::Vector->new_Bin(32, "11011110101011011011111011101111");
-		   $dec = $vec->to_Dec();
+		   $vec = Bit::Vector-&gtnew_Bin(32, "11011110101011011011111011101111");
+		   $dec = $vec-&gtto_Dec();
 
        How do I convert from decimal to binary
 	   Using "sprintf" (perl 5.6+):
@@ -260,10 +262,10 @@ Data: Numbers
 	   Using "Bit::Vector":
 
 		   use Bit::Vector;
-		   $vec = Bit::Vector->new_Dec(32, -559038737);
-		   $bin = $vec->to_Bin();
+		   $vec = Bit::Vector-&gtnew_Dec(32, -559038737);
+		   $bin = $vec-&gtto_Bin();
 
-	   The remaining transformations (e.g. hex -> oct, bin -> hex, etc.)
+	   The remaining transformations (e.g. hex -&gt oct, bin -&gt hex, etc.)
 	   are left as an exercise to the inclined reader.
 
    Why doesn't & work the way I want it to?
@@ -321,7 +323,7 @@ Data: Numbers
        Instead use:
 
 	       @results = ();
-	       for ($i=5; $i < 500_005; $i++) {
+	       for ($i=5; $i &lt 500_005; $i++) {
 		       push(@results, some_func($i));
 		       }
 
@@ -341,7 +343,7 @@ Data: Numbers
        If you're using a version of Perl before 5.004, you must call "srand"
        once at the start of your program to seed the random number generator.
 
-		BEGIN { srand() if $] < 5.004 }
+		BEGIN { srand() if $] &lt 5.004 }
 
        5.004 and later automatically call "srand" at the beginning.  Don't
        call "srand" more than once--you make your numbers less random, rather
@@ -367,7 +369,7 @@ Data: Numbers
        built-in to get a random number between 0 and 1. From there, you shift
        that into the range that you want.
 
-       "rand($x)" returns a number such that "0 <= rand($x) < $x". Thus what
+       "rand($x)" returns a number such that "0 &lt= rand($x) &lt $x". Thus what
        you want to have perl figure out is a random number in the range from 0
        to the difference between your X and Y.
 
@@ -384,7 +386,7 @@ Data: Numbers
 		       my($min, $max) = @_;
 		       # Assumes that the two arguments are integers themselves!
 		       return $min if $min == $max;
-		       ($min, $max) = ($max, $min)  if	$min > $max;
+		       ($min, $max) = ($max, $min)  if	$min &gt $max;
 		       return $min + int rand(1 + $max - $min);
 		       }
 
@@ -457,18 +459,18 @@ Data: Dates
        You can also try the "DateTime" module, which can convert a date/time
        to a Julian Day.
 
-	       $ perl -MDateTime -le'print DateTime->today->jd'
+	       $ perl -MDateTime -le'print DateTime-&gttoday-&gtjd'
 	       2453401.5
 
        Or the modified Julian Day
 
-	       $ perl -MDateTime -le'print DateTime->today->mjd'
+	       $ perl -MDateTime -le'print DateTime-&gttoday-&gtmjd'
 	       53401
 
        Or even the day of the year (which is what some people think of as a
        Julian day)
 
-	       $ perl -MDateTime -le'print DateTime->today->doy'
+	       $ perl -MDateTime -le'print DateTime-&gttoday-&gtdoy'
 	       31
 
    How do I find yesterday's date?
@@ -479,7 +481,7 @@ Data: Dates
 
 	       use DateTime;
 
-	       my $yesterday = DateTime->now->subtract( days => 1 );
+	       my $yesterday = DateTime-&gtnow-&gtsubtract( days =&gt 1 );
 
 	       print "Yesterday was $yesterday\n";
 
@@ -621,7 +623,7 @@ Data: Strings
        does the interpolation for you. It has several other methods to do this
        as well.
 
-	       use Interpolation E => 'eval';
+	       use Interpolation E =&gt 'eval';
 	       print "The time values are $E{localtime()}.\n";
 
        In most cases, it is probably easier to simply use string
@@ -635,7 +637,7 @@ Data: Strings
        characters, a pattern like "/x([^x]*)x/" will get the intervening bits
        in $1. For multiple ones, then something more like "/alpha(.*?)omega/"
        would be needed. But none of these deals with nested patterns.  For
-       balanced expressions using "(", "{", "[" or "<" as delimiters, use the
+       balanced expressions using "(", "{", "[" or "&lt" as delimiters, use the
        CPAN module Regexp::Common, or see "(??{ code })" in perlre.  For other
        cases, you'll have to write a parser.
 
@@ -697,7 +699,7 @@ Data: Strings
        easily done by making a shell alias, like so:
 
 	       alias fmt="perl -i -MText::Autoformat -n0777 \
-		       -e 'print autoformat $_, {all=>1}' $*"
+		       -e 'print autoformat $_, {all=&gt1}' $*"
 
        See the documentation for "Text::Autoformat" to appreciate its many
        capabilities.
@@ -792,7 +794,7 @@ Data: Strings
 
 	       print $x, "\n";
 	       for my $style (qw( sentence title highlight )) {
-		       print autoformat($x, { case => $style }), "\n";
+		       print autoformat($x, { case =&gt $style }), "\n";
 		       }
 
        How do you want to capitalize those words?
@@ -879,7 +881,7 @@ Data: Strings
        "blank" (consisting entirely of whitespace) lines which the "^\s+"
        would remove all by itself.
 
-	       while( <> )
+	       while( &lt&gt )
 		       {
 		       s/^\s+|\s+$//g;
 		       print "$_\n";
@@ -1030,7 +1032,7 @@ Data: Strings
 	       my $string = 'This has $foo and $bar';
 
 	       my %Replacements = (
-		       foo  => 'Fred',
+		       foo  =&gt 'Fred',
 		       );
 
 	       # $string =~ s/\$(\w+)/$Replacements{$1}/g;
@@ -1081,17 +1083,17 @@ Data: Strings
 	       print "@lines";	   # WRONG - extra blanks
 	       print @lines;	   # right
 
-   Why don't my <<HERE documents work?
+   Why don't my &lt&ltHERE documents work?
        Check for these three things:
 
-       There must be no space after the << part.
+       There must be no space after the &lt&lt part.
        There (probably) should be a semicolon at the end.
        You can't (easily) have any space in front of the tag.
 
        If you want to indent the text in the here document, you can do this:
 
 	   # all in one
-	   ($VAR = <<HERE_TARGET) =~ s/^\s+//gm;
+	   ($VAR = &lt&ltHERE_TARGET) =~ s/^\s+//gm;
 	       your text
 	       goes here
 	   HERE_TARGET
@@ -1099,7 +1101,7 @@ Data: Strings
        But the HERE_TARGET must still be flush against the margin.  If you
        want that indented also, you'll have to quote in the indentation.
 
-	   ($quote = <<'    FINIS') =~ s/^\s+//gm;
+	   ($quote = &lt&lt'    FINIS') =~ s/^\s+//gm;
 		   ...we will have peace, when you and all your works have
 		   perished--and the works of your dark master to whom you
 		   would deliver us. You are a liar, Saruman, and a corrupter
@@ -1128,12 +1130,12 @@ Data: Strings
 
        This works with leading special strings, dynamically determined:
 
-	       $remember_the_main = fix<<'    MAIN_INTERPRETER_LOOP';
+	       $remember_the_main = fix&lt&lt'    MAIN_INTERPRETER_LOOP';
 	       @@@ int
 	       @@@ runops() {
 	       @@@     SAVEI32(runlevel);
 	       @@@     runlevel++;
-	       @@@     while ( op = (*op->op_ppaddr)() );
+	       @@@     while ( op = (*op-&gtop_ppaddr)() );
 	       @@@     TAINT_NOT;
 	       @@@     return 0;
 	       @@@ }
@@ -1142,7 +1144,7 @@ Data: Strings
        Or with a fixed amount of leading whitespace, with remaining
        indentation correctly preserved:
 
-	       $poem = fix<<EVER_ON_AND_ON;
+	       $poem = fix&lt&ltEVER_ON_AND_ON;
 	      Now far ahead the Road has gone,
 		 And I must follow, if I can,
 	      Pursuing it with eager feet,
@@ -1335,7 +1337,7 @@ Data: Arrays
 	       foreach $element (@array1, @array2) { $count{$element}++ }
 	       foreach $element (keys %count) {
 		       push @union, $element;
-		       push @{ $count{$element} > 1 ? \@intersection : \@difference }, $element;
+		       push @{ $count{$element} &gt 1 ? \@intersection : \@difference }, $element;
 		       }
 
        Note that this is the symmetric difference, that is, all elements in
@@ -1367,8 +1369,8 @@ Data: Arrays
 		       my ($first, $second) = @_;
 		       no warnings;  # silence spurious -w undef complaints
 		       return 0 unless @$first == @$second;
-		       for (my $i = 0; $i < @$first; $i++) {
-			       return 0 if $first->[$i] ne $second->[$i];
+		       for (my $i = 0; $i &lt @$first; $i++) {
+			       return 0 if $first-&gt[$i] ne $second-&gt[$i];
 			       }
 		       return 1;
 		       }
@@ -1389,7 +1391,7 @@ Data: Arrays
 
 	       use FreezeThaw qw(cmpStr cmpStrHard);
 
-	       %a = %b = ( "this" => "that", "extra" => [ "more", "stuff" ] );
+	       %a = %b = ( "this" =&gt "that", "extra" =&gt [ "more", "stuff" ] );
 	       $a{EXTRA} = \%b;
 	       $b{EXTRA} = \%a;
 
@@ -1425,7 +1427,7 @@ Data: Arrays
        the condition.
 
 	       my( $found, $index ) = ( undef, -1 );
-	       for( $i = 0; $i < @array; $i++ ) {
+	       for( $i = 0; $i &lt @array; $i++ ) {
 		       if( $array[$i] =~ /Perl/ ) {
 			       $found = $array[$i];
 			       $index = $i;
@@ -1447,15 +1449,15 @@ Data: Arrays
        do.  For example, imagine a list node like this:
 
 	       $node = {
-		       VALUE => 42,
-		       LINK  => undef,
+		       VALUE =&gt 42,
+		       LINK  =&gt undef,
 		       };
 
        You could walk the list this way:
 
 	       print "List: ";
-	       for ($node = $head;  $node; $node = $node->{LINK}) {
-		       print $node->{VALUE}, " ";
+	       for ($node = $head;  $node; $node = $node-&gt{LINK}) {
+		       print $node-&gt{VALUE}, " ";
 		       }
 	       print "\n";
 
@@ -1469,10 +1471,10 @@ Data: Arrays
 
 	       sub append {
 		       my($list, $value) = @_;
-		       my $node = { VALUE => $value };
+		       my $node = { VALUE =&gt $value };
 		       if ($list) {
-			       $node->{LINK} = $list->{LINK};
-			       $list->{LINK} = $node;
+			       $node-&gt{LINK} = $list-&gt{LINK};
+			       $list-&gt{LINK} = $node;
 			       }
 		       else {
 			       $_[0] = $node;	   # replace caller's version
@@ -1493,7 +1495,7 @@ Data: Arrays
 
 	       while( 1 ) {
 		       print $array[ $i++ % @array ], "\n";
-		       last if $i > 20;
+		       last if $i &gt 20;
 		       }
 
        You can also use "Tie::Cycle" to use a scalar that always has the next
@@ -1512,12 +1514,12 @@ Data: Arrays
 
 	       use Array::Iterator::Circular;
 
-	       my $color_iterator = Array::Iterator::Circular->new(
+	       my $color_iterator = Array::Iterator::Circular-&gtnew(
 		       qw(red green blue orange)
 		       );
 
 	       foreach ( 1 .. 20 ) {
-		       print $color_iterator->next, "\n";
+		       print $color_iterator-&gtnext, "\n";
 		       }
 
    How do I shuffle an array randomly?
@@ -1543,7 +1545,7 @@ Data: Arrays
 
 	       # shuffle my mpeg collection
 	       #
-	       my @mpeg = <audio/*/*.mp3>;
+	       my @mpeg = &ltaudio/*/*.mp3&gt;
 	       fisher_yates_shuffle( \@mpeg );	  # randomize @mpeg in place
 	       print @mpeg;
 
@@ -1616,9 +1618,9 @@ Data: Arrays
 	       use Algorithm::Permute;
 
 	       my @array = 'a'..'d';
-	       my $p_iterator = Algorithm::Permute->new ( \@array );
+	       my $p_iterator = Algorithm::Permute-&gtnew ( \@array );
 
-	       while (my @perm = $p_iterator->next) {
+	       while (my @perm = $p_iterator-&gtnext) {
 		  print "next permutation: (@perm)\n";
 		       }
 
@@ -1643,12 +1645,12 @@ Data: Arrays
 	       sub permute (&@) {
 		       my $code = shift;
 		       my @idx = 0..$#_;
-		       while ( $code->(@_[@idx]) ) {
+		       while ( $code-&gt(@_[@idx]) ) {
 			       my $p = $#idx;
-			       --$p while $idx[$p-1] > $idx[$p];
+			       --$p while $idx[$p-1] &gt $idx[$p];
 			       my $q = $p or return;
 			       push @idx, reverse splice @idx, $p;
-			       ++$q while $idx[$p-1] > $idx[$q];
+			       ++$q while $idx[$p-1] &gt $idx[$q];
 			       @idx[$p-1,$q]=@idx[$q,$p-1];
 		       }
 	       }
@@ -1674,10 +1676,10 @@ Data: Arrays
        Supply a comparison function to sort() (described in "sort" in
        perlfunc):
 
-	       @list = sort { $a <=> $b } @list;
+	       @list = sort { $a &lt=&gt $b } @list;
 
        The default sort function is cmp, string comparison, which would sort
-       "(1, 2, 10)" into "(1, 10, 2)".	"<=>", used above, is the numerical
+       "(1, 2, 10)" into "(1, 10, 2)".	"&lt=&gt", used above, is the numerical
        comparison operator.
 
        If you have a complicated function needed to pull out the part you want
@@ -1697,15 +1699,15 @@ Data: Arrays
        which could also be written this way, using a trick that's come to be
        known as the Schwartzian Transform:
 
-	       @sorted = map  { $_->[0] }
-		       sort { $a->[1] cmp $b->[1] }
+	       @sorted = map  { $_-&gt[0] }
+		       sort { $a-&gt[1] cmp $b-&gt[1] }
 		       map  { [ $_, uc( (/\d+\s*(\S+)/)[0]) ] } @data;
 
        If you need to sort on several fields, the following paradigm is
        useful.
 
 	       @sorted = sort {
-		       field1($a) <=> field1($b) ||
+		       field1($a) &lt=&gt field1($b) ||
 		       field2($a) cmp field2($b) ||
 		       field3($a) cmp field3($b)
 		       } @data;
@@ -1745,7 +1747,7 @@ Data: Arrays
 		       my $vec = shift;
 		       my @ints;
 		       # Find null-byte density then select best algorithm
-		       if ($vec =~ tr/\0// / length $vec > 0.95) {
+		       if ($vec =~ tr/\0// / length $vec &gt 0.95) {
 			       use integer;
 			       my $i;
 
@@ -1785,9 +1787,9 @@ Data: Arrays
 
        Or use the CPAN module "Bit::Vector":
 
-	       $vector = Bit::Vector->new($num_of_bits);
-	       $vector->Index_List_Store(@ints);
-	       @ints = $vector->Index_List_Read();
+	       $vector = Bit::Vector-&gtnew($num_of_bits);
+	       $vector-&gtIndex_List_Store(@ints);
+	       @ints = $vector-&gtIndex_List_Read();
 
        "Bit::Vector" provides efficient methods for bit vector, sets of small
        integers and "big int" math.
@@ -2047,13 +2049,13 @@ Data: Hashes (Associative Arrays)
        look it up. We still get out a list of keys, but this time they are
        ordered by their value.
 
-	       my @keys = sort { $hash{$a} <=> $hash{$b} } keys %hash;
+	       my @keys = sort { $hash{$a} &lt=&gt $hash{$b} } keys %hash;
 
        From there we can get more complex. If the hash values are the same, we
        can provide a secondary sort on the hash key.
 
 	       my @keys = sort {
-		       $hash{$a} <=> $hash{$b}
+		       $hash{$a} &lt=&gt $hash{$b}
 			       or
 		       "\L$a" cmp "\L$b"
 		       } keys %hash;
@@ -2199,7 +2201,7 @@ Data: Hashes (Associative Arrays)
 
 	       tie my %myhash, 'Tie::IxHash';
 
-	       for (my $i=0; $i<20; $i++) {
+	       for (my $i=0; $i&lt20; $i++) {
 		       $myhash{$i} = 2*$i;
 		       }
 
@@ -2251,12 +2253,12 @@ Data: Hashes (Associative Arrays)
        Usually a hash ref, perhaps like this:
 
 	       $record = {
-		       NAME   => "Jason",
-		       EMPNO  => 132,
-		       TITLE  => "deputy peon",
-		       AGE    => 23,
-		       SALARY => 37_000,
-		       PALS   => [ "Norbert", "Rhys", "Phineas"],
+		       NAME   =&gt "Jason",
+		       EMPNO  =&gt 132,
+		       TITLE  =&gt "deputy peon",
+		       AGE    =&gt 23,
+		       SALARY =&gt 37_000,
+		       PALS   =&gt [ "Norbert", "Rhys", "Phineas"],
 	       };
 
        References are documented in perlref and the upcoming perlreftut.
@@ -2402,7 +2404,7 @@ Data: Misc
        using the "PDL" module from CPAN instead--it makes number-crunching
        easy.
 
-       See <http://search.cpan.org/dist/PGPLOT> for the code.
+       See &lthttp://search.cpan.org/dist/PGPLOT&gt for the code.
 
 REVISION
        Revision: $Revision$
@@ -2427,6 +2429,6 @@ AUTHOR AND COPYRIGHT
 
 
 perl v5.10.1			  2009-08-15			   PERLFAQ4(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

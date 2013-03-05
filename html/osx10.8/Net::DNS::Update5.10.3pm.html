@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Net::DNS::Update" is a subclass of "Net::DNS::Packet", to be used for..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::DNS::Update - Create a DNS update packet</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::DNS::Update(3)   User Contributed Perl Documentation  Net::DNS::Update(3)
 
 
@@ -28,9 +30,9 @@ DESCRIPTION
 
 METHODS
    new
-	   $packet = Net::DNS::Update->new;
-	   $packet = Net::DNS::Update->new('example.com');
-	   $packet = Net::DNS::Update->new('example.com', 'HS');
+	   $packet = Net::DNS::Update-&gtnew;
+	   $packet = Net::DNS::Update-&gtnew('example.com');
+	   $packet = Net::DNS::Update-&gtnew('example.com', 'HS');
 
        Returns a "Net::DNS::Update" object suitable for performing a DNS
        dynamic update.	Specifically, it creates a packet with the header
@@ -58,81 +60,81 @@ EXAMPLES
 	use strict;
 
 	# Create the update packet.
-	my $update = Net::DNS::Update->new('example.com');
+	my $update = Net::DNS::Update-&gtnew('example.com');
 
 	# Prerequisite is that no A records exist for the name.
-	$update->push(pre => nxrrset('foo.example.com. A'));
+	$update-&gtpush(pre =&gt nxrrset('foo.example.com. A'));
 
 	# Add two A records for the name.
-	$update->push(update => rr_add('foo.example.com. 86400 A 192.168.1.2'));
-	$update->push(update => rr_add('foo.example.com. 86400 A 172.16.3.4'));
+	$update-&gtpush(update =&gt rr_add('foo.example.com. 86400 A 192.168.1.2'));
+	$update-&gtpush(update =&gt rr_add('foo.example.com. 86400 A 172.16.3.4'));
 
 	# Send the update to the zone's primary master.
-	my $res = Net::DNS::Resolver->new;
-	$res->nameservers('primary-master.example.com');
+	my $res = Net::DNS::Resolver-&gtnew;
+	$res-&gtnameservers('primary-master.example.com');
 
-	my $reply = $res->send($update);
+	my $reply = $res-&gtsend($update);
 
 	# Did it work?
 	if ($reply) {
-	    if ($reply->header->rcode eq 'NOERROR') {
+	    if ($reply-&gtheader-&gtrcode eq 'NOERROR') {
 		print "Update succeeded\n";
 	    } else {
-		print 'Update failed: ', $reply->header->rcode, "\n";
+		print 'Update failed: ', $reply-&gtheader-&gtrcode, "\n";
 	    }
 	} else {
-	    print 'Update failed: ', $res->errorstring, "\n";
+	    print 'Update failed: ', $res-&gterrorstring, "\n";
 	}
 
    Add an MX record for a name that already exists
-	   my $update = Net::DNS::Update->new('example.com');
-	   $update->push(pre	=> yxdomain('example.com'));
-	   $update->push(update => rr_add('example.com MX 10 mailhost.example.com'));
+	   my $update = Net::DNS::Update-&gtnew('example.com');
+	   $update-&gtpush(pre	=&gt yxdomain('example.com'));
+	   $update-&gtpush(update =&gt rr_add('example.com MX 10 mailhost.example.com'));
 
    Add a TXT record for a name that doesn't exist
-	   my $update = Net::DNS::Update->new('example.com');
-	   $update->push(pre	=> nxdomain('info.example.com'));
-	   $update->push(update => rr_add('info.example.com TXT "yabba dabba doo"'));
+	   my $update = Net::DNS::Update-&gtnew('example.com');
+	   $update-&gtpush(pre	=&gt nxdomain('info.example.com'));
+	   $update-&gtpush(update =&gt rr_add('info.example.com TXT "yabba dabba doo"'));
 
    Delete all A records for a name
-	   my $update = Net::DNS::Update->new('example.com');
-	   $update->push(pre	=> yxrrset('foo.example.com A'));
-	   $update->push(update => rr_del('foo.example.com A'));
+	   my $update = Net::DNS::Update-&gtnew('example.com');
+	   $update-&gtpush(pre	=&gt yxrrset('foo.example.com A'));
+	   $update-&gtpush(update =&gt rr_del('foo.example.com A'));
 
    Delete all RRs for a name
-	   my $update = Net::DNS::Update->new('example.com');
-	   $update->push(pre	=> yxdomain('byebye.example.com'));
-	   $update->push(update => rr_del('byebye.example.com'));
+	   my $update = Net::DNS::Update-&gtnew('example.com');
+	   $update-&gtpush(pre	=&gt yxdomain('byebye.example.com'));
+	   $update-&gtpush(update =&gt rr_del('byebye.example.com'));
 
    Perform a signed update
 	   my $key_name = 'tsig-key';
 	   my $key	= 'awwLOtRfpGE+rRKF2+DEiw==';
 
-	   my $update = Net::DNS::Update->new('example.com');
-	   $update->push(update => rr_add('foo.example.com A 10.1.2.3'));
-	   $update->push(update => rr_add('bar.example.com A 10.4.5.6'));
-	   $update->sign_tsig($key_name, $key);
+	   my $update = Net::DNS::Update-&gtnew('example.com');
+	   $update-&gtpush(update =&gt rr_add('foo.example.com A 10.1.2.3'));
+	   $update-&gtpush(update =&gt rr_add('bar.example.com A 10.4.5.6'));
+	   $update-&gtsign_tsig($key_name, $key);
 
    Another way to perform a signed update
 	   my $key_name = 'tsig-key';
 	   my $key	= 'awwLOtRfpGE+rRKF2+DEiw==';
 
-	   my $update = Net::DNS::Update->new('example.com');
-	   $update->push(update     => rr_add('foo.example.com A 10.1.2.3'));
-	   $update->push(update     => rr_add('bar.example.com A 10.4.5.6'));
-	   $update->push(additional => Net::DNS::RR->new("$key_name TSIG $key"));
+	   my $update = Net::DNS::Update-&gtnew('example.com');
+	   $update-&gtpush(update     =&gt rr_add('foo.example.com A 10.1.2.3'));
+	   $update-&gtpush(update     =&gt rr_add('bar.example.com A 10.4.5.6'));
+	   $update-&gtpush(additional =&gt Net::DNS::RR-&gtnew("$key_name TSIG $key"));
 
    Perform a signed update with a customized TSIG record
 	   my $key_name = 'tsig-key';
 	   my $key	= 'awwLOtRfpGE+rRKF2+DEiw==';
 
-	   my $tsig = Net::DNS::RR->new("$key_name TSIG $key");
-	   $tsig->fudge(60);
+	   my $tsig = Net::DNS::RR-&gtnew("$key_name TSIG $key");
+	   $tsig-&gtfudge(60);
 
-	   my $update = Net::DNS::Update->new('example.com');
-	   $update->push(update     => rr_add('foo.example.com A 10.1.2.3'));
-	   $update->push(update     => rr_add('bar.example.com A 10.4.5.6'));
-	   $update->push(additional => $tsig);
+	   my $update = Net::DNS::Update-&gtnew('example.com');
+	   $update-&gtpush(update     =&gt rr_add('foo.example.com A 10.1.2.3'));
+	   $update-&gtpush(update     =&gt rr_add('bar.example.com A 10.4.5.6'));
+	   $update-&gtpush(additional =&gt $tsig);
 
 BUGS
        This code is still under development.  Please use with caution on
@@ -153,6 +155,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-12-30		   Net::DNS::Update(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

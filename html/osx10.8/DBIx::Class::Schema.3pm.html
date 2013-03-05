@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Creates database classes based on a schema. This is the recommended way..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Schema - composable schemas</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::Schema(3)User Contributed Perl DocumentatioDBIx::Class::Schema(3)
 
 
@@ -20,27 +22,27 @@ SYNOPSIS
 	 use base qw/DBIx::Class::Schema/;
 
 	 # load all Result classes in Library/Schema/Result/
-	 __PACKAGE__->load_namespaces();
+	 __PACKAGE__-&gtload_namespaces();
 
 	 package Library::Schema::Result::CD;
 	 use base qw/DBIx::Class::Core/;
 
-	 __PACKAGE__->load_components(qw/InflateColumn::DateTime/); # for example
-	 __PACKAGE__->table('cd');
+	 __PACKAGE__-&gtload_components(qw/InflateColumn::DateTime/); # for example
+	 __PACKAGE__-&gttable('cd');
 
 	 # Elsewhere in your code:
-	 my $schema1 = Library::Schema->connect(
+	 my $schema1 = Library::Schema-&gtconnect(
 	   $dsn,
 	   $user,
 	   $password,
-	   { AutoCommit => 1 },
+	   { AutoCommit =&gt 1 },
 	 );
 
-	 my $schema2 = Library::Schema->connect($coderef_returning_dbh);
+	 my $schema2 = Library::Schema-&gtconnect($coderef_returning_dbh);
 
 	 # fetch objects using Library::Schema::Result::DVD
-	 my $resultset = $schema1->resultset('DVD')->search( ... );
-	 my @dvd_objects = $schema2->resultset('DVD')->search( ... );
+	 my $resultset = $schema1-&gtresultset('DVD')-&gtsearch( ... );
+	 my @dvd_objects = $schema2-&gtresultset('DVD')-&gtsearch( ... );
 
 DESCRIPTION
        Creates database classes based on a schema. This is the recommended way
@@ -55,12 +57,12 @@ SETUP METHODS
    load_namespaces
        Arguments: %options?
 
-	 __PACKAGE__->load_namespaces();
+	 __PACKAGE__-&gtload_namespaces();
 
-	 __PACKAGE__->load_namespaces(
-	    result_namespace => 'Res',
-	    resultset_namespace => 'RSet',
-	    default_resultset_class => '+MyDB::Othernamespace::RSet',
+	 __PACKAGE__-&gtload_namespaces(
+	    result_namespace =&gt 'Res',
+	    resultset_namespace =&gt 'RSet',
+	    default_resultset_class =&gt '+MyDB::Othernamespace::RSet',
 	 );
 
        With no arguments, this method uses Module::Find to load all of the
@@ -100,22 +102,22 @@ SETUP METHODS
 
 	 # load My::Schema::Result::CD, My::Schema::Result::Artist,
 	 #    My::Schema::ResultSet::CD, etc...
-	 My::Schema->load_namespaces;
+	 My::Schema-&gtload_namespaces;
 
 	 # Override everything to use ugly names.
 	 # In this example, if there is a My::Schema::Res::Foo, but no matching
 	 #   My::Schema::RSets::Foo, then Foo will have its
 	 #   resultset_class set to My::Schema::RSetBase
-	 My::Schema->load_namespaces(
-	   result_namespace => 'Res',
-	   resultset_namespace => 'RSets',
-	   default_resultset_class => 'RSetBase',
+	 My::Schema-&gtload_namespaces(
+	   result_namespace =&gt 'Res',
+	   resultset_namespace =&gt 'RSets',
+	   default_resultset_class =&gt 'RSetBase',
 	 );
 
 	 # Put things in other namespaces
-	 My::Schema->load_namespaces(
-	   result_namespace => '+Some::Place::Results',
-	   resultset_namespace => '+Another::Place::RSets',
+	 My::Schema-&gtload_namespaces(
+	   result_namespace =&gt '+Some::Place::Results',
+	   resultset_namespace =&gt '+Another::Place::RSets',
 	 );
 
        To search multiple namespaces for either Result or ResultSet classes,
@@ -123,14 +125,14 @@ SETUP METHODS
        same result (or resultset) class exists in multiple namespaces, later
        entries in the list of namespaces will override earlier ones.
 
-	 My::Schema->load_namespaces(
+	 My::Schema-&gtload_namespaces(
 	   # My::Schema::Results_C::Foo takes precedence over My::Schema::Results_B::Foo :
-	   result_namespace => [ 'Results_A', 'Results_B', 'Results_C' ],
-	   resultset_namespace => [ '+Some::Place::RSets', 'RSets' ],
+	   result_namespace =&gt [ 'Results_A', 'Results_B', 'Results_C' ],
+	   resultset_namespace =&gt [ '+Some::Place::RSets', 'RSets' ],
 	 );
 
    load_classes
-       Arguments: @classes?, { $namespace => [ @classes ] }+
+       Arguments: @classes?, { $namespace =&gt [ @classes ] }+
 
        "load_classes" is an alternative method to "load_namespaces", both of
        which serve similar purposes, each with different advantages and
@@ -156,13 +158,13 @@ SETUP METHODS
 
        Example:
 
-	 My::Schema->load_classes(); # loads My::Schema::CD, My::Schema::Artist,
+	 My::Schema-&gtload_classes(); # loads My::Schema::CD, My::Schema::Artist,
 				     # etc. (anything under the My::Schema namespace)
 
 	 # loads My::Schema::CD, My::Schema::Artist, Other::Namespace::Producer but
 	 # not Other::Namespace::LinerNotes nor My::Schema::Track
-	 My::Schema->load_classes(qw/ CD Artist #Track /, {
-	   Other::Namespace => [qw/ Producer #LinerNotes /],
+	 My::Schema-&gtload_classes(qw/ CD Artist #Track /, {
+	   Other::Namespace =&gt [qw/ Producer #LinerNotes /],
 	 });
 
    storage_type
@@ -202,12 +204,12 @@ SETUP METHODS
 	  package My::Schema;
 	  use base qw/DBIx::Class::Schema/;
 	  use My::ExceptionClass;
-	  __PACKAGE__->exception_action(sub { My::ExceptionClass->throw(@_) });
-	  __PACKAGE__->load_classes;
+	  __PACKAGE__-&gtexception_action(sub { My::ExceptionClass-&gtthrow(@_) });
+	  __PACKAGE__-&gtload_classes;
 
 	  # or:
-	  my $schema_obj = My::Schema->connect( .... );
-	  $schema_obj->exception_action(sub { My::ExceptionClass->throw(@_) });
+	  my $schema_obj = My::Schema-&gtconnect( .... );
+	  $schema_obj-&gtexception_action(sub { My::ExceptionClass-&gtthrow(@_) });
 
    stacktrace
        Arguments: boolean
@@ -252,14 +254,14 @@ METHODS
        Overloading
 
        "connect" is a convenience method. It is equivalent to calling
-       $schema->clone->connection(@connectinfo). To write your own overloaded
+       $schema-&gtclone-&gtconnection(@connectinfo). To write your own overloaded
        version, overload "connection" instead.
 
    resultset
        Arguments: $source_name
        Return Value: $resultset
 
-	 my $rs = $schema->resultset('DVD');
+	 my $rs = $schema-&gtresultset('DVD');
 
        Returns the DBIx::Class::ResultSet object for the registered source
        name.
@@ -267,7 +269,7 @@ METHODS
    sources
        Return Value: @source_names
 
-	 my @source_names = $schema->sources;
+	 my @source_names = $schema-&gtsources;
 
        Lists names of all the sources registered on this Schema object.
 
@@ -275,7 +277,7 @@ METHODS
        Arguments: $source_name
        Return Value: $result_source
 
-	 my $source = $schema->source('Book');
+	 my $source = $schema-&gtsource('Book');
 
        Returns the DBIx::Class::ResultSource object for the registered source
        name.
@@ -284,7 +286,7 @@ METHODS
        Arguments: $source_name
        Return Value: $classname
 
-	 my $class = $schema->class('CD');
+	 my $class = $schema-&gtclass('CD');
 
        Retrieves the Result class name for the given source name.
 
@@ -294,19 +296,19 @@ METHODS
 
        Executes $coderef with (optional) arguments @coderef_args atomically,
        returning its result (if any). Equivalent to calling
-       $schema->storage->txn_do.  See "txn_do" in DBIx::Class::Storage for
+       $schema-&gtstorage-&gttxn_do.  See "txn_do" in DBIx::Class::Storage for
        more information.
 
        This interface is preferred over using the individual methods
        "txn_begin", "txn_commit", and "txn_rollback" below.
 
-       WARNING: If you are connected with "AutoCommit => 0" the transaction is
+       WARNING: If you are connected with "AutoCommit =&gt 0" the transaction is
        considered nested, and you will still need to call "txn_commit" to
        write your changes when appropriate. You will also want to connect with
-       "auto_savepoint => 1" to get partial rollback to work, if the storage
+       "auto_savepoint =&gt 1" to get partial rollback to work, if the storage
        driver for your database supports it.
 
-       Connecting with "AutoCommit => 1" is recommended.
+       Connecting with "AutoCommit =&gt 1" is recommended.
 
    txn_scope_guard
        Runs "txn_scope_guard" on the schema's storage. See "txn_scope_guard"
@@ -314,21 +316,21 @@ METHODS
 
    txn_begin
        Begins a transaction (does nothing if AutoCommit is off). Equivalent to
-       calling $schema->storage->txn_begin. See "txn_begin" in
+       calling $schema-&gtstorage-&gttxn_begin. See "txn_begin" in
        DBIx::Class::Storage for more information.
 
    txn_commit
        Commits the current transaction. Equivalent to calling
-       $schema->storage->txn_commit. See "txn_commit" in DBIx::Class::Storage
+       $schema-&gtstorage-&gttxn_commit. See "txn_commit" in DBIx::Class::Storage
        for more information.
 
    txn_rollback
        Rolls back the current transaction. Equivalent to calling
-       $schema->storage->txn_rollback. See "txn_rollback" in
+       $schema-&gtstorage-&gttxn_rollback. See "txn_rollback" in
        DBIx::Class::Storage for more information.
 
    storage
-	 my $storage = $schema->storage;
+	 my $storage = $schema-&gtstorage;
 
        Returns the DBIx::Class::Storage object for this Schema. Grab this if
        you want to turn on SQL statement debugging at runtime, or set the
@@ -355,7 +357,7 @@ METHODS
 
        e.g.
 
-	 $schema->populate('Artist', [
+	 $schema-&gtpopulate('Artist', [
 	   [ qw/artistid name/ ],
 	   [ 1, 'Popular Band' ],
 	   [ 2, 'Indie Band' ],
@@ -363,9 +365,9 @@ METHODS
 	 ]);
 
        Since wantarray context is basically the same as looping over
-       $rs->create(...)  you won't see any performance benefits and in this
+       $rs-&gtcreate(...)  you won't see any performance benefits and in this
        case the method is more for convenience. Void context sends the column
-       information directly to storage using <DBI>s bulk insert method. So the
+       information directly to storage using &ltDBI&gts bulk insert method. So the
        performance will be much better for storages that support this method.
 
        Because of this difference in the way void context inserts rows into
@@ -404,7 +406,7 @@ METHODS
        For example, for a schema with My::Schema::CD and My::Schema::Artist
        classes,
 
-	 $schema->compose_namespace('My::DB', 'Base::Class');
+	 $schema-&gtcompose_namespace('My::DB', 'Base::Class');
 	 print join (', ', @My::DB::CD::ISA) . "\n";
 	 print join (', ', @My::DB::Artist::ISA) ."\n";
 
@@ -415,17 +417,17 @@ METHODS
 
    svp_begin
        Creates a new savepoint (does nothing outside a transaction).
-       Equivalent to calling $schema->storage->svp_begin.  See "svp_begin" in
+       Equivalent to calling $schema-&gtstorage-&gtsvp_begin.  See "svp_begin" in
        DBIx::Class::Storage for more information.
 
    svp_release
        Releases a savepoint (does nothing outside a transaction).  Equivalent
-       to calling $schema->storage->svp_release.  See "svp_release" in
+       to calling $schema-&gtstorage-&gtsvp_release.  See "svp_release" in
        DBIx::Class::Storage for more information.
 
    svp_rollback
        Rollback to a savepoint (does nothing outside a transaction).
-       Equivalent to calling $schema->storage->svp_rollback.  See
+       Equivalent to calling $schema-&gtstorage-&gtsvp_rollback.  See
        "svp_rollback" in DBIx::Class::Storage for more information.
 
    clone
@@ -454,7 +456,7 @@ METHODS
 
        See "METHODS" in SQL::Translator for a list of values for
        "\%sqlt_args".  The most common value for this would be "{
-       add_drop_table => 1 }" to have the SQL produced include a "DROP TABLE"
+       add_drop_table =&gt 1 }" to have the SQL produced include a "DROP TABLE"
        statement for each table created. For quoting purposes supply
        "quote_table_names" and "quote_field_names".
 
@@ -468,14 +470,14 @@ METHODS
        Arguments: See "deployment_statements" in DBIx::Class::Storage::DBI
        Return value: $listofstatements
 
-       A convenient shortcut to "$self->storage->deployment_statements($self,
+       A convenient shortcut to "$self-&gtstorage-&gtdeployment_statements($self,
        @args)".  Returns the SQL statements used by "deploy" and "deploy" in
        DBIx::Class::Schema::Storage.
 
    create_ddl_dir
        Arguments: See "create_ddl_dir" in DBIx::Class::Storage::DBI
 
-       A convenient shortcut to "$self->storage->create_ddl_dir($self,
+       A convenient shortcut to "$self-&gtstorage-&gtcreate_ddl_dir($self,
        @args)".
 
        Creates an SQL file based on the Schema, for each of the specified
@@ -485,7 +487,7 @@ METHODS
        Arguments: $database-type, $version, $directory, $preversion
        Return value: $normalised_filename
 
-	 my $filename = $table->ddl_filename($type, $version, $dir, $preversion)
+	 my $filename = $table-&gtddl_filename($type, $version, $dir, $preversion)
 
        This method is called by "create_ddl_dir" to compose a file name out of
        the supplied directory, database type and version number. The default
@@ -498,14 +500,14 @@ METHODS
 
 	Prior to DBIx::Class version 0.08100 this method had a different signature:
 
-	   my $filename = $table->ddl_filename($type, $dir, $version, $preversion)
+	   my $filename = $table-&gtddl_filename($type, $dir, $version, $preversion)
 
 	In recent versions variables $dir and $version were reversed in order to
 	bring the signature in line with other Schema/Storage methods. If you
 	really need to maintain backward compatibility, you can do the following
 	in any overriding methods:
 
-	   ($dir, $version) = ($version, $dir) if ($DBIx::Class::VERSION < 0.08100);
+	   ($dir, $version) = ($version, $dir) if ($DBIx::Class::VERSION &lt 0.08100);
 
    thaw
        Provided as the recommended way of thawing schema objects. You can call
@@ -541,7 +543,7 @@ METHODS
        Registers a class which isa DBIx::Class::ResultSourceProxy. Equivalent
        to calling:
 
-	 $schema->register_source($moniker, $component_class->result_source_instance);
+	 $schema-&gtregister_source($moniker, $component_class-&gtresult_source_instance);
 
    register_source
        Arguments: $moniker, $result_source
@@ -572,7 +574,7 @@ METHODS
        Actually, you probably just wanted to call connect.
 
 AUTHORS
-       Matt S. Trout <mst@shadowcatsystems.co.uk>
+       Matt S. Trout &ltmst@shadowcatsystems.co.uk&gt
 
 LICENSE
        You may distribute this code under the same terms as Perl itself.
@@ -580,6 +582,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-07-27		DBIx::Class::Schema(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

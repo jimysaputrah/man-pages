@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="These are functions for searching through directory trees doing work on..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>File::Find - Traverse a directory tree.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 File::Find(3pm)        Perl Programmers Reference Guide        File::Find(3pm)
 
 
@@ -25,7 +27,7 @@ SYNOPSIS
 	   sub wanted { ... }
 
 	   use File::Find;
-	   find({ wanted => \&process, follow => 1 }, '.');
+	   find({ wanted =&gt \&process, follow =&gt 1 }, '.');
 
 DESCRIPTION
        These are functions for searching through directory trees doing work on
@@ -71,7 +73,7 @@ DESCRIPTION
        "bydepth"
 	  Reports the name of a directory only AFTER all its entries have been
 	  reported.  Entry point "finddepth()" is a shortcut for specifying "{
-	  bydepth => 1 }" in the first argument of "find()".
+	  bydepth =&gt 1 }" in the first argument of "find()".
 
        "preprocess"
 	  The value should be a code reference. This code reference is used to
@@ -195,10 +197,10 @@ DESCRIPTION
 
 		     $File::Find::name	$File::Find::dir  $_
 	default      /			/		  .
-	no_chdir=>0  /etc		/		  etc
+	no_chdir=&gt0  /etc		/		  etc
 		     /etc/x		/etc		  x
 
-	no_chdir=>1  /			/		  /
+	no_chdir=&gt1  /			/		  /
 		     /etc		/		  /etc
 		     /etc/x		/etc		  /etc/x
 
@@ -220,11 +222,11 @@ DESCRIPTION
 	   sub wanted {
 	       /^\.nfs.*\z/s &&
 	       (($dev, $ino, $mode, $nlink, $uid, $gid) = lstat($_)) &&
-	       int(-M _) > 7 &&
+	       int(-M _) &gt 7 &&
 	       unlink($_)
 	       ||
 	       ($nlink || (($dev, $ino, $mode, $nlink, $uid, $gid) = lstat($_))) &&
-	       $dev < 0 &&
+	       $dev &lt 0 &&
 	       ($File::Find::prune = 1);
 	   }
 
@@ -312,11 +314,11 @@ NOTES
 		sub invisible($) {
 		  my $file = shift;
 		  my ($fileCat, $fileInfo);
-		  my $invisible_flag =	1 << 14;
+		  my $invisible_flag =	1 &lt&lt 14;
 
 		  if ( $fileCat = FSpGetCatInfo($file) ) {
-		    if ($fileInfo = $fileCat->ioFlFndrInfo() ) {
-		      return (($fileInfo->fdFlags & $invisible_flag) && 1);
+		    if ($fileInfo = $fileCat-&gtioFlFndrInfo() ) {
+		      return (($fileInfo-&gtfdFlags & $invisible_flag) && 1);
 		    }
 		  }
 		  return undef;
@@ -351,6 +353,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-04-18		       File::Find(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

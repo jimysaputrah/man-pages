@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Scripting definition files (sdefs) are XML files that describe everything..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>sdef -- scripting definition file</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 
 SDEF(5) 		    BSD File Formats Manual		       SDEF(5)
 
@@ -117,11 +119,11 @@ STRUCTURE
      /System/Library/ScriptingDefinitions.  For example, the sdef for a typi-
      cal Cocoa application would begin with this:
 
-       <dictionary xmlns:xi="http://www.w3.org/2003/XInclude">
-	 <xi:include
+       &ltdictionary xmlns:xi="http://www.w3.org/2003/XInclude"&gt
+	 &ltxi:include
 	   href="file:///System/Library/ScriptingDefinitions/CocoaStandard.sdef"
 	   xpointer="xpointer(/dictionary/suite)"
-	 />
+	 /&gt
 	 ...
 
      By using inclusion instead of copying and pasting, your application will
@@ -322,9 +324,9 @@ REFERENCE
 		  plural of the specified element type.  For example:
 
 		  element				default name
-		  <class name="refresh rate">		RefreshRate
-		  <property name="current resolution">	currentResolution
-		  <element type="monitor">		monitors
+		  &ltclass name="refresh rate"&gt		RefreshRate
+		  &ltproperty name="current resolution"&gt	currentResolution
+		  &ltelement type="monitor"&gt		monitors
 
 		  This default name becomes the `class' for classes, the `key'
 		  for properties, elements, and parameters, and the `name' for
@@ -419,15 +421,15 @@ REFERENCE
 		  interpreting them as XML, they must be escaped using either
 		  entities or a CDATA section, for example:
 
-			<documentation>
-			<html>
+			&ltdocumentation&gt
+			&lthtml&gt
 			    For answers to commonly asked questions about
 			    &lt;i&gt;do shell script&lt;/i&gt;, see
-			    <![CDATA[
-			       <a href="http://developer.apple.com">TN2065</a>.
-			    ]]>
-			</html>
-			</documentation>
+			    &lt![CDATA[
+			       &lta href="http://developer.apple.com"&gtTN2065&lt/a&gt.
+			    ]]&gt
+			&lt/html&gt
+			&lt/documentation&gt
 
 		  Bear in mind that an sdef is intended to be a reference, not
 		  a tutorial.  If you want to include any lengthy material,
@@ -469,12 +471,12 @@ REFERENCE
 				line.  For example:
 
 				      sdef:
-				      <enumeration name="save options">
-					  <enumerator name="yes"/>
-					  <enumerator name="no"/>
-					  <enumerator name="ask"/>
-				      </enumeration>
-				      <parameter name="saving" type="save options"/>
+				      &ltenumeration name="save options"&gt
+					  &ltenumerator name="yes"/&gt
+					  &ltenumerator name="no"/&gt
+					  &ltenumerator name="ask"/&gt
+				      &lt/enumeration&gt
+				      &ltparameter name="saving" type="save options"/&gt
 
 				      display:
 				      saving yes/no/ask
@@ -670,15 +672,15 @@ REFERENCE
 		  EXAMPLES
 
 		  tabs (list of integer):
-		  <property name="tabs">
-		      <type type="integer" list="yes"/>
-		  </property>
+		  &ltproperty name="tabs"&gt
+		      &lttype type="integer" list="yes"/&gt
+		  &lt/property&gt
 
 		  frequency (number or text):
-		  <property name="frequency">
-		      <type type="number"/>
-		      <type type="text"/>
-		  </property>
+		  &ltproperty name="frequency"&gt
+		      &lttype type="number"/&gt
+		      &lttype type="text"/&gt
+		  &lt/property&gt
 
      value-type   A simple type definition.  A value-type has no properties
 		  and no elements accessible by your scripting; it is useful
@@ -702,9 +704,9 @@ REFERENCE
 		  Suite file.  For example, an ``image'' type might be
 		  declared like this:
 
-			<value-type name="image" code="PICT">
-			    <cocoa class="NSData" name="Image"/>
-			</value-type>
+			&ltvalue-type name="image" code="PICT"&gt
+			    &ltcocoa class="NSData" name="Image"/&gt
+			&lt/value-type&gt
 
      xref	  A cross-reference.  These are purely for documentation pur-
 		  poses; use one to refer to another suite child that is some-
@@ -722,15 +724,15 @@ EXAMPLES
 
 SEE ALSO
      sdp(1), /System/Library/DTDs/sdef.dtd, TN2106: Scripting Interface Guide-
-     lines <http://developer.apple.com/technotes/tn2002/tn2106.html>, Sdef
-     Scriptability Guide for Cocoa <http://developer.apple.com/documentation/
-     Cocoa/Conceptual/ScriptableCocoaApplications>.
+     lines &lthttp://developer.apple.com/technotes/tn2002/tn2106.html&gt, Sdef
+     Scriptability Guide for Cocoa &lthttp://developer.apple.com/documentation/
+     Cocoa/Conceptual/ScriptableCocoaApplications&gt.
 
 HISTORY
      To upgrade an old sdef to the current format, you can use xsltproc(1)
      with the supplied transform:
 
-	   xsltproc /usr/share/sdef/upgrade.xsl my.sdef > upgraded.sdef
+	   xsltproc /usr/share/sdef/upgrade.xsl my.sdef &gt upgraded.sdef
 
      Changes in Mac OS X 10.8:
 
@@ -747,9 +749,9 @@ HISTORY
      o	 html elements (children of documentation elements) are now declared
 	 to contain text, not XHTML elements.  For example:
 
-	       before:	<html><b>Important</b><html>
+	       before:	&lthtml&gt&ltb&gtImportant&lt/b&gt&lthtml&gt
 
-	       after:	<html><![CDATA[<b>Important</b>]]><html>
+	       after:	&lthtml&gt&lt![CDATA[&ltb&gtImportant&lt/b&gt]]&gt&lthtml&gt
 
 	 Both forms work in 10.4 and 10.5, but the former is now deprecated.
 
@@ -772,21 +774,21 @@ HISTORY
 	 expressed using type elements, not complex strings.  For example:
 
 	       before:
-	       <property name="tabs" type="list of integer"/>
+	       &ltproperty name="tabs" type="list of integer"/&gt
 
 	       after:
-	       <property name="tabs">
-		   <type type="integer" list="yes"/>
-	       </property>
+	       &ltproperty name="tabs"&gt
+		   &lttype type="integer" list="yes"/&gt
+	       &lt/property&gt
 
 	       before:
-	       <property name="frequency" type="number | text"/>
+	       &ltproperty name="frequency" type="number | text"/&gt
 
 	       after:
-	       <property name="frequency">
-		   <type type="number"/>
-		   <type type="text"/>
-	       </property>
+	       &ltproperty name="frequency"&gt
+		   &lttype type="number"/&gt
+		   &lttype type="text"/&gt
+	       &lt/property&gt
 
 	 See the type documentation for complete details.
 
@@ -804,6 +806,6 @@ HISTORY
 	 (formerly its name).
 
 Mac OS X			August 30, 2006 		      Mac OS X
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

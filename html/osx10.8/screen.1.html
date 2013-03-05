@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Screen is a full-screen window manager that multiplexes a physical ter-..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>screen - screen manager with VT100/ANSI terminal emulation</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 SCREEN(1)							     SCREEN(1)
 
 
@@ -449,12 +451,12 @@ DEFAULT KEY BINDINGS
        C-a {
        C-a }	   (history)	 Copy and paste a previous (command) line.
 
-       C-a >	   (writebuf)	 Write paste buffer to a file.
+       C-a &gt	   (writebuf)	 Write paste buffer to a file.
 
-       C-a <	   (readbuf)	 Reads the screen-exchange file into the paste
+       C-a &lt	   (readbuf)	 Reads the screen-exchange file into the paste
 				 buffer.
 
-       C-a =	   (removebuf)	 Removes the file used by C-a < and C-a >.
+       C-a =	   (removebuf)	 Removes the file used by C-a &lt and C-a &gt.
 
        C-a ,	   (license)	 Shows where screen comes from, where it  went
 				 to and why you can use it.
@@ -843,7 +845,7 @@ CUSTOMIZATION
        (using the paste buffer, where a copy remains):
 
 		   C-a : bufferfile /etc/passwd
-		   C-a < C-a ]
+		   C-a &lt C-a ]
 		   C-a : bufferfile
 
        c1 [on|off]
@@ -1000,11 +1002,11 @@ CUSTOMIZATION
 	   tents  of the paste buffer will not be overwritten, but is appended
 	   to.
 	 A toggles in append mode and sets a (second) mark.
-	 > sets the (second) mark and writes the contents of the paste	buffer
+	 &gt sets the (second) mark and writes the contents of the paste	buffer
 	   to the screen-exchange file (/tmp/screen-exchange per default) once
 	   copy-mode is finished.
 	   This example demonstrates how to dump the whole  scrollback	buffer
-	   to that file: "C-A [ g SPACE G $ >".
+	   to that file: "C-A [ g SPACE G $ &gt".
 	 C-g gives information about the current line and column.
 	 x  exchanges  the first mark and the current cursor position. You can
 	   use this to adjust an already placed mark.
@@ -1392,7 +1394,7 @@ CUSTOMIZATION
 
        The third form specifies the contents of the hardstatus line.  '%h'  is
        used  as default string, i.e. the stored hardstatus of the current win-
-       dow (settable via "ESC]0;<string>^G"  or  "ESC_<string>ESC\")  is  dis-
+       dow (settable via "ESC]0;&ltstring&gt^G"  or  "ESC_&ltstring&gtESC\")  is  dis-
        played.	 You  can  customize this to any string you like including the
        escapes from the "STRING ESCAPES" chapter. If you leave out  the  argu-
        ment string, the current string is displayed.
@@ -1751,7 +1753,7 @@ CUSTOMIZATION
        If  cmd	is not an empty string, screen will not use the terminal capa-
        bilities "po/pf" if it detects an ansi print sequence ESC [  5  i,  but
        pipe the output into cmd.  This should normally be a command like "lpr"
-       or "'cat > /tmp/scrprint'".  printcmd without a	command  displays  the
+       or "'cat &gt /tmp/scrprint'".  printcmd without a	command  displays  the
        current	setting.  The ansi sequence ESC \ ends printing and closes the
        pipe.
        Warning: Be careful with this command! If other user have write	access
@@ -1841,8 +1843,8 @@ CUSTOMIZATION
 
        Establish a new window.	The flow-control options (-f,  -fn  and  -fa),
        title  (a.k.a.) option (-t), login options (-l and -ln) , terminal type
-       option (-T <term>), the all-capability-flag (-a) and scrollback	option
-       (-h  <num>)  may be specified with each command.  The option (-M) turns
+       option (-T &ltterm&gt), the all-capability-flag (-a) and scrollback	option
+       (-h  &ltnum&gt)  may be specified with each command.  The option (-M) turns
        monitoring on for this window.  The option (-L) turns output logging on
        for  this  window.  If an optional number n in the range 0..9 is given,
        the window number n is assigned to the newly  created  window  (or,  if
@@ -2282,9 +2284,9 @@ THE MESSAGE LINE
        current window by means of the ANSI Privacy message  control  sequence.
        For instance, from within the shell, try something like:
 
-	      echo '<esc>^Hello world from window '$WINDOW'<esc>\\'
+	      echo '&ltesc&gt^Hello world from window '$WINDOW'&ltesc&gt\\'
 
-       where  '<esc>'  is an escape, '^' is a literal up-arrow, and '\\' turns
+       where  '&ltesc&gt'  is an escape, '^' is a literal up-arrow, and '\\' turns
        into a single backslash.
 
 
@@ -2310,7 +2312,7 @@ WINDOW TYPES
 	  line as busy.  An optional parameter	is  allowed  consisting  of  a
 	  comma separated list of flags in the notation used by stty(1):
 
-	  <baud_rate>
+	  &ltbaud_rate&gt
 		 Usually  300,	1200, 9600 or 19200. This affects transmission
 		 as well as receive speed.
 
@@ -2456,9 +2458,9 @@ STRING ESCAPES
 	      string  if  the specified position lies before the current posi-
 	      tion. Add the 'L' qualifier to change this.
 
-       <      same as '%=' but just do truncation, do not fill with spaces
+       &lt      same as '%=' but just do truncation, do not fill with spaces
 
-       >      mark the current text position for  the  next  truncation.  When
+       &gt      mark the current text position for  the  next  truncation.  When
 	      screen  needs  to do truncation, it tries to do it in a way that
 	      the marked position gets moved to the  specified	percentage  of
 	      the  output  area.  (The	area starts from the last absolute pad
@@ -2539,7 +2541,7 @@ STRING ESCAPES
        "= yd" clear all attributes, write in default  color  on  yellow  back-
 	      ground.
 
-       %-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<
+       %-Lw%{= BW}%50&gt%n%f* %t%{-}%+Lw%&lt
 	      The  available  windows centered at the current window and trun-
 	      cated to the available width. The current  window  is  displayed
 	      white  on  blue.	 This can be used with "hardstatus alwayslast-
@@ -2611,7 +2613,7 @@ TITLES (naming windows)
        command in the .screenrc file, while all other windows are created with
        a "screen" command and thus can have their name set with the -t option.
        Interactively,	 there	  is	the    title-string    escape-sequence
-       (<esc>kname<esc>\)  and the "title" command (C-a A).  The former can be
+       (&ltesc&gtkname&ltesc&gt\)  and the "title" command (C-a A).  The former can be
        output from an application to control the window's name under  software
        control,  and  the  latter  will prompt for a name when typed.  You can
        also bind pre-defined names to keys with the  "title"  command  to  set
@@ -2628,7 +2630,7 @@ TITLES (naming windows)
        is running.
 
        Here's  how  it	works:	 you must modify your shell prompt to output a
-       null title-escape-sequence (<esc>k<esc>\) as a  part  of  your  prompt.
+       null title-escape-sequence (&ltesc&gtk&ltesc&gt\) as a  part  of  your  prompt.
        The  last part of your prompt must be the same as the string you speci-
        fied for the search portion of the title.  Once this is set up,	screen
        will  use  the title-escape-sequence to clear the previous command name
@@ -2647,16 +2649,16 @@ TITLES (naming windows)
        Adding this line to your .screenrc would start a nice-d version of  the
        "top" command in window 2 named "top" rather than "nice".
 
-		   shelltitle '> |csh'
+		   shelltitle '&gt |csh'
 		   screen 1
 
        These  commands	would  start  a  shell with the given shelltitle.  The
        title specified is an auto-title that would expect the prompt  and  the
        typed command to look something like the following:
 
-	      /usr/joe/src/dir> trn
+	      /usr/joe/src/dir&gt trn
 
-       (it  looks  after  the  '>  ' for the command name).  The window status
+       (it  looks  after  the  '&gt  ' for the command name).  The window status
        would show the name "trn" while the command was running, and revert  to
        "csh" upon completion.
 
@@ -2692,7 +2694,7 @@ TITLES (naming windows)
 
 	      set prompt='^[[0000m^[k^[\% '
 
-       The escape-sequence "<esc>[0000m" not  only  normalizes	the  character
+       The escape-sequence "&ltesc&gt[0000m" not  only  normalizes	the  character
        attributes, but all the zeros round the length of the invisible charac-
        ters up to 8.  Bash  users  will  probably  want  to  echo  the	escape
        sequence in the PROMPT_COMMAND:
@@ -2719,14 +2721,14 @@ THE VIRTUAL TERMINAL
        deal with these cases.  Here is how it works:
 
        When screen tries to figure out a terminal name for  itself,  it  first
-       looks  for an entry named "screen.<term>", where <term> is the contents
+       looks  for an entry named "screen.&ltterm&gt", where &ltterm&gt is the contents
        of your $TERM variable.	If no such entry exists, screen tries "screen"
        (or  "screen-w"	if  the terminal is wide (132 cols or more)).  If even
        this entry cannot be found, "vt100" is used as a substitute.
 
        The idea is that if you have a terminal which doesn't support an impor-
        tant  feature  (e.g.  delete  char or clear to EOS) you can build a new
-       termcap/terminfo entry for screen (named "screen.<dumbterm>") in  which
+       termcap/terminfo entry for screen (named "screen.&ltdumbterm&gt") in  which
        this  capability  has been disabled. If this entry is installed on your
        machines you are able to do a rlogin and still keep the	correct  term-
        cap/terminfo  entry.  The terminal name is put in the $TERM variable of
@@ -2788,8 +2790,8 @@ THE VIRTUAL TERMINAL
        dow's  hardstatus  line. If the display has no hardstatus the line will
        be displayed as a standard screen message.  The hardstatus line can  be
        changed	  with	 the   ANSI   Application   Program   Command	(APC):
-       "ESC_<string>ESC\". As a  convenience  for  xterm  users  the  sequence
-       "ESC]0..2;<string>^G" is also accepted.
+       "ESC_&ltstring&gtESC\". As a  convenience  for  xterm  users  the  sequence
+       "ESC]0..2;&ltstring&gt^G" is also accepted.
 
        Some  capabilities  are only put into the $TERMCAP variable of the vir-
        tual terminal if they can be efficiently implemented  by  the  physical
@@ -2837,7 +2839,7 @@ THE VIRTUAL TERMINAL
 
        ESC =		     (V)  Application Keypad Mode
 
-       ESC >		     (V)  Numeric Keypad Mode
+       ESC &gt		     (V)  Numeric Keypad Mode
 
        ESC # 8		     (V)  Fill Screen with E's
 
@@ -3044,7 +3046,7 @@ THE VIRTUAL TERMINAL
 
        ESC [ x			  Send Terminal Parameter Report
 
-       ESC [ > c		  Send	 VT220	 Secondary  Device  Attributes
+       ESC [ &gt c		  Send	 VT220	 Secondary  Device  Attributes
 				  String
 
        ESC [ 6 n		  Send Cursor Position Report
@@ -3215,21 +3217,21 @@ CHARACTER TRANSLATION
        ters over several national language font pages.
 
        Syntax:
-	   XC=<charset-mapping>{,,<charset-mapping>}
-	   <charset-mapping> := <designator><template>{,<mapping>}
-	   <mapping> := <char-to-be-mapped><template-arg>
+	   XC=&ltcharset-mapping&gt{,,&ltcharset-mapping&gt}
+	   &ltcharset-mapping&gt := &ltdesignator&gt&lttemplate&gt{,&ltmapping&gt}
+	   &ltmapping&gt := &ltchar-to-be-mapped&gt&lttemplate-arg&gt
 
        The things in braces may be repeated any number of times.
 
-       A  <charset-mapping> tells screen how to map characters in font <desig-
-       nator> ('B': Ascii, 'A': UK, 'K':  german,  etc.)   to  strings.  Every
-       <mapping>  describes  to  what string a single character will be trans-
+       A  &ltcharset-mapping&gt tells screen how to map characters in font &ltdesig-
+       nator&gt ('B': Ascii, 'A': UK, 'K':  german,  etc.)   to  strings.  Every
+       &ltmapping&gt  describes  to  what string a single character will be trans-
        lated. A template mechanism is used, as most of the time the codes have
        a  lot  in  common  (for  example strings to switch to and from another
-       charset). Each occurrence of '%' in <template>  gets  substituted  with
-       the  <template-arg>  specified  together  with  the  character. If your
+       charset). Each occurrence of '%' in &lttemplate&gt  gets  substituted  with
+       the  &lttemplate-arg&gt  specified  together  with  the  character. If your
        strings are not similar at all, then use '%' as a  template  and  place
-       the  full  string  in  <template-arg>. A quoting mechanism was added to
+       the  full  string  in  &lttemplate-arg&gt. A quoting mechanism was added to
        make it possible to use a real '%'. The '\' character quotes  the  spe-
        cial characters '\', '%', and ','.
 
@@ -3245,7 +3247,7 @@ CHARACTER TRANSLATION
 
        Another	extension  was	added  to  allow  more emulation: If a mapping
        translates the unquoted '%' char, it will be sent to the terminal when-
-       ever screen switches to the corresponding <designator>. In this special
+       ever screen switches to the corresponding &ltdesignator&gt. In this special
        case the template is assumed to be just '%' because the charset	switch
        sequence and the character mappings normally haven't much in common.
 
@@ -3289,10 +3291,10 @@ FILES
        /usr/local/etc/screenrc		 screen initialization commands
        $SCREENRC
        $HOME/.screenrc			 Read in after /usr/local/etc/screenrc
-       $SCREENDIR/S-<login>
-       /local/screens/S-<login> 	 Socket directories (default)
-       /usr/tmp/screens/S-<login>	 Alternate socket directories.
-       <socket directory>/.termcap	 Written by the "termcap" output func-
+       $SCREENDIR/S-&ltlogin&gt
+       /local/screens/S-&ltlogin&gt 	 Socket directories (default)
+       /usr/tmp/screens/S-&ltlogin&gt	 Alternate socket directories.
+       &ltsocket directory&gt/.termcap	 Written by the "termcap" output func-
 					 tion
        /usr/tmp/screens/screen-exchange  or
        /tmp/screen-exchange		 screen  `interprocess	 communication
@@ -3431,6 +3433,6 @@ BUGS
 
 
 4th Berkeley Distribution	   Aug 2003			     SCREEN(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

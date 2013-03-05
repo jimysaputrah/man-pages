@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Berkeley Packet Filter provides a raw interface to data link layers..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>bpf -- Berkeley Packet Filter</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 
 BPF(4)			 BSD Kernel Interfaces Manual			BPF(4)
 
@@ -57,16 +59,16 @@ DESCRIPTION
      trolled by the sysctl debug.bpf_maxdevices.
 
 IOCTLS
-     The ioctl(2) command codes below are defined in <net/bpf.h>.  All com-
+     The ioctl(2) command codes below are defined in &ltnet/bpf.h&gt.  All com-
      mands require these includes:
 
-	     #include <sys/types.h>
-	     #include <sys/time.h>
-	     #include <sys/ioctl.h>
-	     #include <net/bpf.h>
+	     #include &ltsys/types.h&gt
+	     #include &ltsys/time.h&gt
+	     #include &ltsys/ioctl.h&gt
+	     #include &ltnet/bpf.h&gt
 
-     Additionally, BIOCGETIF and BIOCSETIF require <sys/socket.h> and
-     <net/if.h>.
+     Additionally, BIOCGETIF and BIOCSETIF require &ltsys/socket.h&gt and
+     &ltnet/if.h&gt.
 
      In addition to FIONREAD the following commands may be applied to any open
      bpf file.	The (third) argument to ioctl(2) should be a pointer to the
@@ -85,7 +87,7 @@ IOCTLS
      BIOCGDLT	    (u_int) Returns the type of the data link layer underlying
 		    the attached interface.  EINVAL is returned if no inter-
 		    face has been specified.  The device types, prefixed with
-		    ``DLT_'', are defined in <net/bpf.h>.
+		    ``DLT_'', are defined in &ltnet/bpf.h&gt.
 
      BIOCSDLT	    (u_int) Used to specify the type of data link layer of the
 		    interface attached to the bpf descriptor. If the current
@@ -94,14 +96,14 @@ IOCTLS
 		    the descriptor has promiscuous mode set, the new interface
 		    will be moved to promiscuous mode.	EINVAL is returned if
 		    no interface has been specified.  The device types, pre-
-		    fixed with ``DLT_'', are defined in <net/bpf.h>.
+		    fixed with ``DLT_'', are defined in &ltnet/bpf.h&gt.
 
      BIOCGDLTLIST   (struct bpf_dltlist) Returns a list of data link types of
 		    the the given interface.  A user allocated buffer to hold
 		    the list and length of expected list should be provided in
-		    struct bpf_dltlist, defined in <net/bpf.h>.  EINVAL is
+		    struct bpf_dltlist, defined in &ltnet/bpf.h&gt.  EINVAL is
 		    returned if no interface has been specified.  The device
-		    types, prefixed with ``DLT_'', are defined in <net/bpf.h>.
+		    types, prefixed with ``DLT_'', are defined in &ltnet/bpf.h&gt.
 
      BIOCPROMISC    Forces the interface into promiscuous mode.  All packets,
 		    not just those destined for the local host, are processed.
@@ -190,7 +192,7 @@ IOCTLS
 		    };
 
 		    The current version numbers are given by BPF_MAJOR_VERSION
-		    and BPF_MINOR_VERSION from <net/bpf.h>.  An incompatible
+		    and BPF_MINOR_VERSION from &ltnet/bpf.h&gt.  An incompatible
 		    filter may result in undefined behavior (most likely, an
 		    error returned by ioctl() or haphazard packet matching).
 
@@ -257,12 +259,12 @@ BPF HEADER
      Additionally, individual packets are padded so that each starts on a word
      boundary.	This requires that an application has some knowledge of how to
      get from packet to packet.  The macro BPF_WORDALIGN is defined in
-     <net/bpf.h> to facilitate this process.  It rounds up its argument to the
+     &ltnet/bpf.h&gt to facilitate this process.  It rounds up its argument to the
      nearest word aligned value (where a word is BPF_ALIGNMENT bytes wide).
 
      For example, if `p' points to the start of a packet, this expression will
      advance it to the next packet:
-	   p = (char *)p + BPF_WORDALIGN(p->bh_hdrlen + p->bh_caplen)
+	   p = (char *)p + BPF_WORDALIGN(p-&gtbh_hdrlen + p-&gtbh_caplen)
 
      For the alignment mechanisms to work properly, the buffer passed to
      read(2) must itself be word aligned.  The malloc(3) function will always
@@ -289,7 +291,7 @@ FILTER MACHINE
      classes of instructions: BPF_LD, BPF_LDX, BPF_ST, BPF_STX, BPF_ALU,
      BPF_JMP, BPF_RET, and BPF_MISC.  Various other mode and operator bits are
      or'd into the class to give the actual instructions.  The classes and
-     modes are defined in <net/bpf.h>.
+     modes are defined in &ltnet/bpf.h&gt.
 
      Below are the semantics for each defined bpf instruction.	We use the
      convention that A is the accumulator, X is the index register, P[] packet
@@ -310,59 +312,59 @@ FILTER MACHINE
 	       specified as a word (BPF_W), halfword (BPF_H), or byte (BPF_B).
 	       The semantics of all the recognized BPF_LD instructions follow.
 
-	       BPF_LD+BPF_W+BPF_ABS  A <- P[k:4]
-	       BPF_LD+BPF_H+BPF_ABS  A <- P[k:2]
-	       BPF_LD+BPF_B+BPF_ABS  A <- P[k:1]
-	       BPF_LD+BPF_W+BPF_IND  A <- P[X+k:4]
-	       BPF_LD+BPF_H+BPF_IND  A <- P[X+k:2]
-	       BPF_LD+BPF_B+BPF_IND  A <- P[X+k:1]
-	       BPF_LD+BPF_W+BPF_LEN  A <- len
-	       BPF_LD+BPF_IMM	     A <- k
-	       BPF_LD+BPF_MEM	     A <- M[k]
+	       BPF_LD+BPF_W+BPF_ABS  A &lt- P[k:4]
+	       BPF_LD+BPF_H+BPF_ABS  A &lt- P[k:2]
+	       BPF_LD+BPF_B+BPF_ABS  A &lt- P[k:1]
+	       BPF_LD+BPF_W+BPF_IND  A &lt- P[X+k:4]
+	       BPF_LD+BPF_H+BPF_IND  A &lt- P[X+k:2]
+	       BPF_LD+BPF_B+BPF_IND  A &lt- P[X+k:1]
+	       BPF_LD+BPF_W+BPF_LEN  A &lt- len
+	       BPF_LD+BPF_IMM	     A &lt- k
+	       BPF_LD+BPF_MEM	     A &lt- M[k]
 
      BPF_LDX   These instructions load a value into the index register.  Note
 	       that the addressing modes are more restrictive than those of
 	       the accumulator loads, but they include BPF_MSH, a hack for
 	       efficiently loading the IP header length.
 
-	       BPF_LDX+BPF_W+BPF_IMM  X <- k
-	       BPF_LDX+BPF_W+BPF_MEM  X <- M[k]
-	       BPF_LDX+BPF_W+BPF_LEN  X <- len
-	       BPF_LDX+BPF_B+BPF_MSH  X <- 4*(P[k:1]&0xf)
+	       BPF_LDX+BPF_W+BPF_IMM  X &lt- k
+	       BPF_LDX+BPF_W+BPF_MEM  X &lt- M[k]
+	       BPF_LDX+BPF_W+BPF_LEN  X &lt- len
+	       BPF_LDX+BPF_B+BPF_MSH  X &lt- 4*(P[k:1]&0xf)
 
      BPF_ST    This instruction stores the accumulator into the scratch mem-
 	       ory.  We do not need an addressing mode since there is only one
 	       possibility for the destination.
 
-	       BPF_ST  M[k] <- A
+	       BPF_ST  M[k] &lt- A
 
      BPF_STX   This instruction stores the index register in the scratch mem-
 	       ory store.
 
-	       BPF_STX	M[k] <- X
+	       BPF_STX	M[k] &lt- X
 
      BPF_ALU   The alu instructions perform operations between the accumulator
 	       and index register or constant, and store the result back in
 	       the accumulator.  For binary operations, a source mode is
 	       required (BPF_K or BPF_X).
 
-	       BPF_ALU+BPF_ADD+BPF_K  A <- A + k
-	       BPF_ALU+BPF_SUB+BPF_K  A <- A - k
-	       BPF_ALU+BPF_MUL+BPF_K  A <- A * k
-	       BPF_ALU+BPF_DIV+BPF_K  A <- A / k
-	       BPF_ALU+BPF_AND+BPF_K  A <- A & k
-	       BPF_ALU+BPF_OR+BPF_K   A <- A | k
-	       BPF_ALU+BPF_LSH+BPF_K  A <- A << k
-	       BPF_ALU+BPF_RSH+BPF_K  A <- A >> k
-	       BPF_ALU+BPF_ADD+BPF_X  A <- A + X
-	       BPF_ALU+BPF_SUB+BPF_X  A <- A - X
-	       BPF_ALU+BPF_MUL+BPF_X  A <- A * X
-	       BPF_ALU+BPF_DIV+BPF_X  A <- A / X
-	       BPF_ALU+BPF_AND+BPF_X  A <- A & X
-	       BPF_ALU+BPF_OR+BPF_X   A <- A | X
-	       BPF_ALU+BPF_LSH+BPF_X  A <- A << X
-	       BPF_ALU+BPF_RSH+BPF_X  A <- A >> X
-	       BPF_ALU+BPF_NEG	      A <- -A
+	       BPF_ALU+BPF_ADD+BPF_K  A &lt- A + k
+	       BPF_ALU+BPF_SUB+BPF_K  A &lt- A - k
+	       BPF_ALU+BPF_MUL+BPF_K  A &lt- A * k
+	       BPF_ALU+BPF_DIV+BPF_K  A &lt- A / k
+	       BPF_ALU+BPF_AND+BPF_K  A &lt- A & k
+	       BPF_ALU+BPF_OR+BPF_K   A &lt- A | k
+	       BPF_ALU+BPF_LSH+BPF_K  A &lt- A &lt&lt k
+	       BPF_ALU+BPF_RSH+BPF_K  A &lt- A &gt&gt k
+	       BPF_ALU+BPF_ADD+BPF_X  A &lt- A + X
+	       BPF_ALU+BPF_SUB+BPF_X  A &lt- A - X
+	       BPF_ALU+BPF_MUL+BPF_X  A &lt- A * X
+	       BPF_ALU+BPF_DIV+BPF_X  A &lt- A / X
+	       BPF_ALU+BPF_AND+BPF_X  A &lt- A & X
+	       BPF_ALU+BPF_OR+BPF_X   A &lt- A | X
+	       BPF_ALU+BPF_LSH+BPF_X  A &lt- A &lt&lt X
+	       BPF_ALU+BPF_RSH+BPF_X  A &lt- A &gt&gt X
+	       BPF_ALU+BPF_NEG	      A &lt- -A
 
      BPF_JMP   The jump instructions alter flow of control.  Conditional jumps
 	       compare the accumulator against a constant (BPF_K) or the index
@@ -375,12 +377,12 @@ FILTER MACHINE
 	       tions.
 
 	       BPF_JMP+BPF_JA	       pc += k
-	       BPF_JMP+BPF_JGT+BPF_K   pc += (A > k) ? jt : jf
-	       BPF_JMP+BPF_JGE+BPF_K   pc += (A >= k) ? jt : jf
+	       BPF_JMP+BPF_JGT+BPF_K   pc += (A &gt k) ? jt : jf
+	       BPF_JMP+BPF_JGE+BPF_K   pc += (A &gt= k) ? jt : jf
 	       BPF_JMP+BPF_JEQ+BPF_K   pc += (A == k) ? jt : jf
 	       BPF_JMP+BPF_JSET+BPF_K  pc += (A & k) ? jt : jf
-	       BPF_JMP+BPF_JGT+BPF_X   pc += (A > X) ? jt : jf
-	       BPF_JMP+BPF_JGE+BPF_X   pc += (A >= X) ? jt : jf
+	       BPF_JMP+BPF_JGT+BPF_X   pc += (A &gt X) ? jt : jf
+	       BPF_JMP+BPF_JGE+BPF_X   pc += (A &gt= X) ? jt : jf
 	       BPF_JMP+BPF_JEQ+BPF_X   pc += (A == X) ? jt : jf
 	       BPF_JMP+BPF_JSET+BPF_X  pc += (A & X) ? jt : jf
 
@@ -399,8 +401,8 @@ FILTER MACHINE
 	       register transfer instructions that copy the index register to
 	       the accumulator or vice versa.
 
-	       BPF_MISC+BPF_TAX  X <- A
-	       BPF_MISC+BPF_TXA  A <- X
+	       BPF_MISC+BPF_TAX  X &lt- A
+	       BPF_MISC+BPF_TXA  A &lt- X
 
      The bpf interface provides the following macros to facilitate array ini-
      tializers: BPF_STMT(opcode, operand) and BPF_JUMP(opcode, operand,
@@ -492,6 +494,6 @@ AUTHORS
      mer 1990.	Much of the design is due to Van Jacobson.
 
 BSD			       January 16, 1996 			   BSD
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

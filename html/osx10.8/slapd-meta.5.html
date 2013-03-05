@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The  meta backend to slapd(8) performs basic LDAP proxying with respect..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>slapd-meta - metadirectory backend to slapd</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 SLAPD-META(5)							 SLAPD-META(5)
 
 
@@ -80,7 +82,7 @@ SPECIAL CONFIGURATION DIRECTIVES
        They are:
 
 
-       conn-ttl <time>
+       conn-ttl &lttime&gt
 	      This  directive  causes  a  cached  connection  to be dropped an
 	      recreated after a given ttl, regardless of being idle or not.
 
@@ -97,12 +99,12 @@ SPECIAL CONFIGURATION DIRECTIVES
 	      as default.
 
 
-       dncache-ttl {DISABLED|forever|<ttl>}
+       dncache-ttl {DISABLED|forever|&ltttl&gt}
 	      This directive sets the time-to-live  of	the  DN  cache.   This
 	      caches  the  target  that  holds	a  given DN to speed up target
 	      selection in case multiple targets would result from an uncached
 	      search;  forever means cache never expires; disabled means no DN
-	      caching; otherwise a valid ( > 0 ) ttl is required, in the  for-
+	      caching; otherwise a valid ( &gt 0 ) ttl is required, in the  for-
 	      mat illustrated for the idle-timeout directive.
 
 
@@ -118,14 +120,14 @@ SPECIAL CONFIGURATION DIRECTIVES
 	      success error code is returned.
 
 
-       norefs <NO|yes>
+       norefs &ltNO|yes&gt
 	      If  yes,	do not return search reference responses.  By default,
 	      they are returned unless request is LDAPv2.  If set  before  any
 	      target  specification, it affects all targets, unless overridden
 	      by any per-target directive.
 
 
-       noundeffilter <NO|yes>
+       noundeffilter &ltNO|yes&gt
 	      If yes, return success instead of searching if a filter is unde-
 	      fined or contains undefined portions.  By default, the search is
 	      propagated after replacing undefined  portions  with  (!(object-
@@ -153,7 +155,7 @@ SPECIAL CONFIGURATION DIRECTIVES
 	      as the rootdn are propagated to the targets.
 
 
-       quarantine <interval>,<num>[;<interval>,<num>[...]]
+       quarantine &ltinterval&gt,&ltnum&gt[;&ltinterval&gt,&ltnum&gt[...]]
 	      Turns on quarantine of URIs that returned  LDAP_UNAVAILABLE,  so
 	      that  an	attempt  to  reconnect	only occurs at given intervals
 	      instead of any time a client requests an operation.  The pattern
@@ -195,22 +197,22 @@ TARGET SPECIFICATION
        Target specification starts with a "uri" directive:
 
 
-       uri <protocol>://[<host>]/<naming context> [...]
-	      The <protocol> part can be anything  ldap_initialize(3)  accepts
-	      ({ldap|ldaps|ldapi}  and	variants);  the <host> may be omitted,
-	      defaulting to whatever is set in ldap.conf(5).  The <naming con-
-	      text>  part is mandatory for the first URI, but it must be omit-
+       uri &ltprotocol&gt://[&lthost&gt]/&ltnaming context&gt [...]
+	      The &ltprotocol&gt part can be anything  ldap_initialize(3)  accepts
+	      ({ldap|ldaps|ldapi}  and	variants);  the &lthost&gt may be omitted,
+	      defaulting to whatever is set in ldap.conf(5).  The &ltnaming con-
+	      text&gt  part is mandatory for the first URI, but it must be omit-
 	      ted for subsequent ones, if any.	The naming context  part  must
 	      be within the naming context defined for the backend, e.g.:
 
 	      suffix "dc=foo,dc=com"
 	      uri    "ldap://x.foo.com/dc=x,dc=foo,dc=com"
 
-	      The  <naming  context> part doesn't need to be unique across the
+	      The  &ltnaming  context&gt part doesn't need to be unique across the
 	      targets; it may also match one of the  values  of  the  "suffix"
 	      directive.   Multiple URIs may be defined in a single URI state-
 	      ment.  The additional URIs must be separate arguments  and  must
-	      not  have any <naming context> part.  This causes the underlying
+	      not  have any &ltnaming context&gt part.  This causes the underlying
 	      library to contact the first server of the list  that  responds.
 	      For  example,  if  l1.foo.com  and l2.foo.com are shadows of the
 	      same server, the directive
@@ -224,7 +226,7 @@ TARGET SPECIFICATION
 	      tion attempts occur with respect to the last URI that succeeded.
 
 
-       acl-authcDN <administrative DN for access control purposes>
+       acl-authcDN &ltadministrative DN for access control purposes&gt
 	      DN which is used to query the target server for acl checking, as
 	      in  the  LDAP backend; it is supposed to have read access on the
 	      target server to attributes used on the proxy for acl  checking.
@@ -234,11 +236,11 @@ TARGET SPECIFICATION
 	      mously.
 
 
-       acl-passwd <password>
+       acl-passwd &ltpassword&gt
 	      Password used with the acl-authcDN above.
 
 
-       bind-timeout <microseconds>
+       bind-timeout &ltmicroseconds&gt
 	      This directive defines the timeout, in microseconds,  used  when
 	      polling for response after an asynchronous bind connection.  The
 	      initial call to ldap_result(3) is  performed  with  a  trade-off
@@ -258,7 +260,7 @@ TARGET SPECIFICATION
 	      all targets, unless overridden by any per-target directive.
 
 
-       client-pr {accept-unsolicited|DISABLE|<size>}
+       client-pr {accept-unsolicited|DISABLE|&ltsize&gt}
 	      This feature allows to use RFC 2696 Paged Results  control  when
 	      performing  search  operations with a specific target, irrespec-
 	      tive of the client's request.  When  set	to  a  numeric	value,
@@ -273,29 +275,29 @@ TARGET SPECIFICATION
 	      get directive.
 
 
-       default-target [<target>]
+       default-target [&lttarget&gt]
 	      The  "default-target"  directive	can also be used during target
 	      specification.  With no arguments it marks the current target as
-	      the  default.   The optional number marks target <target> as the
-	      default one, starting from 1.  Target <target> must be  defined.
+	      the  default.   The optional number marks target &lttarget&gt as the
+	      default one, starting from 1.  Target &lttarget&gt must be  defined.
 
 
-       idassert-authzFrom <authz-regexp>
+       idassert-authzFrom &ltauthz-regexp&gt
 	      if  defined,  selects  what  local  identities are authorized to
-	      exploit the identity assertion feature.  The string  <authz-reg-
-	      exp> follows the rules defined for the authzFrom attribute.  See
+	      exploit the identity assertion feature.  The string  &ltauthz-reg-
+	      exp&gt follows the rules defined for the authzFrom attribute.  See
 	      slapd.conf(5), section related to authz-policy, for  details  on
 	      the syntax of this field.
 
 
-       idassert-bind	bindmethod=none|simple|sasl    [binddn=<simple	  DN>]
-	      [credentials=<simple    password>]    [saslmech=<SASL	mech>]
-	      [secprops=<properties>] [realm=<realm>] [authcId=<authentication
-	      ID>]  [authzId=<authorization  ID>]  [authz={native|proxyauthz}]
-	      [mode=<mode>]	[flags=<flags>]     [starttls=no|yes|critical]
-	      [tls_cert=<file>]      [tls_key=<file>]	   [tls_cacert=<file>]
-	      [tls_cacertdir=<path>]	  [tls_reqcert=never|allow|try|demand]
-	      [tls_ciphersuite=<ciphers>]	  [tls_protocol_min=<version>]
+       idassert-bind	bindmethod=none|simple|sasl    [binddn=&ltsimple	  DN&gt]
+	      [credentials=&ltsimple    password&gt]    [saslmech=&ltSASL	mech&gt]
+	      [secprops=&ltproperties&gt] [realm=&ltrealm&gt] [authcId=&ltauthentication
+	      ID&gt]  [authzId=&ltauthorization  ID&gt]  [authz={native|proxyauthz}]
+	      [mode=&ltmode&gt]	[flags=&ltflags&gt]     [starttls=no|yes|critical]
+	      [tls_cert=&ltfile&gt]      [tls_key=&ltfile&gt]	   [tls_cacert=&ltfile&gt]
+	      [tls_cacertdir=&ltpath&gt]	  [tls_reqcert=never|allow|try|demand]
+	      [tls_ciphersuite=&ltciphers&gt]	  [tls_protocol_min=&ltversion&gt]
 	      [tls_crlcheck=none|peer|all]
 	      Allows  to  define  the  parameters of the authentication method
 	      that is internally used by the proxy  to	authorize  connections
@@ -325,14 +327,14 @@ TARGET SPECIFICATION
 
 	      The supported modes are:
 
-	      <mode> := {legacy|anonymous|none|self}
+	      &ltmode&gt := {legacy|anonymous|none|self}
 
-	      If <mode> is not present, and authzId is given, the proxy always
-	      authorizes that identity.  <authorization ID> can be
+	      If &ltmode&gt is not present, and authzId is given, the proxy always
+	      authorizes that identity.  &ltauthorization ID&gt can be
 
-	      u:<user>
+	      u:&ltuser&gt
 
-	      [dn:]<DN>
+	      [dn:]&ltDN&gt
 
 	      The former is supposed to  be  expanded  by  the	remote	server
 	      according to the authz rules; see slapd.conf(5) for details.  In
@@ -347,7 +349,7 @@ TARGET SPECIFICATION
 	      the authcDN or a SASL bind as the authcID, unless restricted  by
 	      idassert-authzFrom   rules   (see  below),  in  which  case  the
 	      operation will fail;  eventually,  it  will  assert  some  other
-	      identity	according  to  <mode>.	Other identity assertion modes
+	      identity	according  to  &ltmode&gt.	Other identity assertion modes
 	      are anonymous and self, which respectively mean that  the  empty
 	      or  the  client's  identity  will be asserted; none, which means
 	      that no proxyAuthz control will be used, so the authcDN  or  the
@@ -387,25 +389,25 @@ TARGET SPECIFICATION
 	      acl-bind is not.	See acl-bind for details.
 
 
-       idle-timeout <time>
+       idle-timeout &lttime&gt
 	      This  directive  causes  a  cached  connection  to be dropped an
 	      recreated after it has been idle for the	specified  time.   The
 	      value can be specified as
 
-	      [<d>d][<h>h][<m>m][<s>[s]]
+	      [&ltd&gtd][&lth&gth][&ltm&gtm][&lts&gt[s]]
 
-	      where  <d>,  <h>,  <m> and <s> are respectively treated as days,
+	      where  &ltd&gt,  &lth&gt,  &ltm&gt and &lts&gt are respectively treated as days,
 	      hours,  minutes  and  seconds.   If  set	 before   any	target
 	      specification,  it affects all targets, unless overridden by any
 	      per-target directive.
 
 
-       map {attribute|objectclass} [<local name>|*] {<foreign name>|*}
+       map {attribute|objectclass} [&ltlocal name&gt|*] {&ltforeign name&gt|*}
 	      This maps object classes and attributes as in the LDAP  backend.
 	      See slapd-ldap(5).
 
 
-       network-timeout <time>
+       network-timeout &lttime&gt
 	      Sets  the  network  timeout  value after which poll(2)/select(2)
 	      following a connect(2) returns in  case  of  no  activity.   The
 	      value   is   in	seconds,  and  it  can	be  specified  as  for
@@ -414,7 +416,7 @@ TARGET SPECIFICATION
 	      directive.
 
 
-       nretries {forever|never|<nretries>}
+       nretries {forever|never|&ltnretries&gt}
 	      This directive defines how many times a bind should  be  retried
 	      in case of temporary failure in contacting a target.  If defined
 	      before any target specification, it applies to all  targets  (by
@@ -426,18 +428,18 @@ TARGET SPECIFICATION
 	      The rewrite options are described in the "REWRITING" section.
 
 
-       subtree-{exclude|include} <rule>
+       subtree-{exclude|include} &ltrule&gt
 	      This directive allows to indicate  what  subtrees  are  actually
 	      served by a target.  The syntax of the supported rules is
 
-	      <rule>: [dn[.<style>]:]<pattern>
+	      &ltrule&gt: [dn[.&ltstyle&gt]:]&ltpattern&gt
 
-	      <style>: subtree|children|regex
+	      &ltstyle&gt: subtree|children|regex
 
-	      When <style> is either subtree or children the <pattern> is a DN
+	      When &ltstyle&gt is either subtree or children the &ltpattern&gt is a DN
 	      that must be within the naming context  served  by  the  target.
-	      When  <style>  is regex the <pattern> is a regex(5) pattern.  If
-	      the dn.<style>: prefix is  omitted,  dn.subtree:	is  implicitly
+	      When  &ltstyle&gt  is regex the &ltpattern&gt is a regex(5) pattern.  If
+	      the dn.&ltstyle&gt: prefix is  omitted,  dn.subtree:	is  implicitly
 	      assumed for backward compatibility.
 
 	      In  the  subtree-exclude form if the request DN matches at least
@@ -465,7 +467,7 @@ TARGET SPECIFICATION
 	      mutually exclusive.
 
 
-       suffixmassage <virtual naming context> <real naming context>
+       suffixmassage &ltvirtual naming context&gt &ltreal naming context&gt
 	      All  the directives starting with "rewrite" refer to the rewrite
 	      engine that  has	been  added  to  slapd.   The  "suffixmassage"
 	      directive  was  introduced  in  the LDAP backend to allow suffix
@@ -485,11 +487,11 @@ TARGET SPECIFICATION
 	      unless overridden by any per-target directive.
 
 
-       timeout [<op>=]<val> [...]
+       timeout [&ltop&gt=]&ltval&gt [...]
 	      This directive allows to set per-operation timeouts.  Operations
 	      can be
 
-	      <op> ::= bind, add, delete, modrdn, modify, compare, search
+	      &ltop&gt ::= bind, add, delete, modrdn, modify, compare, search
 
 	      The overall duration  of	the  search  operation	is  controlled
 	      either  by  the  timelimit  parameter or by server-side enforced
@@ -618,19 +620,19 @@ ACLs
        criteria  that the server supports.  This has been achieved with regard
        to all the criteria supported by slapd except  a  special  subtle  case
        (please	 file	an   ITS   if	you   can   find   other   exceptions:
-       <http://www.openldap.org/its/>).  The rule
+       &lthttp://www.openldap.org/its/&gt).  The rule
 
-	      access to dn="<dn>" attrs=<attr>
-		     by dnattr=<dnattr> read
+	      access to dn="&ltdn&gt" attrs=&ltattr&gt
+		     by dnattr=&ltdnattr&gt read
 		     by * none
 
-       cannot be matched iff the attribute that is being requested, <attr>, is
-       NOT  <dnattr>,  and the attribute that determines membership, <dnattr>,
+       cannot be matched iff the attribute that is being requested, &ltattr&gt, is
+       NOT  &ltdnattr&gt,  and the attribute that determines membership, &ltdnattr&gt,
        has not been requested (e.g. in a search)
 
        In fact this ACL is resolved by slapd using the	portion  of  entry  it
        retrieved   from  the  remote  server  without  requiring  any  further
-       intervention of the backend, so, if the <dnattr> attribute has not been
+       intervention of the backend, so, if the &ltdnattr&gt attribute has not been
        fetched,  the  match  cannot  be  assessed because the attribute is not
        present, not because no value matches the requirement!
 
@@ -722,37 +724,37 @@ Substitution Pattern Syntax:
        a  `%' followed by a `{' invokes an advanced substitution.  The pattern
        is:
 
-	      `%' `{' [ <op> ] <name> `(' <substitution> `)' `}'
+	      `%' `{' [ &ltop&gt ] &ltname&gt `(' &ltsubstitution&gt `)' `}'
 
-       where <name> must be a legal name for the map, i.e.
+       where &ltname&gt must be a legal name for the map, i.e.
 
-	      <name> ::= [a-z][a-z0-9]* (case insensitive)
-	      <op> ::= `>' `|' `&' `&&' `*' `**' `$'
+	      &ltname&gt ::= [a-z][a-z0-9]* (case insensitive)
+	      &ltop&gt ::= `&gt' `|' `&' `&&' `*' `**' `$'
 
-       and <substitution> must be a legal substitution pattern, with no limits
+       and &ltsubstitution&gt must be a legal substitution pattern, with no limits
        on the nesting level.
 
        The operators are:
 
-       >      sub  context invocation; <name> must be a legal, already defined
+       &gt      sub  context invocation; &ltname&gt must be a legal, already defined
 	      rewrite context name
 
-       |      external command invocation;  <name>  must  refer  to  a	legal,
+       |      external command invocation;  &ltname&gt  must  refer  to  a	legal,
 	      already defined command name (NOT IMPL.)
 
-       &      variable	assignment;  <name>  defines a variable in the running
+       &      variable	assignment;  &ltname&gt  defines a variable in the running
 	      operation structure which can be dereferenced later; operator  &
 	      assigns  a  variable  in	the rewrite context scope; operator &&
 	      assigns a variable that scopes  the  entire  session,  e.g.  its
 	      value can be dereferenced later by other rewrite contexts
 
-       *      variable	dereferencing; <name> must refer to a variable that is
+       *      variable	dereferencing; &ltname&gt must refer to a variable that is
 	      defined and assigned  for  the  running  operation;  operator  *
 	      dereferences a variable scoping the rewrite context; operator **
 	      dereferences a variable scoping  the  whole  session,  e.g.  the
 	      value is passed across rewrite contexts
 
-       $      parameter  dereferencing;  <name>  must  refer  to  an  existing
+       $      parameter  dereferencing;  &ltname&gt  must  refer  to  an  existing
 	      parameter; the idea is to make some run-time parameters  set  by
 	      the  system  available to the rewrite engine, as the client host
 	      name, the bind DN if any,  constant  parameters  initialized  at
@@ -775,10 +777,10 @@ Rewrite context:
        errors occur.
 
        Each basic server operation is associated to a  rewrite	context;  they
-       are  divided  in two main groups: client -> server and server -> client
+       are  divided  in two main groups: client -&gt server and server -&gt client
        rewriting.
 
-       client -> server:
+       client -&gt server:
 
 	      (default) 	   if defined and no specific context
 				   is available
@@ -797,7 +799,7 @@ Rewrite context:
 	      deleteDN		   delete
 	      exopPasswdDN	   password modify extended operation DN if proxy
 
-       server -> client:
+       server -&gt client:
 
 	      searchResult	   search (only if defined; no default;
 				   acts on DN and DN-syntax attributes
@@ -812,29 +814,29 @@ Basic configuration syntax
 	      rewriting  takes	place  (an  easy way to stop rewriting without
 	      altering too much the configuration file).
 
-       rewriteContext <context name> [ alias <aliased context name> ]
-	      <Context name> is the name that identifies the context, i.e. the
+       rewriteContext &ltcontext name&gt [ alias &ltaliased context name&gt ]
+	      &ltContext name&gt is the name that identifies the context, i.e. the
 	      name  used  by  the  application to refer to the set of rules it
 	      contains.  It is used also to reference sub contexts  in	string
 	      rewriting.   A  context may alias another one.  In this case the
 	      alias context contains no rule, and any  reference  to  it  will
 	      result in accessing the aliased one.
 
-       rewriteRule <regex match pattern> <substitution pattern> [ <flags> ]
+       rewriteRule &ltregex match pattern&gt &ltsubstitution pattern&gt [ &ltflags&gt ]
 	      Determines  how  a  string  can  be  rewritten  if  a pattern is
 	      matched.	Examples are reported below.
 
 Additional configuration syntax:
-       rewriteMap <map type> <map name> [ <map attrs> ]
+       rewriteMap &ltmap type&gt &ltmap name&gt [ &ltmap attrs&gt ]
 	      Allows to define a map that transforms substring rewriting  into
 	      something  else.	 The map is referenced inside the substitution
 	      pattern of a rule.
 
-       rewriteParam <param name> <param value>
+       rewriteParam &ltparam name&gt &ltparam value&gt
 	      Sets a value with global scope, that can be dereferenced by  the
 	      command `%{$paramName}'.
 
-       rewriteMaxPasses <number of passes> [<number of passes per rule>]
+       rewriteMaxPasses &ltnumber of passes&gt [&ltnumber of passes per rule&gt]
 	      Sets  the  maximum  number of total rewriting passes that can be
 	      performed in a single rewrite operation  (to  avoid  loops).   A
 	      safe  default  is  set  to 100; note that reaching this limit is
@@ -852,12 +854,12 @@ Configuration examples:
        rewriteEngine on
        # all dataflow from client to server referring to DNs
        rewriteContext default
-       rewriteRule "(.*)<virtualnamingcontext>$" "%1<realnamingcontext>" ":"
+       rewriteRule "(.*)&ltvirtualnamingcontext&gt$" "%1&ltrealnamingcontext&gt" ":"
        # empty filter rule
        rewriteContext searchFilter
        # all dataflow from server to client
        rewriteContext searchResult
-       rewriteRule "(.*)<realnamingcontext>$" "%1<virtualnamingcontext>" ":"
+       rewriteRule "(.*)&ltrealnamingcontext&gt$" "%1&ltvirtualnamingcontext&gt" ":"
        rewriteContext searchAttrDN alias searchResult
        rewriteContext matchedDN alias searchResult
 
@@ -887,7 +889,7 @@ Configuration examples:
        # context; rules are appended to the existing ones.
        # anything that gets here is piped into rule `addBlanks'
        rewriteContext  default
-       rewriteRule     ".*" "%{>addBlanks(%0)}" ":"
+       rewriteRule     ".*" "%{&gtaddBlanks(%0)}" ":"
 
        # Rewrite the search base according to `default' rules.
        rewriteContext  searchBase alias default
@@ -896,7 +898,7 @@ Configuration examples:
        # `dc=home,dc=net' naming context, with spaces eaten.
        rewriteContext  searchResult
        rewriteRule     "(.*[^ ]?)[ ]?dc=OpenLDAP,[ ]?dc=org"
-		       "%{>eatBlanks(%1)}dc=home,dc=net"    ":"
+		       "%{&gteatBlanks(%1)}dc=home,dc=net"    ":"
 
        # Bind with email instead of full DN: we first need
        # an ldap map that turns attributes into a DN (the
@@ -927,22 +929,22 @@ Configuration examples:
        # if an appropriate DN is bound.
        # To do this, in the first rule the bound DN is
        # dereferenced, while the filter is decomposed in a
-       # prefix, in the value of the `uid=<arg>' AVA, and
-       # in a suffix. A tag `<>' is appended to the DN.
+       # prefix, in the value of the `uid=&ltarg&gt' AVA, and
+       # in a suffix. A tag `&lt&gt' is appended to the DN.
        # If the DN refers to an entry in the `ou=admin' subtree,
-       # the filter is rewritten OR-ing the `uid=<arg>' with
-       # `cn=<arg>'; otherwise it is left as is. This could be
+       # the filter is rewritten OR-ing the `uid=&ltarg&gt' with
+       # `cn=&ltarg&gt'; otherwise it is left as is. This could be
        # useful, for instance, to allow apache's auth_ldap-1.4
        # module to authenticate users with both `uid' and
        # `cn', but only if the request comes from a possible
        # `cn=Web auth,ou=admin,dc=home,dc=net' user.
        rewriteContext searchFilter
        rewriteRule "(.*\\()uid=([a-z0-9_]+)(\\).*)"
-	 "%{**binddn}<>%{&prefix(%1)}%{&arg(%2)}%{&suffix(%3)}"
+	 "%{**binddn}&lt&gt%{&prefix(%1)}%{&arg(%2)}%{&suffix(%3)}"
 	 ":I"
        rewriteRule "[^,]+,ou=admin,dc=home,dc=net"
 	 "%{*prefix}|(uid=%{*arg})(cn=%{*arg})%{*suffix}" ":@I"
-       rewriteRule ".*<>" "%{*prefix}uid=%{*arg}%{*suffix}" ":"
+       rewriteRule ".*&lt&gt" "%{*prefix}uid=%{*arg}%{*suffix}" ":"
 
        # This example shows how to strip unwanted DN-valued
        # attribute values from a search result; the first rule
@@ -990,11 +992,11 @@ DEPRECATED STATEMENTS
        used.
 
 
-       pseudorootdn <substitute DN in case of rootdn bind>
+       pseudorootdn &ltsubstitute DN in case of rootdn bind&gt
 	      Use idassert-bind instead.
 
 
-       pseudorootpw <substitute password in case of rootdn bind>
+       pseudorootpw &ltsubstitute password in case of rootdn bind&gt
 	      Use idassert-bind instead.
 
 
@@ -1014,6 +1016,6 @@ AUTHOR
 
 
 OpenLDAP 2.4.28 		  2011/11/24			 SLAPD-META(5)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module provides an interface that allows filters to be applied to..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBM_Filter -- Filter DBM keys/values</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBM_Filter(3pm)        Perl Programmers Reference Guide        DBM_Filter(3pm)
 
 
@@ -21,17 +23,17 @@ SYNOPSIS
 
 	   $db = tie %hash, ...
 
-	   $db->Filter_Push(Fetch => sub {...},
-			    Store => sub {...});
+	   $db-&gtFilter_Push(Fetch =&gt sub {...},
+			    Store =&gt sub {...});
 
-	   $db->Filter_Push('my_filter1');
-	   $db->Filter_Push('my_filter2', params...);
+	   $db-&gtFilter_Push('my_filter1');
+	   $db-&gtFilter_Push('my_filter2', params...);
 
-	   $db->Filter_Key_Push(...) ;
-	   $db->Filter_Value_Push(...) ;
+	   $db-&gtFilter_Key_Push(...) ;
+	   $db-&gtFilter_Value_Push(...) ;
 
-	   $db->Filter_Pop();
-	   $db->Filtered();
+	   $db-&gtFilter_Pop();
+	   $db-&gtFiltered();
 
 	   package DBM_Filter::my_filter1;
 
@@ -97,9 +99,9 @@ METHODS
        This module will arrange for the following methods to be available via
        the object returned from the "tie" call.
 
-   $db->Filter_Push()
-   $db->Filter_Key_Push()
-   $db->Filter_Value_Push()
+   $db-&gtFilter_Push()
+   $db-&gtFilter_Key_Push()
+   $db-&gtFilter_Value_Push()
        Add a filter to filter stack for the database, $db. The three formats
        vary only in whether they apply to the DBM key, the DBM value or both.
 
@@ -112,11 +114,11 @@ METHODS
        Filter_Value_Push
 	    The filter is applied to the value only.
 
-   $db->Filter_Pop()
+   $db-&gtFilter_Pop()
        Removes the last filter that was applied to the DBM file associated
        with $db, if present.
 
-   $db->Filtered()
+   $db-&gtFiltered()
        Returns TRUE if there are any filters applied to the DBM associated
        with $db.  Otherwise returns FALSE.
 
@@ -129,8 +131,8 @@ Writing a Filter
        Filter_*_Push methods expects to receive exactly two parameters.
 
 	   my $db = tie %hash, 'SDBM_File', ...
-	   $db->Filter_Push( Store => sub { },
-			     Fetch => sub { });
+	   $db-&gtFilter_Push( Store =&gt sub { },
+			     Fetch =&gt sub { });
 
        The code reference associated with "Store" will be called before any
        key/value is written to the database and the code reference associated
@@ -142,8 +144,8 @@ Writing a Filter
        removes the trailing NULL when they are read from the DBM file
 
 	   my $db = tie %hash, 'SDBM_File', ...
-	   $db->Filter_Push( Store => sub { $_ .= "\x00" ; },
-			     Fetch => sub { s/\x00$// ;    });
+	   $db-&gtFilter_Push( Store =&gt sub { $_ .= "\x00" ; },
+			     Fetch =&gt sub { s/\x00$// ;    });
 
        Points to note:
 
@@ -155,7 +157,7 @@ Writing a Filter
 
        The usage is for a canned filter is:
 
-	   $db->Filter_Push("name", params)
+	   $db-&gtFilter_Push("name", params)
 
        where
 
@@ -214,8 +216,8 @@ Writing a Filter
 
 	       ...
 	       return {
-		   Store   => sub { $_ = $encoding->encode($_) },
-		   Fetch   => sub { $_ = $encoding->decode($_) }
+		   Store   =&gt sub { $_ = $encoding-&gtencode($_) },
+		   Fetch   =&gt sub { $_ = $encoding-&gtdecode($_) }
 		   } ;
 	   }
 
@@ -305,20 +307,20 @@ EXAMPLE
 
 	   my $db = tie %hash, 'SDBM_File', ...
 
-	   $db->Filter_Key_Push('int32') ;
+	   $db-&gtFilter_Key_Push('int32') ;
 
-	   $db->Filter_Value_Push('utf8');
-	   $db->Filter_Value_Push('null');
+	   $db-&gtFilter_Value_Push('utf8');
+	   $db-&gtFilter_Value_Push('null');
 
 SEE ALSO
-       <DB_File>,  GDBM_File, NDBM_File, ODBM_File, SDBM_File, perldbmfilter
+       &ltDB_File&gt,  GDBM_File, NDBM_File, ODBM_File, SDBM_File, perldbmfilter
 
 AUTHOR
-       Paul Marquess <pmqs@cpan.org>
+       Paul Marquess &ltpmqs@cpan.org&gt
 
 
 
 perl v5.10.1			  2009-02-12		       DBM_Filter(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Manual::Intro - Introduction to DBIx::Class</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::Manual::IUser(Contributed Perl DocumDBIx::Class::Manual::Intro(3)
 
 
@@ -97,7 +99,7 @@ SETTING UP DBIx::Class
        which we will define later, using the load_namespaces() method:
 
 	 # load My::Schema::Result::* and their resultset classes
-	 __PACKAGE__->load_namespaces();
+	 __PACKAGE__-&gtload_namespaces();
 
        By default this loads all the Result (Row) classes in the
        My::Schema::Result:: namespace, and also any resultset classes in the
@@ -119,8 +121,8 @@ SETTING UP DBIx::Class
        method, and provide component configuration if required. For example,
        if you want automatic row ordering:
 
-	 __PACKAGE__->load_components(qw/ Ordered /);
-	 __PACKAGE__->position_column('rank');
+	 __PACKAGE__-&gtload_components(qw/ Ordered /);
+	 __PACKAGE__-&gtposition_column('rank');
 
        Ordered will refer to a field called 'position' unless otherwise
        directed.  Here you are defining the ordering field to be named 'rank'.
@@ -130,44 +132,44 @@ SETTING UP DBIx::Class
 
        Set the table for your class:
 
-	 __PACKAGE__->table('album');
+	 __PACKAGE__-&gttable('album');
 
        Add columns to your class:
 
-	 __PACKAGE__->add_columns(qw/ albumid artist title rank /);
+	 __PACKAGE__-&gtadd_columns(qw/ albumid artist title rank /);
 
        Each column can also be set up with its own accessor, data_type and
        other pieces of information that it may be useful to have -- just pass
        "add_columns" a hash:
 
-	 __PACKAGE__->add_columns(albumid =>
-				   { accessor  => 'album',
-				     data_type => 'integer',
-				     size      => 16,
-				     is_nullable => 0,
-				     is_auto_increment => 1,
-				     default_value => '',
+	 __PACKAGE__-&gtadd_columns(albumid =&gt
+				   { accessor  =&gt 'album',
+				     data_type =&gt 'integer',
+				     size      =&gt 16,
+				     is_nullable =&gt 0,
+				     is_auto_increment =&gt 1,
+				     default_value =&gt '',
 				   },
-				 artist =>
-				   { data_type => 'integer',
-				     size      => 16,
-				     is_nullable => 0,
-				     is_auto_increment => 0,
-				     default_value => '',
+				 artist =&gt
+				   { data_type =&gt 'integer',
+				     size      =&gt 16,
+				     is_nullable =&gt 0,
+				     is_auto_increment =&gt 0,
+				     default_value =&gt '',
 				   },
-				 title	=>
-				   { data_type => 'varchar',
-				     size      => 256,
-				     is_nullable => 0,
-				     is_auto_increment => 0,
-				     default_value => '',
+				 title	=&gt
+				   { data_type =&gt 'varchar',
+				     size      =&gt 256,
+				     is_nullable =&gt 0,
+				     is_auto_increment =&gt 0,
+				     default_value =&gt '',
 				   },
-				 rank =>
-				   { data_type => 'integer',
-				     size      => 16,
-				     is_nullable => 0,
-				     is_auto_increment => 0,
-				     default_value => '',
+				 rank =&gt
+				   { data_type =&gt 'integer',
+				     size      =&gt 16,
+				     is_nullable =&gt 0,
+				     is_auto_increment =&gt 0,
+				     default_value =&gt '',
 				   }
 				);
 
@@ -185,11 +187,11 @@ SETTING UP DBIx::Class
 
        Define a primary key for your class:
 
-	 __PACKAGE__->set_primary_key('albumid');
+	 __PACKAGE__-&gtset_primary_key('albumid');
 
        If you have a multi-column primary key, just pass a list instead:
 
-	 __PACKAGE__->set_primary_key( qw/ albumid artistid / );
+	 __PACKAGE__-&gtset_primary_key( qw/ albumid artistid / );
 
        Define this class' relationships with other classes using either
        "belongs_to" to describe a column which contains an ID of another
@@ -197,7 +199,7 @@ SETTING UP DBIx::Class
        that contain this Table's foreign key:
 
 	 # in My::Schema::Result::Artist
-	 __PACKAGE__->has_many('albums', 'My::Schema::Result::Album', 'artist');
+	 __PACKAGE__-&gthas_many('albums', 'My::Schema::Result::Album', 'artist');
 
        See DBIx::Class::Relationship for more information about the various
        types of available relationships and how you can design your own.
@@ -225,7 +227,7 @@ SETTING UP DBIx::Class
        Catalyst::Model::DBIC::Schema:
 
 	   $ script/myapp_create.pl model MyDB DBIC::Schema MyDB::Schema \
-	       create=static moniker_map='{ foo => "FOO" }' dbi:SQLite:./myapp.db \
+	       create=static moniker_map='{ foo =&gt "FOO" }' dbi:SQLite:./myapp.db \
 	       on_connect_do='PRAGMA foreign_keys=ON' quote_char='"'
 
        See Catalyst::Helper::Model::DBIC::Schema for more information on this
@@ -243,12 +245,12 @@ SETTING UP DBIx::Class
 
        The arguments are the same as for "connect" in DBI:
 
-	 my $schema = My::Schema->connect('dbi:SQLite:/home/me/myapp/my.db');
+	 my $schema = My::Schema-&gtconnect('dbi:SQLite:/home/me/myapp/my.db');
 
        You can create as many different schema instances as you need. So if
        you have a second database you want to access:
 
-	 my $other_schema = My::Schema->connect( $dsn, $user, $password, $attrs );
+	 my $other_schema = My::Schema-&gtconnect( $dsn, $user, $password, $attrs );
 
        Note that DBIx::Class::Schema does not cache connections for you. If
        you use multiple connections, you need to do this manually.
@@ -256,12 +258,12 @@ SETTING UP DBIx::Class
        To execute some SQL statements on every connect you can add them as an
        option in a special fifth argument to connect:
 
-	 my $another_schema = My::Schema->connect(
+	 my $another_schema = My::Schema-&gtconnect(
 	     $dsn,
 	     $user,
 	     $password,
 	     $attrs,
-	     { on_connect_do => \@on_connect_sql_statments }
+	     { on_connect_do =&gt \@on_connect_sql_statments }
 	 );
 
        See "connect_info" in DBIx::Class::Storage::DBI for more information
@@ -272,8 +274,8 @@ SETTING UP DBIx::Class
        The supplied coderef is expected to return a single connected database
        handle (e.g. a DBI $dbh)
 
-	 my $schema = My::Schema->connect (
-	   sub { Some::DBH::Factory->connect },
+	 my $schema = My::Schema-&gtconnect (
+	   sub { Some::DBH::Factory-&gtconnect },
 	   \%extra_attrs,
 	 );
 
@@ -288,29 +290,29 @@ SETTING UP DBIx::Class
 
        The simplest way to get a record is by primary key:
 
-	 my $album = $schema->resultset('Album')->find(14);
+	 my $album = $schema-&gtresultset('Album')-&gtfind(14);
 
        This will run a "SELECT" with "albumid = 14" in the "WHERE" clause, and
        return an instance of "My::Schema::Result::Album" that represents this
        row.  Once you have that row, you can access and update columns:
 
-	 $album->title('Physical Graffiti');
-	 my $title = $album->title; # $title holds 'Physical Graffiti'
+	 $album-&gttitle('Physical Graffiti');
+	 my $title = $album-&gttitle; # $title holds 'Physical Graffiti'
 
        If you prefer, you can use the "set_column" and "get_column" accessors
        instead:
 
-	 $album->set_column('title', 'Presence');
-	 $title = $album->get_column('title');
+	 $album-&gtset_column('title', 'Presence');
+	 $title = $album-&gtget_column('title');
 
        Just like with Class::DBI, you call "update" to save your changes to
        the database (by executing the actual "UPDATE" statement):
 
-	 $album->update;
+	 $album-&gtupdate;
 
        If needed, you can throw away your local changes:
 
-	 $album->discard_changes if $album->is_changed;
+	 $album-&gtdiscard_changes if $album-&gtis_changed;
 
        As you can see, "is_changed" allows you to check if there are local
        changes to your object.
@@ -320,88 +322,88 @@ SETTING UP DBIx::Class
        method.	It returns an instance of "My::Schema::Result::Album" that can
        be used to access the data in the new record:
 
-	 my $new_album = $schema->resultset('Album')->create({
-	   title  => 'Wish You Were Here',
-	   artist => 'Pink Floyd'
+	 my $new_album = $schema-&gtresultset('Album')-&gtcreate({
+	   title  =&gt 'Wish You Were Here',
+	   artist =&gt 'Pink Floyd'
 	 });
 
        Now you can add data to the new record:
 
-	 $new_album->label('Capitol');
-	 $new_album->year('1975');
-	 $new_album->update;
+	 $new_album-&gtlabel('Capitol');
+	 $new_album-&gtyear('1975');
+	 $new_album-&gtupdate;
 
        Likewise, you can remove it from the database:
 
-	 $new_album->delete;
+	 $new_album-&gtdelete;
 
        You can also remove records without retrieving them first, by calling
        delete directly on a ResultSet object.
 
 	 # Delete all of Falco's albums
-	 $schema->resultset('Album')->search({ artist => 'Falco' })->delete;
+	 $schema-&gtresultset('Album')-&gtsearch({ artist =&gt 'Falco' })-&gtdelete;
 
    Finding your objects
        DBIx::Class provides a few different ways to retrieve data from your
        database.  Here's one example:
 
 	 # Find all of Santana's albums
-	 my $rs = $schema->resultset('Album')->search({ artist => 'Santana' });
+	 my $rs = $schema-&gtresultset('Album')-&gtsearch({ artist =&gt 'Santana' });
 
        In scalar context, as above, "search" returns a DBIx::Class::ResultSet
        object.	It can be used to peek at the first album returned by the
        database:
 
-	 my $album = $rs->first;
-	 print $album->title;
+	 my $album = $rs-&gtfirst;
+	 print $album-&gttitle;
 
        You can loop over the albums and update each one:
 
-	 while (my $album = $rs->next) {
-	   print $album->artist . ' - ' . $album->title;
-	   $album->year(2001);
-	   $album->update;
+	 while (my $album = $rs-&gtnext) {
+	   print $album-&gtartist . ' - ' . $album-&gttitle;
+	   $album-&gtyear(2001);
+	   $album-&gtupdate;
 	 }
 
        Or, you can update them all at once:
 
-	 $rs->update({ year => 2001 });
+	 $rs-&gtupdate({ year =&gt 2001 });
 
        In list context, the "search" method returns all of the matching rows:
 
 	 # Fetch immediately all of Carlos Santana's albums
-	 my @albums = $schema->resultset('Album')->search(
-	   { artist => 'Carlos Santana' }
+	 my @albums = $schema-&gtresultset('Album')-&gtsearch(
+	   { artist =&gt 'Carlos Santana' }
 	 );
 	 foreach my $album (@albums) {
-	   print $album->artist . ' - ' . $album->title;
+	   print $album-&gtartist . ' - ' . $album-&gttitle;
 	 }
 
        We also provide a handy shortcut for doing a "LIKE" search:
 
 	 # Find albums whose artist starts with 'Jimi'
-	 my $rs = $schema->resultset('Album')->search_like({ artist => 'Jimi%' });
+	 my $rs = $schema-&gtresultset('Album')-&gtsearch_like({ artist =&gt 'Jimi%' });
 
        Or you can provide your own "WHERE" clause:
 
 	 # Find Peter Frampton albums from the year 1986
 	 my $where = 'artist = ? AND year = ?';
 	 my @bind  = ( 'Peter Frampton', 1986 );
-	 my $rs    = $schema->resultset('Album')->search_literal( $where, @bind );
+	 my $rs    = $schema-&gtresultset('Album')-&gtsearch_literal( $where, @bind );
 
        The preferred way to generate complex queries is to provide a
        SQL::Abstract construct to "search":
 
-	 my $rs = $schema->resultset('Album')->search({
-	   artist  => { '!=', 'Janis Joplin' },
-	   year    => { '<' => 1980 },
-	   albumid => { '-in' => [ 1, 14, 15, 65, 43 ] }
+	 my $rs = $schema-&gtresultset('Album')-&gtsearch({
+	   artist  =&gt { '!=', 'Janis Joplin' },
+	   year    =&gt { '&lt' =&gt 1980 },
+	   albumid =&gt { '-in' =&gt [ 1, 14, 15, 65, 43 ] }
 	 });
 
        This results in something like the following "WHERE" clause:
 
 	 WHERE artist != 'Janis Joplin'
-	   AND year < 1980
+	   AND year &lt 1980
 	   AND albumid IN (1, 14, 15, 65, 43)
 
        For more examples of complex queries, see
@@ -410,9 +412,9 @@ SETTING UP DBIx::Class
        The search can also be modified by passing another hash with
        attributes:
 
-	 my @albums = My::Schema->resultset('Album')->search(
-	   { artist => 'Bob Marley' },
-	   { rows => 2, order_by => 'year DESC' }
+	 my @albums = My::Schema-&gtresultset('Album')-&gtsearch(
+	   { artist =&gt 'Bob Marley' },
+	   { rows =&gt 2, order_by =&gt 'year DESC' }
 	 );
 
        @albums then holds the two most recent Bob Marley albums.
@@ -437,7 +439,7 @@ NOTES
        does not have one.  In a pinch one can always declare each row
        identifiable by all its columns:
 
-	__PACKAGE__->set_primary_keys (__PACKAGE__->columns);
+	__PACKAGE__-&gtset_primary_keys (__PACKAGE__-&gtcolumns);
 
        Note that DBIx::Class is smart enough to store a copy of the PK values
        before any row-object changes take place, so even if you change the
@@ -453,17 +455,17 @@ NOTES
        For example, the following would not work (assuming "People" does not
        have a declared PK):
 
-	my $row = $schema->resultset('People')
-			  ->search({ last_name => 'Dantes' })
-			   ->next;
-	$row->update({ children => 2 }); # <-- exception thrown because $row isn't
+	my $row = $schema-&gtresultset('People')
+			  -&gtsearch({ last_name =&gt 'Dantes' })
+			   -&gtnext;
+	$row-&gtupdate({ children =&gt 2 }); # &lt-- exception thrown because $row isn't
 					 # necessarily unique
 
        So instead the following should be done:
 
-	$schema->resultset('People')
-		->search({ last_name => 'Dantes' })
-		 ->update({ children => 2 }); # <-- update's ALL Dantes to have children of 2
+	$schema-&gtresultset('People')
+		-&gtsearch({ last_name =&gt 'Dantes' })
+		 -&gtupdate({ children =&gt 2 }); # &lt-- update's ALL Dantes to have children of 2
 
    Problems on RHEL5/CentOS5
        There used to be an issue with the system perl on Red Hat Enterprise
@@ -477,6 +479,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-05-10	 DBIx::Class::Manual::Intro(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

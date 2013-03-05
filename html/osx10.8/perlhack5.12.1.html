@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document attempts to explain how Perl development takes place, and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlhack - How to hack at the Perl internals</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLHACK(1)	       Perl Programmers Reference Guide 	   PERLHACK(1)
 
 
@@ -243,7 +245,7 @@ DESCRIPTION
 
        To email the bug system administrators:
 
-	       "perlbug-admin" <perlbug-admin@perl.org>
+	       "perlbug-admin" &ltperlbug-admin@perl.org&gt
 
    Submitting patches
        Always submit patches to perl5-porters@perl.org.  If you're patching a
@@ -289,13 +291,13 @@ DESCRIPTION
        configurations.	Both efforts welcome volunteers. In order to get
        involved in smoke testing of the perl itself visit
        http://search.cpan.org/dist/Test-Smoke
-       <http://search.cpan.org/dist/Test-Smoke>. In order to start smoke
+       &lthttp://search.cpan.org/dist/Test-Smoke&gt. In order to start smoke
        testing CPAN modules visit
        http://search.cpan.org/dist/CPANPLUS-YACSmoke/
-       <http://search.cpan.org/dist/CPANPLUS-YACSmoke/> or
-       <http://search.cpan.org/dist/minismokebox/> or
+       &lthttp://search.cpan.org/dist/CPANPLUS-YACSmoke/&gt or
+       &lthttp://search.cpan.org/dist/minismokebox/&gt or
        http://search.cpan.org/dist/CPAN-Reporter/
-       <http://search.cpan.org/dist/CPAN-Reporter/>.
+       &lthttp://search.cpan.org/dist/CPAN-Reporter/&gt.
 
        It's a good idea to read and lurk for a while before chipping in.  That
        way you'll get to see the dynamic of the conversations, learn the
@@ -318,7 +320,7 @@ DESCRIPTION
 	  Gisle Aas's "illustrated perlguts", also known as illguts, has very
 	  helpful pictures:
 
-	  <http://search.cpan.org/dist/illguts/>
+	  &lthttp://search.cpan.org/dist/illguts/&gt
 
        perlxstut and perlxs
 	  A working knowledge of XSUB programming is incredibly useful for
@@ -529,13 +531,13 @@ DESCRIPTION
 	  "runops_standard" function in run.c; more specifically, it's done by
 	  these three innocent looking lines:
 
-	      while ((PL_op = CALL_FPTR(PL_op->op_ppaddr)(aTHX))) {
+	      while ((PL_op = CALL_FPTR(PL_op-&gtop_ppaddr)(aTHX))) {
 		  PERL_ASYNC_CHECK();
 	      }
 
 	  You may be more comfortable with the Perl version of that:
 
-	      PERL_ASYNC_CHECK() while $Perl::op = &{$Perl::op->{function}};
+	      PERL_ASYNC_CHECK() while $Perl::op = &{$Perl::op-&gt{function}};
 
 	  Well, maybe not. Anyway, each op contains a function pointer, which
 	  stipulates the function which will actually carry out the operation.
@@ -650,13 +652,13 @@ DESCRIPTION
 	  and the context and data stacks, as shown by "-Dstv", look like:
 
 	      STACK 0: MAIN
-		CX 0: BLOCK  =>
-		CX 1: EVAL   => AV()  PV("A"\0)
+		CX 0: BLOCK  =&gt
+		CX 1: EVAL   =&gt AV()  PV("A"\0)
 		retop=leave
 	      STACK 1: MAGIC
-		CX 0: SUB    =>
+		CX 0: SUB    =&gt
 		retop=(null)
-		CX 1: EVAL   => *
+		CX 1: EVAL   =&gt *
 	      retop=nextstate
 
 	  The die pops the first "CxEVAL" off the context stack, sets
@@ -670,18 +672,18 @@ DESCRIPTION
 	  top CxEVAL popped:
 
 	      STACK 0: MAIN
-		CX 0: BLOCK  =>
-		CX 1: EVAL   => AV()  PV("A"\0)
+		CX 0: BLOCK  =&gt
+		CX 1: EVAL   =&gt AV()  PV("A"\0)
 		retop=leave
 	      STACK 1: MAGIC
-		CX 0: SUB    =>
+		CX 0: SUB    =&gt
 		retop=(null)
 
 	  The die on line 4 pops the context stack back down to the CxEVAL,
 	  leaving it as:
 
 	      STACK 0: MAIN
-		CX 0: BLOCK  =>
+		CX 0: BLOCK  =&gt
 
 	  As usual, "PL_restartop" is extracted from the "CxEVAL", and a
 	  JMPENV_JUMP(3) done, which pops the C stack back to the docatch:
@@ -1153,7 +1155,7 @@ SOURCE CODE STATIC ANALYSIS
        available from http://www.splint.org/ that should compile on any Unix-
        like platform.
 
-       There are "lint" and <splint> targets in Makefile, but you may have to
+       There are "lint" and &ltsplint&gt targets in Makefile, but you may have to
        diddle with the flags (see above).
 
    Coverity
@@ -1176,7 +1178,7 @@ SOURCE CODE STATIC ANALYSIS
        Download the pmd-bin-X.Y.zip () from the SourceForge site, extract the
        pmd-X.Y.jar from it, and then run that on source code thusly:
 
-	 java -cp pmd-X.Y.jar net.sourceforge.pmd.cpd.CPD --minimum-tokens 100 --files /some/where/src --language c > cpd.txt
+	 java -cp pmd-X.Y.jar net.sourceforge.pmd.cpd.CPD --minimum-tokens 100 --files /some/where/src --language c &gt cpd.txt
 
        You may run into memory limits, in which case you should use the -Xmx
        option:
@@ -1268,8 +1270,8 @@ SOURCE CODE STATIC ANALYSIS
        Some of the functionality of the debugging code can be achieved using
        XS modules.
 
-	   -Dr => use re 'debug'
-	   -Dx => use O 'Debug'
+	   -Dr =&gt use re 'debug'
+	   -Dx =&gt use O 'Debug'
 
    Using a source-level debugger
        If the debugging output of "-D" doesn't help you, it's time to step
@@ -1417,15 +1419,15 @@ SOURCE CODE STATIC ANALYSIS
        similar output to B::Debug.
 
 	   {
-	   13  TYPE = add  ===> 14
+	   13  TYPE = add  ===&gt 14
 	       TARG = 1
 	       FLAGS = (SCALAR,KIDS)
 	       {
-		   TYPE = null	===> (12)
+		   TYPE = null	===&gt (12)
 		     (was rv2sv)
 		   FLAGS = (SCALAR,KIDS)
 		   {
-	   11	       TYPE = gvsv  ===> 12
+	   11	       TYPE = gvsv  ===&gt 12
 		       FLAGS = (SCALAR)
 		       GV = main::b
 		   }
@@ -1490,7 +1492,7 @@ SOURCE CODE STATIC ANALYSIS
 	   MARK++;
 	   sv_setpvn(cat, "", 0);
 	+  patcopy = pat;
-	   while (pat < patend) {
+	   while (pat &lt patend) {
 
        Now if we see a "U" which was at the start of the string, we turn on
        the "UTF8" flag for the output SV, "cat":
@@ -1498,7 +1500,7 @@ SOURCE CODE STATIC ANALYSIS
 	+  if (datumtype == 'U' && pat==patcopy+1)
 	+      SvUTF8_on(cat);
 	   if (datumtype == '#') {
-	       while (pat < patend && *pat != '\n')
+	       while (pat &lt patend && *pat != '\n')
 		   pat++;
 
        Remember that it has to be "patcopy+1" because the first character of
@@ -1533,7 +1535,7 @@ SOURCE CODE STATIC ANALYSIS
        the one from t/test.pl.
 
 	require './test.pl';
-	plan( tests => 159 );
+	plan( tests =&gt 159 );
 
        so instead of this:
 
@@ -1566,7 +1568,7 @@ SOURCE CODE STATIC ANALYSIS
 
        or this:
 
-	plan( tests => 156 );
+	plan( tests =&gt 156 );
 
        We now compile up Perl, and run it through the test suite. Our new
        tests pass, hooray!
@@ -1578,12 +1580,12 @@ SOURCE CODE STATIC ANALYSIS
 
 	=item *
 
-	If the pattern begins with a C<U>, the resulting string will be treated
+	If the pattern begins with a C&ltU&gt, the resulting string will be treated
 	as UTF-8-encoded Unicode. You can force UTF-8 encoding on in a string
-	with an initial C<U0>, and the bytes that follow will be interpreted as
+	with an initial C&ltU0&gt, and the bytes that follow will be interpreted as
 	Unicode characters. If you don't want this to happen, you can begin
-	your pattern with C<C0> (or anything else) to force Perl not to UTF-8
-	encode your string, and then follow this with a C<U*> somewhere in your
+	your pattern with C&ltC0&gt (or anything else) to force Perl not to UTF-8
+	encode your string, and then follow this with a C&ltU*&gt somewhere in your
 	pattern.
 
    Patching a core module
@@ -2775,7 +2777,7 @@ EXTERNAL TOOLS FOR DEBUGGING PERL
 
 	   $ sh Configure -des -Dusedevel -Doptimize='-pg' && make perl.gprof
 	   $ ./perl.gprof someprog # creates gmon.out in current directory
-	   $ gprof ./perl.gprof > out
+	   $ gprof ./perl.gprof &gt out
 	   $ view out
 
    GCC gcov Profiling
@@ -2897,8 +2899,8 @@ EXTERNAL TOOLS FOR DEBUGGING PERL
 
 	   the following two lines:
 
-	     ((XPV*) (())->sv_any )->xpv_pv  // 2pvx\n\
-	     ((XPVIV*) (())->sv_any )->xiv_iv // 2ivx
+	     ((XPV*) (())-&gtsv_any )-&gtxpv_pv  // 2pvx\n\
+	     ((XPVIV*) (())-&gtsv_any )-&gtxiv_iv // 2ivx
 
 	   so now you can do ivx and pvx lookups or you can plug there the
 	   sv_peek "conversion":
@@ -2909,7 +2911,7 @@ EXTERNAL TOOLS FOR DEBUGGING PERL
 	   line, but the last one, should end with \n\
 
 	   Alternatively edit the init file interactively via: 3rd mouse
-	   button -> New Display -> Edit Menu
+	   button -&gt New Display -&gt Edit Menu
 
 	   Note: you can define up to 20 conversion shortcuts in the gdb
 	   section.
@@ -3040,6 +3042,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-07			   PERLHACK(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

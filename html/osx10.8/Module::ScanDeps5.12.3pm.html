@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module scans potential modules used by perl programs, and returns..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Module::ScanDeps - Recursively scan Perl code for dependencies</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Module::ScanDeps(3)   User Contributed Perl Documentation  Module::ScanDeps(3)
 
 
@@ -29,8 +31,8 @@ SYNOPSIS
 
 	   # standard usage
 	   my $hash_ref = scan_deps(
-	       files   => [ 'a.pl', 'b.pl' ],
-	       recurse => 1,
+	       files   =&gt [ 'a.pl', 'b.pl' ],
+	       recurse =&gt 1,
 	   );
 
 	   # shorthand; assume recurse == 1
@@ -38,11 +40,11 @@ SYNOPSIS
 
 	   # App::Packer::Frontend compatible interface
 	   # see App::Packer::Frontend for the structure returned by get_files
-	   my $scan = Module::ScanDeps->new;
-	   $scan->set_file( 'a.pl' );
-	   $scan->set_options( add_modules => [ 'Test::More' ] );
-	   $scan->calculate_info;
-	   my $files = $scan->get_files;
+	   my $scan = Module::ScanDeps-&gtnew;
+	   $scan-&gtset_file( 'a.pl' );
+	   $scan-&gtset_options( add_modules =&gt [ 'Test::More' ] );
+	   $scan-&gtcalculate_info;
+	   my $files = $scan-&gtget_files;
 
 DESCRIPTION
        This module scans potential modules used by perl programs, and returns
@@ -51,11 +53,11 @@ DESCRIPTION
        structure:
 
 	   {
-	       file    => '/usr/local/lib/perl5/5.8.0/Test/More.pm',
-	       key     => 'Test/More.pm',
-	       type    => 'module',    # or 'autoload', 'data', 'shared'
-	       used_by => [ 'Test/Simple.pm', ... ],
-	       uses    => [ 'Test/Other.pm', ... ],
+	       file    =&gt '/usr/local/lib/perl5/5.8.0/Test/More.pm',
+	       key     =&gt 'Test/More.pm',
+	       type    =&gt 'module',    # or 'autoload', 'data', 'shared'
+	       used_by =&gt [ 'Test/Simple.pm', ... ],
+	       uses    =&gt [ 'Test/Other.pm', ... ],
 	   }
 
        One function, "scan_deps", is exported by default.  Other functions
@@ -67,7 +69,7 @@ DESCRIPTION
 
 	   use Module::ScanDeps;
 	   ...
-	   my $packer = App::Packer->new( frontend => 'Module::ScanDeps' );
+	   my $packer = App::Packer-&gtnew( frontend =&gt 'Module::ScanDeps' );
 	   ...
 
        Please see App::Packer::Frontend for detailed explanation on the
@@ -75,11 +77,11 @@ DESCRIPTION
 
    scan_deps
 	   $rv_ref = scan_deps(
-	       files	  => \@files,	  recurse => $recurse,
-	       rv	  => \%rv,	  skip	  => \%skip,
-	       compile	  => $compile,	  execute => $execute,
+	       files	  =&gt \@files,	  recurse =&gt $recurse,
+	       rv	  =&gt \%rv,	  skip	  =&gt \%skip,
+	       compile	  =&gt $compile,	  execute =&gt $execute,
 	   );
-	   $rv_ref = scan_deps(@files); # shorthand, with recurse => 1
+	   $rv_ref = scan_deps(@files); # shorthand, with recurse =&gt 1
 
        This function scans each file in @files, registering their dependencies
        into %rv, and returns a reference to the updated %rv.  The meaning of
@@ -135,7 +137,7 @@ DESCRIPTION
        or "undef".
 
    add_deps
-	   $rv_ref = add_deps( rv => \%rv, modules => \@modules );
+	   $rv_ref = add_deps( rv =&gt \%rv, modules =&gt \@modules );
 	   $rv_ref = add_deps( @modules ); # shorthand, without rv
 
        Resolves a list of module names to its actual on-disk location, by
@@ -197,36 +199,36 @@ SEE ALSO
        documentations on CPAN for further information.
 
 AUTHORS
-       Audrey Tang <cpan@audreyt.org>
+       Audrey Tang &ltcpan@audreyt.org&gt
 
-       To a lesser degree: Steffen Mueller <smueller@cpan.org>
+       To a lesser degree: Steffen Mueller &ltsmueller@cpan.org&gt
 
        Parts of heuristics were deduced from:
 
-       o   PerlApp by ActiveState Tools Corp <http://www.activestate.com/>
+       o   PerlApp by ActiveState Tools Corp &lthttp://www.activestate.com/&gt
 
-       o   Perl2Exe by IndigoStar, Inc <http://www.indigostar.com/>
+       o   Perl2Exe by IndigoStar, Inc &lthttp://www.indigostar.com/&gt
 
        The scan_deps_runtime function is contributed by Edward S. Peschko.
 
-       <http://par.perl.org/> is the official website for this module.	You
-       can write to the mailing list at <par@perl.org>, or send an empty mail
-       to <par-subscribe@perl.org> to participate in the discussion.
+       &lthttp://par.perl.org/&gt is the official website for this module.	You
+       can write to the mailing list at &ltpar@perl.org&gt, or send an empty mail
+       to &ltpar-subscribe@perl.org&gt to participate in the discussion.
 
-       Please submit bug reports to <bug-Module-ScanDeps@rt.cpan.org>.
+       Please submit bug reports to &ltbug-Module-ScanDeps@rt.cpan.org&gt.
 
 COPYRIGHT
-       Copyright 2002-2008 by Audrey Tang <cpan@audreyt.org>; 2005-2010 by
-       Steffen Mueller <smueller@cpan.org>.
+       Copyright 2002-2008 by Audrey Tang &ltcpan@audreyt.org&gt; 2005-2010 by
+       Steffen Mueller &ltsmueller@cpan.org&gt.
 
        This program is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
 
-       See <http://www.perl.com/perl/misc/Artistic.html>
+       See &lthttp://www.perl.com/perl/misc/Artistic.html&gt
 
 
 
 perl v5.12.4			  2011-11-02		   Module::ScanDeps(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Requirements..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Mac::AppleEvents::Simple - Simple access to Mac::AppleEvents</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Simple(3)	      User Contributed Perl Documentation	     Simple(3)
 
 
@@ -27,7 +29,7 @@ SYNOPSIS
 	       use Mac::AppleEvents;  # for kAENoReply
 	       $evt = build_event(qw/aevt odoc MACS/, "'----':alis(\@\@)", $alias);
 	       die "There was a problem: $MacError" if $^E;
-	       $evt->send_event(kAENoReply);
+	       $evt-&gtsend_event(kAENoReply);
 	       die "There was a problem: $MacError" if $^E;
 
 DESCRIPTION
@@ -62,21 +64,21 @@ DESCRIPTION
        The building, sending, and disposing is done automatically.  The
        function returns an object containing the parameters.  (Previously, the
        "AEPrint" results of "AEBuildAppleEvent" and "AESend" would be in
-       "$event->{EVENT}" "$event->{REPLY}", but this was wasting way too much
+       "$event-&gt{EVENT}" "$event-&gt{REPLY}", but this was wasting way too much
        memory, as some of these things got big; you can call
-       "AEPrint($event->{REP})" yourself).
+       "AEPrint($event-&gt{REP})" yourself).
 
        Also, the Mac::AppleEvents::Simple method will launch the application
        for you, whereas the Mac::AppleEvents method requires the program to be
        running already (or launched via Mac::Processes or Mac::Apps::Launch).
        Launching works only when the target is an app signature or bundle ID.
 
-       The raw AEDesc forms are in "$event->{EVT}" and "$event->{REP}".  So if
+       The raw AEDesc forms are in "$event-&gt{EVT}" and "$event-&gt{REP}".  So if
        I also "use"'d the Mac::AppleEvents module (or got the symbols via "use
        Mac::AppleEvents::Simple ':all'"), I could extract the direct object
        from the reply like this:
 
-	       $dobj = AEPrint(AEGetParamDesc($event->{REP}, keyDirectObject));
+	       $dobj = AEPrint(AEGetParamDesc($event-&gt{REP}, keyDirectObject));
 
        An easier way to get the direct object data, though, is with the "get"
        method, described below.
@@ -93,10 +95,10 @@ DESCRIPTION
        automatically, and if there is an error and
        $Mac::AppleEvents::Simple::WARN is true, a warning will be sent to
        "STDERR".  You can also check $^E after each call, or check the values
-       of "$event->{ERRNO}" and "$event->{ERROR}".
+       of "$event-&gt{ERRNO}" and "$event-&gt{ERROR}".
 
        If the event reply itself contains a "errn" or "errs" parameter, these
-       will also be placed in "$event->{ERRNO}" and "$event->{ERROR}" and $^E
+       will also be placed in "$event-&gt{ERRNO}" and "$event-&gt{ERROR}" and $^E
        as appropriate.
 
        You may decide to roll your own error catching system, too.  In this
@@ -108,9 +110,9 @@ DESCRIPTION
 
 	       sub my_warn_for_this_app {
 		       my $event = shift;
-		       my $error = AEGetParamDesc($event->{REP}, keyDirectObject);
+		       my $error = AEGetParamDesc($event-&gt{REP}, keyDirectObject);
 		       if ($error) {
-			       my $err = $error->get;
+			       my $err = $error-&gtget;
 			       if ($err =~ /^-\d+$/ && $^W) {
 				       warn "Application error: $err";
 			       }
@@ -126,13 +128,13 @@ FUNCTIONS
 	   TARGET may be a four-character app ID or a hashref containing
 	   ADDRESSTYPE and ADDRESS.  Examples:
 
-		   { typeApplSignature()       => '...' 	   }  # default
-		   { typeTargetID()	       => pack_ppc(...)    }  # Mac OS only
-		   { typeTargetID()	       => pack_eppc(...)   }  # Mac OS only
-		   { typeApplicationURL()      => pack_eppc_x(...) }  # Mac OS X
-		   { typeProcessSerialNumber() => pack_psn(...)    }
-		   { typeKernelProcessID()     => pack_pid(...)    }  # Mac OS X only
-		   { typeBundleID()	       => '...' 	   }  # Mac OS X only
+		   { typeApplSignature()       =&gt '...' 	   }  # default
+		   { typeTargetID()	       =&gt pack_ppc(...)    }  # Mac OS only
+		   { typeTargetID()	       =&gt pack_eppc(...)   }  # Mac OS only
+		   { typeApplicationURL()      =&gt pack_eppc_x(...) }  # Mac OS X
+		   { typeProcessSerialNumber() =&gt pack_psn(...)    }
+		   { typeKernelProcessID()     =&gt pack_pid(...)    }  # Mac OS X only
+		   { typeBundleID()	       =&gt '...' 	   }  # Mac OS X only
 
 	   See the pack functions below for details.
 
@@ -142,15 +144,15 @@ FUNCTIONS
 	   "build_event", and then send it with "send_event" method.  The
 	   parameters are the same as "do_event".
 
-       $EVENT->send_event([GETREPLY, PRIORITY, TIMEOUT]);
+       $EVENT-&gtsend_event([GETREPLY, PRIORITY, TIMEOUT]);
 	   For sending events differently than the defaults, which are
 	   "kAEWaitReply", "kAENormalPriority", and "kNoTimeout", or for re-
 	   sending an event.  The parameters are sticky for a given event, so:
 
-		   $evt->send_event(kAENoReply);
-		   $evt->send_event;  # kAENoReply is still used
+		   $evt-&gtsend_event(kAENoReply);
+		   $evt-&gtsend_event;  # kAENoReply is still used
 
-       $EVENT->handle_event(CLASSID, EVENTID, CODE [, SYS]);
+       $EVENT-&gthandle_event(CLASSID, EVENTID, CODE [, SYS]);
 	   Note: Untested under Mac OS X.  Testing and patches welcome.
 
 	   Sets up an event handler by passing CLASSID and EVENTID of the
@@ -177,7 +179,7 @@ FUNCTIONS
 		   handle_event('CLAS', 'EVNT', \&handler);
 		   sub handler {
 			   my($evt) = @_;
-			   my @data = $evt->get;
+			   my @data = $evt-&gtget;
 			   push @data_out, [$data[0], $data[9]] if $data[0] && $data[9];
 		   }
 
@@ -187,8 +189,8 @@ FUNCTIONS
 			   }
 		   }
 
-       $EVENT->data([KEY])
-       $EVENT->get([KEY])
+       $EVENT-&gtdata([KEY])
+       $EVENT-&gtget([KEY])
        data(DESC[, KEY])
        get(DESC[, KEY])
 	   Similar to "get" and "data" from the Mac::AppleEvents module.  Get
@@ -257,7 +259,7 @@ EXPORT
        export tag.
 
 AUTHOR
-       Chris Nandor <pudge@pobox.com>, http://pudge.net/
+       Chris Nandor &ltpudge@pobox.com&gt, http://pudge.net/
 
        Copyright (c) 1998-2005 Chris Nandor.  All rights reserved.  This
        program is free software; you can redistribute it and/or modify it
@@ -272,6 +274,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2006-07-06			     Simple(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

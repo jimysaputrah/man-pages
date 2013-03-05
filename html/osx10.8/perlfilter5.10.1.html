@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This article is about a little-known feature of Perl called source..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlfilter - Source Filters</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLFILTER(1)	       Perl Programmers Reference Guide 	 PERLFILTER(1)
 
 
@@ -44,7 +46,7 @@ CONCEPTS
        source from a Perl script file on the left into the Perl parser on the
        right. This is how Perl normally operates.
 
-	   file -------> parser
+	   file -------&gt parser
 
        There are two important points to remember:
 
@@ -57,7 +59,7 @@ CONCEPTS
        modifies a source stream before it reaches the parser. A source filter
        changes our diagram like this:
 
-	   file ----> filter ----> parser
+	   file ----&gt filter ----&gt parser
 
        If that doesn't make much sense, consider the analogy of a command
        pipeline. Say you have a shell script stored in the compressed file
@@ -69,13 +71,13 @@ CONCEPTS
        In this case, the data flow from the pipeline can be represented as
        follows:
 
-	   trial.gz ----> gunzip ----> sh
+	   trial.gz ----&gt gunzip ----&gt sh
 
        With source filters, you can store the text of your script compressed
        and use a source filter to uncompress it for Perl's parser:
 
 	    compressed		 gunzip
-	   Perl program ---> source filter ---> parser
+	   Perl program ---&gt source filter ---&gt parser
 
 USING FILTERS
        So how do you use a source filter in a Perl script? Above, I said that
@@ -100,7 +102,7 @@ USING FILTERS
        file. Before the parser processes any of the lines from the file, the
        source stream looks like this:
 
-	   cpp_test ---------> parser
+	   cpp_test ---------&gt parser
 
        Line 1, "use Filter::cpp", includes and installs the "cpp" filter
        module. All source filters work this way. The use statement is compiled
@@ -108,7 +110,7 @@ USING FILTERS
        it attaches the cpp filter to the source stream behind the scenes. Now
        the data flow looks like this:
 
-	   cpp_test ----> cpp filter ----> parser
+	   cpp_test ----&gt cpp filter ----&gt parser
 
        As the parser reads the second and subsequent lines from the source
        stream, it feeds those lines through the "cpp" source filter before
@@ -116,11 +118,11 @@ USING FILTERS
        real C preprocessor. The output from the C preprocessor is then
        inserted back into the source stream by the filter.
 
-			 .-> cpp --.
+			 .-&gt cpp --.
 			 |	   |
 			 |	   |
-			 |	 <-'
-	  cpp_test ----> cpp filter ----> parser
+			 |	 &lt-'
+	  cpp_test ----&gt cpp filter ----&gt parser
 
        The parser then sees the following code:
 
@@ -143,9 +145,9 @@ USING FILTERS
        gets included ("Fred") will not. The source streams look like this
        after line 3 has been parsed and before line 4 is parsed:
 
-	   cpp_test ---> cpp filter ---> parser (INACTIVE)
+	   cpp_test ---&gt cpp filter ---&gt parser (INACTIVE)
 
-	   Fred.pm ----> parser
+	   Fred.pm ----&gt parser
 
        As you can see, a new stream has been created for reading the source
        from "Fred.pm". This stream will remain active until all of "Fred.pm"
@@ -163,13 +165,13 @@ USING FILTERS
        this:
 
 	   use Filter::uudecode; use Filter::uncompress;
-	   M'XL(".H<US4''V9I;F%L')Q;>7/;1I;_>_I3=&E=%:F*I"T?22Q/
-	   M6]9*<IQCO*XFT"0[PL%%'Y+IG?WN^ZYN-$'J.[.JE$,20/?K=_[>
+	   M'XL(".H&ltUS4''V9I;F%L')Q;&gt7/;1I;_&gt_I3=&E=%:F*I"T?22Q/
+	   M6]9*&ltIQCO*XFT"0[PL%%'Y+IG?WN^ZYN-$'J.[.JE$,20/?K=_[&gt
 	   ...
 
        Once the first line has been processed, the flow will look like this:
 
-	   file ---> uudecode ---> uncompress ---> parser
+	   file ---&gt uudecode ---&gt uncompress ---&gt parser
 		      filter	     filter
 
        Data flows through filters in the same order they appear in the source
@@ -281,7 +283,7 @@ WRITING A SOURCE FILTER IN PERL
 	     my ($status);
 
 	     tr/n-za-mN-ZA-M/a-zA-Z/
-		if ($status = filter_read()) > 0;
+		if ($status = filter_read()) &gt 0;
 	     $status;
 	  }
 
@@ -332,11 +334,11 @@ WRITING A SOURCE FILTER IN PERL
 	   die "usage mkrot13 filename\n" unless @ARGV;
 	   my $in = $ARGV[0];
 	   my $out = "$in.tmp";
-	   open(IN, "<$in") or die "Cannot open file $in: $!\n";
-	   open(OUT, ">$out") or die "Cannot open file $out: $!\n";
+	   open(IN, "&lt$in") or die "Cannot open file $in: $!\n";
+	   open(OUT, "&gt$out") or die "Cannot open file $out: $!\n";
 
 	   print OUT "use Rot13;\n";
-	   while (<IN>) {
+	   while (&ltIN&gt) {
 	      tr/a-zA-Z/n-za-mN-ZA-M/;
 	      print OUT;
 	   }
@@ -373,7 +375,7 @@ USING CONTEXT: THE DEBUG FILTER
        Two special marker lines will bracket debugging code, like this:
 
 	   ## DEBUG_BEGIN
-	   if ($year > 1999) {
+	   if ($year &gt 1999) {
 	      warn "Debug: millennium bug in year $year\n";
 	   }
 	   ## DEBUG_END
@@ -388,7 +390,7 @@ USING CONTEXT: THE DEBUG FILTER
        markers into comments:
 
 	   ## DEBUG_BEGIN
-	   #if ($year > 1999) {
+	   #if ($year &gt 1999) {
 	   #	 warn "Debug: millennium bug in year $year\n";
 	   #}
 	   ## DEBUG_END
@@ -401,17 +403,17 @@ USING CONTEXT: THE DEBUG FILTER
 	   use warnings;
 	   use Filter::Util::Call;
 
-	   use constant TRUE => 1;
-	   use constant FALSE => 0;
+	   use constant TRUE =&gt 1;
+	   use constant FALSE =&gt 0;
 
 	   sub import {
 	      my ($type) = @_;
 	      my (%context) = (
-		Enabled => defined $ENV{DEBUG},
-		InTraceBlock => FALSE,
-		Filename => (caller)[1],
-		LineNo => 0,
-		LastBegin => 0,
+		Enabled =&gt defined $ENV{DEBUG},
+		InTraceBlock =&gt FALSE,
+		Filename =&gt (caller)[1],
+		LineNo =&gt 0,
+		LastBegin =&gt 0,
 	      );
 	      filter_add(bless \%context);
 	   }
@@ -419,37 +421,37 @@ USING CONTEXT: THE DEBUG FILTER
 	   sub Die {
 	      my ($self) = shift;
 	      my ($message) = shift;
-	      my ($line_no) = shift || $self->{LastBegin};
-	      die "$message at $self->{Filename} line $line_no.\n"
+	      my ($line_no) = shift || $self-&gt{LastBegin};
+	      die "$message at $self-&gt{Filename} line $line_no.\n"
 	   }
 
 	   sub filter {
 	      my ($self) = @_;
 	      my ($status);
 	      $status = filter_read();
-	      ++ $self->{LineNo};
+	      ++ $self-&gt{LineNo};
 
 	      # deal with EOF/error first
-	      if ($status <= 0) {
-		  $self->Die("DEBUG_BEGIN has no DEBUG_END")
-		      if $self->{InTraceBlock};
+	      if ($status &lt= 0) {
+		  $self-&gtDie("DEBUG_BEGIN has no DEBUG_END")
+		      if $self-&gt{InTraceBlock};
 		  return $status;
 	      }
 
-	      if ($self->{InTraceBlock}) {
+	      if ($self-&gt{InTraceBlock}) {
 		 if (/^\s*##\s*DEBUG_BEGIN/ ) {
-		     $self->Die("Nested DEBUG_BEGIN", $self->{LineNo})
+		     $self-&gtDie("Nested DEBUG_BEGIN", $self-&gt{LineNo})
 		 } elsif (/^\s*##\s*DEBUG_END/) {
-		     $self->{InTraceBlock} = FALSE;
+		     $self-&gt{InTraceBlock} = FALSE;
 		 }
 
 		 # comment out the debug lines when the filter is disabled
-		 s/^/#/ if ! $self->{Enabled};
+		 s/^/#/ if ! $self-&gt{Enabled};
 	      } elsif ( /^\s*##\s*DEBUG_BEGIN/ ) {
-		 $self->{InTraceBlock} = TRUE;
-		 $self->{LastBegin} = $self->{LineNo};
+		 $self-&gt{InTraceBlock} = TRUE;
+		 $self-&gt{LastBegin} = $self-&gt{LineNo};
 	      } elsif ( /^\s*##\s*DEBUG_END/ ) {
-		 $self->Die("DEBUG_END has no DEBUG_BEGIN", $self->{LineNo});
+		 $self-&gtDie("DEBUG_END has no DEBUG_BEGIN", $self-&gt{LineNo});
 	      }
 	      return $status;
 	   }
@@ -475,16 +477,16 @@ USING CONTEXT: THE DEBUG FILTER
 	      $status = filter_read();
 
 	      # deal with EOF/error first
-	      return $status if $status <= 0;
-	      if ($self->{InTraceBlock}) {
+	      return $status if $status &lt= 0;
+	      if ($self-&gt{InTraceBlock}) {
 		 if (/^\s*##\s*DEBUG_END/) {
-		    $self->{InTraceBlock} = FALSE
+		    $self-&gt{InTraceBlock} = FALSE
 		 }
 
 		 # comment out debug lines when the filter is disabled
-		 s/^/#/ if ! $self->{Enabled};
+		 s/^/#/ if ! $self-&gt{Enabled};
 	      } elsif ( /^\s*##\s*DEBUG_BEGIN/ ) {
-		 $self->{InTraceBlock} = TRUE;
+		 $self-&gt{InTraceBlock} = TRUE;
 	      }
 	      return $status;
 	   }
@@ -492,7 +494,7 @@ USING CONTEXT: THE DEBUG FILTER
        Be warned: just as the C-preprocessor doesn't know C, the Debug filter
        doesn't know Perl. It can be fooled quite easily:
 
-	   print <<EOM;
+	   print &lt&ltEOM;
 	   ##DEBUG_BEGIN
 	   EOM
 
@@ -558,7 +560,7 @@ REQUIREMENTS
        Conway.
 
 AUTHOR
-       Paul Marquess <Paul.Marquess@btinternet.com>
+       Paul Marquess &ltPaul.Marquess@btinternet.com&gt
 
 Copyrights
        This article originally appeared in The Perl Journal #11, and is
@@ -569,6 +571,6 @@ Copyrights
 
 
 perl v5.10.1			  2009-06-27			 PERLFILTER(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

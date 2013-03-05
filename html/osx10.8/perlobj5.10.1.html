@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="First you need to understand what references are in Perl.  See perlref..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlobj - Perl objects</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLOBJ(1)	       Perl Programmers Reference Guide 	    PERLOBJ(1)
 
 
@@ -79,7 +81,7 @@ DESCRIPTION
 	   sub new {
 	       my $self = {};
 	       bless $self;
-	       $self->initialize();
+	       $self-&gtinitialize();
 	       return $self;
 	   }
 
@@ -91,12 +93,12 @@ DESCRIPTION
 	       my $class = shift;
 	       my $self = {};
 	       bless $self, $class;
-	       $self->initialize();
+	       $self-&gtinitialize();
 	       return $self;
 	   }
 
-       Or if you expect people to call not just "CLASS->new()" but also
-       "$obj->new()", then use something like the following.  (Note that using
+       Or if you expect people to call not just "CLASS-&gtnew()" but also
+       "$obj-&gtnew()", then use something like the following.  (Note that using
        this to call new() on an instance does not automatically perform any
        copying.  If you want a shallow or deep copy of an object, you'll have
        to specifically allow for that.)  The initialize() method used will be
@@ -107,7 +109,7 @@ DESCRIPTION
 	       my $class = ref($this) || $this;
 	       my $self = {};
 	       bless $self, $class;
-	       $self->initialize();
+	       $self-&gtinitialize();
 	       return $self;
 	   }
 
@@ -188,7 +190,7 @@ DESCRIPTION
 
 	   sub bump {
 	       my $self = shift;
-	       $self->{ __PACKAGE__ . ".count"}++;
+	       $self-&gt{ __PACKAGE__ . ".count"}++;
 	   }
 
    A Method is Simply a Subroutine
@@ -222,7 +224,7 @@ DESCRIPTION
 	       my $self = shift;
 	       my @keys = @_ ? @_ : sort keys %$self;
 	       foreach $key (@keys) {
-		   print "\t$key => $self->{$key}\n";
+		   print "\t$key =&gt $self-&gt{$key}\n";
 	       }
 	   }
 
@@ -231,10 +233,10 @@ DESCRIPTION
        ways to write a method call.  The simpler and more common way is to use
        the arrow notation:
 
-	   my $fred = Critter->find("Fred");
-	   $fred->display("Height", "Weight");
+	   my $fred = Critter-&gtfind("Fred");
+	   $fred-&gtdisplay("Height", "Weight");
 
-       You should already be familiar with the use of the "->" operator with
+       You should already be familiar with the use of the "-&gt" operator with
        references.  In fact, since $fred above is a reference to an object,
        you could think of the method call as just another form of
        dereferencing.
@@ -256,8 +258,8 @@ DESCRIPTION
        If you need to, you can force Perl to start looking in some other
        package:
 
-	   my $barney = MyCritter->Critter::find("Barney");
-	   $barney->Critter::display("Height", "Weight");
+	   my $barney = MyCritter-&gtCritter::find("Barney");
+	   $barney-&gtCritter::display("Height", "Weight");
 
        Here "MyCritter" is presumably a subclass of "Critter" that defines its
        own versions of find() and display().  We haven't specified what those
@@ -273,7 +275,7 @@ DESCRIPTION
 
 	   sub display {
 	       my ($self, @args) = @_;
-	       $self->SUPER::display("Name", @args);
+	       $self-&gtSUPER::display("Name", @args);
 	   }
 
        It is important to note that "SUPER" refers to the superclass(es) of
@@ -282,19 +284,19 @@ DESCRIPTION
        method name, but not in any of the other ways that class names are
        normally used, eg:
 
-	   something->SUPER::method(...);      # OK
+	   something-&gtSUPER::method(...);      # OK
 	   SUPER::method(...);		       # WRONG
-	   SUPER->method(...);		       # WRONG
+	   SUPER-&gtmethod(...);		       # WRONG
 
        Instead of a class name or an object reference, you can also use any
        expression that returns either of those on the left side of the arrow.
        So the following statement is valid:
 
-	   Critter->find("Fred")->display("Height", "Weight");
+	   Critter-&gtfind("Fred")-&gtdisplay("Height", "Weight");
 
        and so is the following:
 
-	   my $fred = (reverse "rettirC")->find(reverse "derF");
+	   my $fred = (reverse "rettirC")-&gtfind(reverse "derF");
 
        The right side of the arrow typically is the method name, but a simple
        scalar variable containing either the method name or a subroutine
@@ -310,8 +312,8 @@ DESCRIPTION
        For example, the following calls to $display are equivalent:
 
 	   my $display = sub { my $self = shift; ... };
-	   $fred->$display("Height", "Weight");
-	   $display->($fred, "Height", "Weight");
+	   $fred-&gt$display("Height", "Weight");
+	   $display-&gt($fred, "Height", "Weight");
 
    Indirect Object Syntax
        The other way to invoke a method is by using the so-called "indirect
@@ -351,27 +353,27 @@ DESCRIPTION
        This can lead to horribly confusing precedence problems, as in these
        next two lines:
 
-	   move $obj->{FIELD};		       # probably wrong!
+	   move $obj-&gt{FIELD};		       # probably wrong!
 	   move $ary[$i];		       # probably wrong!
 
        Those actually parse as the very surprising:
 
-	   $obj->move->{FIELD}; 	       # Well, lookee here
-	   $ary->move([$i]);		       # Didn't expect this one, eh?
+	   $obj-&gtmove-&gt{FIELD}; 	       # Well, lookee here
+	   $ary-&gtmove([$i]);		       # Didn't expect this one, eh?
 
        Rather than what you might have expected:
 
-	   $obj->{FIELD}->move();	       # You should be so lucky.
-	   $ary[$i]->move;		       # Yeah, sure.
+	   $obj-&gt{FIELD}-&gtmove();	       # You should be so lucky.
+	   $ary[$i]-&gtmove;		       # Yeah, sure.
 
        To get the correct behavior with indirect object syntax, you would have
        to use a block around the indirect object:
 
-	   move {$obj->{FIELD}};
+	   move {$obj-&gt{FIELD}};
 	   move {$ary[$i]};
 
        Even then, you still have the same potential problem if there happens
-       to be a function named "move" in the current package.  The "->"
+       to be a function named "move" in the current package.  The "-&gt"
        notation suffers from neither of these disturbing ambiguities, so we
        recommend you use it exclusively.  However, you may still end up having
        to read code using the indirect object notation, so it's important to
@@ -403,7 +405,7 @@ DESCRIPTION
 
 	       use Package 1.2 qw(some imported subs);
 	       # implies:
-	       Package->VERSION(1.2);
+	       Package-&gtVERSION(1.2);
 
    Destructors
        When the last reference to an object goes away, the object is
@@ -464,9 +466,9 @@ DESCRIPTION
 	   sub new_node {
 	       my $class = shift;
 	       my $node  = {};
-	       $node->{LEFT} = $node->{RIGHT} = $node;
-	       $node->{DATA} = [ @_ ];
-	       return bless $node => $class;
+	       $node-&gt{LEFT} = $node-&gt{RIGHT} = $node;
+	       $node-&gt{DATA} = [ @_ ];
+	       return bless $node =&gt $class;
 	   }
 
        If you create nodes like that, they (currently) won't go away unless
@@ -501,8 +503,8 @@ DESCRIPTION
 
 	   warn "starting program";
 	   {
-	       my $a = Subtle->new;
-	       my $b = Subtle->new;
+	       my $a = Subtle-&gtnew;
+	       my $b = Subtle-&gtnew;
 	       $$a = 0;  # break selfref
 	       warn "leaving block";
 	   }
@@ -552,6 +554,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-04-14			    PERLOBJ(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

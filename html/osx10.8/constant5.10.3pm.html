@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This pragma allows you to declare constants at compile-time...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>constant - Perl pragma to declare constants</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 constant(3pm)	       Perl Programmers Reference Guide 	 constant(3pm)
 
 
@@ -16,24 +18,24 @@ NAME
        constant - Perl pragma to declare constants
 
 SYNOPSIS
-	   use constant PI    => 4 * atan2(1, 1);
-	   use constant DEBUG => 0;
+	   use constant PI    =&gt 4 * atan2(1, 1);
+	   use constant DEBUG =&gt 0;
 
 	   print "Pi equals ", PI, "...\n" if DEBUG;
 
 	   use constant {
-	       SEC   => 0,
-	       MIN   => 1,
-	       HOUR  => 2,
-	       MDAY  => 3,
-	       MON   => 4,
-	       YEAR  => 5,
-	       WDAY  => 6,
-	       YDAY  => 7,
-	       ISDST => 8,
+	       SEC   =&gt 0,
+	       MIN   =&gt 1,
+	       HOUR  =&gt 2,
+	       MDAY  =&gt 3,
+	       MON   =&gt 4,
+	       YEAR  =&gt 5,
+	       WDAY  =&gt 6,
+	       YDAY  =&gt 7,
+	       ISDST =&gt 8,
 	   };
 
-	   use constant WEEKDAYS => qw(
+	   use constant WEEKDAYS =&gt qw(
 	       Sunday Monday Tuesday Wednesday Thursday Friday Saturday
 	   );
 
@@ -69,10 +71,10 @@ NOTES
        Even though a reference may be declared as a constant, the reference
        may point to data which may be changed, as this code shows.
 
-	   use constant ARRAY => [ 1,2,3,4 ];
-	   print ARRAY->[1];
-	   ARRAY->[1] = " be changed";
-	   print ARRAY->[1];
+	   use constant ARRAY =&gt [ 1,2,3,4 ];
+	   print ARRAY-&gt[1];
+	   ARRAY-&gt[1] = " be changed";
+	   print ARRAY-&gt[1];
 
        Dereferencing constant references incorrectly (such as using an array
        subscript on a constant hash reference, or vice versa) will be trapped
@@ -82,7 +84,7 @@ NOTES
        constant defined in another package, specify the full package name, as
        in "Some::Package::CONSTANT".  Constants may be exported by modules,
        and may also be called as either class or instance methods, that is, as
-       "Some::Package->CONSTANT" or as "$obj->CONSTANT" where $obj is an
+       "Some::Package-&gtCONSTANT" or as "$obj-&gtCONSTANT" where $obj is an
        instance of "Some::Package".  Subclasses may define their own constants
        to override those in their base class.
 
@@ -104,8 +106,8 @@ NOTES
        NOTE: This implies that the expression defining the value of a constant
        is evaluated in list context.  This may produce surprises:
 
-	   use constant TIMESTAMP => localtime; 	       # WRONG!
-	   use constant TIMESTAMP => scalar localtime;	       # right
+	   use constant TIMESTAMP =&gt localtime; 	       # WRONG!
+	   use constant TIMESTAMP =&gt scalar localtime;	       # right
 
        The first line above defines "TIMESTAMP" as a 9-element list, as
        returned by "localtime()" in list context.  To set it to the string
@@ -126,8 +128,8 @@ NOTES
        this method must have a single value.
 
 	   use constant {
-	       FOO => "A single value",
-	       BAR => "This", "won't", "work!",        # Error!
+	       FOO =&gt "A single value",
+	       BAR =&gt "This", "won't", "work!",        # Error!
 	   };
 
        This is a fundamental limitation of the way hashes are constructed in
@@ -141,8 +143,8 @@ NOTES
        the "use" statement is finished.
 
 	   use constant {
-	       BITMASK => 0xAFBAEBA8,
-	       NEGMASK => ~BITMASK,		       # Error!
+	       BITMASK =&gt 0xAFBAEBA8,
+	       NEGMASK =&gt ~BITMASK,		       # Error!
 	   };
 
    Magic constants
@@ -150,7 +152,7 @@ NOTES
        time, allowing for way cool stuff like this.  (These error numbers
        aren't totally portable, alas.)
 
-	   use constant E2BIG => ($! = 7);
+	   use constant E2BIG =&gt ($! = 7);
 	   print   E2BIG, "\n";        # something like "Arg list too long"
 	   print 0+E2BIG, "\n";        # "7"
 
@@ -198,9 +200,9 @@ CAVEATS
        For example, you can't say $hash{CONSTANT} because "CONSTANT" will be
        interpreted as a string.  Use $hash{CONSTANT()} or $hash{+CONSTANT} to
        prevent the bareword quoting mechanism from kicking in.	Similarly,
-       since the "=>" operator quotes a bareword immediately to its left, you
-       have to say "CONSTANT() => 'value'" (or simply use a comma in place of
-       the big arrow) instead of "CONSTANT => 'value'".
+       since the "=&gt" operator quotes a bareword immediately to its left, you
+       have to say "CONSTANT() =&gt 'value'" (or simply use a comma in place of
+       the big arrow) instead of "CONSTANT =&gt 'value'".
 
 SEE ALSO
        Readonly - Facility for creating read-only scalars, arrays, hashes.
@@ -219,16 +221,16 @@ BUGS
        Please report any bugs or feature requests via the perlbug(1) utility.
 
 AUTHORS
-       Tom Phoenix, <rootbeer@redcat.com>, with help from many other folks.
+       Tom Phoenix, &ltrootbeer@redcat.com&gt, with help from many other folks.
 
        Multiple constant declarations at once added by Casey West,
-       <casey@geeknest.com>.
+       &ltcasey@geeknest.com&gt.
 
-       Documentation mostly rewritten by Ilmari Karonen, <perl@itz.pp.sci.fi>.
+       Documentation mostly rewritten by Ilmari Karonen, &ltperl@itz.pp.sci.fi&gt.
 
        This program is maintained by the Perl 5 Porters.  The CPAN
        distribution is maintained by Sebastien Aperghis-Tramoni
-       <sebastien@aperghis.net>.
+       &ltsebastien@aperghis.net&gt.
 
 COPYRIGHT & LICENSE
        Copyright (C) 1997, 1999 Tom Phoenix
@@ -239,6 +241,6 @@ COPYRIGHT & LICENSE
 
 
 perl v5.10.1			  2009-02-12			 constant(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

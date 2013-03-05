@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This personality is designed to handle multiple connections all within..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::Server::Multiplex - Multiplex several connections within one</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::Server::MultiplexUser Contributed Perl DocumentaNet::Server::Multiplex(3)
 
 
@@ -25,7 +27,7 @@ SYNOPSIS
 	    #...code...
 	 }
 
-	 __PACKAGE__->run();
+	 __PACKAGE__-&gtrun();
 
 DESCRIPTION
        This personality is designed to handle multiple connections all within
@@ -50,41 +52,41 @@ PROCESS FLOW
        The process flow is written in an open, easy to override, easy to hook,
        fashion.  The basic flow is shown below.
 
-	 $self->configure_hook;
+	 $self-&gtconfigure_hook;
 
-	 $self->configure(@_);
+	 $self-&gtconfigure(@_);
 
-	 $self->post_configure;
+	 $self-&gtpost_configure;
 
-	 $self->post_configure_hook;
+	 $self-&gtpost_configure_hook;
 
-	 $self->pre_bind;
+	 $self-&gtpre_bind;
 
-	 $self->bind;
+	 $self-&gtbind;
 
 	 if( Restarting server ){
-	    $self->restart_open_hook();
+	    $self-&gtrestart_open_hook();
 	 }
 
-	 $self->post_bind_hook;
+	 $self-&gtpost_bind_hook;
 
-	 $self->post_bind;
+	 $self-&gtpost_bind;
 
-	 $self->pre_loop_hook;
+	 $self-&gtpre_loop_hook;
 
-	 $self->loop; # This basically just runs IO::Multiplex::loop
-	 # For routines inside a $self->loop
+	 $self-&gtloop; # This basically just runs IO::Multiplex::loop
+	 # For routines inside a $self-&gtloop
 	 # See CLIENT PROCESSING below
 
-	 $self->pre_server_close_hook;
+	 $self-&gtpre_server_close_hook;
 
-	 $self->post_child_cleanup_hook;
+	 $self-&gtpost_child_cleanup_hook;
 
-	 $self->server_close;
+	 $self-&gtserver_close;
 
 	 if( Restarting server ){
-	    $self->restart_close_hook();
-	    $self->hup_server;
+	    $self-&gtrestart_close_hook();
+	    $self-&gthup_server;
 	    # Redo process again starting with configure_hook
 	 }
 
@@ -93,35 +95,35 @@ PROCESS FLOW
 CLIENT PROCESSING
        The following represents the client processing program flow:
 
-	 $self->{server}->{client} = Net::Server::Proto::TCP->accept();  # NOTE: Multiplexed with mux_input() below
+	 $self-&gt{server}-&gt{client} = Net::Server::Proto::TCP-&gtaccept();  # NOTE: Multiplexed with mux_input() below
 
 	 if (check_for_dequeue seconds have passed) {
-	   $self->run_dequeue();
+	   $self-&gtrun_dequeue();
 	 }
 
-	 $self->get_client_info;
+	 $self-&gtget_client_info;
 
-	 $self->post_accept_hook; # Net::Server style
+	 $self-&gtpost_accept_hook; # Net::Server style
 
-	 if( $self->allow_deny
+	 if( $self-&gtallow_deny
 
-	     && $self->allow_deny_hook ){
+	     && $self-&gtallow_deny_hook ){
 
-	   # (Net::Server style $self->process_request() is never called.)
+	   # (Net::Server style $self-&gtprocess_request() is never called.)
 
 	   # A unique client specific object is created
 	   # for all mux_* methods from this point on.
-	   $self = __PACKAGE__->new($self, client);
+	   $self = __PACKAGE__-&gtnew($self, client);
 
-	   $self->mux_connection; # IO::Multiplex style
+	   $self-&gtmux_connection; # IO::Multiplex style
 
 	   for (every packet received) {
-	     $self->mux_input;	# NOTE: Multiplexed with accept() above
+	     $self-&gtmux_input;	# NOTE: Multiplexed with accept() above
 	   }
 
 	 }else{
 
-	   $self->request_denied_hook;
+	   $self-&gtrequest_denied_hook;
 
 	   # Notice that if either allow_deny or allow_deny_hook fails, then
 	   # new(), mux_connection(), and mux_input() will never be called.
@@ -131,11 +133,11 @@ CLIENT PROCESSING
 
 	 }
 
-	 $self->mux_eof;
+	 $self-&gtmux_eof;
 
-	 $self->post_process_request_hook;
+	 $self-&gtpost_process_request_hook;
 
-	 $self->mux_close;
+	 $self-&gtmux_close;
 
        This process then loops multiplexing between the accept() for the next
        connection and mux_input() when input arrives to avoid blocking either
@@ -147,15 +149,15 @@ HOOKS
 
        The loop() method of Net::Server has been overridden to run the loop
        routine of IO::Multiplex instead.  The Net::Server methods may access
-       the IO::Multiplex object at "$self->{mux}" if desired.  The
+       the IO::Multiplex object at "$self-&gt{mux}" if desired.  The
        IO::Multiplex methods may access the Net::Server object at
-       "$self->{net_server}" if desired.
+       "$self-&gt{net_server}" if desired.
 
        The process_request() method is never used with this personality.
 
        The other Net::Server hooks and methods should work the same.
 
-       "$self->run_dequeue()"
+       "$self-&gtrun_dequeue()"
 	   This hook only gets called in conjuction with the check_for_dequeue
 	   setting.  It will run every check_for_dequeue seconds.  Since no
 	   forking is done, this hook should run fast in order to prevent
@@ -166,7 +168,7 @@ TIMEOUTS
        To utilize the optional timeout feature of IO::Multiplex, you need to
        specify a timeout by using the set_timeout method.
 
-       $self->{net_server}->{mux}->set_timeout($fh, $seconds_from_now);
+       $self-&gt{net_server}-&gt{mux}-&gtset_timeout($fh, $seconds_from_now);
 
        $fh may be either a client socket or a listen socket file descriptor
        within the mux.	$seconds_from_now may be fractional to achieve more
@@ -174,7 +176,7 @@ TIMEOUTS
        you should define yourself.
 
    mux_timeout
-       The main loop() routine will call $obj->mux_timeout($mux, $fh) when the
+       The main loop() routine will call $obj-&gtmux_timeout($mux, $fh) when the
        timeout specified in set_timeout is reached where $fh is the same as
        the one specified in set_timeout() and $obj is its corresponding object
        (either the unique client specific object or the main listen callback
@@ -192,13 +194,13 @@ CALLBACK INTERFACE
 
    mux_connection ($mux,$fh)
        (OPTIONAL) Run once when the client first connects if the allow_deny
-       passes.	Note that the "$self->{net_server}->{server}" property hash
+       passes.	Note that the "$self-&gt{net_server}-&gt{server}" property hash
        may be modified by future connections through Net::Server.  Any values
        within it that this object may need to use later should be copied
        within its own object at this point.
 
        Example:
-	 $self->{peerport} = $self->{net_server}->{server}->{peerport};
+	 $self-&gt{peerport} = $self-&gt{net_server}-&gt{server}-&gt{peerport};
 
    mux_input ($mux,$fh,\$data)
        (REQUIRED) Run each time a packet is read.  It should consume $data
@@ -229,10 +231,10 @@ BUGS
        mux_timeout methods.
 
 AUTHOR
-       Rob Brown <bbb@cpan.org>
+       Rob Brown &ltbbb@cpan.org&gt
 
 MAINTAINER
-       Paul Seamons <paul@seamons.com>
+       Paul Seamons &ltpaul@seamons.com&gt
 
 LICENSE
 	 This package may be distributed under the terms of either the
@@ -243,13 +245,13 @@ LICENSE
 	 All rights reserved.
 
 SEE ALSO
-       Net::Server by Paul Seamons <paul@seamons.com>,
+       Net::Server by Paul Seamons &ltpaul@seamons.com&gt,
 
-       IO::Multiplex by Bruce Keeler <bruce@gridpoint.com>.
+       IO::Multiplex by Bruce Keeler &ltbruce@gridpoint.com&gt.
 
 
 
 perl v5.12.4			  2010-07-08	     Net::Server::Multiplex(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

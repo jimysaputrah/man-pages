@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Apache2::SubProcess" provides the Perl API for running and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Apache2::SubProcess -- Executing SubProcesses under mod_perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apacapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::SubProcess(3)
 
 
@@ -19,23 +21,23 @@ Synopsis
 	 use Apache2::SubProcess ();
 
 	 use Config;
-	 use constant PERLIO_IS_ENABLED => $Config{useperlio};
+	 use constant PERLIO_IS_ENABLED =&gt $Config{useperlio};
 
 	 # pass @ARGV / read from the process
 	 $command = "/tmp/argv.pl";
 	 @argv = qw(foo bar);
-	 $out_fh = $r->spawn_proc_prog($command, \@argv);
+	 $out_fh = $r-&gtspawn_proc_prog($command, \@argv);
 	 $output = read_data($out_fh);
 
 	 # pass environment / read from the process
 	 $command = "/tmp/env.pl";
-	 $r->subprocess_env->set(foo => "bar");
-	 $out_fh = $r->spawn_proc_prog($command);
+	 $r-&gtsubprocess_env-&gtset(foo =&gt "bar");
+	 $out_fh = $r-&gtspawn_proc_prog($command);
 	 $output = read_data($out_fh);
 
 	 # write to/read from the process
 	 $command = "/tmp/in_out_err.pl";
-	 ($in_fh, $out_fh, $err_fh) = $r->spawn_proc_prog($command);
+	 ($in_fh, $out_fh, $err_fh) = $r-&gtspawn_proc_prog($command);
 	 print $in_fh "hello\n";
 	 $output = read_data($out_fh);
 	 $error  = read_data($err_fh);
@@ -44,8 +46,8 @@ Synopsis
 	 sub read_data {
 	     my ($fh) = @_;
 	     my $data;
-	     if (PERLIO_IS_ENABLED || IO::Select->new($fh)->can_read(10)) {
-		 $data = <$fh>;
+	     if (PERLIO_IS_ENABLED || IO::Select-&gtnew($fh)-&gtcan_read(10)) {
+		 $data = &lt$fh&gt;
 	     }
 	     return defined $data ? $data : '';
 	 }
@@ -53,7 +55,7 @@ Synopsis
 	 # pass @ARGV but don't ask for any communication channels
 	 $command = "/tmp/argv.pl";
 	 @argv = qw(foo bar);
-	 $r->spawn_proc_prog($command, \@argv);
+	 $r-&gtspawn_proc_prog($command, \@argv);
 
 Description
        "Apache2::SubProcess" provides the Perl API for running and
@@ -69,12 +71,12 @@ API
    "spawn_proc_prog"
        Spawn a sub-process and return STD communication pipes:
 
-				      $r->spawn_proc_prog($command);
-				      $r->spawn_proc_prog($command, \@argv);
-	 $out_fh		    = $r->spawn_proc_prog($command);
-	 $out_fh		    = $r->spawn_proc_prog($command, \@argv);
-	 ($in_fh, $out_fh, $err_fh) = $r->spawn_proc_prog($command);
-	 ($in_fh, $out_fh, $err_fh) = $r->spawn_proc_prog($command, \@argv);
+				      $r-&gtspawn_proc_prog($command);
+				      $r-&gtspawn_proc_prog($command, \@argv);
+	 $out_fh		    = $r-&gtspawn_proc_prog($command);
+	 $out_fh		    = $r-&gtspawn_proc_prog($command, \@argv);
+	 ($in_fh, $out_fh, $err_fh) = $r-&gtspawn_proc_prog($command);
+	 ($in_fh, $out_fh, $err_fh) = $r-&gtspawn_proc_prog($command, \@argv);
 
        obj: $r ( "Apache2::RequestRec object" )
        arg1: $command ( string )
@@ -99,7 +101,7 @@ API
 
        It's possible to pass environment variables as well, by calling:
 
-	 $r->subprocess_env->set($key => $value);
+	 $r-&gtsubprocess_env-&gtset($key =&gt $value);
 
        before spawning the subprocess.
 
@@ -145,7 +147,7 @@ API
        as:
 
 	 use Apache2::SubProcess ();
-	 $r->spawn_proc_prog ('/path/to/detach_script.pl', $args);
+	 $r-&gtspawn_proc_prog ('/path/to/detach_script.pl', $args);
 
        and the /path/to/detach_script.pl contents are:
 
@@ -158,9 +160,9 @@ API
 
 	 chdir '/'		  or die "Can't chdir to /: $!";
 	 open STDIN, '/dev/null'  or die "Can't read /dev/null: $!";
-	 open STDOUT, '+>>', '/path/to/apache/error_log'
+	 open STDOUT, '+&gt&gt', '/path/to/apache/error_log'
 	     or die "Can't write to /dev/null: $!";
-	 open STDERR, '>&STDOUT'  or die "Can't dup stdout: $!";
+	 open STDERR, '&gt&STDOUT'  or die "Can't dup stdout: $!";
 	 setsid or die "Can't start a new session: $!";
 
 	 # run your code here or call exec to another program
@@ -183,6 +185,6 @@ Authors
 
 
 perlapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::SubProcess(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

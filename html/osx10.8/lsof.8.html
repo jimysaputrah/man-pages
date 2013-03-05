@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Lsof  revision 4.85 lists on its standard output file information about..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>lsof - list open files</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 LSOF(8) 							       LSOF(8)
 
 
@@ -19,7 +21,7 @@ SYNOPSIS
        lsof  [	-?abChKlnNOPRtUvVX  ]  [ -A A ] [ -c c ] [ +c c ] [ +|-d d ] [
        +|-D D ] [ +|-e s ] [ +|-f [cfgGn] ] [ -F [f] ] [ -g [s] ] [ -i [i] ] [
        -k  k  ]  [  +|-L  [l] ] [ +|-m m ] [ +|-M ] [ -o [o] ] [ -p s ] [ +|-r
-       [t[m<fmt>]] ] [ -s [p:s] ] [ -S [t] ] [ -T [t] ] [ -u s ] [ +|-w ] [ -x
+       [t[m&ltfmt&gt]] ] [ -s [p:s] ] [ -S [t] ] [ -T [t] ] [ -u s ] [ +|-w ] [ -x
        [fl] ] [ -z [z] ] [ -Z [Z] ] [ -- ] [names]
 
 DESCRIPTION
@@ -50,7 +52,7 @@ DESCRIPTION
        In  addition to producing a single output list, lsof will run in repeat
        mode.  In repeat mode it will produce output, delay,  then  repeat  the
        output  operation  until stopped with an interrupt or quit signal.  See
-       the +|-r [t[m<fmt>]] option description for more information.
+       the +|-r [t[m&ltfmt&gt]] option description for more information.
 
 OPTIONS
        In the absence of any options, lsof lists all open files  belonging  to
@@ -571,7 +573,7 @@ OPTIONS
 		count  less  than  that number will be listed.	(No number may
 		follow -L.)  A specification of the form ``+L1''  will	select
 		open  files  that  have been unlinked.	A specification of the
-		form ``+aL1 <file_system>'' will select unlinked open files on
+		form ``+aL1 &ltfile_system&gt'' will select unlinked open files on
 		the specified file system.
 
 		For  other link count comparisons, use field output (-F) and a
@@ -723,7 +725,7 @@ OPTIONS
 		little faster.	It is also useful when port name lookup is not
 		working properly.
 
-       +|-r [t[m<fmt>]]
+       +|-r [t[m&ltfmt&gt]]
 		puts  lsof  in	repeat	mode.	There lsof lists open files as
 		selected by other options, delays t seconds (default fifteen),
 		then  repeats  the  listing, delaying and listing repetitively
@@ -745,16 +747,16 @@ OPTIONS
 		marker	is  `m'; otherwise the default marker is ``========''.
 		The marker is followed by a NL character.
 
-		The optional "m<fmt>" argument	specifies  a  format  for  the
-		marker	line.	The  <fmt> characters following `m' are inter-
+		The optional "m&ltfmt&gt" argument	specifies  a  format  for  the
+		marker	line.	The  &ltfmt&gt characters following `m' are inter-
 		preted as a format specification to the strftime(3)  function,
 		when  both  it	and the localtime(3) function are available in
 		the dialect's C library.  Consult the  strftime(3)  documenta-
 		tion  for  what  may appear in its format specification.  Note
-		that when field output is requested with the -F option,  <fmt>
+		that when field output is requested with the -F option,  &ltfmt&gt
 		cannot	contain  the  NL  format, ``%n''.  Note also that when
-		<fmt> contains spaces or  other  characters  that  affect  the
-		shell's  interpretation  of  arguments,  <fmt>	must be quoted
+		&ltfmt&gt contains spaces or  other  characters  that  affect  the
+		shell's  interpretation  of  arguments,  &ltfmt&gt	must be quoted
 		appropriately.
 
 		Repeat mode reduces lsof startup overhead, so it is more effi-
@@ -842,14 +844,14 @@ OPTIONS
 		item except TCP or TPI state name  identified  by  a  keyword,
 		followed by `=', separated from others by a single space:
 
-		     <TCP or TPI state name>
-		     QR=<read queue length>
-		     QS=<send queue length>
-		     SO=<socket options and values>
-		     SS=<socket states>
-		     TF=<TCP flags and values>
-		     WR=<window read length>
-		     WW=<window write length>
+		     &ltTCP or TPI state name&gt
+		     QR=&ltread queue length&gt
+		     QS=&ltsend queue length&gt
+		     SO=&ltsocket options and values&gt
+		     SS=&ltsocket states&gt
+		     TF=&ltTCP flags and values&gt
+		     WR=&ltwindow read length&gt
+		     WW=&ltwindow write length&gt
 
 		Not all values are reported for all UNIX dialects.  Items val-
 		ues (when available) are reported after the item name and '='.
@@ -887,8 +889,8 @@ OPTIONS
 		and one TCP value may be reported (when available in the  UNIX
 		dialect)  in  the form of the names that commonly appear after
 		SO_, so_, SS_, TCP_  and TF_ in the dialect's header  files  -
-		most	 often	   <sys/socket.h>,    <sys/socketvar.h>    and
-		<netinet/tcp_var.h>.  Consult those header files for the mean-
+		most	 often	   &ltsys/socket.h&gt,    &ltsys/socketvar.h&gt    and
+		&ltnetinet/tcp_var.h&gt.  Consult those header files for the mean-
 		ing of the flags, options, states and values.
 
 		``SO=''  precedes  socket  options and values; ``SS='', socket
@@ -1451,7 +1453,7 @@ OUTPUT
 
 		  or ``MPC'' for a multiplexed character file;
 
-		  or ``NOFD'' for a Linux /proc/<PID>/fd directory that  can't
+		  or ``NOFD'' for a Linux /proc/&ltPID&gt/fd directory that  can't
 		  be  opened -- the directory path appears in the NAME column,
 		  followed by an error message;
 
@@ -1661,8 +1663,8 @@ OUTPUT
 		       XL	 exclusive lock
 
 		  this list of names was derived from F* #define's in  dialect
-		  header   files   <fcntl.h>,	<linux</fs.h>,	<sys/fcntl.c>,
-		  <sys/fcntlcom.h>, and <sys/file.h>; see  the	lsof.h	header
+		  header   files   &ltfcntl.h&gt,	&ltlinux&lt/fs.h&gt,	&ltsys/fcntl.c&gt,
+		  &ltsys/fcntlcom.h&gt, and &ltsys/file.h&gt; see  the	lsof.h	header
 		  file for a list showing the correspondence between the above
 		  short-hand names and the header file definitions;
 
@@ -1778,7 +1780,7 @@ OUTPUT
 
 		  or the local and remote  Internet  addresses	of  a  network
 		  file;  the  local  host  name  or IP number is followed by a
-		  colon (':'), the  port,  ``->'',  and  the  two-part	remote
+		  colon (':'), the  port,  ``-&gt'',  and  the  two-part	remote
 		  address;  IP	addresses may be reported as numbers or names,
 		  depending on the +|-M, -n, and -P  options;  colon-separated
 		  IPv6	 numbers   are	 enclosed  in  square  brackets;  IPv4
@@ -1804,19 +1806,19 @@ OUTPUT
 
 		  or ``STR'', followed by the stream name;
 
-		  or a stream character device name, followed  by  ``->''  and
+		  or a stream character device name, followed  by  ``-&gt''  and
 		  the  stream name or a list of stream module names, separated
-		  by ``->'';
+		  by ``-&gt'';
 
 		  or ``STR:'' followed by the SCO OpenServer stream device and
-		  module names, separated by ``->'';
+		  module names, separated by ``-&gt'';
 
 		  or  system  directory name, `` -- '', and as many components
 		  of the path name as lsof can find in the kernel's name cache
 		  for selected dialects (See the KERNEL NAME CACHE section for
 		  more information.);
 
-		  or ``PIPE->'', followed by a Solaris kernel pipe destination
+		  or ``PIPE-&gt'', followed by a Solaris kernel pipe destination
 		  address;
 
 		  or  ``COMMON:'',  followed  by  the vnode device information
@@ -1834,7 +1836,7 @@ OUTPUT
 		  terminal  files  that  have  been flagged with the TIOCNOTTY
 		  ioctl and closed by daemons;
 
-		  or ``rd=<offset>'' and ``wr=<offset>'' for the values of the
+		  or ``rd=&ltoffset&gt'' and ``wr=&ltoffset&gt'' for the values of the
 		  read and write offsets of a FIFO;
 
 		  or  ``clone n:/dev/event'' for SCO OpenServer file clones of
@@ -1852,23 +1854,23 @@ OUTPUT
 		  disabled (e.g., by the shutdown(2) function);
 
 		  or the local and remote addresses of a Linux IPX socket file
-		  in the form <net>:[<node>:]<port>, followed  in  parentheses
+		  in the form &ltnet&gt:[&ltnode&gt:]&ltport&gt, followed  in  parentheses
 		  by  the transmit and receive queue sizes, and the connection
 		  state;
 
 		  or ``dgram'' or ``stream'' for the type UnixWare  7.1.1  and
 		  above  in-kernel  UNIX  domain  sockets, followed by a colon
 		  (':') and the local path name when  available,  followed  by
-		  ``->''  and the remote path name or kernel socket address in
+		  ``-&gt''  and the remote path name or kernel socket address in
 		  hexadecimal when available.
 
        For dialects that support a ``namefs'' file system, allowing  one  file
        to   be	 attached   to	 another   with  fattach(3C),  lsof  will  add
-       ``(FA:<address1><direction><address2>)''   to	the    NAME    column.
-       <address1> and <address2> are hexadecimal vnode addresses.  <direction>
-       will be ``<-'' if <address2> has been fattach'ed to  this  vnode  whose
-       address	is  <address1>; and ``->'' if <address1>, the vnode address of
-       this vnode, has been fattach'ed to <address2>.  <address1> may be omit-
+       ``(FA:&ltaddress1&gt&ltdirection&gt&ltaddress2&gt)''   to	the    NAME    column.
+       &ltaddress1&gt and &ltaddress2&gt are hexadecimal vnode addresses.  &ltdirection&gt
+       will be ``&lt-'' if &ltaddress2&gt has been fattach'ed to  this  vnode  whose
+       address	is  &ltaddress1&gt; and ``-&gt'' if &ltaddress1&gt, the vnode address of
+       this vnode, has been fattach'ed to &ltaddress2&gt.  &ltaddress1&gt may be omit-
        ted if it already appears in the DEVICE column.
 
        Lsof  may  add  two  parenthetical  notes  to  the NAME column for open
@@ -1953,10 +1955,10 @@ OUTPUT FOR OTHER PROGRAMS
 		 user structure)
 	    C	 file structure share count
 	    d	 file's device character code
-	    D	 file's major/minor device number (0x<hexadecimal>)
+	    D	 file's major/minor device number (0x&lthexadecimal&gt)
 	    f	 file descriptor
-	    F	 file structure address (0x<hexadecimal>)
-	    G	 file flaGs (0x<hexadecimal>; names if +fg follows)
+	    F	 file structure address (0x&lthexadecimal&gt)
+	    G	 file flaGs (0x&lthexadecimal&gt; names if +fg follows)
 	    g	 process group ID
 	    i	 file's inode number
 	    K	 tasK ID
@@ -1965,25 +1967,25 @@ OUTPUT FOR OTHER PROGRAMS
 	    L	 process login name
 	    m	 marker between repeated output
 	    n	 file name, comment, Internet address
-	    N	 node identifier (ox<hexadecimal>
+	    N	 node identifier (ox&lthexadecimal&gt
 	    o	 file's offset (decimal)
 	    p	 process ID (always selected)
 	    P	 protocol name
-	    r	 raw device number (0x<hexadecimal>)
+	    r	 raw device number (0x&lthexadecimal&gt)
 	    R	 parent process ID
 	    s	 file's size (decimal)
 	    S	 file's stream identification
 	    t	 file's type
 	    T	 TCP/TPI information, identified by prefixes (the
 		 `=' is part of the prefix):
-		     QR=<read queue size>
-		     QS=<send queue size>
-		     SO=<socket options and values> (not all dialects)
-		     SS=<socket states> (not all dialects)
-		     ST=<connection state>
-		     TF=<TCP flags and values> (not all dialects)
-		     WR=<window read size>  (not all dialects)
-		     WW=<window write size>  (not all dialects)
+		     QR=&ltread queue size&gt
+		     QS=&ltsend queue size&gt
+		     SO=&ltsocket options and values&gt (not all dialects)
+		     SS=&ltsocket states&gt (not all dialects)
+		     ST=&ltconnection state&gt
+		     TF=&ltTCP flags and values&gt (not all dialects)
+		     WR=&ltwindow read size&gt  (not all dialects)
+		     WW=&ltwindow write size&gt  (not all dialects)
 		 (TCP/TPI information isn't reported for all supported
 		   UNIX dialects. The -h or -? help output for the
 		   -T option will show what TCP/TPI reporting can be
@@ -2465,7 +2467,7 @@ DIAGNOSTICS
        rectories, or get information on a file in them with stat(2), it issues
        a warning message and continues.  That lsof will issue warning messages
        about inaccessible files in /dev (or /devices) is indicated in its help
-       output - requested with the -h or >B -?	options -  with the message:
+       output - requested with the -h or &gtB -?	options -  with the message:
 
 	    Inaccessible /dev warnings are enabled.
 
@@ -2679,7 +2681,7 @@ FILES
 			 gethostname(2).)
 
 AUTHORS
-       Lsof was written by Victor A. Abell <abe@purdue.edu> of Purdue  Univer-
+       Lsof was written by Victor A. Abell &ltabe@purdue.edu&gt of Purdue  Univer-
        sity.   Many  others  have  contributed to lsof.  They're listed in the
        00CREDITS file of the lsof distribution.
 
@@ -2706,8 +2708,8 @@ DISTRIBUTION
        the distribution.
 
        More  information  on  the  lsof  distribution  can  be	found  in  its
-       README.lsof_<version> file.  If you intend to get the lsof distribution
-       and build it, please read README.lsof_<version> and the other 00* files
+       README.lsof_&ltversion&gt file.  If you intend to get the lsof distribution
+       and build it, please read README.lsof_&ltversion&gt and the other 00* files
        of the distribution before sending questions to the author.
 
 SEE ALSO
@@ -2722,6 +2724,6 @@ SEE ALSO
 
 
 				 Revision-4.85			       LSOF(8)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

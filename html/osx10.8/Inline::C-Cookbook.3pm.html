@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="It's a lot easier for most of us to cook a meal from a recipe, rather..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Inline::C-Cookbook - A Cornucopia of Inline C Recipes</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 C-Cookbook(3)	      User Contributed Perl Documentation	 C-Cookbook(3)
 
 
@@ -43,7 +45,7 @@ Appetizers
 	   How can I do this using Inline?
 
        Solution
-	       use Inline C => <<'END_C';
+	       use Inline C =&gt &lt&lt'END_C';
 
 	       void greet() {
 		   printf("Hello, world\n");
@@ -73,7 +75,7 @@ Appetizers
 	   a one-liner?
 
        Solution
-	       perl -e 'use Inline C=>q{void greet(){printf("Hello, world\n");}};greet'
+	       perl -e 'use Inline C=&gtq{void greet(){printf("Hello, world\n");}};greet'
 
        Discussion
 	   Try doing that in XS :-)
@@ -81,13 +83,13 @@ Appetizers
        See Also
 	   My email signature of late is:
 
-	       perl -le 'use Inline C=>q{SV*JAxH(char*x){return newSVpvf("Just Another %s Hacker",x);}};print JAxH+Perl'
+	       perl -le 'use Inline C=&gtq{SV*JAxH(char*x){return newSVpvf("Just Another %s Hacker",x);}};print JAxH+Perl'
 
 	   A bit fancier but a few bytes too long to qualify as a true one
 	   liner :-(
 
        Credits
-	   "Eli the Bearded" <elijah@workspot.net> gave me the idea that I
+	   "Eli the Bearded" &ltelijah@workspot.net&gt gave me the idea that I
 	   should have an Inline one-liner as a signature.
 
 Meat & Potatoes
@@ -103,7 +105,7 @@ Meat & Potatoes
 	       $filename = $ARGV[0];
 	       die "Usage: perl vowels.pl filename\n" unless -f $filename;
 
-	       $text = join '', <>;	      # slurp input file
+	       $text = join '', &lt&gt;	      # slurp input file
 	       $vp = vowel_scan($text);       # call our function
 	       $vp = sprintf("%03.1f", $vp * 100);  # format for printing
 	       print "The letters in $filename are $vp% vowels.\n";
@@ -128,7 +130,7 @@ Meat & Potatoes
 
 		   while(c = str[i++]) {
 		       c |= normalize;
-		       if (c >= A && c <= Z) {
+		       if (c &gt= A && c &lt= Z) {
 			    letters++;
 			    if (c == A || c == E || c == I || c == O || c == U)
 				vowels++;
@@ -148,7 +150,7 @@ Meat & Potatoes
 
 	   Running this script produces:
 
-	       > perl vowels.pl /usr/dict/words
+	       &gt perl vowels.pl /usr/dict/words
 	       The letters in /usr/dict/words are 37.5% vowels.
 
        See Also
@@ -167,13 +169,13 @@ Meat & Potatoes
        Solution
 	       greet(qw(Sarathy Jan Sparky Murray Mike));
 
-	       use Inline C => <<'END_OF_C_CODE';
+	       use Inline C =&gt &lt&lt'END_OF_C_CODE';
 
 	       void greet(SV* name1, ...) {
 		   Inline_Stack_Vars;
 		   int i;
 
-		   for (i = 0; i < Inline_Stack_Items; i++)
+		   for (i = 0; i &lt Inline_Stack_Items; i++)
 		       printf("Hello %s!\n", SvPV(Inline_Stack_Item(i), PL_na));
 
 		   Inline_Stack_Void;
@@ -202,7 +204,7 @@ Meat & Potatoes
 	   has a return type of void.
 
 	   Second, we use the Inline_Stack_Item(x) function to access each
-	   argument where "0 <= x < items".
+	   argument where "0 &lt= x &lt items".
 
 	   NOTE: When using a variable length argument list, you have to
 	   specify at least one argument before the ellipsis. (On my compiler,
@@ -221,22 +223,22 @@ Meat & Potatoes
        Solution
 	       print map {"$_\n"} get_localtime(time);
 
-	       use Inline C => <<'END_OF_C_CODE';
+	       use Inline C =&gt &lt&lt'END_OF_C_CODE';
 
-	       #include <time.h>
+	       #include &lttime.h&gt
 
 	       void get_localtime(int utc) {
 		 struct tm *ltime = localtime(&utc);
 		 Inline_Stack_Vars;
 
 		 Inline_Stack_Reset;
-		 Inline_Stack_Push(sv_2mortal(newSViv(ltime->tm_year)));
-		 Inline_Stack_Push(sv_2mortal(newSViv(ltime->tm_mon)));
-		 Inline_Stack_Push(sv_2mortal(newSViv(ltime->tm_mday)));
-		 Inline_Stack_Push(sv_2mortal(newSViv(ltime->tm_hour)));
-		 Inline_Stack_Push(sv_2mortal(newSViv(ltime->tm_min)));
-		 Inline_Stack_Push(sv_2mortal(newSViv(ltime->tm_sec)));
-		 Inline_Stack_Push(sv_2mortal(newSViv(ltime->tm_isdst)));
+		 Inline_Stack_Push(sv_2mortal(newSViv(ltime-&gttm_year)));
+		 Inline_Stack_Push(sv_2mortal(newSViv(ltime-&gttm_mon)));
+		 Inline_Stack_Push(sv_2mortal(newSViv(ltime-&gttm_mday)));
+		 Inline_Stack_Push(sv_2mortal(newSViv(ltime-&gttm_hour)));
+		 Inline_Stack_Push(sv_2mortal(newSViv(ltime-&gttm_min)));
+		 Inline_Stack_Push(sv_2mortal(newSViv(ltime-&gttm_sec)));
+		 Inline_Stack_Push(sv_2mortal(newSViv(ltime-&gttm_isdst)));
 		 Inline_Stack_Done;
 	       }
 	       END_OF_C_CODE
@@ -262,7 +264,7 @@ Meat & Potatoes
 	   For more information on the Inline stack macros, see Inline::C.
 
        Credits
-	   Richard Anderson <starfire@zipcon.net> contributed the original
+	   Richard Anderson &ltstarfire@zipcon.net&gt contributed the original
 	   idea for this snippet.
 
    Multiple Return Values (Another Way)
@@ -307,7 +309,7 @@ Meat & Potatoes
 
        See Also
        Credits
-	   Ned Konz <ned@bike-nomad.com> brought this behavior to my
+	   Ned Konz &ltned@bike-nomad.com&gt brought this behavior to my
 	   attention. He also pointed out that he is not the world famous
 	   computer cyclist Steve Roberts (http://www.microship.com), but he
 	   is close (http://bike-nomad.com). Thanks Ned.
@@ -319,7 +321,7 @@ Meat & Potatoes
        Solution
 	       print greeting('Ingy');
 
-	       use Inline C => <<'END_OF_C_CODE';
+	       use Inline C =&gt &lt&lt'END_OF_C_CODE';
 
 	       SV* greeting(SV* sv_name) {
 		   return (newSVpvf("Hello %s!\n", SvPV(sv_name, PL_na)));
@@ -364,8 +366,8 @@ Fast Food
 	       #!/usr/bin/perl
 
 	       use CGI qw(:standard);
-	       use Inline (Config =>
-			   DIRECTORY => '/usr/local/apache/Inline',
+	       use Inline (Config =&gt
+			   DIRECTORY =&gt '/usr/local/apache/Inline',
 			  );
 
 	       print (header,
@@ -374,7 +376,7 @@ Fast Food
 		      end_html
 		     );
 
-	       use Inline C => <<END;
+	       use Inline C =&gt &lt&ltEND;
 	       SV* JAxH(char* x) {
 		   return newSVpvf("Just Another %s Hacker", x);
 	       }
@@ -387,7 +389,7 @@ Fast Food
 	   directory and write into it.
 
 	   The solution is to explicitly tell Inline which directory to use
-	   with the 'use Inline Config => DIRECTORY => ...' line. Then you
+	   with the 'use Inline Config =&gt DIRECTORY =&gt ...' line. Then you
 	   need to give write access to that directory from the web server
 	   (CGI script).
 
@@ -413,15 +415,15 @@ Fast Food
        Solution
 	       package Factorial;
 	       use strict;
-	       use Inline Config =>
-			  DIRECTORY => '/usr/local/apache/Inline',
-			  ENABLE => 'UNTAINT';
+	       use Inline Config =&gt
+			  DIRECTORY =&gt '/usr/local/apache/Inline',
+			  ENABLE =&gt 'UNTAINT';
 	       use Inline 'C';
-	       Inline->init;
+	       Inline-&gtinit;
 
 	       sub handler {
 		   my $r = shift;
-		   $r->send_http_header('text/plain');
+		   $r-&gtsend_http_header('text/plain');
 		   printf "%3d! = %10d\n", $_, factorial($_) for 1..100;
 		   return Apache::Constants::OK;
 	       }
@@ -430,7 +432,7 @@ Fast Food
 	       __DATA__
 	       __C__
 	       double factorial(double x) {
-		   if (x < 2)  return 1;
+		   if (x &lt 2)  return 1;
 		   return x * factorial(x - 1)
 	       }
 
@@ -463,19 +465,19 @@ Fast Food
 	   objects?
 
        Solution
-	       my $obj1 = Soldier->new('Benjamin', 'Private', 11111);
-	       my $obj2 = Soldier->new('Sanders', 'Colonel', 22222);
-	       my $obj3 = Soldier->new('Matt', 'Sergeant', 33333);
+	       my $obj1 = Soldier-&gtnew('Benjamin', 'Private', 11111);
+	       my $obj2 = Soldier-&gtnew('Sanders', 'Colonel', 22222);
+	       my $obj3 = Soldier-&gtnew('Matt', 'Sergeant', 33333);
 
 	       for my $obj ($obj1, $obj2, $obj3) {
-		   print ($obj->get_serial, ") ",
-			  $obj->get_name, " is a ",
-			  $obj->get_rank, "\n");
+		   print ($obj-&gtget_serial, ") ",
+			  $obj-&gtget_name, " is a ",
+			  $obj-&gtget_rank, "\n");
 	       }
 
 	       #---------------------------------------------------------
 
-	       use Inline C => <<'END';
+	       use Inline C =&gt &lt&lt'END';
 
 	       typedef struct {
 		 char* name;
@@ -492,9 +494,9 @@ Fast Food
 
 		   New(42, soldier, 1, Soldier);
 
-		   soldier->name = savepv(name);
-		   soldier->rank = savepv(rank);
-		   soldier->serial = serial;
+		   soldier-&gtname = savepv(name);
+		   soldier-&gtrank = savepv(rank);
+		   soldier-&gtserial = serial;
 
 		   sv_setiv(obj, (IV)soldier);
 		   SvREADONLY_on(obj);
@@ -502,21 +504,21 @@ Fast Food
 		}
 
 		char* get_name(SV* obj) {
-		      return ((Soldier*)SvIV(SvRV(obj)))->name;
+		      return ((Soldier*)SvIV(SvRV(obj)))-&gtname;
 		}
 
 		char* get_rank(SV* obj) {
-		      return ((Soldier*)SvIV(SvRV(obj)))->rank;
+		      return ((Soldier*)SvIV(SvRV(obj)))-&gtrank;
 		}
 
 		long get_serial(SV* obj) {
-		     return ((Soldier*)SvIV(SvRV(obj)))->serial;
+		     return ((Soldier*)SvIV(SvRV(obj)))-&gtserial;
 		}
 
 		void DESTROY(SV* obj) {
 		     Soldier* soldier = (Soldier*)SvIV(SvRV(obj));
-		     Safefree(soldier->name);
-		     Safefree(soldier->rank);
+		     Safefree(soldier-&gtname);
+		     Safefree(soldier-&gtrank);
 		     Safefree(soldier);
 	       }
 
@@ -576,11 +578,11 @@ The Main Course
        Solution
 	       print get('http://www.axkit.org');
 
-	       use Inline C => Config =>
-			  LIBS => '-lghttp';
-	       use Inline C => <<'END_OF_C_CODE';
+	       use Inline C =&gt Config =&gt
+			  LIBS =&gt '-lghttp';
+	       use Inline C =&gt &lt&lt'END_OF_C_CODE';
 
-	       #include <ghttp.h>
+	       #include &ltghttp.h&gt
 
 	       char *get(SV* uri) {
 		  SV* buffer;
@@ -616,22 +618,22 @@ The Main Course
 	   With version 0.30 and higher, you can specify the use of shared
 	   libraries easily with something like this:
 
-	       use Inline C => Config => LIBS => '-lghttp';
-	       use Inline C => "code ...";
+	       use Inline C =&gt Config =&gt LIBS =&gt '-lghttp';
+	       use Inline C =&gt "code ...";
 
 	   or
 
-	       use Inline C => "code ...", LIBS => '-lghttp';
+	       use Inline C =&gt "code ...", LIBS =&gt '-lghttp';
 
 	   To specify a specific library path, use:
 
-	       use Inline C => "code ...", LIBS => '-L/your/lib/path -lyourlib';
+	       use Inline C =&gt "code ...", LIBS =&gt '-L/your/lib/path -lyourlib';
 
 	   To specify an include path use:
 
-	       use Inline C => "code ...",
-			  LIBS => '-lghttp',
-			  INC => '-I/your/inc/path';
+	       use Inline C =&gt "code ...",
+			  LIBS =&gt '-lghttp',
+			  INC =&gt '-I/your/inc/path';
 
        See Also
 	   The "LIBS" and "INC" configuration options are formatted and passed
@@ -639,7 +641,7 @@ The Main Course
 	   options see Inline::C.
 
        Credits
-	   This code was written by Matt Sergeant <matt@sergeant.org>, author
+	   This code was written by Matt Sergeant &ltmatt@sergeant.org&gt, author
 	   of many CPAN modules. The configuration syntax has been modified
 	   for use with Inline v0.30.
 
@@ -653,7 +655,7 @@ The Main Course
 	   math library. Annoyingly, Perl does not let you access it. To print
 	   out a small table of its values, just say:
 
-	       perl -le 'use Inline C => q{ double erf(double); }, ENABLE => "AUTOWRAP"; print "$_ @{[erf($_)]}" for (0..10)'
+	       perl -le 'use Inline C =&gt q{ double erf(double); }, ENABLE =&gt "AUTOWRAP"; print "$_ @{[erf($_)]}" for (0..10)'
 
 	   The excellent "Term::ReadLine::Gnu" implements Term::ReadLine using
 	   the GNU ReadLine library. Here is an easy way to access just
@@ -661,10 +663,10 @@ The Main Course
 
 	       package MyTerm;
 
-	       use Inline C => Config =>
-			  ENABLE => AUTOWRAP =>
-			  LIBS => "-lreadline -lncurses -lterminfo -ltermcap ";
-	       use Inline C => q{ char * readline(char *); };
+	       use Inline C =&gt Config =&gt
+			  ENABLE =&gt AUTOWRAP =&gt
+			  LIBS =&gt "-lreadline -lncurses -lterminfo -ltermcap ";
+	       use Inline C =&gt q{ char * readline(char *); };
 
 	       package main;
 	       my $x = MyTerm::readline("xyz: ");
@@ -691,19 +693,19 @@ The Main Course
 	   "readline", "Term::ReadLine::Gnu"
 
        Credits
-	   GNU ReadLine was written by Brian Fox <bfox@ai.mit.edu> and Chet
-	   Ramey <chet@ins.cwru.edu>. Term::ReadLine::Gnu was written by Hiroo
-	   Hayashi <hiroo.hayashi@computer.org>. Both are far richer than the
+	   GNU ReadLine was written by Brian Fox &ltbfox@ai.mit.edu&gt and Chet
+	   Ramey &ltchet@ins.cwru.edu&gt. Term::ReadLine::Gnu was written by Hiroo
+	   Hayashi &lthiroo.hayashi@computer.org&gt. Both are far richer than the
 	   slim interface given here!
 
 	   The idea of producing wrapper code given only a function
 	   declaration is taken from Swig by David M. Beazley
-	   <beazley@cs.uchicago.edu>.
+	   &ltbeazley@cs.uchicago.edu&gt.
 
 	   Ingy's inline editorial insight:
 
 	   This entire entry was contributed by Ariel Scolnicov
-	   <ariels@compugen.co.il>. Ariel also first suggested the idea for
+	   &ltariels@compugen.co.il&gt. Ariel also first suggested the idea for
 	   Inline to support function declaration processing.
 
    Complex Data
@@ -711,7 +713,7 @@ The Main Course
 	   How do I deal with complex data types like hashes in Inline C?
 
        Solution
-	       use Inline C => <<'END_OF_C_CODE';
+	       use Inline C =&gt &lt&lt'END_OF_C_CODE';
 
 	       void dump_hash(SV* hash_ref) {
 		   HV* hash;
@@ -725,11 +727,11 @@ The Main Course
 
 		   hash = (HV*)SvRV(hash_ref);
 		   num_keys = hv_iterinit(hash);
-		   for (i = 0; i < num_keys; i++) {
+		   for (i = 0; i &lt num_keys; i++) {
 		       hash_entry = hv_iternext(hash);
 		       sv_key = hv_iterkeysv(hash_entry);
 		       sv_val = hv_iterval(hash, hash_entry);
-		       printf("%s => %s\n", SvPV(sv_key, PL_na), SvPV(sv_val, PL_na));
+		       printf("%s =&gt %s\n", SvPV(sv_key, PL_na), SvPV(sv_val, PL_na));
 		   }
 		   return;
 	       }
@@ -737,11 +739,11 @@ The Main Course
 	       END_OF_C_CODE
 
 	       my %hash = (
-			   Author => "Brian Ingerson",
-			   Nickname => "INGY",
-			   Module => "Inline.pm",
-			   Version => "0.30",
-			   Language => "C",
+			   Author =&gt "Brian Ingerson",
+			   Nickname =&gt "INGY",
+			   Module =&gt "Inline.pm",
+			   Version =&gt "0.30",
+			   Language =&gt "C",
 			  );
 
 	       dump_hash(\%hash);
@@ -805,12 +807,12 @@ The Main Course
 	       static int next_word(char** text_ptr, char* word) {
 		   char* text = *text_ptr;
 		   while(*text != '\0' &&
-			 *text <= ' ')
+			 *text &lt= ' ')
 		       text++;
-		   if (*text <= ' ')
+		   if (*text &lt= ' ')
 		       return 0;
 		   while(*text != '\0' &&
-			 *text > ' ') {
+			 *text &gt ' ') {
 		       *word++ = *text++;
 		   }
 		   *word = '\0';
@@ -834,16 +836,16 @@ The Main Course
 	   reference becomes the hash value. The output looks like this:
 
 	       $VAR1 = {
-			 'flintstones' => [
+			 'flintstones' =&gt [
 					    'fred',
 					    'barney'
 					  ],
-			 'simpsons' => [
+			 'simpsons' =&gt [
 					 'homer',
 					 'marge',
 					 'bart'
 				       ],
-			 'jetsons' => [
+			 'jetsons' =&gt [
 					'george',
 					'jane',
 					'elroy'
@@ -854,7 +856,7 @@ The Main Course
 	   See perlapi for information about the Perl5 internal API.
 
        Credits
-	   Al Danial <alnd@pacbell.net> requested a solution to this on
+	   Al Danial &ltalnd@pacbell.net&gt requested a solution to this on
 	   comp.lang.perl.misc. He borrowed the idea from the "Hash of Lists"
 	   example in the Camel book.
 
@@ -864,8 +866,8 @@ Just Desserts
 	   How do I access Win32 DLL-s using Inline?
 
        Solution
-	       use Inline C => DATA =>
-			  LIBS => '-luser32';
+	       use Inline C =&gt DATA =&gt
+			  LIBS =&gt '-luser32';
 
 	       $text = "@ARGV" || 'Inline.pm works with MSWin32. Scary...';
 
@@ -874,7 +876,7 @@ Just Desserts
 	       __END__
 	       __C__
 
-	       #include <windows.h>
+	       #include &ltwindows.h&gt
 
 	       int WinBox(char* Caption, char* Text) {
 		 return MessageBoxA(0, Text, Caption, 0);
@@ -898,7 +900,7 @@ Just Desserts
 
        Credits
 	   This example was adapted from some sample code written by Garrett
-	   Goebel <garrett@scriptpro.com>
+	   Goebel &ltgarrett@scriptpro.com&gt
 
    Embedding Perl in C
        Problem
@@ -942,9 +944,9 @@ Just Desserts
 	   http://search.cpan.org/search?dist=Inline-CPR
 
        Credits
-	   Randal Schwartz <merlyn@stonehenge.com>, Randolph Bentson
-	   <bentson@grieg.holmsjoen.com>, Richard Anderson
-	   <starfire@zipcon.net>, and Tim Maher <tim@consultix-inc.com> helped
+	   Randal Schwartz &ltmerlyn@stonehenge.com&gt, Randolph Bentson
+	   &ltbentson@grieg.holmsjoen.com&gt, Richard Anderson
+	   &ltstarfire@zipcon.net&gt, and Tim Maher &lttim@consultix-inc.com&gt helped
 	   me figure out how to write a program that would work as a hashbang.
 
 Entertaining Guests
@@ -952,8 +954,8 @@ Entertaining Guests
        other modules that want to expose a C API of their own. The general
        syntax for doing this is:
 
-	   use Inline with => 'Module';
-	   use Inline C => ... ;
+	   use Inline with =&gt 'Module';
+	   use Inline C =&gt ... ;
 
        This tells "Module" to pass configuration options to Inline. Options
        like typemaps, include paths, and external libraries, are all resolved
@@ -965,29 +967,29 @@ Entertaining Guests
 	   be done more easily with Inline?
 
        Solution
-	       use Inline with => 'Event';
+	       use Inline with =&gt 'Event';
 
-	       Event->timer(desc     => 'Timer #1',
-			    interval => 2,
-			    cb	     => \&my_callback,
+	       Event-&gttimer(desc     =&gt 'Timer #1',
+			    interval =&gt 2,
+			    cb	     =&gt \&my_callback,
 			   );
 
-	       Event->timer(desc     => 'Timer #2',
-			    interval => 3,
-			    cb	     => \&my_callback,
+	       Event-&gttimer(desc     =&gt 'Timer #2',
+			    interval =&gt 3,
+			    cb	     =&gt \&my_callback,
 			   );
 
 	       print "Starting...\n";
 	       Event::loop;
 
-	       use Inline C => <<'END';
+	       use Inline C =&gt &lt&lt'END';
 	       void my_callback(pe_event* event) {
-		   pe_timer * watcher = event->up;
+		   pe_timer * watcher = event-&gtup;
 
 		   printf("%s\n\tEvent priority = %d\n\tWatcher priority = %d\n\n",
-			  SvPVX(watcher->base.desc),
-			  event->prio,
-			  watcher->base.prio
+			  SvPVX(watcher-&gtbase.desc),
+			  event-&gtprio,
+			  watcher-&gtbase.prio
 			 );
 	       }
 	       END
@@ -998,11 +1000,11 @@ Entertaining Guests
 	   name and location of Event's header files, typemaps and shared
 	   objects. The parameters that "Event" returns look like:
 
-	       INC => "-I $path/Event",
-	       TYPEMAPS => "$path/Event/typemap",
-	       MYEXTLIB => "$path/auto/Event/Event.$so",
-	       AUTO_INCLUDE => '#include "EventAPI.h"',
-	       BOOT => 'I_EVENT_API("Inline");',
+	       INC =&gt "-I $path/Event",
+	       TYPEMAPS =&gt "$path/Event/typemap",
+	       MYEXTLIB =&gt "$path/auto/Event/Event.$so",
+	       AUTO_INCLUDE =&gt '#include "EventAPI.h"',
+	       BOOT =&gt 'I_EVENT_API("Inline");',
 
 	   Doing all of this automatically allows you, the programmer, to
 	   simply write a function that receives a pointer of type
@@ -1022,11 +1024,11 @@ Entertaining Guests
 	   a tutorial showing several examples of using Inline with "Event".
 
        Credits
-	   Jochen Stenzel <perl@jochen-stenzel.de> originally came up with the
+	   Jochen Stenzel &ltperl@jochen-stenzel.de&gt originally came up with the
 	   idea of mixing Inline and "Event". He also authored the "Event"
 	   tutorial.
 
-	   Joshua Pritikin <joshua.pritikin@db.com> is the author of
+	   Joshua Pritikin &ltjoshua.pritikin@db.com&gt is the author of
 	   "Event.pm".
 
 Food for Thought
@@ -1041,7 +1043,7 @@ Food for Thought
 	       print "SQRT(9^2 + 5^2) = ", pyth(9, 5), "\n";
 	       print "9 * 5 = ", mult(9, 5), "\n";
 
-	       use Inline C => <<'END_C';
+	       use Inline C =&gt &lt&lt'END_C';
 	       int add(int x, int y) {
 		   return x + y;
 	       }
@@ -1163,7 +1165,7 @@ Food for Thought
 
 	       my $c_code = generate('foo_function');
 
-	       Inline->bind(C => $c_code);
+	       Inline-&gtbind(C =&gt $c_code);
 
 	       foo_function(1, 2, 3);
 
@@ -1174,7 +1176,7 @@ Food for Thought
 
 	   The "bind()" function of Inline let's you bind
 	   (compile/load/execute) C functions at run time. It takes all of the
-	   same arguments as 'use Inline C => ...'.
+	   same arguments as 'use Inline C =&gt ...'.
 
 	   The nice thing is that once a particular snippet is compiled, it
 	   remains cached so that it doesn't need to be compiled again. I can
@@ -1203,7 +1205,7 @@ SEE ALSO
        To subscribe, send email to inline-subscribe@perl.org
 
 AUTHOR
-       Brian Ingerson <INGY@cpan.org>
+       Brian Ingerson &ltINGY@cpan.org&gt
 
 COPYRIGHT
        Copyright (c) 2001, 2002. Brian Ingerson.
@@ -1219,6 +1221,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-01-29			 C-Cookbook(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module can extract translatable strings from files, and write them..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Locale::Maketext::Extract - Extract translatable strings from source</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Locale::Maketext::ExtrUser3Contributed Perl DocumeLocale::Maketext::Extract(3)
 
 
@@ -16,34 +18,34 @@ NAME
        Locale::Maketext::Extract - Extract translatable strings from source
 
 SYNOPSIS
-	   my $Ext = Locale::Maketext::Extract->new;
-	   $Ext->read_po('messages.po');
-	   $Ext->extract_file($_) for <*.pl>;
+	   my $Ext = Locale::Maketext::Extract-&gtnew;
+	   $Ext-&gtread_po('messages.po');
+	   $Ext-&gtextract_file($_) for &lt*.pl&gt;
 
 	   # Set $entries_are_in_gettext_format if the .pl files above use
 	   # loc('%1') instead of loc('[_1]')
-	   $Ext->compile($entries_are_in_gettext_format);
+	   $Ext-&gtcompile($entries_are_in_gettext_format);
 
-	   $Ext->write_po('messages.po');
+	   $Ext-&gtwrite_po('messages.po');
 
 	   -----------------------------------
 
 	   ### Specifying parser plugins ###
 
-	   my $Ext = Locale::Maketext::Extract->new(
+	   my $Ext = Locale::Maketext::Extract-&gtnew(
 
 	       # Specify which parser plugins to use
-	       plugins => {
+	       plugins =&gt {
 
 		   # Use Perl parser, process files with extension .pl .pm .cgi
-		   perl => [],
+		   perl =&gt [],
 
 		   # Use YAML parser, process all files
-		   yaml => ['*'],
+		   yaml =&gt ['*'],
 
 		   # Use TT2 parser, process files with extension .tt2 .tt .html
 		   # or which match the regex
-		   tt2	=> [
+		   tt2	=&gt [
 		       'tt2',
 		       'tt',
 		       'html',
@@ -51,15 +53,15 @@ SYNOPSIS
 		   ],
 
 		   # Use My::Module as a parser for all files
-		   'My::Module' => ['*'],
+		   'My::Module' =&gt ['*'],
 
 	       },
 
 	       # Warn if a parser can't process a file or problems loading a plugin
-	       warnings => 1,
+	       warnings =&gt 1,
 
 	       # List processed files
-	       verbose => 1,
+	       verbose =&gt 1,
 
 	   );
 
@@ -86,11 +88,11 @@ DESCRIPTION
 
        HTML::Mason (Mason 1) and Mason (Mason 2) (plugin: mason)
 	   HTML::Mason (aka Mason 1)
-	    Strings inside <&|/l>...</&> and <&|/loc>...</&> are extracted.
+	    Strings inside &lt&|/l&gt...&lt/&&gt and &lt&|/loc&gt...&lt/&&gt are extracted.
 
-	   Mason (aka Mason 2) Strings inside <% $.floc { %>...</%> or <% $.fl
-	   { %>...</%> or <% $self->floc { %>...</%> or <% $self->fl {
-	   %>...</%> are extracted.
+	   Mason (aka Mason 2) Strings inside &lt% $.floc { %&gt...&lt/%&gt or &lt% $.fl
+	   { %&gt...&lt/%&gt or &lt% $self-&gtfloc { %&gt...&lt/%&gt or &lt% $self-&gtfl {
+	   %&gt...&lt/%&gt are extracted.
 
        Template Toolkit (plugin: tt2)
 	   Valid forms are:
@@ -133,15 +135,15 @@ METHODS
 	   new()
 
 	   new(
-	       plugins	 => {...},
-	       warnings  => 1 | 0,
-	       verbose	 => 0 | 1 | 2 | 3,
+	       plugins	 =&gt {...},
+	       warnings  =&gt 1 | 0,
+	       verbose	 =&gt 0 | 1 | 2 | 3,
 	   )
 
        See "Plugins", "Warnings" and "Verbose" for details
 
    Plugins
-	   $ext->plugins({...});
+	   $ext-&gtplugins({...});
 
        Locale::Maketext::Extract uses plugins (see below for the list) to
        parse different formats.
@@ -152,20 +154,20 @@ METHODS
 	   # only parse files with the default extension list defined in the plugin
 	   # ie .yaml .yml .conf
 
-	   $ext->plugins({
-	       yaml => [],
+	   $ext-&gtplugins({
+	       yaml =&gt [],
 	   })
 
 
 	   # use only the Perl plugin
 	   # parse all file types
 
-	   $ext->plugins({
-	       perl => '*'
+	   $ext-&gtplugins({
+	       perl =&gt '*'
 	   })
 
-	   $ext->plugins({
-	       tt2  => [
+	   $ext-&gtplugins({
+	       tt2  =&gt [
 		   'tt',	      # matches base filename against /\.tt$/
 		   qr/\.tt2?\./,      # matches base filename against regex
 		   \&my_filter,       # codref called
@@ -181,8 +183,8 @@ METHODS
 	   # Specify your own parser
 	   # only parse files with the default extension list defined in the plugin
 
-	   $ext->plugins({
-	       'My::Extract::Parser'  => []
+	   $ext-&gtplugins({
+	       'My::Extract::Parser'  =&gt []
 	   })
 
        By default, if no plugins are specified, then it uses all of the
@@ -226,7 +228,7 @@ METHODS
        no acceptable plugin was found, or no strings were extracted, then the
        file is not listed:
 
-	     $ext = Locale::Extract->new( verbose => 1 | 2 | 3);
+	     $ext = Locale::Extract-&gtnew( verbose =&gt 1 | 2 | 3);
 
 	  OR
 	     xgettext.pl ... -v 	  # files reported
@@ -263,7 +265,7 @@ METHODS
        "compiled_entries".
 
        The "entries" are not cleared after each compilation; use
-       "-"set_entries()> to clear them if you need to extract from sources
+       "-"set_entries()&gt to clear them if you need to extract from sources
        with varying styles.
 
        normalize_space
@@ -290,10 +292,10 @@ SEE ALSO
        xgettext.pl, Locale::Maketext, Locale::Maketext::Lexicon
 
 AUTHORS
-       Audrey Tang <cpan@audreyt.org>
+       Audrey Tang &ltcpan@audreyt.org&gt
 
 COPYRIGHT
-       Copyright 2003-2008 by Audrey Tang <cpan@audreyt.org>.
+       Copyright 2003-2008 by Audrey Tang &ltcpan@audreyt.org&gt.
 
        This software is released under the MIT license cited below.
 
@@ -320,6 +322,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-07-20	  Locale::Maketext::Extract(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The searchfs() function searches the volume (that is, mounted file sys-..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>searchfs -- search a volume quickly</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 
 SEARCHFS(2)		    BSD System Calls Manual		   SEARCHFS(2)
 
@@ -15,8 +17,8 @@ NAME
      searchfs -- search a volume quickly
 
 SYNOPSIS
-     #include <sys/attr.h>
-     #include <unistd.h>
+     #include &ltsys/attr.h&gt
+     #include &ltunistd.h&gt
 
      int
      searchfs(const char* path, struct fssearchblock* searchBlock,
@@ -41,7 +43,7 @@ DESCRIPTION
      the path name leading to this object must be searchable.
 
      The searchBlock parameter is a pointer to an fssearchblock structure, as
-     defined by <sys/attr.h> (shown below).  You are responsible for filling
+     defined by &ltsys/attr.h&gt (shown below).  You are responsible for filling
      out all fields of this structure before calling the function.
 
      struct fssearchblock {
@@ -135,7 +137,7 @@ DESCRIPTION
 
      The scriptCode parameter is currently ignored.  You should always pass in
      the value 0x08000103, which corresponds to the UTF-8 text encoding value
-     defined by <CarbonCore/TextCommon.h>.
+     defined by &ltCarbonCore/TextCommon.h&gt.
 
      The options parameter is a bit set that controls the behaviour of
      searchfs().  The following option bits are defined.
@@ -267,7 +269,7 @@ SEARCH CRITERIA
      the same way as they would be returned from getattrlist(2), including the
      leading u_int32_t length value.  Note that the size of these buffers must
      be bounded by SEARCHFS_MAX_SEARCHPARMS bytes, which is defined in
-     <sys/attr.h>.
+     &ltsys/attr.h&gt.
 
      The attribute values in the first and second search buffers form a lower
      and upper bound for the search, respectively.  These have different mean-
@@ -396,13 +398,13 @@ EXAMPLES
      The following code searches a volume for files of the specified type and
      creator.
 
-     #include <assert.h>
-     #include <stdio.h>
-     #include <stddef.h>
-     #include <string.h>
-     #include <sys/attr.h>
-     #include <sys/errno.h>
-     #include <unistd.h>
+     #include &ltassert.h&gt
+     #include &ltstdio.h&gt
+     #include &ltstddef.h&gt
+     #include &ltstring.h&gt
+     #include &ltsys/attr.h&gt
+     #include &ltsys/errno.h&gt
+     #include &ltunistd.h&gt
 
      typedef struct attrlist	     attrlist_t;
      typedef struct fssearchblock    fssearchblock_t;
@@ -498,15 +500,15 @@ EXAMPLES
 	     if ( (err == 0) || (err == EAGAIN) ) {
 		 thisEntry = (ResultAttrBuf *) resultAttrBuf;
 
-		 for (matchIndex = 0; matchIndex < matchCount; matchIndex++) {
-		     printf("%08x ", thisEntry->parObjID.fid_objno);
+		 for (matchIndex = 0; matchIndex &lt matchCount; matchIndex++) {
+		     printf("%08x ", thisEntry-&gtparObjID.fid_objno);
 		     printf(
 			 "%s\n",
-			 ((char *) &thisEntry->name)
-			     + thisEntry->name.attr_dataoffset
+			 ((char *) &thisEntry-&gtname)
+			     + thisEntry-&gtname.attr_dataoffset
 		     );
 		     // Advance to the next entry.
-		     ((char *) thisEntry) += thisEntry->length;
+		     ((char *) thisEntry) += thisEntry-&gtlength;
 		 }
 	     }
 
@@ -524,6 +526,6 @@ HISTORY
      10.0).
 
 Darwin			       October 13, 2008 			Darwin
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

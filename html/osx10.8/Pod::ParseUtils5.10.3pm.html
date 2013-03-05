@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Pod::ParseUtils contains a few object-oriented helper packages for POD..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Pod::ParseUtils - helpers for POD parsing and conversion</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Pod::ParseUtils(3pm)   Perl Programmers Reference Guide   Pod::ParseUtils(3pm)
 
 
@@ -19,7 +21,7 @@ SYNOPSIS
 	 use Pod::ParseUtils;
 
 	 my $list = new Pod::List;
-	 my $link = Pod::Hyperlink->new('Pod::Parser');
+	 my $link = Pod::Hyperlink-&gtnew('Pod::Parser');
 
 DESCRIPTION
        Pod::ParseUtils contains a few object-oriented helper packages for POD
@@ -30,58 +32,58 @@ DESCRIPTION
        =over ... =item ... =back) for further processing.  The following
        methods are available:
 
-       Pod::List->new()
+       Pod::List-&gtnew()
 	   Create a new list object. Properties may be specified through a
 	   hash reference like this:
 
-	     my $list = Pod::List->new({ -start => $., -indent => 4 });
+	     my $list = Pod::List-&gtnew({ -start =&gt $., -indent =&gt 4 });
 
 	   See the individual methods/properties for details.
 
-       $list->file()
+       $list-&gtfile()
 	   Without argument, retrieves the file name the list is in. This must
 	   have been set before by either specifying -file in the new() method
 	   or by calling the file() method with a scalar argument.
 
-       $list->start()
+       $list-&gtstart()
 	   Without argument, retrieves the line number where the list started.
 	   This must have been set before by either specifying -start in the
 	   new() method or by calling the start() method with a scalar
 	   argument.
 
-       $list->indent()
+       $list-&gtindent()
 	   Without argument, retrieves the indent level of the list as
 	   specified in "=over n". This must have been set before by either
 	   specifying -indent in the new() method or by calling the indent()
 	   method with a scalar argument.
 
-       $list->type()
+       $list-&gttype()
 	   Without argument, retrieves the list type, which can be an
 	   arbitrary value, e.g. "OL", "UL", ... when thinking the HTML way.
 	   This must have been set before by either specifying -type in the
 	   new() method or by calling the type() method with a scalar
 	   argument.
 
-       $list->rx()
+       $list-&gtrx()
 	   Without argument, retrieves a regular expression for simplifying
 	   the individual item strings once the list type has been determined.
 	   Usage: E.g. when converting to HTML, one might strip the leading
-	   number in an ordered list as "<OL>" already prints numbers itself.
+	   number in an ordered list as "&ltOL&gt" already prints numbers itself.
 	   This must have been set before by either specifying -rx in the
 	   new() method or by calling the rx() method with a scalar argument.
 
-       $list->item()
+       $list-&gtitem()
 	   Without argument, retrieves the array of the items in this list.
 	   The items may be represented by any scalar.	If an argument has
 	   been given, it is pushed on the list of items.
 
-       $list->parent()
+       $list-&gtparent()
 	   Without argument, retrieves information about the parent holding
 	   this list, which is represented as an arbitrary scalar.  This must
 	   have been set before by either specifying -parent in the new()
 	   method or by calling the parent() method with a scalar argument.
 
-       $list->tag()
+       $list-&gttag()
 	   Without argument, retrieves information about the list tag, which
 	   can be any scalar.  This must have been set before by either
 	   specifying -tag in the new() method or by calling the tag() method
@@ -90,83 +92,83 @@ DESCRIPTION
    Pod::Hyperlink
        Pod::Hyperlink is a class for manipulation of POD hyperlinks. Usage:
 
-	 my $link = Pod::Hyperlink->new('alternative text|page/"section in page"');
+	 my $link = Pod::Hyperlink-&gtnew('alternative text|page/"section in page"');
 
        The Pod::Hyperlink class is mainly designed to parse the contents of
-       the "L<...>" sequence, providing a simple interface for accessing the
+       the "L&lt...&gt" sequence, providing a simple interface for accessing the
        different parts of a POD hyperlink for further processing. It can also
        be used to construct hyperlinks.
 
-       Pod::Hyperlink->new()
+       Pod::Hyperlink-&gtnew()
 	   The new() method can either be passed a set of key/value pairs or a
-	   single scalar value, namely the contents of a "L<...>" sequence. An
+	   single scalar value, namely the contents of a "L&lt...&gt" sequence. An
 	   object of the class "Pod::Hyperlink" is returned. The value "undef"
 	   indicates a failure, the error message is stored in $@.
 
-       $link->parse($string)
+       $link-&gtparse($string)
 	   This method can be used to (re)parse a (new) hyperlink, i.e. the
-	   contents of a "L<...>" sequence. The result is stored in the
+	   contents of a "L&lt...&gt" sequence. The result is stored in the
 	   current object.  Warnings are stored in the warnings property.
-	   E.g. sections like "L<open(2)>" are deprecated, as they do not
-	   point to Perl documents. "L<DBI::foo(3p)>" is wrong as well, the
+	   E.g. sections like "L&ltopen(2)&gt" are deprecated, as they do not
+	   point to Perl documents. "L&ltDBI::foo(3p)&gt" is wrong as well, the
 	   manpage section can simply be dropped.
 
-       $link->markup($string)
+       $link-&gtmarkup($string)
 	   Set/retrieve the textual value of the link. This string contains
-	   special markers "P<>" and "Q<>" that should be expanded by the
+	   special markers "P&lt&gt" and "Q&lt&gt" that should be expanded by the
 	   translator's interior sequence expansion engine to the formatter-
 	   specific code to highlight/activate the hyperlink. The details have
 	   to be implemented in the translator.
 
-       $link->text()
+       $link-&gttext()
 	   This method returns the textual representation of the hyperlink as
 	   above, but without markers (read only). Depending on the link type
 	   this is one of the following alternatives (the + and * denote the
 	   portions of the text that are marked up):
 
-	     +perl+		       L<perl>
-	     *$|* in +perlvar+	       L<perlvar/$|>
-	     *OPTIONS* in +perldoc+    L<perldoc/"OPTIONS">
-	     *DESCRIPTION*	       L<"DESCRIPTION">
+	     +perl+		       L&ltperl&gt
+	     *$|* in +perlvar+	       L&ltperlvar/$|&gt
+	     *OPTIONS* in +perldoc+    L&ltperldoc/"OPTIONS"&gt
+	     *DESCRIPTION*	       L&lt"DESCRIPTION"&gt
 
-       $link->warning()
+       $link-&gtwarning()
 	   After parsing, this method returns any warnings encountered during
 	   the parsing process.
 
-       $link->file()
-       $link->line()
+       $link-&gtfile()
+       $link-&gtline()
 	   Just simple slots for storing information about the line and the
 	   file the link was encountered in. Has to be filled in manually.
 
-       $link->page()
+       $link-&gtpage()
 	   This method sets or returns the POD page this link points to.
 
-       $link->node()
+       $link-&gtnode()
 	   As above, but the destination node text of the link.
 
-       $link->alttext()
+       $link-&gtalttext()
 	   Sets or returns an alternative text specified in the link.
 
-       $link->type()
+       $link-&gttype()
 	   The node type, either "section" or "item". As an unofficial type,
-	   there is also "hyperlink", derived from e.g. "L<http://perl.com>"
+	   there is also "hyperlink", derived from e.g. "L&lthttp://perl.com&gt"
 
-       $link->link()
-	   Returns the link as contents of "L<>". Reciprocal to parse().
+       $link-&gtlink()
+	   Returns the link as contents of "L&lt&gt". Reciprocal to parse().
 
    Pod::Cache
        Pod::Cache holds information about a set of POD documents, especially
        the nodes for hyperlinks.  The following methods are available:
 
-       Pod::Cache->new()
+       Pod::Cache-&gtnew()
 	   Create a new cache object. This object can hold an arbitrary number
 	   of POD documents of class Pod::Cache::Item.
 
-       $cache->item()
+       $cache-&gtitem()
 	   Add a new item to the cache. Without arguments, this method returns
 	   a list of all cache elements.
 
-       $cache->find_page($name)
+       $cache-&gtfind_page($name)
 	   Look for a POD document named $name in the cache. Returns the
 	   reference to the corresponding Pod::Cache::Item object or undef if
 	   not found.
@@ -177,23 +179,23 @@ DESCRIPTION
        information about the hyperlink nodes of POD documents.	The following
        methods are available:
 
-       Pod::Cache::Item->new()
+       Pod::Cache::Item-&gtnew()
 	   Create a new object.
 
-       $cacheitem->page()
+       $cacheitem-&gtpage()
 	   Set/retrieve the POD document name (e.g. "Pod::Parser").
 
-       $cacheitem->description()
+       $cacheitem-&gtdescription()
 	   Set/retrieve the POD short description as found in the "=head1
 	   NAME" section.
 
-       $cacheitem->path()
+       $cacheitem-&gtpath()
 	   Set/retrieve the POD file storage path.
 
-       $cacheitem->file()
+       $cacheitem-&gtfile()
 	   Set/retrieve the POD file name.
 
-       $cacheitem->nodes()
+       $cacheitem-&gtnodes()
 	   Add a node (or a list of nodes) to the document's node list. Note
 	   that the order is kept, i.e. start with the first node and end with
 	   the last.  If no argument is given, the current list of nodes is
@@ -201,12 +203,12 @@ DESCRIPTION
 	   be any scalar, but usually is a pair of node string and unique id
 	   for the "find_node" method to work correctly.
 
-       $cacheitem->find_node($name)
+       $cacheitem-&gtfind_node($name)
 	   Look for a node or index entry named $name in the object.  Returns
 	   the unique id of the node (i.e. the second element of the array
 	   stored in the node array) or undef if not found.
 
-       $cacheitem->idx()
+       $cacheitem-&gtidx()
 	   Add an index entry (or a list of them) to the document's index
 	   list. Note that the order is kept, i.e. start with the first node
 	   and end with the last.  If no argument is given, the current list
@@ -215,9 +217,9 @@ DESCRIPTION
 	   pair of string and unique id.
 
 AUTHOR
-       Please report bugs using <http://rt.cpan.org>.
+       Please report bugs using &lthttp://rt.cpan.org&gt.
 
-       Marek Rouchal <marekr@cpan.org>, borrowing a lot of things from pod2man
+       Marek Rouchal &ltmarekr@cpan.org&gt, borrowing a lot of things from pod2man
        and pod2roff as well as other POD processing tools by Tom Christiansen,
        Brad Appleton and Russ Allbery.
 
@@ -227,6 +229,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-04-12		  Pod::ParseUtils(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

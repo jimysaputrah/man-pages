@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="A structured type constraint is a standard container Moose type..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MooseX::Types::Structured - MooseX::Types::Structured - Structured Type</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MooseX::Types::StructuUser3Contributed Perl DocumeMooseX::Types::Structured(3)
 
 
@@ -26,17 +28,17 @@ SYNOPSIS
 	   use MooseX::Types::Structured qw(Dict Tuple Optional);
 
 	   ## A name has a first and last part, but middle names are not required
-	   has name => (
-	       isa=>Dict[
-		   first => Str,
-		   last => Str,
-		   middle => Optional[Str],
+	   has name =&gt (
+	       isa=&gtDict[
+		   first =&gt Str,
+		   last =&gt Str,
+		   middle =&gt Optional[Str],
 	       ],
 	   );
 
 	   ## description is a string field followed by a HashRef of tagged data.
-	   has description => (
-	     isa=>Tuple[
+	   has description =&gt (
+	     isa=&gtTuple[
 	       Str,
 	       Optional[HashRef],
 	    ],
@@ -46,64 +48,64 @@ SYNOPSIS
 
        Then you can instantiate this class with something like:
 
-	   my $john = Person->new(
-	       name => {
-		   first => 'John',
-		   middle => 'James'
-		   last => 'Napiorkowski',
+	   my $john = Person-&gtnew(
+	       name =&gt {
+		   first =&gt 'John',
+		   middle =&gt 'James'
+		   last =&gt 'Napiorkowski',
 	       },
-	       description => [
+	       description =&gt [
 		   'A cool guy who loves Perl and Moose.', {
-		       married_to => 'Vanessa Li',
-		       born_in => 'USA',
+		       married_to =&gt 'Vanessa Li',
+		       born_in =&gt 'USA',
 		   };
 	       ]
 	   );
 
        Or with:
 
-	   my $vanessa = Person->new(
-	       name => {
-		   first => 'Vanessa',
-		   last => 'Li'
+	   my $vanessa = Person-&gtnew(
+	       name =&gt {
+		   first =&gt 'Vanessa',
+		   last =&gt 'Li'
 	       },
-	       description => ['A great student!'],
+	       description =&gt ['A great student!'],
 	   );
 
        But all of these would cause a constraint error for the 'name'
        attribute:
 
 	   ## Value for 'name' not a HashRef
-	   Person->new( name => 'John' );
+	   Person-&gtnew( name =&gt 'John' );
 
 	   ## Value for 'name' has incorrect hash key and missing required keys
-	   Person->new( name => {
-	       first_name => 'John'
+	   Person-&gtnew( name =&gt {
+	       first_name =&gt 'John'
 	   });
 
 	   ## Also incorrect keys
-	   Person->new( name => {
-	       first_name => 'John',
-	       age => 39,
+	   Person-&gtnew( name =&gt {
+	       first_name =&gt 'John',
+	       age =&gt 39,
 	   });
 
 	   ## key 'middle' incorrect type, should be a Str not a ArrayRef
-	   Person->new( name => {
-	       first => 'Vanessa',
-	       middle => [1,2],
-	       last => 'Li',
+	   Person-&gtnew( name =&gt {
+	       first =&gt 'Vanessa',
+	       middle =&gt [1,2],
+	       last =&gt 'Li',
 	   });
 
        And these would cause a constraint error for the 'description'
        attribute:
 
 	   ## Should be an ArrayRef
-	   Person->new( description => 'Hello I am a String' );
+	   Person-&gtnew( description =&gt 'Hello I am a String' );
 
 	   ## First element must be a string not a HashRef.
-	   Person->new (description => [{
-	       tag1 => 'value1',
-	       tag2 => 'value2'
+	   Person-&gtnew (description =&gt [{
+	       tag1 =&gt 'value1',
+	       tag2 =&gt 'value2'
 	   }]);
 
        Please see the test cases for more examples.
@@ -158,7 +160,7 @@ DESCRIPTION
 
        This defines a type constraint that validates values like:
 
-	   ['Hello', 100, {key1 => 'value1', key2 => 'value2'}];
+	   ['Hello', 100, {key1 =&gt 'value1', key2 =&gt 'value2'}];
 	   ['World', 200];
 
        Notice that the last type constraint in the structure is optional.
@@ -168,7 +170,7 @@ DESCRIPTION
        if they exist, while 'Maybe' permits undefined values.  So the
        following example would not validate:
 
-	   StringIntOptionalHashRef->validate(['Hello Undefined', 1000, undef]);
+	   StringIntOptionalHashRef-&gtvalidate(['Hello Undefined', 1000, undef]);
 
        Please note the subtle difference between undefined and null.  If you
        wish to allow both null and undefined, you should use the core Moose
@@ -187,7 +189,7 @@ DESCRIPTION
 
        This would validate the following:
 
-	   ['Hello', 100, {key1 => 'value1', key2 => 'value2'}];
+	   ['Hello', 100, {key1 =&gt 'value1', key2 =&gt 'value2'}];
 	   ['World', 200, undef];
 	   ['World', 200];
 
@@ -197,21 +199,21 @@ DESCRIPTION
 
 	   subtype FirstNameLastName,
 	    as Dict[
-	       firstname => Str,
-	       lastname => Str,
+	       firstname =&gt Str,
+	       lastname =&gt Str,
 	    ];
 
        This would constrain a HashRef that validates something like:
 
-	   {firstname => 'Christopher', lastname => 'Parsons'};
+	   {firstname =&gt 'Christopher', lastname =&gt 'Parsons'};
 
        but all the following would fail validation:
 
 	   ## Incorrect keys
-	   {first => 'Christopher', last => 'Parsons'};
+	   {first =&gt 'Christopher', last =&gt 'Parsons'};
 
 	   ## Too many keys
-	   {firstname => 'Christopher', lastname => 'Parsons', middlename => 'Allen'};
+	   {firstname =&gt 'Christopher', lastname =&gt 'Parsons', middlename =&gt 'Allen'};
 
 	   ## Not a HashRef
 	   ['Christopher', 'Parsons'];
@@ -223,13 +225,13 @@ DESCRIPTION
 	   subtype Crazy,
 	    as Tuple[
 	       Int,
-	       Dict[name=>Str, age=>Int],
+	       Dict[name=&gtStr, age=&gtInt],
 	       ArrayRef[Int]
 	    ];
 
        Which would match:
 
-	   [1, {name=>'John', age=>25},[10,11,12]];
+	   [1, {name=&gt'John', age=&gt25},[10,11,12]];
 
        Please notice how the type parameters can be visually arranged to your
        liking and to improve the clarity of your meaning.  You don't need to
@@ -239,15 +241,15 @@ DESCRIPTION
 
 	   subtype AnyKeyOrder,
 	     as Dict[
-	       key1=>Int,
-	       key2=>Str,
-	       key3=>Int,
+	       key1=&gtInt,
+	       key2=&gtStr,
+	       key3=&gtInt,
 	    ];
 
        Would validate both:
 
-	   {key1 => 1, key2 => "Hi!", key3 => 2};
-	   {key2 => "Hi!", key1 => 100, key3 => 300};
+	   {key1 =&gt 1, key2 =&gt "Hi!", key3 =&gt 2};
+	   {key2 =&gt "Hi!", key1 =&gt 100, key3 =&gt 300};
 
        As you would expect, since underneath its just a plain old Perl hash at
        work.
@@ -266,12 +268,12 @@ DESCRIPTION
 	   package MyApp::MyClass;
 	   use Moose;
 
-	   has person => (isa => 'MyApp::MyStruct');
+	   has person =&gt (isa =&gt 'MyApp::MyStruct');
 
-	   my $instance = MyApp::MyClass->new(
-	       person=>MyApp::MyStruct->new(
-		   full_name => 'John',
-		   age_in_years => 39,
+	   my $instance = MyApp::MyClass-&gtnew(
+	       person=&gtMyApp::MyStruct-&gtnew(
+		   full_name =&gt 'John',
+		   age_in_years =&gt 39,
 	       ),
 	   );
 
@@ -304,40 +306,40 @@ DESCRIPTION
 	   ## Add the coercions.
 	   coerce MyStruct,
 	    from Dict[
-	       full_name=>Str,
-	       age_in_years=>Int
+	       full_name=&gtStr,
+	       age_in_years=&gtInt
 	    ], via {
-	       MyApp::MyStruct->new(%$_);
+	       MyApp::MyStruct-&gtnew(%$_);
 	    },
 	    from Dict[
-	       lastname=>Str,
-	       firstname=>Str,
-	       dob=>DateTime
+	       lastname=&gtStr,
+	       firstname=&gtStr,
+	       dob=&gtDateTime
 	    ], via {
-	       my $name = $_->{firstname} .' '. $_->{lastname};
-	       my $age = DateTime->now - $_->{dob};
+	       my $name = $_-&gt{firstname} .' '. $_-&gt{lastname};
+	       my $age = DateTime-&gtnow - $_-&gt{dob};
 
-	       MyApp::MyStruct->new(
-		   full_name=>$name,
-		   age_in_years=>$age->years,
+	       MyApp::MyStruct-&gtnew(
+		   full_name=&gt$name,
+		   age_in_years=&gt$age-&gtyears,
 	       );
 	    };
 
-	   has person => (isa=>MyStruct);
+	   has person =&gt (isa=&gtMyStruct);
 
        This would allow you to instantiate with something like:
 
-	   my $obj = MyApp::MyClass->new( person => {
-	       full_name=>'John Napiorkowski',
-	       age_in_years=>39,
+	   my $obj = MyApp::MyClass-&gtnew( person =&gt {
+	       full_name=&gt'John Napiorkowski',
+	       age_in_years=&gt39,
 	   });
 
        Or even:
 
-	   my $obj = MyApp::MyClass->new( person => {
-	       lastname=>'John',
-	       firstname=>'Napiorkowski',
-	       dob=>DateTime->new(year=>1969),
+	   my $obj = MyApp::MyClass-&gtnew( person =&gt {
+	       lastname=&gt'John',
+	       firstname=&gt'Napiorkowski',
+	       dob=&gtDateTime-&gtnew(year=&gt1969),
 	   });
 
        If you are not familiar with how coercions work, check out the Moose
@@ -349,12 +351,12 @@ DESCRIPTION
        type as in this example:
 
 	   subtype Person,
-	    as Dict[name => Str];
+	    as Dict[name =&gt Str];
 
 	   subtype FriendlyPerson,
 	    as Person[
-	       name => Str,
-	       total_friends => Int,
+	       name =&gt Str,
+	       total_friends =&gt Int,
 	    ];
 
        This will actually work BUT you have to take care that the subtype has
@@ -370,40 +372,40 @@ DESCRIPTION
 
 	   subtype Person,
 	    as Dict[
-	       name => Str,
-	       age => Int
+	       name =&gt Str,
+	       age =&gt Int
 	   ];
 
 	   subtype Fullname,
 	    as Dict[
-	       first => Str,
-	       last => Str
+	       first =&gt Str,
+	       last =&gt Str
 	    ];
 
 	   coerce Person,
 	    ## Coerce an object of a particular class
 	    from BlessedPersonObject, via {
 	       +{
-		   name=>$_->name,
-		   age=>$_->age,
+		   name=&gt$_-&gtname,
+		   age=&gt$_-&gtage,
 	       };
 	    },
 
 	    ## Coerce from [$name, $age]
 	    from ArrayRef, via {
 	       +{
-		   name=>$_->[0],
-		   age=>$_->[1],
+		   name=&gt$_-&gt[0],
+		   age=&gt$_-&gt[1],
 	       },
 	    },
-	    ## Coerce from {fullname=>{first=>...,last=>...}, dob=>$DateTimeObject}
-	    from Dict[fullname=>Fullname, dob=>DateTime], via {
-	       my $age = $_->dob - DateTime->now;
-	       my $firstn = $_->{fullname}->{first};
-	       my $lastn = $_->{fullname}->{last}
+	    ## Coerce from {fullname=&gt{first=&gt...,last=&gt...}, dob=&gt$DateTimeObject}
+	    from Dict[fullname=&gtFullname, dob=&gtDateTime], via {
+	       my $age = $_-&gtdob - DateTime-&gtnow;
+	       my $firstn = $_-&gt{fullname}-&gt{first};
+	       my $lastn = $_-&gt{fullname}-&gt{last}
 	       +{
-		   name => $_->{fullname}->{first} .' '. ,
-		   age =>$age->years
+		   name =&gt $_-&gt{fullname}-&gt{first} .' '. ,
+		   age =&gt$age-&gtyears
 	       }
 	    };
 
@@ -422,8 +424,8 @@ DESCRIPTION
 
 	   subtype Person,
 	    as Dict[
-		name=>Str,
-		friends=>Optional[
+		name=&gtStr,
+		friends=&gtOptional[
 		    ArrayRef[Person]
 		],
 	    ];
@@ -432,15 +434,15 @@ DESCRIPTION
        optional ArrayRef of Persons who are friends as in:
 
 	   {
-	       name => 'Mike',
-	       friends => [
-		   { name => 'John' },
-		   { name => 'Vincent' },
+	       name =&gt 'Mike',
+	       friends =&gt [
+		   { name =&gt 'John' },
+		   { name =&gt 'Vincent' },
 		   {
-		       name => 'Tracey',
-		       friends => [
-			   { name => 'Stephenie' },
-			   { name => 'Ilya' },
+		       name =&gt 'Tracey',
+		       friends =&gt [
+			   { name =&gt 'Stephenie' },
+			   { name =&gt 'Ilya' },
 		       ],
 		   },
 	       ],
@@ -495,7 +497,7 @@ TYPE CONSTRAINTS
        This defines a HashRef based constraint which allowed you to validate a
        specific hashref.  For example:
 
-	   Dict[name=>Str, age=>Int]; ## Validates {name=>'John', age=>39}
+	   Dict[name=&gtStr, age=&gtInt]; ## Validates {name=&gt'John', age=&gt39}
 
        The keys in %constraints follow the same rules as @constraints in the
        above section.
@@ -519,10 +521,10 @@ TYPE CONSTRAINTS
        a Dict where one or more of the keys doesn't have to exist or a tuple
        where some of the values are not required.  For example:
 
-	   subtype Name() => as Dict[
-	       first=>Str,
-	       last=>Str,
-	       middle=>Optional[Str],
+	   subtype Name() =&gt as Dict[
+	       first=&gtStr,
+	       last=&gtStr,
+	       middle=&gtOptional[Str],
 	   ];
 
        Creates a constraint that validates against a hashref with the keys
@@ -530,8 +532,8 @@ TYPE CONSTRAINTS
        'middle' is must be a string if it appears but doesn't have to appear.
        So in this case both the following are valid:
 
-	   {first=>'John', middle=>'James', last=>'Napiorkowski'}
-	   {first=>'Vanessa', last=>'Li'}
+	   {first=&gt'John', middle=&gt'James', last=&gt'Napiorkowski'}
+	   {first=&gt'Vanessa', last=&gt'Li'}
 
        If you use the 'Maybe' type constraint instead, your values will also
        validate against 'undef', which may be incorrect for you.
@@ -629,67 +631,67 @@ EXAMPLES
 	   use MooseX::Types::Structured qw(Dict Tuple);
 	   use MooseX::Types::DateTime qw(DateTime);
 	   use MooseX::Types::Moose qw(Int Str Object);
-	   use MooseX::Types -declare => [qw(Name Age Person)];
+	   use MooseX::Types -declare =&gt [qw(Name Age Person)];
 
 	   subtype Person,
 	    as Dict[
-		name=>Str,
-		age=>Int,
+		name=&gtStr,
+		age=&gtInt,
 	    ];
 
 	   coerce Person,
 	    from Dict[
-		first=>Str,
-		last=>Str,
-		years=>Int,
+		first=&gtStr,
+		last=&gtStr,
+		years=&gtInt,
 	    ], via { +{
-	       name => "$_->{first} $_->{last}",
-	       age => $_->{years},
+	       name =&gt "$_-&gt{first} $_-&gt{last}",
+	       age =&gt $_-&gt{years},
 	    }},
 	    from Dict[
-		fullname=>Dict[
-		    last=>Str,
-		    first=>Str,
+		fullname=&gtDict[
+		    last=&gtStr,
+		    first=&gtStr,
 		],
-		dob=>DateTime,
+		dob=&gtDateTime,
 	    ],
 	    ## DateTime needs to be inside of single quotes here to disambiguate the
 	    ## class package from the DataTime type constraint imported via the
 	    ## line "use MooseX::Types::DateTime qw(DateTime);"
 	    via { +{
-	       name => "$_->{fullname}{first} $_->{fullname}{last}",
-	       age => ($_->{dob} - 'DateTime'->now)->years,
+	       name =&gt "$_-&gt{fullname}{first} $_-&gt{fullname}{last}",
+	       age =&gt ($_-&gt{dob} - 'DateTime'-&gtnow)-&gtyears,
 	    }};
 
-	   has person => (is=>'rw', isa=>Person, coerce=>1);
+	   has person =&gt (is=&gt'rw', isa=&gtPerson, coerce=&gt1);
 
        And now you can instantiate with all the following:
 
-	   __PACKAGE__->new(
-	       person=>{
-		   name=>'John Napiorkowski',
-		   age=>39,
+	   __PACKAGE__-&gtnew(
+	       person=&gt{
+		   name=&gt'John Napiorkowski',
+		   age=&gt39,
 	       },
 	   );
 
-	   __PACKAGE__->new(
-	       person=>{
-		   first=>'John',
-		   last=>'Napiorkowski',
-		   years=>39,
+	   __PACKAGE__-&gtnew(
+	       person=&gt{
+		   first=&gt'John',
+		   last=&gt'Napiorkowski',
+		   years=&gt39,
 	       },
 	   );
 
-	   __PACKAGE__->new(
-	       person=>{
-		   fullname => {
-		       first=>'John',
-		       last=>'Napiorkowski'
+	   __PACKAGE__-&gtnew(
+	       person=&gt{
+		   fullname =&gt {
+		       first=&gt'John',
+		       last=&gt'Napiorkowski'
 		   },
-		   dob => 'DateTime'->new(
-		       year=>1969,
-		       month=>2,
-		       day=>13
+		   dob =&gt 'DateTime'-&gtnew(
+		       year=&gt1969,
+		       month=&gt2,
+		       day=&gt13
 		   ),
 	       },
 	   );
@@ -704,15 +706,15 @@ SEE ALSO
        MooseX::Meta::TypeConstraint::Structured
 
 AUTHORS
-       o   John Napiorkowski <jjnapiork@cpan.org>
+       o   John Napiorkowski &ltjjnapiork@cpan.org&gt
 
-       o   Florian Ragwitz <rafl@debian.org>
+       o   Florian Ragwitz &ltrafl@debian.org&gt
 
-       o   Yuval Kogman <nothingmuch@woobling.org>
+       o   Yuval Kogman &ltnothingmuch@woobling.org&gt
 
-       o   Tomas Doran <bobtfish@bobtfish.net>
+       o   Tomas Doran &ltbobtfish@bobtfish.net&gt
 
-       o   Robert Sedlacek <rs@474.at>
+       o   Robert Sedlacek &ltrs@474.at&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by John Napiorkowski.
@@ -723,6 +725,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-10-03	  MooseX::Types::Structured(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

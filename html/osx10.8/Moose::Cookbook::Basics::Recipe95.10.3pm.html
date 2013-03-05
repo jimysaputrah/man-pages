@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This Moose cookbook recipe shows how operator overloading, coercion,..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Basics::Recipe9 - Operator overloading, subtypes, and</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::BasicUsereContributed PerlMoose::Cookbook::Basics::Recipe9(3)
 
 
@@ -23,32 +25,32 @@ SYNOPSIS
 	 use Moose::Util::TypeConstraints;
 
 	 subtype 'Gender'
-	     => as 'Str'
-	     => where { $_ =~ m{^[mf]$}s };
+	     =&gt as 'Str'
+	     =&gt where { $_ =~ m{^[mf]$}s };
 
-	 has 'gender' => ( is => 'ro', isa => 'Gender', required => 1 );
+	 has 'gender' =&gt ( is =&gt 'ro', isa =&gt 'Gender', required =&gt 1 );
 
-	 has 'mother' => ( is => 'ro', isa => 'Human' );
-	 has 'father' => ( is => 'ro', isa => 'Human' );
+	 has 'mother' =&gt ( is =&gt 'ro', isa =&gt 'Human' );
+	 has 'father' =&gt ( is =&gt 'ro', isa =&gt 'Human' );
 
-	 use overload '+' => \&_overload_add, fallback => 1;
+	 use overload '+' =&gt \&_overload_add, fallback =&gt 1;
 
 	 sub _overload_add {
 	     my ( $one, $two ) = @_;
 
 	     die('Only male and female humans may create children')
-		 if ( $one->gender() eq $two->gender() );
+		 if ( $one-&gtgender() eq $two-&gtgender() );
 
 	     my ( $mother, $father )
-		 = ( $one->gender eq 'f' ? ( $one, $two ) : ( $two, $one ) );
+		 = ( $one-&gtgender eq 'f' ? ( $one, $two ) : ( $two, $one ) );
 
 	     my $gender = 'f';
-	     $gender = 'm' if ( rand() >= 0.5 );
+	     $gender = 'm' if ( rand() &gt= 0.5 );
 
-	     return Human->new(
-		 gender => $gender,
-		 mother => $mother,
-		 father => $father,
+	     return Human-&gtnew(
+		 gender =&gt $gender,
+		 mother =&gt $mother,
+		 father =&gt $father,
 	     );
 	 }
 
@@ -88,9 +90,9 @@ GENES
 	 use Moose;
 	 use Moose::Util::TypeConstraints;
 
-	 type 'bey2_color' => where { $_ =~ m{^(?:brown|blue)$} };
+	 type 'bey2_color' =&gt where { $_ =~ m{^(?:brown|blue)$} };
 
-	 has 'color' => ( is => 'ro', isa => 'bey2_color' );
+	 has 'color' =&gt ( is =&gt 'ro', isa =&gt 'bey2_color' );
 
        This class is trivial, We have a type constraint for the allowed
        colors, and a "color" attribute.
@@ -101,9 +103,9 @@ GENES
 	 use Moose;
 	 use Moose::Util::TypeConstraints;
 
-	 type 'gey_color' => where { $_ =~ m{^(?:green|blue)$} };
+	 type 'gey_color' =&gt where { $_ =~ m{^(?:green|blue)$} };
 
-	 has 'color' => ( is => 'ro', isa => 'gey_color' );
+	 has 'color' =&gt ( is =&gt 'ro', isa =&gt 'gey_color' );
 
        This is nearly identical to the "Humane::Gene::bey2" class, except that
        the gey gene allows for different colors.
@@ -120,18 +122,18 @@ EYE COLOR
 	 use Moose::Util::TypeConstraints;
 
 	 coerce 'Human::Gene::bey2'
-	     => from 'Str'
-		 => via { Human::Gene::bey2->new( color => $_ ) };
+	     =&gt from 'Str'
+		 =&gt via { Human::Gene::bey2-&gtnew( color =&gt $_ ) };
 
 	 coerce 'Human::Gene::gey'
-	     => from 'Str'
-		 => via { Human::Gene::gey->new( color => $_ ) };
+	     =&gt from 'Str'
+		 =&gt via { Human::Gene::gey-&gtnew( color =&gt $_ ) };
 
-	 has [qw( bey2_1 bey2_2 )] =>
-	     ( is => 'ro', isa => 'Human::Gene::bey2', coerce => 1 );
+	 has [qw( bey2_1 bey2_2 )] =&gt
+	     ( is =&gt 'ro', isa =&gt 'Human::Gene::bey2', coerce =&gt 1 );
 
-	 has [qw( gey_1 gey_2 )] =>
-	     ( is => 'ro', isa => 'Human::Gene::gey', coerce => 1 );
+	 has [qw( gey_1 gey_2 )] =&gt
+	     ( is =&gt 'ro', isa =&gt 'Human::Gene::gey', coerce =&gt 1 );
 
        The eye color class has two of each type of gene. We've also created a
        coercion for each class that coerces a string into a new object. Note
@@ -150,12 +152,12 @@ EYE COLOR
 	     my ($self) = @_;
 
 	     return 'brown'
-		 if ( $self->bey2_1->color() eq 'brown'
-		 or $self->bey2_2->color() eq 'brown' );
+		 if ( $self-&gtbey2_1-&gtcolor() eq 'brown'
+		 or $self-&gtbey2_2-&gtcolor() eq 'brown' );
 
 	     return 'green'
-		 if ( $self->gey_1->color() eq 'green'
-		 or $self->gey_2->color() eq 'green' );
+		 if ( $self-&gtgey_1-&gtcolor() eq 'green'
+		 or $self-&gtgey_2-&gtcolor() eq 'green' );
 
 	     return 'blue';
 	 }
@@ -163,13 +165,13 @@ EYE COLOR
        We'd like to be able to treat a "Human::EyeColor" object as a string,
        so we define a string overloading for the class:
 
-	 use overload '""' => \&color, fallback => 1;
+	 use overload '""' =&gt \&color, fallback =&gt 1;
 
        Finally, we need to define overloading for addition. That way we can
        add together to "Human::EyeColor" objects and get a new one with a new
        (genetically correct) eye color.
 
-	 use overload '+' => \&_overload_add, fallback => 1;
+	 use overload '+' =&gt \&_overload_add, fallback =&gt 1;
 
 	 sub _overload_add {
 	     my ( $one, $two ) = @_;
@@ -180,11 +182,11 @@ EYE COLOR
 	     my $one_gey = 'gey_' . _rand2();
 	     my $two_gey = 'gey_' . _rand2();
 
-	     return Human::EyeColor->new(
-		 bey2_1 => $one->$one_bey2->color(),
-		 bey2_2 => $two->$two_bey2->color(),
-		 gey_1	=> $one->$one_gey->color(),
-		 gey_2	=> $two->$two_gey->color(),
+	     return Human::EyeColor-&gtnew(
+		 bey2_1 =&gt $one-&gt$one_bey2-&gtcolor(),
+		 bey2_2 =&gt $two-&gt$two_bey2-&gtcolor(),
+		 gey_1	=&gt $one-&gt$one_gey-&gtcolor(),
+		 gey_2	=&gt $two-&gt$two_gey-&gtcolor(),
 	     );
 	 }
 
@@ -204,25 +206,25 @@ ADDING EYE COLOR TO "Human"s
 	 use List::MoreUtils qw( zip );
 
 	 coerce 'Human::EyeColor'
-	     => from 'ArrayRef'
-	     => via { my @genes = qw( bey2_1 bey2_2 gey_1 gey_2 );
-		      return Human::EyeColor->new( zip( @genes, @{$_} ) ); };
+	     =&gt from 'ArrayRef'
+	     =&gt via { my @genes = qw( bey2_1 bey2_2 gey_1 gey_2 );
+		      return Human::EyeColor-&gtnew( zip( @genes, @{$_} ) ); };
 
-	 has 'eye_color' => (
-	     is       => 'ro',
-	     isa      => 'Human::EyeColor',
-	     coerce   => 1,
-	     required => 1,
+	 has 'eye_color' =&gt (
+	     is       =&gt 'ro',
+	     isa      =&gt 'Human::EyeColor',
+	     coerce   =&gt 1,
+	     required =&gt 1,
 	 );
 
        We also need to modify "_overload_add()" in the "Human" class to
        account for eye color:
 
-	 return Human->new(
-	     gender    => $gender,
-	     eye_color => ( $one->eye_color() + $two->eye_color() ),
-	     mother    => $mother,
-	     father    => $father,
+	 return Human-&gtnew(
+	     gender    =&gt $gender,
+	     eye_color =&gt ( $one-&gteye_color() + $two-&gteye_color() ),
+	     mother    =&gt $mother,
+	     father    =&gt $father,
 	 );
 
 CONCLUSION
@@ -245,19 +247,19 @@ NEXT STEPS
        Artificial Life
 
 AUTHORS
-       Aran Clary Deltac <bluefeet@cpan.org>
+       Aran Clary Deltac &ltbluefeet@cpan.org&gt
 
-       Dave Rolsky <autarch@urth.org>
+       Dave Rolsky &ltautarch@urth.org&gt
 
 LICENSE
        This work is licensed under a Creative Commons Attribution 3.0 Unported
        License.
 
-       License details are at: <http://creativecommons.org/licenses/by/3.0/>
+       License details are at: &lthttp://creativecommons.org/licenses/by/3.0/&gt
 
 
 
 perl v5.10.1			  2010-02-2Moose::Cookbook::Basics::Recipe9(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

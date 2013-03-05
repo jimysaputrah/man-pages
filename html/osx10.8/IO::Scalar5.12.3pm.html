@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This class is part of the IO::Stringy distribution; see IO::Stringy for..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>IO::Scalar - IO:: interface for reading/writing a scalar</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 IO::Scalar(3)	      User Contributed Perl Documentation	 IO::Scalar(3)
 
 
@@ -24,33 +26,33 @@ SYNOPSIS
 
 	   ### Open a handle on a string, and append to it:
 	   $SH = new IO::Scalar \$data;
-	   $SH->print("Hello");
-	   $SH->print(", world!\nBye now!\n");
+	   $SH-&gtprint("Hello");
+	   $SH-&gtprint(", world!\nBye now!\n");
 	   print "The string is now: ", $data, "\n";
 
 	   ### Open a handle on a string, read it line-by-line, then close it:
 	   $SH = new IO::Scalar \$data;
-	   while (defined($_ = $SH->getline)) {
+	   while (defined($_ = $SH-&gtgetline)) {
 	       print "Got line: $_";
 	   }
-	   $SH->close;
+	   $SH-&gtclose;
 
 	   ### Open a handle on a string, and slurp in all the lines:
 	   $SH = new IO::Scalar \$data;
-	   print "All lines:\n", $SH->getlines;
+	   print "All lines:\n", $SH-&gtgetlines;
 
 	   ### Get the current position (either of two ways):
-	   $pos = $SH->getpos;
-	   $offset = $SH->tell;
+	   $pos = $SH-&gtgetpos;
+	   $offset = $SH-&gttell;
 
 	   ### Set the current position (either of two ways):
-	   $SH->setpos($pos);
-	   $SH->seek($offset, 0);
+	   $SH-&gtsetpos($pos);
+	   $SH-&gtseek($offset, 0);
 
 	   ### Open an anonymous temporary scalar:
 	   $SH = new IO::Scalar;
-	   $SH->print("Hi there!");
-	   print "I printed: ", ${$SH->sref}, "\n";	 ### get at value
+	   $SH-&gtprint("Hi there!");
+	   print "I printed: ", ${$SH-&gtsref}, "\n";	 ### get at value
 
        Don't like OO for your I/O?  No problem.  Thanks to the magic of an
        invisible tie(), the following now works out of the box, just as it
@@ -68,14 +70,14 @@ SYNOPSIS
 
 	   ### Open a handle on a string, read it line-by-line, then close it:
 	   $SH = new IO::Scalar \$data;
-	   while (<$SH>) {
+	   while (&lt$SH&gt) {
 	       print "Got line: $_";
 	   }
 	   close $SH;
 
 	   ### Open a handle on a string, and slurp in all the lines:
 	   $SH = new IO::Scalar \$data;
-	   print "All lines:\n", <$SH>;
+	   print "All lines:\n", &lt$SH&gt;
 
 	   ### Get the current position (WARNING: requires 5.6):
 	   $offset = tell $SH;
@@ -86,7 +88,7 @@ SYNOPSIS
 	   ### Open an anonymous temporary scalar:
 	   $SH = new IO::Scalar;
 	   print $SH "Hi there!";
-	   print "I printed: ", ${$SH->sref}, "\n";	 ### get at value
+	   print "I printed: ", ${$SH-&gtsref}, "\n";	 ### get at value
 
        And for you folks with 1.x code out there: the old tie() style still
        works, though this is unnecessary and deprecated:
@@ -102,8 +104,8 @@ SYNOPSIS
 	   ### Reading and writing an anonymous scalar...
 	   tie *OUT, 'IO::Scalar';
 	   print OUT "line 1\nline 2\n", "line 3\n";
-	   tied(OUT)->seek(0,0);
-	   while (<OUT>) {
+	   tied(OUT)-&gtseek(0,0);
+	   while (&ltOUT&gt) {
 	       print "Got line: ", $_;
 	   }
 
@@ -128,8 +130,8 @@ DESCRIPTION
 
 	   my $s;
 	   $SH = new IO::Scalar \$s;
-	   $SH->print("Hel", "lo, ");	      ### OO style
-	   $SH->print("world!\n");	      ### ditto
+	   $SH-&gtprint("Hel", "lo, ");	      ### OO style
+	   $SH-&gtprint("world!\n");	      ### ditto
 
        Or this:
 
@@ -247,7 +249,7 @@ WARNINGS
        IO::Scalar with an old Perl.  The remedy is to simply use the OO
        version; e.g.:
 
-	   $SH->seek(0,0);    ### GOOD: will work on any 5.005
+	   $SH-&gtseek(0,0);    ### GOOD: will work on any 5.005
 	   seek($SH,0,0);     ### WARNING: will only work on 5.005_57 and beyond
 
 VERSION
@@ -294,6 +296,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2005-02-10			 IO::Scalar(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

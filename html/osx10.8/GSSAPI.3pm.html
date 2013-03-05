@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module gives access to the routines of the GSSAPI library, as..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>GSSAPI - Perl extension providing access to the GSSAPIv2 library</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 GSSAPI(3)	      User Contributed Perl Documentation	     GSSAPI(3)
 
 
@@ -25,14 +27,14 @@ SYNOPSIS
 
 	  TRY: {
 	      my ($target, $tname, $ttl );
-	      $status = GSSAPI::Name->import( $target,
+	      $status = GSSAPI::Name-&gtimport( $target,
 					      $server,
 					      GSSAPI::OID::gss_nt_hostbased_service)
 		      or last;
-	      $status = $target->display($tname) or last;
+	      $status = $target-&gtdisplay($tname) or last;
 	      print "\n using Name $tname";
 
-	      my $ctx = GSSAPI::Context->new();
+	      my $ctx = GSSAPI::Context-&gtnew();
 	      my $imech = GSSAPI::OID::gss_mech_krb5;
 	      my $iflags = 0 ;
 	      my $bindings = GSS_C_NO_CHANNEL_BINDINGS;
@@ -41,14 +43,14 @@ SYNOPSIS
 	      my $itoken = q{};
 	      my $otoken;
 
-	      $status = $ctx->init($creds,$target,
+	      $status = $ctx-&gtinit($creds,$target,
 				   $imech,$iflags,$itime,$bindings,$itoken,
 				   undef, $otoken,undef,undef) or last;
-	      $status = $ctx->valid_time_left($ttl) or last;
+	      $status = $ctx-&gtvalid_time_left($ttl) or last;
 	      print "\n Security context's time to live $ttl secs";
 	  }
 
-	  unless ($status->major == GSS_S_COMPLETE  ) {
+	  unless ($status-&gtmajor == GSS_S_COMPLETE  ) {
 	     print "\nErrors: ", $status;
 	  } else {
 	     print "\n seems everything is fine, type klist to see the ticket\n";
@@ -115,7 +117,7 @@ USAGE
 	       returns GSSAPI::Status Object
 
 	   Example:
-		    $status = GSSAPI::Name->import( $gssapinameobj,
+		    $status = GSSAPI::Name-&gtimport( $gssapinameobj,
 						    'HTTP@moerbsen.grolmsnet.lan',
 						    GSSAPI::OID::gss_nt_hostbased_service);
 
@@ -131,8 +133,8 @@ USAGE
 
 	   Example:
 		    my $tname;
-		    $status = $gssapinameobj->display($tname);
-		    die 'hmm, error...' if($status->major != GSS_S_COMPLETE );
+		    $status = $gssapinameobj-&gtdisplay($tname);
+		    die 'hmm, error...' if($status-&gtmajor != GSS_S_COMPLETE );
 		    print "\n  Name is $tname";
 
        compare( nameobj, ret)
@@ -246,10 +248,10 @@ USAGE
 	  my $isin = 0;
 
 	  my $status = indicate_mechs( $oidset );
-	  $status->major == GSS_S_COMPLETE || die 'error';
+	  $status-&gtmajor == GSS_S_COMPLETE || die 'error';
 
-	  $status = $oidset->contains( gss_mech_krb5_old, $isin );
-	  $status->major == GSS_S_COMPLETE || die 'error';
+	  $status = $oidset-&gtcontains( gss_mech_krb5_old, $isin );
+	  $status-&gtmajor == GSS_S_COMPLETE || die 'error';
 
 	  if ( $isin ) {
 	    print 'Support of Kerberos 5 old mechtype';
@@ -299,14 +301,14 @@ BUGS
        More documentation how to use the module has to be added.
 
 SUPPORT
-       See our project home at <http://perlgssapi.sourceforge.net/>
+       See our project home at &lthttp://perlgssapi.sourceforge.net/&gt
 
        Mailinglist perlgssapi-users@lists.sourceforge.net
 
 AUTHOR
-       The module ist maintained by Achim Grolms <perl@grolmsnet.de>
+       The module ist maintained by Achim Grolms &ltperl@grolmsnet.de&gt
 
-       originally written by Philip Guenther <pguen@cpan.org>
+       originally written by Philip Guenther &ltpguen@cpan.org&gt
 
 THANKS TO
        Philip Guenther
@@ -335,6 +337,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2010-04-27			     GSSAPI(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

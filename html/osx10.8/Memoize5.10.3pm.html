@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="`Memoizing' a function makes it faster by trading space for time.  It..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Memoize - Make functions faster by trading space for time</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Memoize(3pm)	       Perl Programmers Reference Guide 	  Memoize(3pm)
 
 
@@ -28,18 +30,18 @@ SYNOPSIS
 
        Options include:
 
-	       NORMALIZER => function
-	       INSTALL => new_name
+	       NORMALIZER =&gt function
+	       INSTALL =&gt new_name
 
-	       SCALAR_CACHE => 'MEMORY'
-	       SCALAR_CACHE => ['HASH', \%cache_hash ]
-	       SCALAR_CACHE => 'FAULT'
-	       SCALAR_CACHE => 'MERGE'
+	       SCALAR_CACHE =&gt 'MEMORY'
+	       SCALAR_CACHE =&gt ['HASH', \%cache_hash ]
+	       SCALAR_CACHE =&gt 'FAULT'
+	       SCALAR_CACHE =&gt 'MERGE'
 
-	       LIST_CACHE => 'MEMORY'
-	       LIST_CACHE => ['HASH', \%cache_hash ]
-	       LIST_CACHE => 'FAULT'
-	       LIST_CACHE => 'MERGE'
+	       LIST_CACHE =&gt 'MEMORY'
+	       LIST_CACHE =&gt ['HASH', \%cache_hash ]
+	       LIST_CACHE =&gt 'FAULT'
+	       LIST_CACHE =&gt 'MERGE'
 
 DESCRIPTION
        `Memoizing' a function makes it faster by trading space for time.  It
@@ -54,7 +56,7 @@ DESCRIPTION
 	       # Compute Fibonacci numbers
 	       sub fib {
 		 my $n = shift;
-		 return $n if $n < 2;
+		 return $n if $n &lt 2;
 		 fib($n-1) + fib($n-2);
 	       }
 
@@ -88,7 +90,7 @@ DESCRIPTION
 		 sub fib {
 		   my $n = shift;
 		   return $fib[$n] if defined $fib[$n];
-		   return $fib[$n] = $n if $n < 2;
+		   return $fib[$n] = $n if $n &lt 2;
 		   $fib[$n] = fib($n-1) + fib($n-2);
 		 }
 	       }
@@ -107,9 +109,9 @@ DESCRIPTION
        looking at, and then convert the `color' value (typically a string like
        `red') of that object to a red, green, and blue pixel value, like this:
 
-	   for ($direction = 0; $direction < 300; $direction++) {
+	   for ($direction = 0; $direction &lt 300; $direction++) {
 	     # Figure out which object is in direction $direction
-	     $color = $object->{color};
+	     $color = $object-&gt{color};
 	     ($r, $g, $b) = @{&ColorToRGB($color)};
 	     ...
 	   }
@@ -140,10 +142,10 @@ OPTIONS
        way it behaves a little.  To supply options, invoke "memoize" like
        this:
 
-	       memoize(function, NORMALIZER => function,
-				 INSTALL => newname,
-				 SCALAR_CACHE => option,
-				 LIST_CACHE => option
+	       memoize(function, NORMALIZER =&gt function,
+				 INSTALL =&gt newname,
+				 SCALAR_CACHE =&gt option,
+				 LIST_CACHE =&gt option
 				);
 
        Each of these options is optional; you can include some, all, or none
@@ -154,19 +156,19 @@ OPTIONS
        new, memoized version of the function under the name you give.  For
        example,
 
-	       memoize('fib', INSTALL => 'fastfib')
+	       memoize('fib', INSTALL =&gt 'fastfib')
 
        installs the memoized version of "fib" as "fastfib"; without the
        "INSTALL" option it would have replaced the old "fib" with the memoized
        version.
 
        To prevent "memoize" from installing the memoized version anywhere, use
-       "INSTALL => undef".
+       "INSTALL =&gt undef".
 
    NORMALIZER
        Suppose your function looks like this:
 
-	       # Typical call: f('aha!', A => 11, B => 12);
+	       # Typical call: f('aha!', A =&gt 11, B =&gt 12);
 	       sub f {
 		 my $a = shift;
 		 my %hash = @_;
@@ -180,10 +182,10 @@ OPTIONS
        equivalent:
 
 	       f(OUCH);
-	       f(OUCH, B => 2);
-	       f(OUCH, C => 7);
-	       f(OUCH, B => 2, C => 7);
-	       f(OUCH, C => 7, B => 2);
+	       f(OUCH, B =&gt 2);
+	       f(OUCH, C =&gt 7);
+	       f(OUCH, B =&gt 2, C =&gt 7);
+	       f(OUCH, C =&gt 7, B =&gt 2);
 	       (etc.)
 
        However, unless you tell "Memoize" that these calls are equivalent, it
@@ -201,7 +203,7 @@ OPTIONS
 		 $hash{B} ||= 2;
 		 $hash{C} ||= 7;
 
-		 join(',', $a, map ($_ => $hash{$_}) sort keys %hash);
+		 join(',', $a, map ($_ =&gt $hash{$_}) sort keys %hash);
 	       }
 
        Each of the argument lists above comes out of the "normalize_f"
@@ -211,7 +213,7 @@ OPTIONS
 
        You would tell "Memoize" to use this normalizer this way:
 
-	       memoize('f', NORMALIZER => 'normalize_f');
+	       memoize('f', NORMALIZER =&gt 'normalize_f');
 
        "memoize" knows that if the normalized version of the arguments is the
        same for two argument lists, then it can safely look up the value that
@@ -259,8 +261,8 @@ OPTIONS
 		 my $hour = (localtime)[2];
 		 open my $fh, "$DIR/$problem_type" or die...;
 		 my $line;
-		 while ($hour-- > 0)
-		   $line = <$fh>;
+		 while ($hour-- &gt 0)
+		   $line = &lt$fh&gt;
 		 }
 		 return $line;
 	       }
@@ -323,8 +325,8 @@ OPTIONS
 	   A typical example is:
 
 		   use DB_File;
-		   tie my %cache => 'DB_File', $filename, O_RDWR|O_CREAT, 0666;
-		   memoize 'function', SCALAR_CACHE => [HASH => \%cache];
+		   tie my %cache =&gt 'DB_File', $filename, O_RDWR|O_CREAT, 0666;
+		   memoize 'function', SCALAR_CACHE =&gt [HASH =&gt \%cache];
 
 	   This has the effect of storing the cache in a "DB_File" database
 	   whose name is in $filename.	The cache will persist after the
@@ -348,7 +350,7 @@ OPTIONS
 		   { my %cache;
 		     tie %cache, PACKAGE, ARGS...;
 		   }
-		   memoize ... [HASH => \%cache];
+		   memoize ... [HASH =&gt \%cache];
 
        "FAULT"
 	   "FAULT" means that you never expect to call the function in scalar
@@ -361,9 +363,9 @@ OPTIONS
        "MERGE"
 	   "MERGE" normally means the function does not distinguish between
 	   list and sclar context, and that return values in both contexts
-	   should be stored together.  "LIST_CACHE => MERGE" means that list
+	   should be stored together.  "LIST_CACHE =&gt MERGE" means that list
 	   context return values should be stored in the same hash that is
-	   used for scalar context returns, and "SCALAR_CACHE => MERGE" means
+	   used for scalar context returns, and "SCALAR_CACHE =&gt MERGE" means
 	   the same, mutatis mutandis.	It is an error to specify "MERGE" for
 	   both, but it probably does something useful.
 
@@ -383,7 +385,7 @@ OPTIONS
 	   cache.
 
 	   Obviously, the second call to "pi" is a waste of time, and storing
-	   its return value is a waste of space.  Specifying "LIST_CACHE =>
+	   its return value is a waste of space.  Specifying "LIST_CACHE =&gt
 	   MERGE" will make "memoize" use the same cache for scalar and list
 	   context return values, so that the second call uses the scalar
 	   cache that was populated by the first call.	"pi" ends up being
@@ -396,12 +398,12 @@ OPTIONS
 	   function to keep the two sets of return values separate.  For
 	   example:
 
-		   tie my %cache => 'MLDBM', 'DB_File', $filename, ...;
+		   tie my %cache =&gt 'MLDBM', 'DB_File', $filename, ...;
 
 		   memoize 'myfunc',
-		     NORMALIZER => 'n',
-		     SCALAR_CACHE => [HASH => \%cache],
-		     LIST_CACHE => MERGE,
+		     NORMALIZER =&gt 'n',
+		     SCALAR_CACHE =&gt [HASH =&gt \%cache],
+		     LIST_CACHE =&gt MERGE,
 		   ;
 
 		   sub n {
@@ -546,8 +548,8 @@ PERSISTENT CACHE SUPPORT
        as long as it supports "TIEHASH", "FETCH", "STORE", and "EXISTS".  For
        example,
 
-	       tie my %cache => 'GDBM_File', $filename, O_RDWR|O_CREAT, 0666;
-	       memoize 'function', SCALAR_CACHE => [HASH => \%cache];
+	       tie my %cache =&gt 'GDBM_File', $filename, O_RDWR|O_CREAT, 0666;
+	       memoize 'function', SCALAR_CACHE =&gt [HASH =&gt \%cache];
 
        works just fine.  For some storage methods, you need a little glue.
 
@@ -556,8 +558,8 @@ PERSISTENT CACHE SUPPORT
        one.  Use this instead of plain "SDBM_File" to store your cache table
        on disk in an "SDBM_File" database:
 
-	       tie my %cache => 'Memoize::SDBM_File', $filename, O_RDWR|O_CREAT, 0666;
-	       memoize 'function', SCALAR_CACHE => [HASH => \%cache];
+	       tie my %cache =&gt 'Memoize::SDBM_File', $filename, O_RDWR|O_CREAT, 0666;
+	       memoize 'function', SCALAR_CACHE =&gt [HASH =&gt \%cache];
 
        "NDBM_File" has the same problem and the same solution.	(Use
        "Memoize::NDBM_File instead of plain NDBM_File.")
@@ -571,11 +573,11 @@ PERSISTENT CACHE SUPPORT
        function, and stored back at the time you unmemoize the function (or
        when your program exits):
 
-	       tie my %cache => 'Memoize::Storable', $filename;
-	       memoize 'function', SCALAR_CACHE => [HASH => \%cache];
+	       tie my %cache =&gt 'Memoize::Storable', $filename;
+	       memoize 'function', SCALAR_CACHE =&gt [HASH =&gt \%cache];
 
-	       tie my %cache => 'Memoize::Storable', $filename, 'nstore';
-	       memoize 'function', SCALAR_CACHE => [HASH => \%cache];
+	       tie my %cache =&gt 'Memoize::Storable', $filename, 'nstore';
+	       memoize 'function', SCALAR_CACHE =&gt [HASH =&gt \%cache];
 
        Include the `nstore' option to have the "Storable" database written in
        `network order'.  (See Storable for more details about this.)
@@ -662,6 +664,6 @@ THANK YOU
 
 
 perl v5.10.1			  2009-07-03			  Memoize(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

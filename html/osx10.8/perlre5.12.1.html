@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This page describes the syntax of regular expressions in Perl...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlre - Perl regular expressions</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLRE(1)	       Perl Programmers Reference Guide 	     PERLRE(1)
 
 
@@ -191,11 +193,11 @@ DESCRIPTION
 	  /"(?:[^"\\]++|\\.)*+"/
 
        as we know that if the final quote does not match, backtracking will
-       not help. See the independent subexpression "(?>...)" for more details;
+       not help. See the independent subexpression "(?&gt...)" for more details;
        possessive quantifiers are just syntactic sugar for that construct. For
        instance the above example could also be written as follows:
 
-	  /"(?>(?:(?>[^"\\]+)|\\.)*)"/
+	  /"(?&gt(?:(?&gt[^"\\]+)|\\.)*)"/
 
        Escape sequences
 
@@ -255,7 +257,7 @@ DESCRIPTION
 			   buffer and may optionally be wrapped in curly brackets for
 			   safer parsing.
 	  \g{name}  [5]  Named backreference
-	  \k<name>  [5]  Named backreference
+	  \k&ltname&gt  [5]  Named backreference
 	  \K	    [6]  Keep the stuff left of the \K, don't include it in $&
 	  \N	    [7]  Any character but \n (experimental).  Not affected by /s
 			   modifier
@@ -336,7 +338,7 @@ DESCRIPTION
        The bracketing construct "( ... )" creates capture buffers. To refer to
        the current contents of a buffer later on, within the same pattern, use
        \1 for the first, \2 for the second, and so on.	Outside the match use
-       "$" instead of "\".  (The \<digit> notation works in certain
+       "$" instead of "\".  (The \&ltdigit&gt notation works in certain
        circumstances outside the match.  See "Warning on \1 Instead of $1"
        below for details.)  Referring back to another part of the match is
        called a backreference.
@@ -380,13 +382,13 @@ DESCRIPTION
        and would match the same as "/(Y) ( (X) \3 \1 )/x".
 
        Additionally, as of Perl 5.10.0 you may use named capture buffers and
-       named backreferences. The notation is "(?<name>...)" to declare and
-       "\k<name>" to reference. You may also use apostrophes instead of angle
+       named backreferences. The notation is "(?&ltname&gt...)" to declare and
+       "\k&ltname&gt" to reference. You may also use apostrophes instead of angle
        brackets to delimit the name; and you may use the bracketed "\g{name}"
        backreference syntax.  It's possible to refer to a named capture buffer
        by absolute and relative number as well.  Outside the pattern, a named
        capture buffer is available via the "%+" hash.  When different buffers
-       within the same pattern have the same name, $+{name} and "\k<name>"
+       within the same pattern have the same name, $+{name} and "\k&ltname&gt"
        refer to the leftmost defined group. (Thus it's possible to do things
        with named capture buffers that would otherwise require "(??{})" code
        to accomplish.)
@@ -398,7 +400,7 @@ DESCRIPTION
 	   /(.)\1/			   # find first doubled char
 		and print "'$1' is the first doubled character\n";
 
-	   /(?<char>.)\k<char>/ 	   # ... a different way
+	   /(?&ltchar&gt.)\k&ltchar&gt/ 	   # ... a different way
 		and print "'$+{char}' is the first doubled character\n";
 
 	   /(?'char'.)\1/		   # ... mix and match
@@ -454,7 +456,7 @@ DESCRIPTION
        Backslashed metacharacters in Perl are alphanumeric, such as "\b",
        "\w", "\n".  Unlike some other regular expression languages, there are
        no backslashed symbols that aren't alphanumeric.  So anything that
-       looks like \\, \(, \), \<, \>, \{, or \} is always interpreted as a
+       looks like \\, \(, \), \&lt, \&gt, \{, or \} is always interpreted as a
        literal character, not a metacharacter.	This was once used in a common
        idiom to disable or quote the special meanings of regular expression
        metacharacters in a string that you want to use for a pattern. Simply
@@ -593,12 +595,12 @@ DESCRIPTION
 		 pattern, it's best to use the same names, in the same order,
 		 in each of the alternations:
 
-		    /(?|  (?<a> x ) (?<b> y )
-		       |  (?<a> z ) (?<b> w )) /x
+		    /(?|  (?&lta&gt x ) (?&ltb&gt y )
+		       |  (?&lta&gt z ) (?&ltb&gt w )) /x
 
 		 Not doing so may lead to surprises:
 
-		   "12" =~ /(?| (?<a> \d+ ) | (?<b> \D+))/x;
+		   "12" =~ /(?| (?&lta&gt \d+ ) | (?&ltb&gt \D+))/x;
 		   say $+ {a};	 # Prints '12'
 		   say $+ {b};	 # *Also* prints '12'.
 
@@ -640,9 +642,9 @@ DESCRIPTION
 
 		     For look-behind see below.
 
-		 "(?<=pattern)" "\K"
+		 "(?&lt=pattern)" "\K"
 		     A zero-width positive look-behind assertion.  For
-		     example, "/(?<=\t)\w+/" matches a word that follows a
+		     example, "/(?&lt=\t)\w+/" matches a word that follows a
 		     tab, without including the tab in $&.  Works only for
 		     fixed-width look-behind.
 
@@ -654,7 +656,7 @@ DESCRIPTION
 		     allowed, but the behaviour is currently not well defined.
 
 		     For various reasons "\K" may be significantly more
-		     efficient than the equivalent "(?<=...)" construct, and
+		     efficient than the equivalent "(?&lt=...)" construct, and
 		     it is especially useful in situations where you want to
 		     efficiently remove something following something else in
 		     a string. For instance
@@ -665,14 +667,14 @@ DESCRIPTION
 
 		       s/foo\Kbar//g;
 
-		 "(?<!pattern)"
+		 "(?&lt!pattern)"
 		     A zero-width negative look-behind assertion.  For example
-		     "/(?<!bar)foo/" matches any occurrence of "foo" that does
+		     "/(?&lt!bar)foo/" matches any occurrence of "foo" that does
 		     not follow "bar".	Works only for fixed-width look-
 		     behind.
 
        "(?'NAME'pattern)"
-       "(?<NAME>pattern)"
+       "(?&ltNAME&gtpattern)"
 		 A named capture buffer. Identical in every respect to normal
 		 capturing parentheses "()" but for the additional fact that
 		 "%+" or "%-" may be used after a successful match to refer to
@@ -683,7 +685,7 @@ DESCRIPTION
 		 the $+{NAME} will refer to the leftmost defined buffer in the
 		 match.
 
-		 The forms "(?'NAME'pattern)" and "(?<NAME>pattern)" are
+		 The forms "(?'NAME'pattern)" and "(?&ltNAME&gtpattern)" are
 		 equivalent.
 
 		 NOTE: While the notation of this construct is the same as the
@@ -691,7 +693,7 @@ DESCRIPTION
 		 Perl the buffers are numbered sequentially regardless of
 		 being named or not. Thus in the pattern
 
-		   /(x)(?<foo>y)(z)/
+		   /(x)(?&ltfoo&gty)(z)/
 
 		 $+{foo} will be the same as $2, and $3 will contain 'z'
 		 instead of the opposite which is what a .NET regex hacker
@@ -704,11 +706,11 @@ DESCRIPTION
 
 		 NOTE: In order to make things easier for programmers with
 		 experience with the Python or PCRE regex engines, the pattern
-		 "(?P<NAME>pattern)" may be used instead of
-		 "(?<NAME>pattern)"; however this form does not support the
+		 "(?P&ltNAME&gtpattern)" may be used instead of
+		 "(?&ltNAME&gtpattern)"; however this form does not support the
 		 use of single quotes as a delimiter for the name.
 
-       "\k<NAME>"
+       "\k&ltNAME&gt"
        "\k'NAME'"
 		 Named backreference. Similar to numeric backreferences,
 		 except that the group is designated by name and not number.
@@ -716,13 +718,13 @@ DESCRIPTION
 		 leftmost defined group in the current match.
 
 		 It is an error to refer to a name not defined by a
-		 "(?<NAME>)" earlier in the pattern.
+		 "(?&ltNAME&gt)" earlier in the pattern.
 
 		 Both forms are equivalent.
 
 		 NOTE: In order to make things easier for programmers with
 		 experience with the Python or PCRE regex engines, the pattern
-		 "(?P=NAME)" may be used instead of "\k<NAME>".
+		 "(?P=NAME)" may be used instead of "\k&ltNAME&gt".
 
        "(?{ code })"
 		 WARNING: This extended regular expression feature is
@@ -755,7 +757,7 @@ DESCRIPTION
 		 changes introduced after "local"ization are undone, so that
 
 		   $_ = 'a' x 8;
-		   m<
+		   m&lt
 		      (?{ $cnt = 0 })			 # Initialize $cnt.
 		      (
 			a
@@ -766,7 +768,7 @@ DESCRIPTION
 		      aaaa
 		      (?{ $res = $cnt })		 # On success copy to non-localized
 							 # location.
-		    >x;
+		    &gtx;
 
 		 will set "$res = 4".  Note that after the match, $cnt returns
 		 to the globally introduced value, because the scopes that
@@ -793,7 +795,7 @@ DESCRIPTION
 		 convenient custom of using run-time determined strings as
 		 patterns.  For example:
 
-		     $re = <>;
+		     $re = &lt&gt;
 		     chomp $re;
 		     $string =~ /$re/;
 
@@ -846,7 +848,7 @@ DESCRIPTION
 		   $re = qr{
 			      \(
 			      (?:
-				 (?> [^()]+ )	 # Non-parens without backtracking
+				 (?&gt [^()]+ )	 # Non-parens without backtracking
 			       |
 				 (??{ $re })	 # Group with matching parens
 			      )*
@@ -901,7 +903,7 @@ DESCRIPTION
 				 \(
 				   (		  # paren group 3 (contents of parens)
 				   (?:
-				    (?> [^()]+ )  # Non-parens without backtracking
+				    (?&gt [^()]+ )  # Non-parens without backtracking
 				   |
 				    (?2)	  # Recurse to start of paren group 2
 				   )*
@@ -958,7 +960,7 @@ DESCRIPTION
 
 		 NOTE: In order to make things easier for programmers with
 		 experience with the Python or PCRE regex engines the pattern
-		 "(?P>NAME)" may be used instead of "(?&NAME)".
+		 "(?P&gtNAME)" may be used instead of "(?&NAME)".
 
        "(?(condition)yes-pattern|no-pattern)"
        "(?(condition)yes-pattern)"
@@ -980,7 +982,7 @@ DESCRIPTION
 		     Checks if the numbered capturing buffer has matched
 		     something.
 
-		 (<NAME>) ('NAME')
+		 (&ltNAME&gt) ('NAME')
 		     Checks if a buffer with the given name has matched
 		     something.
 
@@ -1039,10 +1041,10 @@ DESCRIPTION
 
 		 An example of how this might be used is as follows:
 
-		   /(?<NAME>(?&NAME_PAT))(?<ADDR>(?&ADDRESS_PAT))
+		   /(?&ltNAME&gt(?&NAME_PAT))(?&ltADDR&gt(?&ADDRESS_PAT))
 		    (?(DEFINE)
-		      (?<NAME_PAT>....)
-		      (?<ADRESS_PAT>....)
+		      (?&ltNAME_PAT&gt....)
+		      (?&ltADRESS_PAT&gt....)
 		    )/x
 
 		 Note that capture buffers matched inside of recursion are not
@@ -1050,7 +1052,7 @@ DESCRIPTION
 		 capturing buffers is necessary. Thus $+{NAME_PAT} would not
 		 be defined even though $+{NAME} would be.
 
-       "(?>pattern)"
+       "(?&gtpattern)"
 		 An "independent" subexpression, one which matches the
 		 substring that a standalone "pattern" would match if anchored
 		 at the given position, and it matches nothing other than this
@@ -1060,7 +1062,7 @@ DESCRIPTION
 		 places where the "grab all you can, and do not give anything
 		 back" semantic is desirable.
 
-		 For example: "^(?>a*)ab" will never match, since "(?>a*)"
+		 For example: "^(?&gta*)ab" will never match, since "(?&gta*)"
 		 (anchored at the beginning of string, as above) will match
 		 all characters "a" at the beginning of string, leaving no "a"
 		 for "ab" to match.  In contrast, "a*ab" will match the same
@@ -1069,11 +1071,11 @@ DESCRIPTION
 		 particular, "a*" inside "a*ab" will match fewer characters
 		 than a standalone "a*", since this makes the tail match.
 
-		 An effect similar to "(?>pattern)" may be achieved by writing
+		 An effect similar to "(?&gtpattern)" may be achieved by writing
 		 "(?=(pattern))\1".  This matches the same substring as a
 		 standalone "a+", and the following "\1" eats the matched
 		 string; it therefore makes a zero-length assertion into an
-		 analogue of "(?>...)".  (The difference between these two
+		 analogue of "(?&gt...)".  (The difference between these two
 		 constructs is that the second one uses a capturing group,
 		 thus shifting ordinals of backreferences in the rest of a
 		 regular expression.)
@@ -1103,14 +1105,14 @@ DESCRIPTION
 
 		     m{ \(
 			   (
-			     (?> [^()]+ )	 # change x+ above to (?> x+ )
+			     (?&gt [^()]+ )	 # change x+ above to (?&gt x+ )
 			   |
 			     \( [^()]* \)
 			   )+
 			\)
 		      }x
 
-		 which uses "(?>...)" matches exactly when the one above does
+		 which uses "(?&gt...)" matches exactly when the one above does
 		 (verifying this yourself would be a productive exercise), but
 		 finishes in a fourth the time when used on a similar string
 		 with 1000000 "a"s.  Be aware, however, that this pattern
@@ -1118,7 +1120,7 @@ DESCRIPTION
 		 pragma or -w switch saying it "matches null string many times
 		 in regex".
 
-		 On simple groups, such as the pattern "(?> [^()]+ )", a
+		 On simple groups, such as the pattern "(?&gt [^()]+ )", a
 		 comparable effect may be achieved by negative look-ahead, as
 		 in "[^()]+ (?! [^()] )".  This was only 4 times slower on a
 		 string with 1000000 "a"s.
@@ -1133,13 +1135,13 @@ DESCRIPTION
 		 whitespace if the remainder of the pattern can be made to
 		 match that way.  The correct answer is either one of these:
 
-		     (?>#[ \t]*)
+		     (?&gt#[ \t]*)
 		     #[ \t]*(?![ \t])
 
 		 For example, to grab non-empty comments into $1, one should
 		 use either one of these:
 
-		     / (?> \# [ \t]* ) (	.+ ) /x;
+		     / (?&gt \# [ \t]* ) (	.+ ) /x;
 		     /	   \# [ \t]*   ( [^ \t] .* ) /x;
 
 		 Which one you pick depends on which of these expressions
@@ -1154,10 +1156,10 @@ DESCRIPTION
 
 		     Quantifier Form	 Bracketing Form
 		     ---------------	 ---------------
-		     PAT*+		 (?>PAT*)
-		     PAT++		 (?>PAT+)
-		     PAT?+		 (?>PAT?)
-		     PAT{min,max}+	 (?>PAT{min,max})
+		     PAT*+		 (?&gtPAT*)
+		     PAT++		 (?&gtPAT+)
+		     PAT?+		 (?&gtPAT?)
+		     PAT{min,max}+	 (?&gtPAT{min,max})
 
    Special Backtracking Control Verbs
        WARNING: These patterns are experimental and subject to change or
@@ -1238,11 +1240,11 @@ DESCRIPTION
 
 	       Any number of "(*PRUNE)" assertions may be used in a pattern.
 
-	       See also "(?>pattern)" and possessive quantifiers for other
+	       See also "(?&gtpattern)" and possessive quantifiers for other
 	       ways to control backtracking. In some cases, the use of
-	       "(*PRUNE)" can be replaced with a "(?>pattern)" with no
+	       "(*PRUNE)" can be replaced with a "(?&gtpattern)" with no
 	       functional difference; however, "(*PRUNE)" can be used to
-	       handle cases that cannot be expressed using a "(?>pattern)"
+	       handle cases that cannot be expressed using a "(?&gtpattern)"
 	       alone.
 
 	   "(*SKIP)" "(*SKIP:NAME)"
@@ -1345,7 +1347,7 @@ DESCRIPTION
 	       fail.
 
 	   "(*COMMIT)"
-	       This is the Perl 6 "commit pattern" "<commit>" or ":::". It's a
+	       This is the Perl 6 "commit pattern" "&ltcommit&gt" or ":::". It's a
 	       zero-width pattern similar to "(*SKIP)", except that when
 	       backtracked into on failure it causes the match to fail
 	       outright. No further attempts to find a valid match by
@@ -1437,20 +1439,20 @@ DESCRIPTION
 
 	   $_ =  "The food is under the bar in the barn.";
 	   if ( /foo(.*)bar/ ) {
-	       print "got <$1>\n";
+	       print "got &lt$1&gt\n";
 	   }
 
        Which perhaps unexpectedly yields:
 
-	 got <d is under the bar in the >
+	 got &ltd is under the bar in the &gt
 
        That's because ".*" was greedy, so you get everything between the first
        "foo" and the last "bar".  Here it's more effective to use minimal
        matching to make sure you get the text between a "foo" and the first
        "bar" thereafter.
 
-	   if ( /foo(.*?)bar/ ) { print "got <$1>\n" }
-	 got <d is under the >
+	   if ( /foo(.*?)bar/ ) { print "got &lt$1&gt\n" }
+	 got &ltd is under the &gt
 
        Here's another example. Let's say you'd like to match a number at the
        end of a string, and you also want to keep the preceding part of the
@@ -1458,14 +1460,14 @@ DESCRIPTION
 
 	   $_ = "I have 2 numbers: 53147";
 	   if ( /(.*)(\d*)/ ) { 			       # Wrong!
-	       print "Beginning is <$1>, number is <$2>.\n";
+	       print "Beginning is &lt$1&gt, number is &lt$2&gt.\n";
 	   }
 
        That won't work at all, because ".*" was greedy and gobbled up the
        whole string. As "\d*" can match on an empty string the complete
        regular expression matched successfully.
 
-	   Beginning is <I have 2 numbers: 53147>, number is <>.
+	   Beginning is &ltI have 2 numbers: 53147&gt, number is &lt&gt.
 
        Here are some variants, most of which don't work:
 
@@ -1484,7 +1486,7 @@ DESCRIPTION
 	   for $pat (@pats) {
 	       printf "%-12s ", $pat;
 	       if ( /$pat/ ) {
-		   print "<$1> <$2>\n";
+		   print "&lt$1&gt &lt$2&gt\n";
 	       } else {
 		   print "FAIL\n";
 	       }
@@ -1492,14 +1494,14 @@ DESCRIPTION
 
        That will print out:
 
-	   (.*)(\d*)	<I have 2 numbers: 53147> <>
-	   (.*)(\d+)	<I have 2 numbers: 5314> <7>
-	   (.*?)(\d*)	<> <>
-	   (.*?)(\d+)	<I have > <2>
-	   (.*)(\d+)$	<I have 2 numbers: 5314> <7>
-	   (.*?)(\d+)$	<I have 2 numbers: > <53147>
-	   (.*)\b(\d+)$ <I have 2 numbers: > <53147>
-	   (.*\D)(\d+)$ <I have 2 numbers: > <53147>
+	   (.*)(\d*)	&ltI have 2 numbers: 53147&gt &lt&gt
+	   (.*)(\d+)	&ltI have 2 numbers: 5314&gt &lt7&gt
+	   (.*?)(\d*)	&lt&gt &lt&gt
+	   (.*?)(\d+)	&ltI have &gt &lt2&gt
+	   (.*)(\d+)$	&ltI have 2 numbers: 5314&gt &lt7&gt
+	   (.*?)(\d+)$	&ltI have 2 numbers: &gt &lt53147&gt
+	   (.*)\b(\d+)$ &ltI have 2 numbers: &gt &lt53147&gt
+	   (.*\D)(\d+)$ &ltI have 2 numbers: &gt &lt53147&gt
 
        As you see, this can be a bit tricky.  It's important to realize that a
        regular expression is merely a set of assertions that gives a
@@ -1594,12 +1596,12 @@ DESCRIPTION
        match takes a long time to finish.
 
        A powerful tool for optimizing such beasts is what is known as an
-       "independent group", which does not backtrack (see "(?>pattern)").
+       "independent group", which does not backtrack (see "(?&gtpattern)").
        Note also that zero-length look-ahead/look-behind assertions will not
        backtrack to make the tail match, since they are in "logical" context:
        only whether they match is considered relevant.	For an example where
        side-effects of look-ahead might have influenced the following match,
-       see "(?>pattern)".
+       see "(?&gtpattern)".
 
    Version 8 Regular Expressions
        In case you're not familiar with the "regular" Version 8 regex
@@ -1726,7 +1728,7 @@ DESCRIPTION
 
        or
 
-	   print "match: <$&>\n" while 'foo' =~ m{ o? }xg;
+	   print "match: &lt$&&gt\n" while 'foo' =~ m{ o? }xg;
 
        or the loop implied by split().
 
@@ -1765,9 +1767,9 @@ DESCRIPTION
        For example:
 
 	   $_ = 'bar';
-	   s/\w??/<$&>/g;
+	   s/\w??/&lt$&&gt/g;
 
-       results in "<><b><><a><><r><>".	At each position of the string the
+       results in "&lt&gt&ltb&gt&lt&gt&lta&gt&lt&gt&ltr&gt&lt&gt".	At each position of the string the
        best match given by non-greedy "??" is the zero-length match, and the
        second best match is what is matched by "\w".  Thus zero-length matches
        alternate with one-character-long matches.
@@ -1842,15 +1844,15 @@ DESCRIPTION
 	   Same as "S{0,1}?", "S{0,BIG_NUMBER}?", "S{1,BIG_NUMBER}?"
 	   respectively.
 
-       "(?>S)"
+       "(?&gtS)"
 	   Matches the best match for "S" and only that.
 
-       "(?=S)", "(?<=S)"
+       "(?=S)", "(?&lt=S)"
 	   Only the best match for "S" is considered.  (This is important only
 	   if "S" has capturing parentheses, and backreferences are used
 	   somewhere else in the whole regular expression.)
 
-       "(?!S)", "(?<!S)"
+       "(?!S)", "(?&lt!S)"
 	   For this grouping operator there is no need to describe the
 	   ordering, since only whether or not "S" can match is important.
 
@@ -1874,7 +1876,7 @@ DESCRIPTION
 
        Suppose that we want to enable a new RE escape-sequence "\Y|" which
        matches at a boundary between whitespace characters and non-whitespace
-       characters.  Note that "(?=\S)(?<!\S)|(?!\S)(?<=\S)" matches exactly at
+       characters.  Note that "(?=\S)(?&lt!\S)|(?!\S)(?&lt=\S)" matches exactly at
        these positions, so we want to have each "\Y|" in the place of the more
        complicated version.  We can create a module "customre" to do this:
 
@@ -1884,15 +1886,15 @@ DESCRIPTION
 	   sub import {
 	     shift;
 	     die "No argument to customre::import allowed" if @_;
-	     overload::constant 'qr' => \&convert;
+	     overload::constant 'qr' =&gt \&convert;
 	   }
 
 	   sub invalid { die "/$_[0]/: invalid escape '\\$_[1]'"}
 
 	   # We must also take care of not escaping the legitimate \\Y|
 	   # sequence, hence the presence of '\\' in the conversion rules.
-	   my %rules = ( '\\' => '\\\\',
-			 'Y|' => qr/(?=\S)(?<!\S)|(?!\S)(?<=\S)/ );
+	   my %rules = ( '\\' =&gt '\\\\',
+			 'Y|' =&gt qr/(?=\S)(?&lt!\S)|(?!\S)(?&lt=\S)/ );
 	   sub convert {
 	     my $re = shift;
 	     $re =~ s{
@@ -1910,7 +1912,7 @@ DESCRIPTION
        the special meaning of "\Y|" should be enabled inside $re):
 
 	   use customre;
-	   $re = <>;
+	   $re = &lt&gt;
 	   chomp $re;
 	   $re = customre::convert $re;
 	   /\Y|$re\Y|/;
@@ -1920,13 +1922,13 @@ PCRE/Python Support
        extensions to the regex syntax. While Perl programmers are encouraged
        to use the Perl specific syntax, the following are also accepted:
 
-       "(?P<NAME>pattern)"
-	   Define a named capture buffer. Equivalent to "(?<NAME>pattern)".
+       "(?P&ltNAME&gtpattern)"
+	   Define a named capture buffer. Equivalent to "(?&ltNAME&gtpattern)".
 
        "(?P=NAME)"
 	   Backreference to a named capture buffer. Equivalent to "\g{NAME}".
 
-       "(?P>NAME)"
+       "(?P&gtNAME)"
 	   Subroutine call to a named capture buffer. Equivalent to
 	   "(?&NAME)".
 
@@ -1973,6 +1975,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-07			     PERLRE(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

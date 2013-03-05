@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module contains methods to test the reachability of remote hosts..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::Ping - check a remote host for reachability</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::Ping(3pm)	       Perl Programmers Reference Guide 	Net::Ping(3pm)
 
 
@@ -18,49 +20,49 @@ NAME
 SYNOPSIS
 	   use Net::Ping;
 
-	   $p = Net::Ping->new();
-	   print "$host is alive.\n" if $p->ping($host);
-	   $p->close();
+	   $p = Net::Ping-&gtnew();
+	   print "$host is alive.\n" if $p-&gtping($host);
+	   $p-&gtclose();
 
-	   $p = Net::Ping->new("icmp");
-	   $p->bind($my_addr); # Specify source interface of pings
+	   $p = Net::Ping-&gtnew("icmp");
+	   $p-&gtbind($my_addr); # Specify source interface of pings
 	   foreach $host (@host_array)
 	   {
 	       print "$host is ";
-	       print "NOT " unless $p->ping($host, 2);
+	       print "NOT " unless $p-&gtping($host, 2);
 	       print "reachable.\n";
 	       sleep(1);
 	   }
-	   $p->close();
+	   $p-&gtclose();
 
-	   $p = Net::Ping->new("tcp", 2);
+	   $p = Net::Ping-&gtnew("tcp", 2);
 	   # Try connecting to the www port instead of the echo port
-	   $p->port_number(getservbyname("http", "tcp"));
-	   while ($stop_time > time())
+	   $p-&gtport_number(getservbyname("http", "tcp"));
+	   while ($stop_time &gt time())
 	   {
 	       print "$host not reachable ", scalar(localtime()), "\n"
-		   unless $p->ping($host);
+		   unless $p-&gtping($host);
 	       sleep(300);
 	   }
 	   undef($p);
 
 	   # Like tcp protocol, but with many hosts
-	   $p = Net::Ping->new("syn");
-	   $p->port_number(getservbyname("http", "tcp"));
+	   $p = Net::Ping-&gtnew("syn");
+	   $p-&gtport_number(getservbyname("http", "tcp"));
 	   foreach $host (@host_array) {
-	     $p->ping($host);
+	     $p-&gtping($host);
 	   }
-	   while (($host,$rtt,$ip) = $p->ack) {
+	   while (($host,$rtt,$ip) = $p-&gtack) {
 	     print "HOST: $host [$ip] ACKed in $rtt seconds.\n";
 	   }
 
 	   # High precision syntax (requires Time::HiRes)
-	   $p = Net::Ping->new();
-	   $p->hires();
-	   ($ret, $duration, $ip) = $p->ping($host, 5.5);
+	   $p = Net::Ping-&gtnew();
+	   $p-&gthires();
+	   ($ret, $duration, $ip) = $p-&gtping($host, 5.5);
 	   printf("$host [ip: $ip] is alive (packet return time: %.2f ms)\n", 1000 * $duration)
 	     if $ret;
-	   $p->close();
+	   $p-&gtclose();
 
 	   # For backward compatibility
 	   print "$host is alive.\n" if pingecho($host);
@@ -121,7 +123,7 @@ DESCRIPTION
        require any special privileges.
 
    Functions
-       Net::Ping->new([$proto [, $def_timeout [, $bytes [, $device [, $tos
+       Net::Ping-&gtnew([$proto [, $def_timeout [, $bytes [, $device [, $tos
        ]]]]]);
 	   Create a new ping object.  All of the parameters are optional.
 	   $proto specifies the protocol to use when doing a ping.  The
@@ -147,7 +149,7 @@ DESCRIPTION
 
 	   If $tos is given, this ToS is configured into the socket.
 
-       $p->ping($host [, $timeout]);
+       $p-&gtping($host [, $timeout]);
 	   Ping the remote host and wait for a response.  $host can be either
 	   the hostname or the IP number of the remote host.  The optional
 	   timeout must be greater than 0 seconds and defaults to whatever was
@@ -162,7 +164,7 @@ DESCRIPTION
 	   Time::HiRes::time() function, if hires() has been previously
 	   called, otherwise it is returned as an integer.
 
-       $p->source_verify( { 0 | 1 } );
+       $p-&gtsource_verify( { 0 | 1 } );
 	   Allows source endpoint verification to be enabled or disabled.
 	   This is useful for those remote destinations with multiples
 	   interfaces where the response may not originate from the same
@@ -171,7 +173,7 @@ DESCRIPTION
 
 	   This is enabled by default.
 
-       $p->service_check( { 0 | 1 } );
+       $p-&gtservice_check( { 0 | 1 } );
 	   Set whether or not the connect behavior should enforce remote
 	   service availability as well as reachability.  Normally, if the
 	   remote server reported ECONNREFUSED, it must have been reachable
@@ -193,16 +195,16 @@ DESCRIPTION
 
 	   This is disabled by default.
 
-       $p->tcp_service_check( { 0 | 1 } );
+       $p-&gttcp_service_check( { 0 | 1 } );
 	   Deprecated method, but does the same as service_check() method.
 
-       $p->hires( { 0 | 1 } );
+       $p-&gthires( { 0 | 1 } );
 	   Causes this module to use Time::HiRes module, allowing milliseconds
 	   to be returned by subsequent calls to ping().
 
 	   This is disabled by default.
 
-       $p->bind($local_addr);
+       $p-&gtbind($local_addr);
 	   Sets the source address from which pings will be sent.  This must
 	   be the address of one of the interfaces on the local host.
 	   $local_addr may be specified as a hostname or as a text IP address
@@ -215,7 +217,7 @@ DESCRIPTION
 	   it is called at all) must be called before the first call to ping()
 	   for that object.
 
-       $p->open($host);
+       $p-&gtopen($host);
 	   When you are using the "stream" protocol, this call pre-opens the
 	   tcp socket.	It's only necessary to do this if you want to provide
 	   a different timeout when creating the connection, or remove the
@@ -224,7 +226,7 @@ DESCRIPTION
 	   first time "ping()" is called.  This call simply does nothing if
 	   you are using any protocol other than stream.
 
-       $p->ack( [ $host ] );
+       $p-&gtack( [ $host ] );
 	   When using the "syn" protocol, use this method to determine the
 	   reachability of the remote host.  This method is meant to be called
 	   up to as many times as ping() was called.  Each call returns the
@@ -240,21 +242,21 @@ DESCRIPTION
 	   host only.  This call simply does nothing if you are using any
 	   protocol other than syn.
 
-       $p->nack( $failed_ack_host );
+       $p-&gtnack( $failed_ack_host );
 	   The reason that host $failed_ack_host did not receive a valid ACK.
 	   Useful to find out why when ack( $fail_ack_host ) returns a false
 	   value.
 
-       $p->close();
+       $p-&gtclose();
 	   Close the network connection for this ping object.  The network
 	   connection is also closed by "undef $p".  The network connection is
 	   automatically closed if the ping object goes out of scope (e.g. $p
 	   is local to a subroutine and you leave the subroutine).
 
-       $p->port_number([$port_number])
+       $p-&gtport_number([$port_number])
 	   When called with a port number, the port number used to ping is set
 	   to $port_number rather than using the echo port.  It also has the
-	   effect of calling "$p->service_check(1)" causing a ping to return a
+	   effect of calling "$p-&gtservice_check(1)" causing a ping to return a
 	   successful response only if that specific port is accessible.  This
 	   function returns the value of the port that "ping()" will connect
 	   to.
@@ -370,6 +372,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-06-12			Net::Ping(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

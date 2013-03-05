@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This section of the Perl FAQ covers questions involving operating..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlfaq8 - System Interaction</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLFAQ8(1)	       Perl Programmers Reference Guide 	   PERLFAQ8(1)
 
 
@@ -84,12 +86,12 @@ DESCRIPTION
        in perlfunc, but as you see, that's already getting you into
        portability snags.
 
-	       open(TTY, "+</dev/tty") or die "no tty: $!";
-	       system "stty  cbreak </dev/tty >/dev/tty 2>&1";
+	       open(TTY, "+&lt/dev/tty") or die "no tty: $!";
+	       system "stty  cbreak &lt/dev/tty &gt/dev/tty 2&gt&1";
 	       $key = getc(TTY);	       # perhaps this works
 	       # OR ELSE
 	       sysread(TTY, $key, 1);  # probably this does
-	       system "stty -cbreak </dev/tty >/dev/tty 2>&1";
+	       system "stty -cbreak &lt/dev/tty &gt/dev/tty 2&gt&1";
 
        The Term::ReadKey module from CPAN offers an easy-to-use interface that
        should be more efficient than shelling out to stty for each key.  It
@@ -122,23 +124,23 @@ DESCRIPTION
 	       my ($term, $oterm, $echo, $noecho, $fd_stdin);
 
 	       $fd_stdin = fileno(STDIN);
-	       $term	 = POSIX::Termios->new();
-	       $term->getattr($fd_stdin);
-	       $oterm	  = $term->getlflag();
+	       $term	 = POSIX::Termios-&gtnew();
+	       $term-&gtgetattr($fd_stdin);
+	       $oterm	  = $term-&gtgetlflag();
 
 	       $echo	 = ECHO | ECHOK | ICANON;
 	       $noecho	 = $oterm & ~$echo;
 
 	       sub cbreak {
-		       $term->setlflag($noecho);  # ok, so i don't want echo either
-		       $term->setcc(VTIME, 1);
-		       $term->setattr($fd_stdin, TCSANOW);
+		       $term-&gtsetlflag($noecho);  # ok, so i don't want echo either
+		       $term-&gtsetcc(VTIME, 1);
+		       $term-&gtsetattr($fd_stdin, TCSANOW);
 	       }
 
 	       sub cooked {
-		       $term->setlflag($oterm);
-		       $term->setcc(VTIME, 0);
-		       $term->setattr($fd_stdin, TCSANOW);
+		       $term-&gtsetlflag($oterm);
+		       $term-&gtsetcc(VTIME, 0);
+		       $term-&gtsetattr($fd_stdin, TCSANOW);
 	       }
 
 	       sub readkey {
@@ -191,8 +193,8 @@ DESCRIPTION
 
 	       use Term::Cap;
 
-	       $terminal = Term::Cap->Tgetent( { OSPEED => 9600 } );
-	       $clear_string = $terminal->Tputs('cl');
+	       $terminal = Term::Cap-&gtTgetent( { OSPEED =&gt 9600 } );
+	       $clear_string = $terminal-&gtTputs('cl');
 
 	       print $clear_screen;
 
@@ -202,8 +204,8 @@ DESCRIPTION
 
 	       Win32::Console;
 
-	       $OUT = Win32::Console->new(STD_OUTPUT_HANDLE);
-	       my $clear_string = $OUT->Cls;
+	       $OUT = Win32::Console-&gtnew(STD_OUTPUT_HANDLE);
+	       my $clear_string = $OUT-&gtCls;
 
 	       print $clear_screen;
 
@@ -225,7 +227,7 @@ DESCRIPTION
 
 	       require 'sys/ioctl.ph';
 	       die "no TIOCGWINSZ " unless defined &TIOCGWINSZ;
-	       open(TTY, "+</dev/tty")			   or die "No tty: $!";
+	       open(TTY, "+&lt/dev/tty")			   or die "No tty: $!";
 	       unless (ioctl(TTY, &TIOCGWINSZ, $winsize='')) {
 		       die sprintf "$0: ioctl TIOCGWINSZ (%08x: $!)\n", &TIOCGWINSZ;
 	       }
@@ -309,7 +311,7 @@ DESCRIPTION
 	   because you're afraid of a little $| variable:
 
 		   use IO::Handle;
-		   DEV->autoflush(1);
+		   DEV-&gtautoflush(1);
 
 	   As mentioned in the previous item, this still doesn't work when
 	   using socket I/O between Unix and Macintosh.  You'll need to hard
@@ -324,18 +326,18 @@ DESCRIPTION
 	   perlfunc.
 
        While trying to read from his caller-id box, the notorious Jamie
-       Zawinski "<jwz@netscape.com>", after much gnashing of teeth and
+       Zawinski "&ltjwz@netscape.com&gt", after much gnashing of teeth and
        fighting with sysread, sysopen, POSIX's tcgetattr business, and various
        other functions that go bump in the night, finally came up with this:
 
 	       sub open_modem {
 		       use IPC::Open2;
 		       my $stty = `/bin/stty -g`;
-		       open2( \*MODEM_IN, \*MODEM_OUT, "cu -l$modem_device -s2400 2>&1");
+		       open2( \*MODEM_IN, \*MODEM_OUT, "cu -l$modem_device -s2400 2&gt&1");
 		       # starting cu hoses /dev/tty's stty settings, even when it has
 		       # been opened on a pipe...
 		       system("/bin/stty $stty");
-		       $_ = <MODEM_IN>;
+		       $_ = &ltMODEM_IN&gt;
 		       chomp;
 		       if ( !m/^Connected/ ) {
 			       print STDERR "$0: cu printed `$_' instead of `Connected'\n";
@@ -608,9 +610,9 @@ DESCRIPTION
 	       use IPC::Open3;
 	       use File::Spec;
 	       use Symbol qw(gensym);
-	       open(NULL, ">", File::Spec->devnull);
-	       my $pid = open3(gensym, \*PH, ">&NULL", "cmd");
-	       while( <PH> ) { }
+	       open(NULL, "&gt", File::Spec-&gtdevnull);
+	       my $pid = open3(gensym, \*PH, "&gt&NULL", "cmd");
+	       while( &ltPH&gt ) { }
 	       waitpid($pid, 0);
 
        To capture a program's STDERR, but discard its STDOUT:
@@ -618,17 +620,17 @@ DESCRIPTION
 	       use IPC::Open3;
 	       use File::Spec;
 	       use Symbol qw(gensym);
-	       open(NULL, ">", File::Spec->devnull);
-	       my $pid = open3(gensym, ">&NULL", \*PH, "cmd");
-	       while( <PH> ) { }
+	       open(NULL, "&gt", File::Spec-&gtdevnull);
+	       my $pid = open3(gensym, "&gt&NULL", \*PH, "cmd");
+	       while( &ltPH&gt ) { }
 	       waitpid($pid, 0);
 
        To capture a program's STDERR, and let its STDOUT go to our own STDERR:
 
 	       use IPC::Open3;
 	       use Symbol qw(gensym);
-	       my $pid = open3(gensym, ">&STDERR", \*PH, "cmd");
-	       while( <PH> ) { }
+	       my $pid = open3(gensym, "&gt&STDERR", \*PH, "cmd");
+	       while( &ltPH&gt ) { }
 	       waitpid($pid, 0);
 
        To read both a command's STDOUT and its STDERR separately, you can
@@ -638,13 +640,13 @@ DESCRIPTION
 	       use IPC::Open3;
 	       use Symbol qw(gensym);
 	       use IO::File;
-	       local *CATCHOUT = IO::File->new_tmpfile;
-	       local *CATCHERR = IO::File->new_tmpfile;
-	       my $pid = open3(gensym, ">&CATCHOUT", ">&CATCHERR", "cmd");
+	       local *CATCHOUT = IO::File-&gtnew_tmpfile;
+	       local *CATCHERR = IO::File-&gtnew_tmpfile;
+	       my $pid = open3(gensym, "&gt&CATCHOUT", "&gt&CATCHERR", "cmd");
 	       waitpid($pid, 0);
 	       seek $_, 0, 0 for \*CATCHOUT, \*CATCHERR;
-	       while( <CATCHOUT> ) {}
-	       while( <CATCHERR> ) {}
+	       while( &ltCATCHOUT&gt ) {}
+	       while( &ltCATCHERR&gt ) {}
 
        But there's no real need for *both* to be tempfiles... the following
        should work just as well, without deadlocking:
@@ -652,37 +654,37 @@ DESCRIPTION
 	       use IPC::Open3;
 	       use Symbol qw(gensym);
 	       use IO::File;
-	       local *CATCHERR = IO::File->new_tmpfile;
-	       my $pid = open3(gensym, \*CATCHOUT, ">&CATCHERR", "cmd");
-	       while( <CATCHOUT> ) {}
+	       local *CATCHERR = IO::File-&gtnew_tmpfile;
+	       my $pid = open3(gensym, \*CATCHOUT, "&gt&CATCHERR", "cmd");
+	       while( &ltCATCHOUT&gt ) {}
 	       waitpid($pid, 0);
 	       seek CATCHERR, 0, 0;
-	       while( <CATCHERR> ) {}
+	       while( &ltCATCHERR&gt ) {}
 
        And it'll be faster, too, since we can begin processing the program's
        stdout immediately, rather than waiting for the program to finish.
 
        With any of these, you can change file descriptors before the call:
 
-	       open(STDOUT, ">logfile");
+	       open(STDOUT, "&gtlogfile");
 	       system("ls");
 
        or you can use Bourne shell file-descriptor redirection:
 
-	       $output = `$cmd 2>some_file`;
-	       open (PIPE, "cmd 2>some_file |");
+	       $output = `$cmd 2&gtsome_file`;
+	       open (PIPE, "cmd 2&gtsome_file |");
 
        You can also use file-descriptor redirection to make STDERR a duplicate
        of STDOUT:
 
-	       $output = `$cmd 2>&1`;
-	       open (PIPE, "cmd 2>&1 |");
+	       $output = `$cmd 2&gt&1`;
+	       open (PIPE, "cmd 2&gt&1 |");
 
        Note that you cannot simply open STDERR to be a dup of STDOUT in your
        Perl program and avoid calling the shell to do the redirection.	This
        doesn't work:
 
-	       open(STDERR, ">&STDOUT");
+	       open(STDERR, "&gt&STDOUT");
 	       $alloutput = `cmd args`;  # stderr still escapes
 
        This fails because the open() makes STDERR go to where STDOUT was going
@@ -696,40 +698,40 @@ DESCRIPTION
        http://www.cpan.org/misc/olddoc/FMTEYEWTK.tgz .	To capture a command's
        STDERR and STDOUT together:
 
-	       $output = `cmd 2>&1`;			   # either with backticks
-	       $pid = open(PH, "cmd 2>&1 |");		   # or with an open pipe
-	       while (<PH>) { } 			   #	plus a read
+	       $output = `cmd 2&gt&1`;			   # either with backticks
+	       $pid = open(PH, "cmd 2&gt&1 |");		   # or with an open pipe
+	       while (&ltPH&gt) { } 			   #	plus a read
 
        To capture a command's STDOUT but discard its STDERR:
 
-	       $output = `cmd 2>/dev/null`;		   # either with backticks
-	       $pid = open(PH, "cmd 2>/dev/null |");	   # or with an open pipe
-	       while (<PH>) { } 			   #	plus a read
+	       $output = `cmd 2&gt/dev/null`;		   # either with backticks
+	       $pid = open(PH, "cmd 2&gt/dev/null |");	   # or with an open pipe
+	       while (&ltPH&gt) { } 			   #	plus a read
 
        To capture a command's STDERR but discard its STDOUT:
 
-	       $output = `cmd 2>&1 1>/dev/null`;	   # either with backticks
-	       $pid = open(PH, "cmd 2>&1 1>/dev/null |");  # or with an open pipe
-	       while (<PH>) { } 			   #	plus a read
+	       $output = `cmd 2&gt&1 1&gt/dev/null`;	   # either with backticks
+	       $pid = open(PH, "cmd 2&gt&1 1&gt/dev/null |");  # or with an open pipe
+	       while (&ltPH&gt) { } 			   #	plus a read
 
        To exchange a command's STDOUT and STDERR in order to capture the
        STDERR but leave its STDOUT to come out our old STDERR:
 
-	       $output = `cmd 3>&1 1>&2 2>&3 3>&-`;	   # either with backticks
-	       $pid = open(PH, "cmd 3>&1 1>&2 2>&3 3>&-|");# or with an open pipe
-	       while (<PH>) { } 			   #	plus a read
+	       $output = `cmd 3&gt&1 1&gt&2 2&gt&3 3&gt&-`;	   # either with backticks
+	       $pid = open(PH, "cmd 3&gt&1 1&gt&2 2&gt&3 3&gt&-|");# or with an open pipe
+	       while (&ltPH&gt) { } 			   #	plus a read
 
        To read both a command's STDOUT and its STDERR separately, it's easiest
        to redirect them separately to files, and then read from those files
        when the program is done:
 
-	       system("program args 1>program.stdout 2>program.stderr");
+	       system("program args 1&gtprogram.stdout 2&gtprogram.stderr");
 
        Ordering is important in all these examples.  That's because the shell
        processes file descriptor redirections in strictly left to right order.
 
-	       system("prog args 1>tmpfile 2>&1");
-	       system("prog args 2>&1 1>tmpfile");
+	       system("prog args 1&gttmpfile 2&gt&1");
+	       system("prog args 2&gt&1 1&gttmpfile");
 
        The first command sends both standard out and standard error to the
        temporary file.	The second command sends only the old standard output
@@ -791,14 +793,14 @@ DESCRIPTION
        happen.
 
 	       open( GREP, "-|", 'grep', @opts, $search_string, @filenames );
-	       chomp(@ok = <GREP>);
+	       chomp(@ok = &ltGREP&gt);
 	       close GREP;
 
        You can also:
 
 	       my @ok = ();
 	       if (open(GREP, "-|")) {
-		       while (<GREP>) {
+		       while (&ltGREP&gt) {
 			       chomp;
 			       push(@ok, $_);
 		       }
@@ -838,7 +840,7 @@ DESCRIPTION
    How can I convert my shell script to perl?
        Learn Perl and rewrite it.  Seriously, there's no simple converter.
        Things that are awkward to do in the shell are easy to do in Perl, and
-       this very awkwardness is what would make a shell->perl converter nigh-
+       this very awkwardness is what would make a shell-&gtperl converter nigh-
        on impossible to write.	By rewriting it, you'll think about what
        you're really trying to do, and hopefully will escape the shell's
        pipeline datastream paradigm, which while convenient for some matters,
@@ -855,14 +857,14 @@ DESCRIPTION
        will suffice:
 
 	       use IO::Socket;		   # new in 5.004
-	       $handle = IO::Socket::INET->new('www.perl.com:80')
+	       $handle = IO::Socket::INET-&gtnew('www.perl.com:80')
 		   or die "can't connect to port 80 on www.perl.com: $!";
-	       $handle->autoflush(1);
+	       $handle-&gtautoflush(1);
 	       if (fork()) {		   # XXX: undef means failure
 		   select($handle);
-		   print while <STDIN>;    # everything from stdin to socket
+		   print while &ltSTDIN&gt;    # everything from stdin to socket
 	       } else {
-		   print while <$handle>;  # everything from socket to stdout
+		   print while &lt$handle&gt;  # everything from socket to stdout
 	       }
 	       close $handle;
 	       exit;
@@ -1092,7 +1094,7 @@ DESCRIPTION
 	       cpan shell -- CPAN exploration and modules installation (v1.59_54)
 	       ReadLine support enabled
 
-	       cpan> install Some::Module
+	       cpan&gt install Some::Module
 
        To manually install the CPAN module, or any well-behaved CPAN module
        for that matter, follow these steps:
@@ -1131,7 +1133,7 @@ DESCRIPTION
 
 	       BEGIN {
 		       require MODULE;
-		       MODULE->import(import list);
+		       MODULE-&gtimport(import list);
 		       }
 
        However, you can suppress the "import" by using an explicit, empty
@@ -1164,8 +1166,8 @@ DESCRIPTION
        shell:
 
 	       % cpan
-	       cpan> o conf makepl_arg INSTALL_BASE=/mydir/perl
-	       cpan> o conf commit
+	       cpan&gt o conf makepl_arg INSTALL_BASE=/mydir/perl
+	       cpan&gt o conf commit
 
        For "Build.PL"-based distributions, use the --install_base option:
 
@@ -1174,8 +1176,8 @@ DESCRIPTION
        You can configure CPAN.pm to automatically use this option too:
 
 	       % cpan
-	       cpan> o conf mbuild_arg --install_base /mydir/perl
-	       cpan> o conf commit
+	       cpan&gt o conf mbuild_arg --install_base /mydir/perl
+	       cpan&gt o conf commit
 
        INSTALL_BASE tells these tools to put your modules into
        /mydir/perl/lib/perl5.  See "How do I add a directory to my include
@@ -1195,7 +1197,7 @@ DESCRIPTION
        (contributed by brian d foy)
 
        If you know the directory already, you can add it to @INC as you would
-       for any other directory. You might <use lib> if you know the directory
+       for any other directory. You might &ltuse lib&gt if you know the directory
        at compile time:
 
 	       use lib $directory;
@@ -1281,6 +1283,6 @@ AUTHOR AND COPYRIGHT
 
 
 perl v5.10.1			  2009-08-15			   PERLFAQ8(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

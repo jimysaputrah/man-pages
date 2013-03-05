@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="When the code you're testing returns multiple lines, records or data..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Test::Differences - Test strings and data structures and show</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Test::Differences(3)  User Contributed Perl Documentation Test::Differences(3)
 
 
@@ -27,7 +29,7 @@ SYNOPSIS
 	  eq_or_diff \@got, [qw( a b c )], "testing arrays";
 
 	  ## Passing options:
-	  eq_or_diff $got, $expected, $name, { context => 300 };  ## options
+	  eq_or_diff $got, $expected, $name, { context =&gt 300 };  ## options
 
 	  ## Using with DBI-like data structures
 
@@ -35,8 +37,8 @@ SYNOPSIS
 
 	  ... open connection & prepare statement and @expected_... here...
 
-	  eq_or_diff $sth->fetchall_arrayref, \@expected_arrays  "testing DBI arrays";
-	  eq_or_diff $sth->fetchall_hashref,  \@expected_hashes, "testing DBI hashes";
+	  eq_or_diff $sth-&gtfetchall_arrayref, \@expected_arrays  "testing DBI arrays";
+	  eq_or_diff $sth-&gtfetchall_hashref,  \@expected_hashes, "testing DBI hashes";
 
 	  ## To force textual or data line numbering (text lines are numbered 1..):
 	  eq_or_diff_text ...;
@@ -146,7 +148,7 @@ OPTIONS
 
 	   This allows you to control the amount of context shown:
 
-	      eq_or_diff $got, $expected, $name, { context => 50000 };
+	      eq_or_diff $got, $expected, $name, { context =&gt 50000 };
 
 	   will show you lots and lots of context.  Normally, eq_or_diff()
 	   uses some heuristics to determine whether to show 3 lines of
@@ -184,7 +186,7 @@ DIFF STYLES
 	use Test::More 'no_plan';
 	use Test::Differences;
 
-	my $long_string = join '' => 1..40;
+	my $long_string = join '' =&gt 1..40;
 
 	TODO: {
 	    local $TODO = 'Testing diff styles';
@@ -232,16 +234,16 @@ DEPLOYING
 	       use Data::Dumper;
 
 	       sub ok {
-		   goto &eq_or_diff if defined &eq_or_diff && @_ > 1;
+		   goto &eq_or_diff if defined &eq_or_diff && @_ &gt 1;
 		   @_ = map ref $_ ? Dumper( @_ ) : $_, @_;
 		   goto Test::&ok;
 	       }
 
-	       plan tests => 1;
+	       plan tests =&gt 1;
 
 	       ok "a", "b";
 
-       o   PREREQ_PM => { .... "Test::Differences" => 0, ... }
+       o   PREREQ_PM =&gt { .... "Test::Differences" =&gt 0, ... }
 
 	   This method will let CPAN and CPANPLUS users download it
 	   automatically.  It will discomfit those users who choose/have to
@@ -286,7 +288,7 @@ LIMITATIONS
        automation.
 
    Unicode
-       Perls before 5.6.0 don't support characters > 255 at all, and 5.6.0
+       Perls before 5.6.0 don't support characters &gt 255 at all, and 5.6.0
        seems broken.  This means that you might get odd results using
        perl5.6.0 with unicode strings.
 
@@ -296,7 +298,7 @@ LIMITATIONS
        set to 1, so on more recent versions of Data::Dumper, this should not
        occur.  Check CPAN to see if it's been peeled out of the main perl
        distribution and backported.  Reported by Ilya Martynov
-       <ilya@martynov.org>, although the SortKeys "future perfect" workaround
+       &ltilya@martynov.org&gt, although the SortKeys "future perfect" workaround
        has been set in anticipation of a new Data::Dumper for a while.	Note
        that the two hashes should report the same here:
 
@@ -306,11 +308,11 @@ LIMITATIONS
 	   # | Elt|Got			   | Elt|Expected		 |
 	   # +----+------------------------+----+------------------------+
 	   # |	 0|{			   |   0|{			 |
-	   # |	 1|  'password' => '',	   |   1|  'password' => '',	 |
-	   # *	 2|  'method' => 'login',  *	|			 |
-	   # |	 3|  'ctrl' => 'home',	   |   2|  'ctrl' => 'home',	 |
-	   # |	  |			   *   3|  'method' => 'login',  *
-	   # |	 4|  'email' => 'test'	   |   4|  'email' => 'test'	 |
+	   # |	 1|  'password' =&gt '',	   |   1|  'password' =&gt '',	 |
+	   # *	 2|  'method' =&gt 'login',  *	|			 |
+	   # |	 3|  'ctrl' =&gt 'home',	   |   2|  'ctrl' =&gt 'home',	 |
+	   # |	  |			   *   3|  'method' =&gt 'login',  *
+	   # |	 4|  'email' =&gt 'test'	   |   4|  'email' =&gt 'test'	 |
 	   # |	 5|}			   |   5|}			 |
 	   # +----+------------------------+----+------------------------+
 
@@ -327,15 +329,15 @@ LIMITATIONS
 
        The former involves two scalars, the latter 4: $x, $y, and @a[0,1].
        This was carefully explained to me in words of two syllables or less by
-       Yves Orton <demerphq@hotmail.com>.  The plan to address this is to
+       Yves Orton &ltdemerphq@hotmail.com&gt.  The plan to address this is to
        allow you to select Data::Denter or some other module of your choice as
        an option.
 
 AUTHOR
-	   Barrie Slaymaker <barries@slaysys.com>
+	   Barrie Slaymaker &ltbarries@slaysys.com&gt
 
 MAINTAINER
-	   Curtis "Ovid" Poe <ovid@cpan.org>
+	   Curtis "Ovid" Poe &ltovid@cpan.org&gt
 
 LICENSE
        Copyright 2001-2008 Barrie Slaymaker, All Rights Reserved.
@@ -346,6 +348,6 @@ LICENSE
 
 
 perl v5.12.4			  2012-06-20		  Test::Differences(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

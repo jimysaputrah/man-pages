@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Tie::File" represents a regular text file as a Perl array.  Each..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Tie::File - Access the lines of a disk file via a Perl array</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Tie::File(3pm)	       Perl Programmers Reference Guide 	Tie::File(3pm)
 
 
@@ -58,12 +60,12 @@ DESCRIPTION
 
    "recsep"
        What is a 'record'?  By default, the meaning is the same as for the
-       "<...>" operator: It's a string terminated by $/, which is probably
+       "&lt...&gt" operator: It's a string terminated by $/, which is probably
        "\n".  (Minor exception: on DOS and Win32 systems, a 'record' is a
        string terminated by "\r\n".)  You may change the definition of
        "record" by supplying the "recsep" option in the "tie" call:
 
-	       tie @array, 'Tie::File', $file, recsep => 'es';
+	       tie @array, 'Tie::File', $file, recsep =&gt 'es';
 
        This says that records are delimited by the string "es".  If the file
        contained the following data:
@@ -122,7 +124,7 @@ DESCRIPTION
        "Myrrh")".  If you set "autochomp" to a false value, the record
        separator will not be removed.  If the file above was tied with
 
-	       tie @gifts, "Tie::File", $gifts, autochomp => 0;
+	       tie @gifts, "Tie::File", $gifts, autochomp =&gt 0;
 
        then the array @gifts would appear to contain "("Gold\n",
        "Frankincense\n", "Myrrh\n")", or (on Win32 systems) "("Gold\r\n",
@@ -137,15 +139,15 @@ DESCRIPTION
 
 	       # open the file if it exists, but fail if it does not exist
 	       use Fcntl 'O_RDWR';
-	       tie @array, 'Tie::File', $file, mode => O_RDWR;
+	       tie @array, 'Tie::File', $file, mode =&gt O_RDWR;
 
 	       # create the file if it does not exist
 	       use Fcntl 'O_RDWR', 'O_CREAT';
-	       tie @array, 'Tie::File', $file, mode => O_RDWR | O_CREAT;
+	       tie @array, 'Tie::File', $file, mode =&gt O_RDWR | O_CREAT;
 
 	       # open an existing file in read-only mode
 	       use Fcntl 'O_RDONLY';
-	       tie @array, 'Tie::File', $file, mode => O_RDONLY;
+	       tie @array, 'Tie::File', $file, mode =&gt O_RDONLY;
 
        Opening the data file in write-only or append mode is not supported.
 
@@ -167,7 +169,7 @@ DESCRIPTION
        desired cache size, in bytes.
 
 	       # I have a lot of memory, so use a large cache to speed up access
-	       tie @array, 'Tie::File', $file, memory => 20_000_000;
+	       tie @array, 'Tie::File', $file, memory =&gt 20_000_000;
 
        Setting the memory limit to 0 will inhibit caching; records will be
        fetched from disk every time you examine them.
@@ -210,15 +212,15 @@ DESCRIPTION
 Public Methods
        The "tie" call returns an object, say $o.  You may call
 
-	       $rec = $o->FETCH($n);
-	       $o->STORE($n, $rec);
+	       $rec = $o-&gtFETCH($n);
+	       $o-&gtSTORE($n, $rec);
 
        to fetch or store the record at line $n, respectively; similarly the
        other tied array methods.  (See perltie for details.)  You may also
        call the following methods on this object:
 
    "flock"
-	       $o->flock(MODE)
+	       $o-&gtflock(MODE)
 
        will lock the tied file.  "MODE" has the same meaning as the second
        argument to the Perl built-in "flock" function; for example "LOCK_SH"
@@ -240,10 +242,10 @@ Public Methods
        safe:
 
 	       my $o = tie @array, "Tie::File", $filename;
-	       $o->flock;
+	       $o-&gtflock;
 
        In particular, "Tie::File" will not read or write the file during the
-       "tie" call.  (Exception: Using "mode => O_TRUNC" will, of course, erase
+       "tie" call.  (Exception: Using "mode =&gt O_TRUNC" will, of course, erase
        the file during the "tie" call.	If you want to do this safely, then
        open the file without "O_TRUNC", lock the file, and use "@array = ()".)
 
@@ -264,10 +266,10 @@ Public Methods
        have a green light at the same time.
 
    "autochomp"
-	       my $old_value = $o->autochomp(0);    # disable autochomp option
-	       my $old_value = $o->autochomp(1);    #  enable autochomp option
+	       my $old_value = $o-&gtautochomp(0);    # disable autochomp option
+	       my $old_value = $o-&gtautochomp(1);    #  enable autochomp option
 
-	       my $ac = $o->autochomp();   # recover current value
+	       my $ac = $o-&gtautochomp();   # recover current value
 
        See "autochomp", above.
 
@@ -275,7 +277,7 @@ Public Methods
        See "Deferred Writing", below.
 
    "offset"
-	       $off = $o->offset($n);
+	       $off = $o-&gtoffset($n);
 
        This method returns the byte offset of the start of the $nth record in
        the file.  If there is no such record, it returns an undefined value.
@@ -318,7 +320,7 @@ Deferred Writing
        want to do:
 
 	       for (@FILE) {
-		 $_ = "> $_";
+		 $_ = "&gt $_";
 	       }
 
        The first time through the loop, you will rewrite the entire file, from
@@ -331,14 +333,14 @@ Deferred Writing
        actual writing, and then have it done all at once.  The following loop
        will perform much better for large files:
 
-	       (tied @a)->defer;
+	       (tied @a)-&gtdefer;
 	       for (@a) {
-		 $_ = "> $_";
+		 $_ = "&gt $_";
 	       }
-	       (tied @a)->flush;
+	       (tied @a)-&gtflush;
 
        If "Tie::File"'s memory limit is large enough, all the writing will
-       done in memory.	Then, when you call "->flush", the entire file will be
+       done in memory.	Then, when you call "-&gtflush", the entire file will be
        rewritten in a single pass.
 
        (Actually, the preceding discussion is something of a fib.  You don't
@@ -346,11 +348,11 @@ Deferred Writing
        case, because "Tie::File" will do it for you automatically unless you
        specifically tell it not to.  See "autodeferring", below.)
 
-       Calling "->flush" returns the array to immediate-write mode.  If you
-       wish to discard the deferred writes, you may call "->discard" instead
-       of "->flush".  Note that in some cases, some of the data will have been
-       written already, and it will be too late for "->discard" to discard all
-       the changes.  Support for "->discard" may be withdrawn in a future
+       Calling "-&gtflush" returns the array to immediate-write mode.  If you
+       wish to discard the deferred writes, you may call "-&gtdiscard" instead
+       of "-&gtflush".  Note that in some cases, some of the data will have been
+       written already, and it will be too late for "-&gtdiscard" to discard all
+       the changes.  Support for "-&gtdiscard" may be withdrawn in a future
        version of "Tie::File".
 
        Deferred writes are cached in memory up to the limit specified by the
@@ -381,7 +383,7 @@ Deferred Writing
        to turn it on and off automatically.
 
 	       for (@a) {
-		 $_ = "> $_";
+		 $_ = "&gt $_";
 	       }
 
        In this example, only the first two assignments will be done
@@ -394,23 +396,23 @@ Deferred Writing
        that all writes be immediate.  To disable the autodeferment feature,
        use
 
-	       (tied @o)->autodefer(0);
+	       (tied @o)-&gtautodefer(0);
 
        or
 
-	       tie @array, 'Tie::File', $file, autodefer => 0;
+	       tie @array, 'Tie::File', $file, autodefer =&gt 0;
 
-       Similarly, "->autodefer(1)" re-enables autodeferment, and
-       "->autodefer()" recovers the current value of the autodefer setting.
+       Similarly, "-&gtautodefer(1)" re-enables autodeferment, and
+       "-&gtautodefer()" recovers the current value of the autodefer setting.
 
 CONCURRENT ACCESS TO FILES
        Caching and deferred writing are inappropriate if you want the same
        file to be accessed simultaneously from more than one process.  Other
        optimizations performed internally by this module are also incompatible
        with concurrent access.	A future version of this module will support a
-       "concurrent => 1" option that enables safe concurrent access.
+       "concurrent =&gt 1" option that enables safe concurrent access.
 
-       Previous versions of this documentation suggested using "memory => 0"
+       Previous versions of this documentation suggested using "memory =&gt 0"
        for safe concurrent access.  This was mistaken.	Tie::File will not
        support safe concurrent access before version 0.98.
 
@@ -574,6 +576,6 @@ TODO
 
 
 perl v5.12.4			  2011-06-01			Tie::File(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

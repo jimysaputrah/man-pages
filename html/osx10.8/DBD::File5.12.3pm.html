@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The DBD::File module is not a true DBI driver, but an abstract base..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBD::File - Base class for writing file based DBI drivers</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBD::File(3)	      User Contributed Perl Documentation	  DBD::File(3)
 
 
@@ -59,21 +61,21 @@ DESCRIPTION
 
        NUM_OF_FIELDS
 
-       Valid after "$sth->execute".
+       Valid after "$sth-&gtexecute".
 
        NUM_OF_PARAMS
 
-       Valid after "$sth->prepare".
+       Valid after "$sth-&gtprepare".
 
        NAME
 
-       Valid after "$sth->execute"; undef for Non-Select statements.
+       Valid after "$sth-&gtexecute"; undef for Non-Select statements.
 
        NULLABLE
 
        Not really working, always returns an array ref of ones, except the
        affected table has been created in this session.  Valid after
-       "$sth->execute"; undef for non-select statements.
+       "$sth-&gtexecute"; undef for non-select statements.
 
        The following DBI attributes and methods are not supported:
 
@@ -139,25 +141,25 @@ DESCRIPTION
        directory in which the table file resides. You can set "f_schema" to
        "undef".
 
-	   my $dbh = DBI->connect ("dbi:CSV:", "", "", {
-	       f_schema => undef,
-	       f_dir	=> "data",
-	       f_ext	=> ".csv/r",
+	   my $dbh = DBI-&gtconnect ("dbi:CSV:", "", "", {
+	       f_schema =&gt undef,
+	       f_dir	=&gt "data",
+	       f_ext	=&gt ".csv/r",
 	       }) or die $DBI::errstr;
 
        By setting the schema you affect the results from the tables call:
 
-	   my @tables = $dbh->tables ();
+	   my @tables = $dbh-&gttables ();
 
 	   # no f_schema
 	   "merijn".foo
 	   "merijn".bar
 
-	   # f_schema => "dbi"
+	   # f_schema =&gt "dbi"
 	   "dbi".foo
 	   "dbi".bar
 
-	   # f_schema => undef
+	   # f_schema =&gt undef
 	   foo
 	   bar
 
@@ -184,21 +186,21 @@ DESCRIPTION
        If you wish to use a lockfile extension other than ".lck", simply
        specify the "f_lockfile" attribute:
 
-	 $dbh = DBI->connect ("dbi:DBM:f_lockfile=.foo");
-	 $dbh->{f_lockfile} = ".foo";
-	 $dbh->{f_meta}{qux}{f_lockfile} = ".foo";
+	 $dbh = DBI-&gtconnect ("dbi:DBM:f_lockfile=.foo");
+	 $dbh-&gt{f_lockfile} = ".foo";
+	 $dbh-&gt{f_meta}{qux}{f_lockfile} = ".foo";
 
        If you wish to disable locking, set the "f_lockfile" to 0.
 
-	 $dbh = DBI->connect ("dbi:DBM:f_lockfile=0");
-	 $dbh->{f_lockfile} = 0;
-	 $dbh->{f_meta}{qux}{f_lockfile} = 0;
+	 $dbh = DBI-&gtconnect ("dbi:DBM:f_lockfile=0");
+	 $dbh-&gt{f_lockfile} = 0;
+	 $dbh-&gt{f_meta}{qux}{f_lockfile} = 0;
 
        f_encoding
 
        With this attribute, you can set the encoding in which the file is
        opened.	This is implemented using "binmode $fh,
-       ":encoding(<f_encoding>)"".
+       ":encoding(&ltf_encoding&gt)"".
 
        f_meta
 
@@ -274,16 +276,16 @@ DESCRIPTION
 
        If you want to read the subdirectories of another directory, use
 
-	   my ($drh)  = DBI->install_driver ("CSV");
-	   my (@list) = $drh->data_sources (f_dir => "/usr/local/csv_data");
+	   my ($drh)  = DBI-&gtinstall_driver ("CSV");
+	   my (@list) = $drh-&gtdata_sources (f_dir =&gt "/usr/local/csv_data");
 
        list_tables
 
-       This method returns a list of file names inside $dbh->{f_dir}.
+       This method returns a list of file names inside $dbh-&gt{f_dir}.
        Example:
 
-	   my ($dbh)  = DBI->connect ("dbi:CSV:f_dir=/usr/local/csv_data");
-	   my (@list) = $dbh->func ("list_tables");
+	   my ($dbh)  = DBI-&gtconnect ("dbi:CSV:f_dir=/usr/local/csv_data");
+	   my (@list) = $dbh-&gtfunc ("list_tables");
 
        Note that the list includes all files contained in the directory, even
        those that have non-valid table names, from the view of SQL.
@@ -311,8 +313,8 @@ DESCRIPTION
        version, DBI::PurePerl version (if DBI::PurePerl is active) and the
        version of the SQL engine in use.
 
-	   my $dbh = DBI->connect ("dbi:File:");
-	   my $f_versions = $dbh->f_versions ();
+	   my $dbh = DBI-&gtconnect ("dbi:File:");
+	   my $f_versions = $dbh-&gtf_versions ();
 	   print "$f_versions\n";
 	   __END__
 	   # DBD::File	      0.39 using SQL::Statement 1.28
@@ -343,7 +345,7 @@ DESCRIPTION
 
        A table name of "." (single dot) is interpreted as the default table.
        This will retrieve the appropriate attribute globally from the dbh.
-       This has the same restrictions as "$dbh->{$attrib}".
+       This has the same restrictions as "$dbh-&gt{$attrib}".
 
        f_set_meta
 
@@ -360,7 +362,7 @@ DESCRIPTION
 
        A table name of "." (single dot) is interpreted as the default table
        which will set the specified attribute globally for the dbh.  This has
-       the same restrictions as "$dbh->{$attrib} = $value".
+       the same restrictions as "$dbh-&gt{$attrib} = $value".
 
        f_clear_meta
 
@@ -394,7 +396,7 @@ KNOWN BUGS AND LIMITATIONS
 
        o   The module stores details about the handled tables in a private
 	   area of the driver handle ($drh). This data area is not shared
-	   between different driver instances, so several "DBI->connect ()"
+	   between different driver instances, so several "DBI-&gtconnect ()"
 	   calls will cause different table instances and private data areas.
 
 	   This data area is filled for the first time when a table is
@@ -448,8 +450,8 @@ KNOWN BUGS AND LIMITATIONS
 AUTHOR
        This module is currently maintained by
 
-       H.Merijn Brand < h.m.brand at xs4all.nl > and Jens Rehsack  < rehsack
-       at googlemail.com >
+       H.Merijn Brand &lt h.m.brand at xs4all.nl &gt and Jens Rehsack  &lt rehsack
+       at googlemail.com &gt
 
        The original author is Jochen Wiedmann.
 
@@ -471,6 +473,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2010-12-21			  DBD::File(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="NEXT.pm adds a pseudoclass named "NEXT" to any program that uses it. If..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>NEXT.pm - Provide a pseudo-class NEXT (et al) that allows method</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 NEXT(3pm)	       Perl Programmers Reference Guide 	     NEXT(3pm)
 
 
@@ -20,48 +22,48 @@ SYNOPSIS
 	   use NEXT;
 
 	   package A;
-	   sub A::method   { print "$_[0]: A method\n";   $_[0]->NEXT::method() }
-	   sub A::DESTROY  { print "$_[0]: A dtor\n";	  $_[0]->NEXT::DESTROY() }
+	   sub A::method   { print "$_[0]: A method\n";   $_[0]-&gtNEXT::method() }
+	   sub A::DESTROY  { print "$_[0]: A dtor\n";	  $_[0]-&gtNEXT::DESTROY() }
 
 	   package B;
 	   use base qw( A );
-	   sub B::AUTOLOAD { print "$_[0]: B AUTOLOAD\n"; $_[0]->NEXT::AUTOLOAD() }
-	   sub B::DESTROY  { print "$_[0]: B dtor\n";	  $_[0]->NEXT::DESTROY() }
+	   sub B::AUTOLOAD { print "$_[0]: B AUTOLOAD\n"; $_[0]-&gtNEXT::AUTOLOAD() }
+	   sub B::DESTROY  { print "$_[0]: B dtor\n";	  $_[0]-&gtNEXT::DESTROY() }
 
 	   package C;
-	   sub C::method   { print "$_[0]: C method\n";   $_[0]->NEXT::method() }
-	   sub C::AUTOLOAD { print "$_[0]: C AUTOLOAD\n"; $_[0]->NEXT::AUTOLOAD() }
-	   sub C::DESTROY  { print "$_[0]: C dtor\n";	  $_[0]->NEXT::DESTROY() }
+	   sub C::method   { print "$_[0]: C method\n";   $_[0]-&gtNEXT::method() }
+	   sub C::AUTOLOAD { print "$_[0]: C AUTOLOAD\n"; $_[0]-&gtNEXT::AUTOLOAD() }
+	   sub C::DESTROY  { print "$_[0]: C dtor\n";	  $_[0]-&gtNEXT::DESTROY() }
 
 	   package D;
 	   use base qw( B C );
-	   sub D::method   { print "$_[0]: D method\n";   $_[0]->NEXT::method() }
-	   sub D::AUTOLOAD { print "$_[0]: D AUTOLOAD\n"; $_[0]->NEXT::AUTOLOAD() }
-	   sub D::DESTROY  { print "$_[0]: D dtor\n";	  $_[0]->NEXT::DESTROY() }
+	   sub D::method   { print "$_[0]: D method\n";   $_[0]-&gtNEXT::method() }
+	   sub D::AUTOLOAD { print "$_[0]: D AUTOLOAD\n"; $_[0]-&gtNEXT::AUTOLOAD() }
+	   sub D::DESTROY  { print "$_[0]: D dtor\n";	  $_[0]-&gtNEXT::DESTROY() }
 
 	   package main;
 
 	   my $obj = bless {}, "D";
 
-	   $obj->method();	       # Calls D::method, A::method, C::method
-	   $obj->missing_method(); # Calls D::AUTOLOAD, B::AUTOLOAD, C::AUTOLOAD
+	   $obj-&gtmethod();	       # Calls D::method, A::method, C::method
+	   $obj-&gtmissing_method(); # Calls D::AUTOLOAD, B::AUTOLOAD, C::AUTOLOAD
 
 	   # Clean-up calls D::DESTROY, B::DESTROY, A::DESTROY, C::DESTROY
 
 DESCRIPTION
        NEXT.pm adds a pseudoclass named "NEXT" to any program that uses it. If
-       a method "m" calls "$self->NEXT::m()", the call to "m" is redispatched
+       a method "m" calls "$self-&gtNEXT::m()", the call to "m" is redispatched
        as if the calling method had not originally been found.
 
-       In other words, a call to "$self->NEXT::m()" resumes the depth-first,
+       In other words, a call to "$self-&gtNEXT::m()" resumes the depth-first,
        left-to-right search of $self's class hierarchy that resulted in the
        original call to "m".
 
-       Note that this is not the same thing as "$self->SUPER::m()", which
+       Note that this is not the same thing as "$self-&gtSUPER::m()", which
        begins a new dispatch that is restricted to searching the ancestors of
-       the current class. "$self->NEXT::m()" can backtrack past the current
+       the current class. "$self-&gtNEXT::m()" can backtrack past the current
        class -- to look for a suitable method in other ancestors of $self --
-       whereas "$self->SUPER::m()" cannot.
+       whereas "$self-&gtSUPER::m()" cannot.
 
        A typical use would be in the destructors of a class hierarchy, as
        illustrated in the synopsis above. Each class in the hierarchy has a
@@ -85,7 +87,7 @@ DESCRIPTION
        attempt to redispatch any method that does not have the same name. For
        example:
 
-	       sub D::oops { print "oops!\n"; $_[0]->NEXT::other_method() }
+	       sub D::oops { print "oops!\n"; $_[0]-&gtNEXT::other_method() }
 
    Enforcing redispatch
        It is possible to make "NEXT" redispatch more demandingly (i.e. like
@@ -94,11 +96,11 @@ DESCRIPTION
 
        To do this, simple invoke the redispatch as:
 
-	       $self->NEXT::ACTUAL::method();
+	       $self-&gtNEXT::ACTUAL::method();
 
        rather than:
 
-	       $self->NEXT::method();
+	       $self-&gtNEXT::method();
 
        The "ACTUAL" tells "NEXT" that there must actually be a next method to
        call, or it should throw an exception.
@@ -112,7 +114,7 @@ DESCRIPTION
 			       # handle here
 		       }
 		       else {  # try elsewhere
-			       shift()->NEXT::ACTUAL::AUTOLOAD(@_);
+			       shift()-&gtNEXT::ACTUAL::AUTOLOAD(@_);
 		       }
 	       }
 
@@ -133,21 +135,21 @@ DESCRIPTION
 	       use NEXT;
 
 	       package A;
-	       sub foo { print "called A::foo\n"; shift->NEXT::foo() }
+	       sub foo { print "called A::foo\n"; shift-&gtNEXT::foo() }
 
 	       package B;
-	       sub foo { print "called B::foo\n"; shift->NEXT::foo() }
+	       sub foo { print "called B::foo\n"; shift-&gtNEXT::foo() }
 
 	       package C; @ISA = qw( A );
-	       sub foo { print "called C::foo\n"; shift->NEXT::foo() }
+	       sub foo { print "called C::foo\n"; shift-&gtNEXT::foo() }
 
 	       package D; @ISA = qw(A B);
-	       sub foo { print "called D::foo\n"; shift->NEXT::foo() }
+	       sub foo { print "called D::foo\n"; shift-&gtNEXT::foo() }
 
 	       package E; @ISA = qw(C D);
-	       sub foo { print "called E::foo\n"; shift->NEXT::foo() }
+	       sub foo { print "called E::foo\n"; shift-&gtNEXT::foo() }
 
-	       E->foo();
+	       E-&gtfoo();
 
        then derived classes may (re-)inherit base-class methods through two or
        more distinct paths (e.g. in the way "E" inherits "A::foo" twice --
@@ -171,11 +173,11 @@ DESCRIPTION
 
        To cover such cases, you can redispatch methods via:
 
-	       $self->NEXT::DISTINCT::method();
+	       $self-&gtNEXT::DISTINCT::method();
 
        rather than:
 
-	       $self->NEXT::method();
+	       $self-&gtNEXT::method();
 
        This causes the redispatcher to only visit each distinct "method"
        method once. That is, to skip any classes in the hierarchy that it has
@@ -183,21 +185,21 @@ DESCRIPTION
        example were rewritten:
 
 	       package A;
-	       sub foo { print "called A::foo\n"; shift->NEXT::DISTINCT::foo() }
+	       sub foo { print "called A::foo\n"; shift-&gtNEXT::DISTINCT::foo() }
 
 	       package B;
-	       sub foo { print "called B::foo\n"; shift->NEXT::DISTINCT::foo() }
+	       sub foo { print "called B::foo\n"; shift-&gtNEXT::DISTINCT::foo() }
 
 	       package C; @ISA = qw( A );
-	       sub foo { print "called C::foo\n"; shift->NEXT::DISTINCT::foo() }
+	       sub foo { print "called C::foo\n"; shift-&gtNEXT::DISTINCT::foo() }
 
 	       package D; @ISA = qw(A B);
-	       sub foo { print "called D::foo\n"; shift->NEXT::DISTINCT::foo() }
+	       sub foo { print "called D::foo\n"; shift-&gtNEXT::DISTINCT::foo() }
 
 	       package E; @ISA = qw(C D);
-	       sub foo { print "called E::foo\n"; shift->NEXT::DISTINCT::foo() }
+	       sub foo { print "called E::foo\n"; shift-&gtNEXT::DISTINCT::foo() }
 
-	       E->foo();
+	       E-&gtfoo();
 
        then it would print:
 
@@ -212,11 +214,11 @@ DESCRIPTION
 
        Note that you can also use:
 
-	       $self->NEXT::DISTINCT::ACTUAL::method();
+	       $self-&gtNEXT::DISTINCT::ACTUAL::method();
 
        or:
 
-	       $self->NEXT::ACTUAL::DISTINCT::method();
+	       $self-&gtNEXT::ACTUAL::DISTINCT::method();
 
        to get both unique invocation and exception-on-failure.
 
@@ -228,7 +230,7 @@ DESCRIPTION
        behaviour is considerably simpler than that of the "NEXT" family.  A
        call to:
 
-	       $obj->EVERY::foo();
+	       $obj-&gtEVERY::foo();
 
        calls every method named "foo" that the object in $obj has inherited.
        That is:
@@ -250,7 +252,7 @@ DESCRIPTION
 	       package main;
 
 	       my $obj = bless {}, 'A';
-	       $obj->EVERY::foo();	  # prints" A::foo B::foo X::foo D::foo
+	       $obj-&gtEVERY::foo();	  # prints" A::foo B::foo X::foo D::foo
 
        Prefixing a method call with "EVERY::" causes every method in the
        object's hierarchy with that name to be invoked. As the above example
@@ -274,11 +276,11 @@ DESCRIPTION
        on the behaviour of their "ancestors"). In that case, instead of using
        the "EVERY" pseudo-class:
 
-	       $obj->EVERY::foo();	  # prints" A::foo B::foo X::foo D::foo
+	       $obj-&gtEVERY::foo();	  # prints" A::foo B::foo X::foo D::foo
 
        you can use the "EVERY::LAST" pseudo-class:
 
-	       $obj->EVERY::LAST::foo();  # prints" D::foo X::foo B::foo A::foo
+	       $obj-&gtEVERY::LAST::foo();  # prints" D::foo X::foo B::foo A::foo
 
        which reverses the order of method call.
 
@@ -304,7 +306,7 @@ DESCRIPTION
        the left-most-depth-first-est one):
 
 	       package Base;
-	       sub DESTROY { $_[0]->EVERY::Destroy }
+	       sub DESTROY { $_[0]-&gtEVERY::Destroy }
 
 	       package Derived1;
 	       use base 'Base';
@@ -326,7 +328,7 @@ DESCRIPTION
 	       sub new {
 		       my ($class, %args) = @_;
 		       my $obj = bless {}, $class;
-		       $obj->EVERY::LAST::Init(\%args);
+		       $obj-&gtEVERY::LAST::Init(\%args);
 	       }
 
 	       package Derived1;
@@ -369,6 +371,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-06-12			     NEXT(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Hash::Merge merges two arbitrarily deep hashes into a single hash...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Hash::Merge - Merges arbitrarily deep hashes into a single hash</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Merge(3)	      User Contributed Perl Documentation	      Merge(3)
 
 
@@ -18,14 +20,14 @@ NAME
 SYNOPSIS
 	   use Hash::Merge qw( merge );
 	   my %a = (
-		       'foo'	=> 1,
-		   'bar'    => [ qw( a b e ) ],
-		   'querty' => { 'bob' => 'alice' },
+		       'foo'	=&gt 1,
+		   'bar'    =&gt [ qw( a b e ) ],
+		   'querty' =&gt { 'bob' =&gt 'alice' },
 	       );
 	   my %b = (
-		       'foo'	 => 2,
-		       'bar'	=> [ qw(c d) ],
-		       'querty' => { 'ted' => 'margeret' },
+		       'foo'	 =&gt 2,
+		       'bar'	=&gt [ qw(c d) ],
+		       'querty' =&gt { 'ted' =&gt 'margeret' },
 	       );
 
 	   my %c = %{ merge( \%a, \%b ) };
@@ -36,20 +38,20 @@ SYNOPSIS
 
 	       Hash::Merge::specify_behavior(
 		   {
-			       'SCALAR' => {
-				       'SCALAR' => sub { $_[1] },
-				       'ARRAY'	=> sub { [ $_[0], @{$_[1]} ] },
-				       'HASH'	=> sub { $_[1] },
+			       'SCALAR' =&gt {
+				       'SCALAR' =&gt sub { $_[1] },
+				       'ARRAY'	=&gt sub { [ $_[0], @{$_[1]} ] },
+				       'HASH'	=&gt sub { $_[1] },
 			       },
-			       'ARRAY => {
-				       'SCALAR' => sub { $_[1] },
-				       'ARRAY'	=> sub { [ @{$_[0]}, @{$_[1]} ] },
-				       'HASH'	=> sub { $_[1] },
+			       'ARRAY =&gt {
+				       'SCALAR' =&gt sub { $_[1] },
+				       'ARRAY'	=&gt sub { [ @{$_[0]}, @{$_[1]} ] },
+				       'HASH'	=&gt sub { $_[1] },
 			       },
-			       'HASH' => {
-				       'SCALAR' => sub { $_[1] },
-				       'ARRAY'	=> sub { [ values %{$_[0]}, @{$_[1]} ] },
-				       'HASH'	=> sub { Hash::Merge::_merge_hashes( $_[0], $_[1] ) },
+			       'HASH' =&gt {
+				       'SCALAR' =&gt sub { $_[1] },
+				       'ARRAY'	=&gt sub { [ values %{$_[0]}, @{$_[1]} ] },
+				       'HASH'	=&gt sub { Hash::Merge::_merge_hashes( $_[0], $_[1] ) },
 			       },
 		       },
 		       'My Behavior',
@@ -57,10 +59,10 @@ SYNOPSIS
 
 	       # Also there is OO interface.
 
-	       my $merge = Hash::Merge->new( 'LEFT_PRECEDENT' );
-	       my %c = %{ $merge->merge( \%a, \%b ) };
+	       my $merge = Hash::Merge-&gtnew( 'LEFT_PRECEDENT' );
+	       my %c = %{ $merge-&gtmerge( \%a, \%b ) };
 
-	       # All behavioral changes (e.g. $merge->set_behavior(...)), called on an object remain specific to that object
+	       # All behavioral changes (e.g. $merge-&gtset_behavior(...)), called on an object remain specific to that object
 	       # The legacy "Global Setting" behavior is respected only when new called as a non-OO function.
 
 DESCRIPTION
@@ -90,17 +92,17 @@ DESCRIPTION
 	   The values buried in the left hash will never be lost; any values
 	   that can be added from the right hash will be attempted.
 
-	      my $merge = Hash::Merge->new();
-	      my $merge = Hash::Merge->new('LEFT_PRECEDENT');
-	      $merge->set_set_behavior('LEFT_PRECEDENT')
+	      my $merge = Hash::Merge-&gtnew();
+	      my $merge = Hash::Merge-&gtnew('LEFT_PRECEDENT');
+	      $merge-&gtset_set_behavior('LEFT_PRECEDENT')
 	      Hash::Merge::set_set_behavior('LEFT_PRECEDENT')
 
        Right Precedence
 	   Same as Left Precedence, but with the right hash values never being
 	   lost
 
-	      my $merge = Hash::Merge->new('RIGHT_PRECEDENT');
-	      $merge->set_set_behavior('RIGHT_PRECEDENT')
+	      my $merge = Hash::Merge-&gtnew('RIGHT_PRECEDENT');
+	      $merge-&gtset_set_behavior('RIGHT_PRECEDENT')
 	      Hash::Merge::set_set_behavior('RIGHT_PRECEDENT')
 
        Storage Precedence
@@ -109,35 +111,35 @@ DESCRIPTION
 	   over either.  The other medium will try to be fitted in the other,
 	   but if this isn't possible, the data is dropped.
 
-	      my $merge = Hash::Merge->new('STORAGE_PRECEDENT');
-	      $merge->set_set_behavior('STORAGE_PRECEDENT')
+	      my $merge = Hash::Merge-&gtnew('STORAGE_PRECEDENT');
+	      $merge-&gtset_set_behavior('STORAGE_PRECEDENT')
 	      Hash::Merge::set_set_behavior('STORAGE_PRECEDENT')
 
        Retainment Precedence
 	   No data will be lost; scalars will be joined with arrays, and
 	   scalars and arrays will be 'hashified' to fit them into a hash.
 
-	      my $merge = Hash::Merge->new('RETAINMENT_PRECEDENT');
-	      $merge->set_set_behavior('RETAINMENT_PRECEDENT')
+	      my $merge = Hash::Merge-&gtnew('RETAINMENT_PRECEDENT');
+	      $merge-&gtset_set_behavior('RETAINMENT_PRECEDENT')
 	      Hash::Merge::set_set_behavior('RETAINMENT_PRECEDENT')
 
        Specific descriptions of how these work are detailed below.
 
-       merge ( <hashref>, <hashref> )
+       merge ( &lthashref&gt, &lthashref&gt )
 	   Merges two hashes given the rules specified.  Returns a reference
 	   to the new hash.
 
-       _hashify( <scalar>|<arrayref> ) -- INTERNAL FUNCTION
+       _hashify( &ltscalar&gt|&ltarrayref&gt ) -- INTERNAL FUNCTION
 	   Returns a reference to a hash created from the scalar or array
 	   reference, where, for the scalar value, or each item in the array,
 	   there is a key and it's value equal to that specific value.
-	   Example, if you pass scalar '3', the hash will be { 3 => 3 }.
+	   Example, if you pass scalar '3', the hash will be { 3 =&gt 3 }.
 
-       _merge_hashes( <hashref>, <hashref> ) -- INTERNAL FUNCTION
+       _merge_hashes( &lthashref&gt, &lthashref&gt ) -- INTERNAL FUNCTION
 	   Actually does the key-by-key evaluation of two hashes and returns
 	   the new merged hash.  Note that this recursively calls "merge".
 
-       set_clone_behavior( <scalar> )
+       set_clone_behavior( &ltscalar&gt )
 	   Sets how the data cloning is handled by Hash::Merge.  If this is
 	   true, then data will be cloned; if false, then original data will
 	   be used whenever possible.  By default, cloning is on (set to
@@ -146,14 +148,14 @@ DESCRIPTION
        get_clone_behavior( )
 	   Returns the current behavior for data cloning.
 
-       set_behavior( <scalar> )
+       set_behavior( &ltscalar&gt )
 	   Specify which built-in behavior for merging that is desired.  The
 	   scalar must be one of those given below.
 
        get_behavior( )
 	   Returns the behavior that is currently in use by Hash::Merge.
 
-       specify_behavior( <hashref>, [<name>] )
+       specify_behavior( &lthashref&gt, [&ltname&gt] )
 	   Specify a custom merge behavior for Hash::Merge.  This must be a
 	   hashref defined with (at least) 3 keys, SCALAR, ARRAY, and HASH;
 	   each of those keys must have another hashref with (at least) the
@@ -166,7 +168,7 @@ DESCRIPTION
 	   left SCALAR to the right ARRAY, you can have your behavior
 	   specification include:
 
-	      %spec = ( ...SCALAR => { ARRAY => sub { [ $_[0], @$_[1] ] }, ... } } );
+	      %spec = ( ...SCALAR =&gt { ARRAY =&gt sub { [ $_[0], @$_[1] ] }, ... } } );
 
 	   Note that you can import _hashify and _merge_hashes into your
 	   program's namespace with the 'custom' tag.
@@ -221,7 +223,7 @@ CAVEATS
        Clone, I'll remove this wrapper.
 
 AUTHOR
-       Michael K. Neylon <mneylon-pm@masemware.com>
+       Michael K. Neylon &ltmneylon-pm@masemware.com&gt
 
 COPYRIGHT
        Copyright (c) 2001,2002 Michael K. Neylon. All rights reserved.
@@ -232,6 +234,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2010-02-15			      Merge(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

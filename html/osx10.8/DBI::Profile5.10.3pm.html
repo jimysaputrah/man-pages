@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The DBI::Profile module provides a simple interface to collect and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBI::Profile - Performance profiling and benchmarking for the DBI</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBI::Profile(3)       User Contributed Perl Documentation      DBI::Profile(3)
 
 
@@ -25,7 +27,7 @@ SYNOPSIS
        grouped by query when the program exits.  You can also enable profiling
        by setting the Profile attribute of any DBI handle:
 
-	 $dbh->{Profile} = 2;
+	 $dbh-&gt{Profile} = 2;
 
        Then the summary will be printed when the handle is destroyed.
 
@@ -85,7 +87,7 @@ OVERVIEW
 
 	   then the new profile sample data will be merged into the tree at
 
-	     $h->{Profile}->{Data}->{foo}->{bar}->{baz}
+	     $h-&gt{Profile}-&gt{Data}-&gt{foo}-&gt{bar}-&gt{baz}
 
 	   But it's not very useful to merge all the call data into one leaf
 	   node (except to get an overall 'time spent inside the DBI' total).
@@ -107,7 +109,7 @@ OVERVIEW
 	   and the selectall_arrayref() method was called, then the profile
 	   sample data for that call will be merged into the tree at:
 
-	     $h->{Profile}->{Data}->{foo}->{selectall_arrayref}->{bar}
+	     $h-&gt{Profile}-&gt{Data}-&gt{foo}-&gt{selectall_arrayref}-&gt{bar}
 
        Profile Data
 	   Profile data is stored at the 'leaves' of the tree as references to
@@ -131,7 +133,7 @@ ENABLING A PROFILE
        Profiling is enabled for a handle by assigning to the Profile
        attribute. For example:
 
-	 $h->{Profile} = DBI::Profile->new();
+	 $h-&gt{Profile} = DBI::Profile-&gtnew();
 
        The Profile attribute holds a blessed reference to a hash object that
        contains the profile data and attributes relating to it.
@@ -142,18 +144,18 @@ ENABLING A PROFILE
 
        All these examples have the same effect as each other:
 
-	 $h->{Profile} = 0;
-	 $h->{Profile} = "/DBI::Profile";
-	 $h->{Profile} = DBI::Profile->new();
-	 $h->{Profile} = {};
-	 $h->{Profile} = { Path => [] };
+	 $h-&gt{Profile} = 0;
+	 $h-&gt{Profile} = "/DBI::Profile";
+	 $h-&gt{Profile} = DBI::Profile-&gtnew();
+	 $h-&gt{Profile} = {};
+	 $h-&gt{Profile} = { Path =&gt [] };
 
        Similarly, these examples have the same effect as each other:
 
-	 $h->{Profile} = 6;
-	 $h->{Profile} = "6/DBI::Profile";
-	 $h->{Profile} = "!Statement:!MethodName/DBI::Profile";
-	 $h->{Profile} = { Path => [ '!Statement', '!MethodName' ] };
+	 $h-&gt{Profile} = 6;
+	 $h-&gt{Profile} = "6/DBI::Profile";
+	 $h-&gt{Profile} = "!Statement:!MethodName/DBI::Profile";
+	 $h-&gt{Profile} = { Path =&gt [ '!Statement', '!MethodName' ] };
 
        If a non-blessed hash reference is given then the DBI::Profile module
        is automatically "require"'d and the reference is blessed into that
@@ -169,7 +171,7 @@ ENABLING A PROFILE
 	   eval "require $module" if $module
 	   $module ||= "DBI::Profile"
 
-	   $module->new( Path => \@Path, @args )
+	   $module-&gtnew( Path =&gt \@Path, @args )
 
        So the first value is used to select the Path to be used (see below).
        The second value, if present, is used as the name of a module which
@@ -197,8 +199,8 @@ ENABLING A PROFILE
        Remember that attributes can be embedded in the Data Source Name string
        which can be passed in to a script as a parameter. For example:
 
-	   dbi:DriverName(Profile=>2):dbname
-	   dbi:DriverName(Profile=>{Username}:!Statement/MyProfiler/Foo:42):dbname
+	   dbi:DriverName(Profile=&gt2):dbname
+	   dbi:DriverName(Profile=&gt{Username}:!Statement/MyProfiler/Foo:42):dbname
 
        And also, if the "DBI_PROFILE" environment variable is set then The DBI
        arranges for every driver handle to share the same profile object. When
@@ -251,9 +253,9 @@ THE PROFILE OBJECT
        that the profile sample relates to. This shows you where the method was
        implemented. For example:
 
-	 'DBD::_::db::selectrow_arrayref' =>
+	 'DBD::_::db::selectrow_arrayref' =&gt
 	     0.022902s
-	 'DBD::mysql::db::selectrow_arrayref' =>
+	 'DBD::mysql::db::selectrow_arrayref' =&gt
 	     2.244521s / 99 = 0.022445s avg (first 0.022813s, min 0.022051s, max 0.028932s)
 
        The "DBD::_::db::selectrow_arrayref" shows that the driver has
@@ -354,18 +356,18 @@ REPORTING
    Report Format
        The current accumulated profile data can be formatted and output using
 
-	   print $h->{Profile}->format;
+	   print $h-&gt{Profile}-&gtformat;
 
        To discard the profile data and start collecting fresh data you can do:
 
-	   $h->{Profile}->{Data} = undef;
+	   $h-&gt{Profile}-&gt{Data} = undef;
 
        The default results format looks like this:
 
 	 DBI::Profile: 0.001015s 42.7% (5 calls) programname @ YYYY-MM-DD HH:MM:SS
-	 '' =>
+	 '' =&gt
 	     0.000024s / 2 = 0.000012s avg (first 0.000015s, min 0.000009s, max 0.000015s)
-	 'SELECT mode,size,name FROM table' =>
+	 'SELECT mode,size,name FROM table' =&gt
 	     0.000991s / 3 = 0.000330s avg (first 0.000678s, min 0.000009s, max 0.000678s)
 
        Which shows the total time spent inside the DBI, with a count of the
@@ -392,10 +394,10 @@ REPORTING
        extract of a more detailed example using both statement text and method
        name in the path:
 
-	 'SELECT mode,size,name FROM table' =>
-	     'FETCH' =>
+	 'SELECT mode,size,name FROM table' =&gt
+	     'FETCH' =&gt
 		 0.000076s
-	     'fetchrow_hashref' =>
+	     'fetchrow_hashref' =&gt
 		 0.036203s / 108 = 0.000335s avg (first 0.000490s, min 0.000152s, max 0.002786s)
 
        Here you can see the 'avg', 'first', 'min' and 'max' for the 108 calls
@@ -410,14 +412,14 @@ REPORTING
        The default method of reporting is for the DESTROY method of the
        Profile object to format the results and write them using:
 
-	   DBI->trace_msg($results, 0);  # see $ON_DESTROY_DUMP below
+	   DBI-&gttrace_msg($results, 0);  # see $ON_DESTROY_DUMP below
 
        to write them to the DBI trace() filehandle (which defaults to STDERR).
        To direct the DBI trace filehandle to write to a file without enabling
        tracing the trace() method can be called with a trace level of 0. For
        example:
 
-	   DBI->trace(0, $filename);
+	   DBI-&gttrace(0, $filename);
 
        The same effect can be achieved without changing the code by setting
        the "DBI_TRACE" environment variable to "0=filename".
@@ -426,7 +428,7 @@ REPORTING
        called to perform the output of the formatted results.  The default
        value is:
 
-	 $ON_DESTROY_DUMP = sub { DBI->trace_msg($results, 0) };
+	 $ON_DESTROY_DUMP = sub { DBI-&gttrace_msg($results, 0) };
 
        Apart from making it easy to send the dump elsewhere, it can also be
        useful as a simple way to disable dumping results.
@@ -442,10 +444,10 @@ PROFILE OBJECT METHODS
        See "REPORTING".
 
    as_node_path_list
-	 @ary = $dbh->{Profile}->as_node_path_list();
-	 @ary = $dbh->{Profile}->as_node_path_list($node, $path);
+	 @ary = $dbh-&gt{Profile}-&gtas_node_path_list();
+	 @ary = $dbh-&gt{Profile}-&gtas_node_path_list($node, $path);
 
-       Returns the collected data ($dbh->{Profile}{Data}) restructured into a
+       Returns the collected data ($dbh-&gt{Profile}{Data}) restructured into a
        list of array refs, one for each leaf node in the Data tree. This
        'flat' structure is often much simpler for applications to work with.
 
@@ -468,30 +470,30 @@ PROFILE OBJECT METHODS
        The nodes are ordered by key, depth-first.
 
        The $node argument can be used to focus on a sub-tree.  If not
-       specified it defaults to $dbh->{Profile}{Data}.
+       specified it defaults to $dbh-&gt{Profile}{Data}.
 
        The $path argument can be used to specify a list of path elements that
        will be added to each element of the returned list. If not specified it
        defaults to a a ref to an empty array.
 
    as_text
-	 @txt = $dbh->{Profile}->as_text();
-	 $txt = $dbh->{Profile}->as_text({
-	     node      => undef,
-	     path      => [],
-	     separator => " > ",
-	     format    => '%1$s: %11$fs / %10$d = %2$fs avg (first %12$fs, min %13$fs, max %14$fs)'."\n";
-	     sortsub   => sub { ... },
+	 @txt = $dbh-&gt{Profile}-&gtas_text();
+	 $txt = $dbh-&gt{Profile}-&gtas_text({
+	     node      =&gt undef,
+	     path      =&gt [],
+	     separator =&gt " &gt ",
+	     format    =&gt '%1$s: %11$fs / %10$d = %2$fs avg (first %12$fs, min %13$fs, max %14$fs)'."\n";
+	     sortsub   =&gt sub { ... },
 	 );
 
-       Returns the collected data ($dbh->{Profile}{Data}) reformatted into a
+       Returns the collected data ($dbh-&gt{Profile}{Data}) reformatted into a
        list of formatted strings.  In scalar context the list is returned as a
        single contatenated string.
 
        A hashref can be used to pass in arguments, the default values are
        shown in the example above.
 
-       The "node" and <path> arguments are passed to as_node_path_list().
+       The "node" and &ltpath&gt arguments are passed to as_node_path_list().
 
        The "separator" argument is used to join the elemets of the path for
        each leaf node.
@@ -502,7 +504,7 @@ PROFILE OBJECT METHODS
        array in place.	The return value from the sub is ignored. For example,
        to sort the nodes by the second level key you could use:
 
-	 sortsub => sub { my $ary=shift; @$ary = sort { $a->[2] cmp $b->[2] } @$ary }
+	 sortsub =&gt sub { my $ary=shift; @$ary = sort { $a-&gt[2] cmp $b-&gt[2] } @$ary }
 
        The "format" argument is a "sprintf" format string that specifies the
        format to use for each leaf node.  It uses the explicit format
@@ -521,7 +523,7 @@ PROFILE OBJECT METHODS
 	   16:	time of first call
 
 CUSTOM DATA MANIPULATION
-       Recall that "$h-"{Profile}->{Data}> is a reference to the collected
+       Recall that "$h-"{Profile}-&gt{Data}&gt is a reference to the collected
        data.  Either to a 'leaf' array (when the Path is empty, i.e.,
        DBI_PROFILE env var is 1), or a reference to hash containing values
        that are either further hash references or leaf array references.
@@ -560,9 +562,9 @@ CUSTOM DATA MANIPULATION
        LogHandler) could use:
 
 	 my $time_in_dbi = 0;
-	 if (my $Profile = $dbh->{Profile}) { # if DBI profiling is enabled
-	     $time_in_dbi = dbi_profile_merge_nodes(my $total=[], $Profile->{Data});
-	     $Profile->{Data} = {}; # reset the profile data
+	 if (my $Profile = $dbh-&gt{Profile}) { # if DBI profiling is enabled
+	     $time_in_dbi = dbi_profile_merge_nodes(my $total=[], $Profile-&gt{Data});
+	     $Profile-&gt{Data} = {}; # reset the profile data
 	 }
 
        If profiling has been enabled then $time_in_dbi will hold the time
@@ -577,7 +579,7 @@ CUSTOM DATA COLLECTION
 	 XXX example to be added later using a selectall_arrayref call
 	 XXX nested inside a fetch loop where the first column of the
 	 XXX outer loop is bound to the profile Path using
-	 XXX bind_column(1, \${ $dbh->{Profile}->{Path}->[0] })
+	 XXX bind_column(1, \${ $dbh-&gt{Profile}-&gt{Path}-&gt[0] })
 	 XXX so you end up with separate profiles for each loop
 	 XXX (patches welcome to add this to the docs :)
 
@@ -598,10 +600,10 @@ CUSTOM DATA COLLECTION
        The $h parameter is the handle the extra profile sample should be
        associated with. The $statement parameter is the string to use where
        the Path specifies !Statement. If $statement is undef then
-       $h->{Statement} will be used. Similarly $method is the string to use if
+       $h-&gt{Statement} will be used. Similarly $method is the string to use if
        the Path specifies !MethodName. There is no default value for $method.
 
-       The $h->{Profile}{Path} attribute is processed by dbi_profile() in the
+       The $h-&gt{Profile}{Path} attribute is processed by dbi_profile() in the
        usual way.
 
        The $h parameter is usually a DBI handle but it can also be a reference
@@ -629,13 +631,13 @@ CAVEATS
 
        Time spent in DESTROY is added to the profile of the parent handle.
 
-       Time spent in DBI->*() methods is not counted. The time spent in the
-       driver connect method, $drh->connect(), when it's called by
-       DBI->connect is counted if the DBI_PROFILE environment variable is set.
+       Time spent in DBI-&gt*() methods is not counted. The time spent in the
+       driver connect method, $drh-&gtconnect(), when it's called by
+       DBI-&gtconnect is counted if the DBI_PROFILE environment variable is set.
 
        Time spent fetching tied variables, $DBI::errstr, is counted.
 
-       Time spent in FETCH for $h->{Profile} is not counted, so getting the
+       Time spent in FETCH for $h-&gt{Profile} is not counted, so getting the
        profile data doesn't alter it.
 
        DBI::PurePerl does not support profiling (though it could in theory).
@@ -660,6 +662,6 @@ CAVEATS
 
 
 perl v5.10.1			  2008-03-13		       DBI::Profile(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

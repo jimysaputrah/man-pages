@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module simply interpolates option file hints in @ARGV by the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Getopt::ArgvFile - interpolates script options from files into @ARGV or</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 ArgvFile(3)	      User Contributed Perl Documentation	   ArgvFile(3)
 
 
@@ -24,7 +26,7 @@ SYNOPSIS
        loaded:
 
 	 # load module and process option file hints in @ARGV
-	 use Getopt::ArgvFile default=>1;
+	 use Getopt::ArgvFile default=&gt1;
 
 	 # load another module to evaluate the options, e.g.:
 	 use Getopt::Long;
@@ -37,14 +39,14 @@ SYNOPSIS
        perform it later on:
 
 	 # load module, do *not* process option file hints
-	 use Getopt::ArgvFile justload=>1;
+	 use Getopt::ArgvFile justload=&gt1;
 
 	 # load another module to evaluate the options, e.g.:
 	 use Getopt::Long;
 	 ...
 
 	 # *now*, solve option file hints
-	 Getopt::ArgvFile::argvFile(default=>1);
+	 Getopt::ArgvFile::argvFile(default=&gt1);
 
 	 # evaluate options, e.g. this common way:
 	 GetOptions(\%options, 'any');	  # this function is defined in Getopt::Long
@@ -62,7 +64,7 @@ SYNOPSIS
 	 ...
 
 	 # *now*, solve option file hints
-	 argvFile(default=>1);
+	 argvFile(default=&gt1);
 
 	 # evaluate options, e.g. this common way:
 	 GetOptions(\%options, 'any');	  # this function is defined in Getopt::Long
@@ -76,7 +78,7 @@ SYNOPSIS
 	 ...
 
 	 # replace file hints by the options stored in the files
-	 argvFile(array=>\@options);
+	 argvFile(array=&gt\@options);
 
        In case you do not like the "@" prefix it is possible to define an
        option to be used instead:
@@ -87,7 +89,7 @@ SYNOPSIS
 	 ...
 
 	 # replace file hints by the options stored in the files
-	 argvFile(fileOption=>'options', array=>\@options);
+	 argvFile(fileOption=&gt'options', array=&gt\@options);
 
 DESCRIPTION
        This module simply interpolates option file hints in @ARGV by the
@@ -205,14 +207,14 @@ FUNCTIONS
 	 --
 
 	 # option file processing is explicitly suppressed
-	 use Getopt::ArgvFile justload=>1;
+	 use Getopt::ArgvFile justload=&gt1;
 
        Except for the traditional loading, the complete interface of
        "argvFile()" is available via "use", but in the typical "use" syntax
        without parantheses.
 
-	 # implicit call of argvFile(default=>1, home=>1)
-	 use Getopt::ArgvFile default=>1, home=>1;
+	 # implicit call of argvFile(default=&gt1, home=&gt1)
+	 use Getopt::ArgvFile default=&gt1, home=&gt1;
 
        See ONE LINE INVOCATION for further details.
 
@@ -232,7 +234,7 @@ FUNCTIONS
        An option file hint is simply the filename preceeded by (at least) one
        "@" character:
 
-	 > script -optA argA -optB @optionFile -optC argC
+	 &gt script -optA argA -optB @optionFile -optC argC
 
        This will cause argvFile() to scan "optionFile" for options.  The
        element "@optionFile" will be removed from the @ARGV array and will be
@@ -250,11 +252,11 @@ FUNCTIONS
        comment lines (starting with a "#") are allowed additionally. POD
        comments are supported as well.	For example, the call
 
-	 > script -optA argA -optB -optC cArg par1 par2
+	 &gt script -optA argA -optB -optC cArg par1 par2
 
        could be transformed into
 
-	 > script @scriptOptions par1 par2
+	 &gt script @scriptOptions par1 par2
 
        where the file "scriptOptions" may look like this:
 
@@ -312,7 +314,7 @@ FUNCTIONS
 
        If anyone provides these files, a user can use a very short call:
 
-	 > script @abc
+	 &gt script @abc
 
        and argvFile() will recursively move all the filed program parameters
        into @ARGV.
@@ -330,7 +332,7 @@ FUNCTIONS
 
        Use parameter "resolveRelativePathes" to switch to path resolution:
 
-	  argvFile(resolveRelativePathes=>1);
+	  argvFile(resolveRelativePathes=&gt1);
 
        will cause "argvFile()" to expand those pathes, both in standard
        strings and nested option files.
@@ -350,7 +352,7 @@ FUNCTIONS
        "argvFile()" does not resolve environment variables. But if required it
        can be commanded to do so via parameter "resolveEnvVars".
 
-	 argvFile(resolveEnvVars=>1);
+	 argvFile(resolveEnvVars=&gt1);
 
        Startup support
 
@@ -374,16 +376,16 @@ FUNCTIONS
        ""
 
 	 argvFile()		       # ignores all startup option files;
-	 argvFile(default=>1)	       # searches and expands "/path/.script",
+	 argvFile(default=&gt1)	       # searches and expands "/path/.script",
 				       # if available (the "default" settings);
-	 argvFile(home=>1)	       # searches and expands "/homes/user/.script",
+	 argvFile(home=&gt1)	       # searches and expands "/homes/user/.script",
 				       # if available (the "home" settings);
-	 argvFile(current=>1)	       # searches and expands "/the/current/dir/.script",
+	 argvFile(current=&gt1)	       # searches and expands "/the/current/dir/.script",
 				       # if available (the "current" settings);
 	 argvFile(
-		  default => 1,
-		  home	  => 1,
-		  current => 1
+		  default =&gt 1,
+		  home	  =&gt 1,
+		  current =&gt 1
 		 )		       # tries to handle all startups.
 
        Any true value will activate the setting it is assigned to.
@@ -397,15 +399,15 @@ FUNCTIONS
        and will receive the name of the script.
 
 	 # use ".config"
-	 argvFile(startupFilename => '.config');
+	 argvFile(startupFilename =&gt '.config');
 
 	 # use ".config" or "config"
-	 argvFile(startupFilename => [qw(.config config)]);
+	 argvFile(startupFilename =&gt [qw(.config config)]);
 
 	 # emulate the default behaviour,
 	 # but use an extra dot postfix
 	 my $nameBuilder=sub {join('', '.', basename($_[0]), '.');};
-	 argvFile(startupFilename => $nameBuilder);
+	 argvFile(startupFilename =&gt $nameBuilder);
 
 	 # use .(script)rc or .(script)/config
 	 my $nameBuilder=sub
@@ -413,7 +415,7 @@ FUNCTIONS
 			   my $sname=basename($_[0]);
 			   [".${sname}rc", ".${sname}/config"];
 			  };
-	 argvFile(startupFilename => $nameBuilder);
+	 argvFile(startupFilename =&gt $nameBuilder);
 
        Note that the list variants will use the first matching filename in
        each possible startup-file path. For example if your array is
@@ -473,7 +475,7 @@ FUNCTIONS
 
 	Examples:
 	 argvFile()		       # processes @ARGV;
-	 argvFile(array=>\@options);   # processes @options;
+	 argvFile(array=&gt\@options);   # processes @options;
 
        Choosing an alternative hint prefix
 
@@ -482,7 +484,7 @@ FUNCTIONS
 
 	Examples:
 	 argvFile();		       # use "@";
-	 argvFile(prefix=>'~');        # use "~";
+	 argvFile(prefix=&gt'~');        # use "~";
 
        Note that the strings "#", "=", "-" and "+" are reserved and cannot be
        chosen here because they are used to start plain or POD comments or are
@@ -496,10 +498,10 @@ FUNCTIONS
 
 	 # install a file option
 	 # (all lines are equivalent)
-	 argvFile(fileOption=>'options');
-	 argvFile(fileOption=>'-options');
-	 argvFile(fileOption=>'+options');
-	 argvFile(fileOption=>'--options');
+	 argvFile(fileOption=&gt'options');
+	 argvFile(fileOption=&gt'-options');
+	 argvFile(fileOption=&gt'+options');
+	 argvFile(fileOption=&gt'--options');
 
        The name of the option can be specified with or without the usual
        option prefixes "-", "--" and "+".
@@ -532,13 +534,13 @@ ONE LINE INVOCATION
 	 ...
 
 	 # solve option files
-	 argvFile(default=>1);
+	 argvFile(default=&gt1);
 
        can be reduced to one line - just pass the parameters of "argvFile()"
        to "use()":
 
 	 # load module and process option file hints in @ARGV
-	 use Getopt::ArgvFile default=>1;
+	 use Getopt::ArgvFile default=&gt1;
 
        Please note that in this case option file hints are processed at
        compile time. This means that if you want to process alternative
@@ -557,7 +559,7 @@ ONE LINE INVOCATION
        will process option hints! If you want to suppress this, use the
        "justload" switch:
 
-	 use Getopt::ArgvFile justload=>1;
+	 use Getopt::ArgvFile justload=&gt1;
 
        See FUNCTIONS for additional informations.
 
@@ -572,7 +574,7 @@ LIMITS
        message will be displayed, no special return code will be set.
 
 AUTHOR
-       Jochen Stenzel <mailto:perl@jochen-stenzel.de>
+       Jochen Stenzel &ltmailto:perl@jochen-stenzel.de&gt
 
 LICENSE
        Copyright (c) 1993-2007 Jochen Stenzel. All rights reserved.
@@ -586,6 +588,6 @@ LICENSE
 
 
 perl v5.12.4			  2007-04-21			   ArgvFile(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

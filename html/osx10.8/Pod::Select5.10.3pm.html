@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="podselect() is a function which will extract specified sections of pod..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Pod::Select, podselect() - extract selected sections of POD from input</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Pod::Select(3pm)       Perl Programmers Reference Guide       Pod::Select(3pm)
 
 
@@ -23,15 +25,15 @@ SYNOPSIS
 	   podselect(@filelist);
 
 	   ## Same as above, but write to tmp.out
-	   podselect({-output => "tmp.out"}, @filelist):
+	   podselect({-output =&gt "tmp.out"}, @filelist):
 
 	   ## Select from the given filelist, only those POD sections that are
 	   ## within a 1st level section named any of: NAME, SYNOPSIS, OPTIONS.
-	   podselect({-sections => ["NAME|SYNOPSIS", "OPTIONS"]}, @filelist):
+	   podselect({-sections =&gt ["NAME|SYNOPSIS", "OPTIONS"]}, @filelist):
 
 	   ## Select the "DESCRIPTION" section of the PODs from STDIN and write
 	   ## the result to STDERR.
-	   podselect({-output => ">&STDERR", -sections => ["DESCRIPTION"]}, \*STDIN);
+	   podselect({-output =&gt "&gt&STDERR", -sections =&gt ["DESCRIPTION"]}, \*STDIN);
 
        or
 
@@ -42,18 +44,18 @@ SYNOPSIS
 
 	   ## Select all the POD sections for each file in @filelist
 	   ## and print the result to tmp.out.
-	   $parser->parse_from_file("<&STDIN", "tmp.out");
+	   $parser-&gtparse_from_file("&lt&STDIN", "tmp.out");
 
 	   ## Select from the given filelist, only those POD sections that are
 	   ## within a 1st level section named any of: NAME, SYNOPSIS, OPTIONS.
-	   $parser->select("NAME|SYNOPSIS", "OPTIONS");
-	   for (@filelist) { $parser->parse_from_file($_); }
+	   $parser-&gtselect("NAME|SYNOPSIS", "OPTIONS");
+	   for (@filelist) { $parser-&gtparse_from_file($_); }
 
 	   ## Select the "DESCRIPTION" and "SEE ALSO" sections of the PODs from
 	   ## STDIN and write the result to STDERR.
-	   $parser->select("DESCRIPTION");
-	   $parser->add_selection("SEE ALSO");
-	   $parser->parse_from_filehandle(\*STDIN, \*STDERR);
+	   $parser-&gtselect("DESCRIPTION");
+	   $parser-&gtadd_selection("SEE ALSO");
+	   $parser-&gtparse_from_filehandle(\*STDIN, \*STDERR);
 
 REQUIRES
        perl5.005, Pod::Parser, Exporter, Carp
@@ -123,8 +125,8 @@ OBJECT METHODS
        reference to the object itself as an implicit first parameter.
 
 curr_headings()
-		   ($head1, $head2, $head3, ...) = $parser->curr_headings();
-		   $head1 = $parser->curr_headings(1);
+		   ($head1, $head2, $head3, ...) = $parser-&gtcurr_headings();
+		   $head1 = $parser-&gtcurr_headings(1);
 
        This method returns a list of the currently active section headings and
        subheadings in the document being parsed. The list of headings returned
@@ -136,7 +138,7 @@ curr_headings()
        level, then "undef" is returned.
 
 select()
-		   $parser->select($section_spec1,$section_spec2,...);
+		   $parser-&gtselect($section_spec1,$section_spec2,...);
 
        This method is used to select the particular sections and subsections
        of POD documentation that are to be printed and/or processed. The
@@ -156,11 +158,11 @@ select()
        This method should not normally be overridden by subclasses.
 
 add_selection()
-		   $parser->add_selection($section_spec1,$section_spec2,...);
+		   $parser-&gtadd_selection($section_spec1,$section_spec2,...);
 
        This method is used to add to the currently selected sections and
        subsections of POD documentation that are to be printed and/or
-       processed. See <select()> for replacing the currently selected
+       processed. See &ltselect()&gt for replacing the currently selected
        sections.
 
        Each of the $section_spec arguments should be a section specification
@@ -171,13 +173,13 @@ add_selection()
        This method should not normally be overridden by subclasses.
 
 clear_selections()
-		   $parser->clear_selections();
+		   $parser-&gtclear_selections();
 
        This method takes no arguments, it has the exact same effect as
-       invoking <select()> with no arguments.
+       invoking &ltselect()&gt with no arguments.
 
 match_section()
-		   $boolean = $parser->match_section($heading1,$heading2,...);
+		   $boolean = $parser-&gtmatch_section($heading1,$heading2,...);
 
        Returns a value of true if the given section and subsection heading
        titles match any of the currently selected section specifications in
@@ -192,7 +194,7 @@ match_section()
        This method should not normally be overridden by subclasses.
 
 is_selected()
-		   $boolean = $parser->is_selected($paragraph);
+		   $boolean = $parser-&gtis_selected($paragraph);
 
        This method is used to determine if the block of text given in
        $paragraph falls within the currently selected set of POD sections and
@@ -222,8 +224,8 @@ podselect()
        follows:
 
        -output
-	   A string corresponding to the desired output file (or ">&STDOUT" or
-	   ">&STDERR"). The default is to use standard output.
+	   A string corresponding to the desired output file (or "&gt&STDOUT" or
+	   "&gt&STDERR"). The default is to use standard output.
 
        -sections
 	   A reference to an array of sections specifications (as described in
@@ -232,7 +234,7 @@ podselect()
 	   specifications are given, then all sections of the PODs are used.
 
        All other arguments should correspond to the names of input files
-       containing POD sections. A file name of "-" or "<&STDIN" will be
+       containing POD sections. A file name of "-" or "&lt&STDIN" will be
        interpreted to mean standard input (which is the default if no
        filenames are given).
 
@@ -252,16 +254,16 @@ SEE ALSO
        Pod::Parser
 
 AUTHOR
-       Please report bugs using <http://rt.cpan.org>.
+       Please report bugs using &lthttp://rt.cpan.org&gt.
 
-       Brad Appleton <bradapp@enteract.com>
+       Brad Appleton &ltbradapp@enteract.com&gt
 
        Based on code for pod2text written by Tom Christiansen
-       <tchrist@mox.perl.com>
+       &lttchrist@mox.perl.com&gt
 
 
 
 perl v5.10.1			  2009-04-12		      Pod::Select(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

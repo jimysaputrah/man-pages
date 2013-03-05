@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Apache2::Directive" provides the Perl API for manipulating the Apache..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Apache2::Directive - Perl API for manipulating the Apache configuration</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apachapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::Directive(3)
 
 
@@ -21,34 +23,34 @@ Synopsis
 
 	 my $tree = Apache2::Directive::conftree();
 
-	 my $documentroot = $tree->lookup('DocumentRoot');
+	 my $documentroot = $tree-&gtlookup('DocumentRoot');
 
-	 my $vhost = $tree->lookup('VirtualHost', 'localhost:8000');
-	 my $servername = $vhost->{'ServerName'};
+	 my $vhost = $tree-&gtlookup('VirtualHost', 'localhost:8000');
+	 my $servername = $vhost-&gt{'ServerName'};
 
 	 use Data::Dumper;
-	 print Dumper $tree->as_hash;
+	 print Dumper $tree-&gtas_hash;
 
 	 my $node = $tree;
 	 while ($node) {
-	     print $node->as_string;
+	     print $node-&gtas_string;
 
 	     #do something with $node
 
-	     my $directive = $node->directive;
-	     my $args = $node->args;
-	     my $filename = $node->filename;
-	     my $line_num = $node->line_num;
+	     my $directive = $node-&gtdirective;
+	     my $args = $node-&gtargs;
+	     my $filename = $node-&gtfilename;
+	     my $line_num = $node-&gtline_num;
 
-	     if (my $kid = $node->first_child) {
+	     if (my $kid = $node-&gtfirst_child) {
 		 $node = $kid;
 	     }
-	     elsif (my $next = $node->next) {
+	     elsif (my $next = $node-&gtnext) {
 		 $node = $next;
 	     }
 	     else {
-		 if (my $parent = $node->parent) {
-		     $node = $parent->next;
+		 if (my $parent = $node-&gtparent) {
+		     $node = $parent-&gtnext;
 		 }
 		 else {
 		     $node = undef;
@@ -66,7 +68,7 @@ API
    "args"
        Get the arguments for the current directive:
 
-	 $args = $node->args();
+	 $args = $node-&gtargs();
 
        obj: $node ( "Apache2::Directive object" )
        ret: $args ( string )
@@ -81,16 +83,16 @@ API
        And later:
 
 	 my $tree = Apache2::Directive::conftree();
-	 my $node = $tree->lookup('PerlSwitches');
-	 my $args = $node->args;
+	 my $node = $tree-&gtlookup('PerlSwitches');
+	 my $args = $node-&gtargs;
 
        $args now contains the string "-M/opt/lib -M/usr/local/lib -wT"
 
    "as_hash"
        Get a hash representation of the configuration tree, in a format
-       suitable for inclusion in <Perl> sections.
+       suitable for inclusion in &ltPerl&gt sections.
 
-	  $config_hash = $conftree->as_hash();
+	  $config_hash = $conftree-&gtas_hash();
 
        obj: $conftree ( "Apache2::Directive object" )
 	   The config tree to stringify
@@ -100,29 +102,29 @@ API
 
        For example: in httpd.conf:
 
-	 <Location /test>
+	 &ltLocation /test&gt
 	   SetHandler perl-script
 	   PerlHandler Test::Module
-	 </Location>
+	 &lt/Location&gt
 
        And later:
 
 	 my $tree = Apache2::Directive::conftree();
-	 my $node = $tree->lookup('Location', '/test/');
-	 my $hash = $node->as_hash;
+	 my $node = $tree-&gtlookup('Location', '/test/');
+	 my $hash = $node-&gtas_hash;
 
        $hash now is:
 
 	 {
-	   'SetHandler'  => 'perl-script',
-	   'PerlHandler' => 'Test::Module',
+	   'SetHandler'  =&gt 'perl-script',
+	   'PerlHandler' =&gt 'Test::Module',
 	 }
 
    "as_string"
        Get a string representation of the configuration node, in httpd.conf
        format.
 
-	  $string = $node->as_string();
+	  $string = $node-&gtas_string();
 
        obj: $node ( "Apache2::Directive object" )
 	   The config tree to stringify
@@ -132,16 +134,16 @@ API
 
        For example: in httpd.conf:
 
-	 <Location /test>
+	 &ltLocation /test&gt
 	   SetHandler perl-script
 	   PerlHandler Test::Module
-	 </Location>
+	 &lt/Location&gt
 
        And later:
 
 	 my $tree = Apache2::Directive::conftree();
-	 my $node = $tree->lookup('Location', '/test/');
-	 my $string = $node->as_string;
+	 my $node = $tree-&gtlookup('Location', '/test/');
+	 my $string = $node-&gtas_string;
 
        $string is now:
 
@@ -160,7 +162,7 @@ API
    "directive"
        Get the name of the directive in $node:
 
-	 $name = $node->directive();
+	 $name = $node-&gtdirective();
 
        obj: $node ( "Apache2::Directive object" )
        ret: $name ( string )
@@ -169,7 +171,7 @@ API
    "filename"
        Get the filename the configuration node was created from:
 
-	 $filename = $node->filename();
+	 $filename = $node-&gtfilename();
 
        obj: $node ( "Apache2::Directive object" )
        ret: $filename ( string )
@@ -178,8 +180,8 @@ API
        For example:
 
 	 my $tree = Apache2::Directive::conftree();
-	 my $node = $tree->lookup('VirtualHost', 'example.com');
-	 my $filename = $node->filename;
+	 my $node = $tree-&gtlookup('VirtualHost', 'example.com');
+	 my $filename = $node-&gtfilename;
 
        $filename is now the full path to the httpd.conf that VirtualHost was
        defined in.
@@ -190,7 +192,7 @@ API
    "first_child"
        Get the first child node of this directive:
 
-	 $child_node = $node->first_child;
+	 $child_node = $node-&gtfirst_child;
 
        obj: $node ( "Apache2::Directive object" )
        ret: $child_node ( "Apache2::Directive object" )
@@ -201,7 +203,7 @@ API
    "line_num"
        Get the line number in a filename this node was created at:
 
-	 $lineno = $node->line_num();
+	 $lineno = $node-&gtline_num();
 
        obj: $node ( "Apache2::Directive object" )
        arg1: $lineno (integer)
@@ -210,8 +212,8 @@ API
    "lookup"
        Get the node(s) matching a certain value.
 
-	 $node	= $conftree->lookup($directive, $args);
-	 @nodes = $conftree->lookup($directive, $args);
+	 $node	= $conftree-&gtlookup($directive, $args);
+	 @nodes = $conftree-&gtlookup($directive, $args);
 
        obj: $conftree ( "Apache2::Directive object" )
 	   The config tree to stringify
@@ -230,21 +232,21 @@ API
 	   If called with only $directive value, this method returns all nodes
 	   from that directive. For example:
 
-	     @Alias = $conftree->lookup('Alias');
+	     @Alias = $conftree-&gtlookup('Alias');
 
 	   returns all nodes for "Alias" directives.
 
 	   If called with an extra $args argument, it returns only nodes where
 	   both the directive and the args matched. For example:
 
-	     $VHost = $tree->lookup('VirtualHost', '_default_:8000');
+	     $VHost = $tree-&gtlookup('VirtualHost', '_default_:8000');
 
        since: 2.0.00
 
    "next"
        Get the next directive node in the tree:
 
-	 $next_node = $node->next();
+	 $next_node = $node-&gtnext();
 
        obj: $node ( "Apache2::Directive object" )
        ret: $next_node ( "Apache2::Directive object" )
@@ -255,7 +257,7 @@ API
    "parent"
        Get the parent node of this directive:
 
-	 $parent_node = $node->parent();
+	 $parent_node = $node-&gtparent();
 
        obj: $node ( "Apache2::Directive object" )
        ret: "parent_node" ( "Apache2::Directive object" )
@@ -276,6 +278,6 @@ Authors
 
 
 perl apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::Directive(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

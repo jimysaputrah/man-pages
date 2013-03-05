@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Using PerlObjCBridge, Perl programs can reference Objective-C objects..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>PerlObjCBridge.pm - Bridges Perl and Objective-C runtimes</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PerlObjCBridge(3)     User Contributed Perl Documentation    PerlObjCBridge(3)
 
 
@@ -18,10 +20,10 @@ NAME
 SYNOPSIS
 	   use Foundation;
 
-	   $s1 = NSString->stringWithCString_("Hello ");
-	   $s2 = NSString->alloc()->initWithCString_("World");
-	   $s3 = $s1->stringByAppendingString_($s2);
-	   printf "%s\n", $s3->cString();
+	   $s1 = NSString-&gtstringWithCString_("Hello ");
+	   $s2 = NSString-&gtalloc()-&gtinitWithCString_("World");
+	   $s3 = $s1-&gtstringByAppendingString_($s2);
+	   printf "%s\n", $s3-&gtcString();
 
 SUMMARY
        The PerlObjCBridge module supports creating and messaging Objective-C
@@ -72,7 +74,7 @@ DESCRIPTION
        that forwards messages from Objective-C to the Perl object.
 
 MESSAGING
-       Ordinary Perl "object->method(argument-list)" syntax is used to send
+       Ordinary Perl "object-&gtmethod(argument-list)" syntax is used to send
        messages to Objective-C objects. The ':' character that delimits
        arguments in Objective-C is illegal in Perl method names, so
        underscores are used instead. An method that is invoked in Objective-C
@@ -82,12 +84,12 @@ MESSAGING
 
        can be invoked from Perl using something like:
 
-	   $anObject->arg1_arg2_($x, $y);
+	   $anObject-&gtarg1_arg2_($x, $y);
 
        Contrast the following Objective-C code fragment with its Perl analogue
        in the synopsis at the top of this man page:
 
-	   #import <Foundation/Foundation.h>
+	   #import &ltFoundation/Foundation.h&gt
 
 	   NSString *s1 = [NSString stringWithCString:"Hello "];
 	   NSString *s2 = [[NSString alloc] initWithCString:"World"];
@@ -95,34 +97,34 @@ MESSAGING
 	   printf("%s\n", [s3 cString]);
 
        To send a message to an Objective-C class, one uses the syntactic form
-       ClassName->method(...args...). For example, one can send the
+       ClassName-&gtmethod(...args...). For example, one can send the
        "defaultManager" message to the NSFileManager class as follows:
 
-	   $defMgr = NSFileManager->defaultManager();
+	   $defMgr = NSFileManager-&gtdefaultManager();
 
        An important special case of a class method is a "factory" method that
        constructs a new instance of a class:
 
-	   $array = NSMutableArray->array();
+	   $array = NSMutableArray-&gtarray();
 
-	   $string = NSString->stringWithCString_("Hi there");
+	   $string = NSString-&gtstringWithCString_("Hi there");
 
        The NSString factory method illustrates how PerlObjCBridge passes Perl
        strings to Objective-C as char *'s.
 
        To send a message to an Objective-C object, one uses the syntactic form
-       $object->method(...args...). If $array is a reference to an
+       $object-&gtmethod(...args...). If $array is a reference to an
        NSMutableArray then one can add the NSString referenced by $string by
        sending $array the "addObject:" message:
 
-	   $array->addObject_($string);
+	   $array-&gtaddObject_($string);
 
        Message sends can be chained from left to right:
 
-	   $hostName = NSProcessInfo->processInfo()->hostName();
+	   $hostName = NSProcessInfo-&gtprocessInfo()-&gthostName();
 
        In the above example, the object returned by
-       NSProcessInfo->processInfo() is in turn sent the hostName message.
+       NSProcessInfo-&gtprocessInfo() is in turn sent the hostName message.
 
 USING COCOA FRAMEWORKS
        PerlObjCBridge automatically generates a bridge module for the
@@ -168,7 +170,7 @@ DISTRIBUTED MESSAGING
 
        Edit the Makefile.PL DEFINE entry to add the -ObjC flag:
 
-	   'DEFINE'	       => '-ObjC', # e.g., '-DHAVE_SOMETHING'
+	   'DEFINE'	       =&gt '-ObjC', # e.g., '-DHAVE_SOMETHING'
 
        Modify the contents of AddSystem.pm to contain:
 
@@ -185,7 +187,7 @@ DISTRIBUTED MESSAGING
 
        and modify AddSystem.xs to have the contents:
 
-	   #include <mach-o/dyld.h>
+	   #include &ltmach-o/dyld.h&gt
 	   #include "EXTERN.h"
 	   #include "perl.h"
 	   #include "XSUB.h"
@@ -198,7 +200,7 @@ DISTRIBUTED MESSAGING
 	   #ifdef I_POLL
 	   #undef I_POLL
 	   #endif I_POLL
-	   #import <Foundation/Foundation.h>
+	   #import &ltFoundation/Foundation.h&gt
 
 	   @interface AddClient : NSObject
 	   @end
@@ -259,17 +261,17 @@ DISTRIBUTED MESSAGING
 	   sub addNumbersForClient_
 	   {
 	       my($self, $client) = @_;
-	       my $first = $client->firstNumber();
-	       my $second = $client->secondNumber();
+	       my $first = $client-&gtfirstNumber();
+	       my $second = $client-&gtsecondNumber();
 	       return int($first + $second);
 	   }
 
 	   $server = new AddServer;
-	   $connection = NSConnection->defaultConnection();
-	   $connection->setRootObject_($server);
-	   $connection->registerName_(NSString->stringWithCString_("AddServer"));
+	   $connection = NSConnection-&gtdefaultConnection();
+	   $connection-&gtsetRootObject_($server);
+	   $connection-&gtregisterName_(NSString-&gtstringWithCString_("AddServer"));
 
-	   NSRunLoop->currentRunLoop()->run();
+	   NSRunLoop-&gtcurrentRunLoop()-&gtrun();
 
        Make sure that the line "#!/usr/bin/perl" does not contain leading
        whitespace.
@@ -313,9 +315,9 @@ DISTRIBUTED MESSAGING
        The lines:
 
 	   $server = new AddServer;
-	   $connection = NSConnection->defaultConnection();
-	   $connection->setRootObject_($server);
-	   $connection->registerName_(NSString->stringWithCString_("AddServer"));
+	   $connection = NSConnection-&gtdefaultConnection();
+	   $connection-&gtsetRootObject_($server);
+	   $connection-&gtregisterName_(NSString-&gtstringWithCString_("AddServer"));
 
        create a new AddServer object and set it as the root object of a DO
        connection, registered with the name "AddServer". Clients can then look
@@ -323,7 +325,7 @@ DISTRIBUTED MESSAGING
 
        The final line:
 
-	   NSRunLoop->currentRunLoop()->run();
+	   NSRunLoop-&gtcurrentRunLoop()-&gtrun();
 
        puts addServer into a event loop, waiting for incoming connections from
        clients.
@@ -362,21 +364,21 @@ DISTRIBUTED MESSAGING
 	       return $self{'secondNumber'};
 	   }
 
-	   die "usage: perlClient <firstNumber> <secondNumber>\n" unless @ARGV == 2;
+	   die "usage: perlClient &ltfirstNumber&gt &ltsecondNumber&gt\n" unless @ARGV == 2;
 
 	   # create client
 	   $client = new AddClient (@ARGV);
 
 	   # create connection to server
-	   $name = NSString->stringWithCString_("AddServer");
-	   $server = NSConnection->rootProxyForConnectionWithRegisteredName_host_($name, 0);
+	   $name = NSString-&gtstringWithCString_("AddServer");
+	   $server = NSConnection-&gtrootProxyForConnectionWithRegisteredName_host_($name, 0);
 	   if (!$server or !$$server) {
 	       print "Can't get server\n";
 	       exit(1);
 	   }
-	   $server->retain();
+	   $server-&gtretain();
 
-	   printf "%d\n", $server->addNumbersForClient_($client);
+	   printf "%d\n", $server-&gtaddNumbersForClient_($client);
 
        Make sure that the line "#!/usr/bin/perl" does not contain leading
        whitespace.
@@ -384,13 +386,13 @@ DISTRIBUTED MESSAGING
        The AddClient methods "firstNumber" and "secondNumber" implement the
        call-back methods invoked by the AddServer. The lines:
 
-	   $name = NSString->stringWithCString_("AddServer");
-	   $server = NSConnection->rootProxyForConnectionWithRegisteredName_host_($name, 0);
+	   $name = NSString-&gtstringWithCString_("AddServer");
+	   $server = NSConnection-&gtrootProxyForConnectionWithRegisteredName_host_($name, 0);
 	   if (!$server or !$$server) {
 	       print "Can't get server\n";
 	       exit(1);
 	   }
-	   $server->retain();
+	   $server-&gtretain();
 
        results in $server being assigned a DO "proxy" object for the AddServer
        object in the addServer program. Any messages sent by the client will
@@ -399,7 +401,7 @@ DISTRIBUTED MESSAGING
 
        The final line:
 
-	   printf "%d\n", $server->addNumbersForClient_($client);
+	   printf "%d\n", $server-&gtaddNumbersForClient_($client);
 
        invokes the AddServer object with a reference to the client object. The
        control flow that results is:
@@ -431,20 +433,20 @@ AUTOMATIC STRING CONVERSION
        argument to an Objective-C method. For example, suppose an Objective-C
        dictionary is created:
 
-	   $dict = NSMutableDictionary->dictionary();
+	   $dict = NSMutableDictionary-&gtdictionary();
 
        The dictionary method "setObject:forKey:" expects the key argument to
        be an NSString and the value argument to be any NSObject. The following
        automatically converts both "aKey" and "aValue" to NSStrings and then
        inserts the pair into the dictionary:
 
-	   $dict->setObject_forKey_("aValue", "aKey");
+	   $dict-&gtsetObject_forKey_("aValue", "aKey");
 
        The value can be retrieved as follows, where "aKey" is again
        automatically converted to an NSString:
 
-	   $value = $dict->objectForKey_("aKey");
-	   printf "value is %s\n", $value->cString();
+	   $value = $dict-&gtobjectForKey_("aKey");
+	   printf "value is %s\n", $value-&gtcString();
 
        Note that the return value assigned to $value is a reference to an
        NSString and is not automatically converted to a Perl string. The
@@ -467,7 +469,7 @@ AUTOMATIC STRING CONVERSION
 
        In Perl the selector form can be executed as:
 
-	   $copy = $origString->performSelector_("copy");
+	   $copy = $origString-&gtperformSelector_("copy");
 
        In this case the Perl string "copy" is automatically converted to an
        Objective-C selector.
@@ -485,11 +487,11 @@ NIL ARGUMENTS AND RETURN VALUES
        example, the Objective-c method "arg1:optionalArg:" would receive nil
        as its second argument.
 
-	   MyClass->arg1_optionalArg_($obj, 0);
+	   MyClass-&gtarg1_optionalArg_($obj, 0);
 
        The special value "undef" can also be used:
 
-	   MyClass->arg1_optionalArg_($obj, undef);
+	   MyClass-&gtarg1_optionalArg_($obj, undef);
 
        When an Objective-C method returns nil, the corresponding Perl return
        value is a reference to a zero-valued scalar. This return value can
@@ -497,7 +499,7 @@ NIL ARGUMENTS AND RETURN VALUES
        following example, if "aMethod" returns nil then "arg1:optionalArg:"
        would receive nil as its second argument:
 
-	   MyClass->arg1_optionalArg_($obj, YourClass->aMethod());
+	   MyClass-&gtarg1_optionalArg_($obj, YourClass-&gtaMethod());
 
        To determine whether an Objective-C method returned nil one should test
        both the Perl reference and its referent. The referent will be zero-
@@ -511,9 +513,9 @@ NIL ARGUMENTS AND RETURN VALUES
        tested in the loop condition. Under normal circumstances looping ends
        when $$obj becomes zero-valued, indicating the enumerator returned nil.
 
-	   $enumerator = $array->objectEnumerator();
-	   while ($obj = $enumerator->nextObject() and $$obj) {
-	       printf "%s\n", $obj->description()->cString();
+	   $enumerator = $array-&gtobjectEnumerator();
+	   while ($obj = $enumerator-&gtnextObject() and $$obj) {
+	       printf "%s\n", $obj-&gtdescription()-&gtcString();
 	   }
 
 ARGUMENTS THAT RETURN OBJECTS BY REFERENCE
@@ -543,26 +545,26 @@ ARGUMENTS THAT RETURN OBJECTS BY REFERENCE
 	   my $errorVal;		   # declare $errorVal as an uninitialized scalar
 	   my $error = \$errorVal;	   # initialize $error as a reference to $errorVal
 
-	   my $result = $anObject->doSomethingAndReturnError_($error);
+	   my $result = $anObject-&gtdoSomethingAndReturnError_($error);
 	   if ( ! $result ) {
 	       if ( $$error ) {
-		   printf "error code is %d\n", $error->code( );
+		   printf "error code is %d\n", $error-&gtcode( );
 	       }
 	   }
 
        Note: the following does not work.
 
 	   my $errorVal;
-	   my $result = $anObject->doSomethingAndReturnError_($errorVal);
+	   my $result = $anObject-&gtdoSomethingAndReturnError_($errorVal);
 
        The following does not work either.
 
 	   my $errorVal;
-	   my $result = $anObject->doSomethingAndReturnError_(\$errorVal);
+	   my $result = $anObject-&gtdoSomethingAndReturnError_(\$errorVal);
 
        Pass undef to avoid returning the Objective-C object:
 
-	   my $result = $anObject->doSomethingAndReturnError_(undef);
+	   my $result = $anObject-&gtdoSomethingAndReturnError_(undef);
 
 POINTERS TO BUFFERS
        For Objective-C methods such as -[NSData getBytes:length:] it is
@@ -576,10 +578,10 @@ POINTERS TO BUFFERS
 
 	   my $buffer;
 	   if ($nsData && $$nsData) {
-	       my $length = $nsData->length();
+	       my $length = $nsData-&gtlength();
 	       $buffer = '\0' x $length;
 	       my $pointerToBuffer = unpack("L!", pack("p", $buffer));
-	       $nsData->getBytes_length_($pointerToBuffer, $length);
+	       $nsData-&gtgetBytes_length_($pointerToBuffer, $length);
 	   }
 
 EXCEPTION HANDLING
@@ -632,8 +634,8 @@ EXCEPTION HANDLING
 
 	  $oldHandler = PerlObjCBridge::getNSExceptionHandler();
 	  PerlObjCBridge::setNSExceptionHandler(\&myHandler);
-	  $dict = NSMutableDictionary->dictionary();
-	  $dict->setObject_forKey_(0, 0);
+	  $dict = NSMutableDictionary-&gtdictionary();
+	  $dict-&gtsetObject_forKey_(0, 0);
 	  PerlObjCBridge::setNSExceptionHandler($oldHandler);
 
        This results in myHandler printing the output:
@@ -649,7 +651,7 @@ LARGE NUMERIC VALUES
        PerlObjCBridge assumes no Perl support for 64-bit integers. When an
        Objective-C method has a 64-bit integer return type (i.e., long long or
        unsigned long long) and the result of invoking that method is a return
-       value that is too large (i.e., >= 2^^31) or too small (<= -(2^^31)) to
+       value that is too large (i.e., &gt= 2^^31) or too small (&lt= -(2^^31)) to
        be represented in Perl as a signed integer then the value is returned
        as a Perl double. Similarly, when a parameter to an Objective-C method
        is a long long or unsigned long long then the type of the Perl argument
@@ -663,7 +665,7 @@ LARGE NUMERIC VALUES
        Similar considerations apply to 32-bit unsigned longs and unsigned
        ints. When an Objective-C method has a 32-bit unsigned long or unsigned
        int return type and the result of invoking that method is a return
-       value that is too large (>= 2^^31) to be represented in Perl as a
+       value that is too large (&gt= 2^^31) to be represented in Perl as a
        signed integer then the value is returned as a Perl double. When a
        parameter to an Objective-C method is a 32-bit unsigned long or
        unsigned int then the Perl int or float argument is simply coerced to
@@ -730,6 +732,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2010-08-13		     PerlObjCBridge(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

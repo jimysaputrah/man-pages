@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="ACHTUNG!  If you're not familiar with Exporter or exporting, read..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Sub::Exporter - a sophisticated exporter for custom-built routines</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Sub::Exporter(3)      User Contributed Perl Documentation     Sub::Exporter(3)
 
 
@@ -24,14 +26,14 @@ SYNOPSIS
 
 	 # in the exporting module:
 	 package Text::Tweaker;
-	 use Sub::Exporter -setup => {
-	   exports => [
+	 use Sub::Exporter -setup =&gt {
+	   exports =&gt [
 	     qw(squish titlecase), # always works the same way
-	     reformat => \&build_reformatter, # generator to build exported function
-	     trim     => \&build_trimmer,
-	     indent   => \&build_indenter,
+	     reformat =&gt \&build_reformatter, # generator to build exported function
+	     trim     =&gt \&build_trimmer,
+	     indent   =&gt \&build_indenter,
 	   ],
-	   collectors => [ 'defaults' ],
+	   collectors =&gt [ 'defaults' ],
 	 };
 
        Then, in an importing module:
@@ -39,9 +41,9 @@ SYNOPSIS
 	 # in the importing module:
 	 use Text::Tweaker
 	   'squish',
-	   indent   => { margin => 5 },
-	   reformat => { width => 79, justify => 'full', -as => 'prettify_text' },
-	   defaults => { eol => 'CRLF' };
+	   indent   =&gt { margin =&gt 5 },
+	   reformat =&gt { width =&gt 79, justify =&gt 'full', -as =&gt 'prettify_text' },
+	   defaults =&gt { eol =&gt 'CRLF' };
 
        With this setup, the importing module ends up with three routines:
        "squish", "indent", and "prettify_text".  The latter two have been
@@ -68,8 +70,8 @@ DESCRIPTION
        writing a simple generator, you can let them do this, instead:
 
 	 use Data::Analyze
-	   analyze => { tolerance => 0.10, passes => 10, -as => analyze10 },
-	   analyze => { tolerance => 0.15, passes => 50, -as => analyze50 };
+	   analyze =&gt { tolerance =&gt 0.10, passes =&gt 10, -as =&gt analyze10 },
+	   analyze =&gt { tolerance =&gt 0.15, passes =&gt 50, -as =&gt analyze50 };
 
 	 my $value = analyze10($data);
 
@@ -80,8 +82,8 @@ DESCRIPTION
 
 	   return sub {
 	     my $data	   = shift;
-	     my $tolerance = shift || $arg->{tolerance};
-	     my $passes    = shift || $arg->{passes};
+	     my $tolerance = shift || $arg-&gt{tolerance};
+	     my $passes    = shift || $arg-&gt{passes};
 
 	     analyze($data, $tolerance, $passes);
 	   }
@@ -108,11 +110,11 @@ DESCRIPTION
        subroutines:
 
 	 package Data::Methodical;
-	 use Sub::Exporter -setup => { exports => { some_method => \&_curry_class } };
+	 use Sub::Exporter -setup =&gt { exports =&gt { some_method =&gt \&_curry_class } };
 
 	 sub _curry_class {
 	   my ($class, $name) = @_;
-	   sub { $class->$name(@_); };
+	   sub { $class-&gt$name(@_); };
 	 }
 
        Because of the way that exporters and Sub::Exporter work, any package
@@ -142,8 +144,8 @@ DESCRIPTION
        How much easier to write:
 
 	 # this program determines to which circle of Hell you will be condemned
-	 use Morality qw(virtue), sin => { -as => 'offense' };
-	 use Math::Trig -all => { -prefix => 'trig_' };
+	 use Morality qw(virtue), sin =&gt { -as =&gt 'offense' };
+	 use Math::Trig -all =&gt { -prefix =&gt 'trig_' };
 
        and to have at one's disposal "offense" and "trig_sin" -- not to
        mention "trig_cos" and "trig_tan".
@@ -154,7 +156,7 @@ EXPORTER CONFIGURATION
 
 	 package Tools;
 	 use Sub::Exporter
-	   -setup => { exports => [ qw(function1 function2 function3) ] };
+	   -setup =&gt { exports =&gt [ qw(function1 function2 function3) ] };
 
        This is the simplest way to use the exporter, and is basically
        equivalent to this:
@@ -166,7 +168,7 @@ EXPORTER CONFIGURATION
        Any basic use of Sub::Exporter will look like this:
 
 	 package Tools;
-	 use Sub::Exporter -setup => \%config;
+	 use Sub::Exporter -setup =&gt \%config;
 
        The following keys are valid in %config:
 
@@ -204,10 +206,10 @@ EXPORTER CONFIGURATION
        reference.  The list is processed in such a way that the following are
        equivalent:
 
-	 { exports => [ qw(foo bar baz), quux => \&quux_generator ] }
+	 { exports =&gt [ qw(foo bar baz), quux =&gt \&quux_generator ] }
 
-	 { exports =>
-	   { foo => undef, bar => undef, baz => undef, quux => \&quux_generator } }
+	 { exports =&gt
+	   { foo =&gt undef, bar =&gt undef, baz =&gt undef, quux =&gt \&quux_generator } }
 
        Generators are code that return coderefs.  They are called with four
        parameters:
@@ -221,16 +223,16 @@ EXPORTER CONFIGURATION
        statement:
 
 	 use Text::Tweaker
-	   reformat => { -as => 'make_narrow', width => 33 },
-	   defaults => { eol => 'CR' };
+	   reformat =&gt { -as =&gt 'make_narrow', width =&gt 33 },
+	   defaults =&gt { eol =&gt 'CR' };
 
        would result in the following call to &build_reformatter:
 
 	 my $code = build_reformatter(
 	   'Text::Tweaker',
 	   'reformat',
-	   { width => 33 }, # note that -as is not passed in
-	   { defaults => { eol => 'CR' } },
+	   { width =&gt 33 }, # note that -as is not passed in
+	   { defaults =&gt { eol =&gt 'CR' } },
 	 );
 
        The returned coderef ($code) would then be installed as "make_narrow"
@@ -250,12 +252,12 @@ EXPORTER CONFIGURATION
        The simpler case is the first: a group definition is a list of exports.
        Here's the example that could go in exporter in the "SYNOPSIS".
 
-	 groups  => {
-	   default    => [ qw(reformat) ],
-	   shorteners => [ qw(squish trim) ],
-	   email_safe => [
+	 groups  =&gt {
+	   default    =&gt [ qw(reformat) ],
+	   shorteners =&gt [ qw(squish trim) ],
+	   email_safe =&gt [
 	     'indent',
-	     reformat => { -as => 'email_format', width => 72 }
+	     reformat =&gt { -as =&gt 'email_format', width =&gt 72 }
 	   ],
 	 },
 
@@ -277,12 +279,12 @@ EXPORTER CONFIGURATION
        This example shows a simple use of the group generator.
 
 	 package Data::Crypto;
-	 use Sub::Exporter -setup => { groups => { cipher => \&build_cipher_group } };
+	 use Sub::Exporter -setup =&gt { groups =&gt { cipher =&gt \&build_cipher_group } };
 
 	 sub build_cipher_group {
 	   my ($class, $group, $arg) = @_;
-	   my ($encode, $decode) = build_codec($arg->{secret});
-	   return { cipher => $encode, decipher => $decode };
+	   my ($encode, $decode) = build_codec($arg-&gt{secret});
+	   return { cipher =&gt $encode, decipher =&gt $decode };
 	 }
 
        The "cipher" and "decipher" routines are built in a group because they
@@ -312,8 +314,8 @@ EXPORTER CONFIGURATION
 
 	  return sub {
 	    my $data	  = shift;
-	    my $tolerance = shift || $arg->{tolerance} || $col->{defaults}{tolerance};
-	    my $passes	  = shift || $arg->{passes}    || $col->{defaults}{passes};
+	    my $tolerance = shift || $arg-&gt{tolerance} || $col-&gt{defaults}{tolerance};
+	    my $passes	  = shift || $arg-&gt{passes}    || $col-&gt{defaults}{passes};
 
 	    analyze($data, $tolerance, $passes);
 	  }
@@ -323,9 +325,9 @@ EXPORTER CONFIGURATION
 
 	 use Data::Analyze
 	   'analyze',
-	   analyze  => { tolerance => 0.10, -as => analyze10 },
-	   analyze  => { tolerance => 0.15, passes => 50, -as => analyze50 },
-	   defaults => { passes => 10 };
+	   analyze  =&gt { tolerance =&gt 0.10, -as =&gt analyze10 },
+	   analyze  =&gt { tolerance =&gt 0.15, passes =&gt 50, -as =&gt analyze50 },
+	   defaults =&gt { passes =&gt 10 };
 
 	 my $A = analyze10($data);     # equivalent to analyze($data, 0.10, 10);
 	 my $C = analyze50($data);     # equivalent to analyze($data, 0.15, 10);
@@ -337,7 +339,7 @@ EXPORTER CONFIGURATION
        it returns false, an exception is thrown.  We could ensure that no one
        tries to set a global data default easily:
 
-	 collectors => { defaults => sub { return (exists $_[0]->{data}) ? 0 : 1 } }
+	 collectors =&gt { defaults =&gt sub { return (exists $_[0]-&gt{data}) ? 0 : 1 } }
 
        Collector coderefs can also be used as hooks to perform arbitrary
        actions before anything is exported.
@@ -469,10 +471,10 @@ EXPORTS
        accepted here.  Instead, you may write something like:
 
 	 use Sub::Exporter
-	   { into => 'Target::Package' },
-	   -setup => {
-	     -as     => 'do_import',
-	     exports => [ ... ],
+	   { into =&gt 'Target::Package' },
+	   -setup =&gt {
+	     -as     =&gt 'do_import',
+	     exports =&gt [ ... ],
 	   }
 	 ;
 
@@ -521,14 +523,14 @@ COMPARISONS
 	     package Some::Module;
 	     use base qw(Exporter);
 	     our @EXPORT_OK   = qw(foo bar baz quux);
-	     our %EXPORT_TAGS = (bar => [ qw(bar baz) ]);
+	     our %EXPORT_TAGS = (bar =&gt [ qw(bar baz) ]);
 
 	   Using Sub::Exporter, it would look like this:
 
 	     package Some::Module;
-	     use Sub::Exporter -setup => {
-	       exports => [ qw(foo bar baz quux) ],
-	       groups  => { bar => [ qw(bar baz) ]}
+	     use Sub::Exporter -setup =&gt {
+	       exports =&gt [ qw(foo bar baz quux) ],
+	       groups  =&gt { bar =&gt [ qw(bar baz) ]}
 	     };
 
 	   Sub::Exporter respects inheritance, so that a package may export
@@ -594,7 +596,7 @@ TODO
        o   add an "always" group
 
 AUTHOR
-       Ricardo SIGNES, "<rjbs@cpan.org>"
+       Ricardo SIGNES, "&ltrjbs@cpan.org&gt"
 
 THANKS
        Hans Dieter Pearcey provided helpful advice while I was writing
@@ -606,7 +608,7 @@ THANKS
 
 BUGS
        Please report any bugs or feature requests through the web interface at
-       <http://rt.cpan.org>. I will be notified, and then you'll automatically
+       &lthttp://rt.cpan.org&gt. I will be notified, and then you'll automatically
        be notified of progress on your bug as I make changes.
 
 COPYRIGHT
@@ -617,6 +619,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2009-01-16		      Sub::Exporter(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

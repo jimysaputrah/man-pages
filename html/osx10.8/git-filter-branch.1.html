@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Lets you rewrite git revision history by rewriting the branches..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>git-filter-branch - Rewrite branches</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 GIT-FILTER-BRANCH(1)		  Git Manual		  GIT-FILTER-BRANCH(1)
 
 
@@ -16,18 +18,18 @@ NAME
        git-filter-branch - Rewrite branches
 
 SYNOPSIS
-       git filter-branch [--env-filter <command>] [--tree-filter <command>]
-	       [--index-filter <command>] [--parent-filter <command>]
-	       [--msg-filter <command>] [--commit-filter <command>]
-	       [--tag-name-filter <command>] [--subdirectory-filter <directory>]
+       git filter-branch [--env-filter &ltcommand&gt] [--tree-filter &ltcommand&gt]
+	       [--index-filter &ltcommand&gt] [--parent-filter &ltcommand&gt]
+	       [--msg-filter &ltcommand&gt] [--commit-filter &ltcommand&gt]
+	       [--tag-name-filter &ltcommand&gt] [--subdirectory-filter &ltdirectory&gt]
 	       [--prune-empty]
-	       [--original <namespace>] [-d <directory>] [-f | --force]
-	       [--] [<rev-list options>...]
+	       [--original &ltnamespace&gt] [-d &ltdirectory&gt] [-f | --force]
+	       [--] [&ltrev-list options&gt...]
 
 
 DESCRIPTION
        Lets you rewrite git revision history by rewriting the branches
-       mentioned in the <rev-list options>, applying custom filters on each
+       mentioned in the &ltrev-list options&gt, applying custom filters on each
        revision. Those filters can modify each tree (e.g. removing a file or
        running a perl rewrite on all files) or information about each commit.
        Otherwise, all information (including original commit times or merge
@@ -62,7 +64,7 @@ DESCRIPTION
        option, e.g. on tmpfs. Reportedly the speedup is very noticeable.
 
    Filters
-       The filters are applied in the order as listed below. The <command>
+       The filters are applied in the order as listed below. The &ltcommand&gt
        argument is always evaluated in the shell context using the eval
        command (with the notable exception of the commit filter, for technical
        reasons). Prior to that, the $GIT_COMMIT environment variable will be
@@ -70,7 +72,7 @@ DESCRIPTION
        GIT_AUTHOR_NAME, GIT_AUTHOR_EMAIL, GIT_AUTHOR_DATE, GIT_COMMITTER_NAME,
        GIT_COMMITTER_EMAIL, and GIT_COMMITTER_DATE are set according to the
        current commit. The values of these variables after the filters have
-       run, are used for the new commit. If any evaluation of <command>
+       run, are used for the new commit. If any evaluation of &ltcommand&gt
        returns a non-zero exit status, the whole operation will be aborted.
 
        A map function is available that takes an "original sha1 id" argument
@@ -80,14 +82,14 @@ DESCRIPTION
        multiple commits.
 
 OPTIONS
-       --env-filter <command>
+       --env-filter &ltcommand&gt
 	   This filter may be used if you only need to modify the environment
 	   in which the commit will be performed. Specifically, you might want
 	   to rewrite the author/committer name/email/time environment
 	   variables (see git-commit-tree(1) for details). Do not forget to
 	   re-export the variables.
 
-       --tree-filter <command>
+       --tree-filter &ltcommand&gt
 	   This is the filter for rewriting the tree and its contents. The
 	   argument is evaluated in shell with the working directory set to
 	   the root of the checked out tree. The new tree is then used as-is
@@ -95,13 +97,13 @@ OPTIONS
 	   neither .gitignore files nor any other ignore rules HAVE ANY
 	   EFFECT!).
 
-       --index-filter <command>
+       --index-filter &ltcommand&gt
 	   This is the filter for rewriting the index. It is similar to the
 	   tree filter but does not check out the tree, which makes it much
 	   faster. Frequently used with git rm --cached --ignore-unmatch ...,
 	   see EXAMPLES below. For hairy cases, see git-update-index(1).
 
-       --parent-filter <command>
+       --parent-filter &ltcommand&gt
 	   This is the filter for rewriting the commit's parent list. It will
 	   receive the parent string on stdin and shall output the new parent
 	   string on stdout. The parent string is in the format described in
@@ -109,17 +111,17 @@ OPTIONS
 	   normal commit and "-p parent1 -p parent2 -p parent3 ..." for a
 	   merge commit.
 
-       --msg-filter <command>
+       --msg-filter &ltcommand&gt
 	   This is the filter for rewriting the commit messages. The argument
 	   is evaluated in the shell with the original commit message on
 	   standard input; its standard output is used as the new commit
 	   message.
 
-       --commit-filter <command>
+       --commit-filter &ltcommand&gt
 	   This is the filter for performing the commit. If this filter is
 	   specified, it will be called instead of the git commit-tree
-	   command, with arguments of the form "<TREE_ID> [(-p
-	   <PARENT_COMMIT_ID>)...]" and the log message on stdin. The commit
+	   command, with arguments of the form "&ltTREE_ID&gt [(-p
+	   &ltPARENT_COMMIT_ID&gt)...]" and the log message on stdin. The commit
 	   id is expected on stdout.
 
 	   As a special extension, the commit filter may emit multiple commit
@@ -135,7 +137,7 @@ OPTIONS
 	   commit-tree "$@" if you don't wish to keep commits with a single
 	   parent and that makes no change to the tree.
 
-       --tag-name-filter <command>
+       --tag-name-filter &ltcommand&gt
 	   This is the filter for rewriting tag names. When passed, it will be
 	   called for every tag ref that points to a rewritten object (or to a
 	   tag object which points to a rewritten object). The original tag
@@ -159,7 +161,7 @@ OPTIONS
 	   timestamp (or the tag message for that matter). Tags which point to
 	   other tags will be rewritten to point to the underlying commit.
 
-       --subdirectory-filter <directory>
+       --subdirectory-filter &ltdirectory&gt
 	   Only look at the history which touches the given subdirectory. The
 	   result will contain that directory (and only that) as its project
 	   root. Implies the section called "Remap to ancestor".
@@ -174,11 +176,11 @@ OPTIONS
 	   instead of the git commit-tree "$@" idiom in your commit filter to
 	   make that happen.
 
-       --original <namespace>
+       --original &ltnamespace&gt
 	   Use this option to set the namespace where the original commits
 	   will be stored. The default value is refs/original.
 
-       -d <directory>
+       -d &ltdirectory&gt
 	   Use this option to set the path to the temporary directory used for
 	   rewriting. When applying a tree filter, the command needs to
 	   temporarily check out the tree to some directory, which may consume
@@ -192,7 +194,7 @@ OPTIONS
 	   directory or when there are already refs starting with
 	   refs/original/, unless forced.
 
-       <rev-list options>...
+       &ltrev-list options&gt...
 	   Arguments for git rev-list. All positive refs included by these
 	   options are rewritten. You may also specify options such as --all,
 	   but you must use -- to separate them from the git filter-branch
@@ -241,7 +243,7 @@ EXAMPLES
        be the parent of the current initial commit, in order to paste the
        other history behind the current history:
 
-	   git filter-branch --parent-filter 'sed "s/^\$/-p <graft-id>/"' HEAD
+	   git filter-branch --parent-filter 'sed "s/^\$/-p &ltgraft-id&gt/"' HEAD
 
 
        (if the parent string is empty - which happens when we are dealing with
@@ -250,12 +252,12 @@ EXAMPLES
        ancestors happened). If this is not the case, use:
 
 	   git filter-branch --parent-filter \
-		   'test $GIT_COMMIT = <commit-id> && echo "-p <graft-id>" || cat' HEAD
+		   'test $GIT_COMMIT = &ltcommit-id&gt && echo "-p &ltgraft-id&gt" || cat' HEAD
 
 
        or even simpler:
 
-	   echo "$commit-id $graft-id" >> .git/info/grafts
+	   echo "$commit-id $graft-id" &gt&gt .git/info/grafts
 	   git filter-branch $graft-id..HEAD
 
 
@@ -309,7 +311,7 @@ EXAMPLES
 
 	   git filter-branch --msg-filter '
 		   cat &&
-		   echo "Acked-by: Bugs Bunny <bunny@bugzilla.org>"
+		   echo "Acked-by: Bugs Bunny &ltbunny@bugzilla.org&gt"
 	   ' HEAD~10..HEAD
 
 
@@ -388,6 +390,6 @@ GIT
 
 
 Git 1.7.12			  08/19/2012		  GIT-FILTER-BRANCH(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

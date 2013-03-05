@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Declaration and Access of Arrays of Arrays..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perllol - Manipulating Arrays of Arrays in Perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLLOL(1)	       Perl Programmers Reference Guide 	    PERLLOL(1)
 
 
@@ -49,7 +51,7 @@ DESCRIPTION
 	       [ "george", "jane", "elroy", "judy", ],
 	   ];
 
-	   print $ref_to_AoA->[2][2];
+	   print $ref_to_AoA-&gt[2][2];
 
        Notice that the outer bracket type has changed, and so our access
        syntax has also changed.  That's because unlike C, in perl you can't
@@ -59,12 +61,12 @@ DESCRIPTION
        these:
 
 	   $AoA[2][2]
-	   $ref_to_AoA->[2][2]
+	   $ref_to_AoA-&gt[2][2]
 
        instead of having to write these:
 
-	   $AoA[2]->[2]
-	   $ref_to_AoA->[2]->[2]
+	   $AoA[2]-&gt[2]
+	   $ref_to_AoA-&gt[2]-&gt[2]
 
        Well, that's because the rule is that on adjacent brackets only
        (whether square or curly), you are free to omit the pointer
@@ -83,7 +85,7 @@ DESCRIPTION
        develop an @AoA array containing all these, here's the right way to do
        that:
 
-	   while (<>) {
+	   while (&lt&gt) {
 	       @tmp = split;
 	       push @AoA, [ @tmp ];
 	   }
@@ -115,14 +117,14 @@ DESCRIPTION
 
 	   use strict;
 	   my(@AoA, @tmp);
-	   while (<>) {
+	   while (&lt&gt) {
 	       @tmp = split;
 	       push @AoA, [ @tmp ];
 	   }
 
        Of course, you don't need the temporary array to have a name at all:
 
-	   while (<>) {
+	   while (&lt&gt) {
 	       push @AoA, [ split ];
 	   }
 
@@ -131,7 +133,7 @@ DESCRIPTION
 
 	   my (@AoA, $i, $line);
 	   for $i ( 0 .. 10 ) {
-	       $line = <>;
+	       $line = &lt&gt;
 	       $AoA[$i] = [ split ' ', $line ];
 	   }
 
@@ -139,7 +141,7 @@ DESCRIPTION
 
 	   my (@AoA, $i);
 	   for $i ( 0 .. 10 ) {
-	       $AoA[$i] = [ split ' ', <> ];
+	       $AoA[$i] = [ split ' ', &lt&gt ];
 	   }
 
        You should in general be leery of using functions that could
@@ -148,13 +150,13 @@ DESCRIPTION
 
 	   my (@AoA, $i);
 	   for $i ( 0 .. 10 ) {
-	       $AoA[$i] = [ split ' ', scalar(<>) ];
+	       $AoA[$i] = [ split ' ', scalar(&lt&gt) ];
 	   }
 
        If you wanted to have a $ref_to_AoA variable as a reference to an
        array, you'd have to do something like this:
 
-	   while (<>) {
+	   while (&lt&gt) {
 	       push @$ref_to_AoA, [ split ];
 	   }
 
@@ -255,7 +257,7 @@ DESCRIPTION
 
 	   @part = ();
 	   $x = 4;
-	   for ($y = 7; $y < 13; $y++) {
+	   for ($y = 7; $y &lt 13; $y++) {
 	       push @part, $AoA[$x][$y];
 	   }
 
@@ -269,15 +271,15 @@ DESCRIPTION
        run from 4..8 and $y run from 7 to 12?  Hmm... here's the simple way:
 
 	   @newAoA = ();
-	   for ($startx = $x = 4; $x <= 8; $x++) {
-	       for ($starty = $y = 7; $y <= 12; $y++) {
+	   for ($startx = $x = 4; $x &lt= 8; $x++) {
+	       for ($starty = $y = 7; $y &lt= 12; $y++) {
 		   $newAoA[$x - $startx][$y - $starty] = $AoA[$x][$y];
 	       }
 	   }
 
        We can reduce some of the looping through slices
 
-	   for ($x = 4; $x <= 8; $x++) {
+	   for ($x = 4; $x &lt= 8; $x++) {
 	       push @newAoA, [ @{ $AoA[$x] } [ 7..12 ] ];
 	   }
 
@@ -290,14 +292,14 @@ DESCRIPTION
        insecurity) through inscrutable code, it would be hard to argue. :-) If
        I were you, I'd put that in a function:
 
-	   @newAoA = splice_2D( \@AoA, 4 => 8, 7 => 12 );
+	   @newAoA = splice_2D( \@AoA, 4 =&gt 8, 7 =&gt 12 );
 	   sub splice_2D {
 	       my $lrr = shift;        # ref to array of array refs!
 	       my ($x_lo, $x_hi,
 		   $y_lo, $y_hi) = @_;
 
 	       return map {
-		   [ @{ $lrr->[$_] } [ $y_lo .. $y_hi ] ]
+		   [ @{ $lrr-&gt[$_] } [ $y_lo .. $y_hi ] ]
 	       } $x_lo .. $x_hi;
 	   }
 
@@ -305,13 +307,13 @@ SEE ALSO
        perldata, perlref, perldsc
 
 AUTHOR
-       Tom Christiansen <tchrist@perl.com>
+       Tom Christiansen &lttchrist@perl.com&gt
 
        Last update: Thu Jun  4 16:16:23 MDT 1998
 
 
 
 perl v5.12.4			  2011-06-07			    PERLLOL(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

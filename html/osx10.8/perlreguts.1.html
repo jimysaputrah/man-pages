@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document is an attempt to shine some light on the guts of the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlreguts - Description of the Perl regular expression engine.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLREGUTS(1)	       Perl Programmers Reference Guide 	 PERLREGUTS(1)
 
 
@@ -91,15 +93,15 @@ OVERVIEW
 
 			     [start]
 				|
-			      <foo>
+			      &ltfoo&gt
 				|
 			  +-----+-----+
 			  |	|     |
-			<\w+> <\d+> <\s+>
+			&lt\w+&gt &lt\d+&gt &lt\s+&gt
 			  |	|     |
 			  +-----+-----+
 				|
-			      <bar>
+			      &ltbar&gt
 				|
 			      [end]
 
@@ -355,7 +357,7 @@ Process Overview
 
        Debug Output
 
-       In the 5.9.x development version of perl you can "use re Debug =>
+       In the 5.9.x development version of perl you can "use re Debug =&gt
        'PARSE'" to see some trace information about the parse process. We will
        start with some simple patterns and build up to more complex patterns.
 
@@ -366,16 +368,16 @@ Process Overview
        screen. 'tsdy' is a special form of "regtail()" which does some extra
        analysis.
 
-	>foo<		  1    reg
+	&gtfoo&lt		  1    reg
 				 brnc
 				   piec
 				     atom
-	><		  4	 tsdy~ EXACT <foo> (EXACT) (1)
+	&gt&lt		  4	 tsdy~ EXACT &ltfoo&gt (EXACT) (1)
 				     ~ attach to END (3) offset to 2
 
        The resulting program then looks like:
 
-	  1: EXACT <foo>(3)
+	  1: EXACT &ltfoo&gt(3)
 	  3: END(0)
 
        As you can see, even though we parsed out a branch and a piece, it was
@@ -390,22 +392,22 @@ Process Overview
        have the pattern "/foo+/". We will see that "regbranch()" calls
        "regpiece()" twice.
 
-	>foo+<		  1    reg
+	&gtfoo+&lt		  1    reg
 				 brnc
 				   piec
 				     atom
-	>o+<		  3	   piec
+	&gto+&lt		  3	   piec
 				     atom
-	><		  6	   tail~ EXACT <fo> (1)
-			  7	 tsdy~ EXACT <fo> (EXACT) (1)
+	&gt&lt		  6	   tail~ EXACT &ltfo&gt (1)
+			  7	 tsdy~ EXACT &ltfo&gt (EXACT) (1)
 				     ~ PLUS (END) (3)
 				     ~ attach to END (6) offset to 3
 
        And we end up with the program:
 
-	  1: EXACT <fo>(3)
+	  1: EXACT &ltfo&gt(3)
 	  3: PLUS(6)
-	  4:   EXACT <o>(0)
+	  4:   EXACT &lto&gt(0)
 	  6: END(0)
 
        Now we have a special case. The "EXACT" regop has a "regnext" of 0.
@@ -416,68 +418,68 @@ Process Overview
 
        Now for something much more complex: "/x(?:foo*|b[a][rR])(foo|bar)$/"
 
-	>x(?:foo*|b...	  1    reg
+	&gtx(?:foo*|b...	  1    reg
 				 brnc
 				   piec
 				     atom
-	>(?:foo*|b[...	  3	   piec
+	&gt(?:foo*|b[...	  3	   piec
 				     atom
-	>?:foo*|b[a...		       reg
-	>foo*|b[a][...			 brnc
+	&gt?:foo*|b[a...		       reg
+	&gtfoo*|b[a][...			 brnc
 					   piec
 					     atom
-	>o*|b[a][rR...	  5		   piec
+	&gto*|b[a][rR...	  5		   piec
 					     atom
-	>|b[a][rR])...	  8		   tail~ EXACT <fo> (3)
-	>b[a][rR])(...	  9		 brnc
+	&gt|b[a][rR])...	  8		   tail~ EXACT &ltfo&gt (3)
+	&gtb[a][rR])(...	  9		 brnc
 			 10		   piec
 					     atom
-	>[a][rR])(f...	 12		   piec
+	&gt[a][rR])(f...	 12		   piec
 					     atom
-	>a][rR])(fo...			       clas
-	>[rR])(foo|...	 14		   tail~ EXACT <b> (10)
+	&gta][rR])(fo...			       clas
+	&gt[rR])(foo|...	 14		   tail~ EXACT &ltb&gt (10)
 					   piec
 					     atom
-	>rR])(foo|b...			       clas
-	>)(foo|bar)...	 25		   tail~ EXACT <a> (12)
+	&gtrR])(foo|b...			       clas
+	&gt)(foo|bar)...	 25		   tail~ EXACT &lta&gt (12)
 					 tail~ BRANCH (3)
 			 26		 tsdy~ BRANCH (END) (9)
 					     ~ attach to TAIL (25) offset to 16
-					 tsdy~ EXACT <fo> (EXACT) (4)
+					 tsdy~ EXACT &ltfo&gt (EXACT) (4)
 					     ~ STAR (END) (6)
 					     ~ attach to TAIL (25) offset to 19
-					 tsdy~ EXACT <b> (EXACT) (10)
-					     ~ EXACT <a> (EXACT) (12)
+					 tsdy~ EXACT &ltb&gt (EXACT) (10)
+					     ~ EXACT &lta&gt (EXACT) (12)
 					     ~ ANYOF[Rr] (END) (14)
 					     ~ attach to TAIL (25) offset to 11
-	>(foo|bar)$<		   tail~ EXACT <x> (1)
+	&gt(foo|bar)$&lt		   tail~ EXACT &ltx&gt (1)
 				   piec
 				     atom
-	>foo|bar)$<		       reg
+	&gtfoo|bar)$&lt		       reg
 			 28		 brnc
 					   piec
 					     atom
-	>|bar)$<	 31		 tail~ OPEN1 (26)
-	>bar)$< 			 brnc
+	&gt|bar)$&lt	 31		 tail~ OPEN1 (26)
+	&gtbar)$&lt 			 brnc
 			 32		   piec
 					     atom
-	>)$<		 34		 tail~ BRANCH (28)
+	&gt)$&lt		 34		 tail~ BRANCH (28)
 			 36		 tsdy~ BRANCH (END) (31)
 					     ~ attach to CLOSE1 (34) offset to 3
-					 tsdy~ EXACT <foo> (EXACT) (29)
+					 tsdy~ EXACT &ltfoo&gt (EXACT) (29)
 					     ~ attach to CLOSE1 (34) offset to 5
-					 tsdy~ EXACT <bar> (EXACT) (32)
+					 tsdy~ EXACT &ltbar&gt (EXACT) (32)
 					     ~ attach to CLOSE1 (34) offset to 2
-	>$<			   tail~ BRANCH (3)
+	&gt$&lt			   tail~ BRANCH (3)
 				       ~ BRANCH (9)
 				       ~ TAIL (25)
 				   piec
 				     atom
-	><		 37	   tail~ OPEN1 (26)
+	&gt&lt		 37	   tail~ OPEN1 (26)
 				       ~ BRANCH (28)
 				       ~ BRANCH (31)
 				       ~ CLOSE1 (34)
-			 38	 tsdy~ EXACT <x> (EXACT) (1)
+			 38	 tsdy~ EXACT &ltx&gt (EXACT) (1)
 				     ~ BRANCH (END) (3)
 				     ~ BRANCH (END) (9)
 				     ~ TAIL (END) (25)
@@ -490,21 +492,21 @@ Process Overview
 
        Resulting in the program
 
-	  1: EXACT <x>(3)
+	  1: EXACT &ltx&gt(3)
 	  3: BRANCH(9)
-	  4:   EXACT <fo>(6)
+	  4:   EXACT &ltfo&gt(6)
 	  6:   STAR(26)
-	  7:	 EXACT <o>(0)
+	  7:	 EXACT &lto&gt(0)
 	  9: BRANCH(25)
-	 10:   EXACT <ba>(14)
+	 10:   EXACT &ltba&gt(14)
 	 12:   OPTIMIZED (2 nodes)
 	 14:   ANYOF[Rr](26)
 	 25: TAIL(26)
 	 26: OPEN1(28)
 	 28:   TRIE-EXACT(34)
 	       [StS:1 Wds:2 Cs:6 Uq:5 #Sts:7 Mn:3 Mx:3 Stcls:bf]
-		 <foo>
-		 <bar>
+		 &ltfoo&gt
+		 &ltbar&gt
 	 30:   OPTIMIZED (4 nodes)
 	 34: CLOSE1(36)
 	 36: EOL(37)
@@ -840,13 +842,13 @@ LICENCE
        Same terms as Perl.
 
 REFERENCES
-       [1] <http://perl.plover.com/Rx/paper/>
+       [1] &lthttp://perl.plover.com/Rx/paper/&gt
 
-       [2] <http://www.unicode.org>
+       [2] &lthttp://www.unicode.org&gt
 
 
 
 perl v5.12.4			  2011-06-01			 PERLREGUTS(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

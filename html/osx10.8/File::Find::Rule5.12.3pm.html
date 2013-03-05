@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="File::Find::Rule is a friendlier interface to File::Find.  It allows..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>File::Find::Rule - Alternative interface to File::Find</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 File::Find::Rule(3)   User Contributed Perl Documentation  File::Find::Rule(3)
 
 
@@ -18,18 +20,18 @@ NAME
 SYNOPSIS
 	 use File::Find::Rule;
 	 # find all the subdirectories of a given directory
-	 my @subdirs = File::Find::Rule->directory->in( $directory );
+	 my @subdirs = File::Find::Rule-&gtdirectory-&gtin( $directory );
 
 	 # find all the .pm files in @INC
-	 my @files = File::Find::Rule->file()
-				     ->name( '*.pm' )
-				     ->in( @INC );
+	 my @files = File::Find::Rule-&gtfile()
+				     -&gtname( '*.pm' )
+				     -&gtin( @INC );
 
 	 # as above, but without method chaining
-	 my $rule =  File::Find::Rule->new;
-	 $rule->file;
-	 $rule->name( '*.pm' );
-	 my @files = $rule->in( @INC );
+	 my $rule =  File::Find::Rule-&gtnew;
+	 $rule-&gtfile;
+	 $rule-&gtname( '*.pm' );
+	 my @files = $rule-&gtin( @INC );
 
 DESCRIPTION
        File::Find::Rule is a friendlier interface to File::Find.  It allows
@@ -46,9 +48,9 @@ METHODS
 	   Specifies names that should match.  May be globs or regular
 	   expressions.
 
-	    $set->name( '*.mp3', '*.ogg' ); # mp3s or oggs
-	    $set->name( qr/\.(mp3|ogg)$/ ); # the same as a regex
-	    $set->name( 'foo.bar' );	    # just things named foo.bar
+	    $set-&gtname( '*.mp3', '*.ogg' ); # mp3s or oggs
+	    $set-&gtname( qr/\.(mp3|ogg)$/ ); # the same as a regex
+	    $set-&gtname( 'foo.bar' );	    # just things named foo.bar
 
        -X tests
 	   Synonyms are provided for each of the -X tests. See "-X" in
@@ -79,8 +81,8 @@ METHODS
 	   completeness.
 
 	    # find nonempty files
-	    $rule->file,
-		 ->nonempty;
+	    $rule-&gtfile,
+		 -&gtnonempty;
 
        stat tests
 	   The following "stat" based methods are provided: "dev", "ino",
@@ -91,11 +93,11 @@ METHODS
 	   Each of these can take a number of targets, which will follow
 	   Number::Compare semantics.
 
-	    $rule->size( 7 );	      # exactly 7
-	    $rule->size( ">7Ki" );    # larger than 7 * 1024 * 1024 bytes
-	    $rule->size( ">=7" )
-		 ->size( "<=90" );    # between 7 and 90, inclusive
-	    $rule->size( 7, 9, 42 );  # 7, 9 or 42
+	    $rule-&gtsize( 7 );	      # exactly 7
+	    $rule-&gtsize( "&gt7Ki" );    # larger than 7 * 1024 * 1024 bytes
+	    $rule-&gtsize( "&gt=7" )
+		 -&gtsize( "&lt=90" );    # between 7 and 90, inclusive
+	    $rule-&gtsize( 7, 9, 42 );  # 7, 9 or 42
 
        "any( @rules )"
        "or( @rules )"
@@ -104,9 +106,9 @@ METHODS
 	   interchangeable.
 
 	    # find avis, movs, things over 200M and empty files
-	    $rule->any( File::Find::Rule->name( '*.avi', '*.mov' ),
-			File::Find::Rule->size( '>200M' ),
-			File::Find::Rule->file->empty,
+	    $rule-&gtany( File::Find::Rule-&gtname( '*.avi', '*.mov' ),
+			File::Find::Rule-&gtsize( '&gt200M' ),
+			File::Find::Rule-&gtfile-&gtempty,
 		      );
 
        "none( @rules )"
@@ -115,8 +117,8 @@ METHODS
 	   interchangeable.
 
 	     # files that aren't 8.3 safe
-	     $rule->file
-		  ->not( $rule->new->name( qr/^[^.]{1,8}(\.[^.]{0,3})?$/ ) );
+	     $rule-&gtfile
+		  -&gtnot( $rule-&gtnew-&gtname( qr/^[^.]{1,8}(\.[^.]{0,3})?$/ ) );
 
        "prune"
 	   Traverse no further.  This rule always matches.
@@ -132,7 +134,7 @@ METHODS
 	   Return a true value if your rule matched.
 
 	    # get things with long names
-	    $rules->exec( sub { length > 20 } );
+	    $rules-&gtexec( sub { length &gt 20 } );
 
        "grep( @specifiers )"
 	   Opens a file and tests it each line at a time.
@@ -140,13 +142,13 @@ METHODS
 	   For each line it evaluates each of the specifiers, stopping at the
 	   first successful match.  A specifier may be a regular expression or
 	   a subroutine.  The subroutine will be invoked with the same
-	   parameters as an ->exec subroutine.
+	   parameters as an -&gtexec subroutine.
 
 	   It is possible to provide a set of negative specifiers by enclosing
 	   them in anonymous arrays.  Should a negative specifier match the
 	   iteration is aborted and the clause is failed.  For example:
 
-	    $rule->grep( qr/^#!.*\bperl/, [ sub { 1 } ] );
+	    $rule-&gtgrep( qr/^#!.*\bperl/, [ sub { 1 } ] );
 
 	   Is a passing clause if the first line of a file looks like a perl
 	   shebang line.
@@ -169,7 +171,7 @@ METHODS
 	   For example this allows you to specify following of symlinks like
 	   so:
 
-	    my $rule = File::Find::Rule->extras({ follow => 1 });
+	    my $rule = File::Find::Rule-&gtextras({ follow =&gt 1 });
 
 	   May be invoked many times per rule, but only the most recent value
 	   is used.
@@ -181,9 +183,9 @@ METHODS
 	   Negated version of the rule.  An effective shortand related to ! in
 	   the procedural interface.
 
-	    $foo->not_name('*.pl');
+	    $foo-&gtnot_name('*.pl');
 
-	    $foo->not( $foo->new->name('*.pl' ) );
+	    $foo-&gtnot( $foo-&gtnew-&gtname('*.pl' ) );
 
    Query Methods
        "in( @directories )"
@@ -195,8 +197,8 @@ METHODS
 	   then be queried using "match".  This allows you to use a rule as an
 	   iterator.
 
-	    my $rule = File::Find::Rule->file->name("*.jpeg")->start( "/web" );
-	    while ( defined ( my $image = $rule->match ) ) {
+	    my $rule = File::Find::Rule-&gtfile-&gtname("*.jpeg")-&gtstart( "/web" );
+	    while ( defined ( my $image = $rule-&gtmatch ) ) {
 		...
 	    }
 
@@ -222,13 +224,13 @@ METHODS
 
    Further examples
        Finding perl scripts
-	    my $finder = File::Find::Rule->or
+	    my $finder = File::Find::Rule-&gtor
 	     (
-	      File::Find::Rule->name( '*.pl' ),
-	      File::Find::Rule->exec(
+	      File::Find::Rule-&gtname( '*.pl' ),
+	      File::Find::Rule-&gtexec(
 				     sub {
 					 if (open my $fh, $_) {
-					     my $shebang = <$fh>;
+					     my $shebang = &lt$fh&gt;
 					     close $fh;
 					     return $shebang =~ /^#!.*\bperl/;
 					 }
@@ -240,13 +242,13 @@ METHODS
 	   http://use.perl.org/comments.pl?sid=7052&cid=10842
 
        ignore CVS directories
-	    my $rule = File::Find::Rule->new;
-	    $rule->or($rule->new
-			   ->directory
-			   ->name('CVS')
-			   ->prune
-			   ->discard,
-		      $rule->new);
+	    my $rule = File::Find::Rule-&gtnew;
+	    $rule-&gtor($rule-&gtnew
+			   -&gtdirectory
+			   -&gtname('CVS')
+			   -&gtprune
+			   -&gtdiscard,
+		      $rule-&gtnew);
 
 	   Note here the use of a null rule.  Null rules match anything they
 	   see, so the effect is to match (and discard) directories called
@@ -266,7 +268,7 @@ TAINT MODE INTERACTION
        the "extras" feature to ask File::Find to internally "untaint" file
        paths with a regex like so:
 
-	   my $rule = File::Find::Rule->extras({ untaint => 1 });
+	   my $rule = File::Find::Rule-&gtextras({ untaint =&gt 1 });
 
        Please consult File::Find's documentation for "untaint",
        "untaint_pattern", and "untaint_skip" for more information.
@@ -279,7 +281,7 @@ BUGS
        this becomes a significant issue it will be addressed.
 
 AUTHOR
-       Richard Clamp <richardc@unixbeard.net> with input gained from this
+       Richard Clamp &ltrichardc@unixbeard.net&gt with input gained from this
        use.perl discussion: http://use.perl.org/~richardc/journal/6467
 
        Additional proofreading and input provided by Kake, Greg McCarroll, and
@@ -302,6 +304,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-09-19		   File::Find::Rule(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

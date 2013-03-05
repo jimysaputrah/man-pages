@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="If you're not familiar with objects from other languages, some of the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlboot - Beginner's Object-Oriented Tutorial</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLBOOT(1)	       Perl Programmers Reference Guide 	   PERLBOOT(1)
 
 
@@ -77,15 +79,15 @@ DESCRIPTION
        Or is it?
 
    Introducing the method invocation arrow
-       For now, let's say that "Class->method" invokes subroutine "method" in
+       For now, let's say that "Class-&gtmethod" invokes subroutine "method" in
        package "Class".  (Here, "Class" is used in its "category" meaning, not
        its "scholastic" meaning.) That's not completely accurate, but we'll do
        this one step at a time.  Now let's use it like so:
 
 	   # Cow::speak, Horse::speak, Sheep::speak as before
-	   Cow->speak;
-	   Horse->speak;
-	   Sheep->speak;
+	   Cow-&gtspeak;
+	   Horse-&gtspeak;
+	   Sheep-&gtspeak;
 
        And once again, this results in:
 
@@ -97,7 +99,7 @@ DESCRIPTION
        variables.  But yet, the parts are separable now.  Watch:
 
 	   $a = "Cow";
-	   $a->speak; # invokes Cow->speak
+	   $a-&gtspeak; # invokes Cow-&gtspeak
 
        Ahh!  Now that the package name has been parted from the subroutine
        name, we can use a variable package name.  And this time, we've got
@@ -119,7 +121,7 @@ DESCRIPTION
 
 	   @pasture = qw(Cow Cow Horse Sheep Sheep);
 	   foreach $animal (@pasture) {
-	     $animal->speak;
+	     $animal-&gtspeak;
 	   }
 
        There!  Now we have the animals all talking, and safely at that,
@@ -138,7 +140,7 @@ DESCRIPTION
    The extra parameter of method invocation
        The invocation of:
 
-	   Class->method(@args)
+	   Class-&gtmethod(@args)
 
        attempts to invoke subroutine "Class::method" as:
 
@@ -178,19 +180,19 @@ DESCRIPTION
 	     sub sound { "moooo" }
 	     sub speak {
 	       my $class = shift;
-	       print "a $class goes ", $class->sound, "!\n";
+	       print "a $class goes ", $class-&gtsound, "!\n";
 	     }
 	   }
 
-       Now, when we call "Cow->speak", we get a $class of "Cow" in "speak".
-       This in turn selects the "Cow->sound" method, which returns "moooo".
+       Now, when we call "Cow-&gtspeak", we get a $class of "Cow" in "speak".
+       This in turn selects the "Cow-&gtsound" method, which returns "moooo".
        But how different would this be for the "Horse"?
 
 	   { package Horse;
 	     sub sound { "neigh" }
 	     sub speak {
 	       my $class = shift;
-	       print "a $class goes ", $class->sound, "!\n";
+	       print "a $class goes ", $class-&gtsound, "!\n";
 	     }
 	   }
 
@@ -205,7 +207,7 @@ DESCRIPTION
 	   { package Animal;
 	     sub speak {
 	     my $class = shift;
-	     print "a $class goes ", $class->sound, "!\n";
+	     print "a $class goes ", $class-&gtsound, "!\n";
 	     }
 	   }
 
@@ -220,7 +222,7 @@ DESCRIPTION
        Note the added @ISA array (pronounced "is a").  We'll get to that in a
        minute.
 
-       But what happens when we invoke "Cow->speak" now?
+       But what happens when we invoke "Cow-&gtspeak" now?
 
        First, Perl constructs the argument list.  In this case, it's just
        "Cow".  Then Perl looks for "Cow::speak".  But that's not there, so
@@ -232,8 +234,8 @@ DESCRIPTION
        with the already frozen argument list.
 
        Inside the "Animal::speak" subroutine, $class becomes "Cow" (the first
-       argument).  So when we get to the step of invoking "$class->sound",
-       it'll be looking for "Cow->sound", which gets it on the first try
+       argument).  So when we get to the step of invoking "$class-&gtsound",
+       it'll be looking for "Cow-&gtsound", which gets it on the first try
        without looking at @ISA.  Success!
 
    A few notes about @ISA
@@ -287,20 +289,20 @@ DESCRIPTION
 	     sub sound { "squeak" }
 	     sub speak {
 	       my $class = shift;
-	       print "a $class goes ", $class->sound, "!\n";
+	       print "a $class goes ", $class-&gtsound, "!\n";
 	       print "[but you can barely hear it!]\n";
 	     }
 	   }
 
-	   Mouse->speak;
+	   Mouse-&gtspeak;
 
        which results in:
 
 	   a Mouse goes squeak!
 	   [but you can barely hear it!]
 
-       Here, "Mouse" has its own speaking routine, so "Mouse->speak" doesn't
-       immediately invoke "Animal->speak". This is known as "overriding". In
+       Here, "Mouse" has its own speaking routine, so "Mouse-&gtspeak" doesn't
+       immediately invoke "Animal-&gtspeak". This is known as "overriding". In
        fact, we don't even need to say that a "Mouse" is an "Animal" at all,
        because all of the methods needed for "speak" are completely defined
        for "Mouse"; this is known as "duck typing": "If it walks like a duck
@@ -333,19 +335,19 @@ DESCRIPTION
 	   }
 
        Note that we're using "Animal::speak". If we were to invoke
-       "Animal->speak" instead, the first parameter to "Animal::speak" would
+       "Animal-&gtspeak" instead, the first parameter to "Animal::speak" would
        automatically be "Animal" rather than "Mouse", so that the call to
-       "$class->sound" in "Animal::speak" would become "Animal->sound" rather
-       than "Mouse->sound".
+       "$class-&gtsound" in "Animal::speak" would become "Animal-&gtsound" rather
+       than "Mouse-&gtsound".
 
-       Also, without the method arrow "->", it becomes necessary to specify
+       Also, without the method arrow "-&gt", it becomes necessary to specify
        the first parameter to "Animal::speak" ourselves, which is why $class
        is explicitly passed: "Animal::speak($class)".
 
        However, invoking "Animal::speak" directly is a mess: Firstly, it
        assumes that the "speak" method is a member of the "Animal" class; what
        if "Animal" actually inherits "speak" from its own base? Because we are
-       no longer using "->" to access "speak", the special method look up
+       no longer using "-&gt" to access "speak", the special method look up
        mechanism wouldn't be used, so "speak" wouldn't even be found!
 
        The second problem is more subtle: "Animal" is now hardwired into the
@@ -363,9 +365,9 @@ DESCRIPTION
    Starting the search from a different place
        A better solution is to tell Perl where in the inheritance chain to
        begin searching for "speak". This can be achieved with a modified
-       version of the method arrow "->":
+       version of the method arrow "-&gt":
 
-	   ClassName->FirstPlaceToLook::method
+	   ClassName-&gtFirstPlaceToLook::method
 
        So, the improved "Mouse" class is:
 
@@ -374,7 +376,7 @@ DESCRIPTION
 	     # same @ISA, &sound as before
 	     sub speak {
 	       my $class = shift;
-	       $class->Animal::speak;
+	       $class-&gtAnimal::speak;
 	       print "[but you can barely hear it!]\n";
 	     }
 	   }
@@ -398,7 +400,7 @@ DESCRIPTION
 	     # same @ISA, &sound as before
 	     sub speak {
 	       my $class = shift;
-	       $class->SUPER::speak;
+	       $class-&gtSUPER::speak;
 	       print "[but you can barely hear it!]\n";
 	     }
 	   }
@@ -410,7 +412,7 @@ DESCRIPTION
 
        Note that a call such as
 
-	   $class->SUPER::method;
+	   $class-&gtSUPER::method;
 
        does not look in the @ISA of $class unless $class happens to be the
        current package.
@@ -418,12 +420,12 @@ DESCRIPTION
    Let's review...
        So far, we've seen the method arrow syntax:
 
-	 Class->method(@args);
+	 Class-&gtmethod(@args);
 
        or the equivalent:
 
 	 $a = "Class";
-	 $a->method(@args);
+	 $a-&gtmethod(@args);
 
        which constructs an argument list of:
 
@@ -451,7 +453,7 @@ DESCRIPTION
 	 { package Animal;
 	   sub speak {
 	     my $class = shift;
-	     print "a $class goes ", $class->sound, "!\n";
+	     print "a $class goes ", $class-&gtsound, "!\n";
 	   }
 	 }
 	 { package Horse;
@@ -459,7 +461,7 @@ DESCRIPTION
 	   sub sound { "neigh" }
 	 }
 
-       This lets us invoke "Horse->speak" to ripple upward to "Animal::speak",
+       This lets us invoke "Horse-&gtspeak" to ripple upward to "Animal::speak",
        calling back to "Horse::sound" to get the specific sound, and the
        output of:
 
@@ -497,7 +499,7 @@ DESCRIPTION
        The method arrow can be used on instances, as well as classes (the
        names of packages). So, let's get the sound that $horse makes:
 
-	 my $noise = $horse->sound("some", "unnecessary", "args");
+	 my $noise = $horse-&gtsound("some", "unnecessary", "args");
 
        To invoke "sound", Perl first notes that $horse is a blessed reference
        (and thus an instance).	It then constructs an argument list, as per
@@ -548,7 +550,7 @@ DESCRIPTION
 
        Then, the following line:
 
-	 print $horse->name, " says ", $horse->sound, "\n";
+	 print $horse-&gtname, " says ", $horse-&gtsound, "\n";
 
        outputs:
 
@@ -578,7 +580,7 @@ DESCRIPTION
 
        Now with the new "named" method, we can build a horse as follows:
 
-	 my $horse = Horse->named("Mr. Ed");
+	 my $horse = Horse-&gtnamed("Mr. Ed");
 
        Notice we're back to a class method, so the two arguments to
        "Horse::named" are "Horse" and "Mr. Ed".  The "bless" operator not only
@@ -604,7 +606,7 @@ DESCRIPTION
 	 { package Animal;
 	   sub speak {
 	     my $class = shift;
-	     print "a $class goes ", $class->sound, "!\n";
+	     print "a $class goes ", $class-&gtsound, "!\n";
 	   }
 	   sub name {
 	     my $self = shift;
@@ -623,8 +625,8 @@ DESCRIPTION
 
        Ahh, but what happens if we invoke "speak" on an instance?
 
-	 my $horse = Horse->named("Mr. Ed");
-	 $horse->speak;
+	 my $horse = Horse-&gtnamed("Mr. Ed");
+	 $horse-&gtspeak;
 
        We get a debugging value:
 
@@ -652,15 +654,15 @@ DESCRIPTION
        class.  Note that I've changed the first parameter holder to $either to
        show that this is intended:
 
-	 my $horse = Horse->named("Mr. Ed");
-	 print Horse->name, "\n"; # prints "Any Horse\n"
-	 print $horse->name, "\n"; # prints "Mr Ed.\n"
+	 my $horse = Horse-&gtnamed("Mr. Ed");
+	 print Horse-&gtname, "\n"; # prints "Any Horse\n"
+	 print $horse-&gtname, "\n"; # prints "Mr Ed.\n"
 
        and now we'll fix "speak" to use this:
 
 	 sub speak {
 	   my $either = shift;
-	   print $either->name, " goes ", $either->sound, "\n";
+	   print $either-&gtname, " goes ", $either-&gtsound, "\n";
 	 }
 
        And since "sound" already worked with either a class or an instance,
@@ -681,12 +683,12 @@ DESCRIPTION
 	   }
 	   sub speak {
 	     my $either = shift;
-	     print $either->name, " goes ", $either->sound, "\n";
+	     print $either-&gtname, " goes ", $either-&gtsound, "\n";
 	   }
 	   sub eat {
 	     my $either = shift;
 	     my $food = shift;
-	     print $either->name, " eats $food.\n";
+	     print $either-&gtname, " eats $food.\n";
 	   }
 	 }
 	 { package Horse;
@@ -700,9 +702,9 @@ DESCRIPTION
 
        And now try it out:
 
-	 my $horse = Horse->named("Mr. Ed");
-	 $horse->eat("hay");
-	 Sheep->eat("grass");
+	 my $horse = Horse-&gtnamed("Mr. Ed");
+	 $horse-&gteat("hay");
+	 Sheep-&gteat("grass");
 
        which prints:
 
@@ -729,10 +731,10 @@ DESCRIPTION
 
        Let's make a sheep that has a name and a color:
 
-	 my $bad = bless { Name => "Evil", Color => "black" }, Sheep;
+	 my $bad = bless { Name =&gt "Evil", Color =&gt "black" }, Sheep;
 
-       so "$bad->{Name}" has "Evil", and "$bad->{Color}" has "black".  But we
-       want to make "$bad->name" access the name, and that's now messed up
+       so "$bad-&gt{Name}" has "Evil", and "$bad-&gt{Color}" has "black".  But we
+       want to make "$bad-&gtname" access the name, and that's now messed up
        because it's expecting a scalar reference.  Not to worry, because
        that's pretty easy to fix up.
 
@@ -748,12 +750,12 @@ DESCRIPTION
 	 ## in Animal
 	 sub name {
 	   my $either = shift;
-	   ref $either ? $either->{Name} : "Any $either";
+	   ref $either ? $either-&gt{Name} : "Any $either";
 	 }
 	 sub named {
 	   my $class = shift;
 	   my $name = shift;
-	   my $self = { Name => $name };
+	   my $self = { Name =&gt $name };
 	   bless $self, $class;
 	 }
 
@@ -763,8 +765,8 @@ DESCRIPTION
 	 ## in Sheep
 	 sub named {
 	   my ($class, $name) = @_;
-	   my $self = $class->SUPER::named(@_);
-	   $$self{Color} = $class->default_color;
+	   my $self = $class-&gtSUPER::named(@_);
+	   $$self{Color} = $class-&gtdefault_color;
 	   $self
 	 }
 
@@ -779,8 +781,8 @@ DESCRIPTION
 
        Now:
 
-	 my $sheep = Sheep->named("Bad");
-	 print $sheep->{Color}, "\n";
+	 my $sheep = Sheep-&gtnamed("Bad");
+	 print $sheep-&gt{Color}, "\n";
 
        outputs:
 
@@ -793,7 +795,7 @@ DESCRIPTION
 	 ## in Animal
 	 sub named {
 	   my ($class, $name) = @_;
-	   my $self = { Name => $name, Color => $class->default_color };
+	   my $self = { Name =&gt $name, Color =&gt $class-&gtdefault_color };
 	   bless $self, $class;
 	 }
 
@@ -814,10 +816,10 @@ DESCRIPTION
 
 	 ## in Animal
 	 sub color {
-	   $_[0]->{Color}
+	   $_[0]-&gt{Color}
 	 }
 	 sub set_color {
-	   $_[0]->{Color} = $_[1];
+	   $_[0]-&gt{Color} = $_[1];
 	 }
 
        Note the alternate way of accessing the arguments: $_[0] is used in-
@@ -825,9 +827,9 @@ DESCRIPTION
        something that may be invoked frequently.)  And now we can fix that
        color for Mr. Ed:
 
-	 my $horse = Horse->named("Mr. Ed");
-	 $horse->set_color("black-and-white");
-	 print $horse->name, " is colored ", $horse->color, "\n";
+	 my $horse = Horse-&gtnamed("Mr. Ed");
+	 $horse-&gtset_color("black-and-white");
+	 print $horse-&gtname, " is colored ", $horse-&gtcolor, "\n";
 
        which results in:
 
@@ -875,6 +877,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-05-14			   PERLBOOT(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

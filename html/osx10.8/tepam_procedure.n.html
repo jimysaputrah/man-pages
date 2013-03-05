@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This  package provides an alternative way to declare Tcl procedures and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>tepam::procedure - TEPAM procedure, reference manual</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 tepam::procedure(Tcl's Enhanced Procedure and Argument Manatepam::procedure(n)
 
 
@@ -324,28 +326,28 @@ PROCEDURE DECLARATION
        So, each of the procedure arguments is declared with a list that has as
        first  element  the argument name, followed by eventual attributes. The
        argument definition syntax can be formalized in the following way:
-       tepam::procedure <name> {
+       tepam::procedure &ltname&gt {
 	  -args {
-	     {<argument_name_1> <arg_attr_name_1a> <arg_attr_data_1a> \
-				<arg_attr_name_1b> <arg_attr_data_1b> ...}
-	     {<argument_name_2> <arg_attr_name_2a> <arg_attr_data_2a> \
-				<arg_attr_name_2b> <arg_attr_data_2b> ...}
+	     {&ltargument_name_1&gt &ltarg_attr_name_1a&gt &ltarg_attr_data_1a&gt \
+				&ltarg_attr_name_1b&gt &ltarg_attr_data_1b&gt ...}
+	     {&ltargument_name_2&gt &ltarg_attr_name_2a&gt &ltarg_attr_data_2a&gt \
+				&ltarg_attr_name_2b&gt &ltarg_attr_data_2b&gt ...}
 	     ...
 	  }
-       } <body>
+       } &ltbody&gt
        The argument names and attributes have to be used in the following way:
 
-       Argument name (<argument_name_<n>>)
+       Argument name (&ltargument_name_&ltn&gt&gt)
 	      The  provided  argument  name  specifies	if  the argument is an
 	      unnamed argument or a  named  argument/option.  In  addition  to
 	      this, an argument name can also be blank to indicate an argument
 	      comment, or it can start with # to indicate a section comment.
 
-	      "<Name>"
+	      "&ltName&gt"
 		     This is the simplest form of an argument name:  An  argu-
 		     ment  whose  name	is not starting with '-' is an unnamed
 		     argument. The parameter provided during a procedure  call
-		     will be assigned to a variable with the name <Name>.
+		     will be assigned to a variable with the name &ltName&gt.
 		     tepam::procedure {print_string} {
 			-args {
 			   {text -type string -description "This is an unnamed argument"}
@@ -355,13 +357,13 @@ PROCEDURE DECLARATION
 		     }
 
 		     print_string "Hello"
-		      -> Hello
+		      -&gt Hello
 
-	      "-<Name>"
+	      "-&ltName&gt"
 		     An  argument  whose name starts with '-' is a named argu-
 		     ment (also called option). The parameter provided	during
 		     a	procedure call will be assigned to a variable with the
-		     name <Name> (not -<Name>).
+		     name &ltName&gt (not -&ltName&gt).
 		     tepam::procedure {print_string} {
 			-args {
 			   {-text -type string -description "This is a named argument"}
@@ -371,7 +373,7 @@ PROCEDURE DECLARATION
 		     }
 
 		     print_string -text "Hello"
-		      -> Hello
+		      -&gt Hello
 
 	      "--"   This flag allows clearly specifying the end of the  named
 		     arguments and the begin of the unnamed arguments, in case
@@ -429,7 +431,7 @@ PROCEDURE DECLARATION
 			return [expr $r0*$r1 - $i0*$i1]
 		     }
 
-       Argument attributes (<arg_attr_name_<mn>> <arg_attr_data_<mn>>)
+       Argument attributes (&ltarg_attr_name_&ltmn&gt&gt &ltarg_attr_data_&ltmn&gt&gt)
 	      The following argument attributes are supported:
 
 	      -description string
@@ -530,8 +532,8 @@ PROCEDURE DECLARATION
 		     argument attributes can be provided  to  the  interactive
 		     argument  definition form via the -auxargs attribute that
 		     is itself a list of attribute name/attribute data pairs:
-		     -auxargs {-<arg_attr_name_1a> <arg_attr_data_1a> \
-			       -<arg_attr_name_1b> <arg_attr_data_1b>
+		     -auxargs {-&ltarg_attr_name_1a&gt &ltarg_attr_data_1a&gt \
+			       -&ltarg_attr_name_1b&gt &ltarg_attr_data_1b&gt
 			       ...
 		     }
 		     For example, if a procedure takes as argument a file name
@@ -555,8 +557,8 @@ PROCEDURE DECLARATION
 		     attribute names and commands have to be provided  to  the
 		     -auxargs_commands	attribute.  The  provided commands are
 		     executed in the context of the calling procedure.
-		     -auxargs_commands {-<arg_attr_name_1a> <arg_attr_command_1a> \
-					-<arg_attr_name_1b> <arg_attr_command_1b>
+		     -auxargs_commands {-&ltarg_attr_name_1a&gt &ltarg_attr_command_1a&gt \
+					-&ltarg_attr_name_1b&gt &ltarg_attr_command_1b&gt
 					...
 		     }
 
@@ -658,10 +660,10 @@ ARGUMENT TYPES
 	      }
 
 	      flag_test
-	      -> 0
+	      -&gt 0
 
 	      flag_test -flag
-	      -> 1
+	      -&gt 1
 
 	      Since  no  argument  data  has to be provided to a flag, also no
 	      data checks are performed for this argument type.
@@ -684,12 +686,12 @@ ARGUMENT TYPES
 
 
        Several numerical types are defined by TEPAM. The type validation  pro-
-       cedures	are  not using only the string is <type> commands to check the
+       cedures	are  not using only the string is &lttype&gt commands to check the
        validity of the provided arguments, but they assure also that no  empty
-       strings	are  provided  as argument data (the string is <type> commands
+       strings	are  provided  as argument data (the string is &lttype&gt commands
        are considering an empty string as a valid  numerical  parameter).  The
        common type validation expression is therefore:
-       expr [string length <argument_data>]>0 && [string is <type_to_check> <argument_data>]
+       expr [string length &ltargument_data&gt]&gt0 && [string is &lttype_to_check&gt &ltargument_data&gt]
 
        o      boolean
 
@@ -702,7 +704,7 @@ ARGUMENT TYPES
 
        The  verification of all alpha numeric types is directly performed with
        the standard Tcl string type verification command:
-       string is <type_to_check> <argument_data>
+       string is &lttype_to_check&gt &ltargument_data&gt
        The following types are verified in this way:
 
        o      alnum
@@ -745,14 +747,14 @@ ARGUMENT TYPES
 
 
 
-       In addition to the data types checked with the string  is  <type>  com-
+       In addition to the data types checked with the string  is  &lttype&gt  com-
        mands, TEPAM specifies some other useful data types:
 
        o      char
 
 	      Each string that has a length of 1 character meets the character
 	      type. The type check is made with the following expression:
-	      expr [string length <argument_data>]==1
+	      expr [string length &ltargument_data&gt]==1
 
        o      color
 
@@ -760,7 +762,7 @@ ARGUMENT TYPES
 	      considered  as  valid  color  argument.  Please note that the Tk
 	      package has to be loaded to use the color type. TEPAM  is  using
 	      the following command to validate the color type:
-	      expr ![catch {winfo rgb . <argument_data>}]
+	      expr ![catch {winfo rgb . &ltargument_data&gt}]
 
        o      font
 
@@ -768,24 +770,24 @@ ARGUMENT TYPES
 	      sidered as valid font argument. Please note that the Tk  package
 	      uas  to  be loaded to use the font type. TEPAM is using the fol-
 	      lowing command to validate the color type:
-	      expr ![catch {font measure <argument_data> ""}]
+	      expr ![catch {font measure &ltargument_data&gt ""}]
 
        o      file
 
 	      Any strings that are not containing one of the following charac-
-	      ters  are  considered  as  valid file name: * ? " < >. It is not
+	      ters  are  considered  as  valid file name: * ? " &lt &gt. It is not
 	      necessary that the file or its containing directory is existing.
 	      Zero-length strings are not considered as valid file names.
 
 	      The following expression is used to validate the file names:
-	      expr [string length <argument_data>]>0 && ![regexp {[\"*?<>:]} <argument_data>]
+	      expr [string length &ltargument_data&gt]&gt0 && ![regexp {[\"*?&lt&gt:]} &ltargument_data&gt]
 
        o      existingfile
 
 	      The  argument  is valid if it matches with an existing file. The
 	      following check is performed to validate the arguments  of  this
 	      type:
-	      file exists <argument_data>
+	      file exists &ltargument_data&gt
 
        o      directory
 
@@ -797,13 +799,13 @@ ARGUMENT TYPES
 	      The argument is valid if it matches with an existing  directory.
 	      The  following  check  is performed to validate the arguments of
 	      this type:
-	      file isdirectory <argument_data>
+	      file isdirectory &ltargument_data&gt
 
 
    DEFINING APPLICATION SPECIFIC ARGUMENT TYPES
        Nothing is easier than adding support for a  new  application  specific
        argument  type.	It is just necessary to add into the namespace tepam a
-       validation function Validation(<type>) that has one argument  and  that
+       validation function Validation(&lttype&gt) that has one argument  and  that
        returns 1 if the provided argument matches with the relevant data type.
        The function has to return otherwise 0.
 
@@ -825,14 +827,14 @@ PROCEDURE CALLS
        Taking the first  procedure  declared  in  PROCEDURE  CALLS,  the  help
        request and the printed help text would be:
        display message -help
-       ->
+       -&gt
        NAME
 	     display message - Displays a simple message box
        SYNOPSIS
 	     display message
-		   [-mtype <mtype>]
+		   [-mtype &ltmtype&gt]
 		      Message type, default: "Warning", choices: {Info, Warning, Error}
-		   <text>
+		   &lttext&gt
 		      Multiple text lines to display, type: string
        DESCRIPTION
 	     This procedure allows displaying a configurable message box. The default
@@ -847,7 +849,7 @@ PROCEDURE CALLS
        display message -mtype Info "It is 7:00" -help
        On the other hand, the following call will result in an error:
        display message -help -mtype Info "It is 7:00"
-       ->
+       -&gt
        display message: Argument '-help' not known
 
    INTERACTIVE PROCEDURE CALL
@@ -880,24 +882,24 @@ PROCEDURE CALLS
 	  puts "$mtype: [join $text]"
        }
        display_message Info "It is PM 7:00."
-       -> Info: It is PM 7:00.
+       -&gt Info: It is PM 7:00.
 
        display_message Info "It is PM 7:00." "You should go home."
-       -> Info: It is PM 7:00. You should go home.
+       -&gt Info: It is PM 7:00. You should go home.
        The  nice  thing  is that unnamed arguments can also be called as named
        arguments, which can be handy, for example if the exact specified argu-
        ment order is not known to a user:
        display_message -mtype Info -text "It is PM 7:00."
-       -> Info: It is PM 7:00.
+       -&gt Info: It is PM 7:00.
 
        display_message -text "It is PM 7:00." -mtype Info
-       -> Info: It is PM 7:00.
+       -&gt Info: It is PM 7:00.
 
        display_message -mtype Info -text "It is PM 7:00." -text "You should go home."
-       -> Info: It is PM 7:00. You should go home.
+       -&gt Info: It is PM 7:00. You should go home.
 
        display_message -text "It is PM 7:00." -text "You should go home." -mtype Info
-       -> Info: It is PM 7:00. You should go home.
+       -&gt Info: It is PM 7:00. You should go home.
 
    NAMED ARGUMENTS
        Named arguments have to be provided to a procedure in form of a parame-
@@ -915,21 +917,21 @@ PROCEDURE CALLS
 	  puts "$mtype: [join $text]"
        }
        display_message -mtype Info -text "It is PM 7:00."
-       -> Info: It is PM 7:00.
+       -&gt Info: It is PM 7:00.
 
        display_message -text "It is PM 7:00." -mtype Info
-       -> Info: It is PM 7:00.
+       -&gt Info: It is PM 7:00.
 
        display_message -mtype Info -text "It is PM 7:00." -text "You should go home."
-       -> Info: It is PM 7:00. You should go home.
+       -&gt Info: It is PM 7:00. You should go home.
 
        display_message -text "It is PM 7:00." -text "You should go home." -mtype Info
-       -> Info: It is PM 7:00. You should go home.
+       -&gt Info: It is PM 7:00. You should go home.
        Also named arguments that have not the -multiple attribute can be  pro-
        vided  multiple times. Only the last provided argument will be retained
        in such a case:
        display_message -mtype Info -text "It is PM 7:00." -mtype Warning
-       -> Warning: It is PM 7:00.
+       -&gt Warning: It is PM 7:00.
 
    UNNAMED ARGUMENTS FIRST, NAMED ARGUMENTS LATER (TK STYLE)
        A procedure that has been defined while the variable tepam::named_argu-
@@ -951,38 +953,38 @@ PROCEDURE CALLS
        The unnamed arguments are placed at the end of  procedure  call,  after
        the named arguments:
        my_proc -n1 N1 -n2 N2 U1 U2
-       -> n1:'N1', n2:'N2', u1:'U1', u2:'U2'
+       -&gt n1:'N1', n2:'N2', u1:'U1', u2:'U2'
        The  argument  parser  considers  the first argument that doesn't start
        with the '-' character as well as all following	arguments  as  unnamed
        argument:
        my_proc U1 U2
-       -> n1:'', n2:'', u1:'U1', u2:'U2'
+       -&gt n1:'', n2:'', u1:'U1', u2:'U2'
        Named  arguments  can  be defined multiple times. If the named argument
        has the -multiply attribute, all argument data will be collected  in  a
        list.  Otherwise,  only	the  last  provided  attribute	data  will  be
        retained:
        my_proc -n1 N1 -n2 N2 -n1 M1 U1 U2
-       -> n1:'M1', n2:'N2', u1:'U1', u2:'U2'
+       -&gt n1:'M1', n2:'N2', u1:'U1', u2:'U2'
        The name of the first unnamed argument has therefore not to start  with
        the '-' character. The unnamed argument is otherwise considered as name
        of another named argument. This is especially important	if  the  first
        unnamed	argument is given by a variable that can contain any character
        strings:
-       my_proc -n1 N1 -n2 N2 "->" "<-"
-       -> my_proc: Argument '->' not known
+       my_proc -n1 N1 -n2 N2 "-&gt" "&lt-"
+       -&gt my_proc: Argument '-&gt' not known
 
-       set U1 "->"
+       set U1 "-&gt"
        my_proc -n1 N1 -n2 N2 $U1 U2}]
-       my_proc: Argument '->' not known
+       my_proc: Argument '-&gt' not known
        The '--' flag allows separating	unambiguously  the  unnamed  arguments
        from  the named arguments. All data after the '--' flag will be consid-
        ered as unnamed argument:
-       my_proc -n1 N1 -n2 N2 -- "->" "<-"
-       -> n1:'N1', n2:'N2', u1:'->', u2:'<-'
+       my_proc -n1 N1 -n2 N2 -- "-&gt" "&lt-"
+       -&gt n1:'N1', n2:'N2', u1:'-&gt', u2:'&lt-'
 
-       set U1 "->"
+       set U1 "-&gt"
        my_proc -n1 N1 -n2 N2 -- $U1 U2
-       -> n1:'N1', n2:'N2', u1:'->', u2:'<-'
+       -&gt n1:'N1', n2:'N2', u1:'-&gt', u2:'&lt-'
 
    NAMED ARGUMENTS FIRST, UNNAMED ARGUMENTS LATER (TCL STYLE)
        The Tk calling style is selected when a procedure is defined while  the
@@ -1004,7 +1006,7 @@ PROCEDURE CALLS
        The unnamed arguments have to be provided first in this case. The named
        arguments are provided afterwards:
        my_proc U1 U2 -n1 N1 -n2 N2
-       -> n1:'N1', n1:'N1', u1:'U1', u2:'U2'
+       -&gt n1:'N1', n1:'N1', u1:'U1', u2:'U2'
        The  argument  parser  will  assign to each defined unnamed argument an
        argument data before it switches to  read  the  named  arguments.  This
        default	behavior changes a bit if there are unnamed arguments that are
@@ -1031,50 +1033,50 @@ PROCEDURE CALLS
        without any parameters, which leads to an error since u1 is a mandatory
        argument:
        my_proc
-       -> my_proc: Required argument is missing: u1
+       -&gt my_proc: Required argument is missing: u1
        The procedure call is valid if one parameter is provided for u1:
        my_proc U1
-       -> n1:'', n2:'', u1:'U1', u2:''
+       -&gt n1:'', n2:'', u1:'U1', u2:''
        When  more  parameters  are provided that are not starting with the '-'
        character, then they will be attributed to the  unnamed	arguments.  U2
        will receive 3 of these parameters, since it accepts multiple values:
        my_proc U1 U2 U3 U4
-       -> n1:'', n2:'', u1:'U1', u2:'U2 U3 U4'
+       -&gt n1:'', n2:'', u1:'U1', u2:'U2 U3 U4'
        As soon as one parameter starts with '-' and all unnamed arguments have
        been served, the argument manager tries to interpret the  parameter  as
        name  of  a  named argument. The procedure call will fail if the intend
        was to attribute the parameter beginning with '-' to an	unnamed  argu-
        ment:
        my_proc U1 U2 U3 U4 -U5
-       -> my_proc: Argument '-U5' not known
+       -&gt my_proc: Argument '-U5' not known
        The  attribution  of a parameter to a named argument will fail if there
        are undefined unnamed (non optional) arguments. The name  specification
        will in this case simply be considered as a parameter value that is at-
        tributed to the next unnamed  argument.	This  was  certainly  not  the
        intention in the following example:
        my_proc -n1 N1
-       -> n1:'', n2:'', u1:'-n1', u2:'N1'
+       -&gt n1:'', n2:'', u1:'-n1', u2:'N1'
        The  situation  is completely different if values have already been at-
        tributed to all mandatory unnamed arguments. A parameter beginning with
        the  '-' character will in this case be considered as a name identifier
        for a named argument:
        my_proc U1 -n1 N1
-       -> n1:'N1', n2:'', u1:'U1', u2:''
+       -&gt n1:'N1', n2:'', u1:'U1', u2:''
        No unnamed arguments are allowed behind the named arguments:
        my_proc U1 -n1 N1 U2
-       -> my_proc: Argument 'U2' is not an option
+       -&gt my_proc: Argument 'U2' is not an option
        The '--' flag has no special meaning if	not  all  mandatory  arguments
        have  got  assigned a value. This flag will simply be attributed to one
        of the unnamed arguments:
        my_proc -- -n1 N1
-       -> n1:'N1', n2:'', u1:'--', u2:''
+       -&gt n1:'N1', n2:'', u1:'--', u2:''
        But the '--' flag is simply ignored if the argument parser has  started
        to handle the named arguments:
        my_proc U1 -- -n1 N1
-       -> n1:'N1', n2:'', u1:'U1', u2:''
+       -&gt n1:'N1', n2:'', u1:'U1', u2:''
 
        my_proc U1 -n1 N1 -- -n2 N2
-       -> n1:'N1', n2:'N2', u1:'U1', u2:''
+       -&gt n1:'N1', n2:'N2', u1:'U1', u2:''
 
    RAW ARGUMENT LIST
        It may be necessary sometimes that the procedure body is able to access
@@ -1091,7 +1093,7 @@ PROCEDURE CALLS
 	  puts "args: $args"
        }
        display_message -mtype Warning "It is 7:00"
-       -> args: -mtype Warning {It is 7:00}
+       -&gt args: -mtype Warning {It is 7:00}
 
 SEE ALSO
        tepam_introduction(n), tepam_procedure(n)
@@ -1110,6 +1112,6 @@ COPYRIGHT
 
 
 tepam				     0.1.0		   tepam::procedure(n)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

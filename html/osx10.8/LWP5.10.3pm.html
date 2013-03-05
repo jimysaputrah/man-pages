@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The libwww-perl collection is a set of Perl modules which provides a..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>LWP - The World-Wide Web library for Perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 LWP(3)		      User Contributed Perl Documentation		LWP(3)
 
 
@@ -69,7 +71,7 @@ HTTP STYLE COMMUNICATION
        section tries to describe what that means.
 
        Let us start with this quote from the HTTP specification document
-       <URL:http://www.w3.org/pub/WWW/Protocols/>:
+       &ltURL:http://www.w3.org/pub/WWW/Protocols/&gt:
 
        o  The HTTP protocol is based on a request/response paradigm. A client
 	  establishes a connection with a server and sends a request to the
@@ -185,10 +187,10 @@ HTTP STYLE COMMUNICATION
 	  address will be sent to the servers with every request.
 
        o  The parse_head specifies whether we should initialize response
-	  headers from the <head> section of HTML documents.
+	  headers from the &lthead&gt section of HTML documents.
 
        o  The proxy and no_proxy attributes specify if and when to go through
-	  a proxy server. <URL:http://www.w3.org/pub/WWW/Proxies/>
+	  a proxy server. &ltURL:http://www.w3.org/pub/WWW/Proxies/&gt
 
        o  The credentials provide a way to set up user names and passwords
 	  needed to access certain services.
@@ -203,23 +205,23 @@ HTTP STYLE COMMUNICATION
 
 	 # Create a user agent object
 	 use LWP::UserAgent;
-	 my $ua = LWP::UserAgent->new;
-	 $ua->agent("MyApp/0.1 ");
+	 my $ua = LWP::UserAgent-&gtnew;
+	 $ua-&gtagent("MyApp/0.1 ");
 
 	 # Create a request
-	 my $req = HTTP::Request->new(POST => 'http://search.cpan.org/search');
-	 $req->content_type('application/x-www-form-urlencoded');
-	 $req->content('query=libwww-perl&mode=dist');
+	 my $req = HTTP::Request-&gtnew(POST =&gt 'http://search.cpan.org/search');
+	 $req-&gtcontent_type('application/x-www-form-urlencoded');
+	 $req-&gtcontent('query=libwww-perl&mode=dist');
 
 	 # Pass request to the user agent and get a response back
-	 my $res = $ua->request($req);
+	 my $res = $ua-&gtrequest($req);
 
 	 # Check the outcome of the response
-	 if ($res->is_success) {
-	     print $res->content;
+	 if ($res-&gtis_success) {
+	     print $res-&gtcontent;
 	 }
 	 else {
-	     print $res->status_line, "\n";
+	     print $res-&gtstatus_line, "\n";
 	 }
 
        The $ua is created once when the application starts up.	New request
@@ -230,9 +232,9 @@ NETWORK SUPPORT
        methods that headers may be used for each.
 
        For all requests, a "User-Agent" header is added and initialized from
-       the $ua->agent attribute before the request is handed to the network
+       the $ua-&gtagent attribute before the request is handed to the network
        layer.  In the same way, a "From" header is initialized from the
-       $ua->from attribute.
+       $ua-&gtfrom attribute.
 
        For all responses, the library adds a header called "Client-Date".
        This header holds the time when the response was received by your
@@ -256,7 +258,7 @@ NETWORK SUPPORT
        None-Match" header to make the request conditional.
 
        For a POST request you should add the "Content-Type" header.  When you
-       try to emulate HTML <FORM> handling you should usually let the value of
+       try to emulate HTML &ltFORM&gt handling you should usually let the value of
        the "Content-Type" header be "application/x-www-form-urlencoded".  See
        lwpcook for examples of this.
 
@@ -320,8 +322,8 @@ NETWORK SUPPORT
 
        Example:
 
-	 $req = HTTP::Request->new(GET => 'ftp://me:passwd@ftp.some.where.com/');
-	 $req->header(Accept => "text/html, */*;q=0.1");
+	 $req = HTTP::Request-&gtnew(GET =&gt 'ftp://me:passwd@ftp.some.where.com/');
+	 $req-&gtheader(Accept =&gt "text/html, */*;q=0.1");
 
    News Requests
        Access to the USENET News system is implemented through the NNTP
@@ -337,12 +339,12 @@ NETWORK SUPPORT
 
        Examples:
 
-	 $req = HTTP::Request->new(GET => 'news:abc1234@a.sn.no');
+	 $req = HTTP::Request-&gtnew(GET =&gt 'news:abc1234@a.sn.no');
 
-	 $req = HTTP::Request->new(POST => 'news:comp.lang.perl.test');
-	 $req->header(Subject => 'This is a test',
-		      From    => 'me@some.where.org');
-	 $req->content(<<EOT);
+	 $req = HTTP::Request-&gtnew(POST =&gt 'news:comp.lang.perl.test');
+	 $req-&gtheader(Subject =&gt 'This is a test',
+		      From    =&gt 'me@some.where.org');
+	 $req-&gtcontent(&lt&ltEOT);
 	 This is the content of the message that we are sending to
 	 the world.
 	 EOT
@@ -359,7 +361,7 @@ NETWORK SUPPORT
 
        Example:
 
-	 $req = HTTP::Request->new(GET => 'gopher://gopher.sn.no/');
+	 $req = HTTP::Request-&gtnew(GET =&gt 'gopher://gopher.sn.no/');
 
    File Request
        The library supports GET and HEAD methods for file requests.  The "If-
@@ -373,7 +375,7 @@ NETWORK SUPPORT
 
        Example:
 
-	 $req = HTTP::Request->new(GET => 'file:/etc/passwd');
+	 $req = HTTP::Request-&gtnew(GET =&gt 'file:/etc/passwd');
 
    Mailto Request
        You can send (aka "POST") mail messages using the library.  All headers
@@ -382,9 +384,9 @@ NETWORK SUPPORT
 
        Example:
 
-	 $req = HTTP::Request->new(POST => 'mailto:libwww@perl.org');
-	 $req->header(Subject => "subscribe");
-	 $req->content("Please subscribe me to the libwww-perl mailing list!\n");
+	 $req = HTTP::Request-&gtnew(POST =&gt 'mailto:libwww@perl.org');
+	 $req-&gtheader(Subject =&gt "subscribe");
+	 $req-&gtcontent("Please subscribe me to the libwww-perl mailing list!\n");
 
    CPAN Requests
        URLs with scheme "cpan:" are redirected to the a suitable CPAN mirror.
@@ -400,7 +402,7 @@ NETWORK SUPPORT
 
        Example request to download the newest perl:
 
-	 $req = HTTP::Request->new(GET => "cpan:src/latest.tar.gz");
+	 $req = HTTP::Request-&gtnew(GET =&gt "cpan:src/latest.tar.gz");
 
 OVERVIEW OF CLASSES AND PACKAGES
        This table should give you a quick overview of the classes provided by
@@ -438,7 +440,7 @@ OVERVIEW OF CLASSES AND PACKAGES
 	HTTP::Date	   -- Date parsing module for HTTP date formats
 	HTTP::Negotiate    -- HTTP content negotiation calculation
 	File::Listing	   -- Parse directory listings
-	HTML::Form	   -- Processing for <form>s in HTML documents
+	HTML::Form	   -- Processing for &ltform&gts in HTML documents
 
 MORE DOCUMENTATION
        All modules contain detailed information on the interfaces they
@@ -521,12 +523,12 @@ AVAILABILITY
 
 	 http://github.com/gisle/libwww-perl
 
-       The best place to discuss this code is on the <libwww@perl.org> mailing
+       The best place to discuss this code is on the &ltlibwww@perl.org&gt mailing
        list.
 
 
 
 perl v5.10.1			  2010-09-20				LWP(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

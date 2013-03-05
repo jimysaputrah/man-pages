@@ -3,41 +3,43 @@
     <head>
         <meta name="description" content="This is an SQL to OO mapper with an object API inspired by Class::DBI..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class - Extensible and flexible object <-> relational mapper.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class(3)	      User Contributed Perl Documentation	DBIx::Class(3)
 
 
 
 NAME
-       DBIx::Class - Extensible and flexible object <-> relational mapper.
+       DBIx::Class - Extensible and flexible object &lt-&gt relational mapper.
 
 GETTING HELP/SUPPORT
        The community can be found via:
 
-       o   Web Site: http://www.dbix-class.org/ <http://www.dbix-class.org/>
+       o   Web Site: http://www.dbix-class.org/ &lthttp://www.dbix-class.org/&gt
 
        o   IRC: irc.perl.org#dbix-class
 
        o   Mailing list: http://lists.scsys.co.uk/mailman/listinfo/dbix-class
-	   <http://lists.scsys.co.uk/mailman/listinfo/dbix-class>
+	   &lthttp://lists.scsys.co.uk/mailman/listinfo/dbix-class&gt
 
        o   RT Bug Tracker:
 	   https://rt.cpan.org/Dist/Display.html?Queue=DBIx-Class
-	   <https://rt.cpan.org/Dist/Display.html?Queue=DBIx-Class>
+	   &lthttps://rt.cpan.org/Dist/Display.html?Queue=DBIx-Class&gt
 
        o   gitweb:
 	   http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=dbsrgits/DBIx-Class.git
-	   <http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=dbsrgits/DBIx-
-	   Class.git>
+	   &lthttp://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=dbsrgits/DBIx-
+	   Class.git&gt
 
        o   git: git://git.shadowcat.co.uk/dbsrgits/DBIx-Class.git
-	   <git://git.shadowcat.co.uk/dbsrgits/DBIx-Class.git>
+	   &ltgit://git.shadowcat.co.uk/dbsrgits/DBIx-Class.git&gt
 
-       o   twitter <http://www.twitter.com/dbix_class>
+       o   twitter &lthttp://www.twitter.com/dbix_class&gt
 
 SYNOPSIS
        Create a schema class called MyApp/Schema.pm:
@@ -45,7 +47,7 @@ SYNOPSIS
 	 package MyApp::Schema;
 	 use base qw/DBIx::Class::Schema/;
 
-	 __PACKAGE__->load_namespaces();
+	 __PACKAGE__-&gtload_namespaces();
 
 	 1;
 
@@ -57,10 +59,10 @@ SYNOPSIS
 	 package MyApp::Schema::Result::Artist;
 	 use base qw/DBIx::Class::Core/;
 
-	 __PACKAGE__->table('artist');
-	 __PACKAGE__->add_columns(qw/ artistid name /);
-	 __PACKAGE__->set_primary_key('artistid');
-	 __PACKAGE__->has_many(cds => 'MyApp::Schema::Result::CD', 'artistid');
+	 __PACKAGE__-&gttable('artist');
+	 __PACKAGE__-&gtadd_columns(qw/ artistid name /);
+	 __PACKAGE__-&gtset_primary_key('artistid');
+	 __PACKAGE__-&gthas_many(cds =&gt 'MyApp::Schema::Result::CD', 'artistid');
 
 	 1;
 
@@ -70,11 +72,11 @@ SYNOPSIS
 	 package MyApp::Schema::Result::CD;
 	 use base qw/DBIx::Class::Core/;
 
-	 __PACKAGE__->load_components(qw/InflateColumn::DateTime/);
-	 __PACKAGE__->table('cd');
-	 __PACKAGE__->add_columns(qw/ cdid artistid title year /);
-	 __PACKAGE__->set_primary_key('cdid');
-	 __PACKAGE__->belongs_to(artist => 'MyApp::Schema::Result::Artist', 'artistid');
+	 __PACKAGE__-&gtload_components(qw/InflateColumn::DateTime/);
+	 __PACKAGE__-&gttable('cd');
+	 __PACKAGE__-&gtadd_columns(qw/ cdid artistid title year /);
+	 __PACKAGE__-&gtset_primary_key('cdid');
+	 __PACKAGE__-&gtbelongs_to(artist =&gt 'MyApp::Schema::Result::Artist', 'artistid');
 
 	 1;
 
@@ -82,61 +84,61 @@ SYNOPSIS
 
 	 # Connect to your database.
 	 use MyApp::Schema;
-	 my $schema = MyApp::Schema->connect($dbi_dsn, $user, $pass, \%dbi_params);
+	 my $schema = MyApp::Schema-&gtconnect($dbi_dsn, $user, $pass, \%dbi_params);
 
 	 # Query for all artists and put them in an array,
 	 # or retrieve them as a result set object.
-	 # $schema->resultset returns a DBIx::Class::ResultSet
-	 my @all_artists = $schema->resultset('Artist')->all;
-	 my $all_artists_rs = $schema->resultset('Artist');
+	 # $schema-&gtresultset returns a DBIx::Class::ResultSet
+	 my @all_artists = $schema-&gtresultset('Artist')-&gtall;
+	 my $all_artists_rs = $schema-&gtresultset('Artist');
 
 	 # Output all artists names
 	 # $artist here is a DBIx::Class::Row, which has accessors
 	 # for all its columns. Rows are also subclasses of your Result class.
 	 foreach $artist (@all_artists) {
-	   print $artist->name, "\n";
+	   print $artist-&gtname, "\n";
 	 }
 
 	 # Create a result set to search for artists.
 	 # This does not query the DB.
-	 my $johns_rs = $schema->resultset('Artist')->search(
+	 my $johns_rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   # Build your WHERE using an SQL::Abstract structure:
-	   { name => { like => 'John%' } }
+	   { name =&gt { like =&gt 'John%' } }
 	 );
 
 	 # Execute a joined query to get the cds.
-	 my @all_john_cds = $johns_rs->search_related('cds')->all;
+	 my @all_john_cds = $johns_rs-&gtsearch_related('cds')-&gtall;
 
 	 # Fetch the next available row.
-	 my $first_john = $johns_rs->next;
+	 my $first_john = $johns_rs-&gtnext;
 
 	 # Specify ORDER BY on the query.
-	 my $first_john_cds_by_title_rs = $first_john->cds(
+	 my $first_john_cds_by_title_rs = $first_john-&gtcds(
 	   undef,
-	   { order_by => 'title' }
+	   { order_by =&gt 'title' }
 	 );
 
 	 # Create a result set that will fetch the artist data
 	 # at the same time as it fetches CDs, using only one query.
-	 my $millennium_cds_rs = $schema->resultset('CD')->search(
-	   { year => 2000 },
-	   { prefetch => 'artist' }
+	 my $millennium_cds_rs = $schema-&gtresultset('CD')-&gtsearch(
+	   { year =&gt 2000 },
+	   { prefetch =&gt 'artist' }
 	 );
 
-	 my $cd = $millennium_cds_rs->next; # SELECT ... FROM cds JOIN artists ...
-	 my $cd_artist_name = $cd->artist->name; # Already has the data so no 2nd query
+	 my $cd = $millennium_cds_rs-&gtnext; # SELECT ... FROM cds JOIN artists ...
+	 my $cd_artist_name = $cd-&gtartist-&gtname; # Already has the data so no 2nd query
 
 	 # new() makes a DBIx::Class::Row object but doesnt insert it into the DB.
 	 # create() is the same as new() then insert().
-	 my $new_cd = $schema->resultset('CD')->new({ title => 'Spoon' });
-	 $new_cd->artist($cd->artist);
-	 $new_cd->insert; # Auto-increment primary key filled in after INSERT
-	 $new_cd->title('Fork');
+	 my $new_cd = $schema-&gtresultset('CD')-&gtnew({ title =&gt 'Spoon' });
+	 $new_cd-&gtartist($cd-&gtartist);
+	 $new_cd-&gtinsert; # Auto-increment primary key filled in after INSERT
+	 $new_cd-&gttitle('Fork');
 
-	 $schema->txn_do(sub { $new_cd->update }); # Runs the update in a transaction
+	 $schema-&gttxn_do(sub { $new_cd-&gtupdate }); # Runs the update in a transaction
 
 	 # change the year of all the millennium CDs at once
-	 $millennium_cds_rs->update({ year => 2002 });
+	 $millennium_cds_rs-&gtupdate({ year =&gt 2002 });
 
 DESCRIPTION
        This is an SQL to OO mapper with an object API inspired by Class::DBI
@@ -178,53 +180,53 @@ WHERE TO GO NEXT
        the modules where you will find documentation.
 
 AUTHOR
-       mst: Matt S. Trout <mst@shadowcatsystems.co.uk>
+       mst: Matt S. Trout &ltmst@shadowcatsystems.co.uk&gt
 
        (I mostly consider myself "project founder" these days but the AUTHOR
        heading is traditional :)
 
 CONTRIBUTORS
-       abraxxa: Alexander Hartmaier <abraxxa@cpan.org>
+       abraxxa: Alexander Hartmaier &ltabraxxa@cpan.org&gt
 
-       acca: Alexander Kuznetsov <acca@cpan.org>
+       acca: Alexander Kuznetsov &ltacca@cpan.org&gt
 
-       aherzog: Adam Herzog <adam@herzogdesigns.com>
+       aherzog: Adam Herzog &ltadam@herzogdesigns.com&gt
 
-       Alexander Keusch <cpan@keusch.at>
+       Alexander Keusch &ltcpan@keusch.at&gt
 
-       alnewkirk: Al Newkirk <we@ana.im>
+       alnewkirk: Al Newkirk &ltwe@ana.im&gt
 
-       amiri: Amiri Barksdale <amiri@metalabel.com>
+       amiri: Amiri Barksdale &ltamiri@metalabel.com&gt
 
-       amoore: Andrew Moore <amoore@cpan.org>
+       amoore: Andrew Moore &ltamoore@cpan.org&gt
 
-       andyg: Andy Grundman <andy@hybridized.org>
+       andyg: Andy Grundman &ltandy@hybridized.org&gt
 
        ank: Andres Kievsky
 
-       arc: Aaron Crane <arc@cpan.org>
+       arc: Aaron Crane &ltarc@cpan.org&gt
 
-       arcanez: Justin Hunter <justin.d.hunter@gmail.com>
+       arcanez: Justin Hunter &ltjustin.d.hunter@gmail.com&gt
 
-       ash: Ash Berlin <ash@cpan.org>
+       ash: Ash Berlin &ltash@cpan.org&gt
 
-       bert: Norbert Csongradi <bert@cpan.org>
+       bert: Norbert Csongradi &ltbert@cpan.org&gt
 
-       blblack: Brandon L. Black <blblack@gmail.com>
+       blblack: Brandon L. Black &ltblblack@gmail.com&gt
 
-       bluefeet: Aran Deltac <bluefeet@cpan.org>
+       bluefeet: Aran Deltac &ltbluefeet@cpan.org&gt
 
-       bphillips: Brian Phillips <bphillips@cpan.org>
+       bphillips: Brian Phillips &ltbphillips@cpan.org&gt
 
-       boghead: Bryan Beeley <cpan@beeley.org>
+       boghead: Bryan Beeley &ltcpan@beeley.org&gt
 
-       bricas: Brian Cassidy <bricas@cpan.org>
+       bricas: Brian Cassidy &ltbricas@cpan.org&gt
 
-       brunov: Bruno Vecchi <vecchi.b@gmail.com>
+       brunov: Bruno Vecchi &ltvecchi.b@gmail.com&gt
 
-       caelum: Rafael Kitover <rkitover@cpan.org>
+       caelum: Rafael Kitover &ltrkitover@cpan.org&gt
 
-       caldrin: Maik Hentsche <maik.hentsche@amd.com>
+       caldrin: Maik Hentsche &ltmaik.hentsche@amd.com&gt
 
        castaway: Jess Robinson
 
@@ -232,179 +234,179 @@ CONTRIBUTORS
 
        clkao: CL Kao
 
-       da5id: David Jack Olrik <djo@cpan.org>
+       da5id: David Jack Olrik &ltdjo@cpan.org&gt
 
-       debolaz: Anders Nor Berle <berle@cpan.org>
+       debolaz: Anders Nor Berle &ltberle@cpan.org&gt
 
-       dew: Dan Thomas <dan@godders.org>
+       dew: Dan Thomas &ltdan@godders.org&gt
 
-       dkubb: Dan Kubb <dan.kubb-cpan@onautopilot.com>
+       dkubb: Dan Kubb &ltdan.kubb-cpan@onautopilot.com&gt
 
-       dnm: Justin Wheeler <jwheeler@datademons.com>
+       dnm: Justin Wheeler &ltjwheeler@datademons.com&gt
 
-       dpetrov: Dimitar Petrov <mitakaa@gmail.com>
+       dpetrov: Dimitar Petrov &ltmitakaa@gmail.com&gt
 
-       dwc: Daniel Westermann-Clark <danieltwc@cpan.org>
+       dwc: Daniel Westermann-Clark &ltdanieltwc@cpan.org&gt
 
-       dyfrgi: Michael Leuchtenburg <michael@slashhome.org>
+       dyfrgi: Michael Leuchtenburg &ltmichael@slashhome.org&gt
 
-       felliott: Fitz Elliott <fitz.elliott@gmail.com>
+       felliott: Fitz Elliott &ltfitz.elliott@gmail.com&gt
 
-       freetime: Bill Moseley <moseley@hank.org>
+       freetime: Bill Moseley &ltmoseley@hank.org&gt
 
-       frew: Arthur Axel "fREW" Schmidt <frioux@gmail.com>
+       frew: Arthur Axel "fREW" Schmidt &ltfrioux@gmail.com&gt
 
-       goraxe: Gordon Irving <goraxe@cpan.org>
+       goraxe: Gordon Irving &ltgoraxe@cpan.org&gt
 
-       gphat: Cory G Watson <gphat@cpan.org>
+       gphat: Cory G Watson &ltgphat@cpan.org&gt
 
-       Grant Street Group <http://www.grantstreet.com/>
+       Grant Street Group &lthttp://www.grantstreet.com/&gt
 
-       groditi: Guillermo Roditi <groditi@cpan.org>
+       groditi: Guillermo Roditi &ltgroditi@cpan.org&gt
 
-       Haarg: Graham Knop <haarg@haarg.org>
+       Haarg: Graham Knop &lthaarg@haarg.org&gt
 
-       hobbs: Andrew Rodland <arodland@cpan.org>
+       hobbs: Andrew Rodland &ltarodland@cpan.org&gt
 
-       ilmari: Dagfinn Ilmari Mannsaaker <ilmari@ilmari.org>
+       ilmari: Dagfinn Ilmari Mannsaaker &ltilmari@ilmari.org&gt
 
-       initself: Mike Baas <mike@initselftech.com>
+       initself: Mike Baas &ltmike@initselftech.com&gt
 
-       ironcamel: Naveed Massjouni <naveedm9@gmail.com>
+       ironcamel: Naveed Massjouni &ltnaveedm9@gmail.com&gt
 
-       jawnsy: Jonathan Yu <jawnsy@cpan.org>
+       jawnsy: Jonathan Yu &ltjawnsy@cpan.org&gt
 
-       jasonmay: Jason May <jason.a.may@gmail.com>
+       jasonmay: Jason May &ltjason.a.may@gmail.com&gt
 
        jesper: Jesper Krogh
 
-       jgoulah: John Goulah <jgoulah@cpan.org>
+       jgoulah: John Goulah &ltjgoulah@cpan.org&gt
 
-       jguenther: Justin Guenther <jguenther@cpan.org>
+       jguenther: Justin Guenther &ltjguenther@cpan.org&gt
 
-       jhannah: Jay Hannah <jay@jays.net>
+       jhannah: Jay Hannah &ltjay@jays.net&gt
 
-       jnapiorkowski: John Napiorkowski <jjn1056@yahoo.com>
+       jnapiorkowski: John Napiorkowski &ltjjn1056@yahoo.com&gt
 
-       jon: Jon Schutz <jjschutz@cpan.org>
+       jon: Jon Schutz &ltjjschutz@cpan.org&gt
 
-       jshirley: J. Shirley <jshirley@gmail.com>
+       jshirley: J. Shirley &ltjshirley@gmail.com&gt
 
        kaare: Kaare Rasmussen
 
        konobi: Scott McWhirter
 
-       littlesavage: Alexey Illarionov <littlesavage@orionet.ru>
+       littlesavage: Alexey Illarionov &ltlittlesavage@orionet.ru&gt
 
-       lukes: Luke Saunders <luke.saunders@gmail.com>
+       lukes: Luke Saunders &ltluke.saunders@gmail.com&gt
 
-       marcus: Marcus Ramberg <mramberg@cpan.org>
+       marcus: Marcus Ramberg &ltmramberg@cpan.org&gt
 
        mattlaw: Matt Lawrence
 
-       mattp: Matt Phillips <mattp@cpan.org>
+       mattp: Matt Phillips &ltmattp@cpan.org&gt
 
-       michaelr: Michael Reddick <michael.reddick@gmail.com>
+       michaelr: Michael Reddick &ltmichael.reddick@gmail.com&gt
 
-       milki: Jonathan Chu <milki@rescomp.berkeley.edu>
+       milki: Jonathan Chu &ltmilki@rescomp.berkeley.edu&gt
 
        ned: Neil de Carteret
 
-       nigel: Nigel Metheringham <nigelm@cpan.org>
+       nigel: Nigel Metheringham &ltnigelm@cpan.org&gt
 
-       ningu: David Kamholz <dkamholz@cpan.org>
+       ningu: David Kamholz &ltdkamholz@cpan.org&gt
 
-       Nniuq: Ron "Quinn" Straight" <quinnfazigu@gmail.org>
+       Nniuq: Ron "Quinn" Straight" &ltquinnfazigu@gmail.org&gt
 
-       norbi: Norbert Buchmuller <norbi@nix.hu>
+       norbi: Norbert Buchmuller &ltnorbi@nix.hu&gt
 
-       nuba: Nuba Princigalli <nuba@cpan.org>
+       nuba: Nuba Princigalli &ltnuba@cpan.org&gt
 
-       Numa: Dan Sully <daniel@cpan.org>
+       Numa: Dan Sully &ltdaniel@cpan.org&gt
 
-       ovid: Curtis "Ovid" Poe <ovid@cpan.org>
+       ovid: Curtis "Ovid" Poe &ltovid@cpan.org&gt
 
-       oyse: Oystein Torget <oystein.torget@dnv.com>
+       oyse: Oystein Torget &ltoystein.torget@dnv.com&gt
 
        paulm: Paul Makepeace
 
        penguin: K J Cheetham
 
-       perigrin: Chris Prather <chris@prather.org>
+       perigrin: Chris Prather &ltchris@prather.org&gt
 
-       peter: Peter Collingbourne <peter@pcc.me.uk>
+       peter: Peter Collingbourne &ltpeter@pcc.me.uk&gt
 
-       phaylon: Robert Sedlacek <phaylon@dunkelheit.at>
+       phaylon: Robert Sedlacek &ltphaylon@dunkelheit.at&gt
 
-       plu: Johannes Plunien <plu@cpan.org>
+       plu: Johannes Plunien &ltplu@cpan.org&gt
 
-       Possum: Daniel LeWarne <possum@cpan.org>
+       Possum: Daniel LeWarne &ltpossum@cpan.org&gt
 
        quicksilver: Jules Bean
 
-       rafl: Florian Ragwitz <rafl@debian.org>
+       rafl: Florian Ragwitz &ltrafl@debian.org&gt
 
-       rainboxx: Matthias Dietrich <perl@rb.ly>
+       rainboxx: Matthias Dietrich &ltperl@rb.ly&gt
 
-       rbo: Robert Bohne <rbo@cpan.org>
+       rbo: Robert Bohne &ltrbo@cpan.org&gt
 
-       rbuels: Robert Buels <rmb32@cornell.edu>
+       rbuels: Robert Buels &ltrmb32@cornell.edu&gt
 
-       rdj: Ryan D Johnson <ryan@innerfence.com>
+       rdj: Ryan D Johnson &ltryan@innerfence.com&gt
 
-       ribasushi: Peter Rabbitson <ribasushi@cpan.org>
+       ribasushi: Peter Rabbitson &ltribasushi@cpan.org&gt
 
-       rjbs: Ricardo Signes <rjbs@cpan.org>
+       rjbs: Ricardo Signes &ltrjbs@cpan.org&gt
 
-       robkinyon: Rob Kinyon <rkinyon@cpan.org>
+       robkinyon: Rob Kinyon &ltrkinyon@cpan.org&gt
 
-       Robert Olson <bob@rdolson.org>
+       Robert Olson &ltbob@rdolson.org&gt
 
-       Roman: Roman Filippov <romanf@cpan.org>
+       Roman: Roman Filippov &ltromanf@cpan.org&gt
 
-       Sadrak: Felix Antonius Wilhelm Ostmann <sadrak@cpan.org>
+       Sadrak: Felix Antonius Wilhelm Ostmann &ltsadrak@cpan.org&gt
 
        sc_: Just Another Perl Hacker
 
-       scotty: Scotty Allen <scotty@scottyallen.com>
+       scotty: Scotty Allen &ltscotty@scottyallen.com&gt
 
-       semifor: Marc Mims <marc@questright.com>
+       semifor: Marc Mims &ltmarc@questright.com&gt
 
-       solomon: Jared Johnson <jaredj@nmgi.com>
+       solomon: Jared Johnson &ltjaredj@nmgi.com&gt
 
-       spb: Stephen Bennett <stephen@freenode.net>
+       spb: Stephen Bennett &ltstephen@freenode.net&gt
 
-       Squeeks <squeek@cpan.org>
+       Squeeks &ltsqueek@cpan.org&gt
 
-       sszabo: Stephan Szabo <sszabo@bigpanda.com>
+       sszabo: Stephan Szabo &ltsszabo@bigpanda.com&gt
 
-       talexb: Alex Beamish <talexb@gmail.com>
+       talexb: Alex Beamish &lttalexb@gmail.com&gt
 
-       tamias: Ronald J Kimball <rjk@tamias.net>
+       tamias: Ronald J Kimball &ltrjk@tamias.net&gt
 
-       teejay : Aaron Trevena <teejay@cpan.org>
+       teejay : Aaron Trevena &ltteejay@cpan.org&gt
 
        Todd Lipcon
 
        Tom Hukins
 
-       tonvoon: Ton Voon <tonvoon@cpan.org>
+       tonvoon: Ton Voon &lttonvoon@cpan.org&gt
 
-       triode: Pete Gamache <gamache@cpan.org>
+       triode: Pete Gamache &ltgamache@cpan.org&gt
 
-       typester: Daisuke Murase <typester@cpan.org>
+       typester: Daisuke Murase &lttypester@cpan.org&gt
 
-       victori: Victor Igumnov <victori@cpan.org>
+       victori: Victor Igumnov &ltvictori@cpan.org&gt
 
        wdh: Will Hawes
 
-       willert: Sebastian Willert <willert@cpan.org>
+       willert: Sebastian Willert &ltwillert@cpan.org&gt
 
-       wreis: Wallace Reis <wreis@cpan.org>
+       wreis: Wallace Reis &ltwreis@cpan.org&gt
 
-       yrlnry: Mark Jason Dominus <mjd@plover.com>
+       yrlnry: Mark Jason Dominus &ltmjd@plover.com&gt
 
-       zamolxes: Bogdan Lucaciu <bogdan@wiz.ro>
+       zamolxes: Bogdan Lucaciu &ltbogdan@wiz.ro&gt
 
 COPYRIGHT
        Copyright (c) 2005 - 2010 the DBIx::Class "AUTHOR" and "CONTRIBUTORS"
@@ -417,6 +419,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-07-27			DBIx::Class(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

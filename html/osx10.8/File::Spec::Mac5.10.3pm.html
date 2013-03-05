@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Methods for manipulating file specifications...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>File::Spec::Mac - File::Spec for Mac OS (Classic)</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 File::Spec::Mac(3pm)   Perl Programmers Reference Guide   File::Spec::Mac(3pm)
 
 
@@ -35,7 +37,7 @@ METHODS
 
 	 IMPORTANT NOTE: Beginning with version 1.3 of this module, the
 	 resulting path is relative by default and not absolute. This decision
-	 was made due to portability reasons. Since "File::Spec->catdir()"
+	 was made due to portability reasons. Since "File::Spec-&gtcatdir()"
 	 returns relative paths on all other operating systems, it will now
 	 also follow this convention on Mac OS. Note that this may break some
 	 existing scripts.
@@ -96,7 +98,7 @@ METHODS
 	   "" is passed as the first argument, it has a special meaning, see
 	   (6)). This way, a colon ":" is handled like a "." (curdir) on Unix,
 	   while an empty string "" is generally ignored (see
-	   "Unix->canonpath()" ). Likewise, a "::" is handled like a ".."
+	   "Unix-&gtcanonpath()" ). Likewise, a "::" is handled like a ".."
 	   (updir), and a ":::" is handled like a "../.." etc.	E.g.
 
 	       catdir("a",":",":","b")	 = ":a:b:"
@@ -108,7 +110,7 @@ METHODS
 
 	 7.
 	   Passing an empty string "" as the first argument to "catdir()" is
-	   like passing"File::Spec->rootdir()" as the first argument, i.e.
+	   like passing"File::Spec-&gtrootdir()" as the first argument, i.e.
 
 	       catdir("","a","b")	   is the same as
 
@@ -126,18 +128,18 @@ METHODS
 	   like their Unix counterparts:
 
 	    Unix:
-	       Unix->catdir("","")		   =  "/"
-	       Unix->catdir("",".")		   =  "/"
-	       Unix->catdir("","..")		   =  "/"	       # can't go beyond root
-	       Unix->catdir("",".","..","..","a")  =  "/a"
+	       Unix-&gtcatdir("","")		   =  "/"
+	       Unix-&gtcatdir("",".")		   =  "/"
+	       Unix-&gtcatdir("","..")		   =  "/"	       # can't go beyond root
+	       Unix-&gtcatdir("",".","..","..","a")  =  "/a"
 	    Mac:
-	       Mac->catdir("","")		   =  rootdir() 	# (e.g. "HD:")
-	       Mac->catdir("",":")		   =  rootdir()
-	       Mac->catdir("","::")		   =  rootdir() 	# can't go beyond root
-	       Mac->catdir("",":","::","::","a")   =  rootdir() . "a:"	# (e.g. "HD:a:")
+	       Mac-&gtcatdir("","")		   =  rootdir() 	# (e.g. "HD:")
+	       Mac-&gtcatdir("",":")		   =  rootdir()
+	       Mac-&gtcatdir("","::")		   =  rootdir() 	# can't go beyond root
+	       Mac-&gtcatdir("",":","::","::","a")   =  rootdir() . "a:"	# (e.g. "HD:a:")
 
 	   However, this approach is limited to the first arguments following
-	   "root" (again, see "Unix->canonpath()" ). If there are more
+	   "root" (again, see "Unix-&gtcanonpath()" ). If there are more
 	   arguments that move up the directory tree, an invalid path going
 	   beyond root can be created.
 
@@ -153,8 +155,8 @@ METHODS
 	 to use "catpath()" to concatenate volume names and directory paths.
 	 E.g.
 
-	     $dir      = File::Spec->catdir("tmp","sources");
-	     $abs_path = File::Spec->catpath("MacintoshHD:", $dir,"");
+	     $dir      = File::Spec-&gtcatdir("tmp","sources");
+	     $abs_path = File::Spec-&gtcatpath("MacintoshHD:", $dir,"");
 
 	 yields
 
@@ -167,7 +169,7 @@ METHODS
 
 	 IMPORTANT NOTE: Beginning with version 1.3 of this module, the
 	 resulting path is relative by default and not absolute. This decision
-	 was made due to portability reasons. Since "File::Spec->catfile()"
+	 was made due to portability reasons. Since "File::Spec-&gtcatfile()"
 	 returns relative paths on all other operating systems, it will now
 	 also follow this convention on Mac OS.  Note that this may break some
 	 existing scripts.
@@ -240,10 +242,10 @@ METHODS
 
 	 E.g.
 
-	     File::Spec->file_name_is_absolute("a");		 # false (relative)
-	     File::Spec->file_name_is_absolute(":a:b:");	 # false (relative)
-	     File::Spec->file_name_is_absolute("MacintoshHD:");  # true (absolute)
-	     File::Spec->file_name_is_absolute("");		 # true (absolute)
+	     File::Spec-&gtfile_name_is_absolute("a");		 # false (relative)
+	     File::Spec-&gtfile_name_is_absolute(":a:b:");	 # false (relative)
+	     File::Spec-&gtfile_name_is_absolute("MacintoshHD:");  # true (absolute)
+	     File::Spec-&gtfile_name_is_absolute("");		 # true (absolute)
 
        path
 	 Returns the null list for the MacPerl application, since the concept
@@ -252,8 +254,8 @@ METHODS
 	 done in :lib:ExtUtils:MM_Mac.pm.
 
        splitpath
-	     ($volume,$directories,$file) = File::Spec->splitpath( $path );
-	     ($volume,$directories,$file) = File::Spec->splitpath( $path, $no_file );
+	     ($volume,$directories,$file) = File::Spec-&gtsplitpath( $path );
+	     ($volume,$directories,$file) = File::Spec-&gtsplitpath( $path, $no_file );
 
 	 Splits a path into volume, directory, and filename portions.
 
@@ -272,7 +274,7 @@ METHODS
        splitdir
 	 The opposite of "catdir()".
 
-	     @dirs = File::Spec->splitdir( $directories );
+	     @dirs = File::Spec-&gtsplitdir( $directories );
 
 	 $directories should be only the directory portion of the path on
 	 systems that have the concept of a volume or that have path syntax
@@ -287,8 +289,8 @@ METHODS
 
 	 Hence, on Mac OS, both
 
-	     File::Spec->splitdir( ":a:b::c:" );    and
-	     File::Spec->splitdir( ":a:b::c" );
+	     File::Spec-&gtsplitdir( ":a:b::c:" );    and
+	     File::Spec-&gtsplitdir( ":a:b::c" );
 
 	 yield:
 
@@ -296,14 +298,14 @@ METHODS
 
 	 while
 
-	     File::Spec->splitdir( ":a:b::c::" );
+	     File::Spec-&gtsplitdir( ":a:b::c::" );
 
 	 yields:
 
 	     ( "a", "b", "::", "c", "::")
 
        catpath
-	     $path = File::Spec->catpath($volume,$directory,$file);
+	     $path = File::Spec-&gtcatpath($volume,$directory,$file);
 
 	 Takes volume, directory and file portions and returns an entire path.
 	 On Mac OS, $volume, $directory and $file are concatenated.  A ':' is
@@ -318,8 +320,8 @@ METHODS
 	 Takes a destination path and an optional base path and returns a
 	 relative path from the base path to the destination path:
 
-	     $rel_path = File::Spec->abs2rel( $path ) ;
-	     $rel_path = File::Spec->abs2rel( $path, $base ) ;
+	     $rel_path = File::Spec-&gtabs2rel( $path ) ;
+	     $rel_path = File::Spec-&gtabs2rel( $path, $base ) ;
 
 	 Note that both paths are assumed to have a notation that
 	 distinguishes a directory path (with trailing ':') from a file path
@@ -348,8 +350,8 @@ METHODS
        rel2abs
 	 Converts a relative path to an absolute path:
 
-	     $abs_path = File::Spec->rel2abs( $path ) ;
-	     $abs_path = File::Spec->rel2abs( $path, $base ) ;
+	     $abs_path = File::Spec-&gtrel2abs( $path ) ;
+	     $abs_path = File::Spec-&gtrel2abs( $path, $base ) ;
 
 	 Note that both paths are assumed to have a notation that
 	 distinguishes a directory path (with trailing ':') from a file path
@@ -370,7 +372,7 @@ METHODS
 
 AUTHORS
        See the authors list in File::Spec. Mac OS support by Paul Schinder
-       <schinder@pobox.com> and Thomas Wegner <wegner_thomas@yahoo.com>.
+       &ltschinder@pobox.com&gt and Thomas Wegner &ltwegner_thomas@yahoo.com&gt.
 
 COPYRIGHT
        Copyright (c) 2004 by the Perl 5 Porters.  All rights reserved.
@@ -385,6 +387,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-05-10		  File::Spec::Mac(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

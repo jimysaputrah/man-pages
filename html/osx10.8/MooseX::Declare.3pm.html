@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module provides syntactic sugar for Moose, the postmodern object..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MooseX::Declare - Declarative syntax for Moose</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MooseX::Declare(3)    User Contributed Perl Documentation   MooseX::Declare(3)
 
 
@@ -19,28 +21,28 @@ SYNOPSIS
 	   use MooseX::Declare;
 
 	   class BankAccount {
-	       has 'balance' => ( isa => 'Num', is => 'rw', default => 0 );
+	       has 'balance' =&gt ( isa =&gt 'Num', is =&gt 'rw', default =&gt 0 );
 
 	       method deposit (Num $amount) {
-		   $self->balance( $self->balance + $amount );
+		   $self-&gtbalance( $self-&gtbalance + $amount );
 	       }
 
 	       method withdraw (Num $amount) {
-		   my $current_balance = $self->balance();
-		   ( $current_balance >= $amount )
+		   my $current_balance = $self-&gtbalance();
+		   ( $current_balance &gt= $amount )
 		       || confess "Account overdrawn";
-		   $self->balance( $current_balance - $amount );
+		   $self-&gtbalance( $current_balance - $amount );
 	       }
 	   }
 
 	   class CheckingAccount extends BankAccount {
-	       has 'overdraft_account' => ( isa => 'BankAccount', is => 'rw' );
+	       has 'overdraft_account' =&gt ( isa =&gt 'BankAccount', is =&gt 'rw' );
 
 	       before withdraw (Num $amount) {
-		   my $overdraft_amount = $amount - $self->balance();
-		   if ( $self->overdraft_account && $overdraft_amount > 0 ) {
-		       $self->overdraft_account->withdraw($overdraft_amount);
-		       $self->deposit($overdraft_amount);
+		   my $overdraft_amount = $amount - $self-&gtbalance();
+		   if ( $self-&gtoverdraft_account && $overdraft_amount &gt 0 ) {
+		       $self-&gtoverdraft_account-&gtwithdraw($overdraft_amount);
+		       $self-&gtdeposit($overdraft_amount);
 		   }
 	       }
 	   }
@@ -160,7 +162,7 @@ NOTE ON IMPORTS
 	       use Moose;
 	       use namespace::autoclean;
 	       ...
-	       __PACKAGE__->meta->make_immutable;
+	       __PACKAGE__-&gtmeta-&gtmake_immutable;
 	   }
 
        So if you declare imports outside the class, the symbols get imported
@@ -171,7 +173,7 @@ NOTE ON IMPORTS
 	   use Data::Dump qw/dump/;
 	   class Foo {
 	       method dump($value) { return dump($value) } # Data::Dump::dump IS NOT in Foo::
-	       method pp($value)   { $self->dump($value) } # an alias for our dump method
+	       method pp($value)   { $self-&gtdump($value) } # an alias for our dump method
 	   }
 
        To solve this, only import MooseX::Declare outside the class definition
@@ -182,11 +184,11 @@ NOTE ON IMPORTS
 	   class Foo {
 	       use Data::Dump qw/dump/;
 	       method dump($value) { return dump($value) } # Data::Dump::dump IS in Foo::
-	       method pp($value)   { $self->dump($value) } # an alias for our dump method
+	       method pp($value)   { $self-&gtdump($value) } # an alias for our dump method
 	   }
 
-	   Foo->new->dump($some_value);
-	   Foo->new->pp($some_value);
+	   Foo-&gtnew-&gtdump($some_value);
+	   Foo-&gtnew-&gtpp($some_value);
 
        NOTE that the import "Data::Dump::dump()" and the method "Foo::dump()",
        although having the same name, do not conflict with each other, because
@@ -204,52 +206,52 @@ SEE ALSO
 
        o   namespace::autoclean
 
-       o   vim syntax: <http://www.vim.org/scripts/script.php?script_id=2526>
+       o   vim syntax: &lthttp://www.vim.org/scripts/script.php?script_id=2526&gt
 
        o   emacs syntax: http://github.com/jrockway/cperl-mode
-	   <http://github.com/jrockway/cperl-mode>
+	   &lthttp://github.com/jrockway/cperl-mode&gt
 
        o   Geany syntax + notes:
 	   http://www.cattlegrid.info/blog/2009/09/moosex-declare-geany-syntax.html
-	   <http://www.cattlegrid.info/blog/2009/09/moosex-declare-geany-
-	   syntax.html>
+	   &lthttp://www.cattlegrid.info/blog/2009/09/moosex-declare-geany-
+	   syntax.html&gt
 
 AUTHORS
-       o   Florian Ragwitz <rafl@debian.org>
+       o   Florian Ragwitz &ltrafl@debian.org&gt
 
-       o   Ash Berlin <ash@cpan.org>
+       o   Ash Berlin &ltash@cpan.org&gt
 
-       o   Chas. J. Owens IV <chas.owens@gmail.com>
+       o   Chas. J. Owens IV &ltchas.owens@gmail.com&gt
 
-       o   Chris Prather <chris@prather.org>
+       o   Chris Prather &ltchris@prather.org&gt
 
-       o   Dave Rolsky <autarch@urth.org>
+       o   Dave Rolsky &ltautarch@urth.org&gt
 
-       o   Devin Austin <dhoss@cpan.org>
+       o   Devin Austin &ltdhoss@cpan.org&gt
 
-       o   Hans Dieter Pearcey <hdp@cpan.org>
+       o   Hans Dieter Pearcey &lthdp@cpan.org&gt
 
-       o   Justin Hunter <justin.d.hunter@gmail.com>
+       o   Justin Hunter &ltjustin.d.hunter@gmail.com&gt
 
-       o   Matt Kraai <kraai@ftbfs.org>
+       o   Matt Kraai &ltkraai@ftbfs.org&gt
 
-       o   Michele Beltrame <arthas@cpan.org>
+       o   Michele Beltrame &ltarthas@cpan.org&gt
 
-       o   Nelo Onyiah <nelo.onyiah@gmail.com>
+       o   Nelo Onyiah &ltnelo.onyiah@gmail.com&gt
 
-       o   nperez <nperez@cpan.org>
+       o   nperez &ltnperez@cpan.org&gt
 
-       o   Piers Cawley <pdcawley@bofh.org.uk>
+       o   Piers Cawley &ltpdcawley@bofh.org.uk&gt
 
-       o   Rafael Kitover <rkitover@io.com>
+       o   Rafael Kitover &ltrkitover@io.com&gt
 
-       o   Robert 'phaylon' Sedlacek <rs@474.at>
+       o   Robert 'phaylon' Sedlacek &ltrs@474.at&gt
 
-       o   Stevan Little <stevan.little@iinteractive.com>
+       o   Stevan Little &ltstevan.little@iinteractive.com&gt
 
-       o   Tomas Doran <bobtfish@bobtfish.net>
+       o   Tomas Doran &ltbobtfish@bobtfish.net&gt
 
-       o   Yanick Champoux <yanick@babyl.dyndns.org>
+       o   Yanick Champoux &ltyanick@babyl.dyndns.org&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Florian Ragwitz.
@@ -260,6 +262,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-08-23		    MooseX::Declare(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

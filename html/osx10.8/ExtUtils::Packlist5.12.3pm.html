@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="ExtUtils::Packlist provides a standard way to manage .packlist files...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>ExtUtils::Packlist - manage .packlist files</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 ExtUtils::Packlist(3pm)Perl Programmers Reference GuideExtUtils::Packlist(3pm)
 
 
@@ -17,15 +19,15 @@ NAME
 
 SYNOPSIS
 	  use ExtUtils::Packlist;
-	  my ($pl) = ExtUtils::Packlist->new('.packlist');
-	  $pl->read('/an/old/.packlist');
-	  my @missing_files = $pl->validate();
-	  $pl->write('/a/new/.packlist');
+	  my ($pl) = ExtUtils::Packlist-&gtnew('.packlist');
+	  $pl-&gtread('/an/old/.packlist');
+	  my @missing_files = $pl-&gtvalidate();
+	  $pl-&gtwrite('/a/new/.packlist');
 
-	  $pl->{'/some/file/name'}++;
+	  $pl-&gt{'/some/file/name'}++;
 	     or
-	  $pl->{'/some/other/file/name'} = { type => 'file',
-					     from => '/some/file' };
+	  $pl-&gt{'/some/other/file/name'} = { type =&gt 'file',
+					     from =&gt '/some/file' };
 
 DESCRIPTION
        ExtUtils::Packlist provides a standard way to manage .packlist files.
@@ -91,31 +93,31 @@ EXAMPLE
 
 	   sub emptydir($) {
 	       my ($dir) = @_;
-	       my $dh = IO::Dir->new($dir) || return(0);
-	       my @count = $dh->read();
-	       $dh->close();
+	       my $dh = IO::Dir-&gtnew($dir) || return(0);
+	       my @count = $dh-&gtread();
+	       $dh-&gtclose();
 	       return(@count == 2 ? 1 : 0);
 	   }
 
 	   # Find all the installed packages
 	   print("Finding all installed modules...\n");
-	   my $installed = ExtUtils::Installed->new();
+	   my $installed = ExtUtils::Installed-&gtnew();
 
-	   foreach my $module (grep(!/^Perl$/, $installed->modules())) {
-	      my $version = $installed->version($module) || "???";
+	   foreach my $module (grep(!/^Perl$/, $installed-&gtmodules())) {
+	      my $version = $installed-&gtversion($module) || "???";
 	      print("Found module $module Version $version\n");
 	      print("Do you want to delete $module? [n] ");
-	      my $r = <STDIN>; chomp($r);
+	      my $r = &ltSTDIN&gt; chomp($r);
 	      if ($r && $r =~ /^y/i) {
 		 # Remove all the files
-		 foreach my $file (sort($installed->files($module))) {
+		 foreach my $file (sort($installed-&gtfiles($module))) {
 		    print("rm $file\n");
 		    unlink($file);
 		 }
-		 my $pf = $installed->packlist($module)->packlist_file();
+		 my $pf = $installed-&gtpacklist($module)-&gtpacklist_file();
 		 print("rm $pf\n");
 		 unlink($pf);
-		 foreach my $dir (sort($installed->directory_tree($module))) {
+		 foreach my $dir (sort($installed-&gtdirectory_tree($module))) {
 		    if (emptydir($dir)) {
 		       print("rmdir $dir\n");
 		       rmdir($dir);
@@ -125,7 +127,7 @@ EXAMPLE
 	   }
 
 AUTHOR
-       Alan Burlison <Alan.Burlison@uk.sun.com>
+       Alan Burlison &ltAlan.Burlison@uk.sun.com&gt
 
 POD ERRORS
        Hey! The above document had some coding errors, which are explained
@@ -137,6 +139,6 @@ POD ERRORS
 
 
 perl v5.12.4			  2011-06-01	       ExtUtils::Packlist(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

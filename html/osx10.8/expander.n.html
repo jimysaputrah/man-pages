@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The  Tcl subst command is often used to support a kind of template pro-..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>textutil::expander - Procedures to process templates and expand text.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 textutil::expanderText and string utilities, macro procestextutil::expander(n)
 
 
@@ -90,7 +92,7 @@ DESCRIPTION
        o      Embedded commands are necessarily bracketed by  [  and  ];  it's
 	      convenient  to  be  able to choose different brackets in special
 	      cases.  Someone producing web pages that include a  large  quan-
-	      tity  of	Tcl code examples might easily prefer to use << and >>
+	      tity  of	Tcl code examples might easily prefer to use &lt&lt and &gt&gt
 	      as the embedded code delimiters instead.
 
        o      There's no easy way to handle incremental input,	as  one  might
@@ -216,7 +218,7 @@ EXPANDER API
 	      Sets  the left and right macro expansion brackets.  This command
 	      is for use as or within a macro, or to  permanently  change  the
 	      bracket  definitions.  By default, the brackets are [ and ], but
-	      any non-empty string can be used; for example, < and > or (* and
+	      any non-empty string can be used; for example, &lt and &gt or (* and
 	      *) or even Hello, and World!.
 
        expanderName textcmd ?newTextCmd?
@@ -298,10 +300,10 @@ TUTORIAL
        guage that can be retargeted to HTML or any other output format:
 
 
-	   % proc bold {} {return "<b>"}
-	   % proc /bold {} {return "</b>"}
+	   % proc bold {} {return "&ltb&gt"}
+	   % proc /bold {} {return "&lt/b&gt"}
 	   % ::myexp expand {Some of this text is in [bold]boldface[/bold]}
-	   Some of this text is in <b>boldface</b>
+	   Some of this text is in &ltb&gtboldface&lt/b&gt
 	   %
 
 
@@ -317,12 +319,12 @@ TUTORIAL
        can be changed to any pair of non-empty strings.
 
        The setbrackets command changes the brackets permanently.  For example,
-       you can write pseudo-html by change them to < and >:
+       you can write pseudo-html by change them to &lt and &gt:
 
 
-	   % ::myexp setbrackets < >
-	   % ::myexp expand {<bold>This is boldface</bold>}
-	   <b>This is boldface</b>
+	   % ::myexp setbrackets &lt &gt
+	   % ::myexp expand {&ltbold&gtThis is boldface&lt/bold&gt}
+	   &ltb&gtThis is boldface&lt/b&gt
 
 
        Alternatively,  you  can  change  the expansion brackets temporarily by
@@ -330,8 +332,8 @@ TUTORIAL
 
 
 	   % ::myexp setbrackets "\\[" "\\]"
-	   % ::myexp expand {<bold>This is boldface</bold>} {< >}
-	   <b>This is boldface</b>
+	   % ::myexp expand {&ltbold&gtThis is boldface&lt/bold&gt} {&lt &gt}
+	   &ltb&gtThis is boldface&lt/b&gt
 	   %
 
 
@@ -459,6 +461,6 @@ COPYRIGHT
 
 
 textutil			     1.3.1		 textutil::expander(n)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

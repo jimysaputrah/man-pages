@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="A base implementation of common Storage methods.  For specific..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Storage - Generic Storage Handler</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::Storage(3User Contributed Perl DocumentatiDBIx::Class::Storage(3)
 
 
@@ -54,21 +56,21 @@ METHODS
 
        For example,
 
-	 my $author_rs = $schema->resultset('Author')->find(1);
+	 my $author_rs = $schema-&gtresultset('Author')-&gtfind(1);
 	 my @titles = qw/Night Day It/;
 
 	 my $coderef = sub {
 	   # If any one of these fails, the entire transaction fails
-	   $author_rs->create_related('books', {
-	     title => $_
+	   $author_rs-&gtcreate_related('books', {
+	     title =&gt $_
 	   }) foreach (@titles);
 
-	   return $author->books;
+	   return $author-&gtbooks;
 	 };
 
 	 my $rs;
 	 try {
-	   $rs = $schema->txn_do($coderef);
+	   $rs = $schema-&gttxn_do($coderef);
 	 } catch {
 	   my $error = shift;
 	   # Transaction failed
@@ -135,15 +137,15 @@ METHODS
        An alternative way of transaction handling based on
        DBIx::Class::Storage::TxnScopeGuard:
 
-	my $txn_guard = $storage->txn_scope_guard;
+	my $txn_guard = $storage-&gttxn_scope_guard;
 
-	$row->col1("val1");
-	$row->update;
+	$row-&gtcol1("val1");
+	$row-&gtupdate;
 
-	$txn_guard->commit;
+	$txn_guard-&gtcommit;
 
        If an exception occurs, or the guard object otherwise leaves the scope
-       before "$txn_guard->commit" is called, the transaction will be rolled
+       before "$txn_guard-&gtcommit" is called, the transaction will be rolled
        back by an explicit "txn_rollback" call. In essence this is akin to
        using a "txn_begin"/"txn_commit" pair, without having to worry about
        calling "txn_rollback" at the right places. Note that since there is no
@@ -175,7 +177,7 @@ METHODS
 
    debugcb
        Sets a callback to be executed each time a statement is run; takes a
-       sub reference.  Callback is executed as $sub->($op, $info) where $op is
+       sub reference.  Callback is executed as $sub-&gt($op, $info) where $op is
        SELECT/INSERT/UPDATE/DELETE and $info is what would normally be
        printed.
 
@@ -247,9 +249,9 @@ SEE ALSO
        SQL::Abstract and DBI.
 
 AUTHORS
-       Matt S. Trout <mst@shadowcatsystems.co.uk>
+       Matt S. Trout &ltmst@shadowcatsystems.co.uk&gt
 
-       Andy Grundman <andy@hybridized.org>
+       Andy Grundman &ltandy@hybridized.org&gt
 
 LICENSE
        You may distribute this code under the same terms as Perl itself.
@@ -257,6 +259,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-07-26	       DBIx::Class::Storage(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

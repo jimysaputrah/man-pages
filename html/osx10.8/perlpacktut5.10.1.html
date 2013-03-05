@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""pack" and "unpack" are two functions for transforming data according..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlpacktut - tutorial on "pack" and "unpack"</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLPACKTUT(1)	       Perl Programmers Reference Guide 	PERLPACKTUT(1)
 
 
@@ -103,7 +105,7 @@ Packing Text
        "split" collapses blank fields, you'll never know whether a record was
        income or expenditure. Oops. Well, you could always use "substr":
 
-	   while (<>) {
+	   while (&lt&gt) {
 	       my $date   = substr($_,	0, 11);
 	       my $desc   = substr($_, 12, 27);
 	       my $income = substr($_, 40,  7);
@@ -119,7 +121,7 @@ Packing Text
 
        Or maybe we could use regular expressions:
 
-	   while (<>) {
+	   while (&lt&gt) {
 	       my($date, $desc, $income, $expend) =
 		   m|(\d\d/\d\d/\d{4}) (.{27}) (.{7})(.*)|;
 	       ...
@@ -133,7 +135,7 @@ Packing Text
        help you out when dealing with fixed-width data like the above. Let's
        have a look at a solution with "unpack":
 
-	   while (<>) {
+	   while (&lt&gt) {
 	       my($date, $desc, $income, $expend) = unpack("A10xA27xA7A*", $_);
 	       ...
 	   }
@@ -187,7 +189,7 @@ Packing Text
        our ledger - in the same format - saying how much we've brought in and
        how much we've spent:
 
-	   while (<>) {
+	   while (&lt&gt) {
 	       my($date, $desc, $income, $expend) = unpack("A10xA27xA7xA*", $_);
 	       $tot_income += $income;
 	       $tot_expend += $expend;
@@ -443,15 +445,15 @@ Packing Numbers
 	  my @data = unpack 's*', pack 'S*', unpack 'n*', $buf;
 
        This is ugly. As of Perl 5.9.2, there's a much nicer way to express
-       your desire for a certain byte-order: the ">" and "<" modifiers.  ">"
-       is the big-endian modifier, while "<" is the little-endian modifier.
+       your desire for a certain byte-order: the "&gt" and "&lt" modifiers.  "&gt"
+       is the big-endian modifier, while "&lt" is the little-endian modifier.
        Using them, we could rewrite the above code as:
 
-	  my @data = unpack 's>*', $buf;
+	  my @data = unpack 's&gt*', $buf;
 
        As you can see, the "big end" of the arrow touches the "s", which is a
-       nice way to remember that ">" is the big-endian modifier. The same
-       obviously works for "<", where the "little end" touches the code.
+       nice way to remember that "&gt" is the big-endian modifier. The same
+       obviously works for "&lt", where the "little end" touches the code.
 
        You will probably find these modifiers even more useful if you have to
        deal with big- or little-endian C structures. Be sure to read "Packing
@@ -547,7 +549,7 @@ Exotic Templates
        the repeat count.
 
    Doing Sums
-       An even stranger template code is "%"<number>. First, because it's used
+       An even stranger template code is "%"&ltnumber&gt. First, because it's used
        as a prefix to some other template code. Second, because it cannot be
        used in "pack" at all, and third, in "unpack", doesn't return the data
        as defined by the template code it precedes. Instead it'll give you an
@@ -584,7 +586,7 @@ Exotic Templates
        next range, up to 255. After some more Latin extensions we find the
        character sets from languages using non-Roman alphabets, interspersed
        with a variety of symbol sets such as currency symbols, Zapf Dingbats
-       or Braille.  (You might want to visit <http://www.unicode.org/> for a
+       or Braille.  (You might want to visit &lthttp://www.unicode.org/&gt for a
        look at some of them - my personal favourites are Telugu and Kannada.)
 
        The Unicode character sets associates characters with integers.
@@ -628,7 +630,7 @@ Exotic Templates
    Another Portable Binary Encoding
        The pack code "w" has been added to support a portable binary data
        encoding scheme that goes way beyond simple integers. (Details can be
-       found at <http://Casbah.org/>, the Scarab project.)  A BER (Binary
+       found at &lthttp://Casbah.org/&gt, the Scarab project.)  A BER (Binary
        Encoded Representation) compressed unsigned integer stores base 128
        digits, most significant digit first, with as few digits as possible.
        Bit eight (the high bit) is set on each byte except the last. There is
@@ -809,8 +811,8 @@ Lengths and Widths
    Intel HEX
        Intel HEX is a file format for representing binary data, mostly for
        programming various chips, as a text file. (See
-       <http://en.wikipedia.org/wiki/.hex> for a detailed description, and
-       <http://en.wikipedia.org/wiki/SREC_(file_format)> for the Motorola
+       &lthttp://en.wikipedia.org/wiki/.hex&gt for a detailed description, and
+       &lthttp://en.wikipedia.org/wiki/SREC_(file_format)&gt for the Motorola
        S-record format, which can be unravelled using the same technique.)
        Each line begins with a colon (':') and is followed by a sequence of
        hexadecimal characters, specifying a byte count n (8 bit), an address
@@ -936,8 +938,8 @@ Packing and Unpacking C Structures
        to be a drag. Isn't there a way we can create the template with a
        simple program? Here's a C program that does the trick:
 
-	  #include <stdio.h>
-	  #include <stddef.h>
+	  #include &ltstdio.h&gt
+	  #include &ltstddef.h&gt
 
 	  typedef struct {
 	    char     fc1;
@@ -964,7 +966,7 @@ Packing and Unpacking C Structures
        Gee, yet another template code - as if we hadn't plenty. But "@" saves
        our day by enabling us to specify the offset from the beginning of the
        pack buffer to the next item: This is just the value the "offsetof"
-       macro (defined in "<stddef.h>") returns when given a "struct" type and
+       macro (defined in "&ltstddef.h&gt") returns when given a "struct" type and
        one of its field names ("member-designator" in C standardese).
 
        Neither using offsets nor adding "x"'s to bridge the gaps is
@@ -995,13 +997,13 @@ Packing and Unpacking C Structures
 
        If the target machine is little-endian, we could write:
 
-	 my $gappy = pack( 'c x![s] s< c x![l] l<', $c1, $s, $c2, $l );
+	 my $gappy = pack( 'c x![s] s&lt c x![l] l&lt', $c1, $s, $c2, $l );
 
        This forces the short and the long members to be little-endian, and is
        just fine if you don't have too many struct members. But we could also
        use the byte-order modifier on a group and write the following:
 
-	 my $gappy = pack( '( c x![s] s c x![l] l )<', $c1, $s, $c2, $l );
+	 my $gappy = pack( '( c x![s] s c x![l] l )&lt', $c1, $s, $c2, $l );
 
        This is not as short as before, but it makes it more obvious that we
        intend to have little-endian byte-order for a whole group, not only for
@@ -1025,7 +1027,7 @@ Packing and Unpacking C Structures
 
 	  # something goes wrong here:
 	  pack( 's!a' x @buffer,
-		map{ ( $_->{count}, $_->{glyph} ) } @buffer );
+		map{ ( $_-&gt{count}, $_-&gt{glyph} ) } @buffer );
 
        This packs "3*@buffer" bytes, but it turns out that the size of
        "buffer_t" is four times "BUFLEN"! The moral of the story is that the
@@ -1034,7 +1036,7 @@ Packing and Unpacking C Structures
        component as well. Thus the correct template is:
 
 	  pack( 's!ax' x @buffer,
-		map{ ( $_->{count}, $_->{glyph} ) } @buffer );
+		map{ ( $_-&gt{count}, $_-&gt{glyph} ) } @buffer );
 
    Alignment, Take 3
        And even if you take all the above into account, ANSI still lets this:
@@ -1195,6 +1197,6 @@ Authors
 
 
 perl v5.10.1			  2009-07-03			PERLPACKTUT(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

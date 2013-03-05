@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module encapsulates reading Distroprefs and matching them against..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>CPAN::Distroprefs -- read and match distroprefs</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 CPAN::Distroprefs(3pm) Perl Programmers Reference Guide CPAN::Distroprefs(3pm)
 
 
@@ -20,16 +22,16 @@ SYNOPSIS
 
 	   my %info = (... distribution/environment info ...);
 
-	   my $finder = CPAN::Distroprefs->find($prefs_dir, \%ext_map);
+	   my $finder = CPAN::Distroprefs-&gtfind($prefs_dir, \%ext_map);
 
-	   while (my $result = $finder->next) {
+	   while (my $result = $finder-&gtnext) {
 
-	       die $result->as_string if $result->is_fatal;
+	       die $result-&gtas_string if $result-&gtis_fatal;
 
-	       warn($result->as_string), next if $result->is_warning;
+	       warn($result-&gtas_string), next if $result-&gtis_warning;
 
-	       for my $pref (@{ $result->prefs }) {
-		   if ($pref->matches(\%info)) {
+	       for my $pref (@{ $result-&gtprefs }) {
+		   if ($pref-&gtmatches(\%info)) {
 		       return $pref;
 		   }
 	       }
@@ -40,9 +42,9 @@ DESCRIPTION
        CPAN distributions.
 
 INTERFACE
-	   my $finder = CPAN::Distroprefs->find($dir, \%ext_map);
+	   my $finder = CPAN::Distroprefs-&gtfind($dir, \%ext_map);
 
-	   while (my $result = $finder->next) { ... }
+	   while (my $result = $finder-&gtnext) { ... }
 
        Build an iterator which finds distroprefs files in the given directory.
 
@@ -50,12 +52,12 @@ INTERFACE
        are modules used to load matching files:
 
 	   {
-	       'yml' => 'YAML::Syck',
-	       'dd'  => 'Data::Dumper',
+	       'yml' =&gt 'YAML::Syck',
+	       'dd'  =&gt 'Data::Dumper',
 	       ...
 	   }
 
-       Each time "$finder->next" is called, the iterator returns one of two
+       Each time "$finder-&gtnext" is called, the iterator returns one of two
        possible values:
 
        o   a CPAN::Distroprefs::Result object
@@ -131,7 +133,7 @@ PREFS
 
        matches
 
-	 if ($pref->matches(\%arg)) { ... }
+	 if ($pref-&gtmatches(\%arg)) { ... }
 
        true if this pref matches the passed-in hashref, which must have a
        value for each of the "match_attributes" (above)
@@ -143,6 +145,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-06-01		CPAN::Distroprefs(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

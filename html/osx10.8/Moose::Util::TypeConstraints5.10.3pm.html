@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module provides Moose with the ability to create custom type..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Util::TypeConstraints - Type constraint system for Moose</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Util::TypeConstUsertContributed Perl DocMoose::Util::TypeConstraints(3)
 
 
@@ -19,19 +21,19 @@ SYNOPSIS
 	 use Moose::Util::TypeConstraints;
 
 	 subtype 'Natural'
-	     => as 'Int'
-	     => where { $_ > 0 };
+	     =&gt as 'Int'
+	     =&gt where { $_ &gt 0 };
 
 	 subtype 'NaturalLessThanTen'
-	     => as 'Natural'
-	     => where { $_ < 10 }
-	     => message { "This number ($_) is not less than ten!" };
+	     =&gt as 'Natural'
+	     =&gt where { $_ &lt 10 }
+	     =&gt message { "This number ($_) is not less than ten!" };
 
 	 coerce 'Num'
-	     => from 'Str'
-	       => via { 0+$_ };
+	     =&gt from 'Str'
+	       =&gt via { 0+$_ };
 
-	 enum 'RGBColors' => qw(red green blue);
+	 enum 'RGBColors' =&gt qw(red green blue);
 
 	 no Moose::Util::TypeConstraints;
 
@@ -58,19 +60,19 @@ DESCRIPTION
 
        For instance:
 
-	 subtype DateTime => as Object => where { $_->isa('DateTime') };
+	 subtype DateTime =&gt as Object =&gt where { $_-&gtisa('DateTime') };
 
        will just work, while this:
 
 	 use DateTime;
-	 subtype DateTime => as Object => where { $_->isa('DateTime') };
+	 subtype DateTime =&gt as Object =&gt where { $_-&gtisa('DateTime') };
 
        will fail silently and cause many headaches. The simple way to solve
        this, as well as future proof your subtypes from classes which have yet
        to have been created, is to quote the type name:
 
 	 use DateTime;
-	 subtype 'DateTime' => as 'Object' => where { $_->isa('DateTime') };
+	 subtype 'DateTime' =&gt as 'Object' =&gt where { $_-&gtisa('DateTime') };
 
    Default Type Constraints
        This module also provides a simple hierarchy for Perl 5 types, here is
@@ -145,9 +147,9 @@ DESCRIPTION
 
 	 type 'HashOfArrayOfObjects',
 	     {
-	     where => IsHashRef(
-		 -keys	 => HasLength,
-		 -values => IsArrayRef(IsObject)
+	     where =&gt IsHashRef(
+		 -keys	 =&gt HasLength,
+		 -values =&gt IsArrayRef(IsObject)
 	     )
 	 };
 
@@ -157,11 +159,11 @@ DESCRIPTION
        "eq_deeply" function.
 
 	 type 'ArrayOfHashOfBarsAndRandomNumbers'
-	     => where {
+	     =&gt where {
 		 eq_deeply($_,
 		     array_each(subhashof({
-			 bar	       => isa('Bar'),
-			 random_number => ignore()
+			 bar	       =&gt isa('Bar'),
+			 random_number =&gt ignore()
 		     })))
 	       };
 
@@ -176,7 +178,7 @@ FUNCTIONS
 
        See the "SYNOPSIS" for an example of how to use these.
 
-       subtype 'Name' => as 'Parent' => where { } ...
+       subtype 'Name' =&gt as 'Parent' =&gt where { } ...
 	   This creates a named subtype.
 
 	   If you provide a parent that Moose does not recognize, it will
@@ -186,12 +188,12 @@ FUNCTIONS
 	   called with the sugar helpers ("where", "message", etc), or with a
 	   name and a hashref of parameters:
 
-	    subtype( 'Foo', { where => ..., message => ... } );
+	    subtype( 'Foo', { where =&gt ..., message =&gt ... } );
 
 	   The valid hashref keys are "as" (the parent), "where", "message",
 	   and "optimize_as".
 
-       subtype as 'Parent' => where { } ...
+       subtype as 'Parent' =&gt where { } ...
 	   This creates an unnamed subtype and will return the type constraint
 	   meta-object, which will be an instance of
 	   Moose::Meta::TypeConstraint.
@@ -200,7 +202,7 @@ FUNCTIONS
 	   either be called with the sugar helpers ("where", "message", etc),
 	   or with just a hashref of parameters:
 
-	    subtype( { where => ..., message => ... } );
+	    subtype( { where =&gt ..., message =&gt ... } );
 
        class_type ($class, ?$options)
 	   Creates a new subtype of "Object" with the name $class and the
@@ -227,9 +229,9 @@ FUNCTIONS
 	   $name, "\@methods" pair, this will create an unnamed duck type.
 	   This can be used in an attribute definition like so:
 
-	     has 'cache' => (
-		 is  => 'ro',
-		 isa => duck_type( [qw( get_set )] ),
+	     has 'cache' =&gt (
+		 is  =&gt 'ro',
+		 isa =&gt duck_type( [qw( get_set )] ),
 	     );
 
        enum ($name, \@values)
@@ -246,9 +248,9 @@ FUNCTIONS
 	   $name, "\@values" pair, this will create an unnamed enum. This can
 	   then be used in an attribute definition like so:
 
-	     has 'sort_order' => (
-		 is  => 'ro',
-		 isa => enum([qw[ ascending descending ]]),
+	     has 'sort_order' =&gt (
+		 is  =&gt 'ro',
+		 isa =&gt enum([qw[ ascending descending ]]),
 	     );
 
        as 'Parent'
@@ -281,19 +283,19 @@ FUNCTIONS
 	   the built in types use this, so your subtypes (assuming they are
 	   shallow) will not likely need to use this.
 
-       type 'Name' => where { } ...
+       type 'Name' =&gt where { } ...
 	   This creates a base type, which has no parent.
 
 	   The "type" function should either be called with the sugar helpers
 	   ("where", "message", etc), or with a name and a hashref of
 	   parameters:
 
-	     type( 'Foo', { where => ..., message => ... } );
+	     type( 'Foo', { where =&gt ..., message =&gt ... } );
 
 	   The valid hashref keys are "where", "message", and "optimize_as".
 
    Type Constraint Utilities
-       match_on_type $value => ( $type => \&action, ... ?\&default )
+       match_on_type $value =&gt ( $type =&gt \&action, ... ?\&default )
 	   This is a utility function for doing simple type based dispatching
 	   similar to match/case in OCaml and case/of in Haskell. It is not as
 	   featureful as those languages, nor does not it support any kind of
@@ -302,28 +304,28 @@ FUNCTIONS
 
 	     sub ppprint {
 		 my $x = shift;
-		 match_on_type $x => (
-		     HashRef => sub {
+		 match_on_type $x =&gt (
+		     HashRef =&gt sub {
 			 my $hash = shift;
 			 '{ '
 			     . (
-			     join ", " => map { $_ . ' => ' . ppprint( $hash->{$_} ) }
+			     join ", " =&gt map { $_ . ' =&gt ' . ppprint( $hash-&gt{$_} ) }
 				 sort keys %$hash
 			     ) . ' }';
 		     },
-		     ArrayRef => sub {
+		     ArrayRef =&gt sub {
 			 my $array = shift;
-			 '[ ' . ( join ", " => map { ppprint($_) } @$array ) . ' ]';
+			 '[ ' . ( join ", " =&gt map { ppprint($_) } @$array ) . ' ]';
 		     },
-		     CodeRef   => sub {'sub { ... }'},
-		     RegexpRef => sub { 'qr/' . $_ . '/' },
-		     GlobRef   => sub { '*' . B::svref_2object($_)->NAME },
-		     Object    => sub { $_->can('to_string') ? $_->to_string : $_ },
-		     ScalarRef => sub { '\\' . ppprint( ${$_} ) },
-		     Num       => sub {$_},
-		     Str       => sub { '"' . $_ . '"' },
-		     Undef     => sub {'undef'},
-		     => sub { die "I don't know what $_ is" }
+		     CodeRef   =&gt sub {'sub { ... }'},
+		     RegexpRef =&gt sub { 'qr/' . $_ . '/' },
+		     GlobRef   =&gt sub { '*' . B::svref_2object($_)-&gtNAME },
+		     Object    =&gt sub { $_-&gtcan('to_string') ? $_-&gtto_string : $_ },
+		     ScalarRef =&gt sub { '\\' . ppprint( ${$_} ) },
+		     Num       =&gt sub {$_},
+		     Str       =&gt sub { '"' . $_ . '"' },
+		     Undef     =&gt sub {'undef'},
+		     =&gt sub { die "I don't know what $_ is" }
 		 );
 	     }
 
@@ -331,24 +333,24 @@ FUNCTIONS
 
 	     sub to_json {
 		 my $x = shift;
-		 match_on_type $x => (
-		     HashRef => sub {
+		 match_on_type $x =&gt (
+		     HashRef =&gt sub {
 			 my $hash = shift;
 			 '{ '
 			     . (
-			     join ", " =>
-				 map { '"' . $_ . '" : ' . to_json( $hash->{$_} ) }
+			     join ", " =&gt
+				 map { '"' . $_ . '" : ' . to_json( $hash-&gt{$_} ) }
 				 sort keys %$hash
 			     ) . ' }';
 		     },
-		     ArrayRef => sub {
+		     ArrayRef =&gt sub {
 			 my $array = shift;
-			 '[ ' . ( join ", " => map { to_json($_) } @$array ) . ' ]';
+			 '[ ' . ( join ", " =&gt map { to_json($_) } @$array ) . ' ]';
 		     },
-		     Num   => sub {$_},
-		     Str   => sub { '"' . $_ . '"' },
-		     Undef => sub {'null'},
-		     => sub { die "$_ is not acceptable json type" }
+		     Num   =&gt sub {$_},
+		     Str   =&gt sub { '"' . $_ . '"' },
+		     Undef =&gt sub {'null'},
+		     =&gt sub { die "$_ is not acceptable json type" }
 		 );
 	     }
 
@@ -369,7 +371,7 @@ FUNCTIONS
 
        See the "SYNOPSIS" for an example of how to use these.
 
-       coerce 'Name' => from 'OtherName' => via { ... }
+       coerce 'Name' =&gt from 'OtherName' =&gt via { ... }
 	   This defines a coercion from one type to another. The "Name"
 	   argument is the type you are coercing to.
 
@@ -494,12 +496,12 @@ BUGS
        See "BUGS" in Moose for details on reporting bugs.
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        Copyright 2006-2010 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -507,6 +509,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2010-03-26   Moose::Util::TypeConstraints(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

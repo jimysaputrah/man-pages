@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This recipe demonstrates the use of "BUILDARGS" and "BUILD". By..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Basics::Recipe10 - Using BUILDARGS and BUILD to hook</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::BasicUsereContributed PerMoose::Cookbook::Basics::Recipe10(3)
 
 
@@ -19,46 +21,46 @@ NAME
 SYNOPSIS
 	 package Person;
 
-	 has 'ssn' => (
-	     is        => 'ro',
-	     isa       => 'Str',
-	     predicate => 'has_ssn',
+	 has 'ssn' =&gt (
+	     is        =&gt 'ro',
+	     isa       =&gt 'Str',
+	     predicate =&gt 'has_ssn',
 	 );
 
-	 has 'country_of_residence' => (
-	     is      => 'ro',
-	     isa     => 'Str',
-	     default => 'usa'
+	 has 'country_of_residence' =&gt (
+	     is      =&gt 'ro',
+	     isa     =&gt 'Str',
+	     default =&gt 'usa'
 	 );
 
-	 has 'first_name' => (
-	     is  => 'ro',
-	     isa => 'Str',
+	 has 'first_name' =&gt (
+	     is  =&gt 'ro',
+	     isa =&gt 'Str',
 	 );
 
-	 has 'last_name' => (
-	     is  => 'ro',
-	     isa => 'Str',
+	 has 'last_name' =&gt (
+	     is  =&gt 'ro',
+	     isa =&gt 'Str',
 	 );
 
-	 around BUILDARGS => sub {
+	 around BUILDARGS =&gt sub {
 	     my $orig = shift;
 	     my $class = shift;
 
 	     if ( @_ == 1 && ! ref $_[0] ) {
-		 return $class->$orig(ssn => $_[0]);
+		 return $class-&gt$orig(ssn =&gt $_[0]);
 	     }
 	     else {
-		 return $class->$orig(@_);
+		 return $class-&gt$orig(@_);
 	     }
 	 };
 
 	 sub BUILD {
 	     my $self = shift;
 
-	     if ( $self->country_of_residence eq 'usa' ) {
+	     if ( $self-&gtcountry_of_residence eq 'usa' ) {
 		 die 'Cannot create a Person who lives in the USA without an ssn.'
-		     unless $self->has_ssn;
+		     unless $self-&gthas_ssn;
 	     }
 	 }
 
@@ -78,12 +80,12 @@ DESCRIPTION
        class, we are allowing it to be called with a single argument, a social
        security number:
 
-	 my $person = Person->new('123-45-6789');
+	 my $person = Person-&gtnew('123-45-6789');
 
        The key part of our "BUILDARGS" is this conditional:
 
 	     if ( @_ == 1 && ! ref $_[0] ) {
-		 return $class->$orig(ssn => $_[0]);
+		 return $class-&gt$orig(ssn =&gt $_[0]);
 	     }
 
        By default, Moose constructors accept a list of key-value pairs, or a
@@ -121,12 +123,12 @@ CONCLUSION
        constraints across the whole object after it is created.
 
 AUTHOR
-       Dave Rolsky <autarch@urth.org>
+       Dave Rolsky &ltautarch@urth.org&gt
 
 COPYRIGHT AND LICENSE
        Copyright 2006-2010 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -134,6 +136,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2010-02-Moose::Cookbook::Basics::Recipe10(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

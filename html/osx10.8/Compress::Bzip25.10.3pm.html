@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Compress::Bzip2 module provides a Perl interface to the Bzip2..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Compress::Bzip2 - Interface to Bzip2 compression library</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Compress::Bzip2(3)    User Contributed Perl Documentation   Compress::Bzip2(3)
 
 
@@ -19,39 +21,39 @@ SYNOPSIS
 	   use Compress::Bzip2 qw(:all :constant :utilities :gzip);
 
 	   ($bz, $status) = bzdeflateInit( [PARAMS] ) ;
-	   ($out, $status) = $bz->bzdeflate($buffer) ;
+	   ($out, $status) = $bz-&gtbzdeflate($buffer) ;
 
 	   ($bz, $status) = bzinflateInit( [PARAMS] ) ;
-	   ($out, $status) = $bz->bzinflate($buffer) ;
+	   ($out, $status) = $bz-&gtbzinflate($buffer) ;
 
-	   ($out, $status) = $bz->bzflush() ;
-	   ($out, $status) = $bz->bzclose() ;
+	   ($out, $status) = $bz-&gtbzflush() ;
+	   ($out, $status) = $bz-&gtbzclose() ;
 
 	   $dest = memBzip($source);
 	       alias compress
 	   $dest = memBunzip($source);
 	       alias decompress
 
-	   $bz = Compress::Bzip2->new( [PARAMS] );
+	   $bz = Compress::Bzip2-&gtnew( [PARAMS] );
 
 	   $bz = bzopen($filename or filehandle, $mode);
 	       alternate, with $bz created by new():
-	   $bz->bzopen($filename or filehandle, $mode);
+	   $bz-&gtbzopen($filename or filehandle, $mode);
 
-	   $bytesread = $bz->bzread($buffer [,$size]) ;
-	   $bytesread = $bz->bzreadline($line);
-	   $byteswritten = $bz->bzwrite($buffer [,$limit]);
-	   $errstring = $bz->bzerror();
-	   $status = $bz->bzeof();
-	   $status = $bz->bzflush();
-	   $status = $bz->bzclose() ;
+	   $bytesread = $bz-&gtbzread($buffer [,$size]) ;
+	   $bytesread = $bz-&gtbzreadline($line);
+	   $byteswritten = $bz-&gtbzwrite($buffer [,$limit]);
+	   $errstring = $bz-&gtbzerror();
+	   $status = $bz-&gtbzeof();
+	   $status = $bz-&gtbzflush();
+	   $status = $bz-&gtbzclose() ;
 
-	   $status = $bz->bzsetparams( $param => $setting );
+	   $status = $bz-&gtbzsetparams( $param =&gt $setting );
 
-	   $bz->total_in() ;
-	   $bz->total_out() ;
+	   $bz-&gttotal_in() ;
+	   $bz-&gttotal_out() ;
 
-	   $verstring = $bz->bzversion();
+	   $verstring = $bz-&gtbzversion();
 
 	   $Compress::Bzip2::bzerrno
 
@@ -84,16 +86,16 @@ FILE READ/WRITE INTERFACE
        filename, it better be positioned to the start of a
        compression/decompression sequence.
 
-   $bz = Compress::Bzip2->new( [PARAMS] )
+   $bz = Compress::Bzip2-&gtnew( [PARAMS] )
        Create a Compress::Bzip2 object.  Optionally, provide
-       compression/decompression parameters as a keyword => setting list.  See
+       compression/decompression parameters as a keyword =&gt setting list.  See
        bzsetparams() for a description of the parameters.
 
-   $bz->bzopen(filename or filehandle, mode)
+   $bz-&gtbzopen(filename or filehandle, mode)
        This is bzopen, but it uses an object previously created by the new
        method.	Other than that, it is identical to the above bzopen.
 
-   $bytesread = $bz->bzread($buffer [, $size]) ;
+   $bytesread = $bz-&gtbzread($buffer [, $size]) ;
        Reads $size bytes from the compressed file into $buffer. If $size is
        not specified, it will default to 4096. If the scalar $buffer is not
        large enough, it will be extended automatically.
@@ -101,7 +103,7 @@ FILE READ/WRITE INTERFACE
        Returns the number of bytes actually read. On EOF it returns 0 and in
        the case of an error, -1.
 
-   $bytesread = $bz->bzreadline($line) ;
+   $bytesread = $bz-&gtbzreadline($line) ;
        Reads the next line from the compressed file into $line.
 
        Returns the number of bytes actually read. On EOF it returns 0 and in
@@ -113,14 +115,14 @@ FILE READ/WRITE INTERFACE
        ($INPUT_RECORD_SEPARATOR or $RS when "English" is in use). The end of a
        line is denoted by the C character '\n'.
 
-   $byteswritten = $bz->bzwrite($buffer [, $limit]) ;
+   $byteswritten = $bz-&gtbzwrite($buffer [, $limit]) ;
        Writes the contents of $buffer to the compressed file. Returns the
        number of bytes actually written, or 0 on error.
 
        If $limit is given and non-zero, then only that many bytes from $buffer
        will be written.
 
-   $status = $bz->bzflush($flush) ;
+   $status = $bz-&gtbzflush($flush) ;
        Flushes all pending output to the compressed file.  Works identically
        to the zlib function it interfaces to. Note that the use of bzflush can
        degrade compression.
@@ -130,15 +132,15 @@ FILE READ/WRITE INTERFACE
 
        Refer to the bzlib documentation for the valid values of $flush.
 
-   $status = $bz->bzeof() ;
+   $status = $bz-&gtbzeof() ;
        Returns 1 if the end of file has been detected while reading the input
        file, otherwise returns 0.
 
-   $bz->bzclose
+   $bz-&gtbzclose
        Closes the compressed file. Any pending data is flushed to the file
        before it is closed.
 
-   $bz->bzsetparams( [PARAMS] );
+   $bz-&gtbzsetparams( [PARAMS] );
        Change settings for the deflate stream $bz.
 
        The list of the valid options is shown below. Options not specified
@@ -147,7 +149,7 @@ FILE READ/WRITE INTERFACE
        -verbosity
 	    Defines the verbosity level. Valid values are 0 through 4,
 
-	    The default is "-verbosity => 0".
+	    The default is "-verbosity =&gt 0".
 
        -blockSize100k
 	    For bzip object opened for stream deflation or write.
@@ -183,7 +185,7 @@ FILE READ/WRITE INTERFACE
 	    small may be 0 or 1.  Set "small" to one to use a slower, less
 	    memory intensive algorithm.
 
-   $bz->bzerror
+   $bz-&gtbzerror
        Returns the bzlib error message or number for the last operation
        associated with $bz. The return value will be the bzlib error number
        when used in a numeric context and the bzlib error message when used in
@@ -259,23 +261,23 @@ Compress::Bzip2 1.03 COMPATIBILITY
        Alias to bzinflateInit.	See bzinflateInit for a description of the
        parameters.  The option "-buffer" is accepted, but ignored.
 
-   $output = $stream->add( $string )
+   $output = $stream-&gtadd( $string )
        Add data to be compressed/decompressed.	Returns whatever output is
        available (possibly none, if it's still buffering it), or undef on
        error.
 
-   $output = $stream->finish( [$string] )
+   $output = $stream-&gtfinish( [$string] )
        Finish the operation; takes an optional final data string.  Whatever is
        returned completes the output; returns undef on error.
 
-   $stream->error
+   $stream-&gterror
        Like the function, but applies to the current object only.  Note that
        errors in a stream object are also returned by the function.
 
-   $stream->input_size
+   $stream-&gtinput_size
        Alias to total_in.  Total bytes passed to the stream.
 
-   $stream->output_size
+   $stream-&gtoutput_size
        Alias to total_out.  Total bytes received from the stream.
 
 GZIP COMPATIBILITY INTERFACE
@@ -305,28 +307,28 @@ GZIP COMPATIBILITY INTERFACE
     $gz = gzopen( $filename, $mode )
        Alias for bzopen.
 
-    $gz->gzread( $buffer, [ $length ] )
+    $gz-&gtgzread( $buffer, [ $length ] )
        Alias for bzread.
 
-    $gz->gzreadline( $buffer )
+    $gz-&gtgzreadline( $buffer )
        Alias for bzreadline.
 
-    $gz->gzwrite( $buffer )
+    $gz-&gtgzwrite( $buffer )
        Alias for bzwrite.
 
-    $gz->gzflush( [$flushtype] )
+    $gz-&gtgzflush( [$flushtype] )
        Alias for bzflush, with return code translation.
 
-    $gz->gzclose( )
+    $gz-&gtgzclose( )
        Alias for bzclose.
 
-    $gz->gzeof( )
+    $gz-&gtgzeof( )
        Alias for bzeof.
 
-    $gz->gzerror( )
+    $gz-&gtgzerror( )
        Alias for bzerror.
 
-    $gz->gzsetparams( $level, $strategy )
+    $gz-&gtgzsetparams( $level, $strategy )
        This is a no-op.
 
     $d = deflateInit( [OPTS] )
@@ -334,21 +336,21 @@ GZIP COMPATIBILITY INTERFACE
 
        All OPTS are ignored.
 
-    $d->deflate( $buffer )
+    $d-&gtdeflate( $buffer )
        Alias for bzdeflate, with return code translation.
 
-    $d->deflateParams( [OPTS] )
+    $d-&gtdeflateParams( [OPTS] )
        This is a no-op.
 
-    $d->flush( [$flushtype] )
+    $d-&gtflush( [$flushtype] )
        Cover function for bzflush or bzclose, depending on $flushtype.
 
        See the Compress::Zlib documentation for more information.
 
-    $d->dict_adler( )
+    $d-&gtdict_adler( )
        This is a no-op.
 
-    $d->msg( )
+    $d-&gtmsg( )
        This is a no-op.
 
     $d = inflateInit( [OPTS] )
@@ -356,16 +358,16 @@ GZIP COMPATIBILITY INTERFACE
 
        All OPTS are ignored.
 
-    $d->inflate( )
+    $d-&gtinflate( )
        Alias for bzinflate, with return code translation.
 
-    $d->inflateSync( )
+    $d-&gtinflateSync( )
        This is a no-op.
 
-    $d->adler32( $crc )
+    $d-&gtadler32( $crc )
        This is a no-op.
 
-    $d->crc32( $crc )
+    $d-&gtcrc32( $crc )
        This is a no-op.
 
     $buffer = memGzip( $buffer )
@@ -416,7 +418,7 @@ STREAM DEFLATE
        $status will hold the exact bzip2 error code.
 
        The function optionally takes a number of named options specified as
-       "-Name=>value" pairs. This allows individual options to be tailored
+       "-Name=&gtvalue" pairs. This allows individual options to be tailored
        without having to specify them all in the parameter list.
 
        Here is a list of the valid options:
@@ -424,7 +426,7 @@ STREAM DEFLATE
        -verbosity
 	    Defines the verbosity level. Valid values are 0 through 4,
 
-	    The default is "-verbosity => 0".
+	    The default is "-verbosity =&gt 0".
 
        -blockSize100k
 	    Defines the buffering factor of compression method.  The algorithm
@@ -454,9 +456,9 @@ STREAM DEFLATE
        override the default buffer size and compression level. All other
        options will take their default values.
 
-	   bzdeflateInit( -blockSize100k => 1, -verbosity => 1 );
+	   bzdeflateInit( -blockSize100k =&gt 1, -verbosity =&gt 1 );
 
-   ($out, $status) = $d->bzdeflate($buffer)
+   ($out, $status) = $d-&gtbzdeflate($buffer)
        Deflates the contents of $buffer. The buffer can either be a scalar or
        a scalar reference.  When finished, $buffer will be completely
        processed (assuming there were no errors). If the deflation was
@@ -474,7 +476,7 @@ STREAM DEFLATE
        In fact, given the size of bzdeflates internal buffer, with most files
        it's likely you won't see any output at all until flush or close.
 
-   ($out, $status) = $d->bzflush([flush_type])
+   ($out, $status) = $d-&gtbzflush([flush_type])
        Typically used to finish the deflation. Any pending output will be
        returned via $out.  $status will have a value "BZ_OK" if successful.
 
@@ -509,9 +511,9 @@ STREAM DEFLATE
 	      or die "Cannot create a deflation stream\n" ;
 
 	   my ($output, $status) ;
-	   while (<>)
+	   while (&lt&gt)
 	   {
-	       ($output, $status) = $x->bzdeflate($_) ;
+	       ($output, $status) = $x-&gtbzdeflate($_) ;
 
 	       $status == BZ_OK
 		   or die "deflation failed\n" ;
@@ -519,7 +521,7 @@ STREAM DEFLATE
 	       print $output ;
 	   }
 
-	   ($output, $status) = $x->bzclose() ;
+	   ($output, $status) = $x-&gtbzclose() ;
 
 	   $status == BZ_OK
 	       or die "deflation failed\n" ;
@@ -543,11 +545,11 @@ STREAM INFLATE
        error code.
 
        The function optionally takes a number of named options specified as
-       "-Name=>value" pairs. This allows individual options to be tailored
+       "-Name=&gtvalue" pairs. This allows individual options to be tailored
        without having to specify them all in the parameter list.
 
        For backward compatibility, it is also possible to pass the parameters
-       as a reference to a hash containing the name=>value pairs.
+       as a reference to a hash containing the name=&gtvalue pairs.
 
        The function takes one optional parameter, a reference to a hash.  The
        contents of the hash allow the deflation interface to be tailored.
@@ -561,13 +563,13 @@ STREAM INFLATE
        -verbosity
 	    Defines the verbosity level. Valid values are 0 through 4,
 
-	    The default is "-verbosity => 0".
+	    The default is "-verbosity =&gt 0".
 
        Here is an example of using the bzinflateInit optional parameter.
 
-	   bzinflateInit( -small => 1, -verbosity => 1 );
+	   bzinflateInit( -small =&gt 1, -verbosity =&gt 1 );
 
-   ($out, $status) = $i->bzinflate($buffer)
+   ($out, $status) = $i-&gtbzinflate($buffer)
        Inflates the complete contents of $buffer. The buffer can either be a
        scalar or a scalar reference.
 
@@ -603,7 +605,7 @@ STREAM INFLATE
 	   my ($output, $status) ;
 	   while (read(STDIN, $input, 4096))
 	   {
-	       ($output, $status) = $x->bzinflate(\$input) ;
+	       ($output, $status) = $x-&gtbzinflate(\$input) ;
 
 	       print $output
 		   if $status == BZ_OK or $status == BZ_STREAM_END ;
@@ -633,12 +635,12 @@ EXAMPLES
 	   my $bz = bzopen($file, "rb")
 	      or die "Cannot open $file: $bzerrno\n" ;
 
-	   print $buffer while $bz->bzread($buffer) > 0 ;
+	   print $buffer while $bz-&gtbzread($buffer) &gt 0 ;
 
 	   die "Error reading from $file: $bzerrno" . ($bzerrno+0) . "\n"
 	      if $bzerrno != BZ_STREAM_END ;
 
-	   $bz->bzclose() ;
+	   $bz-&gtbzclose() ;
 	 }
 
    A grep using bzreadline
@@ -647,7 +649,7 @@ EXAMPLES
 
 	 use Compress::Bzip2 ;
 
-	 die "Usage: bzgrep pattern file...\n" unless @ARGV >= 2;
+	 die "Usage: bzgrep pattern file...\n" unless @ARGV &gt= 2;
 
 	 my $pattern = shift ;
 
@@ -657,14 +659,14 @@ EXAMPLES
 	   my $bz = bzopen($file, "rb")
 	      or die "Cannot open $file: $bzerrno\n" ;
 
-	   while ($bz->bzreadline($_) > 0) {
+	   while ($bz-&gtbzreadline($_) &gt 0) {
 	     print if /$pattern/ ;
 	   }
 
 	   die "Error reading from $file: $bzerrno\n"
 	     if $bzerrno != Z_STREAM_END ;
 
-	   $bz->bzclose() ;
+	   $bz-&gtbzclose() ;
 	 }
 
    Streaming Compression
@@ -681,11 +683,11 @@ EXAMPLES
 	 my $bz = bzopen(\*STDOUT, "wb")
 	    or die "Cannot open stdout: $bzerrno\n" ;
 
-	 while (<>) {
-	   $bz->bzwrite($_) or die "error writing: $bzerrno\n" ;
+	 while (&lt&gt) {
+	   $bz-&gtbzwrite($_) or die "error writing: $bzerrno\n" ;
 	 }
 
-	 $bz->bzclose ;
+	 $bz-&gtbzclose ;
 
 EXPORT
        Use the tags :all, :utilities, :constants, :bzip1 and :gzip.
@@ -758,7 +760,7 @@ SEE ALSO
        The documentation for zlib, bzip2 and Compress::Zlib.
 
 AUTHOR
-       Rob Janes, <arjay at cpan.org>
+       Rob Janes, &ltarjay at cpan.org&gt
 
 COPYRIGHT AND LICENSE
        Copyright (C) 2005 by Rob Janes
@@ -830,6 +832,6 @@ POD ERRORS
 
 
 perl v5.10.1			  2005-08-09		    Compress::Bzip2(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

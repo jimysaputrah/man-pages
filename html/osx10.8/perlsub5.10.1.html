@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Like many languages, Perl provides for user-defined subroutines.  These..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlsub - Perl subroutines</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLSUB(1)	       Perl Programmers Reference Guide 	    PERLSUB(1)
 
 
@@ -102,7 +104,7 @@ DESCRIPTION
 	   sub max {
 	       my $max = shift(@_);
 	       foreach $foo (@_) {
-		   $max = $foo if $max < $foo;
+		   $max = $foo if $max &lt $foo;
 	       }
 	       return $max;
 	   }
@@ -115,7 +117,7 @@ DESCRIPTION
 
 	   sub get_line {
 	       $thisline = $lookahead;	# global variables!
-	       LINE: while (defined($lookahead = <STDIN>)) {
+	       LINE: while (defined($lookahead = &ltSTDIN&gt)) {
 		   if ($lookahead =~ /^[ \t]/) {
 		       $thisline .= $lookahead;
 		   }
@@ -126,7 +128,7 @@ DESCRIPTION
 	       return $thisline;
 	   }
 
-	   $lookahead = <STDIN>;       # get first line
+	   $lookahead = &ltSTDIN&gt;       # get first line
 	   while (defined($line = get_line())) {
 	       ...
 	   }
@@ -189,7 +191,7 @@ DESCRIPTION
        such as when it's used as an argument to defined() or undef().  Nor is
        it optional when you want to do an indirect subroutine call with a
        subroutine name or reference using the "&$subref()" or "&{$subref}()"
-       constructs, although the "$subref->()" notation solves that problem.
+       constructs, although the "$subref-&gt()" notation solves that problem.
        See perlref for more about all that.
 
        Subroutines may be called recursively.  If a subroutine is called using
@@ -286,12 +288,12 @@ DESCRIPTION
        when you do assign to variables in its argument list, "my" doesn't
        change whether those variables are viewed as a scalar or an array.  So
 
-	   my ($foo) = <STDIN>; 	       # WRONG?
-	   my @FOO = <STDIN>;
+	   my ($foo) = &ltSTDIN&gt; 	       # WRONG?
+	   my @FOO = &ltSTDIN&gt;
 
        both supply a list context to the right-hand side, while
 
-	   my $foo = <STDIN>;
+	   my $foo = &ltSTDIN&gt;
 
        supplies a scalar context.  But the following declares only one
        variable:
@@ -319,7 +321,7 @@ DESCRIPTION
        braces that delimit their controlled blocks; control expressions are
        part of that scope, too.  Thus in the loop
 
-	   while (my $line = <>) {
+	   while (my $line = &lt&gt) {
 	       $line = lc $line;
 	   } continue {
 	       print $line;
@@ -329,7 +331,7 @@ DESCRIPTION
        the loop construct (including the "continue" clause), but not beyond
        it.  Similarly, in the conditional
 
-	   if ((my $answer = <STDIN>) =~ /^yes$/i) {
+	   if ((my $answer = &ltSTDIN&gt) =~ /^yes$/i) {
 	       user_agrees();
 	   } elsif ($answer =~ /^no$/i) {
 	       user_disagrees();
@@ -560,12 +562,12 @@ DESCRIPTION
        assign to a "local"ized variable, the "local" doesn't change whether
        its list is viewed as a scalar or an array.  So
 
-	   local($foo) = <STDIN>;
-	   local @FOO = <STDIN>;
+	   local($foo) = &ltSTDIN&gt;
+	   local @FOO = &ltSTDIN&gt;
 
        both supply a list context to the right-hand side, while
 
-	   local $foo = <STDIN>;
+	   local $foo = &ltSTDIN&gt;
 
        supplies a scalar context.
 
@@ -578,7 +580,7 @@ DESCRIPTION
        This feature allows code like this to work :
 
 	   # Read the whole contents of FILE in $slurp
-	   { local $/ = undef; $slurp = <FILE>; }
+	   { local $/ = undef; $slurp = &ltFILE&gt; }
 
        Note, however, that this restricts localization of some values ; for
        example, the following statement dies, as of perl 5.9.0, with an error
@@ -640,14 +642,14 @@ DESCRIPTION
        into existence, possibly extending an array and filling in the skipped
        elements with "undef".  For instance, if you say
 
-	   %hash = ( 'This' => 'is', 'a' => 'test' );
+	   %hash = ( 'This' =&gt 'is', 'a' =&gt 'test' );
 	   @ary  = ( 0..5 );
 	   {
 		local($ary[5]) = 6;
 		local($hash{'a'}) = 'drill';
 		while (my $e = pop(@ary)) {
 		    print "$e . . .\n";
-		    last unless $e > 3;
+		    last unless $e &gt 3;
 		}
 		if (@ary) {
 		    $hash{'only a'} = 'test';
@@ -731,7 +733,7 @@ DESCRIPTION
 	       }
 
 	       # set_arr_lv cannot stop this !
-	       set_arr_lv() = { a => 1 };
+	       set_arr_lv() = { a =&gt 1 };
 
    Passing Symbol Table Entries (typeglobs)
        WARNING: The mechanism described in this section was originally the
@@ -791,7 +793,7 @@ DESCRIPTION
 	       {
 		   local @ARGV = ("/etc/motd");
 		   local $/ = undef;
-		   local $_ = <>;
+		   local $_ = &lt&gt;
 		   @Fields = split /^\s*=+\s*$/;
 	       }
 
@@ -905,7 +907,7 @@ DESCRIPTION
 	   print "@$aref has more than @$bref\n";
 	   sub func {
 	       my ($cref, $dref) = @_;
-	       if (@$cref > @$dref) {
+	       if (@$cref &gt @$dref) {
 		   return ($cref, $dref);
 	       } else {
 		   return ($dref, $cref);
@@ -918,7 +920,7 @@ DESCRIPTION
 	   print "@a has more than @b\n";
 	   sub func {
 	       local (*c, *d) = @_;
-	       if (@c > @d) {
+	       if (@c &gt @d) {
 		   return (\@c, \@d);
 	       } else {
 		   return (\@d, \@c);
@@ -943,7 +945,7 @@ DESCRIPTION
 	   $rec = get_rec(\*STDIN);
 	   sub get_rec {
 	       my $fh = shift;
-	       return scalar <$fh>;
+	       return scalar &lt$fh&gt;
 	   }
 
        If you're planning on generating new filehandles, you could do this.
@@ -970,7 +972,7 @@ DESCRIPTION
        behaves like an old-fashioned subroutine.  It naturally falls out from
        this rule that prototypes have no influence on subroutine references
        like "\&foo" or on indirect subroutine calls like "&{$subref}" or
-       "$subref->()".
+       "$subref-&gt()".
 
        Method calls are not influenced by prototypes either, because the
        function to be called is indeterminate at compile time, since the exact
@@ -1154,8 +1156,8 @@ DESCRIPTION
 	   sub ST_DEV ()       { 0 }
 	   sub ST_INO ()       { 1 }
 
-	   sub FLAG_FOO ()     { 1 << 8 }
-	   sub FLAG_BAR ()     { 1 << 9 }
+	   sub FLAG_FOO ()     { 1 &lt&lt 8 }
+	   sub FLAG_BAR ()     { 1 &lt&lt 9 }
 	   sub FLAG_MASK ()    { FLAG_FOO | FLAG_BAR }
 
 	   sub OPT_BAZ ()      { not (0x1B58 & FLAG_MASK) }
@@ -1248,7 +1250,7 @@ DESCRIPTION
 	       return unless @_;
 	       my $sym = shift;
 	       my $where = ($sym =~ s/^GLOBAL_// ? 'CORE::GLOBAL' : caller(0));
-	       $pkg->export($where, $sym, @_);
+	       $pkg-&gtexport($where, $sym, @_);
 	   }
 
 	   sub glob {
@@ -1267,7 +1269,7 @@ DESCRIPTION
 	   #use REGlob 'GLOBAL_glob';	   # override glob() in ALL namespaces
 	   package Foo;
 	   use REGlob 'glob';		   # override glob() in Foo:: only
-	   print for <^[a-z_]+\.pm\$>;	   # show all pragmatic modules
+	   print for &lt^[a-z_]+\.pm\$&gt;	   # show all pragmatic modules
 
        The initial comment shows a contrived, even dangerous example.  By
        overriding "glob" globally, you would be forcing the new (and
@@ -1305,10 +1307,10 @@ DESCRIPTION
        the argument "Foo/Bar.pm" in @_.  See "require" in perlfunc.
 
        And, as you'll have noticed from the previous example, if you override
-       "glob", the "<*>" glob operator is overridden as well.
+       "glob", the "&lt*&gt" glob operator is overridden as well.
 
        In a similar fashion, overriding the "readline" function also overrides
-       the equivalent I/O operator "<FILEHANDLE>". Also, overriding "readpipe"
+       the equivalent I/O operator "&ltFILEHANDLE&gt". Also, overriding "readpipe"
        also overrides the operators "``" and "qx//".
 
        Finally, some built-ins (e.g. "exists" or "grep") can't be overridden.
@@ -1414,6 +1416,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-02-12			    PERLSUB(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

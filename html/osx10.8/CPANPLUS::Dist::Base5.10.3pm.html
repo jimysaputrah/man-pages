@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="CPANPLUS::Dist::Base functions as a base class for all custom..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>CPANPLUS::Dist::Base - Base class for custom distribution classes</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 CPANPLUS::Dist::Base(3pPerl Programmers Reference GuiCPANPLUS::Dist::Base(3pm)
 
 
@@ -24,13 +26,13 @@ SYNOPSIS
 	       my $dist = shift;
 
 	       ### do the 'standard' things
-	       $dist->SUPER::prepare( @_ ) or return;
+	       $dist-&gtSUPER::prepare( @_ ) or return;
 
 	       ### do MY_IMPLEMENTATION specific things
 	       ...
 
 	       ### don't forget to set the status!
-	       return $dist->status->prepared( $SUCCESS ? 1 : 0 );
+	       return $dist-&gtstatus-&gtprepared( $SUCCESS ? 1 : 0 );
 	   }
 
 DESCRIPTION
@@ -43,21 +45,21 @@ FLOW
        Below is a brief outline when and in which order methods in this class
        are called:
 
-	   $Class->format_available;   # can we use this class on this system?
+	   $Class-&gtformat_available;   # can we use this class on this system?
 
-	   $dist->init; 	       # set up custom accessors, etc
-	   $dist->prepare;	       # find/write meta information
-	   $dist->create;	       # write the distribution file
-	   $dist->install;	       # install the distribution file
+	   $dist-&gtinit; 	       # set up custom accessors, etc
+	   $dist-&gtprepare;	       # find/write meta information
+	   $dist-&gtcreate;	       # write the distribution file
+	   $dist-&gtinstall;	       # install the distribution file
 
-	   $dist->uninstall;	       # remove the distribution (OPTIONAL)
+	   $dist-&gtuninstall;	       # remove the distribution (OPTIONAL)
 
 METHODS
-   @subs = $Class->methods
+   @subs = $Class-&gtmethods
        Returns a list of methods that this class implements that you can
        override.
 
-   $bool = $Class->format_available
+   $bool = $Class-&gtformat_available
        This method is called when someone requests a module to be installed
        via the superclass. This gives you the opportunity to check if all the
        needed requirements to build and install this distribution have been
@@ -70,7 +72,7 @@ METHODS
 
        The "CPANPLUS::Dist::Base" implementation always returns true.
 
-   $bool = $dist->init
+   $bool = $dist-&gtinit
        This method is called just after the new dist object is set up and
        before the "prepare" method is called. This is the time to set up the
        object so it can be used with your class.
@@ -78,7 +80,7 @@ METHODS
        For example, you might want to add extra accessors to the "status"
        object, which you might do as follows:
 
-	   $dist->status->mk_accessors( qw[my_implementation_accessor] );
+	   $dist-&gtstatus-&gtmk_accessors( qw[my_implementation_accessor] );
 
        The "status" object is implemented as an instance of the
        "Object::Accessor" class. Please refer to its documentation for
@@ -90,7 +92,7 @@ METHODS
        The "CPANPLUS::Dist::Base" implementation does not alter your object
        and always returns true.
 
-   $bool = $dist->prepare
+   $bool = $dist-&gtprepare
        This runs the preparation step of your distribution. This step is meant
        to set up the environment so the "create" step can create the actual
        distribution(file).  A "prepare" call in the standard
@@ -103,10 +105,10 @@ METHODS
        distribution class (Typically "CPANPLUS::Dist::MM" or
        "CPANPLUS::Dist::Build").
 
-       Sets "$dist->status->prepared" to the return value of this function.
+       Sets "$dist-&gtstatus-&gtprepared" to the return value of this function.
        If you override this method, you should make sure to set this value.
 
-   $bool = $dist->create
+   $bool = $dist-&gtcreate
        This runs the creation step of your distribution. This step is meant to
        follow up on the "prepare" call, that set up your environment so the
        "create" step can create the actual distribution(file).	A "create"
@@ -119,13 +121,13 @@ METHODS
        distribution class (Typically "CPANPLUS::Dist::MM" or
        "CPANPLUS::Dist::Build").
 
-       Sets "$dist->status->dist" to the location of the created distribution.
+       Sets "$dist-&gtstatus-&gtdist" to the location of the created distribution.
        If you override this method, you should make sure to set this value.
 
-       Sets "$dist->status->created" to the return value of this function.  If
+       Sets "$dist-&gtstatus-&gtcreated" to the return value of this function.  If
        you override this method, you should make sure to set this value.
 
-   $bool = $dist->install
+   $bool = $dist-&gtinstall
        This runs the install step of your distribution. This step is meant to
        follow up on the "create" call, which prepared a distribution(file) to
        install.  A "create" call in the standard "ExtUtils::MakeMaker"
@@ -138,10 +140,10 @@ METHODS
        distribution class (Typically "CPANPLUS::Dist::MM" or
        "CPANPLUS::Dist::Build").
 
-       Sets "$dist->status->installed" to the return value of this function.
+       Sets "$dist-&gtstatus-&gtinstalled" to the return value of this function.
        If you override this method, you should make sure to set this value.
 
-   $bool = $dist->uninstall
+   $bool = $dist-&gtuninstall
        This runs the uninstall step of your distribution. This step is meant
        to remove the distribution from the file system.  A "uninstall" call in
        the standard "ExtUtils::MakeMaker" distribution would, for example, run
@@ -153,12 +155,12 @@ METHODS
        distribution class (Typically "CPANPLUS::Dist::MM" or
        "CPANPLUS::Dist::Build").
 
-       Sets "$dist->status->uninstalled" to the return value of this function.
+       Sets "$dist-&gtstatus-&gtuninstalled" to the return value of this function.
        If you override this method, you should make sure to set this value.
 
 
 
 perl v5.10.1			  2009-05-03	     CPANPLUS::Dist::Base(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

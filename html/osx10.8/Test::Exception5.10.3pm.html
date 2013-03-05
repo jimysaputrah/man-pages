@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module provides a few convenience methods for testing exception..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Test::Exception - Test exception based code</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Test::Exception(3)    User Contributed Perl Documentation   Test::Exception(3)
 
 
@@ -16,43 +18,43 @@ NAME
        Test::Exception - Test exception based code
 
 SYNOPSIS
-	 use Test::More tests => 5;
+	 use Test::More tests =&gt 5;
 	 use Test::Exception;
 
 	 # or if you don't need Test::More
 
-	 use Test::Exception tests => 5;
+	 use Test::Exception tests =&gt 5;
 
 	 # then...
 
 	 # Check that the stringified exception matches given regex
-	 throws_ok { $foo->method } qr/division by zero/, 'zero caught okay';
+	 throws_ok { $foo-&gtmethod } qr/division by zero/, 'zero caught okay';
 
 	 # Check an exception of the given class (or subclass) is thrown
-	 throws_ok { $foo->method } 'Error::Simple', 'simple error thrown';
+	 throws_ok { $foo-&gtmethod } 'Error::Simple', 'simple error thrown';
 
 	 # all Test::Exceptions subroutines are guaranteed to preserve the state
 	 # of $@ so you can do things like this after throws_ok and dies_ok
 	 like $@, 'what the stringified exception should look like';
 
 	 # Check that something died - we do not care why
-	 dies_ok { $foo->method } 'expecting to die';
+	 dies_ok { $foo-&gtmethod } 'expecting to die';
 
 	 # Check that something did not die
-	 lives_ok { $foo->method } 'expecting to live';
+	 lives_ok { $foo-&gtmethod } 'expecting to live';
 
 	 # Check that a test runs without an exception
-	 lives_and { is $foo->method, 42 } 'method is 42';
+	 lives_and { is $foo-&gtmethod, 42 } 'method is 42';
 
 	 # or if you don't like prototyped functions
 
-	 throws_ok( sub { $foo->method }, qr/division by zero/,
+	 throws_ok( sub { $foo-&gtmethod }, qr/division by zero/,
 	     'zero caught okay' );
-	 throws_ok( sub { $foo->method }, 'Error::Simple',
+	 throws_ok( sub { $foo-&gtmethod }, 'Error::Simple',
 	     'simple error thrown' );
-	 dies_ok( sub { $foo->method }, 'expecting to die' );
-	 lives_ok( sub { $foo->method }, 'expecting to live' );
-	 lives_and( sub { is $foo->method, 42 }, 'method is 42' );
+	 dies_ok( sub { $foo-&gtmethod }, 'expecting to die' );
+	 lives_ok( sub { $foo-&gtmethod }, 'expecting to live' );
+	 lives_and( sub { is $foo-&gtmethod, 42 }, 'method is 42' );
 
 DESCRIPTION
        This module provides a few convenience methods for testing exception
@@ -91,7 +93,7 @@ DESCRIPTION
 	   the same class as the one supplied, or a subclass of that class.
 	   For example:
 
-	       throws_ok { $foo->bar } "Error::Simple", 'simple error';
+	       throws_ok { $foo-&gtbar } "Error::Simple", 'simple error';
 
 	   Will only pass if the "bar" method throws an Error::Simple
 	   exception, or a subclass of an Error::Simple exception.
@@ -100,8 +102,8 @@ DESCRIPTION
 	   you want to look for. The following is equivalent to the previous
 	   example:
 
-	       my $SIMPLE = Error::Simple->new;
-	       throws_ok { $foo->bar } $SIMPLE, 'simple error';
+	       my $SIMPLE = Error::Simple-&gtnew;
+	       throws_ok { $foo-&gtbar } $SIMPLE, 'simple error';
 
 	   Should a throws_ok() test fail it produces appropriate diagnostic
 	   messages. For example:
@@ -114,7 +116,7 @@ DESCRIPTION
 	   Like all other Test::Exception functions you can avoid prototypes
 	   by passing a subroutine explicitly:
 
-	       throws_ok( sub {$foo->bar}, "Error::Simple", 'simple error' );
+	       throws_ok( sub {$foo-&gtbar}, "Error::Simple", 'simple error' );
 
 	   A true value is returned if the test succeeds, false otherwise. On
 	   exit $@ is guaranteed to be the cause of death (if any).
@@ -153,8 +155,8 @@ DESCRIPTION
 	       sub read_file {
 		   my $file = shift;
 		   local $/;
-		   open my $fh, '<', $file or die "open failed ($!)\n";
-		   $file = <FILE>;
+		   open my $fh, '&lt', $file or die "open failed ($!)\n";
+		   $file = &ltFILE&gt;
 		   return $file;
 	       };
 
@@ -218,10 +220,10 @@ SKIPPING TEST::EXCEPTION TESTS
 
 	 BEGIN {
 	     eval "use Test::Exception";
-	     plan skip_all => "Test::Exception needed" if $@;
+	     plan skip_all =&gt "Test::Exception needed" if $@;
 	 }
 
-	 plan tests => 2;
+	 plan tests =&gt 2;
 	 # ... tests that need Test::Exception ...
 
        Note that we load Test::Exception in a "BEGIN" block ensuring that the
@@ -231,42 +233,42 @@ SKIPPING TEST::EXCEPTION TESTS
 BUGS
        There are some edge cases in Perl's exception handling where
        Test::Exception will miss exceptions thrown in DESTROY blocks. See the
-       RT bug <http://rt.cpan.org/Ticket/Display.html?id=24678> for details,
+       RT bug &lthttp://rt.cpan.org/Ticket/Display.html?id=24678&gt for details,
        along with the t/edge-cases.t in the distribution test suite. These
        will be addressed in a future Test::Exception release.
 
        If you find any more bugs please let me know by e-mail, or report the
-       problem with <http://rt.cpan.org/>.
+       problem with &lthttp://rt.cpan.org/&gt.
 
 COMMUNITY
        perl-qa
 	   If you are interested in testing using Perl I recommend you visit
-	   <http://qa.perl.org/> and join the excellent perl-qa mailing list.
-	   See <http://lists.perl.org/showlist.cgi?name=perl-qa> for details
+	   &lthttp://qa.perl.org/&gt and join the excellent perl-qa mailing list.
+	   See &lthttp://lists.perl.org/showlist.cgi?name=perl-qa&gt for details
 	   on how to subscribe.
 
        perlmonks
 	   You can find users of Test::Exception, including the module author,
-	   on  <http://www.perlmonks.org/>. Feel free to ask questions on
+	   on  &lthttp://www.perlmonks.org/&gt. Feel free to ask questions on
 	   Test::Exception there.
 
        CPAN::Forum
 	   The CPAN Forum is a web forum for discussing Perl's CPAN modules.
 	   The Test::Exception forum can be found at
-	   <http://www.cpanforum.com/dist/Test-Exception>.
+	   &lthttp://www.cpanforum.com/dist/Test-Exception&gt.
 
        AnnoCPAN
 	   AnnoCPAN is a web site that allows community annotations of Perl
 	   module documentation. The Test::Exception annotations can be found
-	   at <http://annocpan.org/~ADIE/Test-Exception/>.
+	   at &lthttp://annocpan.org/~ADIE/Test-Exception/&gt.
 
 TO DO
        If you think this module should do something that it doesn't (or does
        something that it shouldn't) please let me know.
 
        You can see my current to do list at
-       <http://adrianh.tadalist.com/lists/public/15421>, with an RSS feed of
-       changes at <http://adrianh.tadalist.com/lists/feed_public/15421>.
+       &lthttp://adrianh.tadalist.com/lists/public/15421&gt, with an RSS feed of
+       changes at &lthttp://adrianh.tadalist.com/lists/feed_public/15421&gt.
 
 ACKNOWLEDGMENTS
        Thanks to chromatic and Michael G Schwern for the excellent
@@ -281,13 +283,13 @@ ACKNOWLEDGMENTS
        anonymous folk for comments, suggestions, bug reports and patches.
 
 AUTHOR
-       Adrian Howard <adrianh@quietstars.com>
+       Adrian Howard &ltadrianh@quietstars.com&gt
 
        If you can spare the time, please drop me a line if you find this
        module useful.
 
 SEE ALSO
-       <http://del.icio.us/tag/Test::Exception>
+       &lthttp://del.icio.us/tag/Test::Exception&gt
 	   Delicious links on Test::Exception.
 
        Test::Warn & Test::NoWarnings
@@ -299,10 +301,10 @@ SEE ALSO
        Test::Simple & Test::More
 	   Basic utilities for writing tests.
 
-       <http://qa.perl.org/test-modules.html>
+       &lthttp://qa.perl.org/test-modules.html&gt
 	   Overview of some of the many testing modules available on CPAN.
 
-       <http://del.icio.us/tag/perl+testing>
+       &lthttp://del.icio.us/tag/perl+testing&gt
 	   Delicious links on perl testing.
 
 LICENCE
@@ -314,6 +316,6 @@ LICENCE
 
 
 perl v5.10.1			  2012-06-20		    Test::Exception(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

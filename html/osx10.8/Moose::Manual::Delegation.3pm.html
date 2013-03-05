@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Manual::Delegation - Attribute delegation</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Manual::DelegatUser3Contributed Perl DocumeMoose::Manual::Delegation(3)
 
 
@@ -47,16 +49,16 @@ DEFINING A MAPPING
 
 	 use Moose;
 
-	 has 'uri' => (
-	     is      => 'ro',
-	     isa     => 'URI',
-	     handles => [qw( host path )],
+	 has 'uri' =&gt (
+	     is      =&gt 'ro',
+	     isa     =&gt 'URI',
+	     handles =&gt [qw( host path )],
 	 );
 
-       With this definition, we can call "$website->host" and it "just works".
-       Under the hood, Moose will call "$website->uri->host" for you. Note
+       With this definition, we can call "$website-&gthost" and it "just works".
+       Under the hood, Moose will call "$website-&gturi-&gthost" for you. Note
        that $website is not automatically passed to the "host" method; the
-       invocant is "$website->uri".
+       invocant is "$website-&gturi".
 
        We can also define a mapping as a hash reference. This allows you to
        rename methods as part of the mapping:
@@ -65,25 +67,25 @@ DEFINING A MAPPING
 
 	 use Moose;
 
-	 has 'uri' => (
-	     is      => 'ro',
-	     isa     => 'URI',
-	     handles => {
-		 hostname => 'host',
-		 path	  => 'path',
+	 has 'uri' =&gt (
+	     is      =&gt 'ro',
+	     isa     =&gt 'URI',
+	     handles =&gt {
+		 hostname =&gt 'host',
+		 path	  =&gt 'path',
 	     },
 	 );
 
-       In this example, we've created a "$website->hostname" method, rather
+       In this example, we've created a "$website-&gthostname" method, rather
        than using "URI.pm"'s name, "host".
 
        These two mapping forms are the ones you will use most often. The
        remaining methods are a bit more complex.
 
-	 has 'uri' => (
-	     is      => 'ro',
-	     isa     => 'URI',
-	     handles => qr/^(?:host|path|query.*)/,
+	 has 'uri' =&gt (
+	     is      =&gt 'ro',
+	     isa     =&gt 'URI',
+	     handles =&gt qr/^(?:host|path|query.*)/,
 	 );
 
        This is similar to the array version, except it uses the regex to match
@@ -94,10 +96,10 @@ DEFINING A MAPPING
 
        You can use a role name as the value of "handles":
 
-	 has 'uri' => (
-	     is      => 'ro',
-	     isa     => 'URI',
-	     handles => 'HasURI',
+	 has 'uri' =&gt (
+	     is      =&gt 'ro',
+	     isa     =&gt 'URI',
+	     handles =&gt 'HasURI',
 	 );
 
        Moose will introspect the role to determine what methods it provides
@@ -111,13 +113,13 @@ NATIVE DELEGATION
        Native delegations allow you to delegate to standard Perl data
        structures as if they were objects.
 
-	 has 'queue' => (
-	     traits  => ['Array'],
-	     isa     => 'ArrayRef[Item]',
-	     default => sub { [ ] },
-	     handles => {
-		 add_item  => 'push',
-		 next_item => 'shift',
+	 has 'queue' =&gt (
+	     traits  =&gt ['Array'],
+	     isa     =&gt 'ArrayRef[Item]',
+	     default =&gt sub { [ ] },
+	     handles =&gt {
+		 add_item  =&gt 'push',
+		 next_item =&gt 'shift',
 	     },
 	 )
 
@@ -130,10 +132,10 @@ NATIVE DELEGATION
 	     my ($self, @items) = @_;
 
 	     for my $item (@items) {
-		 $Item_TC->validate($item);
+		 $Item_TC-&gtvalidate($item);
 	     }
 
-	     push @{ $self->queue }, @items;
+	     push @{ $self-&gtqueue }, @items;
 	 }
 
        Moose includes the following traits for native delegation:
@@ -159,16 +161,16 @@ CURRYING
 	   package Spider;
 	   use Moose;
 
-	   has request => (
-	       is      => 'ro'
-	       isa     => 'HTTP::Request',
-	       handles => {
-		   set_user_agent => [ header => 'UserAgent' ],
+	   has request =&gt (
+	       is      =&gt 'ro'
+	       isa     =&gt 'HTTP::Request',
+	       handles =&gt {
+		   set_user_agent =&gt [ header =&gt 'UserAgent' ],
 	       },
 	   )
 
-       With this definition, calling "$spider->set_user_agent('MyClient')"
-       will call "$spider->request->header('UserAgent', 'MyClient')" behind
+       With this definition, calling "$spider-&gtset_user_agent('MyClient')"
+       will call "$spider-&gtrequest-&gtheader('UserAgent', 'MyClient')" behind
        the scenes.
 
        Note that with currying, the currying always starts with the first
@@ -181,7 +183,7 @@ MISSING ATTRIBUTES
        will throw a runtime error if the attribute does not contain an object.
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -192,6 +194,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-06	  Moose::Manual::Delegation(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

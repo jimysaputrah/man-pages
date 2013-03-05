@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="It seems that I keep answering the same questions over and over again...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Archive::Zip::FAQ - Answers to a few frequently asked questions about</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Archive::Zip::FAQ(3)  User Contributed Perl Documentation Archive::Zip::FAQ(3)
 
 
@@ -40,7 +42,7 @@ Install problems on RedHat 8 or 9 with Perl 5.8.0
 
        "LANG=C"
 
-       <https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=87682>
+       &lthttps://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=87682&gt
 
 Why is my zip file so big?
        Q: My zip file is actually bigger than what I stored in it! Why?
@@ -49,7 +51,7 @@ Why is my zip file so big?
 
        Make sure that you are requesting COMPRESSION_DEFLATED if you are
        storing strings.
-	   $member->desiredCompressionMethod( COMPRESSION_DEFLATED );
+	   $member-&gtdesiredCompressionMethod( COMPRESSION_DEFLATED );
 
        Don't make lots of little files if you can help it.
 	   Since zip computes the compression tables for each member, small
@@ -143,19 +145,19 @@ Add a directory/tree to a Zip
        A: You can use the Archive::Zip::addTree*() methods:
 
 	  use Archive::Zip;
-	  my $zip = Archive::Zip->new();
+	  my $zip = Archive::Zip-&gtnew();
 	  # add all readable files and directories below . as xyz/*
-	  $zip->addTree( '.', 'xyz' );
+	  $zip-&gtaddTree( '.', 'xyz' );
 	  # add all readable plain files below /abc as def/*
-	  $zip->addTree( '/abc', 'def', sub { -f && -r } );
+	  $zip-&gtaddTree( '/abc', 'def', sub { -f && -r } );
 	  # add all .c files below /tmp as stuff/*
-	  $zip->addTreeMatching( '/tmp', 'stuff', '\.c$' );
+	  $zip-&gtaddTreeMatching( '/tmp', 'stuff', '\.c$' );
 	  # add all .o files below /tmp as stuff/* if they aren't writable
-	  $zip->addTreeMatching( '/tmp', 'stuff', '\.o$', sub { ! -w } );
+	  $zip-&gtaddTreeMatching( '/tmp', 'stuff', '\.o$', sub { ! -w } );
 	  # add all .so files below /tmp that are smaller than 200 bytes as stuff/*
-	  $zip->addTreeMatching( '/tmp', 'stuff', '\.o$', sub { -s < 200 } );
+	  $zip-&gtaddTreeMatching( '/tmp', 'stuff', '\.o$', sub { -s &lt 200 } );
 	  # and write them into a file
-	  $zip->writeToFileNamed('xxx.zip');
+	  $zip-&gtwriteToFileNamed('xxx.zip');
 
 Extract a directory/tree
        Q: How can I extract some (or all) files from a Zip into a different
@@ -164,7 +166,7 @@ Extract a directory/tree
        A: You can use the Archive::Zip::extractTree() method: ??? ||
 
 	  # now extract the same files into /tmpx
-	  $zip->extractTree( 'stuff', '/tmpx' );
+	  $zip-&gtextractTree( 'stuff', '/tmpx' );
 
 Update a directory/tree
        Q: How can I update a Zip from a directory tree, adding or replacing
@@ -205,8 +207,8 @@ How can I deal with Zips with prepended garbage (i.e. from Sircam)
        A: I added code for this for the Amavis virus scanner. You can query
        archives for their 'eocdOffset' property, which should be 0:
 
-	 if ($zip->eocdOffset > 0)
-	   { warn($zip->eocdOffset . " bytes of garbage at beginning or within Zip") }
+	 if ($zip-&gteocdOffset &gt 0)
+	   { warn($zip-&gteocdOffset . " bytes of garbage at beginning or within Zip") }
 
        When members are extracted, this offset will be used to adjust the
        start of the member if necessary.
@@ -266,7 +268,7 @@ Duplicate files in Zip?
        A: As far as I can tell, this is not disallowed by the Zip spec. If you
        think it's a bad idea, check for it yourself:
 
-	 $zip->addFile($someFile, $someName) unless $zip->memberNamed($someName);
+	 $zip-&gtaddFile($someFile, $someName) unless $zip-&gtmemberNamed($someName);
 
        I can even imagine cases where this might be useful (for instance,
        multiple versions of files).
@@ -324,6 +326,6 @@ Reading from streams
 
 
 perl v5.12.4			  2009-06-30		  Archive::Zip::FAQ(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document describes differences between the 5.9.4 and the 5.9.5..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perl595delta - what is new for perl v5.9.5</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERL595DELTA(1)        Perl Programmers Reference Guide        PERL595DELTA(1)
 
 
@@ -69,7 +71,7 @@ Incompatible Changes
 
        Previously, the exception would not occur until Perl attempted to make
        use of the recursive inheritance while resolving a method or doing a
-       "$foo->isa($bar)" lookup.
+       "$foo-&gtisa($bar)" lookup.
 
 Core Enhancements
    Regular expressions
@@ -86,15 +88,15 @@ Core Enhancements
 	       /
 		^		       # start of line
 		(		       # start capture buffer 1
-		   <		       #   match an opening angle bracket
+		   &lt		       #   match an opening angle bracket
 		   (?:		       #   match one of:
-		       (?>	       #     don't backtrack over the inside of this group
-			   [^<>]+      #       one or more non angle brackets
+		       (?&gt	       #     don't backtrack over the inside of this group
+			   [^&lt&gt]+      #       one or more non angle brackets
 		       )	       #     end non backtracking group
 		   |		       #     ... or ...
 		       (?1)	       #     recurse to bracket 1 and try it again
 		   )*		       #   0 or more times.
-		   >		       #   match a closing angle bracket
+		   &gt		       #   match a closing angle bracket
 		)		       # end capture buffer one
 		$		       # end of line
 	       /x
@@ -107,13 +109,13 @@ Core Enhancements
        Named Capture Buffers
 	   It is now possible to name capturing parenthesis in a pattern and
 	   refer to the captured contents by name. The naming syntax is
-	   "(?<NAME>....)".  It's possible to backreference to a named buffer
-	   with the "\k<NAME>" syntax. In code, the new magical hashes "%+"
+	   "(?&ltNAME&gt....)".  It's possible to backreference to a named buffer
+	   with the "\k&ltNAME&gt" syntax. In code, the new magical hashes "%+"
 	   and "%-" can be used to access the contents of the capture buffers.
 
 	   Thus, to replace all doubled chars, one could write
 
-	       s/(?<letter>.)\k<letter>/$+{letter}/g
+	       s/(?&ltletter&gt.)\k&ltletter&gt/$+{letter}/g
 
 	   Only buffers with defined contents will be "visible" in the "%+"
 	   hash, so it's possible to do something like
@@ -134,7 +136,7 @@ Core Enhancements
 	   buffers is sequential, and not "unnamed first, then named". Thus in
 	   the pattern
 
-	      /(A)(?<B>B)(C)(?<D>D)/
+	      /(A)(?&ltB&gtB)(C)(?&ltD&gtD)/
 
 	   $1 will be 'A', $2 will be 'B', $3 will be 'C' and $4 will be 'D'
 	   and not $1 is 'A', $2 is 'C' and $3 is 'B' and $4 is 'D' that a
@@ -253,12 +255,12 @@ Modules and Pragmas
 
        config()
 	   The config() method now also supports the calling-style
-	   "config('lib')" in addition to "config()->{'lib'}".
+	   "config('lib')" in addition to "config()-&gt{'lib'}".
 
        import()
-	   Upon import, using "lib => 'Foo'" now warns if the low-level
+	   Upon import, using "lib =&gt 'Foo'" now warns if the low-level
 	   library cannot be found. To suppress the warning, you can use "try
-	   => 'Foo'" instead. To convert the warning into a die, use "only =>
+	   =&gt 'Foo'" instead. To convert the warning into a die, use "only =&gt
 	   'Foo'" instead.
 
        roundmode common
@@ -493,6 +495,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-01		       PERL595DELTA(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

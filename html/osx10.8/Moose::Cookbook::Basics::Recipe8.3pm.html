@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="If you've already read Moose::Cookbook::Basics::Recipe3, then this..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Basics::Recipe8 - Builder methods and lazy_build</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::BasicUsereContributed PerlMoose::Cookbook::Basics::Recipe8(3)
 
 
@@ -22,40 +24,40 @@ SYNOPSIS
 	 package BinaryTree;
 	 use Moose;
 
-	 has 'node' => (is => 'rw', isa => 'Any');
+	 has 'node' =&gt (is =&gt 'rw', isa =&gt 'Any');
 
-	 has 'parent' => (
-	     is        => 'rw',
-	     isa       => 'BinaryTree',
-	     predicate => 'has_parent',
-	     weak_ref  => 1,
+	 has 'parent' =&gt (
+	     is        =&gt 'rw',
+	     isa       =&gt 'BinaryTree',
+	     predicate =&gt 'has_parent',
+	     weak_ref  =&gt 1,
 	 );
 
-	 has 'left' => (
-	     is        => 'rw',
-	     isa       => 'BinaryTree',
-	     predicate => 'has_left',
-	     lazy      => 1,
-	     builder   => '_build_child_tree',
+	 has 'left' =&gt (
+	     is        =&gt 'rw',
+	     isa       =&gt 'BinaryTree',
+	     predicate =&gt 'has_left',
+	     lazy      =&gt 1,
+	     builder   =&gt '_build_child_tree',
 	 );
 
-	 has 'right' => (
-	     is        => 'rw',
-	     isa       => 'BinaryTree',
-	     predicate => 'has_right',
-	     lazy      => 1,
-	     builder   => '_build_child_tree',
+	 has 'right' =&gt (
+	     is        =&gt 'rw',
+	     isa       =&gt 'BinaryTree',
+	     predicate =&gt 'has_right',
+	     lazy      =&gt 1,
+	     builder   =&gt '_build_child_tree',
 	 );
 
-	 before 'right', 'left' => sub {
+	 before 'right', 'left' =&gt sub {
 	     my ($self, $tree) = @_;
-	     $tree->parent($self) if defined $tree;
+	     $tree-&gtparent($self) if defined $tree;
 	 };
 
 	 sub _build_child_tree {
 	     my $self = shift;
 
-	     return BinaryTree->new( parent => $self );
+	     return BinaryTree-&gtnew( parent =&gt $self );
 	 }
 
 DESCRIPTION
@@ -70,12 +72,12 @@ DESCRIPTION
        Note that Moose calls the builder method on the object which has the
        attribute. Here's an example:
 
-	 my $tree = BinaryTree->new();
+	 my $tree = BinaryTree-&gtnew();
 
-	 my $left = $tree->left();
+	 my $left = $tree-&gtleft();
 
-       When "$tree->left()" is called, Moose calls
-       "$tree->_build_child_tree()" in order to populate the "left" attribute.
+       When "$tree-&gtleft()" is called, Moose calls
+       "$tree-&gt_build_child_tree()" in order to populate the "left" attribute.
        If we had passed "left" to the original constructor, the builder would
        not be called.
 
@@ -87,22 +89,22 @@ DESCRIPTION
        The "lazy_build" attribute option can be used as sugar to specify a
        whole set of attribute options at once:
 
-	 has 'animal' => (
-	     is 	=> 'ro',
-	     isa	=> 'Animal',
-	     lazy_build => 1,
+	 has 'animal' =&gt (
+	     is 	=&gt 'ro',
+	     isa	=&gt 'Animal',
+	     lazy_build =&gt 1,
 	 );
 
        This is a shorthand for:
 
-	 has 'animal' => (
-	     is        => 'ro',
-	     isa       => 'Animal',
-	     required  => 1,
-	     lazy      => 1,
-	     builder   => '_build_animal',
-	     predicate => 'has_animal',
-	     clearer   => 'clear_animal',
+	 has 'animal' =&gt (
+	     is        =&gt 'ro',
+	     isa       =&gt 'Animal',
+	     required  =&gt 1,
+	     lazy      =&gt 1,
+	     builder   =&gt '_build_animal',
+	     predicate =&gt 'has_animal',
+	     clearer   =&gt 'clear_animal',
 	 );
 
        If your attribute starts with an underscore, Moose is smart and will do
@@ -119,7 +121,7 @@ CONCLUSION
        anonymous subroutines can be quite ugly and hard to follow.
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -130,6 +132,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-0Moose::Cookbook::Basics::Recipe8(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

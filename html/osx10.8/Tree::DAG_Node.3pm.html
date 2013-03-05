@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This class encapsulates/makes/manipulates objects that represent nodes..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Tree::DAG_Node - (super)class for representing nodes in a tree</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Tree::DAG_Node(3)     User Contributed Perl Documentation    Tree::DAG_Node(3)
 
 
@@ -27,10 +29,10 @@ SYNOPSIS
        Using as a class of its own:
 
 	 use Tree::DAG_Node;
-	 my $root = Tree::DAG_Node->new();
-	 $root->name("I'm the tops");
-	 my $new_daughter = $root->new_daughter;
-	 $new_daughter->name("More");
+	 my $root = Tree::DAG_Node-&gtnew();
+	 $root-&gtname("I'm the tops");
+	 my $new_daughter = $root-&gtnew_daughter;
+	 $new_daughter-&gtname("More");
 	 ...
 
 DESCRIPTION
@@ -87,11 +89,11 @@ DESCRIPTION
        can be used as a normal class.  You can go ahead and say:
 
 	 use Tree::DAG_Node;
-	 my $root = Tree::DAG_Node->new();
-	 $root->name("I'm the tops");
-	 $new_daughter = Tree::DAG_Node->new();
-	 $new_daughter->name("More");
-	 $root->add_daughter($new_daughter);
+	 my $root = Tree::DAG_Node-&gtnew();
+	 $root-&gtname("I'm the tops");
+	 $new_daughter = Tree::DAG_Node-&gtnew();
+	 $new_daughter-&gtname("More");
+	 $root-&gtadd_daughter($new_daughter);
 
        and so on, constructing and linking objects from Tree::DAG_Node and
        making useful tree structures out of them.
@@ -158,13 +160,13 @@ OBJECT CONTENTS
        definitely if you're overriding linkage methods.
 
 MAIN CONSTRUCTOR, AND INITIALIZER
-       the constructor CLASS->new() or CLASS->new({...options...})
+       the constructor CLASS-&gtnew() or CLASS-&gtnew({...options...})
 	   This creates a new node object, calls
-	   $object->_init({...options...}) to provide it sane defaults (like:
+	   $object-&gt_init({...options...}) to provide it sane defaults (like:
 	   undef name, undef mother, no daughters, 'attributes' setting of a
 	   new empty hashref), and returns the object created.	(If you just
-	   said "CLASS->new()" or "CLASS->new", then it pretends you called
-	   "CLASS->new({})".)
+	   said "CLASS-&gtnew()" or "CLASS-&gtnew", then it pretends you called
+	   "CLASS-&gtnew({})".)
 
 	   Currently no options for putting in {...options...} are part of the
 	   documented interface, but the options is here in case you want to
@@ -179,18 +181,18 @@ MAIN CONSTRUCTOR, AND INITIALIZER
 	   uninteresting sane default values, and then call methods to change
 	   those values to what you want.  Example:
 
-	       $node = Tree::DAG_Node->new;
-	       $node->name('Supahnode!');
-	       $root->add_daughter($node);
-	       $node->add_daughters(@some_others)
+	       $node = Tree::DAG_Node-&gtnew;
+	       $node-&gtname('Supahnode!');
+	       $root-&gtadd_daughter($node);
+	       $node-&gtadd_daughters(@some_others)
 
 	   Way 2: be able to specify some/most/all the object's attributes in
 	   the call to the constructor.  Something like:
 
-	       $node = Tree::DAG_Node->new({
-		 name => 'Supahnode!',
-		 mother => $root,
-		 daughters => \@some_others
+	       $node = Tree::DAG_Node-&gtnew({
+		 name =&gt 'Supahnode!',
+		 mother =&gt $root,
+		 daughters =&gt \@some_others
 	       });
 
 	   After some deliberation, I've decided that the second way is a Bad
@@ -206,32 +208,32 @@ MAIN CONSTRUCTOR, AND INITIALIZER
 
 	   Anyway, if you use Tree::DAG_Node as a superclass, and you add
 	   attributes that need to be initialized, what you need to do is
-	   provide an _init method that calls $this->SUPER::_init($options) to
+	   provide an _init method that calls $this-&gtSUPER::_init($options) to
 	   use its superclass's _init method, and then initializes the new
 	   attributes:
 
 	     sub _init {
 	       my($this, $options) = @_[0,1];
-	       $this->SUPER::_init($options); # call my superclass's _init to
+	       $this-&gtSUPER::_init($options); # call my superclass's _init to
 		 # init all the attributes I'm inheriting
 
 	       # Now init /my/ new attributes:
-	       $this->{'amigos'} = []; # for example
+	       $this-&gt{'amigos'} = []; # for example
 	     }
 
 	   ...or, as I prefer when I'm being a neat freak:
 
 	     sub _init {
 	       my($this, $options) = @_[0,1];
-	       $this->SUPER::_init($options);
+	       $this-&gtSUPER::_init($options);
 
-	       $this->_init_amigos($options);
+	       $this-&gt_init_amigos($options);
 	     }
 
 	     sub _init_amigos {
 	       my $this = $_[0];
 	       # Or my($this,$options) = @_[0,1]; if I'm using $options
-	       $this->{'amigos'} = [];
+	       $this-&gt{'amigos'} = [];
 	     }
 
 	   In other words, I like to have each attribute initialized thru a
@@ -243,15 +245,15 @@ MAIN CONSTRUCTOR, AND INITIALIZER
 
 	     sub _init {
 	       my($this, $options) = @_[0,1];
-	       $this->SUPER::_init($options);
+	       $this-&gtSUPER::_init($options);
 
-	       $this->_init_amigos($options);
+	       $this-&gt_init_amigos($options);
 	     }
 
 	     sub _init_amigos {
 	       my($this,$options) = @_[0,1]; # I need options this time
-	       $this->{'amigos'} = [];
-	       $this->amigos(@{$options->{'amigos'}}) if $options->{'amigos'};
+	       $this-&gt{'amigos'} = [];
+	       $this-&gtamigos(@{$options-&gt{'amigos'}}) if $options-&gt{'amigos'};
 	     }
 
 	   All this bookkeeping looks silly with just one new attribute in a
@@ -260,13 +262,13 @@ MAIN CONSTRUCTOR, AND INITIALIZER
 	   derived from a class derived from Tree::DAG_Node, then tidy
 	   stratification/modularization like this can keep you sane.
 
-       the constructor $obj->new() or $obj->new({...options...})
+       the constructor $obj-&gtnew() or $obj-&gtnew({...options...})
 	   Just another way to get at the "new" method. This does not copy
 	   $obj, but merely constructs a new object of the same class as it.
 	   Saves you the bother of going $class = ref $obj; $obj2 =
-	   $class->new;
+	   $class-&gtnew;
 
-       the method $node->_init({...options...})
+       the method $node-&gt_init({...options...})
 	   Initialize the object's attribute values.  See the discussion
 	   above.  Presumably this should be called only by the guts of the
 	   "new" constructor -- never by the end user.
@@ -282,14 +284,14 @@ MAIN CONSTRUCTOR, AND INITIALIZER
        "new_daughter_left"
 
 LINKAGE-RELATED METHODS
-       $node->daughters
+       $node-&gtdaughters
 	   This returns the (possibly empty) list of daughters for $node.
 
-       $node->mother
+       $node-&gtmother
 	   This returns what node is $node's mother.  This is undef if $node
 	   has no mother -- i.e., if it is a root.
 
-       $mother->add_daughters( LIST )
+       $mother-&gtadd_daughters( LIST )
 	   This method adds the node objects in LIST to the (right) end of
 	   $mother's "daughter" list.  Making a node N1 the daughter of
 	   another node N2 also means that N1's "mother" attribute is
@@ -306,16 +308,16 @@ LINKAGE-RELATED METHODS
 	   the end of the list or anything; it just skips doing anything with
 	   them.
 
-       $node->add_daughter( LIST )
-	   An exact synonym for $node->add_daughters(LIST)
+       $node-&gtadd_daughter( LIST )
+	   An exact synonym for $node-&gtadd_daughters(LIST)
 
-       $mother->add_daughters_left( LIST )
+       $mother-&gtadd_daughters_left( LIST )
 	   This method is just like "add_daughters", except that it adds the
 	   node objects in LIST to the (left) beginning of $mother's daughter
 	   list, instead of the (right) end of it.
 
-       $node->add_daughter_left( LIST )
-	   An exact synonym for $node->add_daughters_left( LIST )
+       $node-&gtadd_daughter_left( LIST )
+	   An exact synonym for $node-&gtadd_daughters_left( LIST )
 
        Note:
 	   The above link-making methods perform basically an "unshift" or
@@ -323,26 +325,26 @@ LINKAGE-RELATED METHODS
 	   of list-handling functionality, copy the daughter list, and change
 	   it, and then call "set_daughters" on the result:
 
-		     @them = $mother->daughters;
+		     @them = $mother-&gtdaughters;
 		     @removed = splice(@them, 0,2, @new_nodes);
-		     $mother->set_daughters(@them);
+		     $mother-&gtset_daughters(@them);
 
 	   Or consider a structure like:
 
-		     $mother->set_daughters(
-					    grep($_->name =~ /NP/ ,
-						 $mother->daughters
+		     $mother-&gtset_daughters(
+					    grep($_-&gtname =~ /NP/ ,
+						 $mother-&gtdaughters
 						)
 					   );
 
-       the constructor $daughter = $mother->new_daughter, or
-       the constructor $daughter = $mother->new_daughter({...options...})
+       the constructor $daughter = $mother-&gtnew_daughter, or
+       the constructor $daughter = $mother-&gtnew_daughter({...options...})
 	   This constructs a new node (of the same class as $mother), and adds
 	   it to the (right) end of the daughter list of $mother. This is
 	   essentially the same as going
 
-		 $daughter = $mother->new;
-		 $mother->add_daughter($daughter);
+		 $daughter = $mother-&gtnew;
+		 $mother-&gtadd_daughter($daughter);
 
 	   but is rather more efficient because (since $daughter is guaranteed
 	   new and isn't linked to/from anything), it doesn't have to check
@@ -353,41 +355,41 @@ LINKAGE-RELATED METHODS
 	   As you'd expect for a constructor, it returns the node-object
 	   created.
 
-       the constructor $mother->new_daughter_left, or
-       $mother->new_daughter_left({...options...})
-	   This is just like $mother->new_daughter, but adds the new daughter
+       the constructor $mother-&gtnew_daughter_left, or
+       $mother-&gtnew_daughter_left({...options...})
+	   This is just like $mother-&gtnew_daughter, but adds the new daughter
 	   to the left (start) of $mother's daughter list.
 
-       $mother->remove_daughters( LIST )
+       $mother-&gtremove_daughters( LIST )
 	   This removes the nodes listed in LIST from $mother's daughter list.
 	   This is a no-operation if LIST is empty.  If there are things in
 	   LIST that aren't a current daughter of $mother, they are ignored.
 
-	   Not to be confused with $mother->clear_daughters.
+	   Not to be confused with $mother-&gtclear_daughters.
 
-       $node->remove_daughter( LIST )
-	   An exact synonym for $node->remove_daughters( LIST )
+       $node-&gtremove_daughter( LIST )
+	   An exact synonym for $node-&gtremove_daughters( LIST )
 
-       $node->unlink_from_mother
+       $node-&gtunlink_from_mother
 	   This removes node from the daughter list of its mother.  If it has
 	   no mother, this is a no-operation.
 
 	   Returns the mother unlinked from (if any).
 
-       $mother->clear_daughters
+       $mother-&gtclear_daughters
 	   This unlinks all $mother's daughters.  Returns the the list of what
 	   used to be $mother's daughters.
 
-	   Not to be confused with $mother->remove_daughters( LIST ).
+	   Not to be confused with $mother-&gtremove_daughters( LIST ).
 
-       $mother->set_daughters( LIST )
+       $mother-&gtset_daughters( LIST )
 	   This unlinks all $mother's daughters, and replaces them with the
 	   daughters in LIST.
 
-	   Currently implemented as just $mother->clear_daughters followed by
-	   $mother->add_daughters( LIST ).
+	   Currently implemented as just $mother-&gtclear_daughters followed by
+	   $mother-&gtadd_daughters( LIST ).
 
-       $node->replace_with( LIST )
+       $node-&gtreplace_with( LIST )
 	   This replaces $node in its mother's daughter list, by unlinking
 	   $node and replacing it with the items in LIST.  This returns a list
 	   consisting of $node followed by LIST, i.e., the nodes that replaced
@@ -404,7 +406,7 @@ LINKAGE-RELATED METHODS
 	   they're linked to $node's mother.
 
 	   (In the special (and bizarre) case where $node is root, this simply
-	   calls $this->unlink_from_mother on all the items in LIST, making
+	   calls $this-&gtunlink_from_mother on all the items in LIST, making
 	   them roots of their own trees.)
 
 	   Note that the daughter-list of $node is not necessarily affected;
@@ -414,16 +416,16 @@ LINKAGE-RELATED METHODS
 	   of the tree unchanged. If that's what you want, replacing $Old with
 	   $New, then you want:
 
-	     $New->set_daughters($Old->clear_daughters);
-	     $Old->replace_with($New);
+	     $New-&gtset_daughters($Old-&gtclear_daughters);
+	     $Old-&gtreplace_with($New);
 
 	   (I can't say $node's and LIST-items' daughter lists are never
 	   affected my replace_with -- they can be affected in this case:
 
-	     $N1 = ($node->daughters)[0]; # first daughter of $node
-	     $N2 = ($N1->daughters)[0];   # first daughter of $N1;
-	     $N3 = Tree::DAG_Node->random_network; # or whatever
-	     $node->replace_with($N1, $N2, $N3);
+	     $N1 = ($node-&gtdaughters)[0]; # first daughter of $node
+	     $N2 = ($N1-&gtdaughters)[0];   # first daughter of $N1;
+	     $N3 = Tree::DAG_Node-&gtrandom_network; # or whatever
+	     $node-&gtreplace_with($N1, $N2, $N3);
 
 	   As a side affect of attaching $N1 and $N2 to $node's mother,
 	   they're unlinked from their parents ($node, and $N1, replectively).
@@ -432,7 +434,7 @@ LINKAGE-RELATED METHODS
 	   In other words, this method does what it has to, as you'd expect it
 	   to.
 
-       $node->replace_with_daughters
+       $node-&gtreplace_with_daughters
 	   This replaces $node in its mother's daughter list, by unlinking
 	   $node and replacing it with its daughters.  In other words, $node
 	   becomes motherless and daughterless as its daughters move up and
@@ -443,50 +445,50 @@ LINKAGE-RELATED METHODS
 	   unlinks its daughters from it, making them roots of their own
 	   trees.
 
-	   Effectively the same as $node->replace_with($node->daughters), but
+	   Effectively the same as $node-&gtreplace_with($node-&gtdaughters), but
 	   more efficient, since less checking has to be done.	(And I also
-	   think $node->replace_with_daughters is a more common operation in
-	   tree-wrangling than $node->replace_with(LIST), so deserves a named
+	   think $node-&gtreplace_with_daughters is a more common operation in
+	   tree-wrangling than $node-&gtreplace_with(LIST), so deserves a named
 	   method of its own, but that's just me.)
 
-       $node->add_left_sisters( LIST )
+       $node-&gtadd_left_sisters( LIST )
 	   This adds the elements in LIST (in that order) as immediate left
 	   sisters of $node.  In other words, given that B's mother's
-	   daughter-list is (A,B,C,D), calling B->add_left_sisters(X,Y) makes
+	   daughter-list is (A,B,C,D), calling B-&gtadd_left_sisters(X,Y) makes
 	   B's mother's daughter-list (A,X,Y,B,C,D).
 
 	   If LIST is empty, this is a no-op, and returns empty-list.
 
 	   This is basically implemented as a call to
-	   $node->replace_with(LIST, $node), and so all replace_with's
+	   $node-&gtreplace_with(LIST, $node), and so all replace_with's
 	   limitations and caveats apply.
 
-	   The return value of $node->add_left_sisters( LIST ) is the elements
+	   The return value of $node-&gtadd_left_sisters( LIST ) is the elements
 	   of LIST that got added, as returned by replace_with -- minus the
 	   copies of $node you'd get from a straight call to
-	   $node->replace_with(LIST, $node).
+	   $node-&gtreplace_with(LIST, $node).
 
-       $node->add_left_sister( LIST )
-	   An exact synonym for $node->add_left_sisters(LIST)
+       $node-&gtadd_left_sister( LIST )
+	   An exact synonym for $node-&gtadd_left_sisters(LIST)
 
-       $node->add_right_sisters( LIST )
+       $node-&gtadd_right_sisters( LIST )
 	   Just like add_left_sisters (which see), except that the the
 	   elements in LIST (in that order) as immediate right sisters of
 	   $node;
 
 	   In other words, given that B's mother's daughter-list is (A,B,C,D),
-	   calling B->add_right_sisters(X,Y) makes B's mother's daughter-list
+	   calling B-&gtadd_right_sisters(X,Y) makes B's mother's daughter-list
 	   (A,B,X,Y,C,D).
 
-       $node->add_right_sister( LIST )
-	   An exact synonym for $node->add_right_sisters(LIST)
+       $node-&gtadd_right_sister( LIST )
+	   An exact synonym for $node-&gtadd_right_sisters(LIST)
 
 OTHER ATTRIBUTE METHODS
-       $node->name or $node->name(SCALAR)
+       $node-&gtname or $node-&gtname(SCALAR)
 	   In the first form, returns the value of the node object's "name"
 	   attribute.  In the second form, sets it to the value of SCALAR.
 
-       $node->attributes or $node->attributes(SCALAR)
+       $node-&gtattributes or $node-&gtattributes(SCALAR)
 	   In the first form, returns the value of the node object's
 	   "attributes" attribute.  In the second form, sets it to the value
 	   of SCALAR.  I intend this to be used to store a reference to a
@@ -495,76 +497,76 @@ OTHER ATTRIBUTE METHODS
 	   In this case, you needn't ever set the value of this.  (_init has
 	   already initialized it to {}.)  Instead you can just do...
 
-	     $node->attributes->{'foo'} = 'bar';
+	     $node-&gtattributes-&gt{'foo'} = 'bar';
 
-	   ...to write foo => bar.
+	   ...to write foo =&gt bar.
 
-       $node->attribute or $node->attribute(SCALAR)
-	   An exact synonym for $node->attributes or $node->attributes(SCALAR)
+       $node-&gtattribute or $node-&gtattribute(SCALAR)
+	   An exact synonym for $node-&gtattributes or $node-&gtattributes(SCALAR)
 
 OTHER METHODS TO DO WITH RELATIONSHIPS
-       $node->is_node
+       $node-&gtis_node
 	   This always returns true.  More pertinently,
-	   $object->can('is_node') is true (regardless of what "is_node" would
+	   $object-&gtcan('is_node') is true (regardless of what "is_node" would
 	   do if called) for objects belonging to this class or for any class
 	   derived from it.
 
-       $node->ancestors
+       $node-&gtancestors
 	   Returns the list of this node's ancestors, starting with its
 	   mother, then grandmother, and ending at the root.  It does this by
 	   simply following the 'mother' attributes up as far as it can.  So
 	   if $item IS the root, this returns an empty list.
 
-	   Consider that scalar($node->ancestors) returns the ply of this node
+	   Consider that scalar($node-&gtancestors) returns the ply of this node
 	   within the tree -- 2 for a granddaughter of the root, etc., and 0
 	   for root itself.
 
-       $node->root
+       $node-&gtroot
 	   Returns the root of whatever tree $node is a member of.  If $node
 	   is the root, then the result is $node itself.
 
-       $node->is_daughter_of($node2)
+       $node-&gtis_daughter_of($node2)
 	   Returns true iff $node is a daughter of $node2.  Currently
-	   implemented as just a test of ($it->mother eq $node2).
+	   implemented as just a test of ($it-&gtmother eq $node2).
 
-       $node->self_and_descendants
+       $node-&gtself_and_descendants
 	   Returns a list consisting of itself (as element 0) and all the
 	   descendants of $node.  Returns just itself if $node is a
 	   terminal_node.
 
 	   (Note that it's spelled "descendants", not "descendents".)
 
-       $node->descendants
+       $node-&gtdescendants
 	   Returns a list consisting of all the descendants of $node.  Returns
 	   empty-list if $node is a terminal_node.
 
 	   (Note that it's spelled "descendants", not "descendents".)
 
-       $node->leaves_under
+       $node-&gtleaves_under
 	   Returns a list (going left-to-right) of all the leaf nodes under
 	   $node.  ("Leaf nodes" are also called "terminal nodes" -- i.e.,
 	   nodes that have no daughters.)  Returns $node in the degenerate
 	   case of $node being a leaf itself.
 
-       $node->depth_under
+       $node-&gtdepth_under
 	   Returns an integer representing the number of branches between this
 	   $node and the most distant leaf under it.  (In other words, this
 	   returns the ply of subtree starting of $node.  Consider
-	   scalar($it->ancestors) if you want the ply of a node within the
+	   scalar($it-&gtancestors) if you want the ply of a node within the
 	   whole tree.)
 
-       $node->generation
+       $node-&gtgeneration
 	   Returns a list of all nodes (going left-to-right) that are in
 	   $node's generation -- i.e., that are the some number of nodes down
-	   from the root.  $root->generation is just $root.
+	   from the root.  $root-&gtgeneration is just $root.
 
 	   Of course, $node is always in its own generation.
 
-       $node->generation_under(NODE2)
-	   Like $node->generation, but returns only the nodes in $node's
+       $node-&gtgeneration_under(NODE2)
+	   Like $node-&gtgeneration, but returns only the nodes in $node's
 	   generation that are also descendants of NODE2 -- in other words,
 
-	       @us = $node->generation_under( $node->mother->mother );
+	       @us = $node-&gtgeneration_under( $node-&gtmother-&gtmother );
 
 	   is all $node's first cousins (to borrow yet more kinship
 	   terminology) -- assuming $node does indeed have a grandmother.
@@ -574,71 +576,71 @@ OTHER METHODS TO DO WITH RELATIONSHIPS
 	   Actually, "generation_under" is just an alias to "generation", but
 	   I figure that this:
 
-	      @us = $node->generation_under($way_upline);
+	      @us = $node-&gtgeneration_under($way_upline);
 
 	   is a bit more readable than this:
 
-	      @us = $node->generation($way_upline);
+	      @us = $node-&gtgeneration($way_upline);
 
 	   But it's up to you.
 
-	   $node->generation_under($node) returns just $node.
+	   $node-&gtgeneration_under($node) returns just $node.
 
-	   If you call $node->generation_under($node) but NODE2 is not $node
+	   If you call $node-&gtgeneration_under($node) but NODE2 is not $node
 	   or an ancestor of $node, it behaves as if you called just
-	   $node->generation().
+	   $node-&gtgeneration().
 
-       $node->self_and_sisters
+       $node-&gtself_and_sisters
 	   Returns a list of all nodes (going left-to-right) that have the
 	   same mother as $node -- including $node itself. This is just like
-	   $node->mother->daughters, except that that fails where $node is
-	   root, whereas $root->self_and_siblings, as a special case, returns
+	   $node-&gtmother-&gtdaughters, except that that fails where $node is
+	   root, whereas $root-&gtself_and_siblings, as a special case, returns
 	   $root.
 
 	   (Contrary to how you may interpret how this method is named, "self"
 	   is not (necessarily) the first element of what's returned.)
 
-       $node->sisters
+       $node-&gtsisters
 	   Returns a list of all nodes (going left-to-right) that have the
 	   same mother as $node -- not including $node itself.	If $node is
 	   root, this returns empty-list.
 
-       $node->left_sister
+       $node-&gtleft_sister
 	   Returns the node that's the immediate left sister of $node.	If
 	   $node is the leftmost (or only) daughter of its mother (or has no
 	   mother), then this returns undef.
 
-	   (See also $node->add_left_sisters(LIST).)
+	   (See also $node-&gtadd_left_sisters(LIST).)
 
-       $node->left_sisters
+       $node-&gtleft_sisters
 	   Returns a list of nodes that're sisters to the left of $node.  If
 	   $node is the leftmost (or only) daughter of its mother (or has no
 	   mother), then this returns an empty list.
 
-	   (See also $node->add_left_sisters(LIST).)
+	   (See also $node-&gtadd_left_sisters(LIST).)
 
-       $node->right_sister
+       $node-&gtright_sister
 	   Returns the node that's the immediate right sister of $node.  If
 	   $node is the rightmost (or only) daughter of its mother (or has no
 	   mother), then this returns undef.
 
-	   (See also $node->add_right_sisters(LIST).)
+	   (See also $node-&gtadd_right_sisters(LIST).)
 
-       $node->right_sisters
+       $node-&gtright_sisters
 	   Returns a list of nodes that're sisters to the right of $node. If
 	   $node is the rightmost (or only) daughter of its mother (or has no
 	   mother), then this returns an empty list.
 
-	   (See also $node->add_right_sisters(LIST).)
+	   (See also $node-&gtadd_right_sisters(LIST).)
 
-       $node->my_daughter_index
+       $node-&gtmy_daughter_index
 	   Returns what index this daughter is, in its mother's "daughter"
-	   list.  In other words, if $node is ($node->mother->daughters)[3],
-	   then $node->my_daughter_index returns 3.
+	   list.  In other words, if $node is ($node-&gtmother-&gtdaughters)[3],
+	   then $node-&gtmy_daughter_index returns 3.
 
 	   As a special case, returns 0 if $node has no mother.
 
-       $node->address or $anynode->address(ADDRESS)
+       $node-&gtaddress or $anynode-&gtaddress(ADDRESS)
 	   With the first syntax, returns the address of $node within its
 	   tree, based on its position within the tree.  An address is formed
 	   by noting the path between the root and $node, and concatenating
@@ -679,7 +681,7 @@ OTHER METHODS TO DO WITH RELATIONSHIPS
 	   to you, if you mant to figure out what nodes are to the right of
 	   what other nodes.)
 
-       $node->common(LIST)
+       $node-&gtcommon(LIST)
 	   Returns the lowest node in the tree that is ancestor-or-self to the
 	   nodes $node and LIST.
 
@@ -690,7 +692,7 @@ OTHER METHODS TO DO WITH RELATIONSHIPS
 
 	   As a degenerate case, if LIST is empty, returns $node.
 
-       $node->common_ancestor(LIST)
+       $node-&gtcommon_ancestor(LIST)
 	   Returns the lowest node that is ancestor to all the nodes given (in
 	   nodes $node and LIST).  In other words, it answers the question:
 	   "What node in the tree, as low as possible, is ancestor to the
@@ -706,7 +708,7 @@ OTHER METHODS TO DO WITH RELATIONSHIPS
 	   that'll be undef if $node is root.
 
 YET MORE METHODS
-       $node->walk_down({ callback => \&foo, callbackback => \&foo, ... })
+       $node-&gtwalk_down({ callback =&gt \&foo, callbackback =&gt \&foo, ... })
 	   Performs a depth-first traversal of the structure at and under
 	   $node.  What it does at each node depends on the value of the
 	   options hashref, which you must provide.  There are three options,
@@ -722,7 +724,7 @@ YET MORE METHODS
 	   must return true or false -- if false, it will block the next step:
 
 	   * If $node has any daughter nodes, increment "_depth", and call
-	   $daughter->walk_down(options_hashref) for each daughter (in order,
+	   $daughter-&gtwalk_down(options_hashref) for each daughter (in order,
 	   of course), where options_hashref is the same hashref it was called
 	   with.  When this returns, decrements "_depth".
 
@@ -735,7 +737,7 @@ YET MORE METHODS
 
 	   * Return.
 
-	   $node->walk_down is the way to recursively do things to a tree (if
+	   $node-&gtwalk_down is the way to recursively do things to a tree (if
 	   you start at the root) or part of a tree; if what you're doing is
 	   best done via pre-pre order traversal, use "callback"; if what
 	   you're doing is best done with post-order traversal, use
@@ -744,7 +746,7 @@ YET MORE METHODS
 	   simple and horrific.
 
 	   Note that if you don't specify "_depth", it effectively defaults to
-	   0.  You should set it to scalar($node->ancestors) if you want
+	   0.  You should set it to scalar($node-&gtancestors) if you want
 	   "_depth" to reflect the true depth-in-the-tree for the nodes
 	   called, instead of just the depth below $node.  (If $node is the
 	   root, there's difference, of course.)
@@ -758,18 +760,18 @@ YET MORE METHODS
 	   Note that the existence of "walk_down" doesn't mean you can't write
 	   you own special-use traversers.
 
-       @lines = $node->dump_names({ ...options... });
+       @lines = $node-&gtdump_names({ ...options... });
 	   Dumps, as an indented list, the names of the nodes starting at
 	   $node, and continuing under it.  Options are:
 
 	   * _depth -- A nonnegative number.  Indicating the depth to consider
 	   $node as being at (and so the generation under that is that plus
-	   one, etc.).	Defaults to 0.	You may choose to use set _depth =>
-	   scalar($node->ancestors).
+	   one, etc.).	Defaults to 0.	You may choose to use set _depth =&gt
+	   scalar($node-&gtancestors).
 
 	   * tick -- a string to preface each entry with, between the
 	   indenting-spacing and the node's name.  Defaults to empty-string.
-	   You may prefer "*" or "-> " or someting.
+	   You may prefer "*" or "-&gt " or someting.
 
 	   * indent -- the string used to indent with.	Defaults to "  " (two
 	   spaces).  Another sane value might be ". " (period, space).
@@ -778,8 +780,8 @@ YET MORE METHODS
 	   The dump is not printed, but is returned as a list, where each item
 	   is a line, with a "\n" at the end.
 
-       the constructor CLASS->random_network({...options...})
-       the method $node->random_network({...options...})
+       the constructor CLASS-&gtrandom_network({...options...})
+       the method $node-&gtrandom_network({...options...})
 	   In the first case, constructs a randomly arranged network under a
 	   new node, and returns the root node of that tree.  In the latter
 	   case, constructs the network under $node.
@@ -808,7 +810,7 @@ YET MORE METHODS
 	   * max_children -- maximum number of children any mother in the tree
 	   can have.  Defaults to 4.
 
-       the constructor CLASS->lol_to_tree($lol);
+       the constructor CLASS-&gtlol_to_tree($lol);
 	   Converts something like bracket-notation for "Chomsky trees" (or
 	   rather, the closest you can come with Perl
 	   list-of-lists(-of-lists(-of-lists))) into a tree structure.
@@ -837,41 +839,41 @@ YET MORE METHODS
 		 [ 'died', 'VP'],
 		 'S'
 	       ];
-	      $tree = Tree::DAG_Node->lol_to_tree($lol);
-	      $diagram = $tree->draw_ascii_tree;
+	      $tree = Tree::DAG_Node-&gtlol_to_tree($lol);
+	      $diagram = $tree-&gtdraw_ascii_tree;
 	      print map "$_\n", @$diagram;
 
 	   ...returns this tree:
 
 			      |
-			     <S>
+			     &ltS&gt
 			      |
 			   /------------------\
 			   |		      |
-			 <NP>		     <VP>
+			 &ltNP&gt		     &ltVP&gt
 			   |		      |
-		   /---------------\	    <died>
+		   /---------------\	    &ltdied&gt
 		   |		   |
-		 <NP>		 <PP>
+		 &ltNP&gt		 &ltPP&gt
 		   |		   |
-		/-------\   </with rabies\>
+		/-------\   &lt/with rabies\&gt
 		|	|
-	    <Det:The>  <N>
+	    &ltDet:The&gt  &ltN&gt
 			|
-		      <dog>
+		      &ltdog&gt
 
 	   By the way (and this rather follows from the above rules), when
 	   denoting a LoL tree consisting of just one node, this:
 
-	     $tree = Tree::DAG_Node->lol_to_tree( 'Lonely' );
+	     $tree = Tree::DAG_Node-&gtlol_to_tree( 'Lonely' );
 
 	   is okay, although it'd probably occur to you to denote it only as:
 
-	     $tree = Tree::DAG_Node->lol_to_tree( ['Lonely'] );
+	     $tree = Tree::DAG_Node-&gtlol_to_tree( ['Lonely'] );
 
 	   which is of course fine, too.
 
-       $node->tree_to_lol_notation({...options...})
+       $node-&gttree_to_lol_notation({...options...})
 	   Dumps a tree (starting at $node) as the sort of LoL-like bracket
 	   notation you see in the above example code.	Returns just one big
 	   block of text.  The only option is "multiline" -- if true, it dumps
@@ -881,7 +883,7 @@ YET MORE METHODS
 
 	   For example, starting with the tree from the above example, this:
 
-	     print $tree->tree_to_lol_notation, "\n";
+	     print $tree-&gttree_to_lol_notation, "\n";
 
 	   prints the following (which I've broken over two lines for sake of
 	   printablitity of documentation):
@@ -891,12 +893,12 @@ YET MORE METHODS
 
 	   Doing this:
 
-	     print $tree->tree_to_lol_notation({ multiline => 1 });
+	     print $tree-&gttree_to_lol_notation({ multiline =&gt 1 });
 
 	   prints the same content, just spread over many lines, and prettily
 	   indented.
 
-       $node->tree_to_lol
+       $node-&gttree_to_lol
 	   Returns that tree (starting at $node) represented as a LoL, like
 	   what $lol, above, holds.  (This is as opposed to
 	   "tree_to_lol_notation", which returns the viewable code like what
@@ -906,7 +908,7 @@ YET MORE METHODS
 	   Data::Dumper, in case "tree_to_lol_notation" doesn't do just what
 	   you want?
 
-       the constructor CLASS->simple_lol_to_tree($simple_lol);
+       the constructor CLASS-&gtsimple_lol_to_tree($simple_lol);
 	   This is like lol_to_tree, except that rule 1 doesn't apply -- i.e.,
 	   all scalars (or really, anything not a listref) in the LoL-
 	   structure end up as named terminal nodes, and only terminal nodes
@@ -914,7 +916,7 @@ YET MORE METHODS
 	   This method is useful for making things like expression trees, or
 	   at least starting them off.	Consider that this:
 
-	       $tree = Tree::DAG_Node->simple_lol_to_tree(
+	       $tree = Tree::DAG_Node-&gtsimple_lol_to_tree(
 		 [ 'foo', ['bar', ['baz'], 'quux'], 'zaz', 'pati' ]
 	       );
 
@@ -924,27 +926,27 @@ YET MORE METHODS
 	   Note that there is a (possibly surprising) degenerate case of what
 	   I'm calling a "simple-LoL", and it's like this:
 
-	     $tree = Tree::DAG_Node->simple_lol_to_tree('Lonely');
+	     $tree = Tree::DAG_Node-&gtsimple_lol_to_tree('Lonely');
 
 	   This is the (only) way you can specify a tree consisting of only a
 	   single node, which here gets the name 'Lonely'.
 
-       $node->tree_to_simple_lol
+       $node-&gttree_to_simple_lol
 	   Returns that tree (starting at $node) represented as a simple-LoL
 	   -- i.e., one where non-terminal nodes are represented as listrefs,
 	   and terminal nodes are gotten from the contents of those nodes'
 	   "name' attributes.
 
 	   Note that in the case of $node being terminal, what you get back is
-	   the same as $node->name.
+	   the same as $node-&gtname.
 
 	   Compare to tree_to_simple_lol_notation.
 
-       $node->tree_to_simple_lol_notation({...options...})
+       $node-&gttree_to_simple_lol_notation({...options...})
 	   A simple-LoL version of tree_to_lol_notation (which see); takes the
 	   same options.
 
-       $list_r = $node->draw_ascii_tree({ ... options ... })
+       $list_r = $node-&gtdraw_ascii_tree({ ... options ... })
 	   Draws a nice ASCII-art representation of the tree structure at-and-
 	   under $node, with $node at the top.	Returns a reference to the
 	   list of lines (with no "\n"s or anything at the end of them) that
@@ -952,7 +954,7 @@ YET MORE METHODS
 
 	   Example usage:
 
-	     print map("$_\n", @{$tree->draw_ascii_tree});
+	     print map("$_\n", @{$tree-&gtdraw_ascii_tree});
 
 	   draw_ascii_tree takes parameters you set in the options hashref:
 
@@ -976,17 +978,17 @@ YET MORE METHODS
 	   if anyone can suggest a better drawing algorithm, I'd be
 	   appreciative.
 
-       $node->copy_tree or $node->copy_tree({...options...})
+       $node-&gtcopy_tree or $node-&gtcopy_tree({...options...})
 	   This returns the root of a copy of the tree that $node is a member
 	   of.	If you pass no options, copy_tree pretends you've passed {}.
 
 	   This method is currently implemented as just a call to
-	   $this->root->copy_at_and_under({...options...}), but magic may be
+	   $this-&gtroot-&gtcopy_at_and_under({...options...}), but magic may be
 	   added in the future.
 
-	   Options you specify are passed down to calls to $node->copy.
+	   Options you specify are passed down to calls to $node-&gtcopy.
 
-       $node->copy_at_and_under or $node->copy_at_and_under({...options...})
+       $node-&gtcopy_at_and_under or $node-&gtcopy_at_and_under({...options...})
 	   This returns a copy of the subtree consisting of $node and
 	   everything under it.
 
@@ -994,12 +996,12 @@ YET MORE METHODS
 	   {}.
 
 	   This works by recursively building up the new tree from the leaves,
-	   duplicating nodes using $orig_node->copy($options_ref) and then
+	   duplicating nodes using $orig_node-&gtcopy($options_ref) and then
 	   linking them up into a new tree of the same shape.
 
-	   Options you specify are passed down to calls to $node->copy.
+	   Options you specify are passed down to calls to $node-&gtcopy.
 
-       the constructor $node->copy or $node->copy({...options...})
+       the constructor $node-&gtcopy or $node-&gtcopy({...options...})
 	   Returns a copy of $node, minus its daughter or mother attributes
 	   (which are set back to default values).
 
@@ -1014,7 +1016,7 @@ YET MORE METHODS
 	   the clone's 'attribute' attribute.  Both of these kinds of magic
 	   are disabled if the options you pass to "copy" (maybe via
 	   "copy_tree", or "copy_at_and_under") includes ("no_attribute_copy"
-	   => 1).
+	   =&gt 1).
 
 	   The options hashref you pass to "copy" (derictly or indirectly)
 	   gets changed slightly after you call "copy" -- it gets an entry
@@ -1022,8 +1024,8 @@ YET MORE METHODS
 	   care, but this is reserved for possible future use.	See the source
 	   if you are wildly curious.
 
-	   Note that if you are using $node->copy (whether directly or via
-	   $node->copy_tree or $node->copy_at_or_under), and it's not properly
+	   Note that if you are using $node-&gtcopy (whether directly or via
+	   $node-&gtcopy_tree or $node-&gtcopy_at_or_under), and it's not properly
 	   copying object attributes containing references, you probably
 	   shouldn't fight it or try to fix it -- simply override copy_tree
 	   with:
@@ -1031,7 +1033,7 @@ YET MORE METHODS
 	     sub copy_tree {
 	       use Storable qw(dclone);
 	       my $this = $_[0];
-	       return dclone($this->root);
+	       return dclone($this-&gtroot);
 		# d for "deep"
 	     }
 
@@ -1041,7 +1043,7 @@ YET MORE METHODS
 	       use Data::Dumper;
 	       my $this = $_[0];
 	       $Data::Dumper::Purity = 1;
-	       return eval(Dumper($this->root));
+	       return eval(Dumper($this-&gtroot));
 	     }
 
 	   Both of these avoid you having to reinvent the wheel.
@@ -1055,14 +1057,14 @@ YET MORE METHODS
 
 	     sub copy {
 	       my($it, @etc) = @_;
-	       $it->SUPER::copy(@etc);
-	       $it->{'UID'} = &get_new_UID;
+	       $it-&gtSUPER::copy(@etc);
+	       $it-&gt{'UID'} = &get_new_UID;
 	     }
 
 	   ...or the like.  See the source of Tree::DAG_Node::copy for
 	   inspiration.
 
-       $node->delete_tree
+       $node-&gtdelete_tree
 	   Destroys the entire tree that $node is a member of (starting at the
 	   root), by nulling out each node-object's attributes (including,
 	   most importantly, its linkage attributes -- hopefully this is more
@@ -1082,13 +1084,13 @@ YET MORE METHODS
 	   So if you see that, that's what you've done wrong.  (Actually, the
 	   class DEADNODE does provide one method: a no-op method
 	   "delete_tree".  So if you want to delete a tree, but think you may
-	   have deleted it already, it's safe to call $node->delete_tree on it
+	   have deleted it already, it's safe to call $node-&gtdelete_tree on it
 	   (again).)
 
 	   The "delete_tree" method is needed because Perl's garbage collector
 	   would never (as currently implemented) see that it was time to de-
 	   allocate the memory the tree uses -- until either you call
-	   $node->delete_tree, or until the program stops (at "global
+	   $node-&gtdelete_tree, or until the program stops (at "global
 	   destruction" time, when everything is unallocated).
 
 	   Incidentally, there are better ways to do garbage-collecting on a
@@ -1109,13 +1111,13 @@ YET MORE METHODS
 	   circular, not the tree's.  Anyway, consider:
 
 		 # null out all my "attributes" hashes
-		 $anywhere->root->walk_down({
-		   'callback' => sub {
-		     $hr = $_[0]->attributes; %$hr = (); return 1;
+		 $anywhere-&gtroot-&gtwalk_down({
+		   'callback' =&gt sub {
+		     $hr = $_[0]-&gtattributes; %$hr = (); return 1;
 		   }
 		 });
 		 # And then:
-		 $anywhere->delete_tree;
+		 $anywhere-&gtdelete_tree;
 
 	   (I suppose "delete_tree" is a "destructor", or as close as you can
 	   meaningfully come for a circularity-rich data structure in Perl.)
@@ -1123,7 +1125,7 @@ YET MORE METHODS
    When and How to Destroy
        It should be clear to you that if you've built a big parse tree or
        something, and then you're finished with it, you should call
-       $some_node->delete_tree on it if you want the memory back.
+       $some_node-&gtdelete_tree on it if you want the memory back.
 
        But consider this case:	you've got this tree:
 
@@ -1134,7 +1136,7 @@ YET MORE METHODS
 	  E	X  Y
 
        Let's say you decide you don't want D or any of its descendants in the
-       tree, so you call D->unlink_from_mother.  This does NOT automagically
+       tree, so you call D-&gtunlink_from_mother.  This does NOT automagically
        destroy the tree D-X-Y.	Instead it merely splits the tree into two:
 
 	    A			     D
@@ -1146,26 +1148,26 @@ YET MORE METHODS
        To destroy D and its little tree, you have to explicitly call
        delete_tree on it.
 
-       Note, however, that if you call C->unlink_from_mother, and if you don't
+       Note, however, that if you call C-&gtunlink_from_mother, and if you don't
        have a link to C anywhere, then it does magically go away.  This is
        because nothing links to C -- whereas with the D-X-Y tree, D links to X
        and Y, and X and Y each link back to D. Note that calling
-       C->delete_tree is harmless -- after all, a tree of only one node is
+       C-&gtdelete_tree is harmless -- after all, a tree of only one node is
        still a tree.
 
        So, this is a surefire way of getting rid of all $node's children and
        freeing up the memory associated with them and their descendants:
 
-	 foreach my $it ($node->clear_daughters) { $it->delete_tree }
+	 foreach my $it ($node-&gtclear_daughters) { $it-&gtdelete_tree }
 
        Just be sure not to do this:
 
-	 foreach my $it ($node->daughters) { $it->delete_tree }
-	 $node->clear_daughters;
+	 foreach my $it ($node-&gtdaughters) { $it-&gtdelete_tree }
+	 $node-&gtclear_daughters;
 
-       That's bad; the first call to $_->delete_tree will climb to the root of
+       That's bad; the first call to $_-&gtdelete_tree will climb to the root of
        $node's tree, and nuke the whole tree, not just the bits under $node.
-       You might as well have just called $node->delete_tree.  (Moreavor, once
+       You might as well have just called $node-&gtdelete_tree.  (Moreavor, once
        $node is dead, you can't call clear_daughters on it, so you'll get an
        error there.)
 
@@ -1211,19 +1213,19 @@ RAMBLINGS
 
        When routines in this class access a node's "mother" attribute, or its
        "daughters" attribute, they (generally) do so directly (via
-       $node->{'mother'}, etc.), for sake of efficiency.  But classes derived
+       $node-&gt{'mother'}, etc.), for sake of efficiency.  But classes derived
        from this class should probably do this instead thru a method (via
-       $node->mother, etc.), for sake of portability, abstraction, and general
+       $node-&gtmother, etc.), for sake of portability, abstraction, and general
        goodness.
 
        However, no routines in this class (aside from, necessarily, "_init",
        "_init_name", and "name") access the "name" attribute directly;
        routines (like the various tree draw/dump methods) get the "name" value
-       thru a call to $obj->name().  So if you want the object's name to not
+       thru a call to $obj-&gtname().  So if you want the object's name to not
        be a real attribute, but instead have it derived dynamically from some
        feature of the object (say, based on some of its other attributes, or
        based on its address), you can to override the "name" method, without
-       causing problems.  (Be sure to consider the case of $obj->name as a
+       causing problems.  (Be sure to consider the case of $obj-&gtname as a
        write method, as it's used in "lol_to_tree" and "random_network".)
 
 SEE ALSO
@@ -1250,10 +1252,10 @@ SEE ALSO
        printings/editions of Algorithms + Data Structures = Programs.)
 
 MAINTAINER
-       David Hand, "<cogent@cpan.org>"
+       David Hand, "&ltcogent@cpan.org&gt"
 
 AUTHOR
-       Sean M. Burke, "<sburke@cpan.org>"
+       Sean M. Burke, "&ltsburke@cpan.org&gt"
 
 COPYRIGHT, LICENSE, AND DISCLAIMER
        Copyright 1998-2001, 2004, 2007 by Sean M. Burke and David Hand.
@@ -1268,6 +1270,6 @@ COPYRIGHT, LICENSE, AND DISCLAIMER
 
 
 perl v5.12.4			  2007-12-09		     Tree::DAG_Node(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

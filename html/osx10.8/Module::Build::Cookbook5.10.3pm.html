@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Module::Build" isn't conceptually very complicated, but examples are..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Module::Build::Cookbook - Examples of Module::Build Usage</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Module::Build::CookbookPerl)Programmers Reference Module::Build::Cookbook(3pm)
 
 
@@ -77,20 +79,20 @@ BASIC RECIPES
        Inside the "Build.PL" script the same thing can be accomplished by
        passing values for the "config" parameter to "new()":
 
-	my $build = Module::Build->new
+	my $build = Module::Build-&gtnew
 	  (
 	   ...
-	   config => { cc => 'gcc', ld => 'gcc' },
+	   config =&gt { cc =&gt 'gcc', ld =&gt 'gcc' },
 	   ...
 	  );
 
        In custom build code, the same thing can be accomplished by calling the
        "config" in Module::Build method:
 
-	$build->config( cc => 'gcc' );	   # Set
-	$build->config( ld => 'gcc' );	   # Set
+	$build-&gtconfig( cc =&gt 'gcc' );	   # Set
+	$build-&gtconfig( ld =&gt 'gcc' );	   # Set
 	...
-	my $linker = $build->config('ld'); # Get
+	my $linker = $build-&gtconfig('ld'); # Get
 
    Installing modules using the programmatic interface
        If you need to build, test, and/or install modules from within some
@@ -100,15 +102,15 @@ BASIC RECIPES
        subclass) and then invoke its "dispatch()" method to run various
        actions.
 
-	 my $build = Module::Build->new
+	 my $build = Module::Build-&gtnew
 	   (
-	    module_name => 'Foo::Bar',
-	    license	=> 'perl',
-	    requires	=> { 'Some::Module'   => '1.23' },
+	    module_name =&gt 'Foo::Bar',
+	    license	=&gt 'perl',
+	    requires	=&gt { 'Some::Module'   =&gt '1.23' },
 	   );
-	 $build->dispatch('build');
-	 $build->dispatch('test', verbose => 1);
-	 $build->dispatch('install');
+	 $build-&gtdispatch('build');
+	 $build-&gtdispatch('test', verbose =&gt 1);
+	 $build-&gtdispatch('install');
 
        The first argument to "dispatch()" is the name of the action, and any
        following arguments are named parameters.
@@ -213,7 +215,7 @@ ADVANCED RECIPES
        old versions don't.  If authors want to help users who have old
        versions, some form of Makefile.PL should be supplied.  The easiest way
        to accomplish this is to use the "create_makefile_pl" parameter to
-       "Module::Build->new()" in the "Build.PL" script, which can create
+       "Module::Build-&gtnew()" in the "Build.PL" script, which can create
        various flavors of Makefile.PL during the "dist" action.
 
        As a best practice, we recommend using the "traditional" style of
@@ -230,7 +232,7 @@ ADVANCED RECIPES
        the order of the entries in that property:
 
 	 # Process pod files first
-	 my @e = @{$build->build_elements};
+	 my @e = @{$build-&gtbuild_elements};
 	 my ($i) = grep {$e[$_] eq 'pod'} 0..$#e;
 	 unshift @e, splice @e, $i, 1;
 
@@ -252,13 +254,13 @@ ADVANCED RECIPES
        how to accomplish this:
 
 	 use Module::Build;
-	 my $build = Module::Build->new
+	 my $build = Module::Build-&gtnew
 	   (
-	    module_name => 'Foo::Bar',
+	    module_name =&gt 'Foo::Bar',
 	    ...other stuff here...
 	   );
-	 $build->add_build_element('dat');
-	 $build->create_build_script;
+	 $build-&gtadd_build_element('dat');
+	 $build-&gtcreate_build_script;
 
        This will find all .dat files in the lib/ directory, copy them to the
        blib/lib/ directory during the "build" action, and install them during
@@ -271,12 +273,12 @@ ADVANCED RECIPES
 	 use Module::Build;
 	 my $build = new Module::Build
 	   (
-	    module_name => 'Foo::Bar',
-	    dat_files => {'some/dir/Bar.dat' => 'lib/Foo/Bar.dat'},
+	    module_name =&gt 'Foo::Bar',
+	    dat_files =&gt {'some/dir/Bar.dat' =&gt 'lib/Foo/Bar.dat'},
 	    ...other stuff here...
 	   );
-	 $build->add_build_element('dat');
-	 $build->create_build_script;
+	 $build-&gtadd_build_element('dat');
+	 $build-&gtcreate_build_script;
 
        If your extra files actually need to be created on the user's machine,
        or if they need some other kind of special processing, you'll probably
@@ -284,20 +286,20 @@ ADVANCED RECIPES
        them, named "process_${kind}_files()":
 
 	 use Module::Build;
-	 my $class = Module::Build->subclass(code => <<'EOF');
+	 my $class = Module::Build-&gtsubclass(code =&gt &lt&lt'EOF');
 	   sub process_dat_files {
 	     my $self = shift;
 	     ... locate and process *.dat files,
 	     ... and create something in blib/lib/
 	   }
 	 EOF
-	 my $build = $class->new
+	 my $build = $class-&gtnew
 	   (
-	    module_name => 'Foo::Bar',
+	    module_name =&gt 'Foo::Bar',
 	    ...other stuff here...
 	   );
-	 $build->add_build_element('dat');
-	 $build->create_build_script;
+	 $build-&gtadd_build_element('dat');
+	 $build-&gtcreate_build_script;
 
        If your extra files don't go in lib/ but in some other place, see
        "Adding new elements to the install process" for how to actually get
@@ -320,15 +322,15 @@ ADVANCED RECIPES
        should be installed.  To do this, use the "install_path" parameter to
        the "new()" method:
 
-	 my $build = Module::Build->new
+	 my $build = Module::Build-&gtnew
 	   (
 	    ...other stuff here...
-	    install_path => { conf => $installation_path }
+	    install_path =&gt { conf =&gt $installation_path }
 	   );
 
        Or you can call the "install_path()" method later:
 
-	 $build->install_path(conf => $installation_path);
+	 $build-&gtinstall_path(conf =&gt $installation_path);
 
        The user may also specify the path on the command line:
 
@@ -346,7 +348,7 @@ EXAMPLES ON CPAN
        of Module::Build.  They can serve as real-world examples for others.
 
    SVN-Notify-Mirror
-       <http://search.cpan.org/~jpeacock/SVN-Notify-Mirror/>
+       &lthttp://search.cpan.org/~jpeacock/SVN-Notify-Mirror/&gt
 
        John Peacock, author of the "SVN-Notify-Mirror" distribution, says:
 
@@ -375,21 +377,21 @@ EXAMPLES ON CPAN
 
 	 # Build.PL
 	 use Module::Build;
-	 my $class = Module::Build->subclass(
-	     class => "Module::Build::Custom",
-	     code => <<'SUBCLASS' );
+	 my $class = Module::Build-&gtsubclass(
+	     class =&gt "Module::Build::Custom",
+	     code =&gt &lt&lt'SUBCLASS' );
 
 	 sub ACTION_install {
 	     my $self = shift;
 	     # YOUR CODE HERE
-	     $self->SUPER::ACTION_install;
+	     $self-&gtSUPER::ACTION_install;
 	 }
 	 SUBCLASS
 
-	 $class->new(
-	     module_name => 'Your::Module',
+	 $class-&gtnew(
+	     module_name =&gt 'Your::Module',
 	     # rest of the usual Module::Build parameters
-	 )->create_build_script;
+	 )-&gtcreate_build_script;
 
    Adding an action
        You can add a new "./Build" action simply by writing the method for it
@@ -401,15 +403,15 @@ EXAMPLES ON CPAN
 
 	 # Build.PL
 	 use Module::Build;
-	 my $class = Module::Build->subclass(
-	     class => "Module::Build::Custom",
-	     code => <<'SUBCLASS' );
+	 my $class = Module::Build-&gtsubclass(
+	     class =&gt "Module::Build::Custom",
+	     code =&gt &lt&lt'SUBCLASS' );
 
 	 sub ACTION_commit {
 	     my $self = shift;
 
-	     $self->depends_on("test");
-	     $self->do_system(qw(svn commit));
+	     $self-&gtdepends_on("test");
+	     $self-&gtdo_system(qw(svn commit));
 	 }
 	 SUBCLASS
 
@@ -446,7 +448,7 @@ EXAMPLES ON CPAN
 	   # Find out what version of Module::Build is installed or fail quietly.
 	   # This should be cross-platform.
 	   my $Installed_MB =
-	       `$^X -e "eval q{require Module::Build; print Module::Build->VERSION} or exit 1";
+	       `$^X -e "eval q{require Module::Build; print Module::Build-&gtVERSION} or exit 1";
 
 	   # some operating systems put a newline at the end of every print.
 	   chomp $Installed_MB;
@@ -454,7 +456,7 @@ EXAMPLES ON CPAN
 	   $Installed_MB = 0 if $?;
 
 	   # Use our bundled copy of Module::Build if it's newer than the installed.
-	   unshift @INC, "inc/Module-Build/lib/perl5" if $Bundled_MB > $Installed_MB;
+	   unshift @INC, "inc/Module-Build/lib/perl5" if $Bundled_MB &gt $Installed_MB;
 
 	   require Module::Build;
 
@@ -466,7 +468,7 @@ EXAMPLES ON CPAN
        indication of the direction we're moving.
 
 AUTHOR
-       Ken Williams <kwilliams@cpan.org>
+       Ken Williams &ltkwilliams@cpan.org&gt
 
 COPYRIGHT
        Copyright (c) 2001-2008 Ken Williams.  All rights reserved.
@@ -481,6 +483,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-08-10	  Module::Build::Cookbook(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

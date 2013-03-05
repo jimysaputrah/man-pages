@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The "Error" package provides two interfaces. Firstly "Error" provides a..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Error - Error/exception handling in an OO-ish way</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Error(3)	      User Contributed Perl Documentation	      Error(3)
 
 
@@ -42,14 +44,14 @@ SYNOPSIS
 	   }
 	   catch Error::IO with {
 	       my $E = shift;
-	       print STDERR "File ", $E->{'-file'}, " had a problem\n";
+	       print STDERR "File ", $E-&gt{'-file'}, " had a problem\n";
 	   }
 	   except {
 	       my $E = shift;
-	       my $general_handler=sub {send_message $E->{-description}};
+	       my $general_handler=sub {send_message $E-&gt{-description}};
 	       return {
-		   UserException1 => $general_handler,
-		   UserException2 => $general_handler
+		   UserException1 =&gt $general_handler,
+		   UserException2 =&gt $general_handler
 	       };
 	   }
 	   otherwise {
@@ -83,7 +85,7 @@ PROCEDURAL INTERFACE
 	   the event of an error being thrown within BLOCK.
 
        catch CLASS with BLOCK
-	   This clauses will cause all errors that satisfy "$err->isa(CLASS)"
+	   This clauses will cause all errors that satisfy "$err-&gtisa(CLASS)"
 	   to be caught and handled by evaluating "BLOCK".
 
 	   "BLOCK" will be passed two arguments. The first will be the error
@@ -92,7 +94,7 @@ PROCEDURAL INTERFACE
 	   catch block, try will continue processing as if the catch block was
 	   never found. The error will also be available in $@.
 
-	   To propagate the error the catch block may call "$err->throw"
+	   To propagate the error the catch block may call "$err-&gtthrow"
 
 	   If the scalar reference by the second argument is not set, and the
 	   error is not thrown. Then the current try block will return with
@@ -161,7 +163,7 @@ CLASS INTERFACE
        created by a sub in that package, or the last error which passed an
        object blessed into that package as the "-object" argument.
 
-       Error->new()
+       Error-&gtnew()
 	   See the Error::Simple documentation.
 
        throw ( [ ARGS ] )
@@ -195,7 +197,7 @@ CLASS INTERFACE
 	   the package or uncaught errors generated using "record" will be
 	   reported.
 
-		$Error->flush;
+		$Error-&gtflush;
 
    OBJECT METHODS
        stacktrace
@@ -218,11 +220,11 @@ CLASS INTERFACE
        text
 	   The text of the error
 
-       $err->associate($obj)
+       $err-&gtassociate($obj)
 	   Associates an error with an object to allow error propagation. I.e:
 
-	       $ber->encode(...) or
-		   return Error->prior($ber)->associate($ldap);
+	       $ber-&gtencode(...) or
+		   return Error-&gtprior($ber)-&gtassociate($ldap);
 
    OVERLOAD METHODS
        stringify
@@ -271,8 +273,8 @@ $Error::ObjectifyCallback
 	   sub throw_MyError_Bar
 	   {
 	       my $args = shift;
-	       my $err = MyError::Bar->new();
-	       $err->{'MyBarText'} = $args->{'text'};
+	       my $err = MyError::Bar-&gtnew();
+	       $err-&gt{'MyBarText'} = $args-&gt{'text'};
 	       return $err;
 	   }
 
@@ -350,19 +352,19 @@ KNOWN BUGS
        None, but that does not mean there are not any.
 
 AUTHORS
-       Graham Barr <gbarr@pobox.com>
+       Graham Barr &ltgbarr@pobox.com&gt
 
        The code that inspired me to write this was originally written by Peter
-       Seibel <peter@weblogic.com> and adapted by Jesse Glick
-       <jglick@sig.bsh.com>.
+       Seibel &ltpeter@weblogic.com&gt and adapted by Jesse Glick
+       &ltjglick@sig.bsh.com&gt.
 
-       ":warndie" handlers added by Paul Evans <leonerd@leonerd.org.uk>
+       ":warndie" handlers added by Paul Evans &ltleonerd@leonerd.org.uk&gt
 
 MAINTAINER
-       Shlomi Fish <shlomif@iglu.org.il>
+       Shlomi Fish &ltshlomif@iglu.org.il&gt
 
 PAST MAINTAINERS
-       Arun Kumar U <u_arunkumar@yahoo.com>
+       Arun Kumar U &ltu_arunkumar@yahoo.com&gt
 
 COPYRIGHT
        Copyright (c) 1997-8  Graham Barr. All rights reserved.	This program
@@ -372,6 +374,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2012-06-20			      Error(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document describes differences between the 5.005 release and the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perl561delta - what's new for perl v5.6.x</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERL561DELTA(1)        Perl Programmers Reference Guide        PERL561DELTA(1)
 
 
@@ -483,7 +485,7 @@ Summary of changes between 5.6.0 and 5.6.1
        o   Current directory entries in %ENV are now correctly propagated to
 	   child processes.
 
-       o   Duping socket handles with open(F, ">&MYSOCK") now works under
+       o   Duping socket handles with open(F, "&gt&MYSOCK") now works under
 	   Windows 9x.
 
        o   The makefiles now provide a single switch to bulk-enable all the
@@ -680,7 +682,7 @@ Core Enhancements
        with the stubs they provide.  See attributes.
 
    File and directory handles can be autovivified
-       Similar to how constructs such as "$x->[0]" autovivify a reference,
+       Similar to how constructs such as "$x-&gt[0]" autovivify a reference,
        handle constructors (open(), opendir(), pipe(), socketpair(),
        sysopen(), socket(), and accept()) now autovivify a file or directory
        handle if the handle passed to them is an uninitialized scalar
@@ -698,8 +700,8 @@ Core Enhancements
 	   }
 
 	   {
-	       my $f = myopen("</etc/motd");
-	       print <$f>;
+	       my $f = myopen("&lt/etc/motd");
+	       print &lt$f&gt;
 	       # $f implicitly closed here
 	   }
 
@@ -732,7 +734,7 @@ Core Enhancements
        o   in basic arithmetics: + - * / % (NOTE: operating close to the
 	   limits of the integer values may produce surprising results)
 
-       o   in bit arithmetics: & | ^ ~ << >> (NOTE: these used to be forced to
+       o   in bit arithmetics: & | ^ ~ &lt&lt &gt&gt (NOTE: these used to be forced to
 	   be 32 bits wide but now operate on the full native width.)
 
        o   vec()
@@ -930,10 +932,10 @@ Core Enhancements
 
    Some arrows may be omitted in calls through references
        Perl now allows the arrow to be omitted in many constructs involving
-       subroutine calls through references.  For example, "$foo[10]->('foo')"
+       subroutine calls through references.  For example, "$foo[10]-&gt('foo')"
        may now be written "$foo[10]('foo')".  This is rather similar to how
-       the arrow may be omitted from "$foo[10]->{'foo'}".  Note however, that
-       the arrow is still required for "foo(10)->('bar')".
+       the arrow may be omitted from "$foo[10]-&gt{'foo'}".  Note however, that
+       the arrow is still required for "foo(10)-&gt('bar')".
 
    Boolean assignment operators are legal lvalues
        Constructs such as "($a ||= 2) += 1" are now allowed.
@@ -964,7 +966,7 @@ Core Enhancements
 
    Pseudo-hashes work better
        Dereferencing some types of reference values in a pseudo-hash, such as
-       "$ph->{foo}[1]", was accidentally disallowed.  This has been corrected.
+       "$ph-&gt{foo}[1]", was accidentally disallowed.  This has been corrected.
 
        When applied to a pseudo-hash element, exists() now reports whether the
        specified value exists, not merely if the key is valid.
@@ -996,23 +998,23 @@ Core Enhancements
        correct implementation of fflush(NULL) isn't available.
 
    Better diagnostics on meaningless filehandle operations
-       Constructs such as "open(<FH>)" and "close(<FH>)" are compile time
+       Constructs such as "open(&ltFH&gt)" and "close(&ltFH&gt)" are compile time
        errors.	Attempting to read from filehandles that were opened only for
        writing will now produce warnings (just as writing to read-only
        filehandles does).
 
    Where possible, buffered data discarded from duped input filehandle
-       "open(NEW, "<&OLD")" now attempts to discard any data that was
+       "open(NEW, "&lt&OLD")" now attempts to discard any data that was
        previously read and buffered in "OLD" before duping the handle.	On
        platforms where doing this is allowed, the next read operation on "NEW"
        will return the same data as the corresponding operation on "OLD".
        Formerly, it would have returned the data from the start of the
        following disk block instead.
 
-   eof() has the same old magic as <>
-       "eof()" would return true if no attempt to read from "<>" had yet been
+   eof() has the same old magic as &lt&gt
+       "eof()" would return true if no attempt to read from "&lt&gt" had yet been
        made.  "eof()" has been changed to have a little magic of its own, it
-       now opens the "<>" files.
+       now opens the "&lt&gt" files.
 
    binmode() can be used to set :crlf and :raw modes
        binmode() now accepts a second argument that specifies a discipline for
@@ -1104,7 +1106,7 @@ Core Enhancements
        remains unchanged.  See perlop.
 
    Bit operators support full native integer width
-       The bit operators (& | ^ ~ << >>) now operate on the full native
+       The bit operators (& | ^ ~ &lt&lt &gt&gt) now operate on the full native
        integral width (the exact size of which is available in
        $Config{ivsize}).  For example, if your platform is either natively
        64-bit or if Perl has been configured to use 64-bit integers, these
@@ -1245,7 +1247,7 @@ Modules and Pragmata
 	   means "for at least 3 CPU seconds".	The output format has also
 	   changed.  For example:
 
-	      use Benchmark;$x=3;timethese(-5,{a=>sub{$x*$x},b=>sub{$x**2}})
+	      use Benchmark;$x=3;timethese(-5,{a=&gtsub{$x*$x},b=&gtsub{$x**2}})
 
 	   will now output something like this:
 
@@ -1392,7 +1394,7 @@ Modules and Pragmata
 
 	   instead of
 
-	       $fullname = File::Spec->catfile($dir1, $dir2, $file);
+	       $fullname = File::Spec-&gtcatfile($dir1, $dir2, $file);
 
        Getopt::Long
 	   Getopt::Long licensing has changed to allow the Perl Artistic
@@ -1406,9 +1408,9 @@ Modules and Pragmata
 	       use Pod::Usage;
 	       my $man = 0;
 	       my $help = 0;
-	       GetOptions('help|?' => \$help, man => \$man) or pod2usage(2);
+	       GetOptions('help|?' =&gt \$help, man =&gt \$man) or pod2usage(2);
 	       pod2usage(1) if $help;
-	       pod2usage(-exitstatus => 0, -verbose => 2) if $man;
+	       pod2usage(-exitstatus =&gt 0, -verbose =&gt 2) if $man;
 
 	       __END__
 
@@ -1428,11 +1430,11 @@ Modules and Pragmata
 
 	       =over 8
 
-	       =item B<-help>
+	       =item B&lt-help&gt
 
 	       Print a brief help message and exits.
 
-	       =item B<-man>
+	       =item B&lt-man&gt
 
 	       Prints the manual page and exits.
 
@@ -1440,17 +1442,17 @@ Modules and Pragmata
 
 	       =head1 DESCRIPTION
 
-	       B<This program> will read the given input file(s) and do something
+	       B&ltThis program&gt will read the given input file(s) and do something
 	       useful with the contents thereof.
 
 	       =cut
 
 	   See Pod::Usage for details.
 
-	   A bug that prevented the non-option call-back <> from being
+	   A bug that prevented the non-option call-back &lt&gt from being
 	   specified as the first argument has been fixed.
 
-	   To specify the characters < and > as option starters, use ><. Note,
+	   To specify the characters &lt and &gt as option starters, use &gt&lt. Note,
 	   however, that changing option starters is strongly deprecated.
 
        IO  write() and syswrite() will now accept a single-argument form of
@@ -1469,7 +1471,7 @@ Modules and Pragmata
 	   IO::Socket::accept now uses select() instead of alarm() for doing
 	   timeouts.
 
-	   IO::Socket::INET->new now sets $! correctly on failure. $@ is still
+	   IO::Socket::INET-&gtnew now sets $! correctly on failure. $@ is still
 	   set for backwards compatibility.
 
        JPL Java Perl Lingo is now distributed with Perl.  See jpl/README for
@@ -1479,12 +1481,12 @@ Modules and Pragmata
 	   removes all named entries.
 
        Math::BigInt
-	   The bitwise operations "<<", ">>", "&", "|", and "~" are now
+	   The bitwise operations "&lt&lt", "&gt&gt", "&", "|", and "~" are now
 	   supported on bigints.
 
        Math::Complex
 	   The accessor methods Re, Im, arg, abs, rho, and theta can now also
-	   act as mutators (accessor $z->Re(), mutator $z->Re(3)).
+	   act as mutators (accessor $z-&gtRe(), mutator $z-&gtRe(3)).
 
 	   The class method "display_format" and the corresponding object
 	   method "display_format", in addition to accepting just one
@@ -1541,7 +1543,7 @@ Modules and Pragmata
 	   returns found pod files, along with their canonical names (like
 	   "File::Spec::Unix").  Pod::ParseUtils contains Pod::List (useful
 	   for storing pod list information), Pod::Hyperlink (for parsing the
-	   contents of "L<>" sequences) and Pod::Cache (for caching
+	   contents of "L&lt&gt" sequences) and Pod::Cache (for caching
 	   information about pod files, e.g., link nodes).
 
        Pod::Select, podselect
@@ -1701,7 +1703,7 @@ Utility Changes
    The Perl Debugger
        Many bug fixes and enhancements were added to perl5db.pl, the Perl
        debugger.  The help documentation was rearranged.  New commands include
-       "< ?", "> ?", and "{ ?" to list out current actions, "man docpage" to
+       "&lt ?", "&gt ?", and "{ ?" to list out current actions, "man docpage" to
        run your doc viewer on some perl docset, and support for quoted
        options.  The help information was rearranged, and should be viewable
        once again if you're using less as your pager.  A serious security hole
@@ -1776,7 +1778,7 @@ Improved Documentation
 	   An introduction to Unicode support features in Perl.
 
 Performance enhancements
-   Simple sort() using { $a <=> $b } and the like are optimized
+   Simple sort() using { $a &lt=&gt $b } and the like are optimized
        Many common sort() operations using a simple inlined block are now
        optimized for faster performance.
 
@@ -1937,7 +1939,7 @@ Platform specific changes
        "verbs".
 
        Add to Perl command line processing the ability to use default file
-       types and to recognize Unix-style "2>&1".
+       types and to recognize Unix-style "2&gt&1".
 
        Expansion of File::Spec::VMS routines, and integration into
        ExtUtils::MM_VMS.
@@ -2003,7 +2005,7 @@ Platform specific changes
        information, see File::Glob.
 
 Significant bug fixes
-   <HANDLE> on empty files
+   &ltHANDLE&gt on empty files
        With $/ set to "undef", "slurping" an empty file returns a string of
        zero length (instead of "undef", as it used to) the first time the
        HANDLE is read after $/ is set to "undef".  Further reads yield
@@ -2215,19 +2217,19 @@ New or Changed Diagnostics
 	   as:
 
 	       $foo{$bar}
-	       $ref->{"susie"}[12]
+	       $ref-&gt{"susie"}[12]
 
        %s argument is not a HASH or ARRAY element or slice
 	   (F) The argument to delete() must be either a hash or array
 	   element, such as:
 
 	       $foo{$bar}
-	       $ref->{"susie"}[12]
+	       $ref-&gt{"susie"}[12]
 
 	   or a hash or array slice, such as:
 
 	       @foo[$bar, $baz, $xyzzy]
-	       @{$ref->[12]}{"susie", "queue"}
+	       @{$ref-&gt[12]}{"susie", "queue"}
 
        %s argument is not a subroutine name
 	   (F) The argument to exists() for "exists &sub" must be a subroutine
@@ -2251,8 +2253,8 @@ New or Changed Diagnostics
 	   Failure of user callbacks dispatched using the "G_KEEPERR" flag
 	   could also result in this warning.  See "G_KEEPERR" in perlcall.
 
-       <> should be quotes
-	   (F) You wrote "require <file>" when you should have written
+       &lt&gt should be quotes
+	   (F) You wrote "require &ltfile&gt" when you should have written
 	   "require 'file'".
 
        Attempt to join self
@@ -2280,17 +2282,17 @@ New or Changed Diagnostics
 	   It may also indicate a misspelled constant that has been
 	   interpreted as a bareword:
 
-	       use constant TYPO => 1;
+	       use constant TYPO =&gt 1;
 	       if (TYOP) { print "foo" }
 
 	   The "strict" pragma is useful in avoiding such errors.
 
-       Binary number > 0b11111111111111111111111111111111 non-portable
+       Binary number &gt 0b11111111111111111111111111111111 non-portable
 	   (W portable) The binary number you specified is larger than 2**32-1
 	   (4294967295) and therefore non-portable between systems.  See
 	   perlport for more on portability concerns.
 
-       Bit vector size > 32 non-portable
+       Bit vector size &gt 32 non-portable
 	   (W portable) Using bit vector sizes larger than 32 is non-portable.
 
        Buffer overflow in prime_env_iter: %s
@@ -2408,8 +2410,8 @@ New or Changed Diagnostics
        Filehandle %s opened only for output
 	   (W io) You tried to read from a filehandle opened only for writing.
 	   If you intended it to be a read/write filehandle, you needed to
-	   open it with "+<" or "+>" or "+>>" instead of with "<" or nothing.
-	   If you intended only to read from the file, use "<".  See "open" in
+	   open it with "+&lt" or "+&gt" or "+&gt&gt" instead of with "&lt" or nothing.
+	   If you intended only to read from the file, use "&lt".  See "open" in
 	   perlfunc.
 
        flock() on closed filehandle %s
@@ -2424,7 +2426,7 @@ New or Changed Diagnostics
 	   beforehand using "our", or explicitly qualified to say which
 	   package the global variable is in (using "::").
 
-       Hexadecimal number > 0xffffffff non-portable
+       Hexadecimal number &gt 0xffffffff non-portable
 	   (W portable) The hexadecimal number you specified is larger than
 	   2**32-1 (4294967295) and therefore non-portable between systems.
 	   See perlport for more on portability concerns.
@@ -2531,7 +2533,7 @@ New or Changed Diagnostics
 	   SYS$TIMEZONE_DIFFERENTIAL to translate to the number of seconds
 	   which need to be added to UTC to get local time.
 
-       Octal number > 037777777777 non-portable
+       Octal number &gt 037777777777 non-portable
 	   (W portable) The octal number you specified is larger than 2**32-1
 	   (4294967295) and therefore non-portable between systems.  See
 	   perlport for more on portability concerns.
@@ -2649,7 +2651,7 @@ New or Changed Diagnostics
 
        Unknown open() mode '%s'
 	   (F) The second argument of 3-argument open() is not among the list
-	   of valid modes: "<", ">", ">>", "+<", "+>", "+>>", "-|", "|-".
+	   of valid modes: "&lt", "&gt", "&gt&gt", "+&lt", "+&gt", "+&gt&gt", "-|", "|-".
 
        Unknown process %x sent message to prime_env_iter: %s
 	   (P) An error peculiar to VMS.  Perl was reading values for %ENV
@@ -2727,7 +2729,7 @@ New tests
 	   UNIX sockets.
 
        op/attrs
-	   Regression tests for "my ($x,@y,%z) : attrs" and <sub : attrs>.
+	   Regression tests for "my ($x,@y,%z) : attrs" and &ltsub : attrs&gt.
 
        op/filetest
 	   File test operators.
@@ -2877,7 +2879,7 @@ Incompatible Changes
 	   If your platform is either natively 64-bit or if Perl has been
 	   configured to used 64-bit integers, i.e., $Config{ivsize} is 8,
 	   there may be a potential incompatibility in the behavior of bitwise
-	   numeric operators (& | ^ ~ << >>).  These operators used to
+	   numeric operators (& | ^ ~ &lt&lt &gt&gt).  These operators used to
 	   strictly operate on the lower 32 bits of integers in previous
 	   versions, but now operate over the entire native integral width.
 	   In particular, note that unary "~" will produce different results
@@ -2993,7 +2995,7 @@ Known Problems
        is executed:
 
 	   use Tie::Hash;
-	   tie my %tie_hash => 'Tie::StdHash';
+	   tie my %tie_hash =&gt 'Tie::StdHash';
 
 	   ...
 
@@ -3062,12 +3064,12 @@ Known Problems
        these days.
 
    Arrow operator and arrays
-       When the left argument to the arrow operator "->" is an array, or the
+       When the left argument to the arrow operator "-&gt" is an array, or the
        "scalar" operator operating on an array, the result of the operation
        must be considered erroneous. For example:
 
-	   @x->[2]
-	   scalar(@x)->[2]
+	   @x-&gt[2]
+	   scalar(@x)-&gt[2]
 
        These expressions will get run-time errors in some future release of
        Perl.
@@ -3131,7 +3133,7 @@ Obsolete Diagnostics
 	   up.	Usually when you want a regular expression this big, there is
 	   a better way to do it with multiple statements.  See perlre.
 
-       Use of "$$<digit>" to mean "${$}<digit>" is deprecated
+       Use of "$$&ltdigit&gt" to mean "${$}&ltdigit&gt" is deprecated
 	   (D) Perl versions before 5.004 misinterpreted any type marker
 	   followed by "$" and a digit.  For example, "$$0" was incorrectly
 	   taken to mean "${$}0" instead of "${$0}".  This bug is (mostly)
@@ -3140,7 +3142,7 @@ Obsolete Diagnostics
 	   However, the developers of Perl 5.004 could not fix this bug
 	   completely, because at least two widely-used modules depend on the
 	   old meaning of "$$0" in a string.  So Perl 5.004 still interprets
-	   "$$<digit>" in the old (broken) way inside strings; but it
+	   "$$&ltdigit&gt" in the old (broken) way inside strings; but it
 	   generates this message as a warning.  And in Perl 5.005, this
 	   special treatment will cease.
 
@@ -3165,14 +3167,14 @@ SEE ALSO
        The Artistic and Copying files for copyright information.
 
 HISTORY
-       Written by Gurusamy Sarathy <gsar@ActiveState.com>, with many
+       Written by Gurusamy Sarathy &ltgsar@ActiveState.com&gt, with many
        contributions from The Perl Porters.
 
-       Send omissions or corrections to <perlbug@perl.org>.
+       Send omissions or corrections to &ltperlbug@perl.org&gt.
 
 
 
 perl v5.10.1			  2009-02-12		       PERL561DELTA(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Tcl_CreateInterp procedure returns a pointer to a Tcl_Interp struc-..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Tcl_Interp - client-visible fields of interpreter structures</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Tcl_Interp(3)		    Tcl Library Procedures		 Tcl_Interp(3)
 
 
@@ -18,7 +20,7 @@ NAME
        Tcl_Interp - client-visible fields of interpreter structures
 
 SYNOPSIS
-       #include <tcl.h>
+       #include &lttcl.h&gt
 
        typedef struct {
 	       char *result;
@@ -56,21 +58,21 @@ DESCRIPTION
        Whenever  a  command  procedure returns, it must ensure that the result
        field of its interpreter points to the string  being  returned  by  the
        command.   The  result field must always point to a valid string.  If a
-       command wishes to return no result then interp->result should point  to
+       command wishes to return no result then interp-&gtresult should point  to
        an  empty string.  Normally, results are assumed to be statically allo-
        cated, which means that the contents will not change  before  the  next
        time Tcl_Eval is called or some other command procedure is invoked.  In
        this case, the freeProc field must be zero.  Alternatively,  a  command
        procedure  may  dynamically  allocate  its  return  value  (e.g.  using
-       Tcl_Alloc) and store a pointer to it in interp->result.	In this  case,
-       the  command procedure must also set interp->freeProc to the address of
+       Tcl_Alloc) and store a pointer to it in interp-&gtresult.	In this  case,
+       the  command procedure must also set interp-&gtfreeProc to the address of
        a procedure that can free the value, or TCL_DYNAMIC if the storage  was
-       allocated directly by Tcl or by a call to Tcl_Alloc.  If interp->freeP-
+       allocated directly by Tcl or by a call to Tcl_Alloc.  If interp-&gtfreeP-
        roc is non-zero, then Tcl will call freeProc to free the space  pointed
-       to  by  interp->result before it invokes the next command.  If a client
-       procedure overwrites interp->result when interp->freeProc is  non-zero,
+       to  by  interp-&gtresult before it invokes the next command.  If a client
+       procedure overwrites interp-&gtresult when interp-&gtfreeProc is  non-zero,
        then   it   is  responsible  for  calling  freeProc  to	free  the  old
-       interp->result (the Tcl_FreeResult macro should be used for  this  pur-
+       interp-&gtresult (the Tcl_FreeResult macro should be used for  this  pur-
        pose).
 
        FreeProc  should  have arguments and result that match the Tcl_FreeProc
@@ -81,16 +83,16 @@ DESCRIPTION
        alternate memory allocator or in order to do  other  cleanup  when  the
        result memory is freed.
 
-       As part of processing each command, Tcl_Eval initializes interp->result
-       and interp->freeProc just before calling the command procedure for  the
+       As part of processing each command, Tcl_Eval initializes interp-&gtresult
+       and interp-&gtfreeProc just before calling the command procedure for  the
        command.    The	freeProc  field  will  be  initialized	to  zero,  and
-       interp->result will point to an empty string.   Commands  that  do  not
+       interp-&gtresult will point to an empty string.   Commands  that  do  not
        return  any  value can simply leave the fields alone.  Furthermore, the
        empty string pointed to by result is  actually  part  of  an  array  of
        TCL_RESULT_SIZE characters (approximately 200).	If a command wishes to
        return a short string, it can simply copy it to the area pointed to  by
-       interp->result.	 Or,  it  can  use the sprintf procedure to generate a
-       short result string at the location pointed to by interp->result.
+       interp-&gtresult.	 Or,  it  can  use the sprintf procedure to generate a
+       short result string at the location pointed to by interp-&gtresult.
 
        It is a general convention in Tcl-based applications that the result of
        an  interpreter	is  normally in the initialized state described in the
@@ -99,7 +101,7 @@ DESCRIPTION
        been initialized when the procedure is called.  If such a procedure  is
        to  be  called  after the result has been changed, then Tcl_ResetResult
        should be called first to reset the result to  its  initialized	state.
-       The direct use of interp->result is strongly deprecated (see Tcl_SetRe-
+       The direct use of interp-&gtresult is strongly deprecated (see Tcl_SetRe-
        sult).
 
        The errorLine field is valid only after Tcl_Eval  returns  a  TCL_ERROR
@@ -118,6 +120,6 @@ KEYWORDS
 
 
 Tcl				      7.5			 Tcl_Interp(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

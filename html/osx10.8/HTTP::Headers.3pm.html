@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The "HTTP::Headers" class encapsulates HTTP-style message headers.  The..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>HTTP::Headers - Class encapsulating HTTP Message headers</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 HTTP::Headers(3)      User Contributed Perl Documentation     HTTP::Headers(3)
 
 
@@ -17,11 +19,11 @@ NAME
 
 SYNOPSIS
 	require HTTP::Headers;
-	$h = HTTP::Headers->new;
+	$h = HTTP::Headers-&gtnew;
 
-	$h->header('Content-Type' => 'text/plain');  # set
-	$ct = $h->header('Content-Type');	     # get
-	$h->remove_header('Content-Type');	     # delete
+	$h-&gtheader('Content-Type' =&gt 'text/plain');  # set
+	$ct = $h-&gtheader('Content-Type');	     # get
+	$h-&gtremove_header('Content-Type');	     # delete
 
 DESCRIPTION
        The "HTTP::Headers" class encapsulates HTTP-style message headers.  The
@@ -34,31 +36,31 @@ DESCRIPTION
 
        The following methods are available:
 
-       $h = HTTP::Headers->new
+       $h = HTTP::Headers-&gtnew
 	   Constructs a new "HTTP::Headers" object.  You might pass some
 	   initial attribute-value pairs as parameters to the constructor.
 	   E.g.:
 
-	    $h = HTTP::Headers->new(
-		  Date	       => 'Thu, 03 Feb 1994 00:00:00 GMT',
-		  Content_Type => 'text/html; version=3.2',
-		  Content_Base => 'http://www.perl.org/');
+	    $h = HTTP::Headers-&gtnew(
+		  Date	       =&gt 'Thu, 03 Feb 1994 00:00:00 GMT',
+		  Content_Type =&gt 'text/html; version=3.2',
+		  Content_Base =&gt 'http://www.perl.org/');
 
 	   The constructor arguments are passed to the "header" method which
 	   is described below.
 
-       $h->clone
+       $h-&gtclone
 	   Returns a copy of this "HTTP::Headers" object.
 
-       $h->header( $field )
-       $h->header( $field => $value )
-       $h->header( $f1 => $v1, $f2 => $v2, ... )
+       $h-&gtheader( $field )
+       $h-&gtheader( $field =&gt $value )
+       $h-&gtheader( $f1 =&gt $v1, $f2 =&gt $v2, ... )
 	   Get or set the value of one or more header fields.  The header
 	   field name ($field) is not case sensitive.  To make the life easier
-	   for perl users who wants to avoid quoting before the => operator,
+	   for perl users who wants to avoid quoting before the =&gt operator,
 	   you can use '_' as a replacement for '-' in header names.
 
-	   The header() method accepts multiple ($field => $value) pairs,
+	   The header() method accepts multiple ($field =&gt $value) pairs,
 	   which means that you can update several fields with a single
 	   invocation.
 
@@ -80,15 +82,15 @@ DESCRIPTION
 
 	   Examples:
 
-	    $header->header(MIME_Version => '1.0',
-			    User_Agent	 => 'My-Web-Client/0.01');
-	    $header->header(Accept => "text/html, text/plain, image/*");
-	    $header->header(Accept => [qw(text/html text/plain image/*)]);
-	    @accepts = $header->header('Accept');  # get multiple values
-	    $accepts = $header->header('Accept');  # get values as a single string
+	    $header-&gtheader(MIME_Version =&gt '1.0',
+			    User_Agent	 =&gt 'My-Web-Client/0.01');
+	    $header-&gtheader(Accept =&gt "text/html, text/plain, image/*");
+	    $header-&gtheader(Accept =&gt [qw(text/html text/plain image/*)]);
+	    @accepts = $header-&gtheader('Accept');  # get multiple values
+	    $accepts = $header-&gtheader('Accept');  # get values as a single string
 
-       $h->push_header( $field => $value )
-       $h->push_header( $f1 => $v1, $f2 => $v2, ... )
+       $h-&gtpush_header( $field =&gt $value )
+       $h-&gtpush_header( $f1 =&gt $v1, $f2 =&gt $v2, ... )
 	   Add a new field value for the specified header field.  Previous
 	   values for the same field are retained.
 
@@ -98,10 +100,10 @@ DESCRIPTION
 	   The $value argument may be a scalar or a reference to a list of
 	   scalars.
 
-	    $header->push_header(Accept => 'image/jpeg');
-	    $header->push_header(Accept => [map "image/$_", qw(gif png tiff)]);
+	    $header-&gtpush_header(Accept =&gt 'image/jpeg');
+	    $header-&gtpush_header(Accept =&gt [map "image/$_", qw(gif png tiff)]);
 
-       $h->init_header( $field => $value )
+       $h-&gtinit_header( $field =&gt $value )
 	   Set the specified header to the given value, but only if no
 	   previous value for that field is set.
 
@@ -111,7 +113,7 @@ DESCRIPTION
 	   The $value argument may be a scalar or a reference to a list of
 	   scalars.
 
-       $h->remove_header( $field, ... )
+       $h-&gtremove_header( $field, ... )
 	   This function removes the header fields with the specified names.
 
 	   The header field names ($field) are not case sensitive and '_' can
@@ -124,7 +126,7 @@ DESCRIPTION
 	   not possible to tell which of the returned values belonged to which
 	   field.
 
-       $h->remove_content_headers
+       $h-&gtremove_content_headers
 	   This will remove all the header fields used to describe the content
 	   of a message.  All header field names prefixed with "Content-" fall
 	   into this category, as well as "Allow", "Expires" and
@@ -134,17 +136,17 @@ DESCRIPTION
 	   The return value is a new "HTTP::Headers" object that contains the
 	   removed headers only.
 
-       $h->clear
+       $h-&gtclear
 	   This will remove all header fields.
 
-       $h->header_field_names
+       $h-&gtheader_field_names
 	   Returns the list of distinct names for the fields present in the
 	   header.  The field names have case as suggested by HTTP spec, and
 	   the names are returned in the recommended "Good Practice" order.
 
 	   In scalar context return the number of distinct field names.
 
-       $h->scan( \&process_header_field )
+       $h-&gtscan( \&process_header_field )
 	   Apply a subroutine to each header field in turn.  The callback
 	   routine is called with two parameters; the name of the field and a
 	   single value (a string).  If a header field is multi-valued, then
@@ -156,8 +158,8 @@ DESCRIPTION
 	   can be broken by raising an exception ("die"), but the caller of
 	   scan() would have to trap the exception itself.
 
-       $h->as_string
-       $h->as_string( $eol )
+       $h-&gtas_string
+       $h-&gtas_string( $eol )
 	   Return the header fields as a formatted MIME header.  Since it
 	   internally uses the "scan" method to build the string, the result
 	   will use case as suggested by HTTP spec, and it will follow
@@ -179,122 +181,122 @@ CONVENIENCE METHODS
        time (seconds since Jan 1, 1970) and they also expect this kind of
        value when the header value is set.
 
-       $h->date
+       $h-&gtdate
 	   This header represents the date and time at which the message was
 	   originated. E.g.:
 
-	     $h->date(time);  # set current date
+	     $h-&gtdate(time);  # set current date
 
-       $h->expires
+       $h-&gtexpires
 	   This header gives the date and time after which the entity should
 	   be considered stale.
 
-       $h->if_modified_since
-       $h->if_unmodified_since
+       $h-&gtif_modified_since
+       $h-&gtif_unmodified_since
 	   These header fields are used to make a request conditional.	If the
 	   requested resource has (or has not) been modified since the time
 	   specified in this field, then the server will return a "304 Not
 	   Modified" response instead of the document itself.
 
-       $h->last_modified
+       $h-&gtlast_modified
 	   This header indicates the date and time at which the resource was
 	   last modified. E.g.:
 
 	     # check if document is more than 1 hour old
-	     if (my $last_mod = $h->last_modified) {
-		 if ($last_mod < time - 60*60) {
+	     if (my $last_mod = $h-&gtlast_modified) {
+		 if ($last_mod &lt time - 60*60) {
 		     ...
 		 }
 	     }
 
-       $h->content_type
+       $h-&gtcontent_type
 	   The Content-Type header field indicates the media type of the
 	   message content. E.g.:
 
-	     $h->content_type('text/html');
+	     $h-&gtcontent_type('text/html');
 
 	   The value returned will be converted to lower case, and potential
 	   parameters will be chopped off and returned as a separate value if
 	   in an array context.  If there is no such header field, then the
 	   empty string is returned.  This makes it safe to do the following:
 
-	     if ($h->content_type eq 'text/html') {
+	     if ($h-&gtcontent_type eq 'text/html') {
 		# we enter this place even if the real header value happens to
 		# be 'TEXT/HTML; version=3.0'
 		...
 	     }
 
-       $h->content_type_charset
+       $h-&gtcontent_type_charset
 	   Returns the upper-cased charset specified in the Content-Type
 	   header.  In list context return the lower-cased bare content type
 	   followed by the upper-cased charset.  Both values will be "undef"
 	   if not specified in the header.
 
-       $h->content_is_text
+       $h-&gtcontent_is_text
 	   Returns TRUE if the Content-Type header field indicate that the
 	   content is textual.
 
-       $h->content_is_html
+       $h-&gtcontent_is_html
 	   Returns TRUE if the Content-Type header field indicate that the
 	   content is some kind of HTML (including XHTML).  This method can't
 	   be used to set Content-Type.
 
-       $h->content_is_xhtml
+       $h-&gtcontent_is_xhtml
 	   Returns TRUE if the Content-Type header field indicate that the
 	   content is XHTML.  This method can't be used to set Content-Type.
 
-       $h->content_is_xml
+       $h-&gtcontent_is_xml
 	   Returns TRUE if the Content-Type header field indicate that the
 	   content is XML.  This method can't be used to set Content-Type.
 
-       $h->content_encoding
+       $h-&gtcontent_encoding
 	   The Content-Encoding header field is used as a modifier to the
 	   media type.	When present, its value indicates what additional
 	   encoding mechanism has been applied to the resource.
 
-       $h->content_length
+       $h-&gtcontent_length
 	   A decimal number indicating the size in bytes of the message
 	   content.
 
-       $h->content_language
+       $h-&gtcontent_language
 	   The natural language(s) of the intended audience for the message
 	   content.  The value is one or more language tags as defined by RFC
 	   1766.  Eg. "no" for some kind of Norwegian and "en-US" for English
 	   the way it is written in the US.
 
-       $h->title
+       $h-&gttitle
 	   The title of the document.  In libwww-perl this header will be
-	   initialized automatically from the <TITLE>...</TITLE> element of
+	   initialized automatically from the &ltTITLE&gt...&lt/TITLE&gt element of
 	   HTML documents.  This header is no longer part of the HTTP
 	   standard.
 
-       $h->user_agent
+       $h-&gtuser_agent
 	   This header field is used in request messages and contains
 	   information about the user agent originating the request.  E.g.:
 
-	     $h->user_agent('Mozilla/5.0 (compatible; MSIE 7.0; Windows NT 6.0)');
+	     $h-&gtuser_agent('Mozilla/5.0 (compatible; MSIE 7.0; Windows NT 6.0)');
 
-       $h->server
+       $h-&gtserver
 	   The server header field contains information about the software
 	   being used by the originating server program handling the request.
 
-       $h->from
+       $h-&gtfrom
 	   This header should contain an Internet e-mail address for the human
 	   user who controls the requesting user agent.  The address should be
 	   machine-usable, as defined by RFC822.  E.g.:
 
-	     $h->from('King Kong <king@kong.com>');
+	     $h-&gtfrom('King Kong &ltking@kong.com&gt');
 
 	   This header is no longer part of the HTTP standard.
 
-       $h->referer
+       $h-&gtreferer
 	   Used to specify the address (URI) of the document from which the
 	   requested resource address was obtained.
 
 	   The "Free On-line Dictionary of Computing" as this to say about the
 	   word referer:
 
-		<World-Wide Web> A misspelling of "referrer" which
+		&ltWorld-Wide Web&gt A misspelling of "referrer" which
 		somehow made it into the {HTTP} standard.  A given {web
 		page}'s referer (sic) is the {URL} of whatever web page
 		contains the link that the user followed to the current
@@ -312,22 +314,22 @@ CONVENIENCE METHODS
 	   the removal does not happen automatically if using the header(),
 	   push_header() or init_header() methods to set the referrer.
 
-       $h->www_authenticate
+       $h-&gtwww_authenticate
 	   This header must be included as part of a "401 Unauthorized"
 	   response.  The field value consist of a challenge that indicates
 	   the authentication scheme and parameters applicable to the
 	   requested URI.
 
-       $h->proxy_authenticate
+       $h-&gtproxy_authenticate
 	   This header must be included in a "407 Proxy Authentication
 	   Required" response.
 
-       $h->authorization
-       $h->proxy_authorization
+       $h-&gtauthorization
+       $h-&gtproxy_authorization
 	   A user agent that wishes to authenticate itself with a server or a
 	   proxy, may do so by including these headers.
 
-       $h->authorization_basic
+       $h-&gtauthorization_basic
 	   This method is used to get or set an authorization header that use
 	   the "Basic Authentication Scheme".  In array context it will return
 	   two values; the user name and the password.	In scalar context it
@@ -335,11 +337,11 @@ CONVENIENCE METHODS
 
 	   When used to set the header value, it expects two arguments.  E.g.:
 
-	     $h->authorization_basic($uname, $password);
+	     $h-&gtauthorization_basic($uname, $password);
 
 	   The method will croak if the $uname contains a colon ':'.
 
-       $h->proxy_authorization_basic
+       $h-&gtproxy_authorization_basic
 	   Same as authorization_basic() but will set the "Proxy-
 	   Authorization" header instead.
 
@@ -351,11 +353,11 @@ NON-CANONICALIZED FIELD NAMES
        to show up as "foo_bar" instead of "Foo-Bar", you might set it like
        this:
 
-	 $h->header(":foo_bar" => 1);
+	 $h-&gtheader(":foo_bar" =&gt 1);
 
        These field names are returned with the ':' intact for
-       $h->header_field_names and the $h->scan callback, but the colons do not
-       show in $h->as_string.
+       $h-&gtheader_field_names and the $h-&gtscan callback, but the colons do not
+       show in $h-&gtas_string.
 
 COPYRIGHT
        Copyright 1995-2005 Gisle Aas.
@@ -366,6 +368,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-03-07		      HTTP::Headers(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

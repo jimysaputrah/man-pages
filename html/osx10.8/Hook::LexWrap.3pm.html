@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Hook::LexWrap allows you to install a pre- or post-wrapper (or both)..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Hook::LexWrap - Lexically scoped subroutine wrappers</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Hook::LexWrap(3)      User Contributed Perl Documentation     Hook::LexWrap(3)
 
 
@@ -21,23 +23,23 @@ VERSION
 SYNOPSIS
 	       use Hook::LexWrap;
 
-	       sub doit { print "[doit:", caller, "]"; return {my=>"data"} }
+	       sub doit { print "[doit:", caller, "]"; return {my=&gt"data"} }
 
 	       SCOPED: {
 		       wrap doit,
-			       pre  => sub { print "[pre1: @_]\n" },
-			       post => sub { print "[post1:@_]\n"; $_[1]=9; };
+			       pre  =&gt sub { print "[pre1: @_]\n" },
+			       post =&gt sub { print "[post1:@_]\n"; $_[1]=9; };
 
 		       my $temporarily = wrap doit,
-			       post => sub { print "[post2:@_]\n" },
-			       pre  => sub { print "[pre2: @_]\n  "};
+			       post =&gt sub { print "[post2:@_]\n" },
+			       pre  =&gt sub { print "[pre2: @_]\n  "};
 
 		       @args = (1,2,3);
-		       doit(@args);    # pre2->pre1->doit->post1->post2
+		       doit(@args);    # pre2-&gtpre1-&gtdoit-&gtpost1-&gtpost2
 	       }
 
 	       @args = (4,5,6);
-	       doit(@args);	       # pre1->doit->post1
+	       doit(@args);	       # pre1-&gtdoit-&gtpost1
 
 DESCRIPTION
        Hook::LexWrap allows you to install a pre- or post-wrapper (or both)
@@ -50,9 +52,9 @@ DESCRIPTION
 
 	       use Hook::LexWrap;
 
-	       wrap 'subroutine_name', pre => \&some_other_sub;
+	       wrap 'subroutine_name', pre =&gt \&some_other_sub;
 
-	  #or: wrap *subroutine_name,  pre => \&some_other_sub;
+	  #or: wrap *subroutine_name,  pre =&gt \&some_other_sub;
 
        The first argument to "wrap" is a string containing the name of the
        subroutine to be wrapped (or the typeglob containing it, or a reference
@@ -63,21 +65,21 @@ DESCRIPTION
 
        To install a post-wrapper, you write:
 
-	       wrap 'subroutine_name', post => \&yet_another_sub;
+	       wrap 'subroutine_name', post =&gt \&yet_another_sub;
 
-	  #or: wrap *subroutine_name,  post => \&yet_another_sub;
+	  #or: wrap *subroutine_name,  post =&gt \&yet_another_sub;
 
        To install both at once:
 
 	       wrap 'subroutine_name',
-		    pre  => \&some_other_sub,
-		    post => \&yet_another_sub;
+		    pre  =&gt \&some_other_sub,
+		    post =&gt \&yet_another_sub;
 
        or:
 
 	       wrap *subroutine_name,
-		    post => \&yet_another_sub,	# order in which wrappers are
-		    pre  => \&some_other_sub;	# specified doesn't matter
+		    post =&gt \&yet_another_sub,	# order in which wrappers are
+		    pre  =&gt \&some_other_sub;	# specified doesn't matter
 
        Once they are installed, the pre- and post-wrappers will be called
        before and after the subroutine itself, and will be passed the same
@@ -112,16 +114,16 @@ DESCRIPTION
 
 	       my %cache;
 	       wrap fibonacci,
-		       pre  => sub { $_[-1] = $cache{$_[0]} if $cache{$_[0]} },
-		       post => sub { $cache{$_[0]} = $_[-1] };
+		       pre  =&gt sub { $_[-1] = $cache{$_[0]} if $cache{$_[0]} },
+		       post =&gt sub { $cache{$_[0]} = $_[-1] };
 
        or for converting arguments and return values in a consistent manner:
 
 	       # set_temp expects and returns degrees Fahrenheit,
 	       # but we want to use Celsius
 	       wrap set_temp,
-		       pre   => sub { splice @_, 0, 1, $_[0] * 1.8 + 32 },
-		       post  => sub { $_[-1] = ($_[0] - 32) / 1.8 };
+		       pre   =&gt sub { splice @_, 0, 1, $_[0] * 1.8 + 32 },
+		       post  =&gt sub { $_[-1] = ($_[0] - 32) / 1.8 };
 
    Lexically scoped wrappers
        Normally, any wrappers installed by "wrap" remain attached to the
@@ -132,13 +134,13 @@ DESCRIPTION
 
        If "wrap" is called in a non-void context:
 
-	       my $lexical = wrap 'sub_name', pre => \&wrapper;
+	       my $lexical = wrap 'sub_name', pre =&gt \&wrapper;
 
        it returns a special object corresponding to the particular wrapper
        being placed around the original subroutine. When that object is
        destroyed -- when its container variable goes out of scope, or when its
        reference count otherwise falls to zero (e.g. "undef $lexical"), or
-       when it is explicitly destroyed ("$lexical->DESTROY") -- the
+       when it is explicitly destroyed ("$lexical-&gtDESTROY") -- the
        corresponding wrapper is removed from around the original subroutine.
        Note, however, that all other wrappers around the subroutine are
        preserved.
@@ -162,20 +164,20 @@ DESCRIPTION
 	       sub original { print "ray" }
 
 	       # Wrap anonymously...
-	       my $anon_wrapped = wrap \&original, pre => sub { print "do..." };
+	       my $anon_wrapped = wrap \&original, pre =&gt sub { print "do..." };
 
 	       # Show effects...
 	       original();	       # prints "ray"
-	       $anon_wrapped->();      # prints "do..ray"
+	       $anon_wrapped-&gt();      # prints "do..ray"
 
 	       # Wrap nonymously...
 	       wrap *original,
-		       pre  => sub { print "fa.." },
-		       post => sub { print "..mi" };
+		       pre  =&gt sub { print "fa.." },
+		       post =&gt sub { print "..mi" };
 
 	       # Show effects...
 	       original();	       #   now prints "fa..ray..mi"
-	       $anon_wrapped->();      # still prints "do...ray"
+	       $anon_wrapped-&gt();      # still prints "do...ray"
 
 DIAGNOSTICS
        "Can't wrap non-existent subroutine %s"
@@ -187,7 +189,7 @@ DIAGNOSTICS
 	   subroutine reference. Typically, someone forgot the "sub" on the
 	   anonymous subroutine:
 
-		   wrap 'subname', pre => { your_code_here() };
+		   wrap 'subname', pre =&gt { your_code_here() };
 
 	   and Perl interpreted the last argument as a hash constructor.
 
@@ -227,6 +229,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2012-06-20		      Hook::LexWrap(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

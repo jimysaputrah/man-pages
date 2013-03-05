@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Class::Autouse is a runtime class loader that allows you to specify..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Class::Autouse - Run-time load a class the first time you call a method</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Class::Autouse(3)     User Contributed Perl Documentation    Class::Autouse(3)
 
 
@@ -30,14 +32,14 @@ SYNOPSIS
 
 	   # Load a class on method call
 	   use Class::Autouse;
-	   Class::Autouse->autouse( 'CGI' );
-	   print CGI->b('Wow!');
+	   Class::Autouse-&gtautouse( 'CGI' );
+	   print CGI-&gtb('Wow!');
 
 	   # Use as a pragma
 	   use Class::Autouse qw{CGI};
 
 	   # Use a whole module tree
-	   Class::Autouse->autouse_recursive('Acme');
+	   Class::Autouse-&gtautouse_recursive('Acme');
 
 	   # Disable module-existance check, and thus one additional 'stat'
 	   # per module, at autouse-time if loading modules off a remote
@@ -63,7 +65,7 @@ SYNOPSIS
 	   use Class::Autouse \&my_class_generator;
 
 	   # Add a manual callback to UNIVERSAL::AUTOLOAD for syntactic sugar
-	   Class::Autouse->sugar(\&my_magic);
+	   Class::Autouse-&gtsugar(\&my_magic);
 
 DESCRIPTION
        Class::Autouse is a runtime class loader that allows you to specify
@@ -85,7 +87,7 @@ DESCRIPTION
        intentionally. Modules will only be loaded if they are acting as a
        class.
 
-       That is, they will only be loaded during a Class->method call. If you
+       That is, they will only be loaded during a Class-&gtmethod call. If you
        try to use a subroutine directly, say with "Class::method()", the class
        will not be loaded and a fatal error will mostly likely occur.
 
@@ -105,9 +107,9 @@ DESCRIPTION
        is equivalent to
 
 	  use Class::Autouse;
-	  Class::Autouse->autouse( 'CGI'	 );
-	  Class::Autouse->autouse( 'Data::Manip' );
-	  Class::Autouse->autouse( 'This::That'  );
+	  Class::Autouse-&gtautouse( 'CGI'	 );
+	  Class::Autouse-&gtautouse( 'Data::Manip' );
+	  Class::Autouse-&gtautouse( 'This::That'  );
 
    Developer Mode
        "Class::Autouse" features a developer mode. In developer mode, classes
@@ -135,7 +137,7 @@ DESCRIPTION
        For example, the following would give you access to all the URI related
        classes installed on the machine.
 
-	   Class::Autouse->autouse_recursive( 'URI' );
+	   Class::Autouse-&gtautouse_recursive( 'URI' );
 
        Please note that the loadings will only occur down a single branch of
        the include path, whichever the top class is located in.
@@ -155,10 +157,10 @@ DESCRIPTION
 
 	   use Class::Autouse qw{:superloader};
 
-	   print CGI->b('Wow!');
+	   print CGI-&gtb('Wow!');
 
        The super loader can be turned on with either the
-       "Class::Autouse->"superloader> method, or the ":superloader" pragma
+       "Class::Autouse-&gt"superloader&gt method, or the ":superloader" pragma
        argument.
 
        Please note that unlike the normal one-at-a-time autoloading, the
@@ -209,21 +211,21 @@ DESCRIPTION
 		   no strict 'refs';
 		   *{$class . '::new' } = sub {
 		       my $class = shift;
-		       my $proxy = $wrapped_class->new(@_);
-		       my $self = bless({proxy => $proxy},$class);
+		       my $proxy = $wrapped_class-&gtnew(@_);
+		       my $self = bless({proxy =&gt $proxy},$class);
 		       return $self;
 		   };
 		   *{$class . '::CAN' } = sub {
 		       my ($obj,$method) = @_;
-		       my $delegate = $wrapped_class->can($method);
+		       my $delegate = $wrapped_class-&gtcan($method);
 		       return unless $delegate;
 		       my $delegator = sub {
 			   my $self = shift;
 			   if (ref($self)) {
-			       return $self->{proxy}->$method(@_);
+			       return $self-&gt{proxy}-&gt$method(@_);
 			   }
 			   else {
-			       return $wrapped_class->$method(@_);
+			       return $wrapped_class-&gt$method(@_);
 			   }
 		       };
 		       return *{ $class . '::' . $method } = $delegator;
@@ -239,18 +241,18 @@ DESCRIPTION
 	   sub class_method { 123 }
 	   sub instance_method {
 	       my ($self,$v) = @_;
-	       return $v * $self->some_property
+	       return $v * $self-&gtsome_property
 	   }
-	   sub some_property { shift->{some_property} }
+	   sub some_property { shift-&gt{some_property} }
 
 
 	   package main;
-	   my $x = Foo::Wrapper->new(
-	       some_property => 111,
+	   my $x = Foo::Wrapper-&gtnew(
+	       some_property =&gt 111,
 	   );
-	   print $x->some_property,"\n";
-	   print $x->instance_method(5),"\n";
-	   print Foo::Wrapper->class_method,"\n";
+	   print $x-&gtsome_property,"\n";
+	   print $x-&gtinstance_method(5),"\n";
+	   print Foo::Wrapper-&gtclass_method,"\n";
 
    sugar
        This method is provided to support "syntactic sugar": allowing the
@@ -279,7 +281,7 @@ DESCRIPTION
        Syntactic Sugar Example
 
 	   use Class::Autouse;
-	   Class::Autouse->sugar(
+	   Class::Autouse-&gtsugar(
 	       sub {
 		   my $caller = caller(1);
 		   my ($class,$method,@params) = @_;
@@ -357,7 +359,7 @@ DESCRIPTION
 		   Class::Autouse::_children( 'Foo' )
 		   Class::Autouse::load( 'Foo::Bar' )
 		       Class::Autouse::_file_exists( 'Foo/Bar.pm' )
-		       Class::Autouse::load -> Loading in Foo/Bar.pm
+		       Class::Autouse::load -&gt Loading in Foo/Bar.pm
 		   Class::Autouse::load( 'Foo::More' )
 		       etc...
 
@@ -414,17 +416,17 @@ SUPPORT
        Bugs should be always be reported via the CPAN bug tracker at
 
        http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Class-Autouse
-       <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Class-Autouse>
+       &lthttp://rt.cpan.org/NoAuth/ReportBug.html?Queue=Class-Autouse&gt
 
        For other issues, or commercial enhancement or support, contact the
        author.
 
 AUTHORS
-       Adam Kennedy <cpan@ali.as>
+       Adam Kennedy &ltcpan@ali.as&gt
 
-       Scott Smith <sakoht@cpan.org>
+       Scott Smith &ltsakoht@cpan.org&gt
 
-       Rob Napier <rnapier@employees.org>
+       Rob Napier &ltrnapier@employees.org&gt
 
 SEE ALSO
        autoload, autoclass
@@ -441,6 +443,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-01-17		     Class::Autouse(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

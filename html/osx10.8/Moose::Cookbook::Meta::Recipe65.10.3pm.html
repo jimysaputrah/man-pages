@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This example shows a custom method metaclass that models public versus..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Meta::Recipe6 - A method metaclass for marking methods</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::Meta:UseriContributed Perl DMoose::Cookbook::Meta::Recipe6(3)
 
 
@@ -24,22 +26,22 @@ SYNOPSIS
 
 	 extends 'Moose::Meta::Method';
 
-	 has '_policy' => (
-	     is       => 'ro',
-	     isa      => enum( [ qw( public private ) ] ),
-	     default  => 'public',
-	     init_arg => 'policy',
+	 has '_policy' =&gt (
+	     is       =&gt 'ro',
+	     isa      =&gt enum( [ qw( public private ) ] ),
+	     default  =&gt 'public',
+	     init_arg =&gt 'policy',
 	 );
 
 	 sub new {
 	     my $class	 = shift;
 	     my %options = @_;
 
-	     my $self = $class->SUPER::wrap(%options);
+	     my $self = $class-&gtSUPER::wrap(%options);
 
-	     $self->{_policy} = $options{policy};
+	     $self-&gt{_policy} = $options{policy};
 
-	     $self->_add_policy_wrapper;
+	     $self-&gt_add_policy_wrapper;
 
 	     return $self;
 	 }
@@ -47,11 +49,11 @@ SYNOPSIS
 	 sub _add_policy_wrapper {
 	     my $self = shift;
 
-	     return if $self->is_public;
+	     return if $self-&gtis_public;
 
-	     my $name	   = $self->name;
-	     my $package   = $self->package_name;
-	     my $real_body = $self->body;
+	     my $name	   = $self-&gtname;
+	     my $package   = $self-&gtpackage_name;
+	     my $real_body = $self-&gtbody;
 
 	     my $body = sub {
 		 die "The $package\::$name method is private"
@@ -60,25 +62,25 @@ SYNOPSIS
 		 goto &{$real_body};
 	     };
 
-	     $self->{body} = $body;
+	     $self-&gt{body} = $body;
 	 }
 
-	 sub is_public	{ $_[0]->_policy eq 'public' }
-	 sub is_private { $_[0]->_policy eq 'private' }
+	 sub is_public	{ $_[0]-&gt_policy eq 'public' }
+	 sub is_private { $_[0]-&gt_policy eq 'private' }
 
 	 package MyApp::User;
 
 	 use Moose;
 
-	 has 'password' => ( is => 'rw' );
+	 has 'password' =&gt ( is =&gt 'rw' );
 
-	 __PACKAGE__->meta()->add_method(
+	 __PACKAGE__-&gtmeta()-&gtadd_method(
 	     '_reset_password',
-	     My::Meta::Method->new(
-		 name	      => '_reset_password',
-		 package_name => __PACKAGE__,
-		 body	      => sub { $_[0]->password('reset') },
-		 policy       => 'private',
+	     My::Meta::Method-&gtnew(
+		 name	      =&gt '_reset_password',
+		 package_name =&gt __PACKAGE__,
+		 body	      =&gt sub { $_[0]-&gtpassword('reset') },
+		 policy       =&gt 'private',
 	     )
 	 );
 
@@ -99,7 +101,7 @@ DESCRIPTION
        You'll note that we have to explicitly set the "policy" attribute in
        our constructor:
 
-	     $self->{policy} = $options{policy};
+	     $self-&gt{policy} = $options{policy};
 
        That is necessary because Moose metaclasses do not use the meta API to
        create objects. Most Moose classes have a custom "inlined" constructor
@@ -118,7 +120,7 @@ DESCRIPTION
        called. We use "goto" so that the wrapper does not show up in the call
        stack.
 
-       Finally, we replace the value of "$self->{body}". This is another case
+       Finally, we replace the value of "$self-&gt{body}". This is another case
        where we have to do something a bit gross because Moose does not use
        Moose for its own implementation.
 
@@ -139,12 +141,12 @@ SUMMARY
        tool like Devel::Declare to create full-blown new keywords in Perl.
 
 AUTHOR
-       Dave Rolsky <autarch@urth.org>
+       Dave Rolsky &ltautarch@urth.org&gt
 
 COPYRIGHT AND LICENSE
        Copyright 2009 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -152,6 +154,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2009-04-07 Moose::Cookbook::Meta::Recipe6(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Shortest time interval that can be measured is 1 second. The available..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Time::Progress - Elapsed and estimated finish time reporting.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Progress(3)	      User Contributed Perl Documentation	   Progress(3)
 
 
@@ -23,26 +25,26 @@ SYNOPSIS
 	 my $p = new Time::Progress;
 
 	 # restart and report progress
-	 $p->restart;
+	 $p-&gtrestart;
 	 sleep 5; # or do some work here
-	 print $p->report( "done %p elapsed: %L (%l sec), ETA %E (%e sec)\n", 50 );
+	 print $p-&gtreport( "done %p elapsed: %L (%l sec), ETA %E (%e sec)\n", 50 );
 
 	 # set min and max values
-	 $p->attr( min => 2, max => 20 );
+	 $p-&gtattr( min =&gt 2, max =&gt 20 );
 	 # restart `timer'
-	 $p->restart;
+	 $p-&gtrestart;
 	 my $c;
-	 for( $c = 2; $c <= 20; $c++ )
+	 for( $c = 2; $c &lt= 20; $c++ )
 	   {
 	   # print progress bar and percentage done
-	   print $p->report( "eta: %E min, %40b %p\r", $c );
+	   print $p-&gtreport( "eta: %E min, %40b %p\r", $c );
 	   sleep 1; # work...
 	   }
 	 # stop timer
-	 $p->stop;
+	 $p-&gtstop;
 
 	 # report times
-	 print $p->elapsed_str;
+	 print $p-&gtelapsed_str;
 
 DESCRIPTION
        Shortest time interval that can be measured is 1 second. The available
@@ -59,36 +61,36 @@ DESCRIPTION
 	   restarts the timer and clears the stop mark. optionally restart()
 	   may act also as attr() for setting attributes:
 
-	     $p->restart( min => 1, max => 5 );
+	     $p-&gtrestart( min =&gt 1, max =&gt 5 );
 
 	   is the same as:
 
-	     $p->attr( min => 1, max => 5 );
-	     $p->restart();
+	     $p-&gtattr( min =&gt 1, max =&gt 5 );
+	     $p-&gtrestart();
 
 	   If you need to count things, you can set just 'max' attribute since
 	   'min' is already set to 0 when object is constructed by new():
 
-	     $p->restart( max => 42 );
+	     $p-&gtrestart( max =&gt 42 );
 
        stop
 	   Sets the stop mark. this is only useful if you do some work, then
 	   finish, then do some work that shouldn't be timed and finally
 	   report. Something like:
 
-	     $p->restart;
+	     $p-&gtrestart;
 	     # do some work here...
-	     $p->stop;
+	     $p-&gtstop;
 	     # do some post-work here
-	     print $p->report;
+	     print $p-&gtreport;
 	     # `post-work' will not be timed
 
 	   Stop is useless if you want to report time as soon as work is
 	   finished like:
 
-	     $p->restart;
+	     $p-&gtrestart;
 	     # do some work here...
-	     print $p->report;
+	     print $p-&gtreport;
 
        continue
 	   Clears the stop mark. (mostly useless, perhaps you need to
@@ -110,11 +112,11 @@ DESCRIPTION
 
 	   attr returns array of the set attributes:
 
-	     my ( $new_min, $new_max ) = $p->attr( min => 1, max => 5 );
+	     my ( $new_min, $new_max ) = $p-&gtattr( min =&gt 1, max =&gt 5 );
 
 	   If you want just to get values use undef:
 
-	     my $old_format = $p->attr( format => undef );
+	     my $old_format = $p-&gtattr( format =&gt undef );
 
 	   This way of handling attributes is a bit heavy but saves a lot of
 	   attribute handling functions. attr will complain if you pass odd
@@ -125,7 +127,7 @@ DESCRIPTION
 
 	   expected arguments are:
 
-	     $p->report( format, [current_item] );
+	     $p-&gtreport( format, [current_item] );
 
 	   format is string that will be used for the result string.
 	   Recognized special sequences are:
@@ -167,7 +169,7 @@ DESCRIPTION
 	   you want to use the default format but still have estimates use it
 	   like this:
 
-	     $p->format( undef, 45 );
+	     $p-&gtformat( undef, 45 );
 
 	   If you don't give current item (step) or didn't set proper min/max
 	   value then all estimate sequences will have value `n/a'.
@@ -191,28 +193,28 @@ FORMAT EXAMPLES
 	 # $c is current element (step) reached
 	 # for the examples: min = 0, max = 100, $c = 33.3
 
-	 print $p->report( "done %p elapsed: %L (%l sec), ETA %E (%e sec)\n", $c );
+	 print $p-&gtreport( "done %p elapsed: %L (%l sec), ETA %E (%e sec)\n", $c );
 	 # prints:
 	 # done  33.3% elapsed time   0:05 (5 sec), ETA   0:07 (7 sec)
 
-	 print $p->report( "%45b %p\r", $c );
+	 print $p-&gtreport( "%45b %p\r", $c );
 	 # prints:
 	 # ###############..............................  33.3%
 
-	 print $p->report( "done %p ETA %f\n", $c );
+	 print $p-&gtreport( "done %p ETA %f\n", $c );
 	 # prints:
 	 # done  33.3% ETA Sun Oct 21 16:50:57 2001
 
 AUTHOR
 	 Vladi Belperchinov-Shabanski "Cade"
 
-	 <cade@biscom.net> <cade@datamax.bg> <cade@cpan.org>
+	 &ltcade@biscom.net&gt &ltcade@datamax.bg&gt &ltcade@cpan.org&gt
 
 	 http://cade.datamax.bg
 
 
 
 perl v5.12.4			  2010-09-10			   Progress(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

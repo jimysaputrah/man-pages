@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Instances of the "Net::DNS::Nameserver" class represent DNS server..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::DNS::Nameserver - DNS server class</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::DNS::Nameserver(3User Contributed Perl DocumentatiNet::DNS::Nameserver(3)
 
 
@@ -24,21 +26,21 @@ DESCRIPTION
 
 METHODS
    new
-	my $ns = Net::DNS::Nameserver->new(
-	       LocalAddr	=> "10.1.2.3",
-	       LocalPort	=> "5353",
-	       ReplyHandler => \&reply_handler,
-	       Verbose		=> 1
+	my $ns = Net::DNS::Nameserver-&gtnew(
+	       LocalAddr	=&gt "10.1.2.3",
+	       LocalPort	=&gt "5353",
+	       ReplyHandler =&gt \&reply_handler,
+	       Verbose		=&gt 1
 	);
 
 
 
-	my $ns = Net::DNS::Nameserver->new(
-	       LocalAddr	=> ['::1' , '127.0.0.1' ],
-	       LocalPort	=> "5353",
-	       ReplyHandler => \&reply_handler,
-	       Verbose		=> 1,
-	       Truncate 	=> 0,
+	my $ns = Net::DNS::Nameserver-&gtnew(
+	       LocalAddr	=&gt ['::1' , '127.0.0.1' ],
+	       LocalPort	=&gt "5353",
+	       ReplyHandler =&gt \&reply_handler,
+	       Verbose		=&gt 1,
+	       Truncate 	=&gt 0,
 	);
 
        Creates a nameserver object.  Attributes are:
@@ -77,7 +79,7 @@ METHODS
 
        For advanced usage it may also contain a headermaks containing an
        hashref with the settings for the "aa", "ra", and "ad" header bits. The
-       argument is of the form "{ ad => 1, aa => 0, ra => 1 }".
+       argument is of the form "{ ad =&gt 1, aa =&gt 0, ra =&gt 1 }".
 
        See RFC 1035 and the IANA dns-parameters file for more information:
 
@@ -90,7 +92,7 @@ METHODS
        listen on ports 1024 and higher.
 
        Packet Truncation is new functionality for
-       $Net::DNS::Nameserver::VERSION>830 and uses the
+       $Net::DNS::Nameserver::VERSION&gt830 and uses the
        Net::DNS::Packet::truncate method with a size determinde by the
        advertised EDNS0 size in the query, or 512 if EDNS0 is not advertised
        in the query. Only UDP replies are truncated. If you want to do packet
@@ -103,12 +105,12 @@ METHODS
        See "EXAMPLE" for an example.
 
    main_loop
-	       $ns->main_loop;
+	       $ns-&gtmain_loop;
 
        Start accepting queries. Calling main_loop never returns.
 
    loop_once
-	       $ns->loop_once( [TIMEOUT_IN_SECONDS] );
+	       $ns-&gtloop_once( [TIMEOUT_IN_SECONDS] );
 
        Start accepting queries, but returns. If called without a parameter,
        the call will not return until a request has been received (and replied
@@ -130,8 +132,8 @@ METHODS
        waiting on the socket to be processed. In most cases you will have to
        count on calling "loop_once" twice.
 
-       A code fragment like:	  $ns->loop_once(10);
-	       while( $ns->get_open_tcp() ){		$ns->loop_once(0);
+       A code fragment like:	  $ns-&gtloop_once(10);
+	       while( $ns-&gtget_open_tcp() ){		$ns-&gtloop_once(0);
 	    }
 
        Would wait for 10 seconds for the initial connection and would then
@@ -159,13 +161,13 @@ EXAMPLE
 		my ($qname, $qclass, $qtype, $peerhost,$query,$conn) = @_;
 		my ($rcode, @ans, @auth, @add);
 
-		print "Received query from $peerhost to ". $conn->{"sockhost"}. "\n";
-		$query->print;
+		print "Received query from $peerhost to ". $conn-&gt{"sockhost"}. "\n";
+		$query-&gtprint;
 
 
 		if ($qtype eq "A" && $qname eq "foo.example.com" ) {
 			my ($ttl, $rdata) = (3600, "10.1.2.3");
-			push @ans, Net::DNS::RR->new("$qname $ttl $qclass $qtype $rdata");
+			push @ans, Net::DNS::RR-&gtnew("$qname $ttl $qclass $qtype $rdata");
 			$rcode = "NOERROR";
 		}elsif( $qname eq "foo.example.com" ) {
 			$rcode = "NOERROR";
@@ -176,16 +178,16 @@ EXAMPLE
 
 
 		# mark the answer as authoritive (by setting the 'aa' flag
-		return ($rcode, \@ans, \@auth, \@add, { aa => 1 });
+		return ($rcode, \@ans, \@auth, \@add, { aa =&gt 1 });
 	}
 
-	my $ns = Net::DNS::Nameserver->new(
-	    LocalPort	 => 5353,
-	    ReplyHandler => \&reply_handler,
-	    Verbose	 => 1,
+	my $ns = Net::DNS::Nameserver-&gtnew(
+	    LocalPort	 =&gt 5353,
+	    ReplyHandler =&gt \&reply_handler,
+	    Verbose	 =&gt 1,
 	) || die "couldn't create nameserver object\n";
 
-	$ns->main_loop;
+	$ns-&gtmain_loop;
 
 BUGS
        Limitations in perl 5.8.6 makes it impossible to guarantee that replies
@@ -223,6 +225,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2009-12-30	       Net::DNS::Nameserver(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

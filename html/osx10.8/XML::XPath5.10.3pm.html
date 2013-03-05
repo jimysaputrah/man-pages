@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module aims to comply exactly to the XPath specification at..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>XML::XPath - a set of modules for parsing and evaluating XPath</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 XPath(3)	      User Contributed Perl Documentation	      XPath(3)
 
 
@@ -26,11 +28,11 @@ SYNOPSIS
 	   use XML::XPath;
 	   use XML::XPath::XMLParser;
 
-	   my $xp = XML::XPath->new(filename => 'test.xhtml');
+	   my $xp = XML::XPath-&gtnew(filename =&gt 'test.xhtml');
 
-	   my $nodeset = $xp->find('/html/body/p'); # find all paragraphs
+	   my $nodeset = $xp-&gtfind('/html/body/p'); # find all paragraphs
 
-	   foreach my $node ($nodeset->get_nodelist) {
+	   foreach my $node ($nodeset-&gtget_nodelist) {
 	       print "FOUND\n\n",
 		   XML::XPath::XMLParser::as_string($node),
 		   "\n\n";
@@ -64,7 +66,7 @@ API
        than one in your application (if, for example, you're doing more than
        just XPath).
 
-	   my $xp = XML::XPath->new( context => $node );
+	   my $xp = XML::XPath-&gtnew( context =&gt $node );
 
        It is very much recommended that you use only 1 XPath object throughout
        the life of your application. This is because the object (and it's sub-
@@ -77,9 +79,9 @@ API
        either an XML::XPath::NodeSet object containing the nodes it found (or
        empty if no nodes matched the path), or one of XML::XPath::Literal (a
        string), XML::XPath::Number, or XML::XPath::Boolean. It should always
-       return something - and you can use ->isa() to find out what it
+       return something - and you can use -&gtisa() to find out what it
        returned. If you need to check how many nodes it found you should check
-       $nodeset->size.	See XML::XPath::NodeSet. An optional second parameter
+       $nodeset-&gtsize.	See XML::XPath::NodeSet. An optional second parameter
        of a context node allows you to use this method repeatedly, for example
        XSLT needs to do this.
 
@@ -94,7 +96,7 @@ API
    findvalue($path, [$context])
        Returns either a "XML::XPath::Literal", a "XML::XPath::Boolean" or a
        "XML::XPath::Number" object. If the path returns a NodeSet,
-       $nodeset->to_literal is called automatically for you (and thus a
+       $nodeset-&gtto_literal is called automatically for you (and thus a
        "XML::XPath::Literal" is returned). Note that for each of the objects
        stringification is overloaded, so you can just print the value found,
        or manipulate it in the ways you would a normal perl value (e.g. using
@@ -126,7 +128,7 @@ API
 
        Normally in XML::XPath the prefixes in XPath node tests take their
        context from the current node. This means that foo:bar will always
-       match an element <foo:bar> regardless of the namespace that the prefix
+       match an element &ltfoo:bar&gt regardless of the namespace that the prefix
        foo is mapped to (which might even change within the document,
        resulting in unexpected results). In order to make prefixes in XPath
        node tests actually map to a real URI, you need to enable that via a
@@ -153,7 +155,7 @@ On Garbage Collection
        with one caveat: If you free your tree before letting go of a sub-tree,
        consider that playing with fire and you may get burned. What does this
        mean to the average user? Not much. Provided you don't free (or let go
-       out of scope) either the tree you passed to XML::XPath->new, or if you
+       out of scope) either the tree you passed to XML::XPath-&gtnew, or if you
        didn't pass a tree, and passed a filename or IO-ref, then provided you
        don't let the XML::XPath object go out of scope before you let results
        of find() and its friends go out of scope, then you'll be fine. Even if
@@ -162,7 +164,7 @@ On Garbage Collection
        part of your path/query is either an ancestor or parent axis. In that
        case the worst that will happen is you'll end up with a circular
        reference that won't get cleared until interpreter destruction time.
-       You can get around that by explicitly calling $node->DESTROY on each of
+       You can get around that by explicitly calling $node-&gtDESTROY on each of
        your result nodes, if you really need to do that.
 
        Mail me direct if that's not clear. Note that it's not doom and gloom.
@@ -174,8 +176,8 @@ On Garbage Collection
        code - it's already sensible programming.
 
        If you really don't want all this to happen, then set the variable
-       $XML::XPath::SafeMode, and call $xp->cleanup() on the XML::XPath object
-       when you're finished, or $tree->dispose() if you have a tree instead.
+       $XML::XPath::SafeMode, and call $xp-&gtcleanup() on the XML::XPath object
+       when you're finished, or $tree-&gtdispose() if you have a tree instead.
 
 Example
        Please see the test files in t/ for examples on how to use XPath.
@@ -199,6 +201,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2003-01-26			      XPath(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Net::DNS is a collection of Perl modules that act as a Domain Name..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::DNS - Perl interface to the DNS resolver</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::DNS(3)	      User Contributed Perl Documentation	   Net::DNS(3)
 
 
@@ -70,7 +72,7 @@ METHODS
        See the manual pages listed above for other class-specific methods.
 
    version
-	   print Net::DNS->version, "\n";
+	   print Net::DNS-&gtversion, "\n";
 
        Returns the version of Net::DNS.
 
@@ -81,7 +83,7 @@ METHODS
 
 	   # Use your own resolver object.
 	   use Net::DNS;
-	   my $res = Net::DNS::Resolver->new;
+	   my $res = Net::DNS::Resolver-&gtnew;
 	   my  @mx = mx($res, "example.com");
 
        Returns a list of Net::DNS::RR::MX objects representing the MX records
@@ -98,12 +100,12 @@ METHODS
        dependent:
 
 	   # RRset exists (value-independent)
-	   $update->push(pre => yxrrset("host.example.com A"));
+	   $update-&gtpush(pre =&gt yxrrset("host.example.com A"));
 
        Meaning:  At least one RR with the specified name and type must exist.
 
 	   # RRset exists (value-dependent)
-	   $packet->push(pre => yxrrset("host.example.com A 10.1.2.3"));
+	   $packet-&gtpush(pre =&gt yxrrset("host.example.com A 10.1.2.3"));
 
        Meaning:  At least one RR with the specified name and type must exist
        and must have matching data.
@@ -115,7 +117,7 @@ METHODS
        Use this method to add an "RRset does not exist" prerequisite to a
        dynamic update packet.
 
-	   $packet->push(pre => nxrrset("host.example.com A"));
+	   $packet-&gtpush(pre =&gt nxrrset("host.example.com A"));
 
        Meaning:  No RRs with the specified name and type can exist.
 
@@ -126,7 +128,7 @@ METHODS
        Use this method to add a "name is in use" prerequisite to a dynamic
        update packet.
 
-	   $packet->push(pre => yxdomain("host.example.com"));
+	   $packet-&gtpush(pre =&gt yxdomain("host.example.com"));
 
        Meaning:  At least one RR with the specified name must exist.
 
@@ -137,7 +139,7 @@ METHODS
        Use this method to add a "name is not in use" prerequisite to a dynamic
        update packet.
 
-	   $packet->push(pre => nxdomain("host.example.com"));
+	   $packet-&gtpush(pre =&gt nxdomain("host.example.com"));
 
        Meaning:  No RR with the specified name can exist.
 
@@ -147,7 +149,7 @@ METHODS
    rr_add
        Use this method to add RRs to a zone.
 
-	   $packet->push(update => rr_add("host.example.com A 10.1.2.3"));
+	   $packet-&gtpush(update =&gt rr_add("host.example.com A 10.1.2.3"));
 
        Meaning:  Add this RR to the zone.
 
@@ -163,17 +165,17 @@ METHODS
        delete an RRset, delete all RRsets, and delete an RR.
 
 	   # Delete an RRset.
-	   $packet->push(update => rr_del("host.example.com A"));
+	   $packet-&gtpush(update =&gt rr_del("host.example.com A"));
 
        Meaning:  Delete all RRs having the specified name and type.
 
 	   # Delete all RRsets.
-	   $packet->push(update => rr_del("host.example.com"));
+	   $packet-&gtpush(update =&gt rr_del("host.example.com"));
 
        Meaning:  Delete all RRs having the specified name.
 
 	   # Delete an RR.
-	   $packet->push(update => rr_del("host.example.com A 10.1.2.3"));
+	   $packet-&gtpush(update =&gt rr_del("host.example.com A 10.1.2.3"));
 
        Meaning:  Delete all RRs having the specified name, type, and data.
 
@@ -188,7 +190,7 @@ METHODS
        'rrsort()' is the function that is available to do the sorting. In most
        cases rrsort will give you the answer that you want but you can specify
        your own sorting method by using the
-       Net::DNS::RR::FOO->set_rrsort_func() class method. See Net::DNS::RR for
+       Net::DNS::RR::FOO-&gtset_rrsort_func() class method. See Net::DNS::RR for
        details.
 
        rrsort()
@@ -237,81 +239,81 @@ EXAMPLES
 
    Look up a host's addresses.
 	 use Net::DNS;
-	 my $res   = Net::DNS::Resolver->new;
-	 my $query = $res->search("host.example.com");
+	 my $res   = Net::DNS::Resolver-&gtnew;
+	 my $query = $res-&gtsearch("host.example.com");
 
 	 if ($query) {
-	     foreach my $rr ($query->answer) {
-		 next unless $rr->type eq "A";
-		 print $rr->address, "\n";
+	     foreach my $rr ($query-&gtanswer) {
+		 next unless $rr-&gttype eq "A";
+		 print $rr-&gtaddress, "\n";
 	     }
 	 } else {
-	     warn "query failed: ", $res->errorstring, "\n";
+	     warn "query failed: ", $res-&gterrorstring, "\n";
 	 }
 
    Find the nameservers for a domain.
 	 use Net::DNS;
-	 my $res   = Net::DNS::Resolver->new;
-	 my $query = $res->query("example.com", "NS");
+	 my $res   = Net::DNS::Resolver-&gtnew;
+	 my $query = $res-&gtquery("example.com", "NS");
 
 	 if ($query) {
-	     foreach $rr (grep { $_->type eq 'NS' } $query->answer) {
-		 print $rr->nsdname, "\n";
+	     foreach $rr (grep { $_-&gttype eq 'NS' } $query-&gtanswer) {
+		 print $rr-&gtnsdname, "\n";
 	     }
 	 }
 	 else {
-	     warn "query failed: ", $res->errorstring, "\n";
+	     warn "query failed: ", $res-&gterrorstring, "\n";
 	 }
 
    Find the MX records for a domain.
 	 use Net::DNS;
 	 my $name = "example.com";
-	 my $res  = Net::DNS::Resolver->new;
+	 my $res  = Net::DNS::Resolver-&gtnew;
 	 my @mx   = mx($res, $name);
 
 	 if (@mx) {
 	     foreach $rr (@mx) {
-		 print $rr->preference, " ", $rr->exchange, "\n";
+		 print $rr-&gtpreference, " ", $rr-&gtexchange, "\n";
 	     }
 	 } else {
-	     warn "Can't find MX records for $name: ", $res->errorstring, "\n";
+	     warn "Can't find MX records for $name: ", $res-&gterrorstring, "\n";
 	 }
 
    Print a domain's SOA record in zone file format.
 	 use Net::DNS;
-	 my $res   = Net::DNS::Resolver->new;
-	 my $query = $res->query("example.com", "SOA");
+	 my $res   = Net::DNS::Resolver-&gtnew;
+	 my $query = $res-&gtquery("example.com", "SOA");
 
 	 if ($query) {
-	     ($query->answer)[0]->print;
+	     ($query-&gtanswer)[0]-&gtprint;
 	 } else {
-	     print "query failed: ", $res->errorstring, "\n";
+	     print "query failed: ", $res-&gterrorstring, "\n";
 	 }
 
    Perform a zone transfer and print all the records.
 	 use Net::DNS;
-	 my $res  = Net::DNS::Resolver->new;
-	 $res->nameservers("ns.example.com");
+	 my $res  = Net::DNS::Resolver-&gtnew;
+	 $res-&gtnameservers("ns.example.com");
 
-	 my @zone = $res->axfr("example.com");
+	 my @zone = $res-&gtaxfr("example.com");
 
 	 foreach $rr (@zone) {
-	     $rr->print;
+	     $rr-&gtprint;
 	 }
 
    Perform a background query and do some other work while waiting for the
        answer.
 	 use Net::DNS;
-	 my $res    = Net::DNS::Resolver->new;
-	 my $socket = $res->bgsend("host.example.com");
+	 my $res    = Net::DNS::Resolver-&gtnew;
+	 my $socket = $res-&gtbgsend("host.example.com");
 
-	 until ($res->bgisready($socket)) {
+	 until ($res-&gtbgisready($socket)) {
 	     # do some work here while waiting for the answer
 	     # ...and some more here
 	 }
 
-	 my $packet = $res->bgread($socket);
-	 $packet->print;
+	 my $packet = $res-&gtbgread($socket);
+	 $packet-&gtprint;
 
    Send a background query and use select to determine when the answer has
        arrived.
@@ -319,21 +321,21 @@ EXAMPLES
 	 use IO::Select;
 
 	 my $timeout = 5;
-	 my $res     = Net::DNS::Resolver->new;
-	 my $bgsock  = $res->bgsend("host.example.com");
-	 my $sel     = IO::Select->new($bgsock);
+	 my $res     = Net::DNS::Resolver-&gtnew;
+	 my $bgsock  = $res-&gtbgsend("host.example.com");
+	 my $sel     = IO::Select-&gtnew($bgsock);
 
 	 # Add more sockets to $sel if desired.
-	 my @ready = $sel->can_read($timeout);
+	 my @ready = $sel-&gtcan_read($timeout);
 	 if (@ready) {
 	     foreach my $sock (@ready) {
 		 if ($sock == $bgsock) {
-		     my $packet = $res->bgread($bgsock);
-		     $packet->print;
+		     my $packet = $res-&gtbgread($bgsock);
+		     $packet-&gtprint;
 		     $bgsock = undef;
 		 }
 		 # Check for the other sockets.
-		 $sel->remove($sock);
+		 $sel-&gtremove($sock);
 		 $sock = undef;
 	     }
 	 } else {
@@ -377,6 +379,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2009-12-30			   Net::DNS(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

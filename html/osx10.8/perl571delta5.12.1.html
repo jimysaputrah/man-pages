@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document describes differences between the 5.7.0 release and the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perl571delta - what's new for perl v5.7.1</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERL571DELTA(1)        Perl Programmers Reference Guide        PERL571DELTA(1)
 
 
@@ -59,7 +61,7 @@ Incompatible Changes
 	   The new algorithm "One-at-a-Time" produces a different hashed key
 	   order.  More details are in "Performance Enhancements".
 
-       o   The list of filenames from glob() (or <...>) is now by default
+       o   The list of filenames from glob() (or &lt...&gt) is now by default
 	   sorted alphabetically to be csh-compliant.  (bsd_glob() does still
 	   sort platform natively, ASCII or EBCDIC, unless GLOB_ALPHASORT is
 	   specified.)
@@ -76,7 +78,7 @@ Core Enhancements
 	   the handle's behaviour.  Layers can be specified at open time via
 	   3-arg form of open:
 
-	      open($fh,'>:crlf :utf8', $path) || ...
+	      open($fh,'&gt:crlf :utf8', $path) || ...
 
 	   or on already opened handles via extended "binmode":
 
@@ -84,7 +86,7 @@ Core Enhancements
 
 	   The built-in layers are: unix (low level read/write), stdio (as in
 	   previous Perls), perlio (re-implementation of stdio buffering in a
-	   portable manner), crlf (does CRLF <=> "\n" translation as on Win32,
+	   portable manner), crlf (does CRLF &lt=&gt "\n" translation as on Win32,
 	   but available on any platform).  A mmap layer may be available if
 	   platform supports it (mostly Unixes).
 
@@ -98,7 +100,7 @@ Core Enhancements
 	   Unicode (UTF-8 or UTF-EBCDIC depending on platform) by a pseudo
 	   layer ":utf8" :
 
-	      open($fh,">:utf8","Uni.txt");
+	      open($fh,"&gt:utf8","Uni.txt");
 
 	   Note for EBCDIC users: the pseudo layer ":utf8" is erroneously
 	   named for you since it's not UTF-8 what you will be getting but
@@ -112,12 +114,12 @@ Core Enhancements
        o   File handles can be opened to "in memory" files held in Perl
 	   scalars via:
 
-	      open($fh,'>', \$variable) || ...
+	      open($fh,'&gt', \$variable) || ...
 
        o   Anonymous temporary files are available without need to 'use
 	   FileHandle' or other module via
 
-	      open($fh,"+>", undef) || ...
+	      open($fh,"+&gt", undef) || ...
 
 	   That is a literal undef, not an undefined value.
 
@@ -240,7 +242,7 @@ Modules and Pragmata
 
 	       # in user's code:
 
-	       use MyFilter qr/red/ => 'green';
+	       use MyFilter qr/red/ =&gt 'green';
 
 	       print "red\n";	# this code is filtered, will print "green\n"
 	       print "bored\n"; # this code is filtered, will print "bogreen\n"
@@ -294,7 +296,7 @@ Modules and Pragmata
 	   necessary to use it with PerlIO::Via as in :
 
 	       use MIME::QuotedPrint;
-	       open($fh,">Via(MIME::QuotedPrint)",$path)
+	       open($fh,"&gtVia(MIME::QuotedPrint)",$path)
 
 	   See MIME::QuotedPrint for more information.
 
@@ -309,7 +311,7 @@ Modules and Pragmata
 	   implemented in perl code).
 
 	       use MIME::QuotedPrint;
-	       open($fh,">Via(MIME::QuotedPrint)",$path)
+	       open($fh,"&gtVia(MIME::QuotedPrint)",$path)
 
 	   This will automatically convert everything output to $fh to Quoted-
 	   Printable.  See PerlIO::Via for more information.
@@ -626,7 +628,7 @@ Selected Bug Fixes
 
        o   Tie::ARRAY SPLICE method was broken.
 
-       o   vec() now tries to work with characters <= 255 when possible, but
+       o   vec() now tries to work with characters &lt= 255 when possible, but
 	   it leaves higher character values in place.	In that case, if vec()
 	   was used to modify the string, it is no longer considered to be
 	   utf8-encoded.
@@ -650,7 +652,7 @@ Selected Bug Fixes
 		   the drive root.  Other bugs in chdir() and Cwd::cwd() have
 		   also been fixed.
 
-	   o	   Duping socket handles with open(F, ">&MYSOCK") now works
+	   o	   Duping socket handles with open(F, "&gt&MYSOCK") now works
 		   under Windows 9x.
 
 	   o	   HTML files will be installed in c:\perl\html instead of
@@ -749,7 +751,7 @@ Known Problems
 
    Localising a Tied Variable Leaks Memory
 	   use Tie::Hash;
-	   tie my %tie_hash => 'Tie::StdHash';
+	   tie my %tie_hash =&gt 'Tie::StdHash';
 
 	   ...
 
@@ -804,14 +806,14 @@ SEE ALSO
        The Artistic and Copying files for copyright information.
 
 HISTORY
-       Written by Jarkko Hietaniemi <jhi@iki.fi>, with many contributions from
+       Written by Jarkko Hietaniemi &ltjhi@iki.fi&gt, with many contributions from
        The Perl Porters and Perl Users submitting feedback and patches.
 
-       Send omissions or corrections to <perlbug@perl.org>.
+       Send omissions or corrections to &ltperlbug@perl.org&gt.
 
 
 
 perl v5.12.4			  2011-06-01		       PERL571DELTA(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

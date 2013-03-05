@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This is a list of wishes for Perl. The most up to date version of this..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perltodo - Perl TO-DO List</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLTODO(1)	       Perl Programmers Reference Guide 	   PERLTODO(1)
 
 
@@ -92,7 +94,7 @@ Tasks that only need Perl knowledge
        it.  Maybe just put it into test.pl. Throw in the handy tainting
        subroutines.
 
-   POD -> HTML conversion in the core still sucks
+   POD -&gt HTML conversion in the core still sucks
        Which is crazy given just how simple POD purports to be, and how simple
        HTML can be. It's not actually as simple as it sounds, particularly
        with the flexibility POD allows for "=item", but it would be good to
@@ -420,8 +422,8 @@ Tasks that need a little C knowledge
        binary package builders.  One possible proposal is laid out in this
        message:
        http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2002-04/msg02380.html
-       <http://www.xray.mpe.mpg.de/mailing-
-       lists/perl5-porters/2002-04/msg02380.html>.
+       &lthttp://www.xray.mpe.mpg.de/mailing-
+       lists/perl5-porters/2002-04/msg02380.html&gt.
 
    -Duse32bit*
        Natively 64-bit systems need neither -Duse64bitint nor -Duse64bitall.
@@ -589,39 +591,39 @@ Tasks that need a knowledge of XS
        in "CvFLAGS()" would signal to the peephole optimiser to take an optree
        such as this:
 
-	   b  <@> leave[1 ref] vKP/REFC ->(end)
-	   1	 <0> enter ->2
-	   2	 <;> nextstate(main 1 -e:1) v:{ ->3
-	   a	 <2> sassign vKS/2 ->b
-	   8	    <1> entersub[t2] sKS/TARG,1 ->9
-	   -	       <1> ex-list sK ->8
-	   3		  <0> pushmark s ->4
-	   4		  <$> const(IV 1) sM ->5
-	   6		  <1> rv2av[t1] lKM/1 ->7
-	   5		     <$> gv(*a) s ->6
-	   -		  <1> ex-rv2cv sK ->-
-	   7		     <$> gv(*x) s/EARLYCV ->8
-	   -	    <1> ex-rv2sv sKRM*/1 ->a
-	   9	       <$> gvsv(*b) s ->a
+	   b  &lt@&gt leave[1 ref] vKP/REFC -&gt(end)
+	   1	 &lt0&gt enter -&gt2
+	   2	 &lt;&gt nextstate(main 1 -e:1) v:{ -&gt3
+	   a	 &lt2&gt sassign vKS/2 -&gtb
+	   8	    &lt1&gt entersub[t2] sKS/TARG,1 -&gt9
+	   -	       &lt1&gt ex-list sK -&gt8
+	   3		  &lt0&gt pushmark s -&gt4
+	   4		  &lt$&gt const(IV 1) sM -&gt5
+	   6		  &lt1&gt rv2av[t1] lKM/1 -&gt7
+	   5		     &lt$&gt gv(*a) s -&gt6
+	   -		  &lt1&gt ex-rv2cv sK -&gt-
+	   7		     &lt$&gt gv(*x) s/EARLYCV -&gt8
+	   -	    &lt1&gt ex-rv2sv sKRM*/1 -&gta
+	   9	       &lt$&gt gvsv(*b) s -&gta
 
        perform the symbol table lookup of "rv2cv" and "gv(*x)", locate the
        pointer to the custom OP that provides the direct implementation, and
        re- write the optree something like:
 
-	   b  <@> leave[1 ref] vKP/REFC ->(end)
-	   1	 <0> enter ->2
-	   2	 <;> nextstate(main 1 -e:1) v:{ ->3
-	   a	 <2> sassign vKS/2 ->b
-	   7	    <1> custom_x -> 8
-	   -	       <1> ex-list sK ->7
-	   3		  <0> pushmark s ->4
-	   4		  <$> const(IV 1) sM ->5
-	   6		  <1> rv2av[t1] lKM/1 ->7
-	   5		     <$> gv(*a) s ->6
-	   -		  <1> ex-rv2cv sK ->-
-	   -		     <$> ex-gv(*x) s/EARLYCV ->7
-	   -	    <1> ex-rv2sv sKRM*/1 ->a
-	   8	       <$> gvsv(*b) s ->a
+	   b  &lt@&gt leave[1 ref] vKP/REFC -&gt(end)
+	   1	 &lt0&gt enter -&gt2
+	   2	 &lt;&gt nextstate(main 1 -e:1) v:{ -&gt3
+	   a	 &lt2&gt sassign vKS/2 -&gtb
+	   7	    &lt1&gt custom_x -&gt 8
+	   -	       &lt1&gt ex-list sK -&gt7
+	   3		  &lt0&gt pushmark s -&gt4
+	   4		  &lt$&gt const(IV 1) sM -&gt5
+	   6		  &lt1&gt rv2av[t1] lKM/1 -&gt7
+	   5		     &lt$&gt gv(*a) s -&gt6
+	   -		  &lt1&gt ex-rv2cv sK -&gt-
+	   -		     &lt$&gt ex-gv(*x) s/EARLYCV -&gt7
+	   -	    &lt1&gt ex-rv2sv sKRM*/1 -&gta
+	   8	       &lt$&gt gvsv(*b) s -&gta
 
        i.e. the gv(*) OP has been nulled and spliced out of the execution
        path, and the "entersub" OP has been replaced by the custom op.
@@ -921,8 +923,8 @@ Tasks that need a knowledge of the interpreter
        would also tell whether something can be dereferenced as an
        array/hash/etc., or used as a regexp, etc.
        http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2007-03/msg00481.html
-       <http://www.xray.mpe.mpg.de/mailing-
-       lists/perl5-porters/2007-03/msg00481.html>
+       &lthttp://www.xray.mpe.mpg.de/mailing-
+       lists/perl5-porters/2007-03/msg00481.html&gt
 
    Tied filehandles and write() don't mix
        There is no method on tied filehandles to allow them to be called back
@@ -960,8 +962,8 @@ Tasks that need a knowledge of the interpreter
 
        See
        http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2007-01/msg00400.html
-       <http://www.xray.mpe.mpg.de/mailing-
-       lists/perl5-porters/2007-01/msg00400.html> for the discussion.
+       &lthttp://www.xray.mpe.mpg.de/mailing-
+       lists/perl5-porters/2007-01/msg00400.html&gt for the discussion.
 
    optional optimizer
        Make the peephole optimizer optional. Currently it performs two tasks
@@ -1186,6 +1188,6 @@ Tasks for microperl
 
 
 perl v5.12.4			  2011-06-07			   PERLTODO(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

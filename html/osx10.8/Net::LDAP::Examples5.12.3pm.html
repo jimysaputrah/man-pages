@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The following examples are of course PERL code, found to work with the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::LDAP::Examples - PERL LDAP by Example</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::LDAP::Examples(3)User Contributed Perl DocumentatioNet::LDAP::Examples(3)
 
 
@@ -49,14 +51,14 @@ CODE
 	use Net::LDAP;
 
    INITIALIZING
-	$ldap = Net::LDAP->new ( "yourLDAPhost.yourCompany.com" ) or die "$@";
+	$ldap = Net::LDAP-&gtnew ( "yourLDAPhost.yourCompany.com" ) or die "$@";
 
    BINDING
-	$mesg = $ldap->bind ( version => 3 );	       # use for searches
+	$mesg = $ldap-&gtbind ( version =&gt 3 );	       # use for searches
 
-	$mesg = $ldap->bind ( "$userToAuthenticate",
-			      password => "$passwd",
-			      version => 3 );	       # use for changes/edits
+	$mesg = $ldap-&gtbind ( "$userToAuthenticate",
+			      password =&gt "$passwd",
+			      version =&gt 3 );	       # use for changes/edits
 
 	# see your LDAP administrator for information concerning the
 	# user authentication setup at your site.
@@ -75,10 +77,10 @@ CODE
 
 	  if (!$attrs ) { $attrs = [ 'cn','mail' ]; }
 
-	  my $result = $ldap->search ( base    => "$base",
-				       scope   => "sub",
-				       filter  => "$searchString",
-				       attrs   =>  $attrs
+	  my $result = $ldap-&gtsearch ( base    =&gt "$base",
+				       scope   =&gt "sub",
+				       filter  =&gt "$searchString",
+				       attrs   =&gt  $attrs
 				     );
 
        }
@@ -95,7 +97,7 @@ CODE
 	#  i.e. Using the "as_struct"  method
 	#
 
-	my $href = $result->as_struct;
+	my $href = $result-&gtas_struct;
 
 	# get an array of the DN names
 
@@ -136,17 +138,17 @@ CODE
 	# handle each of the results independently
 	# ... i.e. using the walk through method
 	#
-	my @entries = $result->entries;
+	my @entries = $result-&gtentries;
 
 	my $entr;
 	foreach $entr ( @entries ) {
-	  print "DN: ", $entr->dn, "\n";
+	  print "DN: ", $entr-&gtdn, "\n";
 
 	  my $attr;
-	  foreach $attr ( sort $entr->attributes ) {
+	  foreach $attr ( sort $entr-&gtattributes ) {
 	    # skip binary we can't handle
 	    next if ( $attr =~ /;binary$/ );
-	    print "  $attr : ", $entr->get_value ( $attr ) ,"\n";
+	    print "  $attr : ", $entr-&gtget_value ( $attr ) ,"\n";
 	  }
 
 	  print "#-------------------------------\n";
@@ -171,24 +173,24 @@ CODE
 	#
 	#  Do we only have one result returned from the search?
 
-	if ( $result->count != 1 ) { exit; }  # Nope.. exit
+	if ( $result-&gtcount != 1 ) { exit; }  # Nope.. exit
 
-	my $dn = $entries[0]->dn;	  # yes.. get the DN
+	my $dn = $entries[0]-&gtdn;	  # yes.. get the DN
 
 	#######################################
 	#
 	#   MODIFY using a HASH
 	#
 
-	my %ReplaceHash = ( keyword => "x", proxy => "x" );
+	my %ReplaceHash = ( keyword =&gt "x", proxy =&gt "x" );
 
 	my $result = LDAPmodifyUsingHash ( $ldap, $dn, \%ReplaceHash );
 
 	sub LDAPmodifyUsingHash
 	{
 	  my ($ldap, $dn, $whatToChange ) = @_;
-	  my $result = $ldap->modify ( $dn,
-				       replace => { %$whatToChange }
+	  my $result = $ldap-&gtmodify ( $dn,
+				       replace =&gt { %$whatToChange }
 				     );
 	  return $result;
 	}
@@ -206,9 +208,9 @@ CODE
 	sub LDAPmodifyUsingArrayList
 	{
 	  my ($ldap, $dn, $whatToChange ) = @_;
-	  my $result = $ldap->modify ( $dn,
-				       changes => [
-					 replace => @$whatToChange
+	  my $result = $ldap-&gtmodify ( $dn,
+				       changes =&gt [
+					 replace =&gt @$whatToChange
 				       ]
 				     );
 	  return $result;
@@ -227,9 +229,9 @@ CODE
 	sub LDAPmodifyUsingArray
 	{
 	  my ($ldap, $dn, $whatToChange ) = @_;
-	  my $result = $ldap->modify ( $dn,
-				       changes => [
-					 replace => [ @$whatToChange ]
+	  my $result = $ldap-&gtmodify ( $dn,
+				       changes =&gt [
+					 replace =&gt [ @$whatToChange ]
 				       ]
 				     );
 	  return $result;
@@ -251,15 +253,15 @@ CODE
 	push @ReplaceArray, 'cn', "me myself I";
 	push @DeleteArray, 'cn', "me myself";
 
-	if ( $#ReplaceArray > 0 ) {
+	if ( $#ReplaceArray &gt 0 ) {
 	  push @whatToChange, 'replace';
 	  push @whatToChange, \@ReplaceArray;
 	}
-	if ( $#DeleteArray > 0 ) {
+	if ( $#DeleteArray &gt 0 ) {
 	  push @whatToChange, 'delete';
 	  push @whatToChange, \@DeleteArray;
 	}
-	if ( $#AddArray > 0 ) {
+	if ( $#AddArray &gt 0 ) {
 	  push @whatToChange, 'add';
 	  push @whatToChange, \@AddArray;
 	}
@@ -270,8 +272,8 @@ CODE
 	{
 	  my ($ldap, $dn, $whatToChange) = @_;
 
-	  my $result = $ldap->modify ( $dn,
-				       changes => [
+	  my $result = $ldap-&gtmodify ( $dn,
+				       changes =&gt [
 					 @$whatToChange
 				       ]
 				     );
@@ -303,10 +305,10 @@ CODE
 	  # multivalues in the NAMING attribute.
 	  # in most cases that would be the 'CN' attribute
 	  #
-	  my $result = $ldap->moddn ( $dn,
-				      newrdn => $whatToChange,
-				      deleteoldrdn => '1',
-				      newsuperior => $branch
+	  my $result = $ldap-&gtmoddn ( $dn,
+				      newrdn =&gt $whatToChange,
+				      deleteoldrdn =&gt '1',
+				      newsuperior =&gt $branch
 				    );
 
 	  return $result;
@@ -321,11 +323,11 @@ CODE
 	# for the correct objectClass... I'm sure it'll be different
 	#
 	my $CreateArray = [
-	  objectClass => [ "top", "person", "organizationalPerson", "inetOrgPerson" ],
-	  cn => "Jane User",
-	  uid => "0000001",
-	  sn => "User",
-	  mail => "JaneUser@mycompany.com"
+	  objectClass =&gt [ "top", "person", "organizationalPerson", "inetOrgPerson" ],
+	  cn =&gt "Jane User",
+	  uid =&gt "0000001",
+	  sn =&gt "User",
+	  mail =&gt "JaneUser@mycompany.com"
 	];
 
 	#
@@ -352,12 +354,12 @@ CODE
 	sub LDAPentryCreate
 	{
 	   my ($ldap, $dn, $whatToCreate) = @_;
-	   my $result = $ldap->add ( $dn, attrs => [ @$whatToCreate ] );
+	   my $result = $ldap-&gtadd ( $dn, attrs =&gt [ @$whatToCreate ] );
 	   return $result;
 	}
 
    ERROR - Retrieving and Displaying ERROR information
-	if ( $result->code ) {
+	if ( $result-&gtcode ) {
 	  #
 	  # if we've got an error... record it
 	  #
@@ -367,23 +369,23 @@ CODE
 	sub LDAPerror
 	{
 	  my ($from, $mesg) = @_;
-	  print "Return code: ", $mesg->code;
-	  print "\tMessage: ", $mesg->error_name;
-	  print " :",	       $mesg->error_text;
-	  print "MessageID: ", $mesg->mesg_id;
-	  print "\tDN: ", $mesg->dn;
+	  print "Return code: ", $mesg-&gtcode;
+	  print "\tMessage: ", $mesg-&gterror_name;
+	  print " :",	       $mesg-&gterror_text;
+	  print "MessageID: ", $mesg-&gtmesg_id;
+	  print "\tDN: ", $mesg-&gtdn;
 
 	  #---
 	  # Programmer note:
 	  #
-	  #  "$mesg->error" DOESN'T work!!!
+	  #  "$mesg-&gterror" DOESN'T work!!!
 	  #
-	  #print "\tMessage: ", $mesg->error;
+	  #print "\tMessage: ", $mesg-&gterror;
 	  #-----
 	}
 
    UNBIND
-	$ldap->unbind;
+	$ldap-&gtunbind;
 
 LDAP SCHEMA RETRIEVAL
        The following code snippet shows how to retrieve schema information.
@@ -399,7 +401,7 @@ LDAP SCHEMA RETRIEVAL
        After a successful bind you are ready to retrieve the schema
        information.  You do this by initializing a schema object.
 
-	$schema = $ldap->schema ( );
+	$schema = $ldap-&gtschema ( );
 
        In this case Net::LDAP will attempt to determine the dn under which the
        schema can be found. First it will look for the attribute
@@ -409,14 +411,14 @@ LDAP SCHEMA RETRIEVAL
        Alternatively you can specify the dn where the schema is to be found
        with
 
-	$schema = $ldap->schema ( dn => $dn );
+	$schema = $ldap-&gtschema ( dn =&gt $dn );
 
        Once we have a dn to search for, Net::LDAP will fetch the schema entry
        with
 
-	 $mesg = $self->search ( base	=> $dn,
-				 scope	=> 'base',
-				 filter => '(objectClass=subschema)',
+	 $mesg = $self-&gtsearch ( base	=&gt $dn,
+				 scope	=&gt 'base',
+				 filter =&gt '(objectClass=subschema)',
 			       );
 
        Once the schema object has been initialized, schema methods are used to
@@ -431,14 +433,14 @@ LDAP SCHEMA RETRIEVAL
 	# Get the attributes
 	#
 
-	@attributes = $schema->all_attributes ( );
+	@attributes = $schema-&gtall_attributes ( );
 
 	#
 	# Display the attributes
 	#
 
 	foreach $ar ( @attributes ) {
-	  print "attributeType: ", $ar->{name}, "\n";
+	  print "attributeType: ", $ar-&gt{name}, "\n";
 
 	  #
 	  # Print all the details
@@ -446,21 +448,21 @@ LDAP SCHEMA RETRIEVAL
 
 	  foreach $key ( keys %{$ar} ) {
 	    print join ( "\n\t\t", "\t$key:",
-			 ref ( $ar->{$key} ) ? @{$ar->{$key}} : $ar->{$key}
+			 ref ( $ar-&gt{$key} ) ? @{$ar-&gt{$key}} : $ar-&gt{$key}
 		       ), "\n";
 	  }
 	}
 
        The process is the basically the same for getting objectClass
-       information.  Where schema->all_attributes() is used, substitute
-       schema->all_objectclasses().  From that point on the process is the
+       information.  Where schema-&gtall_attributes() is used, substitute
+       schema-&gtall_objectclasses().  From that point on the process is the
        same for both objectClasses and attributes.
 
 BUGS
        None known, but there may be some
 
 AUTHOR	(of this document)
-       Russell Biggs <rgb@ticnet.com>
+       Russell Biggs &ltrgb@ticnet.com&gt
 
 COPYRIGHT
        All rights to this document are hereby relinquished to Graham Barr.
@@ -468,6 +470,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2008-06-30		Net::LDAP::Examples(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

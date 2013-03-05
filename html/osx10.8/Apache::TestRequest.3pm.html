@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Apache::TestRequest provides convenience functions to allow you to make..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Apache::TestRequest - Send requests to your Apache test server</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Apache::TestRequest(3)User Contributed Perl DocumentatioApache::TestRequest(3)
 
 
@@ -20,10 +22,10 @@ SYNOPSIS
 	 use Apache::TestRequest qw(GET POST);
 	 use Apache::Constants qw(HTTP_OK);
 
-	 plan tests => 1, have_lwp;
+	 plan tests =&gt 1, have_lwp;
 
 	 my $res = GET '/test.html';
-	 ok $res->code == HTTP_OK, "Request is ok";
+	 ok $res-&gtcode == HTTP_OK, "Request is ok";
 
 DESCRIPTION
        Apache::TestRequest provides convenience functions to allow you to make
@@ -46,20 +48,20 @@ DESCRIPTION
 	 use Apache::TestRequest qw(GET POST);
 	 use Apache::Constants qw(HTTP_OK);
 
-	 plan tests => 2, have_lwp;
+	 plan tests =&gt 2, have_lwp;
 
 	 my $uri = "/test.html?foo=1&bar=2";
 	 my $res = GET $uri;
-	 ok $res->code == HTTP_OK, "Check that the request was OK";
-	 ok $res->content eq "foo => 1, bar => 2", "Check its content";
+	 ok $res-&gtcode == HTTP_OK, "Check that the request was OK";
+	 ok $res-&gtcontent eq "foo =&gt 1, bar =&gt 2", "Check its content";
 
        Note that you can also use "Apache::TestRequest" with "Test::Builder"
        and its derivatives, including "Test::More":
 
 	 use Test::More;
 	 # ...
-	 is $res->code, HTTP_OK, "Check that the request was OK";
-	 is $res->content, "foo => 1, bar => 2", "Check its content";
+	 is $res-&gtcode, HTTP_OK, "Check that the request was OK";
+	 is $res-&gtcontent, "foo =&gt 1, bar =&gt 2", "Check its content";
 
 CONFIGURATION FUNCTION
        You can tell "Apache::TestRequest" what kind of "LWP::UserAgent" object
@@ -75,9 +77,9 @@ CONFIGURATION FUNCTION
        internally by "Apache::TestRequest", you should always use the "reset"
        parameter to force it to create a new global "LWP::UserAgent" Object:
 
-	 Apache::TestRequest::user_agent(reset => 1, %params);
+	 Apache::TestRequest::user_agent(reset =&gt 1, %params);
 
-       "user_agent()" differs from "LWP::UserAgent->new" in two additional
+       "user_agent()" differs from "LWP::UserAgent-&gtnew" in two additional
        ways. First, it supports an additional parameter, "keep_alive", which
        enables connection persistence, where the same connection is used to
        process multiple requests (and, according to the "LWP::UserAgent"
@@ -90,8 +92,8 @@ CONFIGURATION FUNCTION
        "Apache::TestRequest" not to follow redirects in any of its convenience
        functions, pass a false value to "requests_redirectable":
 
-	 Apache::TestRequest::user_agent(reset => 1,
-					 requests_redirectable => 0);
+	 Apache::TestRequest::user_agent(reset =&gt 1,
+					 requests_redirectable =&gt 0);
 
        If LWP is not installed, then you can still pass in an array reference
        as "LWP::UserAgent" expects. "Apache::TestRequest" will examine the
@@ -100,8 +102,8 @@ CONFIGURATION FUNCTION
 
 	 # Always allow redirection.
 	 my $redir = have_lwp() ? [qw(GET HEAD POST)] : 1;
-	 Apache::TestRequest::user_agent(reset => 1,
-					 requests_redirectable => $redir);
+	 Apache::TestRequest::user_agent(reset =&gt 1,
+					 requests_redirectable =&gt $redir);
 
        But note that redirection will not work with "POST" unless LWP is
        installed. It's best, therefore, to check "have_lwp" before running
@@ -117,7 +119,7 @@ CONFIGURATION FUNCTION
        requests. You can tell it to remember cookies between request by
        adding:
 
-	 Apache::TestRequest::user_agent(cookie_jar => {});
+	 Apache::TestRequest::user_agent(cookie_jar =&gt {});
 
        before issuing the requests.
 
@@ -133,27 +135,27 @@ FUNCTIONS
 	   server. To prevent this behavior, pass a false value to a
 	   "redirect_ok" parameter:
 
-	     my $res = GET $uri, redirect_ok => 0;
+	     my $res = GET $uri, redirect_ok =&gt 0;
 
 	   Alternately, if all of your tests need to disable redirects, tell
 	   "Apache::TestRequest" to use an "LWP::UserAgent" object that
 	   disables redirects:
 
-	     Apache::TestRequest::user_agent( reset => 1,
-					      requests_redirectable => 0 );
+	     Apache::TestRequest::user_agent( reset =&gt 1,
+					      requests_redirectable =&gt 0 );
 
        cert
 	   If you need to force an SSL request to use a particular SSL
 	   certificate, pass the name of the certificate via the "cert"
 	   parameter:
 
-	     my $res = GET $uri, cert => 'my_cert';
+	     my $res = GET $uri, cert =&gt 'my_cert';
 
        content
 	   If you need to add content to your request, use the "content"
 	   parameter:
 
-	     my $res = GET $uri, content => 'hello world!';
+	     my $res = GET $uri, content =&gt 'hello world!';
 
        filename
 	   The name of a local file on the file system to be sent to the
@@ -170,15 +172,15 @@ FUNCTIONS
        You can also supply additional headers to be sent with the request by
        adding their name/value pairs after the "url" parameter, for example:
 
-	 my $res = GET $url, 'Accept-Language' => 'de,en-us,en;q=0.5';
+	 my $res = GET $url, 'Accept-Language' =&gt 'de,en-us,en;q=0.5';
 
        GET_STR
 
-       A shortcut function for "GET($uri)->as_string".
+       A shortcut function for "GET($uri)-&gtas_string".
 
        GET_BODY
 
-       A shortcut function for "GET($uri)->content".
+       A shortcut function for "GET($uri)-&gtcontent".
 
        GET_BODY_ASSERT
 
@@ -190,11 +192,11 @@ FUNCTIONS
 
        GET_OK
 
-       A shortcut function for "GET($uri)->is_success".
+       A shortcut function for "GET($uri)-&gtis_success".
 
        GET_RC
 
-       A shortcut function for "GET($uri)->code".
+       A shortcut function for "GET($uri)-&gtcode".
 
        GET_HEAD
 
@@ -214,11 +216,11 @@ FUNCTIONS
 
        HEAD_STR
 
-       A shortcut function for "HEAD($uri)->as_string".
+       A shortcut function for "HEAD($uri)-&gtas_string".
 
        HEAD_BODY
 
-       A shortcut function for "HEAD($uri)->content". Of course, this means
+       A shortcut function for "HEAD($uri)-&gtcontent". Of course, this means
        that it will likely return nothing.
 
        HEAD_BODY_ASSERT
@@ -231,11 +233,11 @@ FUNCTIONS
 
        HEAD_OK
 
-       A shortcut function for "GET($uri)->is_success".
+       A shortcut function for "GET($uri)-&gtis_success".
 
        HEAD_RC
 
-       A shortcut function for "GET($uri)->code".
+       A shortcut function for "GET($uri)-&gtcode".
 
        HEAD_HEAD
 
@@ -255,11 +257,11 @@ FUNCTIONS
 
        PUT_STR
 
-       A shortcut function for "PUT($uri)->as_string".
+       A shortcut function for "PUT($uri)-&gtas_string".
 
        PUT_BODY
 
-       A shortcut function for "PUT($uri)->content".
+       A shortcut function for "PUT($uri)-&gtcontent".
 
        PUT_BODY_ASSERT
 
@@ -271,11 +273,11 @@ FUNCTIONS
 
        PUT_OK
 
-       A shortcut function for "PUT($uri)->is_success".
+       A shortcut function for "PUT($uri)-&gtis_success".
 
        PUT_RC
 
-       A shortcut function for "PUT($uri)->code".
+       A shortcut function for "PUT($uri)-&gtcode".
 
        PUT_HEAD
 
@@ -288,7 +290,7 @@ FUNCTIONS
 
        POST
 
-	 my $res = POST $uri, [ arg => $val, arg2 => $val ];
+	 my $res = POST $uri, [ arg =&gt $val, arg2 =&gt $val ];
 
        Sends a POST request to the Apache test server and returns an
        "HTTP::Response" object. An array reference of parameters passed as the
@@ -299,15 +301,15 @@ FUNCTIONS
 
        To upload a chunk of data, simply use:
 
-	 my $res = POST $uri, content => $data;
+	 my $res = POST $uri, content =&gt $data;
 
        POST_STR
 
-       A shortcut function for "POST($uri, @args)->content".
+       A shortcut function for "POST($uri, @args)-&gtcontent".
 
        POST_BODY
 
-       A shortcut function for "POST($uri, @args)->content".
+       A shortcut function for "POST($uri, @args)-&gtcontent".
 
        POST_BODY_ASSERT
 
@@ -319,11 +321,11 @@ FUNCTIONS
 
        POST_OK
 
-       A shortcut function for "POST($uri, @args)->is_success".
+       A shortcut function for "POST($uri, @args)-&gtis_success".
 
        POST_RC
 
-       A shortcut function for "POST($uri, @args)->code".
+       A shortcut function for "POST($uri, @args)-&gtcode".
 
        POST_HEAD
 
@@ -336,7 +338,7 @@ FUNCTIONS
 
        UPLOAD
 
-	 my $res = UPLOAD $uri, \@args, filename => $filename;
+	 my $res = UPLOAD $uri, \@args, filename =&gt $filename;
 
        Sends a request to the Apache test server that includes an uploaded
        file. Other POST parameters can be passed as a second argument as an
@@ -347,7 +349,7 @@ FUNCTIONS
        you can submit use the "content" parameter instead of "filename", and
        its value will be submitted to the Apache server as file contents:
 
-	 my $res = UPLOAD $uri, undef, content => "This is file content";
+	 my $res = UPLOAD $uri, undef, content =&gt "This is file content";
 
        The name of the file sent to the server will simply be "b". Note that
        in this case, you cannot pass other POST arguments to "UPLOAD()" --
@@ -355,7 +357,7 @@ FUNCTIONS
 
        UPLOAD_BODY
 
-       A shortcut function for "UPLOAD($uri, @params)->content".
+       A shortcut function for "UPLOAD($uri, @params)-&gtcontent".
 
        UPLOAD_BODY_ASSERT
 
@@ -412,7 +414,7 @@ FUNCTIONS
        your preferred scheme into an optional second param. For example:
 
 	 $module = 'MyTestModule::TestHandler';
-	 $url = Apache::TestRequest::module2url($module, {scheme => 'https'});
+	 $url = Apache::TestRequest::module2url($module, {scheme =&gt 'https'});
 
        returns:
 
@@ -421,7 +423,7 @@ FUNCTIONS
        You may also override the default path with a path of your own:
 
 	 $module = 'MyTestModule::TestHandler';
-	 $url = Apache::TestRequest::module2url($module, {path => '/foo'});
+	 $url = Apache::TestRequest::module2url($module, {path =&gt '/foo'});
 
        returns:
 
@@ -455,13 +457,13 @@ AUTHOR
        Doug MacEachern with contributions from Geoffrey Young, Philippe M.
        Chiasson, Stas Bekman and others. Documentation by David Wheeler.
 
-       Questions can be asked at the test-dev <at> httpd.apache.org list. For
+       Questions can be asked at the test-dev &ltat&gt httpd.apache.org list. For
        more information see: http://httpd.apache.org/test/ and
        http://perl.apache.org/docs/general/testing/testing.html.
 
 
 
 perl v5.12.4			  2011-02-02		Apache::TestRequest(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

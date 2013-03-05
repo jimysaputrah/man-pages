@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="NetAddr::IP::Util provides a suite of tools for manipulating and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>NetAddr::IP::Util -- IPv4/6 and 128 bit number utilities</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Util(3) 	      User Contributed Perl Documentation	       Util(3)
 
 
@@ -54,23 +56,23 @@ SYNOPSIS
 
 	 use NetAddr::IP::Util qw(:all :inet :ipv4 :ipv6 :math)
 
-	 :inet	 =>    inet_aton, inet_ntoa, ipv6_aton
+	 :inet	 =&gt    inet_aton, inet_ntoa, ipv6_aton
 		       ipv6_ntoa, ipv6_n2x, ipv6_n2d,
 		       inet_any2n, inet_n2dx, inet_n2ad,
 		       inet_pton, inet_ntop, inet_4map6,
 		       ipv4to6, mask4to6, ipanyto6, packzeros
 		       maskanyto6, ipv6to4, naip_gethostbyname
 
-	 :ipv4	 =>    inet_aton, inet_ntoa
+	 :ipv4	 =&gt    inet_aton, inet_ntoa
 
-	 :ipv6	 =>    ipv6_aton, ipv6_ntoa, ipv6_n2x,
+	 :ipv6	 =&gt    ipv6_aton, ipv6_ntoa, ipv6_n2x,
 		       ipv6_n2d, inet_any2n, inet_n2dx,
 		       inet_n2ad, inet_pton, inet_ntop,
 		       inet_4map6, ipv4to6, mask4to6,
 		       ipanyto6, maskanyto6, ipv6to4,
 		       packzeros, naip_gethostbyname
 
-	 :math	 =>    hasbits, isIPv4, isNewIPv4, isAnyIPv4,
+	 :math	 =&gt    hasbits, isIPv4, isNewIPv4, isAnyIPv4,
 		       addconst, add128, sub128, notcontiguous,
 		       bin2bcd, bcd2bin, shiftleft
 
@@ -386,8 +388,8 @@ DESCRIPTION
 	   one's complement of ARG2 +1 to the ARG1. It is logically NOT
 	   borrow.
 
-		   i.e.    if ARG1 >= ARG2 then carry = 1
-		   or	   if ARG1  < ARG2 then carry = 0
+		   i.e.    if ARG1 &gt= ARG2 then carry = 1
+		   or	   if ARG1  &lt ARG2 then carry = 0
 
        o   ($spurious,$cidr) = notcontiguous($mask128);
 
@@ -510,18 +512,18 @@ EXAMPLES
 
 	 ... elsewhere
 	   $nip = {
-	       addr    => $vecip,
-	       mask    => $mask,
-	       bits    => $bits,
+	       addr    =&gt $vecip,
+	       mask    =&gt $mask,
+	       bits    =&gt $bits,
 	   };
 
 	 # return network and broadcast addresses from IP and Mask
 	 #
 	 sub netbroad {
 	   my($nip) = shift;
-	   my $notmask = ~ $nip->{mask};
-	   my $bcast   = $nip->{addr} | $notmask;
-	   my $network = $nip->{addr} & $nip->{mask};
+	   my $notmask = ~ $nip-&gt{mask};
+	   my $bcast   = $nip-&gt{addr} | $notmask;
+	   my $network = $nip-&gt{addr} & $nip-&gt{mask};
 	   return ($network, $broadcast);
 	 }
 
@@ -529,9 +531,9 @@ EXAMPLES
 	 #
 	 sub within {
 	   my($nip,$net) = @_;
-	   my $addr = $nip->{addr}
+	   my $addr = $nip-&gt{addr}
 	   my($nw,$bc) = netbroad($net);
-	 # arg1 >= arg2, sub128 returns true
+	 # arg1 &gt= arg2, sub128 returns true
 	   return (sub128($addr,$nw) && sub128($bc,$addr))
 	       ? 1 : 0;
 	 }
@@ -543,17 +545,17 @@ EXAMPLES
 	 #
 	 sub addwrap {
 	   my($nip,$const) = @_;
-	   my $addr    = $nip->{addr};
-	   my $mask    = $nip->{mask};
-	   my $bits    = $nip->{bits};
+	   my $addr    = $nip-&gt{addr};
+	   my $mask    = $nip-&gt{mask};
+	   my $bits    = $nip-&gt{bits};
 	   my $notmask = ~ $mask;
 	   my $hibits  = $addr & $mask;
 	   $addr = addconst($addr,$const);
 	   my $wraponly = $addr & $notmask;
 	   my $newip = {
-	       addr    => $hibits | $wraponly,
-	       mask    => $mask,
-	       bits    => $bits,
+	       addr    =&gt $hibits | $wraponly,
+	       mask    =&gt $mask,
+	       bits    =&gt $bits,
 	   };
 	   # bless $newip as appropriate
 	   return $newip;
@@ -569,9 +571,9 @@ EXAMPLES
 	   ...
 	   my $lastip = $ip-copy();
 	   $ip++;
-	   if ($ip < $lastip) {        # host part wrapped?
+	   if ($ip &lt $lastip) {        # host part wrapped?
 	 # discard carry
-	     (undef, $ip->{addr} = addconst($ip->{addr}, $nextnet);
+	     (undef, $ip-&gt{addr} = addconst($ip-&gt{addr}, $nextnet);
 	   }
 	   next LOOP;
 	 }
@@ -611,10 +613,10 @@ EXPORT_OK
 	       havegethostbyname2
 
 AUTHOR
-       Michael Robinton <michael@bizsystems.com>
+       Michael Robinton &ltmichael@bizsystems.com&gt
 
 COPYRIGHT
-       Copyright 2003 - 2011, Michael Robinton <michael@bizsystems.com>
+       Copyright 2003 - 2011, Michael Robinton &ltmichael@bizsystems.com&gt
 
        All rights reserved.
 
@@ -649,7 +651,7 @@ COPYRIGHT
 	       http://www.gnu.org/copyleft/gpl.html.
 
 AUTHOR
-       Michael Robinton <michael@bizsystems.com>
+       Michael Robinton &ltmichael@bizsystems.com&gt
 
 SEE ALSO
        NetAddr::IP(3), NetAddr::IP::Lite(3), NetAddr::IP::InetBase(3)
@@ -657,6 +659,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-10-24			       Util(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

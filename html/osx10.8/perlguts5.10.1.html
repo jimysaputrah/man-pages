@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document attempts to describe how to use the Perl API, as well as..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlguts - Introduction to the Perl API</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLGUTS(1)	       Perl Programmers Reference Guide 	   PERLGUTS(1)
 
 
@@ -469,7 +471,7 @@ Variables
 	   hash = 0;
 	   while (klen--)
 	       hash = (hash * 33) + *key++;
-	   hash = hash + (hash >> 5);		       /* after 5.6 */
+	   hash = hash + (hash &gt&gt 5);		       /* after 5.6 */
 
        The last step was added in version 5.6 to improve distribution of lower
        bits in the resulting hash value.
@@ -698,14 +700,14 @@ Variables
        GV_ADDMULTI
 	   Marks the variable as multiply defined, thus preventing the:
 
-	     Name <varname> used only once: possible typo
+	     Name &ltvarname&gt used only once: possible typo
 
 	   warning.
 
        GV_ADDWARN
 	   Issues the warning:
 
-	     Had to create <varname> unexpectedly
+	     Had to create &ltvarname&gt unexpectedly
 
 	   if the variable did not exist before the function was called.
 
@@ -1055,8 +1057,8 @@ Variables
 	   I  PERL_MAGIC_isa		vtbl_isa	@ISA array
 	   i  PERL_MAGIC_isaelem	vtbl_isaelem	@ISA array element
 	   k  PERL_MAGIC_nkeys		vtbl_nkeys	scalar(keys()) lvalue
-	   L  PERL_MAGIC_dbfile 	(none)		Debugger %_<filename
-	   l  PERL_MAGIC_dbline 	vtbl_dbline	Debugger %_<filename element
+	   L  PERL_MAGIC_dbfile 	(none)		Debugger %_&ltfilename
+	   l  PERL_MAGIC_dbline 	vtbl_dbline	Debugger %_&ltfilename element
 	   o  PERL_MAGIC_collxfrm	vtbl_collxfrm	Locale collate transformation
 	   P  PERL_MAGIC_tied		vtbl_pack	Tied array or hash
 	   p  PERL_MAGIC_tiedelem	vtbl_packelem	Tied array or hash element
@@ -1075,7 +1077,7 @@ Variables
 							vivification
 	   #  PERL_MAGIC_arylen 	vtbl_arylen	Array length ($#ary)
 	   .  PERL_MAGIC_pos		vtbl_pos	pos() lvalue
-	   <  PERL_MAGIC_backref	vtbl_backref	back pointer to a weak ref
+	   &lt  PERL_MAGIC_backref	vtbl_backref	back pointer to a weak ref
 	   ~  PERL_MAGIC_ext		(none)		Available for use by extensions
 	   :  PERL_MAGIC_symtab 	(none)		hash used as symbol table
 	   %  PERL_MAGIC_rhash		(none)		hash used as restricted hash
@@ -1652,7 +1654,7 @@ Compiled code
        which shows the order of execution of the nodes.  In our simplified
        example above it looks like:
 
-	    $b ---> $c ---> + ---> $a ---> assign-to
+	    $b ---&gt $c ---&gt + ---&gt $a ---&gt assign-to
 
        But with the actual compile tree for "$a = $b + $c" it is different:
        some nodes optimized away.  As a corollary, though the actual tree
@@ -1665,25 +1667,25 @@ Compiled code
        compiled tree by specifying "-Dx" on the Perl command line.  The output
        takes several lines per node, and for "$b+$c" it looks like this:
 
-	   5	       TYPE = add  ===> 6
+	   5	       TYPE = add  ===&gt 6
 		       TARG = 1
 		       FLAGS = (SCALAR,KIDS)
 		       {
-			   TYPE = null	===> (4)
+			   TYPE = null	===&gt (4)
 			     (was rv2sv)
 			   FLAGS = (SCALAR,KIDS)
 			   {
-	   3		       TYPE = gvsv  ===> 4
+	   3		       TYPE = gvsv  ===&gt 4
 			       FLAGS = (SCALAR)
 			       GV = main::b
 			   }
 		       }
 		       {
-			   TYPE = null	===> (5)
+			   TYPE = null	===&gt (5)
 			     (was rv2sv)
 			   FLAGS = (SCALAR,KIDS)
 			   {
-	   4		       TYPE = gvsv  ===> 5
+	   4		       TYPE = gvsv  ===&gt 5
 			       FLAGS = (SCALAR)
 			       GV = main::c
 			   }
@@ -1700,7 +1702,7 @@ Compiled code
 		       |       |
 		      gvsv    gvsv
 
-       The execution order is indicated by "===>" marks, thus it is "3 4 5 6"
+       The execution order is indicated by "===&gt" marks, thus it is "3 4 5 6"
        (node 6 is not included into above listing), i.e., "gvsv gvsv add
        whatever".
 
@@ -2289,7 +2291,7 @@ Internal Functions
 	=for apidoc sv_setiv
 
 	Copies an integer into the given SV.  Does not handle 'set' magic.  See
-	C<sv_setiv_mg>.
+	C&ltsv_setiv_mg&gt.
 
 	=cut
 	*/
@@ -2542,7 +2544,7 @@ Custom Operators
        You should also "register" your op with the Perl interpreter so that it
        can produce sensible error and warning messages. Since it is possible
        to have multiple custom ops within the one "logical" op type
-       "OP_CUSTOM", Perl uses the value of "o->op_ppaddr" as a key into the
+       "OP_CUSTOM", Perl uses the value of "o-&gtop_ppaddr" as a key into the
        "PL_custom_op_descs" and "PL_custom_op_names" hashes. This means you
        need to enter a name and description for your op at the appropriate
        place in the "PL_custom_op_names" and "PL_custom_op_descs" hashes.
@@ -2552,8 +2554,8 @@ Custom Operators
 
 AUTHORS
        Until May 1997, this document was maintained by Jeff Okamoto
-       <okamoto@corp.hp.com>.  It is now maintained as part of Perl itself by
-       the Perl 5 Porters <perl5-porters@perl.org>.
+       &ltokamoto@corp.hp.com&gt.  It is now maintained as part of Perl itself by
+       the Perl 5 Porters &ltperl5-porters@perl.org&gt.
 
        With lots of help and suggestions from Dean Roehrich, Malcolm Beattie,
        Andreas Koenig, Paul Hudson, Ilya Zakharevich, Paul Marquess, Neil
@@ -2566,6 +2568,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-05-10			   PERLGUTS(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

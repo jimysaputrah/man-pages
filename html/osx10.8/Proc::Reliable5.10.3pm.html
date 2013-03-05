@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="A new process object is created by..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Proc::Reliable -- Run external processes reliably with many options.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Reliable(3)	      User Contributed Perl Documentation	   Reliable(3)
 
 
@@ -20,15 +22,15 @@ SYNOPSIS
 
        Create a new process object
 
-	  $myproc = Proc::Reliable->new();
+	  $myproc = Proc::Reliable-&gtnew();
 
        Run a subprocess and collect its output
 
-	  $output = $myproc->run("/bin/ls -l");
+	  $output = $myproc-&gtrun("/bin/ls -l");
 
        Check for problems
 
-	  if($myproc->status()) {
+	  if($myproc-&gtstatus()) {
 	    print("problem!\n");
 	  }
 
@@ -36,50 +38,50 @@ SYNOPSIS
        send the subprocess some data on stdin.
 
 	  $msg = "Hello World\n");
-	  $p->want_single_list(0);
-	  $stdout = $p->run("/usr/bin/fastmail - foo@bar.com", $msg);
-	  if($p->status()) {
-	    print("problem: ", $p->stderr(), "\n");
+	  $p-&gtwant_single_list(0);
+	  $stdout = $p-&gtrun("/usr/bin/fastmail - foo@bar.com", $msg);
+	  if($p-&gtstatus()) {
+	    print("problem: ", $p-&gtstderr(), "\n");
 	  }
 
        Another way to get output
 
-	  ($stdout, $stderr, $status, $msg) = $p->run("/bin/ls -l");
+	  ($stdout, $stderr, $status, $msg) = $p-&gtrun("/bin/ls -l");
 
 OPTIONS
        Run Modes
 
-	$p->run("shell-command-line");	# Launch a shell process
-	$p->run("cmdline", "data");	# Launch a shell process with stdin data
-	$p->run(["cmd", "arg1", ...]);	# Bypass shell processing of arguments
-	$p->run(sub { ... });		# Launch a perl subroutine
-	$p->run(\&subroutine);		# Launch a perl subroutine
+	$p-&gtrun("shell-command-line");	# Launch a shell process
+	$p-&gtrun("cmdline", "data");	# Launch a shell process with stdin data
+	$p-&gtrun(["cmd", "arg1", ...]);	# Bypass shell processing of arguments
+	$p-&gtrun(sub { ... });		# Launch a perl subroutine
+	$p-&gtrun(\&subroutine);		# Launch a perl subroutine
 
        Option settings below represent defaults
 
-	$p->num_tries(1);	    # execute the program only once
-	$p->time_per_try(60);	    # time per try 60 sec
-	$p->maxtime(60);	    # set overall timeout
-	$p->time_btw_tries(5);	    # time between tries 5 sec
-	$p->want_single_list();     # return STDOUT and STDERR together
-	$p->accept_no_error();	    # Re-try if any STDERR output
-	$p->pattern_stdout($pat);   # require STDOUT to match regex $pat
-	$p->pattern_stderr($pat);   # require STDERR to match regex $pat
-	$p->allow_shell(1);	    # allowed to use shell for operation
-	$p->child_exit_time(1.0);   # timeout for child to exit after it closes stdout
-	$p->sigterm_exit_time(0.5); # timeout for child to exit after sigterm
-	$p->sigkill_exit_time(0.5); # timeout for child to exit after sigkill
-	$p->input_chunking(0);	    # feed stdin data line-by-line to subprocess
-	$p->stdin_error_ok(0);	    # ok if child exits without reading all stdin
-	$p->stdout_cb(undef);	    # callback function for line-by-line stdout
-	$p->stderr_cb(undef);	    # callback function for line-by-line stderr
+	$p-&gtnum_tries(1);	    # execute the program only once
+	$p-&gttime_per_try(60);	    # time per try 60 sec
+	$p-&gtmaxtime(60);	    # set overall timeout
+	$p-&gttime_btw_tries(5);	    # time between tries 5 sec
+	$p-&gtwant_single_list();     # return STDOUT and STDERR together
+	$p-&gtaccept_no_error();	    # Re-try if any STDERR output
+	$p-&gtpattern_stdout($pat);   # require STDOUT to match regex $pat
+	$p-&gtpattern_stderr($pat);   # require STDERR to match regex $pat
+	$p-&gtallow_shell(1);	    # allowed to use shell for operation
+	$p-&gtchild_exit_time(1.0);   # timeout for child to exit after it closes stdout
+	$p-&gtsigterm_exit_time(0.5); # timeout for child to exit after sigterm
+	$p-&gtsigkill_exit_time(0.5); # timeout for child to exit after sigkill
+	$p-&gtinput_chunking(0);	    # feed stdin data line-by-line to subprocess
+	$p-&gtstdin_error_ok(0);	    # ok if child exits without reading all stdin
+	$p-&gtstdout_cb(undef);	    # callback function for line-by-line stdout
+	$p-&gtstderr_cb(undef);	    # callback function for line-by-line stderr
 
        Getting output
 
-	$out = $p->stdout();	    # stdout produced by last run()
-	$err = $p->stderr();	    # stderr produced by last run()
-	$stat = $p->status();	    # exit code produced by last run()
-	$msg = $p->msg();	    # module messages produced by last run()
+	$out = $p-&gtstdout();	    # stdout produced by last run()
+	$err = $p-&gtstderr();	    # stderr produced by last run()
+	$stat = $p-&gtstatus();	    # exit code produced by last run()
+	$msg = $p-&gtmsg();	    # module messages produced by last run()
 
        Debug
 
@@ -101,23 +103,23 @@ OVERVIEW
 DESCRIPTION
        A new process object is created by
 
-	  $myproc = Proc::Reliable->new();
+	  $myproc = Proc::Reliable-&gtnew();
 
        The default will run a subprocess only once with a 60-second timeout.
        Either shell-like command lines or references to perl subroutines can
        be specified for launching a process in background.  A simple list
        process, for example, can be started via the shell as
 
-	  $out = $myproc->run("ls");
+	  $out = $myproc-&gtrun("ls");
 
        To separate stdout, stderr, and exit status:
 
-	  ($out, $err, $status, $msg) = $myproc->run("ls");
+	  ($out, $err, $status, $msg) = $myproc-&gtrun("ls");
 
        The output data is also stored within the $myproc object for later
        retrieval.  You can also run a perl subroutine in a subprocess, with
 
-	  $myproc->run(sub { return <*>; });
+	  $myproc-&gtrun(sub { return &lt*&gt; });
 
        The run Method will try to run the named process.  If the process times
        out (after time_per_try seconds) or has an error defined as
@@ -130,9 +132,9 @@ DESCRIPTION
        retry.  One common shorthand is to have the run method retry if there
        is any return from STDERR.
 
-	  $myproc->accept_no_error();	 # Re-try if any STDERR
-	  $myproc->pattern_stdout($pat); # require STDOUT to match regex $pat
-	  $myproc->pattern_stderr($pat); # require STDERR to match regex $pat
+	  $myproc-&gtaccept_no_error();	 # Re-try if any STDERR
+	  $myproc-&gtpattern_stdout($pat); # require STDOUT to match regex $pat
+	  $myproc-&gtpattern_stderr($pat); # require STDERR to match regex $pat
 
        Subprocess completion is detected when the process closes all
        filehandles.  The process must then exit before child_exit_time
@@ -151,17 +153,17 @@ METHODS
        new (Constructor)
 	   Create a new instance of this class by writing either
 
-	       $proc = new Proc::Reliable;   or   $proc = Proc::Reliable->new();
+	       $proc = new Proc::Reliable;   or   $proc = Proc::Reliable-&gtnew();
 
 	   The new method accepts any valid configuration options:
 
-	       $proc = Proc::Reliable->new('maxtime' => 200, 'num_tries' => 3);
+	       $proc = Proc::Reliable-&gtnew('maxtime' =&gt 200, 'num_tries' =&gt 3);
 
        run Run a new process and collect the standard output and standard
 	   error via separate pipes.
 
-	     $out = $proc->run("program-name");
-	    ($out, $err, $status, $msg) = $proc->run("program-name");
+	     $out = $proc-&gtrun("program-name");
+	    ($out, $err, $status, $msg) = $proc-&gtrun("program-name");
 
 	   by default with a single return value, stdout and stderr are
 	   combined to a single stream and returned.  with 4 return values,
@@ -171,14 +173,14 @@ METHODS
 	   to be combined, and want_single_list(0) to force them separated.
 	   The results from run() are stored as member data also:
 
-	     $proc->want_single_list(0);
-	     $proc->run("program");
-	     if($proc->status) {
-	       print($proc->stderr);
+	     $proc-&gtwant_single_list(0);
+	     $proc-&gtrun("program");
+	     if($proc-&gtstatus) {
+	       print($proc-&gtstderr);
 	       exit;
 	     }
 	     else {
-	       print($proc->stdout);
+	       print($proc-&gtstdout);
 	     }
 
 	   Program exit status is returned in the same format as exec(): bits
@@ -193,7 +195,7 @@ METHODS
 	   program data on stdin via a second argument to run():
 
 	    $myinput = "hello\ntest\n";
-	    $output = $proc->run("program-name", $myinput);
+	    $output = $proc-&gtrun("program-name", $myinput);
 
 	   The first option to run() supports three forms: 1) string
 	   containing command string to execute.  this incurs shell parsing.
@@ -210,11 +212,11 @@ METHODS
 	   "eval" except with timeout, retries, etc.).	Simply provide the
 	   function reference like
 
-	    $output = $proc->run(\&perl_function);
+	    $output = $proc-&gtrun(\&perl_function);
 
 	   or supply an unnamed subroutine:
 
-	    $output = $proc->run( sub { sleep(1) } );
+	    $output = $proc-&gtrun( sub { sleep(1) } );
 
 	   The run Method returns after the the function finishes, one way or
 	   another.
@@ -288,9 +290,9 @@ REQUIREMENTS
        I recommend using at least perl 5.003.
 
 AUTHORS
-       Proc::Reliable by Dan Goldwater <dgold at zblob dot com>
+       Proc::Reliable by Dan Goldwater &ltdgold at zblob dot com&gt
 
-       Based on Proc::Short, written by John Hanju Kim <jhkim@fnal.gov>.
+       Based on Proc::Short, written by John Hanju Kim &ltjhkim@fnal.gov&gt.
 
        Contributions by Stephen Cope and Jason Robertson.
 
@@ -311,6 +313,6 @@ POD ERRORS
 
 
 perl v5.10.1			  2003-11-23			   Reliable(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

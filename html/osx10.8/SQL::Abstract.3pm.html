@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module was inspired by the excellent DBIx::Abstract.  However, in..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>SQL::Abstract - Generate SQL from Perl data structures</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 SQL::Abstract(3)      User Contributed Perl Documentation     SQL::Abstract(3)
 
 
@@ -18,26 +20,26 @@ NAME
 SYNOPSIS
 	   use SQL::Abstract;
 
-	   my $sql = SQL::Abstract->new;
+	   my $sql = SQL::Abstract-&gtnew;
 
-	   my($stmt, @bind) = $sql->select($table, \@fields, \%where, \@order);
+	   my($stmt, @bind) = $sql-&gtselect($table, \@fields, \%where, \@order);
 
-	   my($stmt, @bind) = $sql->insert($table, \%fieldvals || \@values);
+	   my($stmt, @bind) = $sql-&gtinsert($table, \%fieldvals || \@values);
 
-	   my($stmt, @bind) = $sql->update($table, \%fieldvals, \%where);
+	   my($stmt, @bind) = $sql-&gtupdate($table, \%fieldvals, \%where);
 
-	   my($stmt, @bind) = $sql->delete($table, \%where);
+	   my($stmt, @bind) = $sql-&gtdelete($table, \%where);
 
 	   # Then, use these in your DBI statements
-	   my $sth = $dbh->prepare($stmt);
-	   $sth->execute(@bind);
+	   my $sth = $dbh-&gtprepare($stmt);
+	   $sth-&gtexecute(@bind);
 
 	   # Just generate the WHERE clause
-	   my($stmt, @bind) = $sql->where(\%where, \@order);
+	   my($stmt, @bind) = $sql-&gtwhere(\%where, \@order);
 
 	   # Return values in the same order, for hashed queries
 	   # See PERFORMANCE section for more details
-	   my @bind = $sql->values(\%fieldvals);
+	   my @bind = $sql-&gtvalues(\%fieldvals);
 
 DESCRIPTION
        This module was inspired by the excellent DBIx::Abstract.  However, in
@@ -58,16 +60,16 @@ DESCRIPTION
        "key=value" pairs:
 
 	   my %data = (
-	       name => 'Jimbo Bobson',
-	       phone => '123-456-7890',
-	       address => '42 Sister Lane',
-	       city => 'St. Louis',
-	       state => 'Louisiana',
+	       name =&gt 'Jimbo Bobson',
+	       phone =&gt '123-456-7890',
+	       address =&gt '42 Sister Lane',
+	       city =&gt 'St. Louis',
+	       state =&gt 'Louisiana',
 	   );
 
        The SQL can then be generated with this:
 
-	   my($stmt, @bind) = $sql->insert('people', \%data);
+	   my($stmt, @bind) = $sql-&gtinsert('people', \%data);
 
        Which would give you something like this:
 
@@ -79,21 +81,21 @@ DESCRIPTION
 
        These are then used directly in your DBI code:
 
-	   my $sth = $dbh->prepare($stmt);
-	   $sth->execute(@bind);
+	   my $sth = $dbh-&gtprepare($stmt);
+	   $sth-&gtexecute(@bind);
 
    Inserting and Updating Arrays
        If your database has array types (like for example Postgres), activate
-       the special option "array_datatypes => 1" when creating the
+       the special option "array_datatypes =&gt 1" when creating the
        "SQL::Abstract" object.	Then you may use an arrayref to insert and
        update database array types:
 
-	   my $sql = SQL::Abstract->new(array_datatypes => 1);
+	   my $sql = SQL::Abstract-&gtnew(array_datatypes =&gt 1);
 	   my %data = (
-	       planets => [qw/Mercury Venus Earth Mars/]
+	       planets =&gt [qw/Mercury Venus Earth Mars/]
 	   );
 
-	   my($stmt, @bind) = $sql->insert('solar_system', \%data);
+	   my($stmt, @bind) = $sql-&gtinsert('solar_system', \%data);
 
        This results in:
 
@@ -108,15 +110,15 @@ DESCRIPTION
        value, you can say something like this:
 
 	   my %data = (
-	       name => 'Bill',
-	       date_entered => \["to_date(?,'MM/DD/YYYY')", "03/02/2003"],
+	       name =&gt 'Bill',
+	       date_entered =&gt \["to_date(?,'MM/DD/YYYY')", "03/02/2003"],
 	   );
 
        The first value in the array is the actual SQL. Any other values are
        optional and would be included in the bind values array. This gives
        you:
 
-	   my($stmt, @bind) = $sql->insert('people', \%data);
+	   my($stmt, @bind) = $sql-&gtinsert('people', \%data);
 
 	   $stmt = "INSERT INTO people (name, date_entered)
 		       VALUES (?, to_date(?,'MM/DD/YYYY'))";
@@ -124,7 +126,7 @@ DESCRIPTION
 
        An UPDATE is just as easy, all you change is the name of the function:
 
-	   my($stmt, @bind) = $sql->update('people', \%data);
+	   my($stmt, @bind) = $sql-&gtupdate('people', \%data);
 
        Notice that your %data isn't touched; the module will generate the
        appropriately quirky SQL for you automatically. Usually you'll want to
@@ -139,12 +141,12 @@ DESCRIPTION
        criteria:
 
 	   my %where = (
-	      requestor => 'inna',
-	      worker => ['nwiger', 'rcwe', 'sfz'],
-	      status => { '!=', 'completed' }
+	      requestor =&gt 'inna',
+	      worker =&gt ['nwiger', 'rcwe', 'sfz'],
+	      status =&gt { '!=', 'completed' }
 	   );
 
-	   my($stmt, @bind) = $sql->select('tickets', '*', \%where);
+	   my($stmt, @bind) = $sql-&gtselect('tickets', '*', \%where);
 
        The above would give you something like this:
 
@@ -155,8 +157,8 @@ DESCRIPTION
 
        Which you could then use in DBI code like so:
 
-	   my $sth = $dbh->prepare($stmt);
-	   $sth->execute(@bind);
+	   my $sth = $dbh-&gtprepare($stmt);
+	   $sth-&gtexecute(@bind);
 
        Easy, eh?
 
@@ -166,7 +168,7 @@ FUNCTIONS
        order to each function (table, then fields, then a where clause) to try
        and simplify things.
 
-   new(option => 'value')
+   new(option =&gt 'value')
        The "new()" function takes a list of options and values, and returns a
        new SQL::Abstract object which can then be used to generate SQL through
        the methods below. The options accepted are:
@@ -182,7 +184,7 @@ FUNCTIONS
        cmp This determines what the default comparison operator is. By default
 	   it is "=", meaning that a hash like this:
 
-	       %where = (name => 'nwiger', email => 'nate@wiger.org');
+	       %where = (name =&gt 'nwiger', email =&gt 'nate@wiger.org');
 
 	   Will generate SQL like this:
 
@@ -209,28 +211,28 @@ FUNCTIONS
 	   array of the form:
 
 	       @where = (
-		   event_date => {'>=', '2/13/99'},
-		   event_date => {'<=', '4/24/03'},
+		   event_date =&gt {'&gt=', '2/13/99'},
+		   event_date =&gt {'&lt=', '4/24/03'},
 	       );
 
 	   will generate SQL like this:
 
-	       WHERE event_date >= '2/13/99' OR event_date <= '4/24/03'
+	       WHERE event_date &gt= '2/13/99' OR event_date &lt= '4/24/03'
 
 	   This is probably not what you want given this query, though (look
 	   at the dates). To change the "OR" to an "AND", simply specify:
 
-	       my $sql = SQL::Abstract->new(logic => 'and');
+	       my $sql = SQL::Abstract-&gtnew(logic =&gt 'and');
 
 	   Which will change the above "WHERE" to:
 
-	       WHERE event_date >= '2/13/99' AND event_date <= '4/24/03'
+	       WHERE event_date &gt= '2/13/99' AND event_date &lt= '4/24/03'
 
 	   The logic can also be changed locally by inserting a modifier in
 	   front of an arrayref :
 
-	       @where = (-and => [event_date => {'>=', '2/13/99'},
-				  event_date => {'<=', '4/24/03'} ]);
+	       @where = (-and =&gt [event_date =&gt {'&gt=', '2/13/99'},
+				  event_date =&gt {'&lt=', '4/24/03'} ]);
 
 	   See the "WHERE CLAUSES" section for explanations.
 
@@ -240,8 +242,8 @@ FUNCTIONS
 	   argument of "upper" or "lower", so that the SQL will have the
 	   effect of case-insensitive "searches". For example, this:
 
-	       $sql = SQL::Abstract->new(convert => 'upper');
-	       %where = (keywords => 'MaKe iT CAse inSeNSItive');
+	       $sql = SQL::Abstract-&gtnew(convert =&gt 'upper');
+	       %where = (keywords =&gt 'MaKe iT CAse inSeNSItive');
 
 	   Will turn out the following SQL:
 
@@ -257,8 +259,8 @@ FUNCTIONS
 	   can't just bind values using DBI's "execute()" for Oracle "CLOB" or
 	   "BLOB" fields.  Instead, you have to use "bind_param()":
 
-	       $sth->bind_param(1, 'reg data');
-	       $sth->bind_param(2, $lots, {ora_type => ORA_CLOB});
+	       $sth-&gtbind_param(1, 'reg data');
+	       $sth-&gtbind_param(2, $lots, {ora_type =&gt ORA_CLOB});
 
 	   The problem is, SQL::Abstract will normally just return a @bind
 	   array, which loses track of which field each slot refers to. Fear
@@ -269,8 +271,8 @@ FUNCTIONS
 	   "columns". If you specify "columns", you will get an array that
 	   looks like this:
 
-	       my $sql = SQL::Abstract->new(bindtype => 'columns');
-	       my($stmt, @bind) = $sql->insert(...);
+	       my $sql = SQL::Abstract-&gtnew(bindtype =&gt 'columns');
+	       my($stmt, @bind) = $sql-&gtinsert(...);
 
 	       @bind = (
 		   [ 'column1', 'value1' ],
@@ -281,20 +283,20 @@ FUNCTIONS
 	   You can then iterate through this manually, using DBI's
 	   "bind_param()".
 
-	       $sth->prepare($stmt);
+	       $sth-&gtprepare($stmt);
 	       my $i = 1;
 	       for (@bind) {
 		   my($col, $data) = @$_;
 		   if ($col eq 'details' || $col eq 'comments') {
-		       $sth->bind_param($i, $data, {ora_type => ORA_CLOB});
+		       $sth-&gtbind_param($i, $data, {ora_type =&gt ORA_CLOB});
 		   } elsif ($col eq 'image') {
-		       $sth->bind_param($i, $data, {ora_type => ORA_BLOB});
+		       $sth-&gtbind_param($i, $data, {ora_type =&gt ORA_BLOB});
 		   } else {
-		       $sth->bind_param($i, $data);
+		       $sth-&gtbind_param($i, $data);
 		   }
 		   $i++;
 	       }
-	       $sth->execute;	   # execute without @bind now
+	       $sth-&gtexecute;	   # execute without @bind now
 
 	   Now, why would you still use SQL::Abstract if you have to do this
 	   crap?  Basically, the advantage is still that you don't have to
@@ -339,7 +341,7 @@ FUNCTIONS
 	   input e.g.:
 
 	     my %condition_as_column_value_pairs = get_values_from_user();
-	     $sqla->select( ... , \%condition_as_column_value_pairs );
+	     $sqla-&gtselect( ... , \%condition_as_column_value_pairs );
 
 	   If the expression matches an exception is thrown. Note that literal
 	   SQL supplied via "\'...'" or "\['...']" is not checked in any way.
@@ -441,8 +443,8 @@ FUNCTIONS
        This returns arbitrarily generated SQL. It's a really basic shortcut.
        It will return two different things, depending on return context:
 
-	   my($stmt, @bind) = $sql->generate('create table', \$table, \@fields);
-	   my $stmt_and_val = $sql->generate('create table', \$table, \@fields);
+	   my($stmt, @bind) = $sql-&gtgenerate('create table', \$table, \@fields);
+	   my $stmt_and_val = $sql-&gtgenerate('create table', \$table, \@fields);
 
        These would return the following:
 
@@ -459,7 +461,7 @@ FUNCTIONS
 
        By the same token:
 
-	   $sql->generate('alter session', { nls_date_format => 'MM/YY' });
+	   $sql-&gtgenerate('alter session', { nls_date_format =&gt 'MM/YY' });
 
        Might give you:
 
@@ -477,7 +479,7 @@ WHERE CLAUSES
        The easiest way to explain is to show lots of examples. After each
        %where hash shown, it is assumed you used:
 
-	   my($stmt, @bind) = $sql->where(\%where);
+	   my($stmt, @bind) = $sql-&gtwhere(\%where);
 
        However, note that the %where hash can be used directly in any of the
        other functions as well, as described above.
@@ -486,8 +488,8 @@ WHERE CLAUSES
        So, let's get started. To begin, a simple hash:
 
 	   my %where  = (
-	       user   => 'nwiger',
-	       status => 'completed'
+	       user   =&gt 'nwiger',
+	       status =&gt 'completed'
 	   );
 
        Is converted to SQL "key = val" statements:
@@ -499,8 +501,8 @@ WHERE CLAUSES
        can be in. To do this, simply specify a list inside of an arrayref:
 
 	   my %where  = (
-	       user   => 'nwiger',
-	       status => ['assigned', 'in-progress', 'pending'];
+	       user   =&gt 'nwiger',
+	       status =&gt ['assigned', 'in-progress', 'pending'];
 	   );
 
        This simple code will create the following:
@@ -512,11 +514,11 @@ WHERE CLAUSES
        false and will generate 0=1.
 
    Tests for NULL values
-       If the value part is "undef" then this is converted to SQL <IS NULL>
+       If the value part is "undef" then this is converted to SQL &ltIS NULL&gt
 
 	   my %where  = (
-	       user   => 'nwiger',
-	       status => undef,
+	       user   =&gt 'nwiger',
+	       status =&gt undef,
 	   );
 
        becomes:
@@ -529,8 +531,8 @@ WHERE CLAUSES
        comparison, you can use a hashref for a given column:
 
 	   my %where  = (
-	       user   => 'nwiger',
-	       status => { '!=', 'completed' }
+	       user   =&gt 'nwiger',
+	       status =&gt { '!=', 'completed' }
 	   );
 
        Which would generate:
@@ -541,7 +543,7 @@ WHERE CLAUSES
        To test against multiple values, just enclose the values in an
        arrayref:
 
-	   status => { '=', ['assigned', 'in-progress', 'pending'] };
+	   status =&gt { '=', ['assigned', 'in-progress', 'pending'] };
 
        Which would give you:
 
@@ -551,8 +553,8 @@ WHERE CLAUSES
        expanded into an "AND" of its elements:
 
 	   my %where  = (
-	       user   => 'nwiger',
-	       status => { '!=', 'completed', -not_like => 'pending%' }
+	       user   =&gt 'nwiger',
+	       status =&gt { '!=', 'completed', -not_like =&gt 'pending%' }
 	   );
 
 	   # Or more dynamically, like from a form
@@ -566,9 +568,9 @@ WHERE CLAUSES
 
        To get an OR instead, you can combine it with the arrayref idea:
 
-	   my %where => (
-		user => 'nwiger',
-		priority => [ {'=', 2}, {'!=', 1} ]
+	   my %where =&gt (
+		user =&gt 'nwiger',
+		priority =&gt [ {'=', 2}, {'!=', 1} ]
 	   );
 
        Which would generate:
@@ -580,13 +582,13 @@ WHERE CLAUSES
        use a scalar reference or array reference as the value:
 
 	   my %where  = (
-	       date_entered => { '>' => \["to_date(?, 'MM/DD/YYYY')", "11/26/2008"] },
-	       date_expires => { '<' => \"now()" }
+	       date_entered =&gt { '&gt' =&gt \["to_date(?, 'MM/DD/YYYY')", "11/26/2008"] },
+	       date_expires =&gt { '&lt' =&gt \"now()" }
 	   );
 
        Which would generate:
 
-	   $stmt = "WHERE date_entered > "to_date(?, 'MM/DD/YYYY') AND date_expires < now()";
+	   $stmt = "WHERE date_entered &gt "to_date(?, 'MM/DD/YYYY') AND date_expires &lt now()";
 	   @bind = ('11/26/2008');
 
    Logic and nesting operators
@@ -597,12 +599,12 @@ WHERE CLAUSES
 
        Because, in Perl you can't do this:
 
-	   priority => { '!=', 2, '!=', 1 }
+	   priority =&gt { '!=', 2, '!=', 1 }
 
        As the second "!=" key will obliterate the first. The solution is to
        use the special "-modifier" form inside an arrayref:
 
-	   priority => [ -and => {'!=', 2},
+	   priority =&gt [ -and =&gt {'!=', 2},
 				 {'!=', 1} ]
 
        Normally, these would be joined by "OR", but the modifier tells it to
@@ -612,26 +614,26 @@ WHERE CLAUSES
        arrayref, as an extra first element. This will NOT do what you think it
        might:
 
-	   priority => -and => [{'!=', 2}, {'!=', 1}]	# WRONG!
+	   priority =&gt -and =&gt [{'!=', 2}, {'!=', 1}]	# WRONG!
 
        Here is a quick list of equivalencies, since there is some overlap:
 
 	   # Same
-	   status => {'!=', 'completed', 'not like', 'pending%' }
-	   status => [ -and => {'!=', 'completed'}, {'not like', 'pending%'}]
+	   status =&gt {'!=', 'completed', 'not like', 'pending%' }
+	   status =&gt [ -and =&gt {'!=', 'completed'}, {'not like', 'pending%'}]
 
 	   # Same
-	   status => {'=', ['assigned', 'in-progress']}
-	   status => [ -or => {'=', 'assigned'}, {'=', 'in-progress'}]
-	   status => [ {'=', 'assigned'}, {'=', 'in-progress'} ]
+	   status =&gt {'=', ['assigned', 'in-progress']}
+	   status =&gt [ -or =&gt {'=', 'assigned'}, {'=', 'in-progress'}]
+	   status =&gt [ {'=', 'assigned'}, {'=', 'in-progress'} ]
 
    Special operators : IN, BETWEEN, etc.
        You can also use the hashref format to compare a list of fields using
        the "IN" comparison operator, by specifying the list as an arrayref:
 
 	   my %where  = (
-	       status	=> 'completed',
-	       reportid => { -in => [567, 2335, 2] }
+	       status	=&gt 'completed',
+	       reportid =&gt { -in =&gt [567, 2335, 2] }
 	   );
 
        Which would generate:
@@ -643,24 +645,24 @@ WHERE CLAUSES
        the same way.
 
        If the argument to "-in" is an empty array, 'sqlfalse' is generated (by
-       default : "1=0"). Similarly, "-not_in => []" generates 'sqltrue' (by
+       default : "1=0"). Similarly, "-not_in =&gt []" generates 'sqltrue' (by
        default : "1=1").
 
        In addition to the array you can supply a chunk of literal sql or
        literal sql with bind:
 
 	   my %where = {
-	     customer => { -in => \[
-	       'SELECT cust_id FROM cust WHERE balance > ?',
+	     customer =&gt { -in =&gt \[
+	       'SELECT cust_id FROM cust WHERE balance &gt ?',
 	       2000,
 	     ],
-	     status => { -in => \'SELECT status_codes FROM states' },
+	     status =&gt { -in =&gt \'SELECT status_codes FROM states' },
 	   };
 
        would generate:
 
 	   $stmt = "WHERE (
-		 customer IN ( SELECT cust_id FROM cust WHERE balance > ? )
+		 customer IN ( SELECT cust_id FROM cust WHERE balance &gt ? )
 	     AND status IN ( SELECT status_codes FROM states )
 	   )";
 	   @bind = ('2000');
@@ -669,9 +671,9 @@ WHERE CLAUSES
        an arrayref of two values:
 
 	   my %where  = (
-	       user   => 'nwiger',
-	       completion_date => {
-		  -not_between => ['2002-10-01', '2003-02-06']
+	       user   =&gt 'nwiger',
+	       completion_date =&gt {
+		  -not_between =&gt ['2002-10-01', '2003-02-06']
 	       }
 	   );
 
@@ -683,10 +685,10 @@ WHERE CLAUSES
        possible:
 
 	   my %where = {
-	     start0 => { -between => [ 1, 2 ] },
-	     start1 => { -between => \["? AND ?", 1, 2] },
-	     start2 => { -between => \"lower(x) AND upper(y)" },
-	     start3 => { -between => [
+	     start0 =&gt { -between =&gt [ 1, 2 ] },
+	     start1 =&gt { -between =&gt \["? AND ?", 1, 2] },
+	     start2 =&gt { -between =&gt \"lower(x) AND upper(y)" },
+	     start3 =&gt { -between =&gt [
 	       \"lower(x)",
 	       \["upper(?)", 'stuff' ],
 	     ] },
@@ -712,8 +714,8 @@ WHERE CLAUSES
        being false you would use:-
 
 	   my %where  = (
-	       -bool	   => 'is_user',
-	       -not_bool   => 'is_enabled',
+	       -bool	   =&gt 'is_user',
+	       -not_bool   =&gt 'is_enabled',
 	   );
 
        Would give you:
@@ -724,11 +726,11 @@ WHERE CLAUSES
        then you should use the and/or operators:-
 
 	   my %where  = (
-	       -and	      => [
-		   -bool      => 'one',
-		   -bool      => 'two',
-		   -bool      => 'three',
-		   -not_bool  => 'four',
+	       -and	      =&gt [
+		   -bool      =&gt 'one',
+		   -bool      =&gt 'two',
+		   -bool      =&gt 'three',
+		   -not_bool  =&gt 'four',
 	       ],
 	   );
 
@@ -743,12 +745,12 @@ WHERE CLAUSES
 
 	   my @where = (
 	       {
-		   user   => 'nwiger',
-		   status => { -like => ['pending%', 'dispatched'] },
+		   user   =&gt 'nwiger',
+		   status =&gt { -like =&gt ['pending%', 'dispatched'] },
 	       },
 	       {
-		   user   => 'robot',
-		   status => 'unassigned',
+		   user   =&gt 'robot',
+		   status =&gt 'unassigned',
 	       }
 	   );
 
@@ -762,11 +764,11 @@ WHERE CLAUSES
        "-or" to change the logic inside :
 
 	   my @where = (
-		-and => [
-		   user => 'nwiger',
+		-and =&gt [
+		   user =&gt 'nwiger',
 		   [
-		       -and => [ workhrs => {'>', 20}, geo => 'ASIA' ],
-		       -or => { workhrs => {'<', 50}, geo => 'EURO' },
+		       -and =&gt [ workhrs =&gt {'&gt', 20}, geo =&gt 'ASIA' ],
+		       -or =&gt { workhrs =&gt {'&lt', 50}, geo =&gt 'EURO' },
 		   ],
 	       ],
 	   );
@@ -774,8 +776,8 @@ WHERE CLAUSES
        That would yield:
 
 	   WHERE ( user = ? AND (
-		      ( workhrs > ? AND geo = ? )
-		   OR ( workhrs < ? OR geo = ? )
+		      ( workhrs &gt ? AND geo = ? )
+		   OR ( workhrs &lt ? OR geo = ? )
 		 ) )
 
    Algebraic inconsistency, for historical reasons
@@ -785,9 +787,9 @@ WHERE CLAUSES
        "inside" the arrayref. Here is an example combining both features :
 
 	  my @where = (
-	    -and => [a => 1, b => 2],
-	    -or  => [c => 3, d => 4],
-	     e	 => [-and => {-like => 'foo%'}, {-like => '%bar'} ]
+	    -and =&gt [a =&gt 1, b =&gt 2],
+	    -or  =&gt [c =&gt 3, d =&gt 4],
+	     e	 =&gt [-and =&gt {-like =&gt 'foo%'}, {-like =&gt '%bar'} ]
 	  )
 
        yielding
@@ -800,10 +802,10 @@ WHERE CLAUSES
        historical reasons. So be careful : the two examples below would seem
        algebraically equivalent, but they are not
 
-	 {col => [-and => {-like => 'foo%'}, {-like => '%bar'}]}
+	 {col =&gt [-and =&gt {-like =&gt 'foo%'}, {-like =&gt '%bar'}]}
 	 # yields : WHERE ( ( col LIKE ? AND col LIKE ? ) )
 
-	 [-and => {col => {-like => 'foo%'}, {col => {-like => '%bar'}}]]
+	 [-and =&gt {col =&gt {-like =&gt 'foo%'}, {col =&gt {-like =&gt '%bar'}}]]
 	 # yields : WHERE ( ( col LIKE ? OR col LIKE ? ) )
 
    Literal SQL
@@ -812,13 +814,13 @@ WHERE CLAUSES
 
 	   my $inn = 'is Not Null';
 	   my %where = (
-	       priority => { '<', 2 },
-	       requestor => \$inn
+	       priority =&gt { '&lt', 2 },
+	       requestor =&gt \$inn
 	   );
 
        This would create:
 
-	   $stmt = "WHERE priority < ? AND requestor is Not Null";
+	   $stmt = "WHERE priority &lt ? AND requestor is Not Null";
 	   @bind = ('2');
 
        Note that in this example, you only get one bind parameter back, since
@@ -828,8 +830,8 @@ WHERE CLAUSES
        with this:
 
 	   my %where = (
-	       priority  => { '<', 2 },
-	       requestor => { '!=', undef },
+	       priority  =&gt { '&lt', 2 },
+	       requestor =&gt { '!=', undef },
 	   );
 
        TMTOWTDI
@@ -840,25 +842,25 @@ WHERE CLAUSES
        see "Unary operators: bool" :
 
 	   my %where = (
-	       priority  => { '<', 2 },
-	       is_ready  => \"";
+	       priority  =&gt { '&lt', 2 },
+	       is_ready  =&gt \"";
 	   );
 
        which yields
 
-	   $stmt = "WHERE priority < ? AND is_ready";
+	   $stmt = "WHERE priority &lt ? AND is_ready";
 	   @bind = ('2');
 
        Literal SQL is also the only way to compare 2 columns to one another:
 
 	   my %where = (
-	       priority => { '<', 2 },
-	       requestor => \'= submittor'
+	       priority =&gt { '&lt', 2 },
+	       requestor =&gt \'= submittor'
 	   );
 
        which creates:
 
-	   $stmt = "WHERE priority < ? AND requestor = submitter";
+	   $stmt = "WHERE priority &lt ? AND requestor = submitter";
 	   @bind = ('2');
 
    Literal SQL with placeholders and bind values (subqueries)
@@ -868,7 +870,7 @@ WHERE CLAUSES
        Postgres you can use something like this:
 
 	   my %where = (
-	      date_column => \[q/= date '2008-09-30' - ?::integer/, 10/]
+	      date_column =&gt \[q/= date '2008-09-30' - ?::integer/, 10/]
 	   )
 
        This would create:
@@ -878,7 +880,7 @@ WHERE CLAUSES
 
        Note that you must pass the bind values in the same format as they are
        returned by "where". That means that if you set "bindtype" to
-       "columns", you must provide the bind values in the "[ column_meta =>
+       "columns", you must provide the bind values in the "[ column_meta =&gt
        value ]" format, where "column_meta" is an opaque scalar value; most
        commonly the column name, but you can use any scalar value (including
        references and blessed references), SQL::Abstract will simply pass it
@@ -886,35 +888,35 @@ WHERE CLAUSES
        will look like:
 
 	   my %where = (
-	      date_column => \[q/= date '2008-09-30' - ?::integer/, [ dummy => 10 ]/]
+	      date_column =&gt \[q/= date '2008-09-30' - ?::integer/, [ dummy =&gt 10 ]/]
 	   )
 
        Literal SQL is especially useful for nesting parenthesized clauses in
        the main SQL query. Here is a first example :
 
-	 my ($sub_stmt, @sub_bind) = ("SELECT c1 FROM t1 WHERE c2 < ? AND c3 LIKE ?",
+	 my ($sub_stmt, @sub_bind) = ("SELECT c1 FROM t1 WHERE c2 &lt ? AND c3 LIKE ?",
 				      100, "foo%");
 	 my %where = (
-	   foo => 1234,
-	   bar => \["IN ($sub_stmt)" => @sub_bind],
+	   foo =&gt 1234,
+	   bar =&gt \["IN ($sub_stmt)" =&gt @sub_bind],
 	 );
 
        This yields :
 
 	 $stmt = "WHERE (foo = ? AND bar IN (SELECT c1 FROM t1
-						    WHERE c2 < ? AND c3 LIKE ?))";
+						    WHERE c2 &lt ? AND c3 LIKE ?))";
 	 @bind = (1234, 100, "foo%");
 
-       Other subquery operators, like for example "> ALL" or "NOT IN", are
+       Other subquery operators, like for example "&gt ALL" or "NOT IN", are
        expressed in the same way. Of course the $sub_stmt and its associated
        bind values can be generated through a former call to "select()" :
 
 	 my ($sub_stmt, @sub_bind)
-	    = $sql->select("t1", "c1", {c2 => {"<" => 100},
-					c3 => {-like => "foo%"}});
+	    = $sql-&gtselect("t1", "c1", {c2 =&gt {"&lt" =&gt 100},
+					c3 =&gt {-like =&gt "foo%"}});
 	 my %where = (
-	   foo => 1234,
-	   bar => \["> ALL ($sub_stmt)" => @sub_bind],
+	   foo =&gt 1234,
+	   bar =&gt \["&gt ALL ($sub_stmt)" =&gt @sub_bind],
 	 );
 
        In the examples above, the subquery was used as an operator on a
@@ -922,38 +924,38 @@ WHERE CLAUSES
        main %where hash, like an EXISTS subquery :
 
 	 my ($sub_stmt, @sub_bind)
-	    = $sql->select("t1", "*", {c1 => 1, c2 => \"> t0.c0"});
-	 my %where = ( -and => [
-	   foo	 => 1234,
-	   \["EXISTS ($sub_stmt)" => @sub_bind],
+	    = $sql-&gtselect("t1", "*", {c1 =&gt 1, c2 =&gt \"&gt t0.c0"});
+	 my %where = ( -and =&gt [
+	   foo	 =&gt 1234,
+	   \["EXISTS ($sub_stmt)" =&gt @sub_bind],
 	 ]);
 
        which yields
 
 	 $stmt = "WHERE (foo = ? AND EXISTS (SELECT * FROM t1
-					       WHERE c1 = ? AND c2 > t0.c0))";
+					       WHERE c1 = ? AND c2 &gt t0.c0))";
 	 @bind = (1234, 1);
 
        Observe that the condition on "c2" in the subquery refers to column
        "t0.c0" of the main query : this is not a bind value, so we have to
-       express it through a scalar ref.  Writing "c2 => {">" => "t0.c0"}"
-       would have generated "c2 > ?" with bind value "t0.c0" ... not exactly
+       express it through a scalar ref.  Writing "c2 =&gt {"&gt" =&gt "t0.c0"}"
+       would have generated "c2 &gt ?" with bind value "t0.c0" ... not exactly
        what we wanted here.
 
        Finally, here is an example where a subquery is used for expressing
        unary negation:
 
 	 my ($sub_stmt, @sub_bind)
-	    = $sql->where({age => [{"<" => 10}, {">" => 20}]});
+	    = $sql-&gtwhere({age =&gt [{"&lt" =&gt 10}, {"&gt" =&gt 20}]});
 	 $sub_stmt =~ s/^ where //i; # don't want "WHERE" in the subclause
 	 my %where = (
-	       lname  => {like => '%son%'},
-	       \["NOT ($sub_stmt)" => @sub_bind],
+	       lname  =&gt {like =&gt '%son%'},
+	       \["NOT ($sub_stmt)" =&gt @sub_bind],
 	   );
 
        This yields
 
-	 $stmt = "lname LIKE ? AND NOT ( age < ? OR age > ? )"
+	 $stmt = "lname LIKE ? AND NOT ( age &lt ? OR age &gt ? )"
 	 @bind = ('%son%', 10, 20)
 
    Conclusion
@@ -971,7 +973,7 @@ WHERE CLAUSES
 
 ORDER BY CLAUSES
        Some functions take an order by clause. This can either be a scalar
-       (just a column name,) a hash of "{ -desc => 'col' }" or "{ -asc =>
+       (just a column name,) a hash of "{ -desc =&gt 'col' }" or "{ -asc =&gt
        'col' }", or an array of either of the two previous forms. Examples:
 
 		      Given	       |	 Will Generate
@@ -983,33 +985,33 @@ ORDER BY CLAUSES
 				       |
 	   [qw/colA colB/]	       | ORDER BY colA, colB
 				       |
-	   {-asc  => 'colA'}	       | ORDER BY colA ASC
+	   {-asc  =&gt 'colA'}	       | ORDER BY colA ASC
 				       |
-	   {-desc => 'colB'}	       | ORDER BY colB DESC
+	   {-desc =&gt 'colB'}	       | ORDER BY colB DESC
 				       |
-	   ['colA', {-asc => 'colB'}]  | ORDER BY colA, colB ASC
+	   ['colA', {-asc =&gt 'colB'}]  | ORDER BY colA, colB ASC
 				       |
-	   { -asc => [qw/colA colB/] } | ORDER BY colA ASC, colB ASC
+	   { -asc =&gt [qw/colA colB/] } | ORDER BY colA ASC, colB ASC
 				       |
 	   [			       |
-	     { -asc => 'colA' },       | ORDER BY colA ASC, colB DESC,
-	     { -desc => [qw/colB/],    |	  colC ASC, colD ASC
-	     { -asc => [qw/colC colD/],|
+	     { -asc =&gt 'colA' },       | ORDER BY colA ASC, colB DESC,
+	     { -desc =&gt [qw/colB/],    |	  colC ASC, colD ASC
+	     { -asc =&gt [qw/colC colD/],|
 	   ]			       |
 	   ===========================================================
 
 SPECIAL OPERATORS
-	 my $sqlmaker = SQL::Abstract->new(special_ops => [
+	 my $sqlmaker = SQL::Abstract-&gtnew(special_ops =&gt [
 	    {
-	     regex => qr/.../,
-	     handler => sub {
+	     regex =&gt qr/.../,
+	     handler =&gt sub {
 	       my ($self, $field, $op, $arg) = @_;
 	       ...
 	     },
 	    },
 	    {
-	     regex => qr/.../,
-	     handler => 'method_name',
+	     regex =&gt qr/.../,
+	     handler =&gt 'method_name',
 	    },
 	  ]);
 
@@ -1038,7 +1040,7 @@ SPECIAL OPERATORS
 	   When supplied with a method name, it is simply called on the "" in
 	   SQL::Abstract object as:
 
-	    $self->$method_name ($field, $op, $arg)
+	    $self-&gt$method_name ($field, $op, $arg)
 
 	    Where:
 
@@ -1048,24 +1050,24 @@ SPECIAL OPERATORS
 
 	   When supplied with a coderef, it is called as:
 
-	    $coderef->($self, $field, $op, $arg)
+	    $coderef-&gt($self, $field, $op, $arg)
 
        For example, here is an implementation of the MATCH .. AGAINST syntax
        for MySQL
 
-	 my $sqlmaker = SQL::Abstract->new(special_ops => [
+	 my $sqlmaker = SQL::Abstract-&gtnew(special_ops =&gt [
 
 	   # special op for MySql MATCH (field) AGAINST(word1, word2, ...)
-	   {regex => qr/^match$/i,
-	    handler => sub {
+	   {regex =&gt qr/^match$/i,
+	    handler =&gt sub {
 	      my ($self, $field, $op, $arg) = @_;
 	      $arg = [$arg] if not ref $arg;
-	      my $label 	= $self->_quote($field);
-	      my ($placeholder) = $self->_convert('?');
+	      my $label 	= $self-&gt_quote($field);
+	      my ($placeholder) = $self-&gt_convert('?');
 	      my $placeholders	= join ", ", (($placeholder) x @$arg);
-	      my $sql		= $self->_sqlcase('match') . " ($label) "
-				. $self->_sqlcase('against') . " ($placeholders) ";
-	      my @bind = $self->_bindtype($field, @$arg);
+	      my $sql		= $self-&gt_sqlcase('match') . " ($label) "
+				. $self-&gt_sqlcase('against') . " ($placeholders) ";
+	      my @bind = $self-&gt_bindtype($field, @$arg);
 	      return ($sql, @bind);
 	      }
 	    },
@@ -1073,17 +1075,17 @@ SPECIAL OPERATORS
 	 ]);
 
 UNARY OPERATORS
-	 my $sqlmaker = SQL::Abstract->new(unary_ops => [
+	 my $sqlmaker = SQL::Abstract-&gtnew(unary_ops =&gt [
 	    {
-	     regex => qr/.../,
-	     handler => sub {
+	     regex =&gt qr/.../,
+	     handler =&gt sub {
 	       my ($self, $op, $arg) = @_;
 	       ...
 	     },
 	    },
 	    {
-	     regex => qr/.../,
-	     handler => 'method_name',
+	     regex =&gt qr/.../,
+	     handler =&gt 'method_name',
 	    },
 	  ]);
 
@@ -1105,7 +1107,7 @@ UNARY OPERATORS
 	   When supplied with a method name, it is simply called on the "" in
 	   SQL::Abstract object as:
 
-	    $self->$method_name ($op, $arg)
+	    $self-&gt$method_name ($op, $arg)
 
 	    Where:
 
@@ -1114,7 +1116,7 @@ UNARY OPERATORS
 
 	   When supplied with a coderef, it is called as:
 
-	    $coderef->($self, $op, $arg)
+	    $coderef-&gt($self, $op, $arg)
 
 PERFORMANCE
        Thanks to some benchmarking by Mark Stosberg, it turns out that this
@@ -1129,9 +1131,9 @@ PERFORMANCE
 	   # and then reuse it for the rest of the rows
 	   my($sth, $stmt);
 	   for my $href (@array_of_hashrefs) {
-	       $stmt ||= $sql->insert('table', $href);
-	       $sth  ||= $dbh->prepare($stmt);
-	       $sth->execute($sql->values($href));
+	       $stmt ||= $sql-&gtinsert('table', $href);
+	       $sth  ||= $dbh-&gtprepare($stmt);
+	       $sth-&gtexecute($sql-&gtvalues($href));
 	   }
 
        The reason this works is because the keys in your $href are sorted
@@ -1157,13 +1159,13 @@ FORMBUILDER
 	   use CGI::FormBuilder;
 	   use SQL::Abstract;
 
-	   my $form = CGI::FormBuilder->new(...);
-	   my $sql  = SQL::Abstract->new;
+	   my $form = CGI::FormBuilder-&gtnew(...);
+	   my $sql  = SQL::Abstract-&gtnew;
 
-	   if ($form->submitted) {
-	       my $field = $form->field;
-	       my $id = delete $field->{id};
-	       my($stmt, @bind) = $sql->update('table', $field, {id => $id});
+	   if ($form-&gtsubmitted) {
+	       my $field = $form-&gtfield;
+	       my $id = delete $field-&gt{id};
+	       my($stmt, @bind) = $sql-&gtupdate('table', $field, {id =&gt $id});
 	   }
 
        Of course, you would still have to connect using "DBI" to run the
@@ -1178,11 +1180,11 @@ FORMBUILDER
 REPO
        o   gitweb:
 	   http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=dbsrgits/DBIx-Class.git
-	   <http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=dbsrgits/DBIx-
-	   Class.git>
+	   &lthttp://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=dbsrgits/DBIx-
+	   Class.git&gt
 
        o   git: git://git.shadowcat.co.uk/dbsrgits/DBIx-Class.git
-	   <git://git.shadowcat.co.uk/dbsrgits/DBIx-Class.git>
+	   &ltgit://git.shadowcat.co.uk/dbsrgits/DBIx-Class.git&gt
 
 CHANGES
        Version 1.50 was a major internal refactoring of "SQL::Abstract".
@@ -1197,10 +1199,10 @@ CHANGES
 
        o   support for literal SQL through the "\ [$sql, bind]" syntax.
 
-       o   support for the { operator => \"..." } construct (to embed literal
+       o   support for the { operator =&gt \"..." } construct (to embed literal
 	   SQL)
 
-       o   support for the { operator => \["...", @bind] } construct (to embed
+       o   support for the { operator =&gt \["...", @bind] } construct (to embed
 	   literal SQL with bind values)
 
        o   optional support for array datatypes
@@ -1245,11 +1247,11 @@ SEE ALSO
        DBIx::Class, DBIx::Abstract, CGI::FormBuilder, HTML::QuickTable.
 
 AUTHOR
-       Copyright (c) 2001-2007 Nathan Wiger <nwiger@cpan.org>. All Rights
+       Copyright (c) 2001-2007 Nathan Wiger &ltnwiger@cpan.org&gt. All Rights
        Reserved.
 
        This module is actively maintained by Matt Trout
-       <mst@shadowcatsystems.co.uk>
+       &ltmst@shadowcatsystems.co.uk&gt
 
        For support, your best bet is to try the "DBIx::Class" users mailing
        list.  While not an official support venue, "DBIx::Class" makes heavy
@@ -1264,6 +1266,6 @@ LICENSE
 
 
 perl v5.12.4			  2010-12-21		      SQL::Abstract(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This section deals with questions related to networking, the internet,..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlfaq9 - Networking</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLFAQ9(1)	       Perl Programmers Reference Guide 	   PERLFAQ9(1)
 
 
@@ -20,7 +22,7 @@ DESCRIPTION
        and a few on the web.
 
    What is the correct form of response from a CGI script?
-       (Alan Flavell <flavell+www@a5.ph.gla.ac.uk> answers...)
+       (Alan Flavell &ltflavell+www@a5.ph.gla.ac.uk&gt answers...)
 
        The Common Gateway Interface (CGI) specifies a software interface
        between a program ("CGI script") and a web server (HTTPD). It is not
@@ -93,7 +95,7 @@ DESCRIPTION
 
 	       BEGIN {
 		       use CGI::Carp qw(carpout);
-		       open(LOG, ">>/var/local/cgi-logs/mycgi-log")
+		       open(LOG, "&gt&gt/var/local/cgi-logs/mycgi-log")
 			       or die "Unable to append to mycgi-log: $!\n";
 		       carpout(*LOG);
 	       }
@@ -117,7 +119,7 @@ DESCRIPTION
        formatting of the resulting plain text.
 
        Many folks attempt a simple-minded regular expression approach, like
-       "s/<.*?>//g", but that fails in many cases because the tags may
+       "s/&lt.*?&gt//g", but that fails in many cases because the tags may
        continue over line breaks, they may contain quoted angle-brackets, or
        HTML comment may be present.  Plus, folks forget to convert
        entities--like "&lt;" for example.
@@ -125,7 +127,7 @@ DESCRIPTION
        Here's one "simple-minded" approach, that works for most files:
 
 	       #!/usr/bin/perl -p0777
-	       s/<(?:[^>'"]*|(['"]).*?\1)*>//gs
+	       s/&lt(?:[^&gt'"]*|(['"]).*?\1)*&gt//gs
 
        If you want a more complete solution, see the 3-stage striphtml program
        in http://www.cpan.org/authors/Tom_Christiansen/scripts/striphtml.gz .
@@ -133,25 +135,25 @@ DESCRIPTION
        Here are some tricky cases that you should think about when picking a
        solution:
 
-	       <IMG SRC = "foo.gif" ALT = "A > B">
+	       &ltIMG SRC = "foo.gif" ALT = "A &gt B"&gt
 
-	       <IMG SRC = "foo.gif"
-		ALT = "A > B">
+	       &ltIMG SRC = "foo.gif"
+		ALT = "A &gt B"&gt
 
-	       <!-- <A comment> -->
+	       &lt!-- &ltA comment&gt --&gt
 
-	       <script>if (a<b && a>c)</script>
+	       &ltscript&gtif (a&ltb && a&gtc)&lt/script&gt
 
-	       <# Just data #>
+	       &lt# Just data #&gt
 
-	       <![INCLUDE CDATA [ >>>>>>>>>>>> ]]>
+	       &lt![INCLUDE CDATA [ &gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt ]]&gt
 
        If HTML comments include other tags, those solutions would also break
        on text like this:
 
-	       <!-- This section commented out.
-		       <B>You can't see me!</B>
-	       -->
+	       &lt!-- This section commented out.
+		       &ltB&gtYou can't see me!&lt/B&gt
+	       --&gt
 
    How do I extract URLs?
        You can easily extract all sorts of URLs from HTML with
@@ -173,9 +175,9 @@ DESCRIPTION
 	       #!/usr/bin/perl -n00
 	       # qxurl - tchrist@perl.com
 	       print "$2\n" while m{
-		       < \s*
+		       &lt \s*
 			 A \s+ HREF \s* = \s* (["']) (.*?) \1
-		       \s* >
+		       \s* &gt
 	       }gsix;
 
    How do I download a file from the user's machine?  How do I open a file on
@@ -205,8 +207,8 @@ DESCRIPTION
 		       start_form,
 			       "What's your favorite animal? ",
 		       popup_menu(
-			       -name   => 'animal',
-			       -values => [ qw( Llama Alpaca Camel Ram ) ]
+			       -name   =&gt 'animal',
+			       -values =&gt [ qw( Llama Alpaca Camel Ram ) ]
 			       ),
 		       submit,
 
@@ -246,7 +248,7 @@ DESCRIPTION
 	       use URI::URL;
 
 	       my $url = url('http://www.perl.com/cgi-bin/cpan_mod');
-	       $url->query_form(module => 'DB_File', readme => 1);
+	       $url-&gtquery_form(module =&gt 'DB_File', readme =&gt 1);
 	       $content = get($url);
 
        If you're using the POST method, create your own user agent and encode
@@ -255,10 +257,10 @@ DESCRIPTION
 	       use HTTP::Request::Common qw(POST);
 	       use LWP::UserAgent;
 
-	       $ua = LWP::UserAgent->new();
+	       $ua = LWP::UserAgent-&gtnew();
 	       my $req = POST 'http://www.perl.com/cgi-bin/cpan_mod',
-					  [ module => 'DB_File', readme => 1 ];
-	       $content = $ua->request($req)->as_string;
+					  [ module =&gt 'DB_File', readme =&gt 1 ];
+	       $content = $ua-&gtrequest($req)-&gtas_string;
 
    How do I decode or create those %-encodings on the web?
        (contributed by brian d foy)
@@ -346,8 +348,8 @@ DESCRIPTION
 
 	       use HTTPD::UserAdmin ();
 	       HTTPD::UserAdmin
-		 ->new(DB => "/foo/.htpasswd")
-		 ->add($username => $password);
+		 -&gtnew(DB =&gt "/foo/.htpasswd")
+		 -&gtadd($username =&gt $password);
 
    How do I make sure users can't enter values into a form that cause my CGI
        script to do bad things?
@@ -360,7 +362,7 @@ DESCRIPTION
        in perlfunc:
 
 	       $/ = '';
-	       $header = <MSG>;
+	       $header = &ltMSG&gt;
 	       $header =~ s/\n\s+/ /g;	# merge continuation lines
 	       %head = ( UNIX_FROM_LINE, split /^([-\w]+):\s*/m, $header );
 
@@ -391,11 +393,11 @@ DESCRIPTION
 
 	       use CGI;
 
-	       my $cgi = CGI->new();
+	       my $cgi = CGI-&gtnew();
 
-	       my $total = $cgi->param( 'price' ) + $cgi->param( 'shipping' );
+	       my $total = $cgi-&gtparam( 'price' ) + $cgi-&gtparam( 'shipping' );
 
-	       my @items = $cgi->param( 'item' );
+	       my @items = $cgi-&gtparam( 'item' );
 
        You might also try "CGI::Minimal" which is a lightweight version of the
        same thing.  Other CGI::* modules on CPAN might work better for you,
@@ -479,12 +481,12 @@ DESCRIPTION
 	       print unpack("u", $len . $_);	     # uudecode and print
 
    How do I return the user's mail address?
-       On systems that support getpwuid, the $< variable, and the
+       On systems that support getpwuid, the $&lt variable, and the
        "Sys::Hostname" module (which is part of the standard perl
        distribution), you can probably try using something like this:
 
 	       use Sys::Hostname;
-	       $address = sprintf('%s@%s', scalar getpwuid($<), hostname);
+	       $address = sprintf('%s@%s', scalar getpwuid($&lt), hostname);
 
        Company policies on mail address can mean that this generates addresses
        that the company's mail system will not accept, so you should ask for
@@ -503,9 +505,9 @@ DESCRIPTION
 
 	       open(SENDMAIL, "|/usr/lib/sendmail -oi -t -odq")
 		       or die "Can't fork for sendmail: $!\n";
-	       print SENDMAIL <<"EOF";
-	       From: User Originating Mail <me\@host>
-	       To: Final Destination <you\@otherhost>
+	       print SENDMAIL &lt&lt"EOF";
+	       From: User Originating Mail &ltme\@host&gt
+	       To: Final Destination &ltyou\@otherhost&gt
 	       Subject: A relevant subject line
 
 	       Body of the message goes here after the blank line
@@ -528,14 +530,14 @@ DESCRIPTION
 
 	       use Mail::Mailer;
 
-	       $mailer = Mail::Mailer->new();
-	       $mailer->open({ From    => $from_address,
-					       To      => $to_address,
-					       Subject => $subject,
+	       $mailer = Mail::Mailer-&gtnew();
+	       $mailer-&gtopen({ From    =&gt $from_address,
+					       To      =&gt $to_address,
+					       Subject =&gt $subject,
 					 })
 		       or die "Can't open: $!\n";
 	       print $mailer $body;
-	       $mailer->close();
+	       $mailer-&gtclose();
 
        The "Mail::Internet" module uses "Net::SMTP" which is less Unix-centric
        than "Mail::Mailer", but less reliable.	Avoid raw SMTP commands.
@@ -549,28 +551,28 @@ DESCRIPTION
 	       use MIME::Lite;
 
 	       ### Create a new multipart message:
-	       $msg = MIME::Lite->new(
-					From	=>'me@myhost.com',
-					To	=>'you@yourhost.com',
-					Cc	=>'some@other.com, some@more.com',
-					Subject =>'A message with 2 parts...',
-					Type	=>'multipart/mixed'
+	       $msg = MIME::Lite-&gtnew(
+					From	=&gt'me@myhost.com',
+					To	=&gt'you@yourhost.com',
+					Cc	=&gt'some@other.com, some@more.com',
+					Subject =&gt'A message with 2 parts...',
+					Type	=&gt'multipart/mixed'
 					);
 
 	       ### Add parts (each "attach" has same arguments as "new"):
-	       $msg->attach(Type     =>'TEXT',
-					Data	 =>"Here's the GIF file you wanted"
+	       $msg-&gtattach(Type     =&gt'TEXT',
+					Data	 =&gt"Here's the GIF file you wanted"
 					);
-	       $msg->attach(Type     =>'image/gif',
-					Path	 =>'aaa000123.gif',
-					Filename =>'logo.gif'
+	       $msg-&gtattach(Type     =&gt'image/gif',
+					Path	 =&gt'aaa000123.gif',
+					Filename =&gt'logo.gif'
 					);
 
-	       $text = $msg->as_string;
+	       $text = $msg-&gtas_string;
 
        "MIME::Lite" also includes a method for sending these things.
 
-	       $msg->send;
+	       $msg-&gtsend;
 
        This defaults to using sendmail but can be customized to use SMTP via
        Net::SMTP.
@@ -586,14 +588,14 @@ DESCRIPTION
 	       my(@msgs, @sub);
 	       my $msgno = -1;
 	       $/ = ''; 		   # paragraph reads
-	       while (<>) {
+	       while (&lt&gt) {
 		       if (/^From /m) {
 			       /^Subject:\s*(?:Re:\s*)*(.*)/mi;
 			       $sub[++$msgno] = lc($1) || '';
 		       }
 		       $msgs[$msgno] .= $_;
 	       }
-	       for my $i (sort { $sub[$a] cmp $sub[$b] || $a <=> $b } (0 .. $#msgs)) {
+	       for my $i (sort { $sub[$a] cmp $sub[$b] || $a &lt=&gt $b } (0 .. $#msgs)) {
 		       print $msgs[$i];
 	       }
 
@@ -604,7 +606,7 @@ DESCRIPTION
 	       BEGIN { $msgno = -1 }
 	       $sub[++$msgno] = (/^Subject:\s*(?:Re:\s*)*(.*)/mi)[0] if /^From/m;
 	       $msg[$msgno] .= $_;
-	       END { print @msg[ sort { $sub[$a] cmp $sub[$b] || $a <=> $b } (0 .. $#msg) ] }
+	       END { print @msg[ sort { $sub[$a] cmp $sub[$b] || $a &lt=&gt $b } (0 .. $#msg) ] }
 
    How do I find out my hostname, domainname, or IP address?
        gethostbyname, Socket, Net::Domain, Sys::Hostname" (contributed by
@@ -643,7 +645,7 @@ DESCRIPTION
        as
 
 	       perl -MNews::NNTPClient
-		 -e 'print News::NNTPClient->new->list("newsgroups")'
+		 -e 'print News::NNTPClient-&gtnew-&gtlist("newsgroups")'
 
    How do I fetch/put an FTP file?
        "LWP::Simple" (available from CPAN) can fetch but not put.  "Net::FTP"
@@ -672,6 +674,6 @@ AUTHOR AND COPYRIGHT
 
 
 perl v5.12.4			  2011-06-07			   PERLFAQ9(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

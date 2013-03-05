@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module provides subs that allow you to read or write entire files..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>File::Slurp - Efficient Reading/Writing of Complete Files</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 File::Slurp(3)	      User Contributed Perl Documentation	File::Slurp(3)
 
 
@@ -74,7 +76,7 @@ DESCRIPTION
        If you set the binmode option, then the file will be slurped in binary
        mode.
 
-	       my $bin_data = read_file( $bin_file, binmode => ':raw' ) ;
+	       my $bin_data = read_file( $bin_file, binmode =&gt ':raw' ) ;
 
        NOTE: this actually sets the O_BINARY mode flag for sysopen. It
        probably should call binmode and pass its argument to support other
@@ -86,7 +88,7 @@ DESCRIPTION
        context) will be an array reference which contains the lines of the
        slurped file. The following two calls are equivalent:
 
-	       my $lines_ref = read_file( $bin_file, array_ref => 1 ) ;
+	       my $lines_ref = read_file( $bin_file, array_ref =&gt 1 ) ;
 	       my $lines_ref = [ read_file( $bin_file ) ] ;
 
        scalar_ref
@@ -96,7 +98,7 @@ DESCRIPTION
        of the slurped file. This will usually be faster than returning the
        plain scalar.
 
-	       my $text_ref = read_file( $bin_file, scalar_ref => 1 ) ;
+	       my $text_ref = read_file( $bin_file, scalar_ref =&gt 1 ) ;
 
        buf_ref
 
@@ -104,17 +106,17 @@ DESCRIPTION
        file contents will be stored in the scalar. This can be used in
        conjunction with any of the other options.
 
-	       my $text_ref = read_file( $bin_file, buf_ref => \$buffer,
-						    array_ref => 1 ) ;
-	       my @lines = read_file( $bin_file, buf_ref => \$buffer ) ;
+	       my $text_ref = read_file( $bin_file, buf_ref =&gt \$buffer,
+						    array_ref =&gt 1 ) ;
+	       my @lines = read_file( $bin_file, buf_ref =&gt \$buffer ) ;
 
        blk_size
 
        You can use this option to set the block size used when slurping from
        an already open handle (like \*STDIN). It defaults to 1MB.
 
-	       my $text_ref = read_file( $bin_file, blk_size => 10_000_000,
-						    array_ref => 1 ) ;
+	       my $text_ref = read_file( $bin_file, blk_size =&gt 10_000_000,
+						    array_ref =&gt 1 ) ;
 
        err_mode
 
@@ -123,7 +125,7 @@ DESCRIPTION
        'quiet to have no error handling. This code wants to carp and then read
        abother file if it fails.
 
-	       my $text_ref = read_file( $file, err_mode => 'carp' ) ;
+	       my $text_ref = read_file( $file, err_mode =&gt 'carp' ) ;
 	       unless ( $text_ref ) {
 
 		       # read a different file but croak if not found
@@ -142,8 +144,8 @@ DESCRIPTION
        modify the behavior of "write_file". The rest of the argument list is
        the data to be written to the file.
 
-	 write_file( 'filename', {append => 1 }, @data ) ;
-	 write_file( 'filename', {binmode => ':raw' }, $buffer ) ;
+	 write_file( 'filename', {append =&gt 1 }, @data ) ;
+	 write_file( 'filename', {binmode =&gt ':raw' }, $buffer ) ;
 
        As a shortcut if the first data argument is a scalar or array
        reference, it is used as the only data to be written to the file. Any
@@ -175,7 +177,7 @@ DESCRIPTION
        If you set the binmode option, then the file will be written in binary
        mode.
 
-	       write_file( $bin_file, {binmode => ':raw'}, @data ) ;
+	       write_file( $bin_file, {binmode =&gt ':raw'}, @data ) ;
 
        NOTE: this actually sets the O_BINARY mode flag for sysopen. It
        probably should call binmode and pass its argument to support other
@@ -188,7 +190,7 @@ DESCRIPTION
        the scalar reference shortcut) in @_ will be ignored. These are
        equivilent:
 
-	       write_file( $bin_file, { buf_ref => \$buffer } ) ;
+	       write_file( $bin_file, { buf_ref =&gt \$buffer } ) ;
 	       write_file( $bin_file, \$buffer ) ;
 	       write_file( $bin_file, $buffer ) ;
 
@@ -207,7 +209,7 @@ DESCRIPTION
        If you set this boolean option, the data will be written at the end of
        the current file.
 
-	       write_file( $file, {append => 1}, @data ) ;
+	       write_file( $file, {append =&gt 1}, @data ) ;
 
        "write_file" croaks if it cannot open the file. It returns true if it
        succeeded in writing out the file and undef if there was an error.
@@ -219,7 +221,7 @@ DESCRIPTION
        If you set this boolean option, an existing file will not be
        overwritten.
 
-	       write_file( $file, {no_clobber => 1}, @data ) ;
+	       write_file( $file, {no_clobber =&gt 1}, @data ) ;
 
        err_mode
 
@@ -229,7 +231,7 @@ DESCRIPTION
        the first call to "write_file" fails it will carp and then write to
        another file. If the second call to "write_file" fails, it will croak.
 
-	       unless ( write_file( $file, { err_mode => 'carp', \$data ) ;
+	       unless ( write_file( $file, { err_mode =&gt 'carp', \$data ) ;
 
 		       # write a different file but croak if not found
 		       write_file( $other_file, \$data ) ;
@@ -247,7 +249,7 @@ DESCRIPTION
        documentation. These calls are equivilent:
 
 	       append_file( $file, @data ) ;
-	       write_file( $file, {append => 1}, @data ) ;
+	       write_file( $file, {append =&gt 1}, @data ) ;
 
    read_dir
        This sub reads all the file names from directory and returns them to
@@ -266,7 +268,7 @@ DESCRIPTION
        If this boolean option is set, "." and ".." are not removed from the
        list of files.
 
-	       my @all_files = read_dir( '/path/to/dir', keep_dot_dot => 1 ) ;
+	       my @all_files = read_dir( '/path/to/dir', keep_dot_dot =&gt 1 ) ;
 
    EXPORT
 	 read_file write_file overwrite_file append_file read_dir
@@ -280,11 +282,11 @@ DESCRIPTION
        that requires B.pm which didn't get into core until 5.005.
 
 AUTHOR
-       Uri Guttman, <uri@stemsystems.com>
+       Uri Guttman, &lturi@stemsystems.com&gt
 
 
 
 perl v5.10.1			  2008-01-23			File::Slurp(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

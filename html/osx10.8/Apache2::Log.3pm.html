@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Apache2::Log" provides the Perl API for Apache logging methods...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Apache2::Log - Perl API for Apache Logging Methods</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apache_mod_apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::Log(3)
 
 
@@ -20,17 +22,17 @@ Synopsis
 	 #--------------
 	 use Apache2::Log;
 
-	 use Apache2::Const -compile => qw(OK :log);
-	 use APR::Const    -compile => qw(:error SUCCESS);
+	 use Apache2::Const -compile =&gt qw(OK :log);
+	 use APR::Const    -compile =&gt qw(:error SUCCESS);
 
-	 my $s = Apache2::ServerUtil->server;
+	 my $s = Apache2::ServerUtil-&gtserver;
 
-	 $s->log_error("server: log_error");
-	 $s->log_serror(__FILE__, __LINE__, Apache2::Const::LOG_ERR,
+	 $s-&gtlog_error("server: log_error");
+	 $s-&gtlog_serror(__FILE__, __LINE__, Apache2::Const::LOG_ERR,
 			APR::Const::SUCCESS, "log_serror logging at err level");
-	 $s->log_serror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_DEBUG,
+	 $s-&gtlog_serror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_DEBUG,
 			APR::Const::ENOTIME, "debug print");
-	 Apache2::ServerRec->log_error("routine warning");
+	 Apache2::ServerRec-&gtlog_error("routine warning");
 
 	 Apache2::ServerRec::warn("routine warning");
 
@@ -39,39 +41,39 @@ Synopsis
 	 package Foo;
 
 	 use strict;
-	 use warnings FATAL => 'all';
+	 use warnings FATAL =&gt 'all';
 
 	 use Apache2::Log;
 
-	 use Apache2::Const -compile => qw(OK :log);
-	 use APR::Const    -compile => qw(:error SUCCESS);
+	 use Apache2::Const -compile =&gt qw(OK :log);
+	 use APR::Const    -compile =&gt qw(:error SUCCESS);
 
 	 sub handler {
 	     my $r = shift;
-	     $r->log_error("request: log_error");
+	     $r-&gtlog_error("request: log_error");
 
-	     my $rlog = $r->log;
+	     my $rlog = $r-&gtlog;
 	     for my $level qw(emerg alert crit error warn notice info debug) {
 		 no strict 'refs';
-		 $rlog->$level($package, "request: $level log level");
+		 $rlog-&gt$level($package, "request: $level log level");
 	     }
 
 	     # can use server methods as well
-	     my $s = $r->server;
-	     $s->log_error("server: log_error");
+	     my $s = $r-&gtserver;
+	     $s-&gtlog_error("server: log_error");
 
-	     $r->log_rerror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_DEBUG,
+	     $r-&gtlog_rerror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_DEBUG,
 			    APR::Const::ENOTIME, "in debug");
 
-	     $s->log_serror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_INFO,
+	     $s-&gtlog_serror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_INFO,
 			    APR::Const::SUCCESS, "server info");
 
-	     $s->log_serror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_ERR,
+	     $s-&gtlog_serror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_ERR,
 			    APR::Const::ENOTIME, "fatal error");
 
-	     $r->log_reason("fatal error");
-	     $r->warn('routine request warning');
-	     $s->warn('routine server warning');
+	     $r-&gtlog_reason("fatal error");
+	     $r-&gtwarn('routine request warning');
+	     $s-&gtwarn('routine server warning');
 
 	     return Apache2::Const::OK;
 	 }
@@ -92,17 +94,17 @@ Description
        warning or higher (err, crit, elert and emerg) will be logged.
        Therefore this:
 
-	 $r->log_rerror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_WARNING,
+	 $r-&gtlog_rerror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_WARNING,
 			APR::Const::ENOTIME, "warning!");
 
        will log the message, but this one won't:
 
-	 $r->log_rerror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_INFO,
+	 $r-&gtlog_rerror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_INFO,
 			APR::Const::ENOTIME, "just an info");
 
        It will be logged only if the server log level is set to info or debug.
        "LogLevel" is set in the configuration file, but can be changed using
-       the "$s->loglevel()" method.
+       the "$s-&gtloglevel()" method.
 
        The filename and the line number of the caller are logged only if
        "Apache2::Const::LOG_DEBUG" is used (because that's how Apache 2.0
@@ -116,11 +118,11 @@ Description
 Constants
        Log level constants can be compiled all at once:
 
-	 use Apache2::Const -compile => qw(:log);
+	 use Apache2::Const -compile =&gt qw(:log);
 
        or individually:
 
-	 use Apache2::Const -compile => qw(LOG_DEBUG LOG_INFO);
+	 use Apache2::Const -compile =&gt qw(LOG_DEBUG LOG_INFO);
 
    LogLevel Constants
        The following constants (sorted from the most severe level to the least
@@ -148,7 +150,7 @@ Constants
        example to compile "APR::Const::SUCCESS" and all the APR error status
        constants do:
 
-	 use APR::Const    -compile => qw(:error SUCCESS);
+	 use APR::Const    -compile =&gt qw(:error SUCCESS);
 
        Here is the rest of the logging related constants:
 
@@ -171,16 +173,16 @@ Constants
        "error-notes" entry is set, it is up to the error handler to determine
        whether this text should be sent back to the client.  For example:
 
-	 use Apache2::Const -compile => qw(:log);
-	 use APR::Const    -compile => qw(ENOTIME);
-	 $r->log_rerror(Apache2::Log::LOG_MARK,
+	 use Apache2::Const -compile =&gt qw(:log);
+	 use APR::Const    -compile =&gt qw(ENOTIME);
+	 $r-&gtlog_rerror(Apache2::Log::LOG_MARK,
 			Apache2::Const::LOG_ERR|Apache2::Const::LOG_TOCLIENT,
 			APR::Const::ENOTIME,
 			"request log_rerror");
 
        now the log message can be retrieved via:
 
-	 $r->notes->get("error-notes");
+	 $r-&gtnotes-&gtget("error-notes");
 
        Remember that client-generated text streams sent back to the client
        MUST be escaped to prevent CSS attacks.
@@ -190,9 +192,9 @@ Constants
        is useful for startup message where no timestamps, logging level is
        wanted. For example:
 
-	 use Apache2::Const -compile => qw(:log);
-	 use APR::Const    -compile => qw(SUCCESS);
-	 $s->log_serror(Apache2::Log::LOG_MARK,
+	 use Apache2::Const -compile =&gt qw(:log);
+	 use APR::Const    -compile =&gt qw(SUCCESS);
+	 $s-&gtlog_serror(Apache2::Log::LOG_MARK,
 			Apache2::Const::LOG_INFO,
 			APR::Const::SUCCESS,
 			"This log message comes with a header");
@@ -203,9 +205,9 @@ Constants
 
        whereas, when "Apache2::Const::LOG_STARTUP" is binary ORed as in:
 
-	 use Apache2::Const -compile => qw(:log);
-	 use APR::Const    -compile => qw(SUCCESS);
-	 $s->log_serror(Apache2::Log::LOG_MARK,
+	 use Apache2::Const -compile =&gt qw(:log);
+	 use APR::Const    -compile =&gt qw(SUCCESS);
+	 $s-&gtlog_serror(Apache2::Log::LOG_MARK,
 			Apache2::Const::LOG_INFO|Apache2::Const::LOG_STARTUP,
 			APR::Const::SUCCESS,
 			"This log message comes with no header");
@@ -215,10 +217,10 @@ Constants
 	 This log message comes with no header
 
 Server Logging Methods
-   "$s->log"
+   "$s-&gtlog"
        get a log handle which can be used to log messages of different levels.
 
-	 my $slog = $s->log;
+	 my $slog = $s-&gtlog;
 
        obj: $s ( "Apache2::ServerRec object" )
        ret: $slog ( "Apache2::Log::Server" object )
@@ -226,10 +228,10 @@ Server Logging Methods
 
        since: 2.0.00
 
-   "$s->log_error"
+   "$s-&gtlog_error"
        just logs the supplied message to error_log
 
-	 $s->log_error(@message);
+	 $s-&gtlog_error(@message);
 
        obj: $s ( "Apache2::ServerRec object" )
        arg1: @message ( strings ARRAY )
@@ -240,13 +242,13 @@ Server Logging Methods
 
        For example:
 
-	 $s->log_error("running low on memory");
+	 $s-&gtlog_error("running low on memory");
 
-   "$s->log_serror"
+   "$s-&gtlog_serror"
        This function provides a fine control of when the message is logged,
        gives an access to built-in status codes.
 
-	 $s->log_serror($file, $line, $level, $status, @message);
+	 $s-&gtlog_serror($file, $line, $level, $status, @message);
 
        obj: $s ( "Apache2::ServerRec object" )
        arg1: $file ( string )
@@ -270,20 +272,20 @@ Server Logging Methods
 
        For example:
 
-	 use Apache2::Const -compile => qw(:log);
-	 use APR::Const    -compile => qw(ENOTIME SUCCESS);
-	 $s->log_serror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_ERR,
+	 use Apache2::Const -compile =&gt qw(:log);
+	 use APR::Const    -compile =&gt qw(ENOTIME SUCCESS);
+	 $s-&gtlog_serror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_ERR,
 			APR::Const::SUCCESS, "log_serror logging at err level");
 
-	 $s->log_serror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_DEBUG,
+	 $s-&gtlog_serror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_DEBUG,
 			APR::Const::ENOTIME, "debug print");
 
-   "$s->warn"
-	 $s->warn(@warnings);
+   "$s-&gtwarn"
+	 $s-&gtwarn(@warnings);
 
        is the same as:
 
-	 $s->log_serror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_WARNING,
+	 $s-&gtlog_serror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_WARNING,
 			APR::Const::SUCCESS, @warnings)
 
        obj: $s ( "Apache2::ServerRec object" )
@@ -295,13 +297,13 @@ Server Logging Methods
 
        For example:
 
-	 $s->warn('routine server warning');
+	 $s-&gtwarn('routine server warning');
 
 Request Logging Methods
-   "$r->log"
+   "$r-&gtlog"
        get a log handle which can be used to log messages of different levels.
 
-	 $rlog = $r->log;
+	 $rlog = $r-&gtlog;
 
        obj: $r ( "Apache2::RequestRec object" )
        ret: $rlog ( "Apache2::Log::Request" object )
@@ -309,10 +311,10 @@ Request Logging Methods
 
        since: 2.0.00
 
-   "$r->log_error"
-       just logs the supplied message (similar to "$s->log_error" ).
+   "$r-&gtlog_error"
+       just logs the supplied message (similar to "$s-&gtlog_error" ).
 
-	 $r->log_error(@message);
+	 $r-&gtlog_error(@message);
 
        obj: $r ( "Apache2::RequestRec object" )
        arg1: @message ( strings ARRAY )
@@ -323,14 +325,14 @@ Request Logging Methods
 
        For example:
 
-	 $r->log_error("the request is about to end");
+	 $r-&gtlog_error("the request is about to end");
 
-   "$r->log_reason"
+   "$r-&gtlog_reason"
        This function provides a convenient way to log errors in a preformatted
        way:
 
-	 $r->log_reason($message);
-	 $r->log_reason($message, $filename);
+	 $r-&gtlog_reason($message);
+	 $r-&gtlog_reason($message, $filename);
 
        obj: $r ( "Apache2::RequestRec object" )
        arg1: $message ( string )
@@ -344,39 +346,39 @@ Request Logging Methods
 
        For example:
 
-	 $r->log_reason("There is no enough data");
+	 $r-&gtlog_reason("There is no enough data");
 
        will generate a log entry similar to the following:
 
 	 [Fri Sep 24 11:58:36 2004] [error] access to /someuri
 	 failed for 127.0.0.1, reason: There is no enough data.
 
-   "$r->log_rerror"
+   "$r-&gtlog_rerror"
        This function provides a fine control of when the message is logged,
        gives an access to built-in status codes.
 
-	 $r->log_rerror($file, $line, $level, $status, @message);
+	 $r-&gtlog_rerror($file, $line, $level, $status, @message);
 
-       arguments are identical to "$s->log_serror".
+       arguments are identical to "$s-&gtlog_serror".
 
        since: 2.0.00
 
        For example:
 
-	 use Apache2::Const -compile => qw(:log);
-	 use APR::Const    -compile => qw(ENOTIME SUCCESS);
-	 $r->log_rerror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_ERR,
+	 use Apache2::Const -compile =&gt qw(:log);
+	 use APR::Const    -compile =&gt qw(ENOTIME SUCCESS);
+	 $r-&gtlog_rerror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_ERR,
 			APR::Const::SUCCESS, "log_rerror logging at err level");
 
-	 $r->log_rerror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_DEBUG,
+	 $r-&gtlog_rerror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_DEBUG,
 			APR::Const::ENOTIME, "debug print");
 
-   "$r->warn"
-	 $r->warn(@warnings);
+   "$r-&gtwarn"
+	 $r-&gtwarn(@warnings);
 
        is the same as:
 
-	 $r->log_rerror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_WARNING,
+	 $r-&gtlog_rerror(Apache2::Log::LOG_MARK, Apache2::Const::LOG_WARNING,
 			APR::Const::SUCCESS, @warnings)
 
        obj: $r ( "Apache2::RequestRec object" )
@@ -388,19 +390,19 @@ Request Logging Methods
 
        For example:
 
-	 $r->warn('routine server warning');
+	 $r-&gtwarn('routine server warning');
 
 Other Logging Methods
    LogLevel Methods
-       after getting the log handle with "$s->log" or "$r->log", use one of
+       after getting the log handle with "$s-&gtlog" or "$r-&gtlog", use one of
        the following methods (corresponding to the "LogLevel" levels):
 
 	 emerg(), alert(), crit(), error(), warn(), notice(), info(), debug()
 
        to control when messages should be logged:
 
-	 $s->log->emerg(@message);
-	 $r->log->emerg(@message);
+	 $s-&gtlog-&gtemerg(@message);
+	 $r-&gtlog-&gtemerg(@message);
 
        obj: $slog ( server or request log handle )
        arg1: @message ( strings ARRAY )
@@ -410,10 +412,10 @@ Other Logging Methods
        For example if the "LogLevel" is "error" and the following code is
        executed:
 
-	 my $slog = $s->log;
-	 $slog->debug("just ", "some debug info");
-	 $slog->warn(@warnings);
-	 $slog->crit("dying");
+	 my $slog = $s-&gtlog;
+	 $slog-&gtdebug("just ", "some debug info");
+	 $slog-&gtwarn(@warnings);
+	 $slog-&gtcrit("dying");
 
        only the last command's logging will be performed. This is because
        warn, debug and other logging command which are listed right to error
@@ -461,7 +463,7 @@ General Functions
 
        It's mostly useful to be passed as the first argument to those logging
        methods, expecting the filename and the line number as the first
-       arguments (e.g., "$s->log_serror" and "$r->log_rerror" ).
+       arguments (e.g., "$s-&gtlog_serror" and "$r-&gtlog_rerror" ).
 
 Virtual Hosts
        Code running from within a virtual host needs to be able to log into
@@ -515,14 +517,14 @@ Virtual Hosts
 	   object.
 
 	   Inside HTTP request handlers this is possible via
-	   "Apache2->request".	Which requires either "PerlOptions
+	   "Apache2-&gtrequest".	Which requires either "PerlOptions
 	   +GlobalRequest" setting or can be also done at runtime if $r is
 	   available:
 
 	     use Apache2::RequestUtil ();
 	     sub handler {
 		 my $r = shift;
-		 Apache2::RequestUtil->request($r);
+		 Apache2::RequestUtil-&gtrequest($r);
 		 ...
 
 	   Outside HTTP handlers at the moment it is not possible, to get hold
@@ -576,6 +578,6 @@ Authors
 
 
 perl v5.12.apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::Log(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

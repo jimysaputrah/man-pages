@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document describes differences between the 5.6.0 release and the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perl58delta - what is new for perl v5.8.0</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERL58DELTA(1)	       Perl Programmers Reference Guide 	PERL58DELTA(1)
 
 
@@ -160,7 +162,7 @@ Incompatible Changes
        aliases for d/f, but you never knew that.)
 
    glob() now returns filenames in alphabetical order
-       The list of filenames from glob() (or <...>) is now by default sorted
+       The list of filenames from glob() (or &lt...&gt) is now by default sorted
        alphabetically to be csh-compliant (which is what happened before in
        most Unix platforms).  (bsd_glob() does still sort platform natively,
        ASCII or EBCDIC, unless GLOB_ALPHASORT is specified.) [561]
@@ -231,7 +233,7 @@ Incompatible Changes
 	   programs depends on the underlying implementation, consider using
 	   Class::PseudoHash from CPAN.
 
-       o   The syntaxes "@a->[...]" and  "%h->{...}" have now been deprecated.
+       o   The syntaxes "@a-&gt[...]" and  "%h-&gt{...}" have now been deprecated.
 
        o   After years of trying, suidperl is considered to be too complex to
 	   ever be considered truly secure.  The suidperl functionality is
@@ -298,7 +300,7 @@ Core Enhancements
 	   the handle's behaviour.  Layers can be specified at open time via
 	   3-arg form of open:
 
-	      open($fh,'>:crlf :utf8', $path) || ...
+	      open($fh,'&gt:crlf :utf8', $path) || ...
 
 	   or on already opened handles via extended "binmode":
 
@@ -306,7 +308,7 @@ Core Enhancements
 
 	   The built-in layers are: unix (low level read/write), stdio (as in
 	   previous Perls), perlio (re-implementation of stdio buffering in a
-	   portable manner), crlf (does CRLF <=> "\n" translation as on Win32,
+	   portable manner), crlf (does CRLF &lt=&gt "\n" translation as on Win32,
 	   but available on any platform).  A mmap layer may be available if
 	   platform supports it (mostly Unixes).
 
@@ -329,7 +331,7 @@ Core Enhancements
 	   Unicode (UTF-8 or UTF-EBCDIC depending on platform) by a pseudo
 	   layer ":utf8" :
 
-	      open($fh,">:utf8","Uni.txt");
+	      open($fh,"&gt:utf8","Uni.txt");
 
 	   Note for EBCDIC users: the pseudo layer ":utf8" is erroneously
 	   named for you since it's not UTF-8 what you will be getting but
@@ -363,12 +365,12 @@ Core Enhancements
        o   File handles can be opened to "in memory" files held in Perl
 	   scalars via:
 
-	      open($fh,'>', \$variable) || ...
+	      open($fh,'&gt', \$variable) || ...
 
        o   Anonymous temporary files are available without need to 'use
 	   FileHandle' or other module via
 
-	      open($fh,"+>", undef) || ...
+	      open($fh,"+&gt", undef) || ...
 
 	   That is a literal undef, not an undefined value.
 
@@ -597,7 +599,7 @@ Core Enhancements
 	   enabled.
 
        o   You can now override the readline() builtin, and this overrides
-	   also the <FILEHANDLE> angle bracket operator.
+	   also the &ltFILEHANDLE&gt angle bracket operator.
 
        o   The command-line options -s and -F are now recognized on the
 	   shebang (#!) line.
@@ -723,7 +725,7 @@ Modules and Pragmata
 
 	       # in user's code:
 
-	       use MyFilter qr/red/ => 'green';
+	       use MyFilter qr/red/ =&gt 'green';
 
 	       print "red\n";	# this code is filtered, will print "green\n"
 	       print "bored\n"; # this code is filtered, will print "bogreen\n"
@@ -826,12 +828,12 @@ Modules and Pragmata
 	   of a "PerlIO::via" class:
 
 	       use PerlIO::via::QuotedPrint;
-	       open($fh,">:via(QuotedPrint)",$path);
+	       open($fh,"&gt:via(QuotedPrint)",$path);
 
 	   This will automatically convert everything output to $fh to Quoted-
 	   Printable.  See PerlIO::via and PerlIO::via::QuotedPrint.
 
-       o   "Pod::ParseLink", by Russ Allbery, has been added, to parse L<>
+       o   "Pod::ParseLink", by Russ Allbery, has been added, to parse L&lt&gt
 	   links in pods as described in the new perlpodspec.
 
        o   "Pod::Text::Overstrike", by Joe Smith, has been added.  It converts
@@ -1267,7 +1269,7 @@ Performance Enhancements
 	   trivial, or somewhat profound.  However, if you just want to sort
 	   the even digits ahead of the odd ones, then what will
 
-	       sort { ($a % 2) <=> ($b % 2) } @digits;
+	       sort { ($a % 2) &lt=&gt ($b % 2) } @digits;
 
 	   yield?  The only even digit, 4, will come first.  But how about the
 	   odd numbers, which all compare equal?  With the quicksort algorithm
@@ -1279,7 +1281,7 @@ Performance Enhancements
 	   the same input.  The justification for this rests with quicksort's
 	   worst case behavior.  If you run
 
-	      sort { $a <=> $b } ( 1 .. $N , 1 .. $N );
+	      sort { $a &lt=&gt $b } ( 1 .. $N , 1 .. $N );
 
 	   (something you might approximate if you wanted to merge two sorted
 	   arrays using sort), doubling $N doesn't just double the quicksort
@@ -1299,7 +1301,7 @@ Performance Enhancements
 	   broken to preserve the original order of appearance in the input
 	   array.  So
 
-	       sort { ($a % 2) <=> ($b % 2) } (3,1,4,1,5,9);
+	       sort { ($a % 2) &lt=&gt ($b % 2) } (3,1,4,1,5,9);
 
 	   will yield (4,3,1,1,5,9), guaranteed.  The even and odd numbers
 	   appear in the output in the same order they appeared in the input.
@@ -1628,7 +1630,7 @@ Selected Bug Fixes
        o   Localised tied variables no longer leak memory
 
 	       use Tie::Hash;
-	       tie my %tied_hash => 'Tie::StdHash';
+	       tie my %tied_hash =&gt 'Tie::StdHash';
 
 	       ...
 
@@ -1640,7 +1642,7 @@ Selected Bug Fixes
 	   exist, if they didn't before they were localised.
 
 	       use Tie::Hash;
-	       tie my %tied_hash => 'Tie::StdHash';
+	       tie my %tied_hash =&gt 'Tie::StdHash';
 
 	       ...
 
@@ -1999,7 +2001,7 @@ Selected Bug Fixes
 		   incompatible with those generated by the other supported
 		   compilers (GCC and Visual C++). [561]
 
-	   o	   Duping socket handles with open(F, ">&MYSOCK") now works
+	   o	   Duping socket handles with open(F, "&gt&MYSOCK") now works
 		   under Windows 9x.  [561]
 
 	   o	   Current directory entries in %ENV are now correctly
@@ -2030,7 +2032,7 @@ Selected Bug Fixes
 	   o	   Less stack reserved per thread so that more threads can run
 		   concurrently. (Still 16M per thread.) [561]
 
-	   o	   "File::Spec->tmpdir()" now prefers C:/temp over /tmp (works
+	   o	   "File::Spec-&gttmpdir()" now prefers C:/temp over /tmp (works
 		   better when perl is running as service).
 
 	   o	   Better UNC path handling under ithreads. [561]
@@ -2069,7 +2071,7 @@ New or Changed Diagnostics
        o   All regular expression compilation error messages are now hopefully
 	   easier to understand both because the error message now comes
 	   before the failed regex and because the point of failure is now
-	   clearly marked by a "<-- HERE" marker.
+	   clearly marked by a "&lt-- HERE" marker.
 
        o   Various I/O (and socket) functions like binmode(), close(), and so
 	   forth now more consistently warn if they are used illogically
@@ -2126,7 +2128,7 @@ New or Changed Diagnostics
        o   Variable length lookbehind has not yet been implemented, trying to
 	   use it will tell that.
 
-       o   Using arrays or hashes as references (e.g. "%foo->{bar}" has been
+       o   Using arrays or hashes as references (e.g. "%foo-&gt{bar}" has been
 	   deprecated for a while.  Now you will get an optional warning.
 
        o   Warnings relating to the use of the new restricted hashes feature
@@ -2784,11 +2786,11 @@ SEE ALSO
        The Artistic and Copying files for copyright information.
 
 HISTORY
-       Written by Jarkko Hietaniemi <jhi@iki.fi>.
+       Written by Jarkko Hietaniemi &ltjhi@iki.fi&gt.
 
 
 
 perl v5.12.4			  2011-06-01			PERL58DELTA(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

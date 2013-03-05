@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="podchecker will perform syntax checking of Perl5 POD format..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Pod::Checker, podchecker() - check pod documents for syntax errors</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Pod::Checker(3pm)      Perl Programmers Reference Guide      Pod::Checker(3pm)
 
 
@@ -21,7 +23,7 @@ SYNOPSIS
 	 $syntax_okay = podchecker($filepath, $outputpath, %options);
 
 	 my $checker = new Pod::Checker %options;
-	 $checker->parse_from_file($filepath, \*STDERR);
+	 $checker-&gtparse_from_file($filepath, \*STDERR);
 
 OPTIONS/ARGUMENTS
        $filepath is the input POD to read and $outputpath is where to write
@@ -33,7 +35,7 @@ OPTIONS/ARGUMENTS
    podchecker()
        This function can take a hash of options:
 
-       -warnings => val
+       -warnings =&gt val
 	   Turn warnings on/off. val is usually 1 for on, but higher values
 	   trigger additional warnings. See "Warnings".
 
@@ -47,7 +49,7 @@ DESCRIPTION
 
        The following checks are currently performed:
 
-       o   Unknown '=xxxx' commands, unknown 'X<...>' interior-sequences, and
+       o   Unknown '=xxxx' commands, unknown 'X&lt...&gt' interior-sequences, and
 	   unterminated interior sequences.
 
        o   Check for proper balancing of "=begin" and "=end". The contents of
@@ -57,11 +59,11 @@ DESCRIPTION
        o   Check for proper nesting and balancing of "=over", "=item" and
 	   "=back".
 
-       o   Check for same nested interior-sequences (e.g.  "L<...L<...>...>").
+       o   Check for same nested interior-sequences (e.g.  "L&lt...L&lt...&gt...&gt").
 
-       o   Check for malformed or non-existing entities "E<...>".
+       o   Check for malformed or non-existing entities "E&lt...&gt".
 
-       o   Check for correct syntax of hyperlinks "L<...>". See perlpod for
+       o   Check for correct syntax of hyperlinks "L&lt...&gt". See perlpod for
 	   details.
 
        o   Check for unresolved document-internal links. This check may also
@@ -120,10 +122,10 @@ DIAGNOSTICS
 
        o   Unknown interior-sequence "SEQ"
 
-	   An invalid markup command has been encountered. Valid are: "B<>",
-	   "C<>", "E<>", "F<>", "I<>", "L<>", "S<>", "X<>", "Z<>"
+	   An invalid markup command has been encountered. Valid are: "B&lt&gt",
+	   "C&lt&gt", "E&lt&gt", "F&lt&gt", "I&lt&gt", "L&lt&gt", "S&lt&gt", "X&lt&gt", "Z&lt&gt"
 
-       o   nested commands CMD<...CMD<...>...>
+       o   nested commands CMD&lt...CMD&lt...&gt...&gt
 
 	   Two nested identical markup commands have been found. Generally
 	   this does not make sense.
@@ -137,16 +139,16 @@ DIAGNOSTICS
 	   An entity specified by number (dec, hex, oct) is out of range
 	   (1-255).
 
-       o   malformed link L<>
+       o   malformed link L&lt&gt
 
 	   The link found cannot be parsed because it does not conform to the
 	   syntax described in perlpod.
 
-       o   nonempty Z<>
+       o   nonempty Z&lt&gt
 
-	   The "Z<>" sequence is supposed to be empty.
+	   The "Z&lt&gt" sequence is supposed to be empty.
 
-       o   empty X<>
+       o   empty X&lt&gt
 
 	   The index entry specified contains nothing but whitespace.
 
@@ -191,9 +193,9 @@ DIAGNOSTICS
 	   numbered one. This is obviously inconsistent. For most translators
 	   the type of the first "=item" determines the type of the list.
 
-       o   N unescaped "<>" in paragraph
+       o   N unescaped "&lt&gt" in paragraph
 
-	   Angle brackets not written as "<lt>" and "<gt>" can potentially
+	   Angle brackets not written as "&ltlt&gt" and "&ltgt&gt" can potentially
 	   cause errors as they could be misinterpreted as markup commands.
 	   This is only printed when the -warnings level is greater than 1.
 
@@ -237,25 +239,25 @@ DIAGNOSTICS
        o   ignoring leading/trailing whitespace in link
 
 	   There is whitespace at the beginning or the end of the contents of
-	   L<...>.
+	   L&lt...&gt.
 
        o   (section) in '$page' deprecated
 
-	   There is a section detected in the page name of L<...>, e.g.
-	   "L<passwd(2)>". POD hyperlinks may point to POD documents only.
-	   Please write "C<passwd(2)>" instead. Some formatters are able to
+	   There is a section detected in the page name of L&lt...&gt, e.g.
+	   "L&ltpasswd(2)&gt". POD hyperlinks may point to POD documents only.
+	   Please write "C&ltpasswd(2)&gt" instead. Some formatters are able to
 	   expand this to appropriate code. For links to (builtin) functions,
-	   please say "L<perlfunc/mkdir>", without ().
+	   please say "L&ltperlfunc/mkdir&gt", without ().
 
        o   alternative text/node '%s' contains non-escaped | or /
 
-	   The characters "|" and "/" are special in the L<...> context.
+	   The characters "|" and "/" are special in the L&lt...&gt context.
 	   Although the hyperlink parser does its best to determine which "/"
 	   is text and which is a delimiter in case of doubt, one ought to
 	   escape these literal characters like this:
 
-	     /	   E<sol>
-	     |	   E<verbar>
+	     /	   E&ltsol&gt
+	     |	   E&ltverbar&gt
 
 RETURN VALUE
        podchecker returns the number of POD syntax errors found or -1 if there
@@ -266,7 +268,7 @@ EXAMPLES
 
 INTERFACE
        While checking, this module collects document properties, e.g. the
-       nodes for hyperlinks ("=headX", "=item") and index entries ("X<>").
+       nodes for hyperlinks ("=headX", "=item") and index entries ("X&lt&gt").
        POD translators can use this feature to syntax-check and get the nodes
        in a first pass before actually starting to convert. This is expensive
        in terms of execution time, but allows for very robust conversions.
@@ -278,23 +280,23 @@ INTERFACE
        completely the output behavior. Users of podchecker (the script) get
        the well-known behavior.
 
-       "Pod::Checker->new( %options )"
+       "Pod::Checker-&gtnew( %options )"
 	   Return a reference to a new Pod::Checker object that inherits from
 	   Pod::Parser and is used for calling the required methods later. The
 	   following options are recognized:
 
-	   "-warnings => num"
+	   "-warnings =&gt num"
 	     Print warnings if "num" is true. The higher the value of "num",
 	   the more warnings are printed. Currently there are only levels 1
 	   and 2.
 
-	   "-quiet => num"
+	   "-quiet =&gt num"
 	     If "num" is true, do not print any errors/warnings. This is
 	   useful when Pod::Checker is used to munge POD code into plain text
 	   from within POD formatters.
 
-       "$checker->poderror( @args )"
-       "$checker->poderror( {%opts}, @args )"
+       "$checker-&gtpoderror( @args )"
+       "$checker-&gtpoderror( {%opts}, @args )"
 	   Internal method for printing errors and warnings. If no options are
 	   given, simply prints "@_". The following options are recognized and
 	   used to form the output:
@@ -315,46 +317,46 @@ INTERFACE
 
 	   The error level, should be 'WARNING' or 'ERROR'.
 
-       "$checker->num_errors()"
+       "$checker-&gtnum_errors()"
 	   Set (if argument specified) and retrieve the number of errors
 	   found.
 
-       "$checker->num_warnings()"
+       "$checker-&gtnum_warnings()"
 	   Set (if argument specified) and retrieve the number of warnings
 	   found.
 
-       "$checker->name()"
+       "$checker-&gtname()"
 	   Set (if argument specified) and retrieve the canonical name of POD
 	   as found in the "=head1 NAME" section.
 
-       "$checker->node()"
+       "$checker-&gtnode()"
 	   Add (if argument specified) and retrieve the nodes (as defined by
 	   "=headX" and "=item") of the current POD. The nodes are returned in
 	   the order of their occurrence. They consist of plain text, each
 	   piece of whitespace is collapsed to a single blank.
 
-       "$checker->idx()"
+       "$checker-&gtidx()"
 	   Add (if argument specified) and retrieve the index entries (as
-	   defined by "X<>") of the current POD. They consist of plain text,
+	   defined by "X&lt&gt") of the current POD. They consist of plain text,
 	   each piece of whitespace is collapsed to a single blank.
 
-       "$checker->hyperlink()"
+       "$checker-&gthyperlink()"
 	   Add (if argument specified) and retrieve the hyperlinks (as defined
-	   by "L<>") of the current POD. They consist of a 2-item array: line
+	   by "L&lt&gt") of the current POD. They consist of a 2-item array: line
 	   number and "Pod::Hyperlink" object.
 
 AUTHOR
-       Please report bugs using <http://rt.cpan.org>.
+       Please report bugs using &lthttp://rt.cpan.org&gt.
 
-       Brad Appleton <bradapp@enteract.com> (initial version), Marek Rouchal
-       <marekr@cpan.org>
+       Brad Appleton &ltbradapp@enteract.com&gt (initial version), Marek Rouchal
+       &ltmarekr@cpan.org&gt
 
        Based on code for Pod::Text::pod2text() written by Tom Christiansen
-       <tchrist@mox.perl.com>
+       &lttchrist@mox.perl.com&gt
 
 
 
 perl v5.12.4			  2011-06-01		     Pod::Checker(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

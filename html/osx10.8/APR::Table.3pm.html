@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""APR::Table" allows its users to manipulate opaque string-content..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>APR::Table - Perl API for manipulating APR opaque string-content tables</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apache_mod_peapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::APR::Table(3)
 
 
@@ -19,34 +21,34 @@ Synopsis
 	 use APR::Table ();
 
 	 $table = APR::Table::make($pool, $nelts);
-	 $table_copy = $table->copy($pool);
+	 $table_copy = $table-&gtcopy($pool);
 
-	 $table->clear();
+	 $table-&gtclear();
 
-	 $table->set($key => $val);
-	 $table->unset($key);
-	 $table->add($key, $val);
+	 $table-&gtset($key =&gt $val);
+	 $table-&gtunset($key);
+	 $table-&gtadd($key, $val);
 
-	 $val = $table->get($key);
-	 @val = $table->get($key);
+	 $val = $table-&gtget($key);
+	 @val = $table-&gtget($key);
 
-	 $table->merge($key => $val);
+	 $table-&gtmerge($key =&gt $val);
 
 	 use APR::Const -compile qw(:table);
-	 $table_overlay = $table_base->overlay($table_overlay, $pool);
-	 $table_overlay->compress(APR::Const::OVERLAP_TABLES_MERGE);
+	 $table_overlay = $table_base-&gtoverlay($table_overlay, $pool);
+	 $table_overlay-&gtcompress(APR::Const::OVERLAP_TABLES_MERGE);
 
-	 $table_a->overlap($table_b, APR::Const::OVERLAP_TABLES_SET);
+	 $table_a-&gtoverlap($table_b, APR::Const::OVERLAP_TABLES_SET);
 
-	 $table->do(sub {print "key $_[0], value $_[1]\n"}, @valid_keys);
+	 $table-&gtdo(sub {print "key $_[0], value $_[1]\n"}, @valid_keys);
 
 	 #Tied Interface
-	 $value = $table->{$key};
-	 $table->{$key} = $value;
-	 print "got it" if exists $table->{$key};
+	 $value = $table-&gt{$key};
+	 $table-&gt{$key} = $value;
+	 print "got it" if exists $table-&gt{$key};
 
 	 foreach my $key (keys %{$table}) {
-	     print "$key = $table->{$key}\n";
+	     print "$key = $table-&gt{$key}\n";
 	 }
 
 Description
@@ -86,7 +88,7 @@ API
        Add data to a table, regardless of whether there is another element
        with the same key.
 
-	 $table->add($key, $val);
+	 $table-&gtadd($key, $val);
 
        obj: $table ( "APR::Table object" )
 	   The table to add to.
@@ -106,7 +108,7 @@ API
    "clear"
        Delete all of the elements from a table.
 
-	 $table->clear();
+	 $table-&gtclear();
 
        obj: $table ( "APR::Table object" )
 	   The table to clear.
@@ -118,7 +120,7 @@ API
        Eliminate redundant entries in a table by either overwriting or merging
        duplicates:
 
-	 $table->compress($flags);
+	 $table-&gtcompress($flags);
 
        obj: $table ( "APR::Table object" )
 	   The table to compress.
@@ -137,12 +139,12 @@ API
 
        When $flags == "APR::Const::OVERLAP_TABLES_SET", each key will be set
        to the last value seen for that key.  For example, given key/value
-       pairs 'foo => bar' and 'foo => baz', 'foo' would have a final value of
+       pairs 'foo =&gt bar' and 'foo =&gt baz', 'foo' would have a final value of
        'baz' after compression -- the 'bar' value would be lost.
 
        When $flags == "APR::Const::OVERLAP_TABLES_MERGE", multiple values for
        the same key are flattened into a comma-separated list.	Given
-       key/value pairs 'foo => bar' and 'foo => baz', 'foo' would have a final
+       key/value pairs 'foo =&gt bar' and 'foo =&gt baz', 'foo' would have a final
        value of 'bar, baz' after compression.
 
        Access the constants via:
@@ -162,29 +164,29 @@ API
 
 	   Start with table $table:
 
-	     foo => "one"
-	     foo => "two"
-	     foo => "three"
-	     bar => "beer"
+	     foo =&gt "one"
+	     foo =&gt "two"
+	     foo =&gt "three"
+	     bar =&gt "beer"
 
 	   which is done by:
 
-	     use APR::Const    -compile => ':table';
-	     my $table = APR::Table::make($r->pool, TABLE_SIZE);
+	     use APR::Const    -compile =&gt ':table';
+	     my $table = APR::Table::make($r-&gtpool, TABLE_SIZE);
 
-	     $table->set(bar => 'beer');
-	     $table->set(foo => 'one');
-	     $table->add(foo => 'two');
-	     $table->add(foo => 'three');
+	     $table-&gtset(bar =&gt 'beer');
+	     $table-&gtset(foo =&gt 'one');
+	     $table-&gtadd(foo =&gt 'two');
+	     $table-&gtadd(foo =&gt 'three');
 
 	   Now compress it using "APR::Const::OVERLAP_TABLES_SET":
 
-	     $table->compress(APR::Const::OVERLAP_TABLES_SET);
+	     $table-&gtcompress(APR::Const::OVERLAP_TABLES_SET);
 
 	   Now table $table contains:
 
-	     foo => "three"
-	     bar => "beer"
+	     foo =&gt "three"
+	     bar =&gt "beer"
 
 	   The value three for the key foo, that was added last, took over the
 	   other values.
@@ -193,27 +195,27 @@ API
 
 	   Start with table $table:
 
-	     foo => "one"
-	     foo => "two"
-	     foo => "three"
-	     bar => "beer"
+	     foo =&gt "one"
+	     foo =&gt "two"
+	     foo =&gt "three"
+	     bar =&gt "beer"
 
 	   as in the previous example, now compress it using
 	   "APR::Const::OVERLAP_TABLES_MERGE":
 
-	     $table->compress(APR::Const::OVERLAP_TABLES_MERGE);
+	     $table-&gtcompress(APR::Const::OVERLAP_TABLES_MERGE);
 
 	   Now table $table contains:
 
-	     foo => "one, two, three"
-	     bar => "beer"
+	     foo =&gt "one, two, three"
+	     bar =&gt "beer"
 
 	   All the values for the same key were merged into one value.
 
    "copy"
        Create a new table and copy another table into it.
 
-	 $table_copy = $table->copy($p);
+	 $table_copy = $table-&gtcopy($p);
 
        obj: $table ( "APR::Table object" )
 	   The table to copy.
@@ -231,7 +233,7 @@ API
        subroutine for each element.  The subroutine gets passed as argument, a
        key-value pair.
 
-	 $table->do(sub {...}, @filter);
+	 $table-&gtdo(sub {...}, @filter);
 
        obj: $table ( "APR::Table object" )
 	   The table to operate on.
@@ -253,22 +255,22 @@ API
        o   This filter simply prints out the key/value pairs and counts how
 	   many pairs did it see.
 
-	     use constant TABLE_SIZE => 20;
+	     use constant TABLE_SIZE =&gt 20;
 	     our $filter_count;
-	     my $table = APR::Table::make($r->pool, TABLE_SIZE);
+	     my $table = APR::Table::make($r-&gtpool, TABLE_SIZE);
 
 	     # populate the table with ascii data
 	     for (1..TABLE_SIZE) {
-		 $table->set(chr($_+97), $_);
+		 $table-&gtset(chr($_+97), $_);
 	     }
 
 	     $filter_count = 0;
-	     $table->do("my_filter");
+	     $table-&gtdo("my_filter");
 	     print "Counted $filter_count elements";
 
 	     sub my_filter {
 		 my ($key, $value) = @_;
-		 warn "$key => $value\n";
+		 warn "$key =&gt $value\n";
 		 $filter_count++;
 		 return 1;
 	     }
@@ -290,8 +292,8 @@ API
        Get the value(s) associated with a given key.  After this call, the
        data is still in the table.
 
-	 $val = $table->get($key);
-	 @val = $table->get($key);
+	 $val = $table-&gtget($key);
+	 @val = $table-&gtget($key);
 
        obj: $table ( "APR::Table object" )
 	   The table to search for the key.
@@ -332,7 +334,7 @@ API
        Add data to a table by merging the value with data that has already
        been stored using ", " as a separator:
 
-	 $table->merge($key, $val);
+	 $table-&gtmerge($key, $val);
 
        obj: $table ( "APR::Table object" )
 	   The table to search for the data.
@@ -355,13 +357,13 @@ API
 
        o   Start with a pair:
 
-	     merge => "1"
+	     merge =&gt "1"
 
 	   and merge "a" to the value:
 
-	     $table->set(  merge => '1');
-	     $table->merge(merge => 'a');
-	     $val = $table->get('merge');
+	     $table-&gtset(  merge =&gt '1');
+	     $table-&gtmerge(merge =&gt 'a');
+	     $val = $table-&gtget('merge');
 
 	   Result:
 
@@ -369,15 +371,15 @@ API
 
        o   Start with a multivalued pair:
 
-	     merge => "1"
-	     merge => "2"
+	     merge =&gt "1"
+	     merge =&gt "2"
 
 	   and merge "a" to the first value;
 
-	     $table->set(  merge => '1');
-	     $table->add(  merge => '2');
-	     $table->merge(merge => 'a');
-	     @val = $table->get('merge');
+	     $table-&gtset(  merge =&gt '1');
+	     $table-&gtadd(  merge =&gt '2');
+	     $table-&gtmerge(merge =&gt 'a');
+	     @val = $table-&gtget('merge');
 
 	   Result:
 
@@ -388,8 +390,8 @@ API
 
        o   Have no entry and merge "a";
 
-	     $table->merge(miss => 'a');
-	     $val = $table->get('miss');
+	     $table-&gtmerge(miss =&gt 'a');
+	     $val = $table-&gtget('miss');
 
 	   Result:
 
@@ -399,7 +401,7 @@ API
        For each key/value pair in $table_b, add the data to $table_a. The
        definition of $flags explains how $flags define the overlapping method.
 
-	 $table_a->overlap($table_b, $flags);
+	 $table_a-&gtoverlap($table_b, $flags);
 
        obj: $table_a ( "APR::Table object" )
 	   The table to add the data to.
@@ -436,10 +438,10 @@ API
        Conceptually, "overlap()" does this:
 
 	 apr_array_header_t *barr = apr_table_elts(b);
-	 apr_table_entry_t *belt = (apr_table_entry_t *)barr-E<gt>elts;
+	 apr_table_entry_t *belt = (apr_table_entry_t *)barr-E&ltgt&gtelts;
 	 int i;
 
-	 for (i = 0; i < barr->nelts; ++i) {
+	 for (i = 0; i &lt barr-&gtnelts; ++i) {
 	     if (flags & APR_OVERLAP_TABLES_MERGE) {
 		 apr_table_mergen(a, belt[i].key, belt[i].val);
 	     }
@@ -461,34 +463,34 @@ API
 
 	   Start with table $base:
 
-	     foo => "one"
-	     foo => "two"
-	     bar => "beer"
+	     foo =&gt "one"
+	     foo =&gt "two"
+	     bar =&gt "beer"
 
 	   and table $add:
 
-	     foo => "three"
+	     foo =&gt "three"
 
 	   which is done by:
 
-	     use APR::Const    -compile => ':table';
-	     my $base = APR::Table::make($r->pool, TABLE_SIZE);
-	     my $add  = APR::Table::make($r->pool, TABLE_SIZE);
+	     use APR::Const    -compile =&gt ':table';
+	     my $base = APR::Table::make($r-&gtpool, TABLE_SIZE);
+	     my $add  = APR::Table::make($r-&gtpool, TABLE_SIZE);
 
-	     $base->set(bar => 'beer');
-	     $base->set(foo => 'one');
-	     $base->add(foo => 'two');
+	     $base-&gtset(bar =&gt 'beer');
+	     $base-&gtset(foo =&gt 'one');
+	     $base-&gtadd(foo =&gt 'two');
 
-	     $add->set(foo => 'three');
+	     $add-&gtset(foo =&gt 'three');
 
 	   Now overlap using "APR::Const::OVERLAP_TABLES_SET":
 
-	     $base->overlap($add, APR::Const::OVERLAP_TABLES_SET);
+	     $base-&gtoverlap($add, APR::Const::OVERLAP_TABLES_SET);
 
 	   Now table $add is unmodified and table $base contains:
 
-	     foo => "three"
-	     bar => "beer"
+	     foo =&gt "three"
+	     bar =&gt "beer"
 
 	   The value from table "add" has overwritten all previous values for
 	   the same key both had (foo).  This is the same as doing "overlay()"
@@ -498,34 +500,34 @@ API
 
 	   Start with table $base:
 
-	     foo => "one"
-	     foo => "two"
+	     foo =&gt "one"
+	     foo =&gt "two"
 
 	   and table $add:
 
-	     foo => "three"
-	     bar => "beer"
+	     foo =&gt "three"
+	     bar =&gt "beer"
 
 	   which is done by:
 
-	     use APR::Const    -compile => ':table';
-	     my $base = APR::Table::make($r->pool, TABLE_SIZE);
-	     my $add  = APR::Table::make($r->pool, TABLE_SIZE);
+	     use APR::Const    -compile =&gt ':table';
+	     my $base = APR::Table::make($r-&gtpool, TABLE_SIZE);
+	     my $add  = APR::Table::make($r-&gtpool, TABLE_SIZE);
 
-	     $base->set(foo => 'one');
-	     $base->add(foo => 'two');
+	     $base-&gtset(foo =&gt 'one');
+	     $base-&gtadd(foo =&gt 'two');
 
-	     $add->set(foo => 'three');
-	     $add->set(bar => 'beer');
+	     $add-&gtset(foo =&gt 'three');
+	     $add-&gtset(bar =&gt 'beer');
 
 	   Now overlap using "APR::Const::OVERLAP_TABLES_MERGE":
 
-	     $base->overlap($add, APR::Const::OVERLAP_TABLES_MERGE);
+	     $base-&gtoverlap($add, APR::Const::OVERLAP_TABLES_MERGE);
 
 	   Now table $add is unmodified and table $base contains:
 
-	     foo => "one, two, three"
-	     bar => "beer"
+	     foo =&gt "one, two, three"
+	     bar =&gt "beer"
 
 	   Values from both tables for the same key were merged into one
 	   value. This is the same as doing "overlay()" followed by
@@ -535,7 +537,7 @@ API
        Merge two tables into one new table. The resulting table may have more
        than one value for the same key.
 
-	 $table = $table_base->overlay($table_overlay, $p);
+	 $table = $table_base-&gtoverlay($table_overlay, $p);
 
        obj: $table_base ( "APR::Table object" )
 	   The table to add at the end of the new table.
@@ -555,43 +557,43 @@ API
 
        o   Start with table $base:
 
-	     foo => "one"
-	     foo => "two"
-	     bar => "beer"
+	     foo =&gt "one"
+	     foo =&gt "two"
+	     bar =&gt "beer"
 
 	   and table $add:
 
-	     foo => "three"
+	     foo =&gt "three"
 
 	   which is done by:
 
-	     use APR::Const    -compile => ':table';
-	     my $base = APR::Table::make($r->pool, TABLE_SIZE);
-	     my $add  = APR::Table::make($r->pool, TABLE_SIZE);
+	     use APR::Const    -compile =&gt ':table';
+	     my $base = APR::Table::make($r-&gtpool, TABLE_SIZE);
+	     my $add  = APR::Table::make($r-&gtpool, TABLE_SIZE);
 
-	     $base->set(bar => 'beer');
-	     $base->set(foo => 'one');
-	     $base->add(foo => 'two');
+	     $base-&gtset(bar =&gt 'beer');
+	     $base-&gtset(foo =&gt 'one');
+	     $base-&gtadd(foo =&gt 'two');
 
-	     $add->set(foo => 'three');
+	     $add-&gtset(foo =&gt 'three');
 
 	   Now overlay using "APR::Const::OVERLAP_TABLES_SET":
 
-	     my $overlay = $base->overlay($add, APR::Const::OVERLAP_TABLES_SET);
+	     my $overlay = $base-&gtoverlay($add, APR::Const::OVERLAP_TABLES_SET);
 
 	   That resulted in a new table $overlay (tables "add" and $base are
 	   unmodified) which contains:
 
-	     foo => "one"
-	     foo => "two"
-	     foo => "three"
-	     bar => "beer"
+	     foo =&gt "one"
+	     foo =&gt "two"
+	     foo =&gt "three"
+	     bar =&gt "beer"
 
    "set"
        Add a key/value pair to a table, if another element already exists with
        the same key, this will over-write the old data.
 
-	 $table->set($key, $val);
+	 $table-&gtset($key, $val);
 
        obj: $table ( "APR::Table object" )
 	   The table to add the data to.
@@ -611,7 +613,7 @@ API
    "unset"
        Remove data from the table.
 
-	 $table->unset($key);
+	 $table-&gtunset($key);
 
        obj: $table ( "APR::Table object" )
 	   The table to remove data from.
@@ -639,7 +641,7 @@ TIE Interface
        "each()" (which fully supports multivalued keys), or "APR::Table::do".
 
    "EXISTS"
-	 $ret = $table->EXISTS($key);
+	 $ret = $table-&gtEXISTS($key);
 
        obj: $table ( "APR::Table object" )
        arg1: $key ( string )
@@ -649,14 +651,14 @@ TIE Interface
        since: 2.0.00
 
    "CLEAR"
-	 $table->CLEAR();
+	 $table-&gtCLEAR();
 
        obj: $table ( "APR::Table object" )
        ret: no return value
        since: 2.0.00
 
    "STORE"
-	 $table->STORE($key, $val);
+	 $table-&gtSTORE($key, $val);
 
        obj: $table ( "APR::Table object" )
        arg1: $key ( string )
@@ -665,7 +667,7 @@ TIE Interface
        since: 2.0.00
 
    "DELETE"
-	 $table->DELETE($key);
+	 $table-&gtDELETE($key);
 
        obj: $table ( "APR::Table object" )
        arg1: $key ( string )
@@ -673,7 +675,7 @@ TIE Interface
        since: 2.0.00
 
    "FETCH"
-	 $ret = $table->FETCH($key);
+	 $ret = $table-&gtFETCH($key);
 
        obj: $table ( "APR::Table object" )
        arg1: $key ( string )
@@ -683,21 +685,21 @@ TIE Interface
        When iterating through the table's entries with "each()", "FETCH" will
        return the current value of a multivalued key.  For example:
 
-	 $table->add("a" => 1);
-	 $table->add("b" => 2);
-	 $table->add("a" => 3);
+	 $table-&gtadd("a" =&gt 1);
+	 $table-&gtadd("b" =&gt 2);
+	 $table-&gtadd("a" =&gt 3);
 
 	 ($k, $v) = each %$table; # (a, 1)
-	 print $table->{a};	  # prints 1
+	 print $table-&gt{a};	  # prints 1
 
 	 ($k, $v) = each %$table; # (b, 2)
-	 print $table->{a};	  # prints 1
+	 print $table-&gt{a};	  # prints 1
 
 	 ($k, $v) = each %$table; # (a, 3)
-	 print $table->{a};	  # prints 3 !!!
+	 print $table-&gt{a};	  # prints 3 !!!
 
 	 ($k, $v) = each %$table; # (undef, undef)
-	 print $table->{a};	  # prints 1
+	 print $table-&gt{a};	  # prints 1
 
 See Also
        mod_perl 2.0 documentation.
@@ -712,6 +714,6 @@ Authors
 
 
 perl v5.12.4 apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::APR::Table(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

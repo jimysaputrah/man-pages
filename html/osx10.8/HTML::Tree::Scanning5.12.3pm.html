@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The following article by Sean M. Burke first appeared in The Perl..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>HTML::Tree::Scanning -- article: "Scanning HTML"</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 HTML::Tree::Scanning(3User Contributed Perl DocumentatiHTML::Tree::Scanning(3)
 
 
@@ -25,7 +27,7 @@ DESCRIPTION
        under the same terms as Perl itself.
 
        (Note that this is discussed in chapters 6 through 10 of the book Perl
-       and LWP <http://lwp.interglacial.com/> which was written after the
+       and LWP &lthttp://lwp.interglacial.com/&gt which was written after the
        following documentation, and which is available free online.)
 
 Scanning HTML
@@ -57,8 +59,8 @@ Scanning HTML
        file, by simply saying:
 
 	 use HTML::TreeBuilder;
-	 my $tree = HTML::TreeBuilder->new();
-	 $tree->parse_file('foo.html');
+	 my $tree = HTML::TreeBuilder-&gtnew();
+	 $tree-&gtparse_file('foo.html');
 
        and then $tree contains a parse tree built from the HTML source from
        the file "foo.html".  The way this parse tree is represented is with a
@@ -69,10 +71,10 @@ Scanning HTML
 
        So, if you take this source:
 
-	 <html><head><title>Doc 1</title></head>
-	 <body>
-	 Stuff <hr> 2000-08-17
-	 </body></html>
+	 &lthtml&gt&lthead&gt&lttitle&gtDoc 1&lt/title&gt&lt/head&gt
+	 &ltbody&gt
+	 Stuff &lthr&gt 2000-08-17
+	 &lt/body&gt&lt/html&gt
 
        and feed it to HTML::TreeBuilder, it'll return a tree of objects that
        looks like this:
@@ -117,30 +119,30 @@ Scanning HTML
        Objects of the class HTML::Element each have three noteworthy
        attributes:
 
-       "_tag" -- (best accessed as "$e->tag") this element's tag-name,
+       "_tag" -- (best accessed as "$e-&gttag") this element's tag-name,
        lowercased (e.g., "em" for an "em" element).
 	       Footnote: Yes, this is misnamed.  In proper SGML terminology,
 	       this is instead called a "GI", short for "generic identifier";
 	       and the term "tag" is used for a token of SGML source that
 	       represents either the start of an element (a start-tag like
-	       "<em lang='fr'>") or the end of an element (an end-tag like
-	       "</em>".  However, since more people claim to have been
+	       "&ltem lang='fr'&gt") or the end of an element (an end-tag like
+	       "&lt/em&gt".  However, since more people claim to have been
 	       abducted by aliens than to have ever seen the SGML standard,
 	       and since both encounters typically involve a feeling of
 	       "missing time", it's not surprising that the terminology of the
 	       SGML standard is not closely followed.
 
-       "_parent" -- (best accessed as "$e->parent") the element that is $obj's
+       "_parent" -- (best accessed as "$e-&gtparent") the element that is $obj's
        parent, or undef if this element is the root of its tree.
-       "_content" -- (best accessed as "$e->content_list") the list of nodes
+       "_content" -- (best accessed as "$e-&gtcontent_list") the list of nodes
        (i.e., elements or text segments) that are $e's children.
 
        Moreover, if an element object has any attributes in the SGML sense of
-       the word, then those are readable as "$e->attr('name')" -- for example,
-       with the object built from having parsed "<a id='foo'>bar</a>",
-       "$e->attr('id')" will return the string "foo".  Moreover, "$e->tag" on
-       that object returns the string "a", "$e->content_list" returns a list
-       consisting of just the single scalar "bar", and "$e->parent" returns
+       the word, then those are readable as "$e-&gtattr('name')" -- for example,
+       with the object built from having parsed "&lta id='foo'&gtbar&lt/a&gt",
+       "$e-&gtattr('id')" will return the string "foo".  Moreover, "$e-&gttag" on
+       that object returns the string "a", "$e-&gtcontent_list" returns a list
+       consisting of just the single scalar "bar", and "$e-&gtparent" returns
        the object that's this node's parent -- which may be, for example, a
        "p" element.
 
@@ -168,7 +170,7 @@ Scanning HTML
        release.  They all start out:
 
 	 [...lots of leading images and junk...]
-	 <h1>ConGlomCo to Open New Corporate Office in Ougadougou</h1>
+	 &lth1&gtConGlomCo to Open New Corporate Office in Ougadougou&lt/h1&gt
 	 BAKERSFIELD, CA, 2000-04-24 -- ConGlomCo's vice president in charge
 	 of world conquest, Rock Feldspar, announced today the opening of a
 	 new office in Ougadougou, the capital city of Burkino Faso, gateway
@@ -193,8 +195,8 @@ Scanning HTML
 		 or die "Couldn't open $filename);
 	       my $heading;
 	      Line:
-	       while(<HTML>) {
-		 if( m{<h1>(.*?)</h1>}i ) {  # match it!
+	       while(&ltHTML&gt) {
+		 if( m{&lth1&gt(.*?)&lt/h1&gt}i ) {  # match it!
 		   $heading = $1;
 		   last Line;
 		 }
@@ -230,7 +232,7 @@ Scanning HTML
 	   HTML::Parser returns isn't immediately useful.  To get something
 	   useful out of those tokens, you'll need to write code that knows
 	   some things about what elements take no content (as with "hr"
-	   elements), and that a "</p>" end-tags are omissible, so a "<p>"
+	   elements), and that a "&lt/p&gt" end-tags are omissible, so a "&ltp&gt"
 	   will end any currently open paragraph -- and you're well on your
 	   way to pointlessly reinventing much of the code in
 	   HTML::TreeBuilder
@@ -261,16 +263,16 @@ Scanning HTML
        So, to extract the text from the "h1" elements of an HTML document:
 
 	 sub get_heading {
-	   my $tree = HTML::TreeBuilder->new;
-	   $tree->parse_file($_[0]);   # !
+	   my $tree = HTML::TreeBuilder-&gtnew;
+	   $tree-&gtparse_file($_[0]);   # !
 	   my $heading;
-	   my $h1 = $tree->look_down('_tag', 'h1');  # !
+	   my $h1 = $tree-&gtlook_down('_tag', 'h1');  # !
 	   if($h1) {
-	     $heading = $h1->as_text;	# !
+	     $heading = $h1-&gtas_text;	# !
 	   } else {
 	     warn "No heading in $_[0]?";
 	   }
-	   $tree->delete; # clear memory!
+	   $tree-&gtdelete; # clear memory!
 	   return $heading;
 	 }
 
@@ -282,12 +284,12 @@ Scanning HTML
        the text bits that are children (or otherwise descendants) of the given
        node -- to get the text content of the $h1 object, we could just say:
 
-	 $heading = join '', $h1->content_list;
+	 $heading = join '', $h1-&gtcontent_list;
 
        but that will work only if we're sure that the "h1" element's children
        will be only text bits -- if the document contained:
 
-	 <h1>Local Man Sees <cite>Blade</cite> Again</h1>
+	 &lth1&gtLocal Man Sees &ltcite&gtBlade&lt/cite&gt Again&lt/h1&gt
 
        then the sub-tree would be:
 
@@ -297,27 +299,27 @@ Scanning HTML
 	     . "Blade"
 	   . " Again'
 
-       so "join '', $h1->content_list" will be something like:
+       so "join '', $h1-&gtcontent_list" will be something like:
 
 	 Local Man Sees HTML::Element=HASH(0x15424040) Again
 
-       whereas "$h1->as_text" would yield:
+       whereas "$h1-&gtas_text" would yield:
 
 	 Local Man Sees Blade Again
 
        and depending on what you're doing with the heading text, you might
        want the "as_HTML" method instead.  It returns the (sub)tree
-       represented as HTML source.  "$h1->as_HTML" would yield:
+       represented as HTML source.  "$h1-&gtas_HTML" would yield:
 
-	 <h1>Local Man Sees <cite>Blade</cite> Again</h1>
+	 &lth1&gtLocal Man Sees &ltcite&gtBlade&lt/cite&gt Again&lt/h1&gt
 
        However, if you wanted the contents of $h1 as HTML, but not the $h1
        itself, you could say:
 
 	 join '',
 	   map(
-	     ref($_) ? $_->as_HTML : $_,
-	     $h1->content_list
+	     ref($_) ? $_-&gtas_HTML : $_,
+	     $h1-&gtcontent_list
 	   )
 
        This "map" iterates over the nodes in $h1's list of children; and for
@@ -326,7 +328,7 @@ Scanning HTML
        object (causing "ref" to be true), "as_HTML" will used instead of the
        string value of the object itself (which would be something quite
        useless, as most object values are).  So that "as_HTML" for the "cite"
-       element will be the string "<cite>Blade</cite>".  And then, finally,
+       element will be the string "&ltcite&gtBlade&lt/cite&gt".  And then, finally,
        "join" just puts into one string all the strings that the "map"
        returns.
 
@@ -351,7 +353,7 @@ Scanning HTML
 
        So the example:
 
-	 $h1 = $tree->look_down('_tag', 'h1');
+	 $h1 = $tree-&gtlook_down('_tag', 'h1');
 
        returns the first element at-or-under $tree whose "_tag" attribute has
        the value "h1".
@@ -363,14 +365,14 @@ Scanning HTML
        press releases that you were scanning had several "h1" elements,
        possibly before or after the one you actually want.  For example:
 
-	 <h1><center>Visit Our Corporate Partner
-	  <br><a href="/dyna/clickthru"
-	    ><img src="/dyna/vend_ad"></a>
-	 </center></h1>
-	 <h1><center>ConGlomCo President Schreck to Visit Regional HQ
-	  <br><a href="/photos/Schreck_visit_large.jpg"
-	    ><img src="/photos/Schreck_visit.jpg"></a>
-	 </center></h1>
+	 &lth1&gt&ltcenter&gtVisit Our Corporate Partner
+	  &ltbr&gt&lta href="/dyna/clickthru"
+	    &gt&ltimg src="/dyna/vend_ad"&gt&lt/a&gt
+	 &lt/center&gt&lt/h1&gt
+	 &lth1&gt&ltcenter&gtConGlomCo President Schreck to Visit Regional HQ
+	  &ltbr&gt&lta href="/photos/Schreck_visit_large.jpg"
+	    &gt&ltimg src="/photos/Schreck_visit.jpg"&gt&lt/a&gt
+	 &lt/center&gt&lt/h1&gt
 
        Here, you want to ignore the first "h1" element because it contains an
        ad, and you want the text from the second "h1".	The problem is in
@@ -378,10 +380,10 @@ Scanning HTML
        always entreating you to "visit" the sponsoring site, you could exclude
        "h1" elements that contain the word "visit" under them:
 
-	 my $real_h1 = $tree->look_down(
+	 my $real_h1 = $tree-&gtlook_down(
 	   '_tag', 'h1',
 	   sub {
-	     $_[0]->as_text !~ m/\bvisit/i
+	     $_[0]-&gtas_text !~ m/\bvisit/i
 	   }
 	 );
 
@@ -394,10 +396,10 @@ Scanning HTML
        Instead you could try looking for the first "h1" element that doesn't
        contain an image:
 
-	 my $real_h1 = $tree->look_down(
+	 my $real_h1 = $tree-&gtlook_down(
 	   '_tag', 'h1',
 	   sub {
-	     not $_[0]->look_down('_tag', 'img')
+	     not $_[0]-&gtlook_down('_tag', 'img')
 	   }
 	 );
 
@@ -410,7 +412,7 @@ Scanning HTML
        value), if any matches.	So, here,
 
 	 sub {
-	   not $_[0]->look_down('_tag', 'img')
+	   not $_[0]-&gtlook_down('_tag', 'img')
 	 }
 
        means "return true only if this element has no 'img' element as
@@ -424,10 +426,10 @@ Scanning HTML
        "h1" elements -- the only second one contains the string "Schreck", and
        we could just test for that:
 
-	 my $real_h1 = $tree->look_down(
+	 my $real_h1 = $tree-&gtlook_down(
 	   '_tag', 'h1',
 	   sub {
-	     $_[0]->as_text =~ m{Schreck}
+	     $_[0]-&gtas_text =~ m{Schreck}
 	   }
 	 );
 
@@ -437,13 +439,13 @@ Scanning HTML
        exclude involve a link whose URL involves "/dyna/", then you can use
        that:
 
-	 my $real_h1 = $tree->look_down(
+	 my $real_h1 = $tree-&gtlook_down(
 	   '_tag', 'h1',
 	   sub {
-	     my $link = $_[0]->look_down('_tag','a');
+	     my $link = $_[0]-&gtlook_down('_tag','a');
 	     return 1 unless $link;
 	       # no link means it's fine
-	     return 0 if $link->attr('href') =~ m{/dyna/};
+	     return 0 if $link-&gtattr('href') =~ m{/dyna/};
 	       # a link to there is bad
 	     return 1; # otherwise okay
 	   }
@@ -453,13 +455,13 @@ Scanning HTML
        element that either contains no images, or else whose image has a "src"
        attribute whose value contains "/photos/":
 
-	 my $real_h1 = $tree->look_down(
+	 my $real_h1 = $tree-&gtlook_down(
 	   '_tag', 'h1',
 	   sub {
-	     my $img = $_[0]->look_down('_tag','img');
+	     my $img = $_[0]-&gtlook_down('_tag','img');
 	     return 1 unless $img;
 	       # no image means it's fine
-	     return 1 if $img->attr('src') =~ m{/photos/};
+	     return 1 if $img-&gtattr('src') =~ m{/photos/};
 	       # good if a photo
 	     return 0; # otherwise bad
 	   }
@@ -472,7 +474,7 @@ Scanning HTML
        which is always the one you want, then you can use "look_down" in a
        list context, and just use the last element of that list:
 
-	 my @h1s = $tree->look_down(
+	 my @h1s = $tree-&gtlook_down(
 	   '_tag', 'h1',
 	   ...maybe more criteria...
 	 );
@@ -507,29 +509,29 @@ Scanning HTML
        it with an eye toward making up rules that will select where the real
        headline-links are, while screening out all the links to other parts of
        Yahoo, other news services, etc.  You will need to puzzle over the HTML
-       source, and scrutinize the output of "$tree->dump" on the parse tree of
+       source, and scrutinize the output of "$tree-&gtdump" on the parse tree of
        that HTML.
 
        Sometimes the only way to pin down what you're after is by position in
        the tree. For example, headlines of interest may be in the third column
        of the second row of the second table element in a page:
 
-	 my $table = ( $tree->look_down('_tag','table') )[1];
-	 my $row2  = ( $table->look_down('_tag', 'tr' ) )[1];
-	 my $col3  = ( $row2->look-down('_tag', 'td')	)[2];
+	 my $table = ( $tree-&gtlook_down('_tag','table') )[1];
+	 my $row2  = ( $table-&gtlook_down('_tag', 'tr' ) )[1];
+	 my $col3  = ( $row2-&gtlook-down('_tag', 'td')	)[2];
 	 ...then do things with $col3...
 
        Or they may be all the links in a "p" element that has at least three
        "br" elements as children:
 
-	 my $p = $tree->look_down(
+	 my $p = $tree-&gtlook_down(
 	   '_tag', 'p',
 	   sub {
-	     2 < grep { ref($_) and $_->tag eq 'br' }
-		      $_[0]->content_list
+	     2 &lt grep { ref($_) and $_-&gttag eq 'br' }
+		      $_[0]-&gtcontent_list
 	   }
 	 );
-	 @links = $p->look_down('_tag', 'a');
+	 @links = $p-&gtlook_down('_tag', 'a');
 
        But almost always, you can get away with looking for properties of the
        of the thing itself, rather than just looking for contexts.  Now, if
@@ -537,13 +539,13 @@ Scanning HTML
        tagging, such is as useful in CSS -- note the class="headlinelink" bit
        here:
 
-	 <a href="...long_news_url..." class="headlinelink">Elvis
-	 seen in tortilla</a>
+	 &lta href="...long_news_url..." class="headlinelink"&gtElvis
+	 seen in tortilla&lt/a&gt
 
        If you find anything like that, you could leap right in and select
        links with:
 
-	 @links = $tree->look_down('class','headlinelink');
+	 @links = $tree-&gtlook_down('class','headlinelink');
 
        Regrettably, your chances of seeing any sort of semantic markup
        principles really being followed with actual HTML are pretty thin.
@@ -565,7 +567,7 @@ Scanning HTML
        the headline-links are distinguished by the fact that they (and they
        alone) contain a "b" element:
 
-	 <a href="...long_news_url..."><b>Elvis seen in tortilla</b></a>
+	 &lta href="...long_news_url..."&gt&ltb&gtElvis seen in tortilla&lt/b&gt&lt/a&gt
 
        or, diagrammed as a part of the parse tree:
 
@@ -585,34 +587,34 @@ Scanning HTML
 	 sub get_headlines {
 	   my $url = $_[0] || die "What URL?";
 
-	   my $response = LWP::UserAgent->new->request(
-	     HTTP::Request->new( GET => $url )
+	   my $response = LWP::UserAgent-&gtnew-&gtrequest(
+	     HTTP::Request-&gtnew( GET =&gt $url )
 	   );
-	   unless($response->is_success) {
-	     warn "Couldn't get $url: ", $response->status_line, "\n";
+	   unless($response-&gtis_success) {
+	     warn "Couldn't get $url: ", $response-&gtstatus_line, "\n";
 	     return;
 	   }
 
-	   my $tree = HTML::TreeBuilder->new();
-	   $tree->parse($response->content);
-	   $tree->eof;
+	   my $tree = HTML::TreeBuilder-&gtnew();
+	   $tree-&gtparse($response-&gtcontent);
+	   $tree-&gteof;
 
 	   my @out;
 	   foreach my $link (
-	     $tree->look_down(	 # !
+	     $tree-&gtlook_down(	 # !
 	       '_tag', 'a',
 	       sub {
-		 return unless $_[0]->attr('href');
-		 my @c = $_[0]->content_list;
-		 @c == 1 and ref $c[0] and $c[0]->tag eq 'b';
+		 return unless $_[0]-&gtattr('href');
+		 my @c = $_[0]-&gtcontent_list;
+		 @c == 1 and ref $c[0] and $c[0]-&gttag eq 'b';
 	       }
 	     )
 	   ) {
-	     push @out, [ $link->attr('href'), $link->as_text ];
+	     push @out, [ $link-&gtattr('href'), $link-&gtas_text ];
 	   }
 
-	   warn "Odd, fewer than 6 stories in $url!" if @out < 6;
-	   $tree->delete;
+	   warn "Odd, fewer than 6 stories in $url!" if @out &lt 6;
+	   $tree-&gtdelete;
 	   return @out;
 	 }
 
@@ -625,7 +627,7 @@ Scanning HTML
 	   );
 	   print
 	     $section, ": ", scalar(@links), " stories\n",
-	     map(("  ", $_->[0], " : ", $_->[1], "\n"), @links),
+	     map(("  ", $_-&gt[0], " : ", $_-&gt[1], "\n"), @links),
 	     "\n";
 	 }
 
@@ -645,7 +647,7 @@ Scanning HTML
    Regardez, duvet!
        It's often quite a challenge to write criteria to match the desired
        parts of an HTML parse tree.  Very often you can pull it off with a
-       simple "$tree->look_down('_tag', 'h1')", but sometimes you do have to
+       simple "$tree-&gtlook_down('_tag', 'h1')", but sometimes you do have to
        keep adding and refining criteria, until you might end up with complex
        filters like what I've shown in this article.  The benefit to learning
        how to deal with HTML parse trees is that one main search tool, the
@@ -669,6 +671,6 @@ BACK
 
 
 perl v5.12.4			  2012-06-20	       HTML::Tree::Scanning(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

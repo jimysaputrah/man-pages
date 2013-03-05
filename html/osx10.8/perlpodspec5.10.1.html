@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document is detailed notes on the Pod markup language.  Most..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlpodspec - Plain Old Documentation: format specification and notes</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLPODSPEC(1)	       Perl Programmers Reference Guide 	PERLPODSPEC(1)
 
 
@@ -64,7 +66,7 @@ Pod Definitions
        Whitespace is used in this document as a blanket term for spaces, tabs,
        and newline sequences.  (By itself, this term usually refers to literal
        whitespace.  That is, sequences of whitespace characters in Pod source,
-       as opposed to "E<32>", which is a formatting code that denotes a
+       as opposed to "E&lt32&gt", which is a formatting code that denotes a
        whitespace character.)
 
        A Pod parser is a module meant for parsing Pod (regardless of whether
@@ -76,7 +78,7 @@ Pod Definitions
        counting words, scanning for index points, etc.).
 
        Pod content is contained in Pod blocks.	A Pod block starts with a line
-       that matches <m/\A=[a-zA-Z]/>, and continues up to the next line that
+       that matches &ltm/\A=[a-zA-Z]/&gt, and continues up to the next line that
        matches "m/\A=cut/" -- or up to the end of the file, if there is no
        "m/\A=cut/" line.
 
@@ -106,12 +108,12 @@ Pod Definitions
 	   Some command paragraphs allow formatting codes in their content
 	   (i.e., after the part that matches "m/\A=[a-zA-Z]\S*\s*/"), as in:
 
-	     =head1 Did You Remember to C<use strict;>?
+	     =head1 Did You Remember to C&ltuse strict;&gt?
 
 	   In other words, the Pod processing handler for "head1" will apply
-	   the same processing to "Did You Remember to C<use strict;>?" that
+	   the same processing to "Did You Remember to C&ltuse strict;&gt?" that
 	   it would to an ordinary paragraph -- i.e., formatting codes (like
-	   "C<...>") are parsed and presumably formatted appropriately, and
+	   "C&lt...&gt") are parsed and presumably formatted appropriately, and
 	   whitespace in the form of literal spaces and/or tabs is not
 	   significant.
 
@@ -142,18 +144,18 @@ Pod Definitions
 
        For example: consider the following paragraphs:
 
-	 # <- that's the 0th column
+	 # &lt- that's the 0th column
 
 	 =head1 Foo
 
 	 Stuff
 
-	   $foo->bar
+	   $foo-&gtbar
 
 	 =cut
 
        Here, "=head1 Foo" and "=cut" are command paragraphs because the first
-       line of each matches "m/\A=[a-zA-Z]/".  "[space][space]$foo->bar" is a
+       line of each matches "m/\A=[a-zA-Z]/".  "[space][space]$foo-&gtbar" is a
        verbatim paragraph, because its first line starts with a literal
        whitespace character (and there's no "=begin"..."=end" region around).
 
@@ -175,7 +177,7 @@ Pod Commands
 
 	     =head1 Object Attributes
 
-	     =head3 What B<Not> to Do!
+	     =head3 What B&ltNot&gt to Do!
 
        "=pod"
 	   This command indicates that this paragraph begins a Pod block.  (If
@@ -235,7 +237,7 @@ Pod Commands
 
 	     =item   3.
 
-	     =item C<< $thing->stuff(I<dodad>) >>
+	     =item C&lt&lt $thing-&gtstuff(I&ltdodad&gt) &gt&gt
 
 	     =item For transporting us beyond seas to be tried for pretended
 	     offenses
@@ -329,40 +331,40 @@ Pod Formatting Codes
        There are two syntaxes for formatting codes:
 
        o   A formatting code starts with a capital letter (just US-ASCII
-	   [A-Z]) followed by a "<", any number of characters, and ending with
-	   the first matching ">".  Examples:
+	   [A-Z]) followed by a "&lt", any number of characters, and ending with
+	   the first matching "&gt".  Examples:
 
-	       That's what I<you> think!
+	       That's what I&ltyou&gt think!
 
-	       What's C<dump()> for?
+	       What's C&ltdump()&gt for?
 
-	       X<C<chmod> and C<unlink()> Under Different Operating Systems>
+	       X&ltC&ltchmod&gt and C&ltunlink()&gt Under Different Operating Systems&gt
 
        o   A formatting code starts with a capital letter (just US-ASCII
-	   [A-Z]) followed by two or more "<"'s, one or more whitespace
+	   [A-Z]) followed by two or more "&lt"'s, one or more whitespace
 	   characters, any number of characters, one or more whitespace
 	   characters, and ending with the first matching sequence of two or
-	   more ">"'s, where the number of ">"'s equals the number of "<"'s in
+	   more "&gt"'s, where the number of "&gt"'s equals the number of "&lt"'s in
 	   the opening of this formatting code.  Examples:
 
-	       That's what I<< you >> think!
+	       That's what I&lt&lt you &gt&gt think!
 
-	       C<<< open(X, ">>thing.dat") || die $! >>>
+	       C&lt&lt&lt open(X, "&gt&gtthing.dat") || die $! &gt&gt&gt
 
-	       B<< $foo->bar(); >>
+	       B&lt&lt $foo-&gtbar(); &gt&gt
 
-	   With this syntax, the whitespace character(s) after the "C<<<" and
-	   before the ">>" (or whatever letter) are not renderable -- they do
+	   With this syntax, the whitespace character(s) after the "C&lt&lt&lt" and
+	   before the "&gt&gt" (or whatever letter) are not renderable -- they do
 	   not signify whitespace, are merely part of the formatting codes
 	   themselves.	That is, these are all synonymous:
 
-	       C<thing>
-	       C<< thing >>
-	       C<<	     thing     >>
-	       C<<<   thing >>>
-	       C<<<<
+	       C&ltthing&gt
+	       C&lt&lt thing &gt&gt
+	       C&lt&lt	     thing     &gt&gt
+	       C&lt&lt&lt   thing &gt&gt&gt
+	       C&lt&lt&lt&lt
 	       thing
-			  >>>>
+			  &gt&gt&gt&gt
 
 	   and so on.
 
@@ -371,19 +373,19 @@ Pod Formatting Codes
        the code in the "parse_text" routine in Pod::Parser as an example of a
        correct implementation.
 
-       "I<text>" -- italic text
+       "I&lttext&gt" -- italic text
 	   See the brief discussion in "Formatting Codes" in perlpod.
 
-       "B<text>" -- bold text
+       "B&lttext&gt" -- bold text
 	   See the brief discussion in "Formatting Codes" in perlpod.
 
-       "C<code>" -- code text
+       "C&ltcode&gt" -- code text
 	   See the brief discussion in "Formatting Codes" in perlpod.
 
-       "F<filename>" -- style for filenames
+       "F&ltfilename&gt" -- style for filenames
 	   See the brief discussion in "Formatting Codes" in perlpod.
 
-       "X<topic name>" -- an index entry
+       "X&lttopic name&gt" -- an index entry
 	   See the brief discussion in "Formatting Codes" in perlpod.
 
 	   This code is unusual in that most formatters completely discard
@@ -391,36 +393,36 @@ Pod Formatting Codes
 	   invisible codes that can be used in building an index of the
 	   current document.
 
-       "Z<>" -- a null (zero-effect) formatting code
+       "Z&lt&gt" -- a null (zero-effect) formatting code
 	   Discussed briefly in "Formatting Codes" in perlpod.
 
 	   This code is unusual is that it should have no content.  That is, a
-	   processor may complain if it sees "Z<potatoes>".  Whether or not it
+	   processor may complain if it sees "Z&ltpotatoes&gt".  Whether or not it
 	   complains, the potatoes text should ignored.
 
-       "L<name>" -- a hyperlink
+       "L&ltname&gt" -- a hyperlink
 	   The complicated syntaxes of this code are discussed at length in
 	   "Formatting Codes" in perlpod, and implementation details are
-	   discussed below, in "About L<...> Codes".  Parsing the contents of
-	   L<content> is tricky.  Notably, the content has to be checked for
+	   discussed below, in "About L&lt...&gt Codes".  Parsing the contents of
+	   L&ltcontent&gt is tricky.  Notably, the content has to be checked for
 	   whether it looks like a URL, or whether it has to be split on
 	   literal "|" and/or "/" (in the right order!), and so on, before
-	   E<...> codes are resolved.
+	   E&lt...&gt codes are resolved.
 
-       "E<escape>" -- a character escape
+       "E&ltescape&gt" -- a character escape
 	   See "Formatting Codes" in perlpod, and several points in "Notes on
 	   Implementing Pod Processors".
 
-       "S<text>" -- text contains non-breaking spaces
+       "S&lttext&gt" -- text contains non-breaking spaces
 	   This formatting code is syntactically simple, but semantically
 	   complex.  What it means is that each space in the printable content
 	   of this code signifies a non-breaking space.
 
 	   Consider:
 
-	       C<$x ? $y    :  $z>
+	       C&lt$x ? $y    :  $z&gt
 
-	       S<C<$x ? $y     :  $z>>
+	       S&ltC&lt$x ? $y     :  $z&gt&gt
 
 	   Both signify the monospace (c[ode] style) text consisting of "$x",
 	   one space, "?", one space, ":", one space, "$z".  The difference is
@@ -428,33 +430,33 @@ Pod Formatting Codes
 	   spaces, but instead are non-breaking spaces.
 
        If a Pod processor sees any formatting code other than the ones listed
-       above (as in "N<...>", or "Q<...>", etc.), that processor must by
+       above (as in "N&lt...&gt", or "Q&lt...&gt", etc.), that processor must by
        default treat this as an error.	A Pod parser may allow a way for
        particular applications to add to the above list of known formatting
        codes; a Pod parser might even allow a way to stipulate, for each
        additional command, whether it requires some form of special
-       processing, as L<...> does.
+       processing, as L&lt...&gt does.
 
        Future versions of this specification may add additional formatting
        codes.
 
-       Historical note:  A few older Pod processors would not see a ">" as
-       closing a "C<" code, if the ">" was immediately preceded by a "-".
+       Historical note:  A few older Pod processors would not see a "&gt" as
+       closing a "C&lt" code, if the "&gt" was immediately preceded by a "-".
        This was so that this:
 
-	   C<$foo->bar>
+	   C&lt$foo-&gtbar&gt
 
        would parse as equivalent to this:
 
-	   C<$foo-E<gt>bar>
+	   C&lt$foo-E&ltgt&gtbar&gt
 
        instead of as equivalent to a "C" formatting code containing only
-       "$foo-", and then a "bar>" outside the "C" formatting code.  This
+       "$foo-", and then a "bar&gt" outside the "C" formatting code.  This
        problem has since been solved by the addition of syntaxes like this:
 
-	   C<< $foo->bar >>
+	   C&lt&lt $foo-&gtbar &gt&gt
 
-       Compliant parsers must not treat "->" as special.
+       Compliant parsers must not treat "-&gt" as special.
 
        Formatting codes absolutely cannot span paragraphs.  If a code is
        opened in one paragraph, and no closing code is found by the end of
@@ -462,18 +464,18 @@ Pod Formatting Codes
        should complain (as in "Unterminated I code in the paragraph starting
        at line 123: 'Time objects are not...'").  So these two paragraphs:
 
-	 I<I told you not to do this!
+	 I&ltI told you not to do this!
 
-	 Don't make me say it again!>
+	 Don't make me say it again!&gt
 
        ...must not be parsed as two paragraphs in italics (with the I code
        starting in one paragraph and starting in another.)  Instead, the first
        paragraph should generate a warning, but that aside, the above code
        must parse as if it were:
 
-	 I<I told you not to do this!>
+	 I&ltI told you not to do this!&gt
 
-	 Don't make me say it again!E<gt>
+	 Don't make me say it again!E&ltgt&gt
 
        (In SGMLish jargon, all Pod commands are like block-level elements,
        whereas all Pod formatting codes are like inline-level elements.)
@@ -548,7 +550,7 @@ Notes on Implementing Pod Processors
 
 	     %% POD::Pod2PS v3.14159, using POD::Parser v1.92
 
-	     <!-- Pod::HTML v3.14159, using POD::Parser v1.92 -->
+	     &lt!-- Pod::HTML v3.14159, using POD::Parser v1.92 --&gt
 
 	     {\doccomm generated by Pod::Tree::RTF 3.14159 using Pod::Tree 1.08}
 
@@ -564,7 +566,7 @@ Notes on Implementing Pod Processors
 	   STDERR, or "die"ing).
 
        o   Pod parsers may emit warnings or error messages ("Unknown E code
-	   E<zslig>!") to STDERR (whether through printing to STDERR, or
+	   E&ltzslig&gt!") to STDERR (whether through printing to STDERR, or
 	   "warn"ing/"carp"ing, or "die"ing/"croak"ing), but must allow
 	   suppressing all such STDERR output, and instead allow an option for
 	   reporting errors/warnings in some other way, whether by triggering
@@ -579,7 +581,7 @@ Notes on Implementing Pod Processors
 	   and add text like "*** Formatting Aborted ***" to the end of the
 	   (partial) in-memory document.
 
-       o   In paragraphs where formatting codes (like E<...>, B<...>) are
+       o   In paragraphs where formatting codes (like E&lt...&gt, B&lt...&gt) are
 	   understood (i.e., not verbatim paragraphs, but including ordinary
 	   paragraphs, and command paragraphs that produce renderable text,
 	   like "=head1"), literal whitespace should generally be considered
@@ -597,7 +599,7 @@ Notes on Implementing Pod Processors
 	   try to turn backtick (`) into anything else but a single backtick
 	   character (distinct from an open quote character!), nor "--" into
 	   anything but two minus signs.  They must never do any of those
-	   things to text in C<...> formatting codes, and never ever to text
+	   things to text in C&lt...&gt formatting codes, and never ever to text
 	   in verbatim paragraphs.
 
        o   When rendering Pod to a format that has two kinds of hyphens (-),
@@ -631,13 +633,13 @@ Notes on Implementing Pod Processors
 	   containing) the period character that ends this sentence.
 
        o   Pod parsers, when reporting errors, should make some effort to
-	   report an approximate line number ("Nested E<>'s in Paragraph #52,
+	   report an approximate line number ("Nested E&lt&gt's in Paragraph #52,
 	   near line 633 of Thing/Foo.pm!"), instead of merely noting the
-	   paragraph number ("Nested E<>'s in Paragraph #52 of
+	   paragraph number ("Nested E&lt&gt's in Paragraph #52 of
 	   Thing/Foo.pm!").  Where this is problematic, the paragraph number
 	   should at least be accompanied by an excerpt from the paragraph
-	   ("Nested E<>'s in Paragraph #52 of Thing/Foo.pm, which begins
-	   'Read/write accessor for the C<interest rate> attribute...'").
+	   ("Nested E&lt&gt's in Paragraph #52 of Thing/Foo.pm, which begins
+	   'Read/write accessor for the C&ltinterest rate&gt attribute...'").
 
        o   Pod parsers, when processing a series of verbatim paragraphs one
 	   after another, should consider them to be one large verbatim
@@ -646,10 +648,10 @@ Notes on Implementing Pod Processors
 
 		   use Foo;
 
-		   print Foo->VERSION
+		   print Foo-&gtVERSION
 
 	   should be unified into one paragraph ("\tuse Foo;\n\n\tprint
-	   Foo->VERSION") before being passed to the formatter or other
+	   Foo-&gtVERSION") before being passed to the formatter or other
 	   processor.  Parsers may also allow an option for overriding this.
 
 	   While this might be too cumbersome to implement in event-based Pod
@@ -670,14 +672,14 @@ Notes on Implementing Pod Processors
 	   Pod::Parser, comes with modern versions of Perl.
 
        o   Characters in Pod documents may be conveyed either as literals, or
-	   by number in E<n> codes, or by an equivalent mnemonic, as in
-	   E<eacute> which is exactly equivalent to E<233>.
+	   by number in E&ltn&gt codes, or by an equivalent mnemonic, as in
+	   E&lteacute&gt which is exactly equivalent to E&lt233&gt.
 
 	   Characters in the range 32-126 refer to those well known US-ASCII
 	   characters (also defined there by Unicode, with the same meaning),
 	   which all Pod formatters must render faithfully.  Characters in the
 	   ranges 0-31 and 127-159 should not be used (neither as literals,
-	   nor as E<number> codes), except for the literal byte-sequences for
+	   nor as E&ltnumber&gt codes), except for the literal byte-sequences for
 	   newline (13, 13 10, or 10), and tab (9).
 
 	   Characters in the range 160-255 refer to Latin-1 characters (also
@@ -688,53 +690,53 @@ Notes on Implementing Pod Processors
 	   outside 32-126; and many are able to handle 32-126 and 160-255, but
 	   nothing above 255.
 
-       o   Besides the well-known "E<lt>" and "E<gt>" codes for less-than and
-	   greater-than, Pod parsers must understand "E<sol>" for "/"
-	   (solidus, slash), and "E<verbar>" for "|" (vertical bar, pipe).
-	   Pod parsers should also understand "E<lchevron>" and "E<rchevron>"
+       o   Besides the well-known "E&ltlt&gt" and "E&ltgt&gt" codes for less-than and
+	   greater-than, Pod parsers must understand "E&ltsol&gt" for "/"
+	   (solidus, slash), and "E&ltverbar&gt" for "|" (vertical bar, pipe).
+	   Pod parsers should also understand "E&ltlchevron&gt" and "E&ltrchevron&gt"
 	   as legacy codes for characters 171 and 187, i.e., "left-pointing
 	   double angle quotation mark" = "left pointing guillemet" and
 	   "right-pointing double angle quotation mark" = "right pointing
-	   guillemet".	(These look like little "<<" and ">>", and they are
-	   now preferably expressed with the HTML/XHTML codes "E<laquo>" and
-	   "E<raquo>".)
+	   guillemet".	(These look like little "&lt&lt" and "&gt&gt", and they are
+	   now preferably expressed with the HTML/XHTML codes "E&ltlaquo&gt" and
+	   "E&ltraquo&gt".)
 
-       o   Pod parsers should understand all "E<html>" codes as defined in the
+       o   Pod parsers should understand all "E&lthtml&gt" codes as defined in the
 	   entity declarations in the most recent XHTML specification at
 	   "www.W3.org".  Pod parsers must understand at least the entities
 	   that define characters in the range 160-255 (Latin-1).  Pod
-	   parsers, when faced with some unknown "E<identifier>" code,
+	   parsers, when faced with some unknown "E&ltidentifier&gt" code,
 	   shouldn't simply replace it with nullstring (by default, at least),
 	   but may pass it through as a string consisting of the literal
 	   characters E, less-than, identifier, greater-than.  Or Pod parsers
 	   may offer the alternative option of processing such unknown
-	   "E<identifier>" codes by firing an event especially for such codes,
+	   "E&ltidentifier&gt" codes by firing an event especially for such codes,
 	   or by adding a special node-type to the in-memory document tree.
-	   Such "E<identifier>" may have special meaning to some processors,
+	   Such "E&ltidentifier&gt" may have special meaning to some processors,
 	   or some processors may choose to add them to a special error
 	   report.
 
-       o   Pod parsers must also support the XHTML codes "E<quot>" for
-	   character 34 (doublequote, "), "E<amp>" for character 38
-	   (ampersand, &), and "E<apos>" for character 39 (apostrophe, ').
+       o   Pod parsers must also support the XHTML codes "E&ltquot&gt" for
+	   character 34 (doublequote, "), "E&ltamp&gt" for character 38
+	   (ampersand, &), and "E&ltapos&gt" for character 39 (apostrophe, ').
 
-       o   Note that in all cases of "E<whatever>", whatever (whether an
+       o   Note that in all cases of "E&ltwhatever&gt", whatever (whether an
 	   htmlname, or a number in any base) must consist only of
 	   alphanumeric characters -- that is, whatever must watch
-	   "m/\A\w+\z/".  So "E< 0 1 2 3 >" is invalid, because it contains
+	   "m/\A\w+\z/".  So "E&lt 0 1 2 3 &gt" is invalid, because it contains
 	   spaces, which aren't alphanumeric characters.  This presumably does
 	   not need special treatment by a Pod processor; " 0 1 2 3 " doesn't
 	   look like a number in any base, so it would presumably be looked up
 	   in the table of HTML-like names.  Since there isn't (and cannot be)
 	   an HTML-like entity called " 0 1 2 3 ", this will be treated as an
-	   error.  However, Pod processors may treat "E< 0 1 2 3 >" or
-	   "E<e-acute>" as syntactically invalid, potentially earning a
+	   error.  However, Pod processors may treat "E&lt 0 1 2 3 &gt" or
+	   "E&lte-acute&gt" as syntactically invalid, potentially earning a
 	   different error message than the error message (or warning, or
 	   event) generated by a merely unknown (but theoretically valid)
-	   htmlname, as in "E<qacute>" [sic].  However, Pod parsers are not
+	   htmlname, as in "E&ltqacute&gt" [sic].  However, Pod parsers are not
 	   required to make this distinction.
 
-       o   Note that E<number> must not be interpreted as simply "codepoint
+       o   Note that E&ltnumber&gt must not be interpreted as simply "codepoint
 	   number in the current/native character set".  It always means only
 	   "the character represented by codepoint number in Unicode."	(This
 	   is identical to the semantics of &#number; in XML.)
@@ -744,7 +746,7 @@ Notes on Implementing Pod Processors
 	   e-acute character) to the escape sequences or codes necessary for
 	   conveying such sequences in the target output format.  A converter
 	   to *roff would, for example know that "\xE9" (whether conveyed
-	   literally, or via a E<...> sequence) is to be conveyed as "e\\*'".
+	   literally, or via a E&lt...&gt sequence) is to be conveyed as "e\\*'".
 	   Similarly, a program rendering Pod in a Mac OS application window,
 	   would presumably need to know that "\xE9" maps to codepoint 142 in
 	   MacRoman encoding that (at time of writing) is native for Mac OS.
@@ -779,7 +781,7 @@ Notes on Implementing Pod Processors
 	   at www.unicode.org), and whatever else strikes your fancy.  For
 	   example, in xhtml-symbol.ent, there is the entry:
 
-	     <!ENTITY infin    "&#8734;"> <!-- infinity, U+221E ISOtech -->
+	     &lt!ENTITY infin    "&#8734;"&gt &lt!-- infinity, U+221E ISOtech --&gt
 
 	   While the mapping "infin" to the character "\x{221E}" will
 	   (hopefully) have been already handled by the Pod parser, the
@@ -789,7 +791,7 @@ Notes on Implementing Pod Processors
 	   them.  So for a Unicode-to-*roff mapping, for example, this would
 	   merit the entry:
 
-	     "\x{221E}" => '\(in',
+	     "\x{221E}" =&gt '\(in',
 
 	   It is eagerly hoped that in the future, increasing numbers of
 	   formats (and formatters) will support Unicode characters directly
@@ -799,19 +801,19 @@ Notes on Implementing Pod Processors
 
        o   It is up to individual Pod formatter to display good judgement when
 	   confronted with an unrenderable character (which is distinct from
-	   an unknown E<thing> sequence that the parser couldn't resolve to
+	   an unknown E&ltthing&gt sequence that the parser couldn't resolve to
 	   anything, renderable or not).  It is good practice to map Latin
-	   letters with diacritics (like "E<eacute>"/"E<233>") to the
+	   letters with diacritics (like "E&lteacute&gt"/"E&lt233&gt") to the
 	   corresponding unaccented US-ASCII letters (like a simple character
 	   101, "e"), but clearly this is often not feasible, and an
 	   unrenderable character may be represented as "?", or the like.  In
-	   attempting a sane fallback (as from E<233> to "e"), Pod formatters
+	   attempting a sane fallback (as from E&lt233&gt to "e"), Pod formatters
 	   may use the %Latin1Code_to_fallback table in Pod::Escapes, or
 	   Text::Unidecode, if available.
 
 	   For example, this Pod text:
 
-	     magic is enabled if you set C<$Currency> to 'E<euro>'.
+	     magic is enabled if you set C&lt$Currency&gt to 'E&lteuro&gt'.
 
 	   may be rendered as: "magic is enabled if you set $Currency to '?'"
 	   or as "magic is enabled if you set $Currency to '[euro]'", or as
@@ -820,27 +822,27 @@ Notes on Implementing Pod Processors
 	   A Pod formatter may also note, in a comment or warning, a list of
 	   what unrenderable characters were encountered.
 
-       o   E<...> may freely appear in any formatting code (other than in
-	   another E<...> or in an Z<>).  That is, "X<The E<euro>1,000,000
-	   Solution>" is valid, as is "L<The E<euro>1,000,000
-	   Solution|Million::Euros>".
+       o   E&lt...&gt may freely appear in any formatting code (other than in
+	   another E&lt...&gt or in an Z&lt&gt).  That is, "X&ltThe E&lteuro&gt1,000,000
+	   Solution&gt" is valid, as is "L&ltThe E&lteuro&gt1,000,000
+	   Solution|Million::Euros&gt".
 
        o   Some Pod formatters output to formats that implement non-breaking
 	   spaces as an individual character (which I'll call "NBSP"), and
 	   others output to formats that implement non-breaking spaces just as
 	   spaces wrapped in a "don't break this across lines" code.  Note
 	   that at the level of Pod, both sorts of codes can occur: Pod can
-	   contain a NBSP character (whether as a literal, or as a "E<160>" or
-	   "E<nbsp>" code); and Pod can contain "S<foo I<bar> baz>" codes,
+	   contain a NBSP character (whether as a literal, or as a "E&lt160&gt" or
+	   "E&ltnbsp&gt" code); and Pod can contain "S&ltfoo I&ltbar&gt baz&gt" codes,
 	   where "mere spaces" (character 32) in such codes are taken to
 	   represent non-breaking spaces.  Pod parsers should consider
-	   supporting the optional parsing of "S<foo I<bar> baz>" as if it
-	   were "fooNBSPI<bar>NBSPbaz", and, going the other way, the optional
+	   supporting the optional parsing of "S&ltfoo I&ltbar&gt baz&gt" as if it
+	   were "fooNBSPI&ltbar&gtNBSPbaz", and, going the other way, the optional
 	   parsing of groups of words joined by NBSP's as if each group were
-	   in a S<...> code, so that formatters may use the representation
+	   in a S&lt...&gt code, so that formatters may use the representation
 	   that maps best to what the output format demands.
 
-       o   Some processors may find that the "S<...>" code is easiest to
+       o   Some processors may find that the "S&lt...&gt" code is easiest to
 	   implement by replacing each space in the parse tree under the
 	   content of the S, with an NBSP.  But note: the replacement should
 	   apply not to spaces in all text, but only to spaces in printable
@@ -848,18 +850,18 @@ Notes on Implementing Pod Processors
 	   particular tree/event model implemented by the Pod parser.)	For
 	   example, consider this unusual case:
 
-	      S<L</Autoloaded Functions>>
+	      S&ltL&lt/Autoloaded Functions&gt&gt
 
 	   This means that the space in the middle of the visible link text
 	   must not be broken across lines.  In other words, it's the same as
 	   this:
 
-	      L<"AutoloadedE<160>Functions"/Autoloaded Functions>
+	      L&lt"AutoloadedE&lt160&gtFunctions"/Autoloaded Functions&gt
 
 	   However, a misapplied space-to-NBSP replacement could (wrongly)
 	   produce something equivalent to this:
 
-	      L<"AutoloadedE<160>Functions"/AutoloadedE<160>Functions>
+	      L&lt"AutoloadedE&lt160&gtFunctions"/AutoloadedE&lt160&gtFunctions&gt
 
 	   ...which is almost definitely not going to work as a hyperlink
 	   (assuming this formatter outputs a format supporting hypertext).
@@ -872,7 +874,7 @@ Notes on Implementing Pod Processors
        o   Besides the NBSP character discussed above, implementors are
 	   reminded of the existence of the other "special" character in
 	   Latin-1, the "soft hyphen" character, also known as "discretionary
-	   hyphen", i.e. "E<173>" = "E<0xAD>" = "E<shy>").  This character
+	   hyphen", i.e. "E&lt173&gt" = "E&lt0xAD&gt" = "E&ltshy&gt").  This character
 	   expresses an optional hyphenation point.  That is, it normally
 	   renders as nothing, but may render as a "-" if a formatter breaks
 	   the word at that point.  Pod formatters should, as appropriate, do
@@ -883,16 +885,16 @@ Notes on Implementing Pod Processors
 
 	   For example:
 
-	     sigE<shy>action
-	     manuE<shy>script
-	     JarkE<shy>ko HieE<shy>taE<shy>nieE<shy>mi
+	     sigE&ltshy&gtaction
+	     manuE&ltshy&gtscript
+	     JarkE&ltshy&gtko HieE&ltshy&gttaE&ltshy&gtnieE&ltshy&gtmi
 
 	   These signal to a formatter that if it is to hyphenate "sigaction"
 	   or "manuscript", then it should be done as "sig-[linebreak]action"
 	   or "manu-[linebreak]script" (and if it doesn't hyphenate it, then
-	   the "E<shy>" doesn't show up at all).  And if it is to hyphenate
+	   the "E&ltshy&gt" doesn't show up at all).  And if it is to hyphenate
 	   "Jarkko" and/or "Hietaniemi", it can do so only at the points where
-	   there is a "E<shy>" code.
+	   there is a "E&ltshy&gt" code.
 
 	   In practice, it is anticipated that this character will not be used
 	   often, but formatters should either support it, or delete it.
@@ -911,35 +913,35 @@ Notes on Implementing Pod Processors
 	   distinctions is useful; but obsessing over how to spell them,
 	   usually is not.
 
-About L<...> Codes
-       As you can tell from a glance at perlpod, the L<...> code is the most
+About L&lt...&gt Codes
+       As you can tell from a glance at perlpod, the L&lt...&gt code is the most
        complex of the Pod formatting codes.  The points below will hopefully
        clarify what it means and how processors should deal with it.
 
-       o   In parsing an L<...> code, Pod parsers must distinguish at least
+       o   In parsing an L&lt...&gt code, Pod parsers must distinguish at least
 	   four attributes:
 
 	   First:
 	       The link-text.  If there is none, this must be undef.  (E.g.,
-	       in "L<Perl Functions|perlfunc>", the link-text is "Perl
-	       Functions".  In "L<Time::HiRes>" and even "L<|Time::HiRes>",
+	       in "L&ltPerl Functions|perlfunc&gt", the link-text is "Perl
+	       Functions".  In "L&ltTime::HiRes&gt" and even "L&lt|Time::HiRes&gt",
 	       there is no link text.  Note that link text may contain
 	       formatting.)
 
 	   Second:
 	       The possibly inferred link-text -- i.e., if there was no real
 	       link text, then this is the text that we'll infer in its place.
-	       (E.g., for "L<Getopt::Std>", the inferred link text is
+	       (E.g., for "L&ltGetopt::Std&gt", the inferred link text is
 	       "Getopt::Std".)
 
 	   Third:
-	       The name or URL, or undef if none.  (E.g., in "L<Perl
-	       Functions|perlfunc>", the name -- also sometimes called the
-	       page -- is "perlfunc".  In "L</CAVEATS>", the name is undef.)
+	       The name or URL, or undef if none.  (E.g., in "L&ltPerl
+	       Functions|perlfunc&gt", the name -- also sometimes called the
+	       page -- is "perlfunc".  In "L&lt/CAVEATS&gt", the name is undef.)
 
 	   Fourth:
 	       The section (AKA "item" in older perlpods), or undef if none.
-	       E.g., in "L<Getopt::Std/DESCRIPTION>", "DESCRIPTION" is the
+	       E.g., in "L&ltGetopt::Std/DESCRIPTION&gt", "DESCRIPTION" is the
 	       section.  (Note that this is not the same as a manpage section
 	       like the "5" in "man 5 crontab".  "Section Foo" in the Pod
 	       sense means the part of the text that's introduced by the
@@ -954,56 +956,56 @@ About L<...> Codes
 	       are); or possibly a man page name (like "crontab(5)" is).
 
 	   Sixth:
-	       The raw original L<...> content, before text is split on "|",
-	       "/", etc, and before E<...> codes are expanded.
+	       The raw original L&lt...&gt content, before text is split on "|",
+	       "/", etc, and before E&lt...&gt codes are expanded.
 
 	   (The above were numbered only for concise reference below.  It is
 	   not a requirement that these be passed as an actual list or array.)
 
 	   For example:
 
-	     L<Foo::Bar>
-	       =>  undef,			   # link text
+	     L&ltFoo::Bar&gt
+	       =&gt  undef,			   # link text
 		   "Foo::Bar",			   # possibly inferred link text
 		   "Foo::Bar",			   # name
 		   undef,			   # section
 		   'pod',			   # what sort of link
 		   "Foo::Bar"			   # original content
 
-	     L<Perlport's section on NL's|perlport/Newlines>
-	       =>  "Perlport's section on NL's",   # link text
+	     L&ltPerlport's section on NL's|perlport/Newlines&gt
+	       =&gt  "Perlport's section on NL's",   # link text
 		   "Perlport's section on NL's",   # possibly inferred link text
 		   "perlport",			   # name
 		   "Newlines",			   # section
 		   'pod',			   # what sort of link
 		   "Perlport's section on NL's|perlport/Newlines" # orig. content
 
-	     L<perlport/Newlines>
-	       =>  undef,			   # link text
+	     L&ltperlport/Newlines&gt
+	       =&gt  undef,			   # link text
 		   '"Newlines" in perlport',	   # possibly inferred link text
 		   "perlport",			   # name
 		   "Newlines",			   # section
 		   'pod',			   # what sort of link
 		   "perlport/Newlines"		   # original content
 
-	     L<crontab(5)/"DESCRIPTION">
-	       =>  undef,			   # link text
+	     L&ltcrontab(5)/"DESCRIPTION"&gt
+	       =&gt  undef,			   # link text
 		   '"DESCRIPTION" in crontab(5)',  # possibly inferred link text
 		   "crontab(5)",		   # name
 		   "DESCRIPTION",		   # section
 		   'man',			   # what sort of link
 		   'crontab(5)/"DESCRIPTION"'	   # original content
 
-	     L</Object Attributes>
-	       =>  undef,			   # link text
+	     L&lt/Object Attributes&gt
+	       =&gt  undef,			   # link text
 		   '"Object Attributes"',	   # possibly inferred link text
 		   undef,			   # name
 		   "Object Attributes", 	   # section
 		   'pod',			   # what sort of link
 		   "/Object Attributes" 	   # original content
 
-	     L<http://www.perl.org/>
-	       =>  undef,			   # link text
+	     L&lthttp://www.perl.org/&gt
+	       =&gt  undef,			   # link text
 		   "http://www.perl.org/",	   # possibly inferred link text
 		   "http://www.perl.org/",	   # name
 		   undef,			   # section
@@ -1012,115 +1014,115 @@ About L<...> Codes
 
 	   Note that you can distinguish URL-links from anything else by the
 	   fact that they match "m/\A\w+:[^:\s]\S*\z/".  So
-	   "L<http://www.perl.com>" is a URL, but "L<HTTP::Response>" isn't.
+	   "L&lthttp://www.perl.com&gt" is a URL, but "L&ltHTTP::Response&gt" isn't.
 
-       o   In case of L<...> codes with no "text|" part in them, older
+       o   In case of L&lt...&gt codes with no "text|" part in them, older
 	   formatters have exhibited great variation in actually displaying
-	   the link or cross reference.  For example, L<crontab(5)> would
+	   the link or cross reference.  For example, L&ltcrontab(5)&gt would
 	   render as "the crontab(5) manpage", or "in the crontab(5) manpage"
 	   or just "crontab(5)".
 
 	   Pod processors must now treat "text|"-less links as follows:
 
-	     L<name>	     =>  L<name|name>
-	     L</section>     =>  L<"section"|/section>
-	     L<name/section> =>  L<"section" in name|name/section>
+	     L&ltname&gt	     =&gt  L&ltname|name&gt
+	     L&lt/section&gt     =&gt  L&lt"section"|/section&gt
+	     L&ltname/section&gt =&gt  L&lt"section" in name|name/section&gt
 
        o   Note that section names might contain markup.  I.e., if a section
 	   starts with:
 
-	     =head2 About the C<-M> Operator
+	     =head2 About the C&lt-M&gt Operator
 
 	   or with:
 
-	     =item About the C<-M> Operator
+	     =item About the C&lt-M&gt Operator
 
 	   then a link to it would look like this:
 
-	     L<somedoc/About the C<-M> Operator>
+	     L&ltsomedoc/About the C&lt-M&gt Operator&gt
 
 	   Formatters may choose to ignore the markup for purposes of
 	   resolving the link and use only the renderable characters in the
 	   section name, as in:
 
-	     <h1><a name="About_the_-M_Operator">About the <code>-M</code>
-	     Operator</h1>
+	     &lth1&gt&lta name="About_the_-M_Operator"&gtAbout the &ltcode&gt-M&lt/code&gt
+	     Operator&lt/h1&gt
 
 	     ...
 
-	     <a href="somedoc#About_the_-M_Operator">About the <code>-M</code>
-	     Operator" in somedoc</a>
+	     &lta href="somedoc#About_the_-M_Operator"&gtAbout the &ltcode&gt-M&lt/code&gt
+	     Operator" in somedoc&lt/a&gt
 
-       o   Previous versions of perlpod distinguished "L<name/"section">"
-	   links from "L<name/item>" links (and their targets).  These have
+       o   Previous versions of perlpod distinguished "L&ltname/"section"&gt"
+	   links from "L&ltname/item&gt" links (and their targets).  These have
 	   been merged syntactically and semantically in the current
 	   specification, and section can refer either to a "=headn Heading
 	   Content" command or to a "=item Item Content" command.  This
 	   specification does not specify what behavior should be in the case
 	   of a given document having several things all seeming to produce
 	   the same section identifier (e.g., in HTML, several things all
-	   producing the same anchorname in <a name="anchorname">...</a>
+	   producing the same anchorname in &lta name="anchorname"&gt...&lt/a&gt
 	   elements).  Where Pod processors can control this behavior, they
-	   should use the first such anchor.  That is, "L<Foo/Bar>" refers to
+	   should use the first such anchor.  That is, "L&ltFoo/Bar&gt" refers to
 	   the first "Bar" section in Foo.
 
 	   But for some processors/formats this cannot be easily controlled;
-	   as with the HTML example, the behavior of multiple ambiguous <a
-	   name="anchorname">...</a> is most easily just left up to browsers
+	   as with the HTML example, the behavior of multiple ambiguous &lta
+	   name="anchorname"&gt...&lt/a&gt is most easily just left up to browsers
 	   to decide.
 
        o   Authors wanting to link to a particular (absolute) URL, must do so
-	   only with "L<scheme:...>" codes (like L<http://www.perl.org>), and
-	   must not attempt "L<Some Site Name|scheme:...>" codes.  This
-	   restriction avoids many problems in parsing and rendering L<...>
+	   only with "L&ltscheme:...&gt" codes (like L&lthttp://www.perl.org&gt), and
+	   must not attempt "L&ltSome Site Name|scheme:...&gt" codes.  This
+	   restriction avoids many problems in parsing and rendering L&lt...&gt
 	   codes.
 
-       o   In a "L<text|...>" code, text may contain formatting codes for
-	   formatting or for E<...> escapes, as in:
+       o   In a "L&lttext|...&gt" code, text may contain formatting codes for
+	   formatting or for E&lt...&gt escapes, as in:
 
-	     L<B<ummE<234>stuff>|...>
+	     L&ltB&ltummE&lt234&gtstuff&gt|...&gt
 
-	   For "L<...>" codes without a "name|" part, only "E<...>" and "Z<>"
+	   For "L&lt...&gt" codes without a "name|" part, only "E&lt...&gt" and "Z&lt&gt"
 	   codes may occur -- no other formatting codes.  That is, authors
-	   should not use ""L<B<Foo::Bar>>"".
+	   should not use ""L&ltB&ltFoo::Bar&gt&gt"".
 
-	   Note, however, that formatting codes and Z<>'s can occur in any and
-	   all parts of an L<...> (i.e., in name, section, text, and url).
+	   Note, however, that formatting codes and Z&lt&gt's can occur in any and
+	   all parts of an L&lt...&gt (i.e., in name, section, text, and url).
 
-	   Authors must not nest L<...> codes.	For example, "L<The
-	   L<Foo::Bar> man page>" should be treated as an error.
+	   Authors must not nest L&lt...&gt codes.	For example, "L&ltThe
+	   L&ltFoo::Bar&gt man page&gt" should be treated as an error.
 
        o   Note that Pod authors may use formatting codes inside the "text"
-	   part of "L<text|name>" (and so on for L<text|/"sec">).
+	   part of "L&lttext|name&gt" (and so on for L&lttext|/"sec"&gt).
 
 	   In other words, this is valid:
 
-	     Go read L<the docs on C<$.>|perlvar/"$.">
+	     Go read L&ltthe docs on C&lt$.&gt|perlvar/"$."&gt
 
-	   Some output formats that do allow rendering "L<...>" codes as
+	   Some output formats that do allow rendering "L&lt...&gt" codes as
 	   hypertext, might not allow the link-text to be formatted; in that
 	   case, formatters will have to just ignore that formatting.
 
-       o   At time of writing, "L<name>" values are of two types: either the
-	   name of a Pod page like "L<Foo::Bar>" (which might be a real Perl
+       o   At time of writing, "L&ltname&gt" values are of two types: either the
+	   name of a Pod page like "L&ltFoo::Bar&gt" (which might be a real Perl
 	   module or program in an @INC / PATH directory, or a .pod file in
 	   those places); or the name of a UNIX man page, like
-	   "L<crontab(5)>".  In theory, "L<chmod>" in ambiguous between a Pod
+	   "L&ltcrontab(5)&gt".  In theory, "L&ltchmod&gt" in ambiguous between a Pod
 	   page called "chmod", or the Unix man page "chmod" (in whatever man-
 	   section).  However, the presence of a string in parens, as in
 	   "crontab(5)", is sufficient to signal that what is being discussed
 	   is not a Pod page, and so is presumably a UNIX man page.  The
 	   distinction is of no importance to many Pod processors, but some
 	   processors that render to hypertext formats may need to distinguish
-	   them in order to know how to render a given "L<foo>" code.
+	   them in order to know how to render a given "L&ltfoo&gt" code.
 
-       o   Previous versions of perlpod allowed for a "L<section>" syntax (as
-	   in "L<Object Attributes>"), which was not easily distinguishable
-	   from "L<name>" syntax.  This syntax is no longer in the
-	   specification, and has been replaced by the "L<"section">" syntax
+       o   Previous versions of perlpod allowed for a "L&ltsection&gt" syntax (as
+	   in "L&ltObject Attributes&gt"), which was not easily distinguishable
+	   from "L&ltname&gt" syntax.  This syntax is no longer in the
+	   specification, and has been replaced by the "L&lt"section"&gt" syntax
 	   (where the quotes were formerly optional).  Pod parsers should
-	   tolerate the "L<section>" syntax, for a while at least.  The
-	   suggested heuristic for distinguishing "L<section>" from "L<name>"
+	   tolerate the "L&ltsection&gt" syntax, for a while at least.  The
+	   suggested heuristic for distinguishing "L&ltsection&gt" from "L&ltname&gt"
 	   is that if it contains any whitespace, it's a section.  Pod
 	   processors may warn about this being deprecated syntax.
 
@@ -1143,9 +1145,9 @@ About =over...=back Regions
        o   Authors of Pod formatters are reminded that "=over" ... "=back" may
 	   map to several different constructs in your output format.  For
 	   example, in converting Pod to (X)HTML, it can map to any of
-	   <ul>...</ul>, <ol>...</ol>, <dl>...</dl>, or
-	   <blockquote>...</blockquote>.  Similarly, "=item" can map to <li>
-	   or <dt>.
+	   &ltul&gt...&lt/ul&gt, &ltol&gt...&lt/ol&gt, &ltdl&gt...&lt/dl&gt, or
+	   &ltblockquote&gt...&lt/blockquote&gt.  Similarly, "=item" can map to &ltli&gt
+	   or &ltdt&gt.
 
        o   Each "=over" ... "=back" region should be one of the following:
 
@@ -1185,7 +1187,7 @@ About =over...=back Regions
 	       paragraphs, and possibly also some nested "=over" ... "=back"
 	       regions, "=for..." paragraphs, and "=begin"..."=end" regions.
 	       Such an itemless "=over" ... "=back" region in Pod is
-	       equivalent in meaning to a "<blockquote>...</blockquote>"
+	       equivalent in meaning to a "&ltblockquote&gt...&lt/blockquote&gt"
 	       element in HTML.
 
 	   Note that with all the above cases, you can determine which type of
@@ -1337,15 +1339,15 @@ About Data Paragraphs and "=begin/=end" Regions
 
 	 =begin html
 
-	 I like <em>PIE</em>!
+	 I like &ltem&gtPIE&lt/em&gt!
 
-	 <hr>Especially pecan pie!
+	 &lthr&gtEspecially pecan pie!
 
 	 =end html
 
        If these were ordinary paragraphs, the Pod parser would try to expand
-       the "E</em>" (in the first paragraph) as a formatting code, just like
-       "E<lt>" or "E<eacute>".	But since this is in a "=begin
+       the "E&lt/em&gt" (in the first paragraph) as a formatting code, just like
+       "E&ltlt&gt" or "E&lteacute&gt".	But since this is in a "=begin
        identifier"..."=end identifier" region and the identifier "html"
        doesn't begin have a ":" prefix, the contents of this region are stored
        as data paragraphs, instead of being processed as ordinary paragraphs
@@ -1360,8 +1362,8 @@ About Data Paragraphs and "=begin/=end" Regions
 
 	 =begin :biblio
 
-	 Wirth, Niklaus.  1976.  I<Algorithms + Data Structures =
-	 Programs.>  Prentice-Hall, Englewood Cliffs, NJ.
+	 Wirth, Niklaus.  1976.  I&ltAlgorithms + Data Structures =
+	 Programs.&gt  Prentice-Hall, Englewood Cliffs, NJ.
 
 	 =end :biblio
 
@@ -1371,8 +1373,8 @@ About Data Paragraphs and "=begin/=end" Regions
        "biblio" identifier).  The same effect could be had with:
 
 	 =for :biblio
-	 Wirth, Niklaus.  1976.  I<Algorithms + Data Structures =
-	 Programs.>  Prentice-Hall, Englewood Cliffs, NJ.
+	 Wirth, Niklaus.  1976.  I&ltAlgorithms + Data Structures =
+	 Programs.&gt  Prentice-Hall, Englewood Cliffs, NJ.
 
        The ":" on these identifiers means simply "process this stuff normally,
        even though the result will be for some special target".  I suggest
@@ -1395,13 +1397,13 @@ About Data Paragraphs and "=begin/=end" Regions
 
 	 =item
 
-	 Wirth, Niklaus.  1975.  I<Algorithmen und Datenstrukturen.>
+	 Wirth, Niklaus.  1975.  I&ltAlgorithmen und Datenstrukturen.&gt
 	 Teubner, Stuttgart.  [Yes, it's in German.]
 
 	 =item
 
-	 Wirth, Niklaus.  1976.  I<Algorithms + Data Structures =
-	 Programs.>  Prentice-Hall, Englewood Cliffs, NJ.
+	 Wirth, Niklaus.  1976.  I&ltAlgorithms + Data Structures =
+	 Programs.&gt  Prentice-Hall, Englewood Cliffs, NJ.
 
 	 =back
 
@@ -1433,7 +1435,7 @@ About Data Paragraphs and "=begin/=end" Regions
 	 =cut
 
 	 # Yup, this isn't Pod anymore.
-	 sub excl { (rand() > .5) ? "hoo!" : "hah!" }
+	 sub excl { (rand() &gt .5) ? "hoo!" : "hah!" }
 
 	 =pod
 
@@ -1491,13 +1493,13 @@ About Data Paragraphs and "=begin/=end" Regions
 
 	 =item
 
-	 Wirth, Niklaus.  1975.  I<Algorithmen und Datenstrukturen.>
+	 Wirth, Niklaus.  1975.  I&ltAlgorithmen und Datenstrukturen.&gt
 	 Teubner, Stuttgart.  [Yes, it's in German.]
 
 	 =item
 
-	 Wirth, Niklaus.  1976.  I<Algorithms + Data Structures =
-	 Programs.>  Prentice-Hall, Englewood Cliffs, NJ.
+	 Wirth, Niklaus.  1976.  I&ltAlgorithms + Data Structures =
+	 Programs.&gt  Prentice-Hall, Englewood Cliffs, NJ.
 
 	 =back
 
@@ -1505,9 +1507,9 @@ About Data Paragraphs and "=begin/=end" Regions
 
 	 =begin html
 
-	 <img src='wirth_spokesmodeling_book.png'>
+	 &ltimg src='wirth_spokesmodeling_book.png'&gt
 
-	 <hr>
+	 &lthr&gt
 
 	 =end html
 
@@ -1525,10 +1527,10 @@ About Data Paragraphs and "=begin/=end" Regions
        another (within a single region), should consider them to be one large
        data paragraph that happens to contain blank lines.  So the content of
        the above "=begin html"..."=end html" may be stored as two data
-       paragraphs (one consisting of "<img
-       src='wirth_spokesmodeling_book.png'>\n" and another consisting of
-       "<hr>\n"), but should be stored as a single data paragraph (consisting
-       of "<img src='wirth_spokesmodeling_book.png'>\n\n<hr>\n").
+       paragraphs (one consisting of "&ltimg
+       src='wirth_spokesmodeling_book.png'&gt\n" and another consisting of
+       "&lthr&gt\n"), but should be stored as a single data paragraph (consisting
+       of "&ltimg src='wirth_spokesmodeling_book.png'&gt\n\n&lthr&gt\n").
 
        Pod processors should tolerate empty "=begin something"..."=end
        something" regions, empty "=begin :something"..."=end :something"
@@ -1633,6 +1635,6 @@ AUTHOR
 
 
 perl v5.10.1			  2009-05-26			PERLPODSPEC(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

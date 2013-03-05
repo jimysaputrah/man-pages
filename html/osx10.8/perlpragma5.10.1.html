@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="A pragma is a module which influences some aspect of the compile time..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlpragma - how to write a user pragma</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLPRAGMA(1)	       Perl Programmers Reference Guide 	 PERLPRAGMA(1)
 
 
@@ -29,8 +31,8 @@ A basic example
 
 	   use MyMaths;
 
-	   my $l = MyMaths->new(1.2);
-	   my $r = MyMaths->new(3.4);
+	   my $l = MyMaths-&gtnew(1.2);
+	   my $r = MyMaths-&gtnew(3.4);
 
 	   print "A: ", $l + $r, "\n";
 
@@ -66,7 +68,7 @@ A basic example
 	   use warnings;
 	   use strict;
 	   use myint();
-	   use overload '+' => sub {
+	   use overload '+' =&gt sub {
 	       my ($l, $r) = @_;
 	       # Pass 1 to check up one call level from here
 	       if (myint::in_effect(1)) {
@@ -105,7 +107,7 @@ A basic example
 	   sub in_effect {
 	       my $level = shift // 0;
 	       my $hinthash = (caller($level))[10];
-	       return $hinthash->{myint};
+	       return $hinthash-&gt{myint};
 	   }
 
 	   1;
@@ -115,14 +117,14 @@ A basic example
 
 	   BEGIN {
 	       require myint;
-	       myint->import();
+	       myint-&gtimport();
 	   }
 
        and "no myint;" is
 
 	   BEGIN {
 	       require myint;
-	       myint->unimport();
+	       myint-&gtunimport();
 	   }
 
        Hence the "import" and "unimport" routines are called at compile time
@@ -163,6 +165,6 @@ Implementation details
 
 
 perl v5.10.1			  2009-02-12			 PERLPRAGMA(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

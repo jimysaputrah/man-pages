@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="If you have written a test module based on Test::Builder then..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Test::Tester - Ease testing test modules built with Test::Builder</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Test::Tester(3)       User Contributed Perl Documentation      Test::Tester(3)
 
 
@@ -16,7 +18,7 @@ NAME
        Test::Tester - Ease testing test modules built with Test::Builder
 
 SYNOPSIS
-	 use Test::Tester tests => 6;
+	 use Test::Tester tests =&gt 6;
 
 	 use Test::MyStyle;
 
@@ -25,9 +27,9 @@ SYNOPSIS
 	     is_mystyle_eq("this", "that", "not eq");
 	   },
 	   {
-	     ok => 0, # expect this to fail
-	     name => "not eq",
-	     diag => "Expected: 'this'\nGot: 'that'",
+	     ok =&gt 0, # expect this to fail
+	     name =&gt "not eq",
+	     diag =&gt "Expected: 'this'\nGot: 'that'",
 	   }
 	 );
 
@@ -35,7 +37,7 @@ SYNOPSIS
 
 	 use Test::Tester;
 
-	 use Test::More tests => 3;
+	 use Test::More tests =&gt 3;
 	 use Test::MyStyle;
 
 	 my ($premature, @results) = run_tests(
@@ -46,7 +48,7 @@ SYNOPSIS
 
 	 # now use Test::More::like to check the diagnostic output
 
-	 like($results[0]->{diag}, "/^Database ping took \\d+ seconds$"/, "diag");
+	 like($results[0]-&gt{diag}, "/^Database ping took \\d+ seconds$"/, "diag");
 
 DESCRIPTION
        If you have written a test module based on Test::Builder then
@@ -72,9 +74,9 @@ HOW TO USE (THE EASY WAY)
 	 check_test(
 	   sub { is_mystyle_eq("this", "that", "not eq") },
 	   {
-	     ok => 0, # we expect the test to fail
-	     name => "not eq",
-	     diag => "Expected: 'this'\nGot: 'that'",
+	     ok =&gt 0, # we expect the test to fail
+	     name =&gt "not eq",
+	     diag =&gt "Expected: 'this'\nGot: 'that'",
 	   }
 	 );
 
@@ -92,7 +94,7 @@ HOW TO USE (THE EASY WAY)
 	   }
 	 );
 
-	 like($result[0]->{diag}, "/^Database ping took \\d+ seconds$"/, "diag");
+	 like($result[0]-&gt{diag}, "/^Database ping took \\d+ seconds$"/, "diag");
 
        We cannot predict how long the database ping will take so we use
        Test::More's like() test to check that the diagnostic string is of the
@@ -114,13 +116,13 @@ HOW TO USE (THE HARD WAY)
 
        should allow your test scripts to do
 
-	 Test::YourModule::set_builder(Test::Tester->capture);
+	 Test::YourModule::set_builder(Test::Tester-&gtcapture);
 
        and after that any tests inside your module will captured.
 
 TEST RESULTS
        The result of each test is captured in a hash. These hashes are the
-       same as the hashes returned by Test::Builder->details but with a couple
+       same as the hashes returned by Test::Builder-&gtdetails but with a couple
        of extra fields.
 
        These fields are documented in Test::Builder in the details() function
@@ -130,7 +132,7 @@ TEST RESULTS
 
        actual_ok
 	 Did the test really pass? That is, did the pass come from
-	 Test::Builder->ok() or did it pass because it was a TODO test?
+	 Test::Builder-&gtok() or did it pass because it was a TODO test?
 
        name
 	 The name supplied for the test.
@@ -186,7 +188,7 @@ TEST RESULTS
 	 stack.
 
        Some of Test::Tester's functions return arrays of these hashes, just
-       like Test::Builder->details. That is, the hash for the first test will
+       like Test::Builder-&gtdetails. That is, the hash for the first test will
        be array element 1 (not 0). Element 0 will not be a hash it will be a
        string which contains any diagnostic output that came before the first
        test. This should usually be empty, if it's not, it means something
@@ -310,7 +312,7 @@ EXPORTED FUNCTIONS
 
 HOW IT WORKS
        Normally, a test module (let's call it Test:MyStyle) calls
-       Test::Builder->new to get the Test::Builder object. Test::MyStyle calls
+       Test::Builder-&gtnew to get the Test::Builder object. Test::MyStyle calls
        methods on this object to record information about test results. When
        Test::Tester is loaded, it replaces Test::Builder's new() method with
        one which returns a Test::Tester::Delegate object. Most of the time
@@ -331,15 +333,15 @@ SEE ALSO
        predict exactly what your test will output.
 
 AUTHOR
-       This module is copyright 2005 Fergal Daly <fergal@esatclear.ie>, some
+       This module is copyright 2005 Fergal Daly &ltfergal@esatclear.ie&gt, some
        parts are based on other people's work.
 
        Plan handling lifted from Test::More. written by Michael G Schwern
-       <schwern@pobox.com>.
+       &ltschwern@pobox.com&gt.
 
        Test::Tester::Capture is a cut down and hacked up version of
        Test::Builder.  Test::Builder was written by chromatic
-       <chromatic@wgz.org> and Michael G Schwern <schwern@pobox.com>.
+       &ltchromatic@wgz.org&gt and Michael G Schwern &ltschwern@pobox.com&gt.
 
 LICENSE
        Under the same license as Perl itself
@@ -349,6 +351,6 @@ LICENSE
 
 
 perl v5.12.4			  2008-03-01		       Test::Tester(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document describes the differences between the 5.8.8 release and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perl5100delta - what is new for perl 5.10.0</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERL5100DELTA(1)       Perl Programmers Reference Guide       PERL5100DELTA(1)
 
 
@@ -102,15 +104,15 @@ Core Enhancements
 	       /
 		^		       # start of line
 		(		       # start capture buffer 1
-		   <		       #   match an opening angle bracket
+		   &lt		       #   match an opening angle bracket
 		   (?:		       #   match one of:
-		       (?>	       #     don't backtrack over the inside of this group
-			   [^<>]+      #       one or more non angle brackets
+		       (?&gt	       #     don't backtrack over the inside of this group
+			   [^&lt&gt]+      #       one or more non angle brackets
 		       )	       #     end non backtracking group
 		   |		       #     ... or ...
 		       (?1)	       #     recurse to bracket 1 and try it again
 		   )*		       #   0 or more times.
-		   >		       #   match a closing angle bracket
+		   &gt		       #   match a closing angle bracket
 		)		       # end capture buffer one
 		$		       # end of line
 	       /x
@@ -118,19 +120,19 @@ Core Enhancements
 	   PCRE users should note that Perl's recursive regex feature allows
 	   backtracking into a recursed pattern, whereas in PCRE the recursion
 	   is atomic or "possessive" in nature.  As in the example above, you
-	   can add (?>) to control this selectively.  (Yves Orton)
+	   can add (?&gt) to control this selectively.  (Yves Orton)
 
        Named Capture Buffers
 	   It is now possible to name capturing parenthesis in a pattern and
 	   refer to the captured contents by name. The naming syntax is
-	   "(?<NAME>....)".  It's possible to backreference to a named buffer
-	   with the "\k<NAME>" syntax. In code, the new magical hashes "%+"
+	   "(?&ltNAME&gt....)".  It's possible to backreference to a named buffer
+	   with the "\k&ltNAME&gt" syntax. In code, the new magical hashes "%+"
 	   and "%-" can be used to access the contents of the capture buffers.
 
 	   Thus, to replace all doubled chars with a single copy, one could
 	   write
 
-	       s/(?<letter>.)\k<letter>/$+{letter}/g
+	       s/(?&ltletter&gt.)\k&ltletter&gt/$+{letter}/g
 
 	   Only buffers with defined contents will be "visible" in the "%+"
 	   hash, so it's possible to do something like
@@ -151,7 +153,7 @@ Core Enhancements
 	   buffers is sequential, and not "unnamed first, then named". Thus in
 	   the pattern
 
-	      /(A)(?<B>B)(C)(?<D>D)/
+	      /(A)(?&ltB&gtB)(C)(?&ltD&gtD)/
 
 	   $1 will be 'A', $2 will be 'B', $3 will be 'C' and $4 will be 'D'
 	   and not $1 is 'A', $2 is 'C' and $3 is 'B' and $4 is 'D' that a
@@ -318,7 +320,7 @@ Core Enhancements
        module authors use other types of relations between classes (in
        addition to inheritance). (chromatic)
 
-       See "$obj->DOES( ROLE )" in UNIVERSAL.
+       See "$obj-&gtDOES( ROLE )" in UNIVERSAL.
 
    Formats
        Formats were improved in several ways. A new field, "^*", can be used
@@ -329,7 +331,7 @@ Core Enhancements
        fixed.
 
    Byte-order modifiers for pack() and unpack()
-       There are two new byte-order modifiers, ">" (big-endian) and "<"
+       There are two new byte-order modifiers, "&gt" (big-endian) and "&lt"
        (little-endian), that can be appended to most pack() and unpack()
        template characters and groups to force a certain byte-order for that
        type or group.  See "pack" in perlfunc and perlpacktut for details.
@@ -580,7 +582,7 @@ Incompatible Changes
 
        Previously, the exception would not occur until Perl attempted to make
        use of the recursive inheritance while resolving a method or doing a
-       "$foo->isa($bar)" lookup.
+       "$foo-&gtisa($bar)" lookup.
 
    warnings::enabled and warnings::warnif changed to favor users of modules
        The behaviour in 5.10.x favors the person using the module; The
@@ -745,7 +747,7 @@ Modules and Pragmata
 	   CPAN mirrors.
 
        o   "Pod::Escapes" provides utilities that are useful in decoding Pod
-	   E<...> sequences.
+	   E&lt...&gt sequences.
 
        o   "Pod::Simple" is now the backend for several of the Pod-related
 	   modules included with Perl.
@@ -1084,9 +1086,9 @@ Selected Bug Fixes
 	   You can now use a non-arrowed form for chained subscripts after a
 	   list slice, like in:
 
-	       ({foo => "bar"})[0]{foo}
+	       ({foo =&gt "bar"})[0]{foo}
 
-	   This used to be a syntax error; a "->" was required.
+	   This used to be a syntax error; a "-&gt" was required.
 
        "no warnings 'category'" works correctly with -w
 	   Previously when running with warnings enabled globally via "-w",
@@ -1104,7 +1106,7 @@ Selected Bug Fixes
 	   signalling.	One can get thread status, or the list of running or
 	   joinable threads.
 
-	   A new "threads->exit()" method is used to exit from the application
+	   A new "threads-&gtexit()" method is used to exit from the application
 	   (this is the default for the main thread) or from the current
 	   thread only (this is the default for all other threads). On the
 	   other hand, the exit() built-in now always causes the whole
@@ -1376,6 +1378,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-01		      PERL5100DELTA(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

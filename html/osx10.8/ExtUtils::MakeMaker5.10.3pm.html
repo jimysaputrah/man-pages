@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This utility is designed to write a Makefile for an extension module..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>ExtUtils::MakeMaker - Create a module Makefile</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 ExtUtils::MakeMaker(3pmPerl Programmers Reference GuidExtUtils::MakeMaker(3pm)
 
 
@@ -18,7 +20,7 @@ NAME
 SYNOPSIS
 	 use ExtUtils::MakeMaker;
 
-	 WriteMakefile( ATTRIBUTE => VALUE [, ...] );
+	 WriteMakefile( ATTRIBUTE =&gt VALUE [, ...] );
 
 DESCRIPTION
        This utility is designed to write a Makefile for an extension module
@@ -388,7 +390,7 @@ DESCRIPTION
 
        CONFIGURE
 	 CODE reference. The subroutine should return a hash reference. The
-	 hash may contain further attributes, e.g. {LIBS => ...}, that have to
+	 hash may contain further attributes, e.g. {LIBS =&gt ...}, that have to
 	 be determined by some evaluation method.
 
        CONFIGURE_REQUIRES
@@ -397,7 +399,7 @@ DESCRIPTION
 
 	 This will go into the "configure_requires" field of your META.yml.
 
-	 Defaults to "{ "ExtUtils::MakeMaker" =" 0 }>
+	 Defaults to "{ "ExtUtils::MakeMaker" =" 0 }&gt
 
 	 The format is the same as PREREQ_PM.
 
@@ -447,12 +449,12 @@ DESCRIPTION
 	 expanded in the same way as XSUB names are expanded by the XS()
 	 macro.  Defaults to
 
-	   {"$(NAME)" => ["boot_$(NAME)" ] }
+	   {"$(NAME)" =&gt ["boot_$(NAME)" ] }
 
 	 e.g.
 
-	   {"RPC" => [qw( boot_rpcb rpcb_gettime getnetconfigent )],
-	    "NetconfigPtr" => [ 'DESTROY'] }
+	   {"RPC" =&gt [qw( boot_rpcb rpcb_gettime getnetconfigent )],
+	    "NetconfigPtr" =&gt [ 'DESTROY'] }
 
 	 Please see the ExtUtils::Mksymlists documentation for more
 	 information about the DL_FUNCS, DL_VARS and FUNCLIST attributes.
@@ -663,17 +665,17 @@ DESCRIPTION
 	 An anonymous array of alternative library specifications to be
 	 searched for (in order) until at least one library is found. E.g.
 
-	   'LIBS' => ["-lgdbm", "-ldbm -lfoo", "-L/path -ldbm.nfs"]
+	   'LIBS' =&gt ["-lgdbm", "-ldbm -lfoo", "-L/path -ldbm.nfs"]
 
 	 Mind, that any element of the array contains a complete set of
 	 arguments for the ld command. So do not specify
 
-	   'LIBS' => ["-ltcl", "-ltk", "-lX11"]
+	   'LIBS' =&gt ["-ltcl", "-ltk", "-lX11"]
 
 	 See ODBM_File/Makefile.PL for an example, where an array is needed.
 	 If you specify a scalar as in
 
-	   'LIBS' => "-ltcl -ltk -lX11"
+	   'LIBS' =&gt "-ltcl -ltk -lX11"
 
 	 MakeMaker will turn it into an array with one element.
 
@@ -723,9 +725,9 @@ DESCRIPTION
 	 file names under the "blib/man1/" directory, as in the following
 	 example:
 
-	   MAN1PODS	       => {
-	     'doc/command.pod'	  => 'blib/man1/command.1',
-	     'scripts/script.pl'  => 'blib/man1/script.1',
+	   MAN1PODS	       =&gt {
+	     'doc/command.pod'	  =&gt 'blib/man1/command.1',
+	     'scripts/script.pl'  =&gt 'blib/man1/script.1',
 	   }
 
        MAN3PODS
@@ -896,7 +898,7 @@ DESCRIPTION
 	 and the value is passed in as the first argument when the PL file is
 	 run.
 
-	     PL_FILES => {'bin/foobar.PL' => 'bin/foobar'}
+	     PL_FILES =&gt {'bin/foobar.PL' =&gt 'bin/foobar'}
 
 	 Would run bin/foobar.PL like this:
 
@@ -905,7 +907,7 @@ DESCRIPTION
 	 If multiple files from one program are desired an array ref can be
 	 used.
 
-	     PL_FILES => {'bin/foobar.PL' => [qw(bin/foobar1 bin/foobar2)]}
+	     PL_FILES =&gt {'bin/foobar.PL' =&gt [qw(bin/foobar1 bin/foobar2)]}
 
 	 In this case the program will be run multiple times using each target
 	 file.
@@ -923,7 +925,7 @@ DESCRIPTION
        PM
 	 Hashref of .pm files and *.pl files to be installed.  e.g.
 
-	   {'name_of_file.pm' => '$(INST_LIBDIR)/install_as.pm'}
+	   {'name_of_file.pm' =&gt '$(INST_LIBDIR)/install_as.pm'}
 
 	 By default this will include *.pm and *.pl and the files found in the
 	 PMLIBDIRS directories.  Defining PM in the Makefile.PL will override
@@ -947,7 +949,7 @@ DESCRIPTION
 	 Great care is necessary when defining the command if quoting needs to
 	 be done.  For instance, you would need to say:
 
-	   {'PM_FILTER' => 'grep -v \\"^\\#\\"'}
+	   {'PM_FILTER' =&gt 'grep -v \\"^\\#\\"'}
 
 	 to remove all the leading comments on the fly during the build.  The
 	 extra \\ are necessary, unfortunately, because this variable is
@@ -1019,12 +1021,12 @@ DESCRIPTION
 
 	 This will go into the "requires" field of your META.yml.
 
-	     PREREQ_PM => {
+	     PREREQ_PM =&gt {
 		 # Require Test::More at least 0.47
-		 "Test::More" => "0.47",
+		 "Test::More" =&gt "0.47",
 
 		 # Require any version of Acme::Buffy
-		 "Acme::Buffy" => 0,
+		 "Acme::Buffy" =&gt 0,
 	     }
 
        PREREQ_PRINT
@@ -1033,8 +1035,8 @@ DESCRIPTION
 	 hash ref.
 
 	   $PREREQ_PM = {
-			  'A::B' => Vers1,
-			  'C::D' => Vers2,
+			  'A::B' =&gt Vers1,
+			  'C::D' =&gt Vers2,
 			  ...
 			};
 
@@ -1050,11 +1052,11 @@ DESCRIPTION
 	 RedHatism for "PREREQ_PRINT".	The output format is different,
 	 though:
 
-	     perl(A::B)>=Vers1 perl(C::D)>=Vers2 ...
+	     perl(A::B)&gt=Vers1 perl(C::D)&gt=Vers2 ...
 
 	 A minimal required perl version, if present, will look like this:
 
-	     perl(perl)>=5.008001
+	     perl(perl)&gt=5.008001
 
        SITEPREFIX
 	 Like PERLPREFIX, but only for the site install locations.
@@ -1152,7 +1154,7 @@ DESCRIPTION
 	 contains the correct VERSION macro after any change of the file, you
 	 would have to do something like
 
-	     depend => { Makefile => '$(VERSION_FROM)' }
+	     depend =&gt { Makefile =&gt '$(VERSION_FROM)' }
 
 	 See attribute "depend" below.
 
@@ -1163,7 +1165,7 @@ DESCRIPTION
        XS
 	 Hashref of .xs files. MakeMaker will default this.  e.g.
 
-	   {'name_of_file.xs' => 'name_of_file.c'}
+	   {'name_of_file.xs' =&gt 'name_of_file.c'}
 
 	 The .c files will automatically be included in the list of files
 	 deleted by a make clean.
@@ -1188,17 +1190,17 @@ DESCRIPTION
        to the method as a hash.
 
        clean
-	   {FILES => "*.xyz foo"}
+	   {FILES =&gt "*.xyz foo"}
 
        depend
-	   {ANY_TARGET => ANY_DEPENDENCY, ...}
+	   {ANY_TARGET =&gt ANY_DEPENDENCY, ...}
 
 	 (ANY_TARGET must not be given a double-colon rule by MakeMaker.)
 
        dist
-	   {TARFLAGS => 'cvfF', COMPRESS => 'gzip', SUFFIX => '.gz',
-	   SHAR => 'shar -m', DIST_CP => 'ln', ZIP => '/bin/zip',
-	   ZIPFLAGS => '-rl', DIST_DEFAULT => 'private tardist' }
+	   {TARFLAGS =&gt 'cvfF', COMPRESS =&gt 'gzip', SUFFIX =&gt '.gz',
+	   SHAR =&gt 'shar -m', DIST_CP =&gt 'ln', ZIP =&gt '/bin/zip',
+	   ZIPFLAGS =&gt '-rl', DIST_DEFAULT =&gt 'private tardist' }
 
 	 If you specify COMPRESS, then SUFFIX should also be altered, as it is
 	 needed to tell make the target file of the compression. Setting
@@ -1208,33 +1210,33 @@ DESCRIPTION
 	 links and links the rest. Default is 'best'.
 
        dynamic_lib
-	   {ARMAYBE => 'ar', OTHERLDFLAGS => '...', INST_DYNAMIC_DEP => '...'}
+	   {ARMAYBE =&gt 'ar', OTHERLDFLAGS =&gt '...', INST_DYNAMIC_DEP =&gt '...'}
 
        linkext
-	   {LINKTYPE => 'static', 'dynamic' or ''}
+	   {LINKTYPE =&gt 'static', 'dynamic' or ''}
 
 	 NB: Extensions that have nothing but *.pm files had to say
 
-	   {LINKTYPE => ''}
+	   {LINKTYPE =&gt ''}
 
 	 with Pre-5.0 MakeMakers. Since version 5.00 of MakeMaker such a line
 	 can be deleted safely. MakeMaker recognizes when there's nothing to
 	 be linked.
 
        macro
-	   {ANY_MACRO => ANY_VALUE, ...}
+	   {ANY_MACRO =&gt ANY_VALUE, ...}
 
        postamble
 	 Anything put here will be passed to MY::postamble() if you have one.
 
        realclean
-	   {FILES => '$(INST_ARCHAUTODIR)/*.xyz'}
+	   {FILES =&gt '$(INST_ARCHAUTODIR)/*.xyz'}
 
        test
-	   {TESTS => 't/*.t'}
+	   {TESTS =&gt 't/*.t'}
 
        tool_autosplit
-	   {MAXLEN => 8}
+	   {MAXLEN =&gt 8}
 
    Overriding MakeMaker Methods
        If you cannot achieve the desired Makefile behaviour by specifying
@@ -1248,7 +1250,7 @@ DESCRIPTION
 
 	       package MY; # so that "SUPER" works right
 	       sub c_o {
-		   my $inherited = shift->SUPER::c_o(@_);
+		   my $inherited = shift-&gtSUPER::c_o(@_);
 		   $inherited =~ s/old text/new text/;
 		   $inherited;
 	       }
@@ -1269,7 +1271,7 @@ DESCRIPTION
        Makefile:
 
 	   sub MY::postamble {
-	       return <<'MAKE_FRAG';
+	       return &lt&lt'MAKE_FRAG';
 	   $(MYEXTLIB): sdbm/Makefile
 		   cd sdbm && $(MAKE) all
 
@@ -1284,12 +1286,12 @@ DESCRIPTION
 
        Some of the most common mistakes:
 
-       "MAN3PODS => ' '"
+       "MAN3PODS =&gt ' '"
 	 This is commonly used to suppress the creation of man pages.
 	 MAN3PODS takes a hash ref not a string, but the above worked by
 	 accident in old versions of MakeMaker.
 
-	 The correct code is "MAN3PODS => { }".
+	 The correct code is "MAN3PODS =&gt { }".
 
    Hintsfile support
        MakeMaker.pm uses the architecture specific information from Config.pm.
@@ -1306,7 +1308,7 @@ DESCRIPTION
        reference becomes blessed. So if you want to do the equivalent to
        override or create an attribute you would say something like
 
-	   $self->{LIBS} = ['-ldbm -lucb -lc'];
+	   $self-&gt{LIBS} = ['-ldbm -lucb -lc'];
 
    Distribution Support
        For authors of extensions MakeMaker provides several Makefile targets.
@@ -1397,9 +1399,9 @@ DESCRIPTION
 
 	   WriteMakefile(
 	       ...other options...
-	       dist => {
-		   COMPRESS => "bzip2",
-		   SUFFIX   => ".bz2"
+	       dist =&gt {
+		   COMPRESS =&gt "bzip2",
+		   SUFFIX   =&gt ".bz2"
 	       }
 	   );
 
@@ -1459,7 +1461,7 @@ DESCRIPTION
 
 ENVIRONMENT
        PERL_MM_OPT
-	   Command line options used by "MakeMaker->new()", and thus by
+	   Command line options used by "MakeMaker-&gtnew()", and thus by
 	   "WriteMakefile()".  The string is split on whitespace, and the
 	   result is processed before any actual command line arguments are
 	   processed.
@@ -1495,17 +1497,17 @@ AUTHORS
        Send bug reports via http://rt.cpan.org/.  Please send your generated
        Makefile along with your report.
 
-       For more up-to-date information, see <http://www.makemaker.org>.
+       For more up-to-date information, see &lthttp://www.makemaker.org&gt.
 
 LICENSE
        This program is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
 
-       See <http://www.perl.com/perl/misc/Artistic.html>
+       See &lthttp://www.perl.com/perl/misc/Artistic.html&gt
 
 
 
 perl v5.10.1			  2009-08-05	      ExtUtils::MakeMaker(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Version objects were added to Perl in 5.10.  This module implements..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>version - Perl extension for Version Objects</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 version(3pm)	       Perl Programmers Reference Guide 	  version(3pm)
 
 
@@ -19,29 +21,29 @@ SYNOPSIS
 	 # Parsing version strings (decimal or dotted-decimal)
 
 	 use version 0.77; # get latest bug-fixes and API
-	 $ver = version->parse($string)
+	 $ver = version-&gtparse($string)
 
 	 # Declaring a dotted-decimal $VERSION (keep on one line!)
 
-	 use version 0.77; our $VERSION = version->declare("v1.2.3"); # formal
+	 use version 0.77; our $VERSION = version-&gtdeclare("v1.2.3"); # formal
 	 use version 0.77; our $VERSION = qv("v1.2.3"); 	      # shorthand
 	 use version 0.77; our $VERSION = qv("v1.2_3"); 	      # alpha
 
 	 # Declaring an old-style decimal $VERSION (use quotes!)
 
 	 our $VERSION = "1.0203";				      # recommended
-	 use version 0.77; our $VERSION = version->parse("1.0203");   # formal
-	 use version 0.77; our $VERSION = version->parse("1.02_03");  # alpha
+	 use version 0.77; our $VERSION = version-&gtparse("1.0203");   # formal
+	 use version 0.77; our $VERSION = version-&gtparse("1.02_03");  # alpha
 
 	 # Comparing mixed version styles (decimals, dotted-decimals, objects)
 
-	 if ( version->parse($v1) == version->parse($v2) ) {
+	 if ( version-&gtparse($v1) == version-&gtparse($v2) ) {
 	   # do stuff
 	 }
 
 	 # Sorting mixed version styles
 
-	 @ordered = sort { version->parse($a) <=> version->parse($b) } @list;
+	 @ordered = sort { version-&gtparse($a) &lt=&gt version-&gtparse($b) } @list;
 
 DESCRIPTION
        Version objects were added to Perl in 5.10.  This module implements
@@ -93,14 +95,14 @@ DECLARING VERSIONS
        First, convert your old decimal version (e.g. 1.02) to a normalized
        dotted-decimal form:
 
-	 $ perl -Mversion -e 'print version->parse("1.02")->normal'
+	 $ perl -Mversion -e 'print version-&gtparse("1.02")-&gtnormal'
 	 v1.20.0
 
        Then increment any of the dotted-decimal components (v1.20.1 or
        v1.21.0).
 
    How to "declare()" a dotted-decimal version
-	 use version 0.77; our $VERSION = version->declare("v1.2.3");
+	 use version 0.77; our $VERSION = version-&gtdeclare("v1.2.3");
 
        The "declare()" method always creates dotted-decimal version objects.
        When used in a module, you must put it on the same line as "use
@@ -149,7 +151,7 @@ PARSING AND COMPARING VERSIONS
 
        Some examples:
 
-	 $variable   version->parse($variable)
+	 $variable   version-&gtparse($variable)
 	 ---------   -------------------------
 	 1.23	     v1.230.0
 	 "1.23"      v1.230.0
@@ -191,11 +193,11 @@ PARSING AND COMPARING VERSIONS
        are not sufficient for your needs.
 
    How to compare version objects
-       Version objects overload the "cmp" and "<=>" operators.	Perl
+       Version objects overload the "cmp" and "&lt=&gt" operators.	Perl
        automatically generates all of the other comparison operators based on
        those two so all the normal logical comparisons will work.
 
-	 if ( version->parse($v1) == version->parse($v2) ) {
+	 if ( version-&gtparse($v1) == version-&gtparse($v2) ) {
 	   # do stuff
 	 }
 
@@ -203,18 +205,18 @@ PARSING AND COMPARING VERSIONS
        object term will be converted to a version object using "parse()".
        This may give surprising results:
 
-	 $v1 = version->parse("v0.95.0");
-	 $bool = $v1 < 0.96; # FALSE since 0.96 is v0.960.0
+	 $v1 = version-&gtparse("v0.95.0");
+	 $bool = $v1 &lt 0.96; # FALSE since 0.96 is v0.960.0
 
        Always comparing to a version object will help avoid surprises:
 
-	 $bool = $v1 < version->parse("v0.96.0"); # TRUE
+	 $bool = $v1 &lt version-&gtparse("v0.96.0"); # TRUE
 
        Note that "alpha" version objects (where the version string contains a
        trailing underscore segment) compare as less than the equivalent
        version without an underscore:
 
-	 $bool = version->parse("1.23_45") < version->parse("1.2345"); # TRUE
+	 $bool = version-&gtparse("1.23_45") &lt version-&gtparse("1.2345"); # TRUE
 
        See version::Internals for more details on "alpha" versions.
 
@@ -223,30 +225,30 @@ OBJECT METHODS
        True if and only if the version object was created with a underscore,
        e.g.
 
-	 version->parse('1.002_03')->is_alpha;	# TRUE
-	 version->declare('1.2.3_4')->is_alpha; # TRUE
+	 version-&gtparse('1.002_03')-&gtis_alpha;	# TRUE
+	 version-&gtdeclare('1.2.3_4')-&gtis_alpha; # TRUE
 
    is_qv()
        True only if the version object is a dotted-decimal version, e.g.
 
-	 version->parse('v1.2.0')->is_qv;	 # TRUE
-	 version->declare('v1.2')->is_qv;	# TRUE
-	 qv('1.2')->is_qv;			# TRUE
-	 version->parse('1.2')->is_qv;		# FALSE
+	 version-&gtparse('v1.2.0')-&gtis_qv;	 # TRUE
+	 version-&gtdeclare('v1.2')-&gtis_qv;	# TRUE
+	 qv('1.2')-&gtis_qv;			# TRUE
+	 version-&gtparse('1.2')-&gtis_qv;		# FALSE
 
    normal()
        Returns a string with a standard 'normalized' dotted-decimal form with
        a leading-v and at least 3 components.
 
-	version->declare('v1.2')->normal;  # v1.2.0
-	version->parse('1.2')->normal;	   # v1.200.0
+	version-&gtdeclare('v1.2')-&gtnormal;  # v1.2.0
+	version-&gtparse('1.2')-&gtnormal;	   # v1.200.0
 
    numify()
        Returns a value representing the object in a pure decimal form without
        trailing zeroes.
 
-	version->declare('v1.2')->numify;  # 1.002
-	version->parse('1.2')->numify;	   # 1.2
+	version-&gtdeclare('v1.2')-&gtnumify;  # 1.002
+	version-&gtparse('1.2')-&gtnumify;	   # 1.2
 
    stringify()
        Returns a string that is as close to the original representation as
@@ -255,9 +257,9 @@ OBJECT METHODS
        This method is used whenever a version object is interpolated into a
        string.
 
-	version->declare('v1.2')->stringify;	# v1.2
-	version->parse('1.200')->stringify;	# 1.200
-	version->parse(1.02_30)->stringify;	# 1.023
+	version-&gtdeclare('v1.2')-&gtstringify;	# v1.2
+	version-&gtparse('1.200')-&gtstringify;	# 1.200
+	version-&gtparse(1.02_30)-&gtstringify;	# 1.023
 
 EXPORTED FUNCTIONS
    qv()
@@ -282,7 +284,7 @@ EXPORTED FUNCTIONS
        number.	Leading and trailing spaces are not allowed.
 
 AUTHOR
-       John Peacock <jpeacock@cpan.org>
+       John Peacock &ltjpeacock@cpan.org&gt
 
 SEE ALSO
        version::Internals.
@@ -292,6 +294,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-07			  version(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

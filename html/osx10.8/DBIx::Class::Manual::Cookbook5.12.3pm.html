@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Manual::Cookbook - Miscellaneous recipes</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::Manual::CUseroContributed Perl DoDBIx::Class::Manual::Cookbook(3)
 
 
@@ -21,29 +23,29 @@ SEARCHING
        a paged resultset, which will fetch only a defined number of records at
        a time:
 
-	 my $rs = $schema->resultset('Artist')->search(
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   undef,
 	   {
-	     page => 1,  # page to return (defaults to 1)
-	     rows => 10, # number of results per page
+	     page =&gt 1,  # page to return (defaults to 1)
+	     rows =&gt 10, # number of results per page
 	   },
 	 );
 
-	 return $rs->all(); # all records for page 1
+	 return $rs-&gtall(); # all records for page 1
 
-	 return $rs->page(2); # records for page 2
+	 return $rs-&gtpage(2); # records for page 2
 
        You can get a Data::Page object for the resultset (suitable for use in
        e.g. a template) using the "pager" method:
 
-	 return $rs->pager();
+	 return $rs-&gtpager();
 
    Complex WHERE clauses
        Sometimes you need to formulate a query using specific operators:
 
-	 my @albums = $schema->resultset('Album')->search({
-	   artist => { 'like', '%Lamb%' },
-	   title  => { 'like', '%Fear of Fours%' },
+	 my @albums = $schema-&gtresultset('Album')-&gtsearch({
+	   artist =&gt { 'like', '%Lamb%' },
+	   title  =&gt { 'like', '%Fear of Fours%' },
 	 });
 
        This results in something like the following "WHERE" clause:
@@ -55,13 +57,13 @@ SEARCHING
 
        Other queries might require slightly more complex logic:
 
-	 my @albums = $schema->resultset('Album')->search({
-	   -or => [
-	     -and => [
-	       artist => { 'like', '%Smashing Pumpkins%' },
-	       title  => 'Siamese Dream',
+	 my @albums = $schema-&gtresultset('Album')-&gtsearch({
+	   -or =&gt [
+	     -and =&gt [
+	       artist =&gt { 'like', '%Smashing Pumpkins%' },
+	       title  =&gt 'Siamese Dream',
 	     ],
-	     artist => 'Starchildren',
+	     artist =&gt 'Starchildren',
 	   ],
 	 });
 
@@ -75,9 +77,9 @@ SEARCHING
 
    Retrieve one and only one row from a resultset
        Sometimes you need only the first "top" row of a resultset. While this
-       can be easily done with $rs->first, it is suboptimal, as a full blown
+       can be easily done with $rs-&gtfirst, it is suboptimal, as a full blown
        cursor for the resultset will be created and then immediately destroyed
-       after fetching the first row object.  $rs->single is designed
+       after fetching the first row object.  $rs-&gtsingle is designed
        specifically for this case - it will grab the first returned result
        without even instantiating a cursor.
 
@@ -88,7 +90,7 @@ SEARCHING
 	   does _not_ accept search attributes. However one can always chain a
 	   single() to a search():
 
-	     my $top_cd = $cd_rs->search({}, { order_by => 'rating' })->single;
+	     my $top_cd = $cd_rs-&gtsearch({}, { order_by =&gt 'rating' })-&gtsingle;
 
        o   Since single() is the engine behind find(), it is designed to fetch
 	   a single row per database query. Thus a warning will be issued when
@@ -98,7 +100,7 @@ SEARCHING
 	   you know what you are doing, you can silence the warning by
 	   explicitly limiting the resultset size:
 
-	     my $top_cd = $cd_rs->search ({}, { order_by => 'rating', rows => 1 })->single;
+	     my $top_cd = $cd_rs-&gtsearch ({}, { order_by =&gt 'rating', rows =&gt 1 })-&gtsingle;
 
    Arbitrary SQL through a custom ResultSource
        Sometimes you have to run arbitrary SQL because your query is too
@@ -114,14 +116,14 @@ SEARCHING
 	 use warnings;
 	 use base qw/DBIx::Class::Core/;
 
-	 __PACKAGE__->table_class('DBIx::Class::ResultSource::View');
+	 __PACKAGE__-&gttable_class('DBIx::Class::ResultSource::View');
 
-	 # ->table, ->add_columns, etc.
+	 # -&gttable, -&gtadd_columns, etc.
 
 	 # do not attempt to deploy() this view
-	 __PACKAGE__->result_source_instance->is_virtual(1);
+	 __PACKAGE__-&gtresult_source_instance-&gtis_virtual(1);
 
-	 __PACKAGE__->result_source_instance->view_definition(q[
+	 __PACKAGE__-&gtresult_source_instance-&gtview_definition(q[
 	   SELECT u.* FROM user u
 	   INNER JOIN user_friends f ON u.id = f.user_id
 	   WHERE f.friend_user_id = ?
@@ -134,9 +136,9 @@ SEARCHING
        Next, you can execute your complex query using bind parameters like
        this:
 
-	 my $friends = $schema->resultset( 'UserFriendsComplex' )->search( {},
+	 my $friends = $schema-&gtresultset( 'UserFriendsComplex' )-&gtsearch( {},
 	   {
-	     bind  => [ 12345, 12345 ]
+	     bind  =&gt [ 12345, 12345 ]
 	   }
 	 );
 
@@ -149,7 +151,7 @@ SEARCHING
 
        o   NOTE
 
-	   If you're using the old deprecated "$rsrc_instance->name(\'( SELECT
+	   If you're using the old deprecated "$rsrc_instance-&gtname(\'( SELECT
 	   ...')" method for custom SQL execution, you are highly encouraged
 	   to update your code to use a virtual view as above. If you do not
 	   want to change your code, and just want to suppress the deprecation
@@ -157,17 +159,17 @@ SEARCHING
 	   line to your source definition, so that "deploy" will exclude this
 	   "table":
 
-	     sub sqlt_deploy_hook { $_[1]->schema->drop_table ($_[1]) }
+	     sub sqlt_deploy_hook { $_[1]-&gtschema-&gtdrop_table ($_[1]) }
 
    Using specific columns
        When you only want specific columns from a table, you can use "columns"
        to specify which ones you need. This is useful to avoid loading columns
        with large amounts of data that you aren't about to use anyway:
 
-	 my $rs = $schema->resultset('Artist')->search(
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   undef,
 	   {
-	     columns => [qw/ name /]
+	     columns =&gt [qw/ name /]
 	   }
 	 );
 
@@ -184,11 +186,11 @@ SEARCHING
        name, function, or stored procedure name). You then use "as" to set the
        column name you will use to access the returned value:
 
-	 my $rs = $schema->resultset('Artist')->search(
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   {},
 	   {
-	     select => [ 'name', { LENGTH => 'name' } ],
-	     as     => [qw/ name name_length /],
+	     select =&gt [ 'name', { LENGTH =&gt 'name' } ],
+	     as     =&gt [qw/ name name_length /],
 	   }
 	 );
 
@@ -201,14 +203,14 @@ SEARCHING
        DBIx::Class::ResultSet). You can control the "AS" part of the generated
        SQL via the "-as" field attribute as follows:
 
-	 my $rs = $schema->resultset('Artist')->search(
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   {},
 	   {
-	     join => 'cds',
-	     distinct => 1,
-	     '+select' => [ { count => 'cds.cdid', -as => 'amount_of_cds' } ],
-	     '+as' => [qw/num_cds/],
-	     order_by => { -desc => 'amount_of_cds' },
+	     join =&gt 'cds',
+	     distinct =&gt 1,
+	     '+select' =&gt [ { count =&gt 'cds.cdid', -as =&gt 'amount_of_cds' } ],
+	     '+as' =&gt [qw/num_cds/],
+	     order_by =&gt { -desc =&gt 'amount_of_cds' },
 	   }
 	 );
 
@@ -222,39 +224,39 @@ SEARCHING
        with add_columns), you just access it as normal. Our "Artist" class has
        a "name" column, so we just use the "name" accessor:
 
-	 my $artist = $rs->first();
-	 my $name = $artist->name();
+	 my $artist = $rs-&gtfirst();
+	 my $name = $artist-&gtname();
 
        If on the other hand the alias does not correspond to an existing
        column, you have to fetch the value using the "get_column" accessor:
 
-	 my $name_length = $artist->get_column('name_length');
+	 my $name_length = $artist-&gtget_column('name_length');
 
        If you don't like using "get_column", you can always create an accessor
        for any of your aliases using either of these:
 
 	 # Define accessor manually:
-	 sub name_length { shift->get_column('name_length'); }
+	 sub name_length { shift-&gtget_column('name_length'); }
 
 	 # Or use DBIx::Class::AccessorGroup:
-	 __PACKAGE__->mk_group_accessors('column' => 'name_length');
+	 __PACKAGE__-&gtmk_group_accessors('column' =&gt 'name_length');
 
        See also "Using SQL functions on the left hand side of a comparison".
 
    SELECT DISTINCT with multiple columns
-	 my $rs = $schema->resultset('Artist')->search(
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   {},
 	   {
-	     columns => [ qw/artist_id name rank/ ],
-	     distinct => 1
+	     columns =&gt [ qw/artist_id name rank/ ],
+	     distinct =&gt 1
 	   }
 	 );
 
-	 my $rs = $schema->resultset('Artist')->search(
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   {},
 	   {
-	     columns => [ qw/artist_id name rank/ ],
-	     group_by => [ qw/artist_id name rank/ ],
+	     columns =&gt [ qw/artist_id name rank/ ],
+	     group_by =&gt [ qw/artist_id name rank/ ],
 	   }
 	 );
 
@@ -264,23 +266,23 @@ SEARCHING
 	 # GROUP BY artist_id, name, rank
 
    SELECT COUNT(DISTINCT colname)
-	 my $rs = $schema->resultset('Artist')->search(
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   {},
 	   {
-	     columns => [ qw/name/ ],
-	     distinct => 1
+	     columns =&gt [ qw/name/ ],
+	     distinct =&gt 1
 	   }
 	 );
 
-	 my $rs = $schema->resultset('Artist')->search(
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   {},
 	   {
-	     columns => [ qw/name/ ],
-	     group_by => [ qw/name/ ],
+	     columns =&gt [ qw/name/ ],
+	     group_by =&gt [ qw/name/ ],
 	   }
 	 );
 
-	 my $count = $rs->count;
+	 my $count = $rs-&gtcount;
 
 	 # Equivalent SQL:
 	 # SELECT COUNT( * ) FROM (SELECT me.name FROM artist me GROUP BY me.name) me:
@@ -288,13 +290,13 @@ SEARCHING
    Grouping results
        DBIx::Class supports "GROUP BY" as follows:
 
-	 my $rs = $schema->resultset('Artist')->search(
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   {},
 	   {
-	     join     => [qw/ cds /],
-	     select   => [ 'name', { count => 'cds.id' } ],
-	     as       => [qw/ name cd_count /],
-	     group_by => [qw/ name /]
+	     join     =&gt [qw/ cds /],
+	     select   =&gt [ 'name', { count =&gt 'cds.id' } ],
+	     as       =&gt [qw/ name cd_count /],
+	     group_by =&gt [qw/ name /]
 	   }
 	 );
 
@@ -310,12 +312,12 @@ SEARCHING
    Subqueries
        You can write subqueries relatively easily in DBIC.
 
-	 my $inside_rs = $schema->resultset('Artist')->search({
-	   name => [ 'Billy Joel', 'Brittany Spears' ],
+	 my $inside_rs = $schema-&gtresultset('Artist')-&gtsearch({
+	   name =&gt [ 'Billy Joel', 'Brittany Spears' ],
 	 });
 
-	 my $rs = $schema->resultset('CD')->search({
-	   artist_id => { -in => $inside_rs->get_column('id')->as_query },
+	 my $rs = $schema-&gtresultset('CD')-&gtsearch({
+	   artist_id =&gt { -in =&gt $inside_rs-&gtget_column('id')-&gtas_query },
 	 });
 
        The usual operators ( '=', '!=', -in, -not_in, etc.) are supported.
@@ -323,8 +325,8 @@ SEARCHING
        NOTE: You have to explicitly use '=' when doing an equality comparison.
        The following will not work:
 
-	 my $rs = $schema->resultset('CD')->search({
-	   artist_id => $inside_rs->get_column('id')->as_query,  # does NOT work
+	 my $rs = $schema-&gtresultset('CD')-&gtsearch({
+	   artist_id =&gt $inside_rs-&gtget_column('id')-&gtas_query,  # does NOT work
 	 });
 
        Support
@@ -334,13 +336,13 @@ SEARCHING
 
        Correlated subqueries
 
-	 my $cdrs = $schema->resultset('CD');
-	 my $rs = $cdrs->search({
-	   year => {
-	     '=' => $cdrs->search(
-	       { artist_id => { '=' => { -ident => 'me.artist_id' } } },
-	       { alias => 'inner' }
-	     )->get_column('year')->max_rs->as_query,
+	 my $cdrs = $schema-&gtresultset('CD');
+	 my $rs = $cdrs-&gtsearch({
+	   year =&gt {
+	     '=' =&gt $cdrs-&gtsearch(
+	       { artist_id =&gt { '=' =&gt { -ident =&gt 'me.artist_id' } } },
+	       { alias =&gt 'inner' }
+	     )-&gtget_column('year')-&gtmax_rs-&gtas_query,
 	   },
 	 });
 
@@ -366,9 +368,9 @@ SEARCHING
 	 sub search_cds_ordered {
 	     my ($self) = @_;
 
-	     return $self->search(
+	     return $self-&gtsearch(
 		 {},
-		 { order_by => 'name DESC' },
+		 { order_by =&gt 'name DESC' },
 	     );
 	 }
 
@@ -384,17 +386,17 @@ SEARCHING
 
 	 # class definition as normal
 	 use base 'DBIx::Class::Core';
-	 __PACKAGE__->table('cd');
+	 __PACKAGE__-&gttable('cd');
 
 	 # tell DBIC to use the custom ResultSet class
-	 __PACKAGE__->resultset_class('My::DBIC::ResultSet::CD');
+	 __PACKAGE__-&gtresultset_class('My::DBIC::ResultSet::CD');
 
        Note that "resultset_class" must be called after "load_components" and
        "table", or you will get errors about missing methods.
 
        Then call your new method in your code:
 
-	  my $ordered_cds = $schema->resultset('CD')->search_cds_ordered();
+	  my $ordered_cds = $schema-&gtresultset('CD')-&gtsearch_cds_ordered();
 
    Using SQL functions on the left hand side of a comparison
        Using SQL functions on the left hand side of a comparison is generally
@@ -404,20 +406,20 @@ SEARCHING
        in question.) However, it can be accomplished with "DBIx::Class" when
        necessary by resorting to literal SQL:
 
-	 $rs->search(\[ 'YEAR(date_of_birth) = ?', [ plain_value => 1979 ] ]);
+	 $rs-&gtsearch(\[ 'YEAR(date_of_birth) = ?', [ plain_value =&gt 1979 ] ]);
 
 	 # Equivalent SQL:
 	 # SELECT * FROM employee WHERE YEAR(date_of_birth) = ?
 
-	 $rs->search({ -and => [
-	   name => 'Bob',
-	   \[ 'YEAR(date_of_birth) = ?', [ plain_value => 1979 ] ],
+	 $rs-&gtsearch({ -and =&gt [
+	   name =&gt 'Bob',
+	   \[ 'YEAR(date_of_birth) = ?', [ plain_value =&gt 1979 ] ],
 	 ]});
 
 	 # Equivalent SQL:
 	 # SELECT * FROM employee WHERE name = ? AND YEAR(date_of_birth) = ?
 
-       Note: the "plain_value" string in the "[ plain_value => 1979 ]" part
+       Note: the "plain_value" string in the "[ plain_value =&gt 1979 ]" part
        should be either the same as the name of the column (do this if the
        type of the return value of the function is the same as the type of the
        column) or in the case of a function it's currently treated as a dummy
@@ -437,17 +439,17 @@ JOINS AND PREFETCHING
        This requires that you have defined the DBIx::Class::Relationship. For
        example :
 
-	 My::Schema::CD->has_many( artists => 'My::Schema::Artist', 'artist_id');
+	 My::Schema::CD-&gthas_many( artists =&gt 'My::Schema::Artist', 'artist_id');
 
        To return all CDs matching a particular artist name, you specify the
        name of the relationship ('artists'):
 
-	 my $rs = $schema->resultset('CD')->search(
+	 my $rs = $schema-&gtresultset('CD')-&gtsearch(
 	   {
-	     'artists.name' => 'Bob Marley'
+	     'artists.name' =&gt 'Bob Marley'
 	   },
 	   {
-	     join => 'artists', # join the artist table
+	     join =&gt 'artists', # join the artist table
 	   }
 	 );
 
@@ -464,13 +466,13 @@ JOINS AND PREFETCHING
        including it in your "order_by" attribute, (again using the aliased
        relation name rather than table name) :
 
-	 my $rs = $schema->resultset('CD')->search(
+	 my $rs = $schema-&gtresultset('CD')-&gtsearch(
 	   {
-	     'artists.name' => 'Bob Marley'
+	     'artists.name' =&gt 'Bob Marley'
 	   },
 	   {
-	     join     => 'artists',
-	     order_by => [qw/ artists.name /]
+	     join     =&gt 'artists',
+	     order_by =&gt [qw/ artists.name /]
 	   }
 	 );
 
@@ -488,8 +490,8 @@ JOINS AND PREFETCHING
        Now let's say you want to display a list of CDs, each with the name of
        the artist. The following will work fine:
 
-	 while (my $cd = $rs->next) {
-	   print "CD: " . $cd->title . ", Artist: " . $cd->artist->name;
+	 while (my $cd = $rs-&gtnext) {
+	   print "CD: " . $cd-&gttitle . ", Artist: " . $cd-&gtartist-&gtname;
 	 }
 
        There is a problem however. We have searched both the "cd" and "artist"
@@ -507,14 +509,14 @@ JOINS AND PREFETCHING
        problem.  This allows you to fetch results from related tables in
        advance:
 
-	 my $rs = $schema->resultset('CD')->search(
+	 my $rs = $schema-&gtresultset('CD')-&gtsearch(
 	   {
-	     'artists.name' => 'Bob Marley'
+	     'artists.name' =&gt 'Bob Marley'
 	   },
 	   {
-	     join     => 'artists',
-	     order_by => [qw/ artists.name /],
-	     prefetch => 'artists' # return artist data too!
+	     join     =&gt 'artists',
+	     order_by =&gt [qw/ artists.name /],
+	     prefetch =&gt 'artists' # return artist data too!
 	   }
 	 );
 
@@ -526,8 +528,8 @@ JOINS AND PREFETCHING
 
        The code to print the CD list remains the same:
 
-	 while (my $cd = $rs->next) {
-	   print "CD: " . $cd->title . ", Artist: " . $cd->artist->name;
+	 while (my $cd = $rs-&gtnext) {
+	   print "CD: " . $cd-&gttitle . ", Artist: " . $cd-&gtartist-&gtname;
 	 }
 
        DBIx::Class has now prefetched all matching data from the "artist"
@@ -545,16 +547,16 @@ JOINS AND PREFETCHING
        example, we want to limit the search further, using "LinerNotes":
 
 	 # Relationships defined elsewhere:
-	 # CD->belongs_to('artist' => 'Artist');
-	 # CD->has_one('liner_notes' => 'LinerNotes', 'cd');
-	 my $rs = $schema->resultset('CD')->search(
+	 # CD-&gtbelongs_to('artist' =&gt 'Artist');
+	 # CD-&gthas_one('liner_notes' =&gt 'LinerNotes', 'cd');
+	 my $rs = $schema-&gtresultset('CD')-&gtsearch(
 	   {
-	     'artist.name' => 'Bob Marley'
-	     'liner_notes.notes' => { 'like', '%some text%' },
+	     'artist.name' =&gt 'Bob Marley'
+	     'liner_notes.notes' =&gt { 'like', '%some text%' },
 	   },
 	   {
-	     join     => [qw/ artist liner_notes /],
-	     order_by => [qw/ artist.name /],
+	     join     =&gt [qw/ artist liner_notes /],
+	     order_by =&gt [qw/ artist.name /],
 	   }
 	 );
 
@@ -571,16 +573,16 @@ JOINS AND PREFETCHING
        "LinerNotes" contain a specific string:
 
 	 # Relationships defined elsewhere:
-	 # Artist->has_many('cds' => 'CD', 'artist');
-	 # CD->has_one('liner_notes' => 'LinerNotes', 'cd');
+	 # Artist-&gthas_many('cds' =&gt 'CD', 'artist');
+	 # CD-&gthas_one('liner_notes' =&gt 'LinerNotes', 'cd');
 
-	 my $rs = $schema->resultset('Artist')->search(
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   {
-	     'liner_notes.notes' => { 'like', '%some text%' },
+	     'liner_notes.notes' =&gt { 'like', '%some text%' },
 	   },
 	   {
-	     join => {
-	       'cds' => 'liner_notes'
+	     join =&gt {
+	       'cds' =&gt 'liner_notes'
 	     }
 	   }
 	 );
@@ -596,17 +598,17 @@ JOINS AND PREFETCHING
        liner notes:
 
 	 # Relationship defined elsewhere:
-	 # LinerNotes->belongs_to('author' => 'Person');
+	 # LinerNotes-&gtbelongs_to('author' =&gt 'Person');
 
-	 my $rs = $schema->resultset('Artist')->search(
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   {
-	     'liner_notes.notes' => { 'like', '%some text%' },
-	     'author.name' => 'A. Writer'
+	     'liner_notes.notes' =&gt { 'like', '%some text%' },
+	     'author.name' =&gt 'A. Writer'
 	   },
 	   {
-	     join => {
-	       'cds' => {
-		 'liner_notes' => 'author'
+	     join =&gt {
+	       'cds' =&gt {
+		 'liner_notes' =&gt 'author'
 	       }
 	     }
 	   }
@@ -626,14 +628,14 @@ JOINS AND PREFETCHING
        CD and Concert, and join CD to LinerNotes:
 
 	 # Relationships defined elsewhere:
-	 # Artist->has_many('concerts' => 'Concert', 'artist');
+	 # Artist-&gthas_many('concerts' =&gt 'Concert', 'artist');
 
-	 my $rs = $schema->resultset('Artist')->search(
+	 my $rs = $schema-&gtresultset('Artist')-&gtsearch(
 	   { },
 	   {
-	     join => [
+	     join =&gt [
 	       {
-		 cds => 'liner_notes'
+		 cds =&gt 'liner_notes'
 	       },
 	       'concerts'
 	     ],
@@ -650,11 +652,11 @@ JOINS AND PREFETCHING
        "prefetch" can be nested more than one relationship deep using the same
        syntax as a multi-step join:
 
-	 my $rs = $schema->resultset('Tag')->search(
+	 my $rs = $schema-&gtresultset('Tag')-&gtsearch(
 	   {},
 	   {
-	     prefetch => {
-	       cd => 'artist'
+	     prefetch =&gt {
+	       cd =&gt 'artist'
 	     }
 	   }
 	 );
@@ -667,16 +669,16 @@ JOINS AND PREFETCHING
        Now accessing our "cd" and "artist" relationships does not need
        additional SQL statements:
 
-	 my $tag = $rs->first;
-	 print $tag->cd->artist->name;
+	 my $tag = $rs-&gtfirst;
+	 print $tag-&gtcd-&gtartist-&gtname;
 
 ROW-LEVEL OPERATIONS
    Retrieving a row object's Schema
        It is possible to get a Schema object from a row object like so:
 
-	 my $schema = $cd->result_source->schema;
+	 my $schema = $cd-&gtresult_source-&gtschema;
 	 # use the schema as normal:
-	 my $artist_rs = $schema->resultset('Artist');
+	 my $artist_rs = $schema-&gtresultset('Artist');
 
        This can be useful when you don't want to pass around a Schema object
        to every method.
@@ -686,9 +688,9 @@ ROW-LEVEL OPERATIONS
 
        Thanks to the core component PK::Auto, this is straightforward:
 
-	 my $foo = $rs->create(\%blah);
+	 my $foo = $rs-&gtcreate(\%blah);
 	 # do more stuff
-	 my $id = $foo->id; # foo->my_primary_key_field will also work.
+	 my $id = $foo-&gtid; # foo-&gtmy_primary_key_field will also work.
 
        If you are not using autoincrementing primary keys, this will probably
        not work, but then you already know the value of the last primary key
@@ -701,12 +703,12 @@ ROW-LEVEL OPERATIONS
        To make an object stringify itself as a single column, use something
        like this (replace "name" with the column/method of your choice):
 
-	 use overload '""' => sub { shift->name}, fallback => 1;
+	 use overload '""' =&gt sub { shift-&gtname}, fallback =&gt 1;
 
        For more complex stringification, you can use an anonymous subroutine:
 
-	 use overload '""' => sub { $_[0]->name . ", " .
-				    $_[0]->address }, fallback => 1;
+	 use overload '""' =&gt sub { $_[0]-&gtname . ", " .
+				    $_[0]-&gtaddress }, fallback =&gt 1;
 
        Stringification Example
 
@@ -720,25 +722,25 @@ ROW-LEVEL OPERATIONS
 
        If you have a Product object $obj and write something like
 
-	 print $obj->category
+	 print $obj-&gtcategory
 
        things will not work as expected.
 
        To obtain, for example, the category description, you should add this
        method to the class defining the Category table:
 
-	 use overload "" => sub {
+	 use overload "" =&gt sub {
 	     my $self = shift;
 
-	     return $self->Description;
-	 }, fallback => 1;
+	     return $self-&gtDescription;
+	 }, fallback =&gt 1;
 
    Want to know if find_or_create found or created a row?
        Just use "find_or_new" instead, then check "in_storage":
 
-	 my $obj = $rs->find_or_new({ blah => 'blarg' });
-	 unless ($obj->in_storage) {
-	   $obj->insert;
+	 my $obj = $rs-&gtfind_or_new({ blah =&gt 'blarg' });
+	 unless ($obj-&gtin_storage) {
+	   $obj-&gtinsert;
 	   # do whatever else you wanted if it was a new row
 	 }
 
@@ -753,11 +755,11 @@ ROW-LEVEL OPERATIONS
 	   use base 'DBIx::Class::Schema';
 
 	   # load subclassed classes from My::App::Schema::Result/ResultSet
-	   __PACKAGE__->load_namespaces;
+	   __PACKAGE__-&gtload_namespaces;
 
 	   # load classes from shared model
 	   load_classes({
-	       'My::Shared::Model::Result' => [qw/
+	       'My::Shared::Model::Result' =&gt [qw/
 		   Foo
 		   Bar
 	       /]});
@@ -775,7 +777,7 @@ ROW-LEVEL OPERATIONS
 	   # WARNING: Make sure you call table() again in your subclass,
 	   # otherwise DBIx::Class::ResultSourceProxy::Table will not be called
 	   # and the class name is not correctly registered as a source
-	   __PACKAGE__->table('baz');
+	   __PACKAGE__-&gttable('baz');
 
 	   sub additional_method {
 	       return "I'm an additional method only needed by this app";
@@ -808,7 +810,7 @@ ROW-LEVEL OPERATIONS
 
 	   use base qw/DBIx::Class::Schema/;
 
-	   __PACKAGE__->load_namespaces;
+	   __PACKAGE__-&gtload_namespaces;
 
 	   1;
 
@@ -823,19 +825,19 @@ ROW-LEVEL OPERATIONS
 	   ### Define what our admin class is, for ensure_class_loaded()
 	   my $admin_class = __PACKAGE__ . '::Admin';
 
-	   __PACKAGE__->table('users');
+	   __PACKAGE__-&gttable('users');
 
-	   __PACKAGE__->add_columns(qw/user_id	 email	  password
+	   __PACKAGE__-&gtadd_columns(qw/user_id	 email	  password
 				       firstname lastname active
 				       admin/);
 
-	   __PACKAGE__->set_primary_key('user_id');
+	   __PACKAGE__-&gtset_primary_key('user_id');
 
 	   sub inflate_result {
 	       my $self = shift;
-	       my $ret = $self->next::method(@_);
-	       if( $ret->admin ) {### If this is an admin, rebless for extra functions
-		   $self->ensure_class_loaded( $admin_class );
+	       my $ret = $self-&gtnext::method(@_);
+	       if( $ret-&gtadmin ) {### If this is an admin, rebless for extra functions
+		   $self-&gtensure_class_loaded( $admin_class );
 		   bless $ret, $admin_class;
 	       }
 	       return $ret;
@@ -856,7 +858,7 @@ ROW-LEVEL OPERATIONS
 	   use base qw/My::Schema::Result::User/;
 
 	   # This line is important
-	   __PACKAGE__->table('users');
+	   __PACKAGE__-&gttable('users');
 
 	   sub hello
 	   {
@@ -878,35 +880,35 @@ ROW-LEVEL OPERATIONS
 	   use strict;
 	   use My::Schema;
 
-	   my $user_data = { email    => 'someguy@place.com',
-			     password => 'pass1',
-			     admin    => 0 };
+	   my $user_data = { email    =&gt 'someguy@place.com',
+			     password =&gt 'pass1',
+			     admin    =&gt 0 };
 
-	   my $admin_data = { email    => 'someadmin@adminplace.com',
-			      password => 'pass2',
-			      admin    => 1 };
+	   my $admin_data = { email    =&gt 'someadmin@adminplace.com',
+			      password =&gt 'pass2',
+			      admin    =&gt 1 };
 
-	   my $schema = My::Schema->connection('dbi:Pg:dbname=test');
+	   my $schema = My::Schema-&gtconnection('dbi:Pg:dbname=test');
 
-	   $schema->resultset('User')->create( $user_data );
-	   $schema->resultset('User')->create( $admin_data );
+	   $schema-&gtresultset('User')-&gtcreate( $user_data );
+	   $schema-&gtresultset('User')-&gtcreate( $admin_data );
 
 	   ### Now we search for them
-	   my $user = $schema->resultset('User')->single( $user_data );
-	   my $admin = $schema->resultset('User')->single( $admin_data );
+	   my $user = $schema-&gtresultset('User')-&gtsingle( $user_data );
+	   my $admin = $schema-&gtresultset('User')-&gtsingle( $admin_data );
 
 	   print ref $user, "\n";
 	   print ref $admin, "\n";
 
-	   print $user->password , "\n"; # pass1
-	   print $admin->password , "\n";# pass2; inherited from User
-	   print $user->hello , "\n";# I am a regular user.
-	   print $admin->hello, "\n";# I am an admin.
+	   print $user-&gtpassword , "\n"; # pass1
+	   print $admin-&gtpassword , "\n";# pass2; inherited from User
+	   print $user-&gthello , "\n";# I am a regular user.
+	   print $admin-&gthello, "\n";# I am an admin.
 
 	   ### The statement below will NOT print
-	   print "I can do admin stuff\n" if $user->can('do_admin_stuff');
+	   print "I can do admin stuff\n" if $user-&gtcan('do_admin_stuff');
 	   ### The statement below will print
-	   print "I can do admin stuff\n" if $admin->can('do_admin_stuff');
+	   print "I can do admin stuff\n" if $admin-&gtcan('do_admin_stuff');
 
        Alternatively you can use DBIx::Class::DynamicSubclass that implements
        exactly the above functionality.
@@ -918,11 +920,11 @@ ROW-LEVEL OPERATIONS
 
        To do this simply use DBIx::Class::ResultClass::HashRefInflator.
 
-	my $rs = $schema->resultset('CD');
+	my $rs = $schema-&gtresultset('CD');
 
-	$rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
+	$rs-&gtresult_class('DBIx::Class::ResultClass::HashRefInflator');
 
-	my $hash_ref = $rs->find(1);
+	my $hash_ref = $rs-&gtfind(1);
 
        Wasn't that easy?
 
@@ -938,8 +940,8 @@ ROW-LEVEL OPERATIONS
 
        This is used like so:
 
-	 my $cursor = $rs->cursor
-	 while (my @vals = $cursor->next) {
+	 my $cursor = $rs-&gtcursor
+	 while (my @vals = $cursor-&gtnext) {
 	     # use $val[0..n] here
 	 }
 
@@ -952,7 +954,7 @@ RESULTSET OPERATIONS
        To get the DBIx::Class::Schema object from a ResultSet, do the
        following:
 
-	$rs->result_source->schema
+	$rs-&gtresult_source-&gtschema
 
    Getting Columns Of Data
        AKA Aggregating Data
@@ -960,33 +962,33 @@ RESULTSET OPERATIONS
        If you want to find the sum of a particular column there are several
        ways, the obvious one is to use search:
 
-	 my $rs = $schema->resultset('Items')->search(
+	 my $rs = $schema-&gtresultset('Items')-&gtsearch(
 	   {},
 	   {
-	      select => [ { sum => 'Cost' } ],
-	      as     => [ 'total_cost' ], # remember this 'as' is for DBIx::Class::ResultSet not SQL
+	      select =&gt [ { sum =&gt 'Cost' } ],
+	      as     =&gt [ 'total_cost' ], # remember this 'as' is for DBIx::Class::ResultSet not SQL
 	   }
 	 );
-	 my $tc = $rs->first->get_column('total_cost');
+	 my $tc = $rs-&gtfirst-&gtget_column('total_cost');
 
        Or, you can use the DBIx::Class::ResultSetColumn, which gets returned
        when you ask the "ResultSet" for a column using "get_column":
 
-	 my $cost = $schema->resultset('Items')->get_column('Cost');
-	 my $tc = $cost->sum;
+	 my $cost = $schema-&gtresultset('Items')-&gtget_column('Cost');
+	 my $tc = $cost-&gtsum;
 
        With this you can also do:
 
-	 my $minvalue = $cost->min;
-	 my $maxvalue = $cost->max;
+	 my $minvalue = $cost-&gtmin;
+	 my $maxvalue = $cost-&gtmax;
 
        Or just iterate through the values of this column only:
 
-	 while ( my $c = $cost->next ) {
+	 while ( my $c = $cost-&gtnext ) {
 	   print $c;
 	 }
 
-	 foreach my $c ($cost->all) {
+	 foreach my $c ($cost-&gtall) {
 	   print $c;
 	 }
 
@@ -994,7 +996,7 @@ RESULTSET OPERATIONS
        you need one that it doesn't have, then you can use the "func" method
        instead:
 
-	 my $avg = $cost->func('AVERAGE');
+	 my $avg = $cost-&gtfunc('AVERAGE');
 
        This will cause the following SQL statement to be run:
 
@@ -1009,81 +1011,81 @@ RESULTSET OPERATIONS
        using the set_cache method:
 
 	my @uploadable_groups;
-	while (my $group = $groups->next) {
-	  if ($group->can_upload($self)) {
+	while (my $group = $groups-&gtnext) {
+	  if ($group-&gtcan_upload($self)) {
 	    push @uploadable_groups, $group;
 	  }
 	}
-	my $new_rs = $self->result_source->resultset;
-	$new_rs->set_cache(\@uploadable_groups);
+	my $new_rs = $self-&gtresult_source-&gtresultset;
+	$new_rs-&gtset_cache(\@uploadable_groups);
 	return $new_rs;
 
 USING RELATIONSHIPS
    Create a new row in a related table
-	 my $author = $book->create_related('author', { name => 'Fred'});
+	 my $author = $book-&gtcreate_related('author', { name =&gt 'Fred'});
 
    Search in a related table
        Only searches for books named 'Titanic' by the author in $author.
 
-	 my $books_rs = $author->search_related('books', { name => 'Titanic' });
+	 my $books_rs = $author-&gtsearch_related('books', { name =&gt 'Titanic' });
 
    Delete data in a related table
        Deletes only the book named Titanic by the author in $author.
 
-	 $author->delete_related('books', { name => 'Titanic' });
+	 $author-&gtdelete_related('books', { name =&gt 'Titanic' });
 
    Ordering a relationship result set
        If you always want a relation to be ordered, you can specify this when
        you create the relationship.
 
-       To order "$book->pages" by descending page_number, create the relation
+       To order "$book-&gtpages" by descending page_number, create the relation
        as follows:
 
-	 __PACKAGE__->has_many('pages' => 'Page', 'book', { order_by => { -desc => 'page_number'} } );
+	 __PACKAGE__-&gthas_many('pages' =&gt 'Page', 'book', { order_by =&gt { -desc =&gt 'page_number'} } );
 
    Filtering a relationship result set
        If you want to get a filtered result set, you can just add add to $attr
        as follows:
 
-	__PACKAGE__->has_many('pages' => 'Page', 'book', { where => { scrap => 0 } } );
+	__PACKAGE__-&gthas_many('pages' =&gt 'Page', 'book', { where =&gt { scrap =&gt 0 } } );
 
    Many-to-many relationship bridges
        This is straightforward using ManyToMany:
 
 	 package My::User;
 	 use base 'DBIx::Class::Core';
-	 __PACKAGE__->table('user');
-	 __PACKAGE__->add_columns(qw/id name/);
-	 __PACKAGE__->set_primary_key('id');
-	 __PACKAGE__->has_many('user_address' => 'My::UserAddress', 'user');
-	 __PACKAGE__->many_to_many('addresses' => 'user_address', 'address');
+	 __PACKAGE__-&gttable('user');
+	 __PACKAGE__-&gtadd_columns(qw/id name/);
+	 __PACKAGE__-&gtset_primary_key('id');
+	 __PACKAGE__-&gthas_many('user_address' =&gt 'My::UserAddress', 'user');
+	 __PACKAGE__-&gtmany_to_many('addresses' =&gt 'user_address', 'address');
 
 	 package My::UserAddress;
 	 use base 'DBIx::Class::Core';
-	 __PACKAGE__->table('user_address');
-	 __PACKAGE__->add_columns(qw/user address/);
-	 __PACKAGE__->set_primary_key(qw/user address/);
-	 __PACKAGE__->belongs_to('user' => 'My::User');
-	 __PACKAGE__->belongs_to('address' => 'My::Address');
+	 __PACKAGE__-&gttable('user_address');
+	 __PACKAGE__-&gtadd_columns(qw/user address/);
+	 __PACKAGE__-&gtset_primary_key(qw/user address/);
+	 __PACKAGE__-&gtbelongs_to('user' =&gt 'My::User');
+	 __PACKAGE__-&gtbelongs_to('address' =&gt 'My::Address');
 
 	 package My::Address;
 	 use base 'DBIx::Class::Core';
-	 __PACKAGE__->table('address');
-	 __PACKAGE__->add_columns(qw/id street town area_code country/);
-	 __PACKAGE__->set_primary_key('id');
-	 __PACKAGE__->has_many('user_address' => 'My::UserAddress', 'address');
-	 __PACKAGE__->many_to_many('users' => 'user_address', 'user');
+	 __PACKAGE__-&gttable('address');
+	 __PACKAGE__-&gtadd_columns(qw/id street town area_code country/);
+	 __PACKAGE__-&gtset_primary_key('id');
+	 __PACKAGE__-&gthas_many('user_address' =&gt 'My::UserAddress', 'address');
+	 __PACKAGE__-&gtmany_to_many('users' =&gt 'user_address', 'user');
 
-	 $rs = $user->addresses(); # get all addresses for a user
-	 $rs = $address->users(); # get all users for an address
+	 $rs = $user-&gtaddresses(); # get all addresses for a user
+	 $rs = $address-&gtusers(); # get all users for an address
 
-	 my $address = $user->add_to_addresses(    # returns a My::Address instance,
+	 my $address = $user-&gtadd_to_addresses(    # returns a My::Address instance,
 						   # NOT a My::UserAddress instance!
 	   {
-	     country => 'United Kingdom',
-	     area_code => 'XYZ',
-	     town => 'London',
-	     street => 'Sesame',
+	     country =&gt 'United Kingdom',
+	     area_code =&gt 'XYZ',
+	     town =&gt 'London',
+	     street =&gt 'Sesame',
 	   }
 	 );
 
@@ -1099,11 +1101,11 @@ USING RELATIONSHIPS
 	 package MyDatabase::Main::Artist;
 	 use base qw/DBIx::Class::Core/;
 
-	 __PACKAGE__->table('database1.artist'); # will use "database1.artist" in FROM clause
+	 __PACKAGE__-&gttable('database1.artist'); # will use "database1.artist" in FROM clause
 
-	 __PACKAGE__->add_columns(qw/ artist_id name /);
-	 __PACKAGE__->set_primary_key('artist_id');
-	 __PACKAGE__->has_many('cds' => 'MyDatabase::Main::Cd');
+	 __PACKAGE__-&gtadd_columns(qw/ artist_id name /);
+	 __PACKAGE__-&gtset_primary_key('artist_id');
+	 __PACKAGE__-&gthas_many('cds' =&gt 'MyDatabase::Main::Cd');
 
 	 1;
 
@@ -1125,15 +1127,15 @@ USING RELATIONSHIPS
 
 	 extends 'DBIx::Class::Schema';
 
-	 around connection => sub {
+	 around connection =&gt sub {
 	   my ( $inner, $self, $dsn, $username, $pass, $attr ) = ( shift, @_ );
 
-	   my $postfix = delete $attr->{schema_name_postfix};
+	   my $postfix = delete $attr-&gt{schema_name_postfix};
 
-	   $inner->(@_);
+	   $inner-&gt(@_);
 
 	   if ( $postfix ) {
-	       $self->append_db_name($postfix);
+	       $self-&gtappend_db_name($postfix);
 	   }
 	 };
 
@@ -1142,16 +1144,16 @@ USING RELATIONSHIPS
 
 	   my @sources_with_db
 	       = grep
-		   { $_->name =~ /^\w+\./mx }
+		   { $_-&gtname =~ /^\w+\./mx }
 		   map
-		       { $self->source($_) }
-		       $self->sources;
+		       { $self-&gtsource($_) }
+		       $self-&gtsources;
 
 	   foreach my $source (@sources_with_db) {
-	       my $name = $source->name;
+	       my $name = $source-&gtname;
 	       $name =~ s{^(\w+)\.}{${1}${postfix}\.}mx;
 
-	       $source->name($name);
+	       $source-&gtname($name);
 	   }
 	 }
 
@@ -1165,12 +1167,12 @@ USING RELATIONSHIPS
        passed to connection, as follows:
 
 	 my $schema
-	   = MyDatabase::Schema->connect(
+	   = MyDatabase::Schema-&gtconnect(
 	     $dsn,
 	     $user,
 	     $pass,
 	     {
-	       schema_name_postfix => '_dev'
+	       schema_name_postfix =&gt '_dev'
 	       # ... Other options as desired ...
 	     })
 
@@ -1183,25 +1185,25 @@ TRANSACTIONS
        DBIx::Class::Storage and DBIx::Class::Schema.  Here is an example of
        the recommended way to use it:
 
-	 my $genus = $schema->resultset('Genus')->find(12);
+	 my $genus = $schema-&gtresultset('Genus')-&gtfind(12);
 
 	 my $coderef2 = sub {
-	   $genus->extinct(1);
-	   $genus->update;
+	   $genus-&gtextinct(1);
+	   $genus-&gtupdate;
 	 };
 
 	 my $coderef1 = sub {
-	   $genus->add_to_species({ name => 'troglodyte' });
-	   $genus->wings(2);
-	   $genus->update;
-	   $schema->txn_do($coderef2); # Can have a nested transaction. Only the outer will actualy commit
-	   return $genus->species;
+	   $genus-&gtadd_to_species({ name =&gt 'troglodyte' });
+	   $genus-&gtwings(2);
+	   $genus-&gtupdate;
+	   $schema-&gttxn_do($coderef2); # Can have a nested transaction. Only the outer will actualy commit
+	   return $genus-&gtspecies;
 	 };
 
 	 use Try::Tiny;
 	 my $rs;
 	 try {
-	   $rs = $schema->txn_do($coderef1);
+	   $rs = $schema-&gttxn_do($coderef1);
 	 } catch {
 	   # Transaction failed
 	   die "the sky is falling!"	       #
@@ -1232,33 +1234,33 @@ TRANSACTIONS
        something, depending on the type of failure, we want to abort the whole
        task, or only skip the failed row.
 
-	 my $schema = MySchema->connect("dbi:Pg:dbname=my_db");
+	 my $schema = MySchema-&gtconnect("dbi:Pg:dbname=my_db");
 
 	 # Start a transaction. Every database change from here on will only be
 	 # committed into the database if the try block succeeds.
 	 use Try::Tiny;
 	 my $exception;
 	 try {
-	   $schema->txn_do(sub {
+	   $schema-&gttxn_do(sub {
 	     # SQL: BEGIN WORK;
 
-	     my $job = $schema->resultset('Job')->create({ name=> 'big job' });
+	     my $job = $schema-&gtresultset('Job')-&gtcreate({ name=&gt 'big job' });
 	     # SQL: INSERT INTO job ( name) VALUES ( 'big job' );
 
 	     for (1..10) {
 
 	       # Start a nested transaction, which in fact sets a savepoint.
 	       try {
-		 $schema->txn_do(sub {
+		 $schema-&gttxn_do(sub {
 		   # SQL: SAVEPOINT savepoint_0;
 
-		   my $thing = $schema->resultset('Thing')->create({ job=>$job->id });
+		   my $thing = $schema-&gtresultset('Thing')-&gtcreate({ job=&gt$job-&gtid });
 		   # SQL: INSERT INTO thing ( job) VALUES ( 1 );
 
-		   if (rand > 0.8) {
+		   if (rand &gt 0.8) {
 		     # This will generate an error, thus setting $@
 
-		     $thing->update({force_fail=>'foo'});
+		     $thing-&gtupdate({force_fail=&gt'foo'});
 		     # SQL: UPDATE thing SET force_fail = 'foo'
 		     #	    WHERE ( id = 42 );
 		   }
@@ -1312,7 +1314,7 @@ TRANSACTIONS
 
        In this example it might be hard to see where the rollbacks, releases
        and commits are happening, but it works just the same as for plain
-       <txn_do>: If the "try"-block around "txn_do" fails, a rollback is
+       &lttxn_do&gt: If the "try"-block around "txn_do" fails, a rollback is
        issued. If the "try" succeeds, the transaction is committed (or the
        savepoint released).
 
@@ -1342,7 +1344,7 @@ SQL
 
 	 perl -MDBIx::Class::Schema::Loader=make_schema_at,dump_to_dir:./lib \
 	   -e 'make_schema_at("My::Schema", \
-	   { db_schema => 'myschema', components => ["InflateColumn::DateTime"] }, \
+	   { db_schema =&gt 'myschema', components =&gt ["InflateColumn::DateTime"] }, \
 	   [ "dbi:Pg:dbname=foo", "username", "password" ])'
 
        This will create a tree of files rooted at "./lib/My/Schema/"
@@ -1355,8 +1357,8 @@ SQL
 
        To create a set of database-specific .sql files for the above schema:
 
-	my $schema = My::Schema->connect($dsn);
-	$schema->create_ddl_dir(['MySQL', 'SQLite', 'PostgreSQL'],
+	my $schema = My::Schema-&gtconnect($dsn);
+	$schema-&gtcreate_ddl_dir(['MySQL', 'SQLite', 'PostgreSQL'],
 			       '0.1',
 			       './dbscriptdir/'
 			       );
@@ -1366,19 +1368,19 @@ SQL
 
        To create a new database using the schema:
 
-	my $schema = My::Schema->connect($dsn);
-	$schema->deploy({ add_drop_table => 1});
+	my $schema = My::Schema-&gtconnect($dsn);
+	$schema-&gtdeploy({ add_drop_table =&gt 1});
 
        To import created .sql files using the mysql client:
 
-	 mysql -h "host" -D "database" -u "user" -p < My_Schema_1.0_MySQL.sql
+	 mysql -h "host" -D "database" -u "user" -p &lt My_Schema_1.0_MySQL.sql
 
        To create "ALTER TABLE" conversion scripts to update a database to a
        newer version of your schema at a later point, first set a new $VERSION
        in your Schema file, then:
 
-	my $schema = My::Schema->connect($dsn);
-	$schema->create_ddl_dir(['MySQL', 'SQLite', 'PostgreSQL'],
+	my $schema = My::Schema-&gtconnect($dsn);
+	$schema-&gtcreate_ddl_dir(['MySQL', 'SQLite', 'PostgreSQL'],
 				'0.2',
 				'/dbscriptdir/',
 				'0.1'
@@ -1394,7 +1396,7 @@ SQL
        expressions that aren't based on table content, for examples of how
        this applies to various database types, see:
        http://troels.arvin.dk/db/rdbms/#other-dummy_table
-       <http://troels.arvin.dk/db/rdbms/#other-dummy_table>.
+       &lthttp://troels.arvin.dk/db/rdbms/#other-dummy_table&gt.
 
        Note: If you're using Oracles dual table don't ever do anything other
        than a select, if you CRUD on your dual table you *will* break your
@@ -1406,18 +1408,18 @@ SQL
 	 use strict;
 	 use warnings;
 	 use base 'DBIx::Class::Core';
-	 __PACKAGE__->table("Dual");
-	 __PACKAGE__->add_columns(
+	 __PACKAGE__-&gttable("Dual");
+	 __PACKAGE__-&gtadd_columns(
 	   "dummy",
-	   { data_type => "VARCHAR2", is_nullable => 0, size => 1 },
+	   { data_type =&gt "VARCHAR2", is_nullable =&gt 0, size =&gt 1 },
 	 );
 
        Once you've loaded your table class select from it using "select" and
        "as" instead of "columns"
 
-	 my $rs = $schema->resultset('Dual')->search(undef,
-	   { select => [ 'sydate' ],
-	     as     => [ 'now' ]
+	 my $rs = $schema-&gtresultset('Dual')-&gtsearch(undef,
+	   { select =&gt [ 'sydate' ],
+	     as     =&gt [ 'now' ]
 	   },
 	 );
 
@@ -1425,8 +1427,8 @@ SQL
        below will not work because there is no column called 'now' in the Dual
        table class
 
-	 while (my $dual = $rs->next) {
-	   print $dual->now."\n";
+	 while (my $dual = $rs-&gtnext) {
+	   print $dual-&gtnow."\n";
 	 }
 	 # Can't locate object method "now" via package "MyAppDB::Dual" at headshot.pl line 23.
 
@@ -1434,14 +1436,14 @@ SQL
        "add_columns" to your Dual class for whatever you wanted to select from
        dual, but that's just silly, instead use "get_column"
 
-	 while (my $dual = $rs->next) {
-	   print $dual->get_column('now')."\n";
+	 while (my $dual = $rs-&gtnext) {
+	   print $dual-&gtget_column('now')."\n";
 	 }
 
        Or use "cursor"
 
-	 my $cursor = $rs->cursor;
-	 while (my @vals = $cursor->next) {
+	 my $cursor = $rs-&gtcursor;
+	 while (my @vals = $cursor-&gtnext) {
 	   print $vals[0]."\n";
 	 }
 
@@ -1453,16 +1455,16 @@ SQL
        SQL::Translator to not create table dual:
 
 	   my $sqlt_args = {
-	       add_drop_table => 1,
-	       parser_args    => { sources => [ grep $_ ne 'Dual', schema->sources ] },
+	       add_drop_table =&gt 1,
+	       parser_args    =&gt { sources =&gt [ grep $_ ne 'Dual', schema-&gtsources ] },
 	   };
-	   $schema->create_ddl_dir( [qw/Oracle/], undef, './sql', undef, $sqlt_args );
+	   $schema-&gtcreate_ddl_dir( [qw/Oracle/], undef, './sql', undef, $sqlt_args );
 
        Or use DBIx::Class::ResultClass::HashRefInflator
 
-	 $rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
-	 while ( my $dual = $rs->next ) {
-	   print $dual->{now}."\n";
+	 $rs-&gtresult_class('DBIx::Class::ResultClass::HashRefInflator');
+	 while ( my $dual = $rs-&gtnext ) {
+	   print $dual-&gt{now}."\n";
 	 }
 
        Here are some example "select" conditions to illustrate the different
@@ -1470,27 +1472,27 @@ SQL
        "oracles.heavily(nested(functions_can('take', 'lots'), OF), 'args')"
 
 	 # get a sequence value
-	 select => [ 'A_SEQ.nextval' ],
+	 select =&gt [ 'A_SEQ.nextval' ],
 
 	 # get create table sql
-	 select => [ { 'dbms_metadata.get_ddl' => [ "'TABLE'", "'ARTIST'" ]} ],
+	 select =&gt [ { 'dbms_metadata.get_ddl' =&gt [ "'TABLE'", "'ARTIST'" ]} ],
 
 	 # get a random num between 0 and 100
-	 select => [ { "trunc" => [ { "dbms_random.value" => [0,100] } ]} ],
+	 select =&gt [ { "trunc" =&gt [ { "dbms_random.value" =&gt [0,100] } ]} ],
 
 	 # what year is it?
-	 select => [ { 'extract' => [ \'year from sysdate' ] } ],
+	 select =&gt [ { 'extract' =&gt [ \'year from sysdate' ] } ],
 
 	 # do some math
-	 select => [ {'round' => [{'cos' => [ \'180 * 3.14159265359/180' ]}]}],
+	 select =&gt [ {'round' =&gt [{'cos' =&gt [ \'180 * 3.14159265359/180' ]}]}],
 
 	 # which day of the week were you born on?
-	 select => [{'to_char' => [{'to_date' => [ "'25-DEC-1980'", "'dd-mon-yyyy'" ]}, "'day'"]}],
+	 select =&gt [{'to_char' =&gt [{'to_date' =&gt [ "'25-DEC-1980'", "'dd-mon-yyyy'" ]}, "'day'"]}],
 
 	 # select 16 rows from dual
-	 select   => [ "'hello'" ],
-	 as	  => [ 'world' ],
-	 group_by => [ 'cube( 1, 2, 3, 4 )' ],
+	 select   =&gt [ "'hello'" ],
+	 as	  =&gt [ 'world' ],
+	 group_by =&gt [ 'cube( 1, 2, 3, 4 )' ],
 
    Adding Indexes And Functions To Your SQL
        Often you will want indexes on columns on your table to speed up
@@ -1500,13 +1502,13 @@ SQL
 
 	package My::Schema::Result::Artist;
 
-	__PACKAGE__->table('artist');
-	__PACKAGE__->add_columns(id => { ... }, name => { ... })
+	__PACKAGE__-&gttable('artist');
+	__PACKAGE__-&gtadd_columns(id =&gt { ... }, name =&gt { ... })
 
 	sub sqlt_deploy_hook {
 	  my ($self, $sqlt_table) = @_;
 
-	  $sqlt_table->add_index(name => 'idx_name', fields => ['name']);
+	  $sqlt_table-&gtadd_index(name =&gt 'idx_name', fields =&gt ['name']);
 	}
 
 	1;
@@ -1514,7 +1516,7 @@ SQL
        Sometimes you might want to change the index depending on the type of
        the database for which SQL is being generated:
 
-	 my ($db_type = $sqlt_table->schema->translator->producer_type)
+	 my ($db_type = $sqlt_table-&gtschema-&gttranslator-&gtproducer_type)
 	   =~ s/^SQL::Translator::Producer:://;
 
        You can also add hooks to the schema level to stop certain tables being
@@ -1527,7 +1529,7 @@ SQL
 	sub sqlt_deploy_hook {
 	  my ($self, $sqlt_schema) = @_;
 
-	  $sqlt_schema->drop_table('table_name');
+	  $sqlt_schema-&gtdrop_table('table_name');
 	}
 
        You could also add views, procedures or triggers to the output using
@@ -1592,13 +1594,13 @@ SQL
        If the database contains column names with spaces and/or reserved
        words, they need to be quoted in the SQL queries. This is done using:
 
-	$schema->storage->sql_maker->quote_char([ qw/[ ]/] );
-	$schema->storage->sql_maker->name_sep('.');
+	$schema-&gtstorage-&gtsql_maker-&gtquote_char([ qw/[ ]/] );
+	$schema-&gtstorage-&gtsql_maker-&gtname_sep('.');
 
        The first sets the quote characters. Either a pair of matching
        brackets, or a """ or "'":
 
-	$schema->storage->sql_maker->quote_char('"');
+	$schema-&gtstorage-&gtsql_maker-&gtquote_char('"');
 
        Check the documentation of your database for the correct quote
        characters to use. "name_sep" needs to be set to allow the SQL
@@ -1608,13 +1610,13 @@ SQL
        In most cases you should set these as part of the arguments passed to
        "connect" in DBIx::Class::Schema:
 
-	my $schema = My::Schema->connect(
+	my $schema = My::Schema-&gtconnect(
 	 'dbi:mysql:my_db',
 	 'db_user',
 	 'db_password',
 	 {
-	   quote_char => '"',
-	   name_sep   => '.'
+	   quote_char =&gt '"',
+	   name_sep   =&gt '.'
 	 }
 	)
 
@@ -1624,9 +1626,9 @@ SQL
 
 	sub connection {
 	    my $self = shift;
-	    my $rv = $self->next::method( @_ );
-	    $rv->storage->sql_maker->quote_char([ qw/[ ]/ ]);
-	    $rv->storage->sql_maker->name_sep('.');
+	    my $rv = $self-&gtnext::method( @_ );
+	    $rv-&gtstorage-&gtsql_maker-&gtquote_char([ qw/[ ]/ ]);
+	    $rv-&gtstorage-&gtsql_maker-&gtname_sep('.');
 	    return $rv;
 	}
 
@@ -1636,16 +1638,16 @@ SQL
        DBIx::Class::ResultSet and "update" in DBIx::Class::Row family of
        methods:
 
-	 $resultset->create({
-	   numbers => [1, 2, 3]
+	 $resultset-&gtcreate({
+	   numbers =&gt [1, 2, 3]
 	 });
 
-	 $row->update(
+	 $row-&gtupdate(
 	   {
-	     numbers => [1, 2, 3]
+	     numbers =&gt [1, 2, 3]
 	   },
 	   {
-	     day => '2008-11-24'
+	     day =&gt '2008-11-24'
 	   }
 	 );
 
@@ -1654,9 +1656,9 @@ SQL
        is interpreted as a list of values to be "OR"ed), but you can use the
        following syntax to force passing them as bind values:
 
-	 $resultset->search(
+	 $resultset-&gtsearch(
 	   {
-	     numbers => \[ '= ?', [numbers => [1, 2, 3]] ]
+	     numbers =&gt \[ '= ?', [numbers =&gt [1, 2, 3]] ]
 	   }
 	 );
 
@@ -1665,7 +1667,7 @@ SQL
        explanation. Note that DBIx::Class sets "bindtype" in SQL::Abstract to
        "columns", so you must pass the bind values (the "[1, 2, 3]" arrayref
        in the above example) wrapped in arrayrefs together with the column
-       name, like this: "[column_name => value]".
+       name, like this: "[column_name =&gt value]".
 
    Formatting DateTime objects in queries
        To ensure "WHERE" conditions containing DateTime arguments are properly
@@ -1675,13 +1677,13 @@ SQL
        object attached to your Schema provides a correct "DateTime" formatter,
        so all you have to do is:
 
-	 my $dtf = $schema->storage->datetime_parser;
-	 my $rs = $schema->resultset('users')->search(
+	 my $dtf = $schema-&gtstorage-&gtdatetime_parser;
+	 my $rs = $schema-&gtresultset('users')-&gtsearch(
 	   {
-	     signup_date => {
-	       -between => [
-		 $dtf->format_datetime($dt_start),
-		 $dtf->format_datetime($dt_end),
+	     signup_date =&gt {
+	       -between =&gt [
+		 $dtf-&gtformat_datetime($dt_start),
+		 $dtf-&gtformat_datetime($dt_end),
 	       ],
 	     }
 	   },
@@ -1711,7 +1713,7 @@ SQL
        unexpected data corrupt will occur.
 
        The Catalyst Wiki Unicode page at
-       <http://wiki.catalystframework.org/wiki/tutorialsandhowtos/using_unicode>
+       &lthttp://wiki.catalystframework.org/wiki/tutorialsandhowtos/using_unicode&gt
        has additional information on the use of Unicode with Catalyst and
        DBIx::Class.
 
@@ -1722,9 +1724,9 @@ SQL
        MySQL supports unicode, and will correctly flag utf8 data from the
        database if the "mysql_enable_utf8" is set in the connect options.
 
-	 my $schema = My::Schema->connection('dbi:mysql:dbname=test',
+	 my $schema = My::Schema-&gtconnection('dbi:mysql:dbname=test',
 					     $user, $pass,
-					     { mysql_enable_utf8 => 1} );
+					     { mysql_enable_utf8 =&gt 1} );
 
        When set, a data retrieved from a textual column type (char, varchar,
        etc) will have the UTF-8 flag turned on if necessary. This enables
@@ -1745,9 +1747,9 @@ SQL
        database creation time. Additionally the "pg_enable_utf8" should be set
        to ensure unicode data is correctly marked.
 
-	 my $schema = My::Schema->connection('dbi:Pg:dbname=test',
+	 my $schema = My::Schema-&gtconnection('dbi:Pg:dbname=test',
 					     $user, $pass,
-					     { pg_enable_utf8 => 1} );
+					     { pg_enable_utf8 =&gt 1} );
 
        Further information can be found in DBD::Pg.
 
@@ -1758,9 +1760,9 @@ SQL
        "sqlite_unicode" flag should be set at connect time (in versions of
        DBD::SQLite prior to 1.27 this attribute was named "unicode").
 
-	 my $schema = My::Schema->connection('dbi:SQLite:/tmp/test.db',
+	 my $schema = My::Schema-&gtconnection('dbi:SQLite:/tmp/test.db',
 					     '', '',
-					     { sqlite_unicode => 1} );
+					     { sqlite_unicode =&gt 1} );
 
 BOOTSTRAPPING/MIGRATING
    Easy migration from class-based to schema-based setup
@@ -1772,28 +1774,28 @@ BOOTSTRAPPING/MIGRATING
 	 use MyDB;
 	 use SQL::Translator;
 
-	 my $schema = MyDB->schema_instance;
+	 my $schema = MyDB-&gtschema_instance;
 
-	 my $translator 	  =  SQL::Translator->new(
-	     debug		  => $debug	     ||  0,
-	     trace		  => $trace	     ||  0,
-	     no_comments	  => $no_comments    ||  0,
-	     show_warnings	  => $show_warnings  ||  0,
-	     add_drop_table	  => $add_drop_table ||  0,
-	     validate		  => $validate	     ||  0,
-	     parser_args	  => {
-		'DBIx::Schema'	  => $schema,
+	 my $translator 	  =  SQL::Translator-&gtnew(
+	     debug		  =&gt $debug	     ||  0,
+	     trace		  =&gt $trace	     ||  0,
+	     no_comments	  =&gt $no_comments    ||  0,
+	     show_warnings	  =&gt $show_warnings  ||  0,
+	     add_drop_table	  =&gt $add_drop_table ||  0,
+	     validate		  =&gt $validate	     ||  0,
+	     parser_args	  =&gt {
+		'DBIx::Schema'	  =&gt $schema,
 				     },
-	     producer_args   => {
-		 'prefix'	  => 'My::Schema',
+	     producer_args   =&gt {
+		 'prefix'	  =&gt 'My::Schema',
 				},
 	 );
 
-	 $translator->parser('SQL::Translator::Parser::DBIx::Class');
-	 $translator->producer('SQL::Translator::Producer::DBIx::Class::File');
+	 $translator-&gtparser('SQL::Translator::Parser::DBIx::Class');
+	 $translator-&gtproducer('SQL::Translator::Producer::DBIx::Class::File');
 
-	 my $output = $translator->translate(@args) or die
-		 "Error: " . $translator->error;
+	 my $output = $translator-&gttranslate(@args) or die
+		 "Error: " . $translator-&gterror;
 
 	 print $output;
 
@@ -1814,9 +1816,9 @@ OVERLOADING METHODS
 	 sub new {
 	   my ( $class, $attrs ) = @_;
 
-	   $attrs->{foo} = 'bar' unless defined $attrs->{foo};
+	   $attrs-&gt{foo} = 'bar' unless defined $attrs-&gt{foo};
 
-	   my $new = $class->next::method($attrs);
+	   my $new = $class-&gtnext::method($attrs);
 
 	   return $new;
 	 }
@@ -1835,18 +1837,18 @@ OVERLOADING METHODS
        can accomplish this by wrapping the "number" accessor with
        Class::Method::Modifiers:
 
-	 around number => sub {
+	 around number =&gt sub {
 	   my ($orig, $self) = (shift, shift);
 
 	   if (@_) {
 	     my $value = $_[0];
-	     $self->squared( $value * $value );
+	     $self-&gtsquared( $value * $value );
 	   }
 
-	   $self->$orig(@_);
+	   $self-&gt$orig(@_);
 	 }
 
-       Note that the hard work is done by the call to "$self->$orig", which
+       Note that the hard work is done by the call to "$self-&gt$orig", which
        redispatches your call to store_column in the superclass(es).
 
        Generally, if this is a calculation your database can easily do, try
@@ -1860,8 +1862,8 @@ OVERLOADING METHODS
 
 	 sub insert {
 	   my ( $self, @args ) = @_;
-	   $self->next::method(@args);
-	   $self->create_related ('cds', \%initial_cd_data );
+	   $self-&gtnext::method(@args);
+	   $self-&gtcreate_related ('cds', \%initial_cd_data );
 	   return $self;
 	 }
 
@@ -1872,12 +1874,12 @@ OVERLOADING METHODS
 	 sub insert {
 	   my ( $self, @args ) = @_;
 
-	   my $guard = $self->result_source->schema->txn_scope_guard;
+	   my $guard = $self-&gtresult_source-&gtschema-&gttxn_scope_guard;
 
-	   $self->next::method(@args);
-	   $self->create_related ('cds', \%initial_cd_data );
+	   $self-&gtnext::method(@args);
+	   $self-&gtcreate_related ('cds', \%initial_cd_data );
 
-	   $guard->commit;
+	   $guard-&gtcommit;
 
 	   return $self
 	 }
@@ -1903,7 +1905,7 @@ OVERLOADING METHODS
        First, in your "Camera" schema class, define the description field as
        follows:
 
-	 __PACKAGE__->add_columns(description => { accessor => '_description' });
+	 __PACKAGE__-&gtadd_columns(description =&gt { accessor =&gt '_description' });
 
        Next, we'll define the accessor-wrapper subroutine:
 
@@ -1912,16 +1914,16 @@ OVERLOADING METHODS
 
 	     # If there is an update to the column, we'll let the original accessor
 	     # deal with it.
-	     return $self->_description(@_) if @_;
+	     return $self-&gt_description(@_) if @_;
 
 	     # Fetch the column value.
-	     my $description = $self->_description;
+	     my $description = $self-&gt_description;
 
 	     # If there's something in the description field, then just return that.
 	     return $description if defined $description && length $descripton;
 
 	     # Otherwise, generate a description.
-	     return $self->generate_description;
+	     return $self-&gtgenerate_description;
 	 }
 
 DEBUGGING AND PROFILING
@@ -1932,7 +1934,7 @@ DEBUGGING AND PROFILING
 
 	 use Data::Dumper;
 
-	 my $cd = $schema->resultset('CD')->find(1);
+	 my $cd = $schema-&gtresultset('CD')-&gtfind(1);
 	 print Dumper($cd);
 
        several pages worth of data from the CD object's schema and result
@@ -1949,7 +1951,7 @@ DEBUGGING AND PROFILING
 	 sub _dumper_hook {
 	   $_[0] = bless {
 	     %{ $_[0] },
-	     result_source => undef,
+	     result_source =&gt undef,
 	   }, ref($_[0]);
 	 }
 
@@ -1959,7 +1961,7 @@ DEBUGGING AND PROFILING
 
 	 local $Data::Dumper::Freezer = '_dumper_hook';
 
-	 my $cd = $schema->resultset('CD')->find(1);
+	 my $cd = $schema-&gtresultset('CD')-&gtfind(1);
 	 print Dumper($cd);
 		# dumps $cd without its ResultSource
 
@@ -1990,7 +1992,7 @@ DEBUGGING AND PROFILING
 	   my $sql = shift();
 	   my @params = @_;
 
-	   $self->print("Executing $sql: ".join(', ', @params)."\n");
+	   $self-&gtprint("Executing $sql: ".join(', ', @params)."\n");
 	   $start = time();
 	 }
 
@@ -2000,7 +2002,7 @@ DEBUGGING AND PROFILING
 	   my @params = @_;
 
 	   my $elapsed = sprintf("%0.4f", time() - $start);
-	   $self->print("Execution took $elapsed seconds.\n");
+	   $self-&gtprint("Execution took $elapsed seconds.\n");
 	   $start = undef;
 	 }
 
@@ -2008,8 +2010,8 @@ DEBUGGING AND PROFILING
 
        You can then install that class as the debugging object:
 
-	 __PACKAGE__->storage->debugobj(new My::Profiler());
-	 __PACKAGE__->storage->debug(1);
+	 __PACKAGE__-&gtstorage-&gtdebugobj(new My::Profiler());
+	 __PACKAGE__-&gtstorage-&gtdebug(1);
 
        A more complicated example might involve storing each execution of SQL
        in an array:
@@ -2021,8 +2023,8 @@ DEBUGGING AND PROFILING
 
 	   my $elapsed = time() - $start;
 	   push(@{ $calls{$sql} }, {
-	       params => \@params,
-	       elapsed => $elapsed
+	       params =&gt \@params,
+	       elapsed =&gt $elapsed
 	   });
 	 }
 
@@ -2079,14 +2081,14 @@ STARTUP SPEED
        Typically DBIx::Class result classes start off with
 
 	   use base qw/DBIx::Class::Core/;
-	   __PACKAGE__->load_components(qw/InflateColumn::DateTime/);
+	   __PACKAGE__-&gtload_components(qw/InflateColumn::DateTime/);
 
        If this preamble is moved into a common base class:-
 
 	   package MyDBICbase;
 
 	   use base qw/DBIx::Class::Core/;
-	   __PACKAGE__->load_components(qw/InflateColumn::DateTime/);
+	   __PACKAGE__-&gtload_components(qw/InflateColumn::DateTime/);
 	   1;
 
        and each result class then uses this as a base:-
@@ -2099,14 +2101,14 @@ STARTUP SPEED
    Explicitly List Schema Result Classes
        The schema class will normally contain
 
-	   __PACKAGE__->load_classes();
+	   __PACKAGE__-&gtload_classes();
 
        to load the result classes. This will use Module::Find to find and load
        the appropriate modules. Explicitly defining the classes you wish to
        load will remove the overhead of Module::Find and the related directory
        operations:
 
-	   __PACKAGE__->load_classes(qw/ CD Artist Track /);
+	   __PACKAGE__-&gtload_classes(qw/ CD Artist Track /);
 
        If you are instead using the load_namespaces syntax to load the
        appropriate classes there is not a direct alternative avoiding
@@ -2121,15 +2123,15 @@ MEMORY USAGE
        DBI's CachedKids hash:
 
 	   # print all currently cached prepared statements
-	   print for keys %{$schema->storage->dbh->{CachedKids}};
+	   print for keys %{$schema-&gtstorage-&gtdbh-&gt{CachedKids}};
 	   # get a count of currently cached prepared statements
-	   my $count = scalar keys %{$schema->storage->dbh->{CachedKids}};
+	   my $count = scalar keys %{$schema-&gtstorage-&gtdbh-&gt{CachedKids}};
 
        If it's appropriate, you can simply clear these statements,
        automatically deallocating them in the database:
 
-	   my $kids = $schema->storage->dbh->{CachedKids};
-	   delete @{$kids}{keys %$kids} if scalar keys %$kids > 100;
+	   my $kids = $schema-&gtstorage-&gtdbh-&gt{CachedKids};
+	   delete @{$kids}{keys %$kids} if scalar keys %$kids &gt 100;
 
        But what you probably want is to expire unused statements and not those
        that are used frequently.  You can accomplish this with Tie::Cache or
@@ -2137,13 +2139,13 @@ MEMORY USAGE
 
 	   use Tie::Cache;
 	   use DB::Main;
-	   my $schema = DB::Main->connect($dbi_dsn, $user, $pass, {
-	       on_connect_do => sub { tie %{shift->_dbh->{CachedKids}}, 'Tie::Cache', 100 },
+	   my $schema = DB::Main-&gtconnect($dbi_dsn, $user, $pass, {
+	       on_connect_do =&gt sub { tie %{shift-&gt_dbh-&gt{CachedKids}}, 'Tie::Cache', 100 },
 	   });
 
 
 
 perl v5.12.4			  2011-05-10  DBIx::Class::Manual::Cookbook(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

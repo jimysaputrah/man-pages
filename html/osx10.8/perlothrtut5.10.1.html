@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="WARNING: This tutorial describes the old-style thread model that was..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlothrtut - old tutorial on threads in Perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLOTHRTUT(1)	       Perl Programmers Reference Guide 	PERLOTHRTUT(1)
 
 
@@ -255,7 +257,7 @@ Thread Basics
 
 	   use Thread;
 
-	   $thr = Thread->new( \&sub1 );
+	   $thr = Thread-&gtnew( \&sub1 );
 
 	   sub sub1 {
 	       print "In the thread\n";
@@ -271,14 +273,14 @@ Thread Basics
 
 	   use Thread;
 	   $Param3 = "foo";
-	   $thr = Thread->new( \&sub1, "Param 1", "Param 2", $Param3 );
-	   $thr = Thread->new( \&sub1, @ParamList );
-	   $thr = Thread->new( \&sub1, qw(Param1 Param2 $Param3) );
+	   $thr = Thread-&gtnew( \&sub1, "Param 1", "Param 2", $Param3 );
+	   $thr = Thread-&gtnew( \&sub1, @ParamList );
+	   $thr = Thread-&gtnew( \&sub1, qw(Param1 Param2 $Param3) );
 
 	   sub sub1 {
 	       my @InboundParameters = @_;
 	       print "In the thread\n";
-	       print "got parameters >", join("<>", @InboundParameters), "<\n";
+	       print "got parameters &gt", join("&lt&gt", @InboundParameters), "&lt\n";
 	   }
 
        The subroutine runs like a normal Perl subroutine, and the call to new
@@ -297,12 +299,12 @@ Thread Basics
 	   $LineCount = 0;
 
 	   $thr = async {
-	       while(<>) {$LineCount++}
+	       while(&lt&gt) {$LineCount++}
 	       print "Got $LineCount lines\n";
 	   };
 
 	   print "Waiting for the linecount to end\n";
-	   $thr->join;
+	   $thr-&gtjoin;
 	   print "All done\n";
 
        You'll notice we did a use Thread qw(async) in that example.  async is
@@ -350,9 +352,9 @@ Thread Basics
        use the join() method.
 
 	   use Thread;
-	   $thr = Thread->new( \&sub1 );
+	   $thr = Thread-&gtnew( \&sub1 );
 
-	   @ReturnData = $thr->join;
+	   @ReturnData = $thr-&gtjoin;
 	   print "Thread returned @ReturnData";
 
 	   sub sub1 { return "Fifty-six", "foo", 2; }
@@ -375,7 +377,7 @@ Thread Basics
 
 	   use Thread qw(async);
 	   $thr = async {$b = 3/0};   # Divide by zero error
-	   $foo = eval {$thr->join};
+	   $foo = eval {$thr-&gtjoin};
 	   if ($@) {
 	       print "died with error $@\n";
 	   } else {
@@ -398,9 +400,9 @@ Thread Basics
        automatically.
 
 	   use Thread;
-	   $thr = Thread->new( \&sub1 ); # Spawn the thread
+	   $thr = Thread-&gtnew( \&sub1 ); # Spawn the thread
 
-	   $thr->detach; # Now we officially don't care any more
+	   $thr-&gtdetach; # Now we officially don't care any more
 
 	   sub sub1 {
 	       $a = 0;
@@ -440,8 +442,8 @@ Threads And Data
 
 	   use Thread;
 	   $a = 1;
-	   $thr1 = Thread->new(\&sub1);
-	   $thr2 = Thread->new(\&sub2);
+	   $thr1 = Thread-&gtnew(\&sub1);
+	   $thr2 = Thread-&gtnew(\&sub2);
 
 	   sleep 10;
 	   print "$a\n";
@@ -500,8 +502,8 @@ Threads And Data
 	       }
 	       print "\$bar was $bar\n";
 	   };
-	   $thr1->join;
-	   $thr2->join;
+	   $thr1-&gtjoin;
+	   $thr2-&gtjoin;
 	   print "\$a is $a\n";
 
        lock() blocks the thread until the variable being locked is available.
@@ -575,19 +577,19 @@ Threads And Data
 	   use Thread qw(async);
 	   use Thread::Queue;
 
-	   my $DataQueue = Thread::Queue->new();
+	   my $DataQueue = Thread::Queue-&gtnew();
 	   $thr = async {
-	       while ($DataElement = $DataQueue->dequeue) {
+	       while ($DataElement = $DataQueue-&gtdequeue) {
 		   print "Popped $DataElement off the queue\n";
 	       }
 	   };
 
-	   $DataQueue->enqueue(12);
-	   $DataQueue->enqueue("A", "B", "C");
+	   $DataQueue-&gtenqueue(12);
+	   $DataQueue-&gtenqueue("A", "B", "C");
 	   sleep 10;
-	   $DataQueue->enqueue(undef);
+	   $DataQueue-&gtenqueue(undef);
 
-       You create the queue with "Thread::Queue->new".	Then you can add lists
+       You create the queue with "Thread::Queue-&gtnew".	Then you can add lists
        of scalars onto the end with enqueue(), and pop scalars off the front
        of it with dequeue().  A queue has no fixed size, and can grow as
        needed to hold everything pushed on to it.
@@ -618,12 +620,12 @@ Threads And Code
 
 	       use Thread qw(yield);
 	       use Thread::Semaphore;
-	       my $semaphore = Thread::Semaphore->new();
+	       my $semaphore = Thread::Semaphore-&gtnew();
 	       $GlobalVariable = 0;
 
-	       $thr1 = Thread->new( \&sample_sub, 1 );
-	       $thr2 = Thread->new( \&sample_sub, 2 );
-	       $thr3 = Thread->new( \&sample_sub, 3 );
+	       $thr1 = Thread-&gtnew( \&sample_sub, 1 );
+	       $thr2 = Thread-&gtnew( \&sample_sub, 2 );
+	       $thr3 = Thread-&gtnew( \&sample_sub, 3 );
 
 	       sub sample_sub {
 		   my $SubNumber = shift @_;
@@ -631,14 +633,14 @@ Threads And Code
 		   my $LocalCopy;
 		   sleep 1;
 		   while ($TryCount--) {
-		       $semaphore->down;
+		       $semaphore-&gtdown;
 		       $LocalCopy = $GlobalVariable;
 		       print "$TryCount tries left for sub $SubNumber (\$GlobalVariable is $GlobalVariable)\n";
 		       yield;
 		       sleep 2;
 		       $LocalCopy++;
 		       $GlobalVariable = $LocalCopy;
-		       $semaphore->up;
+		       $semaphore-&gtup;
 		   }
 	       }
 
@@ -658,7 +660,7 @@ Threads And Code
 	   counter below zero, it blocks until the counter is large enough.
 	   Note that while a semaphore can be created with a starting count of
 	   zero, any up() or down() always changes the counter by at least
-	   one. $semaphore->down(0) is the same as $semaphore->down(1).
+	   one. $semaphore-&gtdown(0) is the same as $semaphore-&gtdown(1).
 
 	   The question, of course, is why would you do something like this?
 	   Why create a semaphore with a starting count that's not one, or why
@@ -711,10 +713,10 @@ Threads And Code
 
 	   use Thread qw(yield);
 
-	   Thread->new(\&thread_sub, 1);
-	   Thread->new(\&thread_sub, 2);
-	   Thread->new(\&thread_sub, 3);
-	   Thread->new(\&thread_sub, 4);
+	   Thread-&gtnew(\&thread_sub, 1);
+	   Thread-&gtnew(\&thread_sub, 2);
+	   Thread-&gtnew(\&thread_sub, 3);
+	   Thread-&gtnew(\&thread_sub, 4);
 
 	   sub sync_sub :locked {
 	       my $CallingThread = shift @_;
@@ -746,21 +748,21 @@ Threads And Code
 
 	   sub tester {
 	       my $thrnum = shift @_;
-	       my $bar = Foo->new();
+	       my $bar = Foo-&gtnew();
 	       foreach (1..10) {
 		   print "$thrnum calling per_object\n";
-		   $bar->per_object($thrnum);
+		   $bar-&gtper_object($thrnum);
 		   print "$thrnum out of per_object\n";
 		   yield;
 		   print "$thrnum calling one_at_a_time\n";
-		   $bar->one_at_a_time($thrnum);
+		   $bar-&gtone_at_a_time($thrnum);
 		   print "$thrnum out of one_at_a_time\n";
 		   yield;
 	       }
 	   }
 
 	   foreach my $thrnum (1..10) {
-	       Thread->new(\&tester, $thrnum);
+	       Thread-&gtnew(\&tester, $thrnum);
 	   }
 
 	   package Foo;
@@ -830,7 +832,7 @@ General Thread Utility Routines
        in anyplace else.
 
    What Thread Am I In?
-       The Thread->self method provides your program with a way to get an
+       The Thread-&gtself method provides your program with a way to get an
        object representing the thread it's currently in.  You can use this
        object in the same way as the ones returned from the thread creation.
 
@@ -847,15 +849,15 @@ General Thread Utility Routines
        objects represent the same thread, and false if they don't.
 
    What Threads Are Running?
-       Thread->list returns a list of thread objects, one for each thread
+       Thread-&gtlist returns a list of thread objects, one for each thread
        that's currently running.  Handy for a number of things, including
        cleaning up at the end of your program:
 
 	   # Loop through all the threads
-	   foreach $thr (Thread->list) {
+	   foreach $thr (Thread-&gtlist) {
 	       # Don't join the main thread or ourselves
-	       if ($thr->tid && !Thread::equal($thr, Thread->self)) {
-		   $thr->join;
+	       if ($thr-&gttid && !Thread::equal($thr, Thread-&gtself)) {
+		   $thr-&gtjoin;
 	       }
 	   }
 
@@ -875,31 +877,31 @@ A Complete Example
 	   6  use Thread;
 	   7  use Thread::Queue;
 	   8
-	   9  my $stream = Thread::Queue->new();
-	   10 my $kid	 = Thread->new(\&check_num, $stream, 2);
+	   9  my $stream = Thread::Queue-&gtnew();
+	   10 my $kid	 = Thread-&gtnew(\&check_num, $stream, 2);
 	   11
 	   12 for my $i ( 3 .. 1000 ) {
-	   13	  $stream->enqueue($i);
+	   13	  $stream-&gtenqueue($i);
 	   14 }
 	   15
-	   16 $stream->enqueue(undef);
-	   17 $kid->join();
+	   16 $stream-&gtenqueue(undef);
+	   17 $kid-&gtjoin();
 	   18
 	   19 sub check_num {
 	   20	  my ($upstream, $cur_prime) = @_;
 	   21	  my $kid;
-	   22	  my $downstream = Thread::Queue->new();
-	   23	  while (my $num = $upstream->dequeue) {
+	   22	  my $downstream = Thread::Queue-&gtnew();
+	   23	  while (my $num = $upstream-&gtdequeue) {
 	   24	      next unless $num % $cur_prime;
 	   25	      if ($kid) {
-	   26		 $downstream->enqueue($num);
+	   26		 $downstream-&gtenqueue($num);
 	   27		       } else {
 	   28		 print "Found prime $num\n";
-	   29		     $kid = Thread->new(\&check_num, $downstream, $num);
+	   29		     $kid = Thread-&gtnew(\&check_num, $downstream, $num);
 	   30	      }
 	   31	  }
-	   32	  $downstream->enqueue(undef) if $kid;
-	   33	  $kid->join()	       if $kid;
+	   32	  $downstream-&gtenqueue(undef) if $kid;
+	   33	  $kid-&gtjoin()	       if $kid;
 	   34 }
 
        This program uses the pipeline model to generate prime numbers.	Each
@@ -1008,7 +1010,7 @@ Acknowledgements
        of the prime number generator.
 
 AUTHOR
-       Dan Sugalski <sugalskd@ous.edu>
+       Dan Sugalski &ltsugalskd@ous.edu&gt
 
 Copyrights
        This article originally appeared in The Perl Journal #10, and is
@@ -1019,6 +1021,6 @@ Copyrights
 
 
 perl v5.10.1			  2009-04-12			PERLOTHRTUT(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

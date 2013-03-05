@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module implements a client interface to the SMTP and ESMTP..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::SMTP - Simple Mail Transfer Protocol Client</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::SMTP(3pm)	       Perl Programmers Reference Guide 	Net::SMTP(3pm)
 
 
@@ -19,8 +21,8 @@ SYNOPSIS
 	   use Net::SMTP;
 
 	   # Constructors
-	   $smtp = Net::SMTP->new('mailhost');
-	   $smtp = Net::SMTP->new('mailhost', Timeout => 60);
+	   $smtp = Net::SMTP-&gtnew('mailhost');
+	   $smtp = Net::SMTP-&gtnew('mailhost', Timeout =&gt 60);
 
 DESCRIPTION
        This module implements a client interface to the SMTP and ESMTP
@@ -41,9 +43,9 @@ EXAMPLES
 
 	   use Net::SMTP;
 
-	   $smtp = Net::SMTP->new('mailhost');
-	   print $smtp->domain,"\n";
-	   $smtp->quit;
+	   $smtp = Net::SMTP-&gtnew('mailhost');
+	   print $smtp-&gtdomain,"\n";
+	   $smtp-&gtquit;
 
        This example sends a small message to the postmaster at the SMTP server
        known as mailhost:
@@ -52,18 +54,18 @@ EXAMPLES
 
 	   use Net::SMTP;
 
-	   $smtp = Net::SMTP->new('mailhost');
+	   $smtp = Net::SMTP-&gtnew('mailhost');
 
-	   $smtp->mail($ENV{USER});
-	   $smtp->to('postmaster');
+	   $smtp-&gtmail($ENV{USER});
+	   $smtp-&gtto('postmaster');
 
-	   $smtp->data();
-	   $smtp->datasend("To: postmaster\n");
-	   $smtp->datasend("\n");
-	   $smtp->datasend("A simple test message\n");
-	   $smtp->dataend();
+	   $smtp-&gtdata();
+	   $smtp-&gtdatasend("To: postmaster\n");
+	   $smtp-&gtdatasend("\n");
+	   $smtp-&gtdatasend("A simple test message\n");
+	   $smtp-&gtdataend();
 
-	   $smtp->quit;
+	   $smtp-&gtquit;
 
 CONSTRUCTOR
        new ( [ HOST ] [, OPTIONS ] )
@@ -101,24 +103,24 @@ CONSTRUCTOR
 
 	   Example:
 
-	       $smtp = Net::SMTP->new('mailhost',
-				      Hello => 'my.mail.domain',
-				      Timeout => 30,
-				      Debug   => 1,
+	       $smtp = Net::SMTP-&gtnew('mailhost',
+				      Hello =&gt 'my.mail.domain',
+				      Timeout =&gt 30,
+				      Debug   =&gt 1,
 				     );
 
 	       # the same
-	       $smtp = Net::SMTP->new(
-				      Host => 'mailhost',
-				      Hello => 'my.mail.domain',
-				      Timeout => 30,
-				      Debug   => 1,
+	       $smtp = Net::SMTP-&gtnew(
+				      Host =&gt 'mailhost',
+				      Hello =&gt 'my.mail.domain',
+				      Timeout =&gt 30,
+				      Debug   =&gt 1,
 				     );
 
 	       # Connect to the default server from Net::config
-	       $smtp = Net::SMTP->new(
-				      Hello => 'my.mail.domain',
-				      Timeout => 30,
+	       $smtp = Net::SMTP-&gtnew(
+				      Hello =&gt 'my.mail.domain',
+				      Timeout =&gt 30,
 				     );
 
 METHODS
@@ -164,21 +166,21 @@ METHODS
 	   in hash like fashion, using key and value pairs.  Possible options
 	   are:
 
-	    Size	=> <bytes>
-	    Return	=> "FULL" | "HDRS"
-	    Bits	=> "7" | "8" | "binary"
-	    Transaction => <ADDRESS>
-	    Envelope	=> <ENVID>     # xtext-encodes its argument
-	    ENVID	=> <ENVID>     # similar to Envelope, but expects argument encoded
-	    XVERP	=> 1
-	    AUTH	=> <submitter> # encoded address according to RFC 2554
+	    Size	=&gt &ltbytes&gt
+	    Return	=&gt "FULL" | "HDRS"
+	    Bits	=&gt "7" | "8" | "binary"
+	    Transaction =&gt &ltADDRESS&gt
+	    Envelope	=&gt &ltENVID&gt     # xtext-encodes its argument
+	    ENVID	=&gt &ltENVID&gt     # similar to Envelope, but expects argument encoded
+	    XVERP	=&gt 1
+	    AUTH	=&gt &ltsubmitter&gt # encoded address according to RFC 2554
 
 	   The "Return" and "Envelope" parameters are used for DSN (Delivery
 	   Status Notification).
 
 	   The submitter address in "AUTH" option is expected to be in a
 	   format as required by RFC 2554, in an RFC2821-quoted form and
-	   xtext-encoded, or <> .
+	   xtext-encoded, or &lt&gt .
 
        reset ()
 	   Reset the status of the server. This may be called after a message
@@ -196,19 +198,19 @@ METHODS
 	   OPTIONS as an anonymous hash using key and value pairs.  Possible
 	   options are:
 
-	     Notify  => ['NEVER'] or ['SUCCESS','FAILURE','DELAY']  (see below)
-	     ORcpt   => <ORCPT>
-	     SkipBad => 1	 (to ignore bad addresses)
+	     Notify  =&gt ['NEVER'] or ['SUCCESS','FAILURE','DELAY']  (see below)
+	     ORcpt   =&gt &ltORCPT&gt
+	     SkipBad =&gt 1	 (to ignore bad addresses)
 
 	   If "SkipBad" is true the "recipient" will not return an error when
 	   a bad address is encountered and it will return an array of
 	   addresses that did succeed.
 
-	     $smtp->recipient($recipient1,$recipient2);  # Good
-	     $smtp->recipient($recipient1,$recipient2, { SkipBad => 1 });  # Good
-	     $smtp->recipient($recipient1,$recipient2, { Notify => ['FAILURE','DELAY'], SkipBad => 1 });  # Good
-	     @goodrecips=$smtp->recipient(@recipients, { Notify => ['FAILURE'], SkipBad => 1 });  # Good
-	     $smtp->recipient("$recipient,$recipient2"); # BAD
+	     $smtp-&gtrecipient($recipient1,$recipient2);  # Good
+	     $smtp-&gtrecipient($recipient1,$recipient2, { SkipBad =&gt 1 });  # Good
+	     $smtp-&gtrecipient($recipient1,$recipient2, { Notify =&gt ['FAILURE','DELAY'], SkipBad =&gt 1 });  # Good
+	     @goodrecips=$smtp-&gtrecipient(@recipients, { Notify =&gt ['FAILURE'], SkipBad =&gt 1 });  # Good
+	     $smtp-&gtrecipient("$recipient,$recipient2"); # BAD
 
 	   Notify is used to request Delivery Status Notifications (DSNs), but
 	   your SMTP/ESMTP service may not respect this request depending upon
@@ -223,9 +225,9 @@ METHODS
 	   option and "requests that a DSN not be returned to the sender under
 	   any conditions."
 
-	     {Notify => ['NEVER']}
+	     {Notify =&gt ['NEVER']}
 
-	     $smtp->recipient(@recipients, { Notify => ['NEVER'], SkipBad => 1 });  # Good
+	     $smtp-&gtrecipient(@recipients, { Notify =&gt ['NEVER'], SkipBad =&gt 1 });  # Good
 
 	   You may use any combination of these three values
 	   'SUCCESS','FAILURE','DELAY' in the anonymous array reference as
@@ -245,9 +247,9 @@ METHODS
 	   a NOTIFY parameter requests that a "delayed" DSN NOT be issued
 	   under any conditions."
 
-	     {Notify => ['SUCCESS','FAILURE','DELAY']}
+	     {Notify =&gt ['SUCCESS','FAILURE','DELAY']}
 
-	     $smtp->recipient(@recipients, { Notify => ['FAILURE','DELAY'], SkipBad => 1 });  # Good
+	     $smtp-&gtrecipient(@recipients, { Notify =&gt ['FAILURE','DELAY'], SkipBad =&gt 1 });  # Good
 
 	   ORcpt is also part of the SMTP DSN extension according to RFC3461.
 	   It is used to pass along the original recipient that the mail was
@@ -280,7 +282,7 @@ METHODS
 	   Verify that "ADDRESS" is a legitimate mailing address.
 
 	   Most sites usually disable this feature in their SMTP service
-	   configuration.  Use "Debug => 1" option under new() to see if
+	   configuration.  Use "Debug =&gt 1" option under new() to see if
 	   disabled.
 
        help ( [ $subject ] )
@@ -304,13 +306,13 @@ ADDRESSES
 
 	funny user@domain      WRONG
 	"funny user"@domain    RIGHT, recommended
-	<"funny user"@domain>  OK
+	&lt"funny user"@domain&gt  OK
 
 SEE ALSO
        Net::Cmd
 
 AUTHOR
-       Graham Barr <gbarr@pobox.com>
+       Graham Barr &ltgbarr@pobox.com&gt
 
 COPYRIGHT
        Copyright (c) 1995-2004 Graham Barr. All rights reserved.  This program
@@ -320,6 +322,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-06-01			Net::SMTP(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

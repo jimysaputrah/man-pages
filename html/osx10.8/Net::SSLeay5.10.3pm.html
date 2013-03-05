@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="There is a related module called "Net::SSLeay::Handle" included in this..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::SSLeay - Perl extension for using OpenSSL</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::SSLeay(3)	      User Contributed Perl Documentation	Net::SSLeay(3)
 
 
@@ -22,20 +24,20 @@ SYNOPSIS
 
 	 ($page, $response, %reply_headers)
 		= get_https('www.bacus.pt', 443, '/',			# 2
-		       make_headers(User-Agent => 'Cryptozilla/5.0b1',
-				    Referer    => 'https://www.bacus.pt'
+		       make_headers(User-Agent =&gt 'Cryptozilla/5.0b1',
+				    Referer    =&gt 'https://www.bacus.pt'
 		       ));
 
 	 ($page, $result, %headers) =					# 2b
 		= get_https('www.bacus.pt', 443, '/protected.html',
-		     make_headers(Authorization =>
+		     make_headers(Authorization =&gt
 				  'Basic ' . MIME::Base64::encode("$user:$pass",''))
 		     );
 
 	 ($page, $response, %reply_headers)
 		= post_https('www.bacus.pt', 443, '/foo.cgi', '',	# 3
-		       make_form(OK   => '1',
-				 name => 'Sampo'
+		       make_form(OK   =&gt '1',
+				 name =&gt 'Sampo'
 		       ));
 
 	 $reply = sslcat($host, $port, $request);			# 4
@@ -65,7 +67,7 @@ DESCRIPTION
        second argument is the TCP port at the remote end (your own port is
        picked arbitrarily from high numbered ports as usual for TCP). The
        third argument is the URL of the page without the host name part. If in
-       doubt consult the HTTP specifications at <http://www.w3c.org>.
+       doubt consult the HTTP specifications at &lthttp://www.w3c.org&gt.
 
        Case 2 demonstrates full fledged use of "get_https()". As can be seen,
        "get_https()" parses the response and response headers and returns them
@@ -110,7 +112,7 @@ DESCRIPTION
        to a hash.
 
 	 ($page, $response, @headers) = get_https('www.bacus.pt', 443, '/');
-	 for ($i = 0; $i < $#headers; $i+=2) {
+	 for ($i = 0; $i &lt $#headers; $i+=2) {
 	     print "$headers[$i] = " . $headers[$i+1] . "\n";
 	 }
 
@@ -184,15 +186,15 @@ DESCRIPTION
 
 	 ($page, $result, %headers) =					# 2c
 		= get_https('www.bacus.pt', 443, '/protected.html',
-		     make_headers(Authorization =>
+		     make_headers(Authorization =&gt
 				  'Basic ' . MIME::Base64::encode("$user:$pass",'')),
 		     '', $mime_type6, $path_to_crt7, $path_to_key8);
 
 	 ($page, $response, %reply_headers)
 		= post_https('www.bacus.pt', 443, '/foo.cgi',		# 3b
-		     make_headers('Authorization' =>
+		     make_headers('Authorization' =&gt
 				  'Basic ' . MIME::Base64::encode("$user:$pass",'')),
-		     make_form(OK   => '1', name => 'Sampo'),
+		     make_form(OK   =&gt '1', name =&gt 'Sampo'),
 		     $mime_type6, $path_to_crt7, $path_to_key8);
 
        Case 2c demonstrates getting a password protected page that also
@@ -225,7 +227,7 @@ DESCRIPTION
 	 Net::SSLeay::set_proxy('gateway.myorg.com', 8080, 'joe', 'salainen');
 	 ($page, $result, %headers) =
 		= get_https('www.bacus.pt', 443, '/protected.html',
-		     make_headers(Authorization =>
+		     make_headers(Authorization =&gt
 				  'Basic ' . MIME::Base64::encode("susie:pass",''))
 		     );
 
@@ -337,7 +339,7 @@ DESCRIPTION
 
        In C:
 
-	       #include <ssl.h>
+	       #include &ltssl.h&gt
 
 	       err = SSL_set_verify (ssl, SSL_VERIFY_CLIENT_ONCE,
 					  &your_call_back_here);
@@ -544,27 +546,27 @@ DESCRIPTION
 
 	 ($page, $result, %headers) =
 		= get_http('www.bacus.pt', 443, '/protected.html',
-		     make_headers(Authorization =>
+		     make_headers(Authorization =&gt
 				  'Basic ' . MIME::Base64::encode("$user:$pass",''))
 		     );
 
 	 ($page, $response, %reply_headers)
 		= post_http('www.bacus.pt', 443, '/foo.cgi', '',
-		       make_form(OK   => '1',
-				 name => 'Sampo'
+		       make_form(OK   =&gt '1',
+				 name =&gt 'Sampo'
 		       ));
 
 	 ($reply, $err) = tcpcat($host, $port, $request);
 
 	 ($page, $result, %headers) =
 		= get_httpx($usessl, 'www.bacus.pt', 443, '/protected.html',
-		     make_headers(Authorization =>
+		     make_headers(Authorization =&gt
 				  'Basic ' . MIME::Base64::encode("$user:$pass",''))
 		     );
 
 	 ($page, $response, %reply_headers)
 		= post_httpx($usessl, 'www.bacus.pt', 443, '/foo.cgi', '',
-		       make_form(OK   => '1',  name => 'Sampo' ));
+		       make_form(OK   =&gt '1',  name =&gt 'Sampo' ));
 
 	 ($reply, $err, $server_cert) = tcpxcat($usessl, $host, $port, $request);
 
@@ -608,7 +610,7 @@ EXAMPLES
 
 	   $res = Net::SSLeay::write($ssl, $msg);  # Perl knows how long $msg is
 	   die_if_ssl_error("ssl write");
-	   CORE::shutdown S, 1;  # Half close --> No more output, sends EOF to server
+	   CORE::shutdown S, 1;  # Half close --&gt No more output, sends EOF to server
 	   $got = Net::SSLeay::read($ssl);	   # Perl returns undef on failure
 	   die_if_ssl_error("ssl read");
 	   print $got;
@@ -696,7 +698,7 @@ EXAMPLES
 
 	   chdir '/key/dir' or die "chdir: $!";
 	   $| = 1;  # Piping hot!
-	   open LOG, ">>/dev/console" or die "Can't open log file $!";
+	   open LOG, "&gt&gt/dev/console" or die "Can't open log file $!";
 	   select LOG; print "server.pl started\n";
 
 	   $ctx = Net::SSLeay::CTX_new()     or die_now "CTX_new ($ctx) ($!)";
@@ -762,7 +764,7 @@ LIMITATIONS
 
 	   $written = 0;
 
-	   while ($written < length($message)) {
+	   while ($written &lt length($message)) {
 	       $written += Net::SSLeay::write($ssl, substr($message, $written));
 	       last if print_errs('SSL_write');
 	   }
@@ -810,13 +812,13 @@ KNOWN BUGS AND CAVEATS
        actually seems to implement "/dev/random" semantics. Caveat emptor.
 
        I've been pointed to two such daemons by Mik Firestone
-       <mik@@speed.stdio._com> who has used them on Solaris 8:
+       &ltmik@@speed.stdio._com&gt who has used them on Solaris 8:
 
        1.  Entropy Gathering Daemon (EGD) at
-	   <http://www.lothar.com/tech/crypto/>
+	   &lthttp://www.lothar.com/tech/crypto/&gt
 
        2.  Pseudo-random number generating daemon (PRNGD) at
-	   <http://www.aet.tu-cottbus.de/personen/jaenicke/postfix_tls/prngd.html>
+	   &lthttp://www.aet.tu-cottbus.de/personen/jaenicke/postfix_tls/prngd.html&gt
 
        If you are using the low level API functions to communicate with other
        SSL implementations, you would do well to call
@@ -924,16 +926,16 @@ DIAGNOSTICS
 BUGS AND SUPPORT
        Please report any bugs or feature requests to "bug-Net-SSLeay at
        rt.cpan.org", or through the web interface at
-       <http://rt.cpan.org/Public/Dist/Display.html?Name=Net-SSLeay>.  I will
+       &lthttp://rt.cpan.org/Public/Dist/Display.html?Name=Net-SSLeay&gt.  I will
        be notified, and then you'll automatically be notified of progress on
        your bug as I make changes.
 
        Subversion access to the latest source code etc can be obtained at
-       <http://alioth.debian.org/projects/net-ssleay>
+       &lthttp://alioth.debian.org/projects/net-ssleay&gt
 
        The developer mailing list (for people interested in contributing to
        the source code) can be found at
-       <http://lists.alioth.debian.org/mailman/listinfo/net-ssleay-devel>
+       &lthttp://lists.alioth.debian.org/mailman/listinfo/net-ssleay-devel&gt
 
        You can find documentation for this module with the "perldoc" command.
 
@@ -943,15 +945,15 @@ BUGS AND SUPPORT
 
        o   AnnoCPAN: Annotated CPAN documentation
 
-	   <http://annocpan.org/dist/Net-SSLeay>
+	   &lthttp://annocpan.org/dist/Net-SSLeay&gt
 
        o   CPAN Ratings
 
-	   <http://cpanratings.perl.org/d/Net-SSLeay>
+	   &lthttp://cpanratings.perl.org/d/Net-SSLeay&gt
 
        o   Search CPAN
 
-	   <http://search.cpan.org/dist/Net-SSLeay>
+	   &lthttp://search.cpan.org/dist/Net-SSLeay&gt
 
        Commercial support for Net::SSLeay may be obtained from
 
@@ -962,14 +964,14 @@ BUGS AND SUPPORT
 AUTHOR
        Maintained by Mike McCauley and Florian Ragwitz since November 2005
 
-       Originally written by Sampo Kellomaeki <sampo@symlabs.com>
+       Originally written by Sampo Kellomaeki &ltsampo@symlabs.com&gt
 
 COPYRIGHT
-       Copyright (c) 1996-2003 Sampo Kellomaeki <sampo@symlabs.com>
+       Copyright (c) 1996-2003 Sampo Kellomaeki &ltsampo@symlabs.com&gt
 
-       Copyright (C) 2005-2006 Florian Ragwitz <rafl@debian.org>
+       Copyright (C) 2005-2006 Florian Ragwitz &ltrafl@debian.org&gt
 
-       Copyright (C) 2005 Mike McCauley <mikem@open.com.au>
+       Copyright (C) 2005 Mike McCauley &ltmikem@open.com.au&gt
 
        All Rights Reserved.
 
@@ -990,13 +992,13 @@ COPYRIGHT
 SEE ALSO
 	 Net::SSLeay::Handle			  - File handle interface
 	 ./examples				  - Example servers and a clients
-	 <http://www.openssl.org/>		  - OpenSSL source, documentation, etc
+	 &lthttp://www.openssl.org/&gt		  - OpenSSL source, documentation, etc
 	 openssl-users-request@openssl.org	  - General OpenSSL mailing list
-	 <http://www.ietf.org/rfc/rfc2246.txt>	  - TLS 1.0 specification
-	 <http://www.w3c.org>			  - HTTP specifications
-	 <http://www.ietf.org/rfc/rfc2617.txt>	  - How to send password
-	 <http://www.lothar.com/tech/crypto/>	  - Entropy Gathering Daemon (EGD)
-	 <http://www.aet.tu-cottbus.de/personen/jaenicke/postfix_tls/prngd.html>
+	 &lthttp://www.ietf.org/rfc/rfc2246.txt&gt	  - TLS 1.0 specification
+	 &lthttp://www.w3c.org&gt			  - HTTP specifications
+	 &lthttp://www.ietf.org/rfc/rfc2617.txt&gt	  - How to send password
+	 &lthttp://www.lothar.com/tech/crypto/&gt	  - Entropy Gathering Daemon (EGD)
+	 &lthttp://www.aet.tu-cottbus.de/personen/jaenicke/postfix_tls/prngd.html&gt
 				  - pseudo-random number generating daemon (PRNGD)
 	 perl(1)
 	 perlref(1)
@@ -1006,6 +1008,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2010-01-30			Net::SSLeay(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

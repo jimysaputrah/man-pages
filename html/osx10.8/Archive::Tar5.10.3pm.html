@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Archive::Tar provides an object oriented mechanism for handling tar..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Archive::Tar - module for manipulations of tar archives</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Archive::Tar(3pm)      Perl Programmers Reference Guide      Archive::Tar(3pm)
 
 
@@ -17,19 +19,19 @@ NAME
 
 SYNOPSIS
 	   use Archive::Tar;
-	   my $tar = Archive::Tar->new;
+	   my $tar = Archive::Tar-&gtnew;
 
-	   $tar->read('origin.tgz');
-	   $tar->extract();
+	   $tar-&gtread('origin.tgz');
+	   $tar-&gtextract();
 
-	   $tar->add_files('file/foo.pl', 'docs/README');
-	   $tar->add_data('file/baz.txt', 'This is the contents now');
+	   $tar-&gtadd_files('file/foo.pl', 'docs/README');
+	   $tar-&gtadd_data('file/baz.txt', 'This is the contents now');
 
-	   $tar->rename('oldname', 'new/file/name');
+	   $tar-&gtrename('oldname', 'new/file/name');
 
-	   $tar->write('files.tar');		       # plain tar
-	   $tar->write('files.tgz', COMPRESS_GZIP);    # gzip compressed
-	   $tar->write('files.tbz', COMPRESS_BZIP);    # bzip2 compressed
+	   $tar-&gtwrite('files.tar');		       # plain tar
+	   $tar-&gtwrite('files.tgz', COMPRESS_GZIP);    # gzip compressed
+	   $tar-&gtwrite('files.tbz', COMPRESS_BZIP);    # bzip2 compressed
 
 DESCRIPTION
        Archive::Tar provides an object oriented mechanism for handling tar
@@ -42,7 +44,7 @@ DESCRIPTION
        files and things.
 
 Object Methods
-   Archive::Tar->new( [$file, $compressed] )
+   Archive::Tar-&gtnew( [$file, $compressed] )
        Returns a new Tar object. If given any arguments, "new()" calls the
        "read()" method automatically, passing on the arguments provided to the
        "read()" method.
@@ -50,7 +52,7 @@ Object Methods
        If "new()" is invoked with arguments and the "read()" method fails for
        any reason, "new()" returns undef.
 
-   $tar->read ( $filename|$handle, [$compressed, {opt => 'val'}] )
+   $tar-&gtread ( $filename|$handle, [$compressed, {opt =&gt 'val'}] )
        Read the given tar file into memory.  The first argument can either be
        the name of a file or a reference to an already open filehandle (or an
        IO::Zlib object if it's compressed)
@@ -97,7 +99,7 @@ Object Methods
        Returns the number of files read in scalar context, and a list of
        "Archive::Tar::File" objects in list context.
 
-   $tar->contains_file( $filename )
+   $tar-&gtcontains_file( $filename )
        Check if the archive contains a certain file.  It will return true if
        the file is in the archive, false otherwise.
 
@@ -106,7 +108,7 @@ Object Methods
        or compare 2 paths to see if they would point to the same underlying
        file.
 
-   $tar->extract( [@filenames] )
+   $tar-&gtextract( [@filenames] )
        Write files whose names are equivalent to any of the names in
        @filenames to disk, creating subdirectories as necessary. This might
        not work too well under VMS.  Under MacPerl, the file's modification
@@ -120,20 +122,20 @@ Object Methods
 
        Returns a list of filenames extracted.
 
-   $tar->extract_file( $file, [$extract_path] )
+   $tar-&gtextract_file( $file, [$extract_path] )
        Write an entry, whose name is equivalent to the file name provided to
        disk. Optionally takes a second parameter, which is the full native
        path (including filename) the entry will be written to.
 
        For example:
 
-	   $tar->extract_file( 'name/in/archive', 'name/i/want/to/give/it' );
+	   $tar-&gtextract_file( 'name/in/archive', 'name/i/want/to/give/it' );
 
-	   $tar->extract_file( $at_file_object,   'name/i/want/to/give/it' );
+	   $tar-&gtextract_file( $at_file_object,   'name/i/want/to/give/it' );
 
        Returns true on success, false on failure.
 
-   $tar->list_files( [\@properties] )
+   $tar-&gtlist_files( [\@properties] )
        Returns a list of the names of all the files in the archive.
 
        If "list_files()" is passed an array reference as its first argument it
@@ -147,7 +149,7 @@ Object Methods
        references, making it equivalent to calling "list_files" without
        arguments.
 
-   $tar->get_files( [@filenames] )
+   $tar-&gtget_files( [@filenames] )
        Returns the "Archive::Tar::File" objects matching the filenames
        provided. If no filename list was passed, all "Archive::Tar::File"
        objects in the current Tar object are returned.
@@ -155,13 +157,13 @@ Object Methods
        Please refer to the "Archive::Tar::File" documentation on how to handle
        these objects.
 
-   $tar->get_content( $file )
+   $tar-&gtget_content( $file )
        Return the content of the named file.
 
-   $tar->replace_content( $file, $content )
+   $tar-&gtreplace_content( $file, $content )
        Make the string $content be the content for the file named $file.
 
-   $tar->rename( $file, $new_name )
+   $tar-&gtrename( $file, $new_name )
        Rename the file of the in-memory archive to $new_name.
 
        Note that you must specify a Unix path for $new_name, since per tar
@@ -169,17 +171,17 @@ Object Methods
 
        Returns true on success and false on failure.
 
-   $tar->remove (@filenamelist)
+   $tar-&gtremove (@filenamelist)
        Removes any entries with names matching any of the given filenames from
        the in-memory archive. Returns a list of "Archive::Tar::File" objects
        that remain.
 
-   $tar->clear
+   $tar-&gtclear
        "clear" clears the current in-memory archive. This effectively gives
        you a 'blank' object, ready to be filled again. Note that "clear" only
        has effect on the object, not the underlying tarfile.
 
-   $tar->write ( [$file, $compressed, $prefix] )
+   $tar-&gtwrite ( [$file, $compressed, $prefix] )
        Write the in-memory archive to disk.  The first argument can either be
        the name of a file or a reference to an already open filehandle (a GLOB
        reference).
@@ -190,10 +192,10 @@ Object Methods
        constants is prefered:
 
 	 # write a gzip compressed file
-	 $tar->write( 'out.tgz', COMPRESS_GZIP );
+	 $tar-&gtwrite( 'out.tgz', COMPRESS_GZIP );
 
 	 # write a bzip compressed file
-	 $tar->write( 'out.tbz', COMPRESS_BZIP );
+	 $tar-&gtwrite( 'out.tbz', COMPRESS_BZIP );
 
        Note that when you pass in a filehandle, the compression argument is
        ignored, as all files are printed verbatim to your filehandle.  If you
@@ -209,7 +211,7 @@ Object Methods
        as a string, which could be useful if you'd like to stuff the archive
        into a socket or a pipe to gzip or something.
 
-   $tar->add_files( @filenamelist )
+   $tar-&gtadd_files( @filenamelist )
        Takes a list of filenames and adds them to the in-memory archive.
 
        The path to the file is automatically converted to a Unix like
@@ -229,7 +231,7 @@ Object Methods
 
        Returns a list of "Archive::Tar::File" objects that were just added.
 
-   $tar->add_data ( $filename, $data, [$opthashref] )
+   $tar-&gtadd_data ( $filename, $data, [$opthashref] )
        Takes a filename, a scalar full of data and optionally a reference to a
        hash with specific options.
 
@@ -266,7 +268,7 @@ Object Methods
        Returns the "Archive::Tar::File" object that was just added, or "undef"
        on failure.
 
-   $tar->error( [$BOOL] )
+   $tar-&gterror( [$BOOL] )
        Returns the current errorstring (usually, the last error reported).  If
        a true value was specified, it will give the "Carp::longmess"
        equivalent of the error, in effect giving you a stacktrace.
@@ -275,7 +277,7 @@ Object Methods
        $Archive::Tar::error although it is much recommended you use the method
        call instead.
 
-   $tar->setcwd( $cwd );
+   $tar-&gtsetcwd( $cwd );
        "Archive::Tar" needs to know the current directory, and it will run
        "Cwd::cwd()" every time it extracts a relative entry from the tarfile
        and saves it in the file system. (As of version 1.30, however,
@@ -290,7 +292,7 @@ Object Methods
        To use this performance boost, set the current directory via
 
 	   use Cwd;
-	   $tar->setcwd( cwd() );
+	   $tar-&gtsetcwd( cwd() );
 
        once before calling a function like "extract_file" and "Archive::Tar"
        will use the current directory setting from then on and won't call
@@ -298,7 +300,7 @@ Object Methods
 
        To switch back to the default behaviour, use
 
-	   $tar->setcwd( undef );
+	   $tar-&gtsetcwd( undef );
 
        and "Archive::Tar" will call "Cwd::cwd()" internally again.
 
@@ -306,7 +308,7 @@ Object Methods
        called for you.
 
 Class Methods
-   Archive::Tar->create_archive($file, $compressed, @filelist)
+   Archive::Tar-&gtcreate_archive($file, $compressed, @filelist)
        Creates a tar file from the list of files provided.  The first argument
        can either be the name of the tar file to create or a reference to an
        open file handle (e.g. a GLOB reference).
@@ -317,10 +319,10 @@ Class Methods
        constants is prefered:
 
 	 # write a gzip compressed file
-	 Archive::Tar->create_archive( 'out.tgz', COMPRESS_GZIP, @filelist );
+	 Archive::Tar-&gtcreate_archive( 'out.tgz', COMPRESS_GZIP, @filelist );
 
 	 # write a bzip compressed file
-	 Archive::Tar->create_archive( 'out.tbz', COMPRESS_BZIP, @filelist );
+	 Archive::Tar-&gtcreate_archive( 'out.tbz', COMPRESS_BZIP, @filelist );
 
        Note that when you pass in a filehandle, the compression argument is
        ignored, as all files are printed verbatim to your filehandle.  If you
@@ -339,7 +341,7 @@ Class Methods
        reads all the files into memory before writing out the archive.
        Consult the FAQ below if this is a problem.
 
-   Archive::Tar->iter( $filename, [ $compressed, {opt => $val} ] )
+   Archive::Tar-&gtiter( $filename, [ $compressed, {opt =&gt $val} ] )
        Returns an iterator function that reads the tar file without loading it
        all in memory.  Each time the function is called it will return the
        next file in the tarball. The files are returned as
@@ -351,17 +353,17 @@ Class Methods
 
        Example usage:
 
-	   my $next = Archive::Tar->iter( "example.tar.gz", 1, {filter => qr/\.pm$/} );
+	   my $next = Archive::Tar-&gtiter( "example.tar.gz", 1, {filter =&gt qr/\.pm$/} );
 
-	   while( my $f = $next->() ) {
-	       print $f->name, "\n";
+	   while( my $f = $next-&gt() ) {
+	       print $f-&gtname, "\n";
 
-	       $f->extract or warn "Extraction failed";
+	       $f-&gtextract or warn "Extraction failed";
 
 	       # ....
 	   }
 
-   Archive::Tar->list_archive($file, $compressed, [\@properties])
+   Archive::Tar-&gtlist_archive($file, $compressed, [\@properties])
        Returns a list of the names of all the files in the archive.  The first
        argument can either be the name of the tar file to list or a reference
        to an open file handle (e.g. a GLOB reference).
@@ -378,7 +380,7 @@ Class Methods
        special cased to return a list of names rather than a list of hash
        references.
 
-   Archive::Tar->extract_archive($file, $compressed)
+   Archive::Tar-&gtextract_archive($file, $compressed)
        Extracts the contents of the tar file.  The first argument can either
        be the name of the tar file to create or a reference to an open file
        handle (e.g. a GLOB reference).	All relative paths in the tar file
@@ -388,7 +390,7 @@ Class Methods
        archive extraction fails for any reason, "extract_archive" will return
        false.  Please use the "error" method to find the cause of the failure.
 
-   $bool = Archive::Tar->has_io_string
+   $bool = Archive::Tar-&gthas_io_string
        Returns true if we currently have "IO::String" support loaded.
 
        Either "IO::String" or "perlio" support is needed to support writing
@@ -398,7 +400,7 @@ Class Methods
        See the "GLOBAL VARIABLES" section to see how to change this
        preference.
 
-   $bool = Archive::Tar->has_perlio
+   $bool = Archive::Tar-&gthas_perlio
        Returns true if we currently have "perlio" support loaded.
 
        This requires "perl-5.8" or higher, compiled with "perlio"
@@ -410,13 +412,13 @@ Class Methods
        See the "GLOBAL VARIABLES" section to see how to change this
        preference.
 
-   $bool = Archive::Tar->has_zlib_support
+   $bool = Archive::Tar-&gthas_zlib_support
        Returns true if "Archive::Tar" can extract "zlib" compressed archives
 
-   $bool = Archive::Tar->has_bzip2_support
+   $bool = Archive::Tar-&gthas_bzip2_support
        Returns true if "Archive::Tar" can extract "bzip2" compressed archives
 
-   Archive::Tar->can_handle_compressed_files
+   Archive::Tar-&gtcan_handle_compressed_files
        A simple checking routine, which will return true if "Archive::Tar" is
        able to uncompress compressed archives on the fly with "IO::Zlib" and
        "IO::Compress::Bzip2" or false if not both are installed.
@@ -481,7 +483,7 @@ GLOBAL VARIABLES
        warnings, instead of the regular "carp". This is the same message you
        would get by doing:
 
-	   $tar->error(1);
+	   $tar-&gterror(1);
 
        Defaults to 0.
 
@@ -496,7 +498,7 @@ GLOBAL VARIABLES
        Holds the last reported error. Kept for historical reasons, but its use
        is very much discouraged. Use the "error()" method instead:
 
-	   warn $tar->error unless $tar->extract;
+	   warn $tar-&gterror unless $tar-&gtextract;
 
    $Archive::Tar::INSECURE_EXTRACT_MODE
        This variable indicates whether "Archive::Tar" should allow files to be
@@ -607,8 +609,8 @@ FAQ
 	   based on your criteria. For example, to extract only files that
 	   have the string "foo" in their title, you would use:
 
-	       $tar->extract(
-		   grep { $_->full_path =~ /foo/ } $tar->get_files
+	       $tar-&gtextract(
+		   grep { $_-&gtfull_path =~ /foo/ } $tar-&gtget_files
 	       );
 
 	   This way, you can filter on any attribute of the files in the
@@ -630,7 +632,7 @@ FAQ
 	       use Archive::Tar;
 
 	       open F, "uncompress -c $filename |";
-	       my $tar = Archive::Tar->new(*F);
+	       my $tar = Archive::Tar-&gtnew(*F);
 	       ...
 
 	   and this with "gunzip"
@@ -638,7 +640,7 @@ FAQ
 	       use Archive::Tar;
 
 	       open F, "gunzip -c $filename |";
-	       my $tar = Archive::Tar->new(*F);
+	       my $tar = Archive::Tar-&gtnew(*F);
 	       ...
 
 	   Similarly, if the "compress" program is available, you can use this
@@ -647,11 +649,11 @@ FAQ
 	       use Archive::Tar;
 	       use IO::File;
 
-	       my $fh = new IO::File "| compress -c >$filename";
-	       my $tar = Archive::Tar->new();
+	       my $fh = new IO::File "| compress -c &gt$filename";
+	       my $tar = Archive::Tar-&gtnew();
 	       ...
-	       $tar->write($fh);
-	       $fh->close ;
+	       $tar-&gtwrite($fh);
+	       $fh-&gtclose ;
 
        How do I handle Unicode strings?
 	   "Archive::Tar" uses byte semantics for any files it reads from or
@@ -663,10 +665,10 @@ FAQ
 	   For example, if you add a Unicode string like
 
 	       # Problem
-	       $tar->add_data('file.txt', "Euro: \x{20AC}");
+	       $tar-&gtadd_data('file.txt', "Euro: \x{20AC}");
 
 	   then there will be a problem later when the tarfile gets written
-	   out to disk via "$tar-"write()>:
+	   out to disk via "$tar-"write()&gt:
 
 	       Wide character in print at .../Archive/Tar.pm line 1014.
 
@@ -683,7 +685,7 @@ FAQ
 	       my $data = "Accented character: \x{20AC}";
 	       $data = encode('utf8', $data);
 
-	       $tar->add_data('file.txt', $data);
+	       $tar-&gtadd_data('file.txt', $data);
 
 	   A opposite problem occurs if you extract a UTF8-encoded file from a
 	   tarball. Using "get_content()" on the "Archive::Tar::File" object
@@ -695,7 +697,7 @@ FAQ
 	   into a Unicode string:
 
 	       use Encode;
-	       my $data = $tar->get_content();
+	       my $data = $tar-&gtget_content();
 
 	       # Make it a Unicode string
 	       $data = decode('utf8', $data);
@@ -764,9 +766,9 @@ SEE ALSO
 	   "http://gd.tuwien.ac.at/utils/archivers/star/README.otherbugs"
 
 AUTHOR
-       This module by Jos Boumans <kane@cpan.org>.
+       This module by Jos Boumans &ltkane@cpan.org&gt.
 
-       Please reports bugs to <bug-archive-tar@rt.cpan.org>.
+       Please reports bugs to &ltbug-archive-tar@rt.cpan.org&gt.
 
 ACKNOWLEDGEMENTS
        Thanks to Sean Burke, Chris Nandor, Chip Salzenberg, Tim Heaney, Gisle
@@ -774,7 +776,7 @@ ACKNOWLEDGEMENTS
        suggestions.
 
 COPYRIGHT
-       This module is copyright (c) 2002 - 2009 Jos Boumans <kane@cpan.org>.
+       This module is copyright (c) 2002 - 2009 Jos Boumans &ltkane@cpan.org&gt.
        All rights reserved.
 
        This library is free software; you may redistribute and/or modify it
@@ -783,6 +785,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-06-23		     Archive::Tar(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

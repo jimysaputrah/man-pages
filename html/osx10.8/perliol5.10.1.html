@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document describes the behavior and implementation of the PerlIO..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perliol - C API for Perl's implementation of IO in Layers.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLIOL(1)	       Perl Programmers Reference Guide 	    PERLIOL(1)
 
 
@@ -17,7 +19,7 @@ NAME
 
 SYNOPSIS
 	   /* Defining a layer ... */
-	   #include <perliol.h>
+	   #include &ltperliol.h&gt
 
 DESCRIPTION
        This document describes the behavior and implementation of the PerlIO
@@ -117,7 +119,7 @@ DESCRIPTION
        represented as a pointer to this linked-list of "layers".
 
        It should be noted that because of the double indirection in a "PerlIO
-       *", a "&(perlio->next)" "is" a "PerlIO *", and so to some degree at
+       *", a "&(perlio-&gtnext)" "is" a "PerlIO *", and so to some degree at
        least one layer can use the "standard" API on the next layer down.
 
        A "layer" is composed of two parts:
@@ -217,7 +219,7 @@ DESCRIPTION
 		       table	       perlio	       unix
 		   |	       |
 		   +-----------+    +----------+    +--------+
-	  PerlIO ->|	       |--->|  next    |--->|  NULL  |
+	  PerlIO -&gt|	       |---&gt|  next    |---&gt|  NULL  |
 		   +-----------+    +----------+    +--------+
 		   |	       |    |  buffer  |    |	fd   |
 		   +-----------+    |	       |    +--------+
@@ -339,7 +341,7 @@ DESCRIPTION
 	   The name of the layer whose open() method Perl should invoke on
 	   open().  For example if the layer is called APR, you will call:
 
-	     open $fh, ">:APR", ...
+	     open $fh, "&gt:APR", ...
 
 	   and Perl knows that it has to invoke the PerlIOAPR_open() method
 	   implemented by the APR layer.
@@ -848,13 +850,13 @@ DESCRIPTION
 	   find it.  It is an example of a layer which takes an argument as it
 	   is called thus:
 
-	      open( $fh, "<:encoding(iso-8859-7)", $pathname );
+	      open( $fh, "&lt:encoding(iso-8859-7)", $pathname );
 
        ":scalar"
 	   Provides support for reading data from and writing data to a
 	   scalar.
 
-	      open( $fh, "+<:scalar", \$scalar );
+	      open( $fh, "+&lt:scalar", \$scalar );
 
 	   When a handle is so opened, then reads get bytes from the string
 	   value of $scalar, and writes change the value. In both cases the
@@ -863,14 +865,14 @@ DESCRIPTION
 
 	   Please note that this layer is implied when calling open() thus:
 
-	      open( $fh, "+<", \$scalar );
+	      open( $fh, "+&lt", \$scalar );
 
        ":via"
 	   Provided to allow layers to be implemented as Perl code.  For
 	   instance:
 
 	      use PerlIO::via::StripHTML;
-	      open( my $fh, "<:via(StripHTML)", "index.html" );
+	      open( my $fh, "&lt:via(StripHTML)", "index.html" );
 
 	   See PerlIO::via for details.
 
@@ -900,8 +902,8 @@ TODO
 		 if (f) {
 		     PerlIOAPR *st = PerlIOSelf(f, PerlIOAPR);
 		     /* fill in the st struct, as in _open() */
-		     st->file = file;
-		     PerlIOBase(f)->flags |= PERLIO_F_OPEN;
+		     st-&gtfile = file;
+		     PerlIOBase(f)-&gtflags |= PERLIO_F_OPEN;
 
 		     return f;
 		 }
@@ -927,6 +929,6 @@ TODO
 
 
 perl v5.10.1			  2009-02-12			    PERLIOL(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

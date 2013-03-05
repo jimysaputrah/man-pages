@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This documents any important or noteworthy changes in Moose, with a..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Manual::Delta - Important Changes in Moose</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Manual::Delta(3User Contributed Perl DocumentatiMoose::Manual::Delta(3)
 
 
@@ -80,12 +82,12 @@ DESCRIPTION
 	   "applied_attribute" key to the "role_metaroles" option, as in:
 
 	       Moose::Util::MetaRole::apply_metaroles(
-		   for => __PACKAGE__,
-		   class_metaroles => {
-		       attribute => ['My::Meta::Role::Attribute'],
+		   for =&gt __PACKAGE__,
+		   class_metaroles =&gt {
+		       attribute =&gt ['My::Meta::Role::Attribute'],
 		   },
-		   role_metaroles => {
-		       applied_attribute => ['My::Meta::Role::Attribute'],
+		   role_metaroles =&gt {
+		       applied_attribute =&gt ['My::Meta::Role::Attribute'],
 		   },
 	       );
 
@@ -121,8 +123,8 @@ DESCRIPTION
 	   o	   Old public methods in Class::MOP and Moose
 
 		   This includes things like
-		   "Class::MOP::Class->get_attribute_map",
-		   "Class::MOP::Class->construct_instance", and many others.
+		   "Class::MOP::Class-&gtget_attribute_map",
+		   "Class::MOP::Class-&gtconstruct_instance", and many others.
 		   These were deprecated in Class::MOP 0.80_01, released on
 		   April 5, 2009.
 
@@ -198,7 +200,7 @@ DESCRIPTION
 	   doing the same thing by hand. For example, the Array's push
 	   delegation ended up doing something like this:
 
-	     push @{ $self->$reader() }, @_;
+	     push @{ $self-&gt$reader() }, @_;
 
 	   If the attribute was created without a reader, the $reader sub
 	   reference followed a very slow code path. Even with a reader, this
@@ -271,7 +273,7 @@ DESCRIPTION
 	   Moose actually give a warning. The warning is issued once per
 	   calling package. See Moose::Deprecated for more details.
 
-       You cannot pass "coerce => 1" unless the attribute's type constraint
+       You cannot pass "coerce =&gt 1" unless the attribute's type constraint
        has a coercion
 	   Previously, this was accepted, and it sort of worked, except that
 	   if you attempted to set the attribute after the object was created,
@@ -304,13 +306,13 @@ DESCRIPTION
 	     package Bar::Meta::Attribute;
 	     use Moose::Role;
 
-	     has 'my_illegal_option' => (
-		 isa => 'CodeRef',
-		 is  => 'rw',
+	     has 'my_illegal_option' =&gt (
+		 isa =&gt 'CodeRef',
+		 is  =&gt 'rw',
 	     );
 
-	     around illegal_options_for_inheritance => sub {
-		 return ( shift->(@_), qw/my_illegal_option/ );
+	     around illegal_options_for_inheritance =&gt sub {
+		 return ( shift-&gt(@_), qw/my_illegal_option/ );
 	     };
 
 1.05
@@ -320,8 +322,8 @@ DESCRIPTION
 	   "Moose::Object::new", but now they are also called when
 	   constructing an object via "Moose::Meta::Class::new_object".
 	   "BUILD" methods are an inherent part of the object construction
-	   process, and this should make "$meta->new_object" actually usable
-	   without forcing people to use "$meta->name->new".
+	   process, and this should make "$meta-&gtnew_object" actually usable
+	   without forcing people to use "$meta-&gtname-&gtnew".
 
        "no Moose", "no Moose::Role", and "no Moose::Exporter" now unimport
        strict and warnings
@@ -342,7 +344,7 @@ DESCRIPTION
        Moose::Meta::TypeConstraint::Class is_subtype_of behavior
 	   Earlier versions of is_subtype_of would incorrectly return true
 	   when called with itself, its own TC name or its class name as an
-	   argument. (i.e. $foo_tc->is_subtype_of('Foo') == 1) This behavior
+	   argument. (i.e. $foo_tc-&gtis_subtype_of('Foo') == 1) This behavior
 	   was a caused by "isa" being checked before the class name. The old
 	   behavior can be accessed with is_type_of
 
@@ -351,7 +353,7 @@ DESCRIPTION
        methods by default
 	   Earlier versions of Moose::Meta::Attribute::Native::Trait::Code
 	   created read-only accessors for the attributes it's been applied
-	   to, even if you didn't ask for it with "is => 'ro'". This incorrect
+	   to, even if you didn't ask for it with "is =&gt 'ro'". This incorrect
 	   behaviour has now been fixed.
 
 0.95
@@ -408,7 +410,7 @@ DESCRIPTION
 	   attribute in the future if we can figure out how to make this work.
 
 0.93
-       Calling $object->new() is no longer deprecated
+       Calling $object-&gtnew() is no longer deprecated
 	   We decided to undeprecate this. Now it just works.
 
        Both "get_method_map" and "get_attribute_map" is deprecated
@@ -417,7 +419,7 @@ DESCRIPTION
 	   functionality they provided is to iterate over the list of names
 	   manually.
 
-	       my %fields = map { $_ => $meta->get_attribute($_) } $meta->get_attribute_list;
+	       my %fields = map { $_ =&gt $meta-&gtget_attribute($_) } $meta-&gtget_attribute_list;
 
 	   This was actually a change in Class::MOP, but this version of Moose
 	   requires a version of Class::MOP that includes said change.
@@ -426,13 +428,13 @@ DESCRIPTION
        Added Native delegation for Code refs
 	   See Moose::Meta::Attribute::Native::Trait::Code for details.
 
-       Calling $object->new() is deprecated
+       Calling $object-&gtnew() is deprecated
 	   Moose has long supported this, but it's never really been
 	   documented, and we don't think this is a good practice. If you want
 	   to construct an object from an existing object, you should provide
-	   some sort of alternate constructor like "$object->clone".
+	   some sort of alternate constructor like "$object-&gtclone".
 
-	   Calling "$object->new" now issues a warning, and will be an error
+	   Calling "$object-&gtnew" now issues a warning, and will be an error
 	   in a future release.
 
        Moose no longer warns if you call "make_immutable" for a class with
@@ -470,7 +472,7 @@ DESCRIPTION
 	   (which must take an arrayref), and a free-form list where the first
 	   value is sometimes special is hard to validate (and harder to give
 	   reasonable error messages for). These functions have been changed
-	   to take arrayrefs in all their forms - so, "enum 'My::Type' =>
+	   to take arrayrefs in all their forms - so, "enum 'My::Type' =&gt
 	   [qw(foo bar)]" is now the preferred way to create an enum type
 	   constraint. The old syntax still works for now, but it will
 	   hopefully be deprecated and removed in a future release.
@@ -483,14 +485,14 @@ DESCRIPTION
 	   Method providers are only available via traits.
 
        "handles", not "provides" or "curries"
-	   The "provides" syntax was like core Moose "handles => HASHREF"
+	   The "provides" syntax was like core Moose "handles =&gt HASHREF"
 	   syntax, but with the keys and values reversed.  This was confusing,
-	   and AttributeHelpers now uses "handles => HASHREF" in a way that
+	   and AttributeHelpers now uses "handles =&gt HASHREF" in a way that
 	   should be intuitive to anyone already familiar with how it is used
 	   for other attributes.
 
 	   The "curries" functionality provided by AttributeHelpers has been
-	   generalized to apply to all cases of "handles => HASHREF", though
+	   generalized to apply to all cases of "handles =&gt HASHREF", though
 	   not every piece of functionality has been ported (currying with a
 	   CODEREF is not supported).
 
@@ -522,7 +524,7 @@ DESCRIPTION
        removed.
 
 0.89
-       "use Moose -metaclass => 'Foo'" now does alias resolution, just like
+       "use Moose -metaclass =&gt 'Foo'" now does alias resolution, just like
        "-traits" (and the "metaclass" and "traits" options to "has").
 
        Added two functions "meta_class_alias" and "meta_attribute_alias" to
@@ -537,10 +539,10 @@ DESCRIPTION
 0.84
        When an attribute generates no accessors, we now warn. This is to help
        users who forget the "is" option. If you really do not want any
-       accessors, you can use "is => 'bare'". You can maintain back compat
+       accessors, you can use "is =&gt 'bare'". You can maintain back compat
        with older versions of Moose by using something like:
 
-	   ($Moose::VERSION >= 0.84 ? is => 'bare' : ())
+	   ($Moose::VERSION &gt= 0.84 ? is =&gt 'bare' : ())
 
        When an accessor overwrites an existing method, we now warn. To work
        around this warning (if you really must have this behavior), you can
@@ -548,17 +550,17 @@ DESCRIPTION
 
 	   sub foo {}
 
-	   __PACKAGE__->meta->remove_method('foo');
+	   __PACKAGE__-&gtmeta-&gtremove_method('foo');
 
-	   has foo => (
-	       is => 'ro',
+	   has foo =&gt (
+	       is =&gt 'ro',
 	   );
 
        When an unknown option is passed to "has", we now warn. You can silence
        the warning by fixing your code. :)
 
        The "Role" type has been deprecated. On its own, it was useless, since
-       it just checked "$object->can('does')". If you were using it as a
+       it just checked "$object-&gtcan('does')". If you were using it as a
        parent type, just call "role_type('Role::Name')" to create an
        appropriate type instead.
 
@@ -583,7 +585,7 @@ DESCRIPTION
 0.74
        Added a "duck_type" sugar function to Moose::Util::TypeConstraints to
        make integration with non-Moose classes easier. It simply checks if
-       "$obj->can()" a list of methods.
+       "$obj-&gtcan()" a list of methods.
 
        A number of methods (mostly inherited from Class::MOP) have been
        renamed with a leading underscore to indicate their internal-ness. The
@@ -606,10 +608,10 @@ DESCRIPTION
 
        The internals of making a class immutable changed a lot in Class::MOP
        0.78_02, and Moose's internals have changed along with it. The external
-       "$metaclass->make_immutable" method still works the same way.
+       "$metaclass-&gtmake_immutable" method still works the same way.
 
 0.72
-       A mutable class accepted "Foo->new(undef)" without complaint, while an
+       A mutable class accepted "Foo-&gtnew(undef)" without complaint, while an
        immutable class would blow up with an unhelpful error. Now, in both
        cases we throw a helpful error instead.
 
@@ -621,7 +623,7 @@ DESCRIPTION
 	     $args = {...};
 	 }
 
-	 return My::Class->new($args);
+	 return My::Class-&gtnew($args);
 
        But we decided this is a bad idea and a little too magical, because it
        can easily mask real errors.
@@ -637,31 +639,31 @@ DESCRIPTION
 	 use Declare::Constraints::Simple -All;
 
 	 subtype 'ArrayOfInts'
-	     => as 'ArrayRef'
-	     => IsArrayRef(IsInt);
+	     =&gt as 'ArrayRef'
+	     =&gt IsArrayRef(IsInt);
 
        Instead it must be changed to this:
 
 	 subtype(
-	     'ArrayOfInts' => {
-		 as    => 'ArrayRef',
-		 where => IsArrayRef(IsInt)
+	     'ArrayOfInts' =&gt {
+		 as    =&gt 'ArrayRef',
+		 where =&gt IsArrayRef(IsInt)
 	     }
 	 );
 
        If you want to maintain backwards compat with older versions of Moose,
        you must explicitly test Moose's "VERSION":
 
-	 if ( Moose->VERSION < 0.71_01 ) {
+	 if ( Moose-&gtVERSION &lt 0.71_01 ) {
 	     subtype 'ArrayOfInts'
-		 => as 'ArrayRef'
-		 => IsArrayRef(IsInt);
+		 =&gt as 'ArrayRef'
+		 =&gt IsArrayRef(IsInt);
 	 }
 	 else {
 	     subtype(
-		 'ArrayOfInts' => {
-		     as    => 'ArrayRef',
-		     where => IsArrayRef(IsInt)
+		 'ArrayOfInts' =&gt {
+		     as    =&gt 'ArrayRef',
+		     where =&gt IsArrayRef(IsInt)
 		 }
 	     );
 	 }
@@ -675,12 +677,12 @@ DESCRIPTION
        simple. You fetch the attribute object from out of the $self that is
        passed as the first argument to trigger, like so:
 
-	 has 'foo' => (
-	     is      => 'ro',
-	     isa     => 'Any',
-	     trigger => sub {
+	 has 'foo' =&gt (
+	     is      =&gt 'ro',
+	     isa     =&gt 'Any',
+	     trigger =&gt sub {
 		 my ( $self, $value ) = @_;
-		 my $attr = $self->meta->find_attribute_by_name('foo');
+		 my $attr = $self-&gtmeta-&gtfind_attribute_by_name('foo');
 
 		 # ...
 	     }
@@ -714,9 +716,9 @@ DESCRIPTION
        Moose will no longer inline a constructor for your class unless it
        inherits its constructor from Moose::Object, and will warn when it
        doesn't inline. If you want to force inlining anyway, pass
-       "replace_constructor => 1" to "make_immutable".
+       "replace_constructor =&gt 1" to "make_immutable".
 
-       If you want to get rid of the warning, pass "inline_constructor => 0".
+       If you want to get rid of the warning, pass "inline_constructor =&gt 0".
 
 0.62
        Removed the (deprecated) "make_immutable" keyword.
@@ -753,7 +755,7 @@ DESCRIPTION
 0.55_01
        Implemented metaclass traits (and wrote a recipe for it):
 
-	 use Moose -traits => 'Foo'
+	 use Moose -traits =&gt 'Foo'
 
        This should make writing small Moose extensions a little easier.
 
@@ -761,19 +763,19 @@ DESCRIPTION
        Fixed "coerce" to accept anon types just like "subtype" can.  So that
        you can do:
 
-	 coerce $some_anon_type => from 'Str' => via { ... };
+	 coerce $some_anon_type =&gt from 'Str' =&gt via { ... };
 
 0.51
-       Added "BUILDARGS", a new step in "Moose::Object->new()".
+       Added "BUILDARGS", a new step in "Moose::Object-&gtnew()".
 
 0.49
-       Fixed how the "is => (ro|rw)" works with custom defined "reader",
+       Fixed how the "is =&gt (ro|rw)" works with custom defined "reader",
        "writer" and "accessor" options. See the below table for details:
 
-	 is => ro, writer => _foo    # turns into (reader => foo, writer => _foo)
-	 is => rw, writer => _foo    # turns into (reader => foo, writer => _foo)
-	 is => rw, accessor => _foo  # turns into (accessor => _foo)
-	 is => ro, accessor => _foo  # error, accesor is rw
+	 is =&gt ro, writer =&gt _foo    # turns into (reader =&gt foo, writer =&gt _foo)
+	 is =&gt rw, writer =&gt _foo    # turns into (reader =&gt foo, writer =&gt _foo)
+	 is =&gt rw, accessor =&gt _foo  # turns into (accessor =&gt _foo)
+	 is =&gt ro, accessor =&gt _foo  # error, accesor is rw
 
 0.45
        The "before/around/after" method modifiers now support regexp matching
@@ -807,16 +809,16 @@ DESCRIPTION
        composed roles. It makes sense, people are using it, and so why not
        just officially support it.
 
-       The "Moose::Meta::Class->create" method now supports roles.
+       The "Moose::Meta::Class-&gtcreate" method now supports roles.
 
        It is now possible to make anonymous enum types by passing "enum" an
-       array reference instead of the "enum $name => @values".
+       array reference instead of the "enum $name =&gt @values".
 
 0.37
        Added the "make_immutable" keyword as a shortcut to calling
        "make_immutable" on the meta object. This eventually got removed!
 
-       Made "init_arg => undef" work in Moose. This means "do not accept a
+       Made "init_arg =&gt undef" work in Moose. This means "do not accept a
        constructor parameter for this attribute".
 
        Type errors now use the provided message. Prior to this release they
@@ -852,7 +854,7 @@ DESCRIPTION
        if anyone would like to continue this please feel free.
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -870,6 +872,6 @@ POD ERRORS
 
 
 perl v5.12.4			  2011-09-06	       Moose::Manual::Delta(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

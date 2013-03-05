@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Apache2::ServerUtil" provides the Apache server object utilities API...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Apache2::ServerUtil - Perl API for Apache server record utils</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apacapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::ServerUtil(3)
 
 
@@ -17,23 +19,23 @@ NAME
 
 Synopsis
 	 use Apache2::ServerUtil ();
-	 $s = Apache2::ServerUtil->server;
+	 $s = Apache2::ServerUtil-&gtserver;
 
 	 # push config
-	 $s->add_config(['ServerTokens off']);
+	 $s-&gtadd_config(['ServerTokens off']);
 
 	 # add components to the Server signature
-	 $s->add_version_component("MyModule/1.234");
+	 $s-&gtadd_version_component("MyModule/1.234");
 
 	 # access PerlSetVar/PerlAddVar values
-	 my $srv_cfg = $s->dir_config;
+	 my $srv_cfg = $s-&gtdir_config;
 
 	 # check command line defines
 	 print "this is mp2"
 	     if Apache2::ServerUtil::exists_config_define('MODPERL2');
 
 	 # get PerlChildExitHandler configured handlers
-	 @handlers = @{ $s->get_handlers('PerlChildExitHandler') || []};
+	 @handlers = @{ $s-&gtget_handlers('PerlChildExitHandler') || []};
 
 	 # server build and version info:
 	 $when_built = Apache2::ServerUtil::get_server_built();
@@ -45,28 +47,28 @@ Synopsis
 	 $server_root = Apache2::ServerUtil::server_root();
 
 	 # get 'conf/' dir path (avoid using this function!)
-	 my $dir = Apache2::ServerUtil::server_root_relative($r->pool, 'conf');
+	 my $dir = Apache2::ServerUtil::server_root_relative($r-&gtpool, 'conf');
 
 	 # set child_exit handlers
-	 $r->set_handlers(PerlChildExitHandler => \&handler);
+	 $r-&gtset_handlers(PerlChildExitHandler =&gt \&handler);
 
 	 # server level PerlOptions flags lookup
-	 $s->push_handlers(ChildExit => \&child_exit)
-	     if $s->is_perl_option_enabled('ChildExit');
+	 $s-&gtpush_handlers(ChildExit =&gt \&child_exit)
+	     if $s-&gtis_perl_option_enabled('ChildExit');
 
 	 # extend HTTP to support a new method
-	 $s->method_register('NEWGET');
+	 $s-&gtmethod_register('NEWGET');
 
 	 # register server shutdown callback
 	 Apache2::ServerUtil::server_shutdown_register_cleanup(sub { Apache2::Const::OK });
 
 	 # do something only when the server restarts
 	 my $cnt = Apache2::ServerUtil::restart_count();
-	 do_something_once() if $cnt > 1;
+	 do_something_once() if $cnt &gt 1;
 
 	 # get the resolved ids from Group and User entries
-	 my $user_id  = Apache2::ServerUtil->user_id;
-	 my $group_id = Apache2::ServerUtil->group_id;
+	 my $user_id  = Apache2::ServerUtil-&gtuser_id;
+	 my $group_id = Apache2::ServerUtil-&gtgroup_id;
 
 Description
        "Apache2::ServerUtil" provides the Apache server object utilities API.
@@ -77,7 +79,7 @@ Methods API
    "add_config"
        Dynamically add Apache configuration:
 
-	 $s->add_config($lines);
+	 $s-&gtadd_config($lines);
 
        obj: $s ( "Apache2::ServerRec object" )
        arg1: $lines ( ARRAY ref )
@@ -87,7 +89,7 @@ Methods API
        ret: no return value
        since: 2.0.00
 
-       See also: "$r->add_config"
+       See also: "$r-&gtadd_config"
 
        For example:
 
@@ -95,19 +97,19 @@ Methods API
        startup.pl):
 
 	 use Apache2::ServerUtil ();
-	 my $conf = <<'EOC';
+	 my $conf = &lt&lt'EOC';
 	 PerlModule Apache2::MyExample
-	 <Location /perl>
+	 &ltLocation /perl&gt
 	   SetHandler perl-script
 	   PerlResponseHandler Apache2::MyExample
-	 </Location>
+	 &lt/Location&gt
 	 EOC
-	 Apache2::ServerUtil->server->add_config([split /\n/, $conf]);
+	 Apache2::ServerUtil-&gtserver-&gtadd_config([split /\n/, $conf]);
 
    "add_version_component"
        Add a component to the version string
 
-	 $s->add_version_component($component);
+	 $s-&gtadd_version_component($component);
 
        obj: $s ( "Apache2::ServerRec object" )
        arg1: $component ( string )
@@ -130,14 +132,14 @@ Methods API
        string at the server startup:
 
 	 use Apache2::ServerUtil ();
-	 use Apache2::Const -compile => 'OK';
+	 use Apache2::Const -compile =&gt 'OK';
 
-	 Apache2::ServerUtil->server->push_handlers(
-	     PerlPostConfigHandler => \&add_my_version);
+	 Apache2::ServerUtil-&gtserver-&gtpush_handlers(
+	     PerlPostConfigHandler =&gt \&add_my_version);
 
 	 sub add_my_version {
 	     my ($conf_pool, $log_pool, $temp_pool, $s) = @_;
-	     $s->add_version_component("Hikers, Inc/0.99999");
+	     $s-&gtadd_version_component("Hikers, Inc/0.99999");
 	     return Apache2::Const::OK;
 	 }
 
@@ -154,14 +156,14 @@ Methods API
        the component information is displayed or not.
 
    "dir_config"
-       "$s->dir_config()" provides an interface for the per-server variables
+       "$s-&gtdir_config()" provides an interface for the per-server variables
        specified by the "PerlSetVar" and "PerlAddVar" directives, and also can
        be manipulated via the "APR::Table" methods.
 
-	 $table  = $s->dir_config();
-	 $value  = $s->dir_config($key);
-	 @values = $s->dir_config->get($key);
-	 $s->dir_config($key, $val);
+	 $table  = $s-&gtdir_config();
+	 $value  = $s-&gtdir_config($key);
+	 @values = $s-&gtdir_config-&gtget($key);
+	 $s-&gtdir_config($key, $val);
 
        obj: $s ( "Apache2::ServerRec object" )
        opt arg2: $key ( string )
@@ -177,19 +179,19 @@ Methods API
 
        The keys are case-insensitive.
 
-	 $t = $s->dir_config();
+	 $t = $s-&gtdir_config();
 
        dir_config() called in a scalar context without the $key argument
        returns a HASH reference blessed into the APR::Table class. This object
        can be manipulated via the APR::Table methods. For available methods
        see APR::Table.
 
-	 @values = $s->dir_config->get($key);
+	 @values = $s-&gtdir_config-&gtget($key);
 
        To receive a list of values you must use "get()" method from the
        "APR::Table" class.
 
-	 $value = $s->dir_config($key);
+	 $value = $s-&gtdir_config($key);
 
        If the $key argument is passed in the scalar context only a single
        value will be returned. Since the table preserves the insertion order,
@@ -198,13 +200,13 @@ Methods API
        context is also much faster, as it'll stop searching the table as soon
        as the first match happens.
 
-	 $s->dir_config($key => $val);
+	 $s-&gtdir_config($key =&gt $val);
 
        If the $key and the $val arguments are used, the set() operation will
        happen: all existing values associated with the key $key (and the key
        itself) will be deleted and $value will be placed instead.
 
-	 $s->dir_config($key => undef);
+	 $s-&gtdir_config($key =&gt undef);
 
        If $val is undef the unset() operation will happen: all existing values
        associated with the key $key (and the key itself) will be deleted.
@@ -231,7 +233,7 @@ Methods API
    "get_handlers"
        Returns a reference to a list of handlers enabled for a given phase.
 
-	 $handlers_list = $s->get_handlers($hook_name);
+	 $handlers_list = $s-&gtget_handlers($hook_name);
 
        obj: $s ( "Apache2::ServerRec object" )
        arg1: $hook_name ( string )
@@ -242,13 +244,13 @@ Methods API
 
        since: 2.0.00
 
-       See also: "$r->add_config"
+       See also: "$r-&gtadd_config"
 
        For example:
 
        A list of handlers configured to run at the child_exit phase:
 
-	 @handlers = @{ $s->get_handlers('PerlChildExitHandler') || []};
+	 @handlers = @{ $s-&gtget_handlers('PerlChildExitHandler') || []};
 
    "get_server_built"
        Get the date and time that the server was built
@@ -293,7 +295,7 @@ Methods API
    "group_id"
        Get the group id corresponding to the "Group" directive in httpd.conf:
 
-	 $gid = Apache2::ServerUtil->group_id;
+	 $gid = Apache2::ServerUtil-&gtgroup_id;
 
        obj: "Apache2::ServerUtil" (class name)
        ret: $gid ( integer )
@@ -306,7 +308,7 @@ Methods API
    "is_perl_option_enabled"
        check whether a server level "PerlOptions" flag is enabled or not.
 
-	 $result = $s->is_perl_option_enabled($flag);
+	 $result = $s-&gtis_perl_option_enabled($flag);
 
        obj: $s ( "Apache2::ServerRec object" )
        arg1: $flag ( string )
@@ -317,8 +319,8 @@ Methods API
        be disabled with "PerlOptions -ChildExit") and configure some handlers
        to run if enabled:
 
-	 $s->push_handlers(ChildExit => \&child_exit)
-	     if $s->is_perl_option_enabled('ChildExit');
+	 $s-&gtpush_handlers(ChildExit =&gt \&child_exit)
+	     if $s-&gtis_perl_option_enabled('ChildExit');
 
        See also: PerlOptions and the equivalent function for directory level
        PerlOptions flags.
@@ -327,7 +329,7 @@ Methods API
        Register a new request method, and return the offset that will be
        associated with that method.
 
-	 $offset = $s->method_register($methname);
+	 $offset = $s-&gtmethod_register($methname);
 
        obj: $s ( "Apache2::ServerRec object" )
        arg1: $methname ( string )
@@ -351,8 +353,8 @@ Methods API
        Add one or more handlers to a list of handlers to be called for a given
        phase.
 
-	 $ok = $s->push_handlers($hook_name => \&handler);
-	 $ok = $s->push_handlers($hook_name => [\&handler, \&handler2]);
+	 $ok = $s-&gtpush_handlers($hook_name =&gt \&handler);
+	 $ok = $s-&gtpush_handlers($hook_name =&gt [\&handler, \&handler2]);
 
        obj: $s ( "Apache2::ServerRec object" )
        arg1: $hook_name ( string )
@@ -370,21 +372,21 @@ Methods API
 
        since: 2.0.00
 
-       See also: "$r->add_config"
+       See also: "$r-&gtadd_config"
 
        Examples:
 
        A single handler:
 
-	 $s->push_handlers(PerlChildExitHandler => \&handler);
+	 $s-&gtpush_handlers(PerlChildExitHandler =&gt \&handler);
 
        Multiple handlers:
 
-	 $s->push_handlers(PerlChildExitHandler => ['Foo::Bar::handler', \&handler2]);
+	 $s-&gtpush_handlers(PerlChildExitHandler =&gt ['Foo::Bar::handler', \&handler2]);
 
        Anonymous functions:
 
-	 $s->push_handlers(PerlLogHandler => sub { return Apache2::Const::OK });
+	 $s-&gtpush_handlers(PerlLogHandler =&gt sub { return Apache2::Const::OK });
 
    "restart_count"
        How many times the server was restarted.
@@ -400,7 +402,7 @@ Methods API
 
 	 use Apache2::ServerUtil ();
 	 my $cnt = Apache2::ServerUtil::restart_count();
-	 open my $fh, ">>/tmp/out" or die "$!";
+	 open my $fh, "&gt&gt/tmp/out" or die "$!";
 	 print $fh "cnt: $cnt\n";
 	 close $fh;
 
@@ -448,12 +450,12 @@ Methods API
        -k graceful)", check whether "restart_count()" is bigger than 1:
 
 	 my $cnt = Apache2::ServerUtil::restart_count();
-	 do_something() if $cnt > 1;
+	 do_something() if $cnt &gt 1;
 
    "server"
        Get the main server's object
 
-	 $main_s = Apache2::ServerUtil->server();
+	 $main_s = Apache2::ServerUtil-&gtserver();
 
        obj: "Apache2::ServerUtil" (class name)
        ret: $main_s ( "Apache2::ServerRec object" )
@@ -489,7 +491,7 @@ Methods API
        $fname is appended to the value of "ServerRoot" and returned. For
        example:
 
-	 my $dir = Apache2::ServerUtil::server_root_relative($r->pool, 'logs');
+	 my $dir = Apache2::ServerUtil::server_root_relative($r-&gtpool, 'logs');
 
        You must be extra-careful when using this function. If you aren't sure
        what you are doing don't use it.
@@ -515,19 +517,19 @@ Methods API
        path for the duration of the request, use the request pool:
 
 	 use Apache2::RequestRec ();
-	 Apache2::ServerUtil::server_root_relative($r->pool, $fname);
+	 Apache2::ServerUtil::server_root_relative($r-&gtpool, $fname);
 
        If you need to have the path for the duration of a connection (e.g.
        inside a protocol handler), you should use:
 
 	 use Apache2::Connection ();
-	 Apache2::ServerUtil::server_root_relative($c->pool, $fname);
+	 Apache2::ServerUtil::server_root_relative($c-&gtpool, $fname);
 
        And if you want it for the scope of the server file:
 
 	 use Apache2::Process ();
 	 use Apache2::ServerUtil ();
-	 Apache2::ServerUtil::server_root_relative($s->process->pool, $fname);
+	 Apache2::ServerUtil::server_root_relative($s-&gtprocess-&gtpool, $fname);
 
        Moreover, you could have encountered the opposite problem, where you
        have used a short-lived pool object to construct the path, but tried to
@@ -563,10 +565,10 @@ Methods API
        Set a list of handlers to be called for a given phase. Any previously
        set handlers are forgotten.
 
-	 $ok = $s->set_handlers($hook_name => \&handler);
-	 $ok = $s->set_handlers($hook_name => [\&handler, \&handler2]);
-	 $ok = $s->set_handlers($hook_name => []);
-	 $ok = $s->set_handlers($hook_name => undef);
+	 $ok = $s-&gtset_handlers($hook_name =&gt \&handler);
+	 $ok = $s-&gtset_handlers($hook_name =&gt [\&handler, \&handler2]);
+	 $ok = $s-&gtset_handlers($hook_name =&gt []);
+	 $ok = $s-&gtset_handlers($hook_name =&gt undef);
 
        obj: $s ( "Apache2::ServerRec object" )
        arg1: $hook_name ( string )
@@ -588,34 +590,34 @@ Methods API
 
        since: 2.0.00
 
-       See also: "$r->add_config"
+       See also: "$r-&gtadd_config"
 
        Examples:
 
        A single handler:
 
-	 $r->set_handlers(PerlChildExitHandler => \&handler);
+	 $r-&gtset_handlers(PerlChildExitHandler =&gt \&handler);
 
        Multiple handlers:
 
-	 $r->set_handlers(PerlFixupHandler => ['Foo::Bar::handler', \&handler2]);
+	 $r-&gtset_handlers(PerlFixupHandler =&gt ['Foo::Bar::handler', \&handler2]);
 
        Anonymous functions:
 
-	 $r->set_handlers(PerlLogHandler => sub { return Apache2::Const::OK });
+	 $r-&gtset_handlers(PerlLogHandler =&gt sub { return Apache2::Const::OK });
 
        Reset any previously set handlers:
 
-	 $r->set_handlers(PerlCleanupHandler => []);
+	 $r-&gtset_handlers(PerlCleanupHandler =&gt []);
 
        or
 
-	 $r->set_handlers(PerlCleanupHandler => undef);
+	 $r-&gtset_handlers(PerlCleanupHandler =&gt undef);
 
    "user_id"
        Get the user id corresponding to the "User" directive in httpd.conf:
 
-	 $uid = Apache2::ServerUtil->user_id;
+	 $uid = Apache2::ServerUtil-&gtuser_id;
 
        obj: "Apache2::ServerUtil" (class name)
        ret: $uid ( integer )
@@ -637,7 +639,7 @@ Unsupported API
    "error_log2stderr"
        Start sending STDERR to the error_log file
 
-	 $s->error_log2stderr();
+	 $s-&gterror_log2stderr();
 
        obj: $s ( "Apache2::ServerRec object" )
 	   The current server
@@ -661,6 +663,6 @@ Authors
 
 
 perlapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::ServerUtil(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

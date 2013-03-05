@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The "HTML::TokeParser" is an alternative interface to the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>HTML::TokeParser - Alternative HTML::Parser interface</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 HTML::TokeParser(3)   User Contributed Perl Documentation  HTML::TokeParser(3)
 
 
@@ -17,11 +19,11 @@ NAME
 
 SYNOPSIS
 	require HTML::TokeParser;
-	$p = HTML::TokeParser->new("index.html") ||
+	$p = HTML::TokeParser-&gtnew("index.html") ||
 	     die "Can't open: $!";
-	$p->empty_element_tags(1);  # configure its behaviour
+	$p-&gtempty_element_tags(1);  # configure its behaviour
 
-	while (my $token = $p->get_token) {
+	while (my $token = $p-&gtget_token) {
 	    #...
 	}
 
@@ -33,9 +35,9 @@ DESCRIPTION
 
        The following methods are available:
 
-       $p = HTML::TokeParser->new( $filename, %opt );
-       $p = HTML::TokeParser->new( $filehandle, %opt );
-       $p = HTML::TokeParser->new( \$document, %opt );
+       $p = HTML::TokeParser-&gtnew( $filename, %opt );
+       $p = HTML::TokeParser-&gtnew( $filehandle, %opt );
+       $p = HTML::TokeParser-&gtnew( \$document, %opt );
 	   The object constructor argument is either a file name, a file
 	   handle object, or the complete document to be parsed.  Extra
 	   options can be provided as key/value pairs and are processed as
@@ -65,8 +67,8 @@ DESCRIPTION
 	   undecoded UTF-8 is used as a source.  When parsing UTF-8 encoded
 	   files turn on UTF-8 decoding:
 
-	      open(my $fh, "<:utf8", "index.html") || die "Can't open 'index.html': $!";
-	      my $p = HTML::TokeParser->new( $fh );
+	      open(my $fh, "&lt:utf8", "index.html") || die "Can't open 'index.html': $!";
+	      my $p = HTML::TokeParser-&gtnew( $fh );
 	      # ...
 
 	   If a $filename is passed to the constructor the file will be opened
@@ -76,10 +78,10 @@ DESCRIPTION
 	   If parsing from an UTF-8 encoded string buffer decode it first:
 
 	      utf8::decode($document);
-	      my $p = HTML::TokeParser->new( \$document );
+	      my $p = HTML::TokeParser-&gtnew( \$document );
 	      # ...
 
-       $p->get_token
+       $p-&gtget_token
 	   This method will return the next token found in the HTML document,
 	   or "undef" at the end of the document.  The token is returned as an
 	   array reference.  The first element of the array will be a string
@@ -99,23 +101,23 @@ DESCRIPTION
 	   the rest are plain scalars.	The "Argspec" in HTML::Parser explains
 	   the details.
 
-       $p->unget_token( @tokens )
+       $p-&gtunget_token( @tokens )
 	   If you find you have read too many tokens you can push them back,
-	   so that they are returned the next time $p->get_token is called.
+	   so that they are returned the next time $p-&gtget_token is called.
 
-       $p->get_tag
-       $p->get_tag( @tags )
+       $p-&gtget_tag
+       $p-&gtget_tag( @tags )
 	   This method returns the next start or end tag (skipping any other
 	   tokens), or "undef" if there are no more tags in the document.  If
 	   one or more arguments are given, then we skip tokens until one of
 	   the specified tag types is found.  For example:
 
-	      $p->get_tag("font", "/font");
+	      $p-&gtget_tag("font", "/font");
 
 	   will find the next start or end tag for a font-element.
 
 	   The tag information is returned as an array reference in the same
-	   form as for $p->get_token above, but the type code (first element)
+	   form as for $p-&gtget_token above, but the type code (first element)
 	   is missing. A start tag will be returned like this:
 
 	     [$tag, $attr, $attrseq, $text]
@@ -125,8 +127,8 @@ DESCRIPTION
 
 	     ["/$tag", $text]
 
-       $p->get_text
-       $p->get_text( @endtags )
+       $p-&gtget_text
+       $p-&gtget_text( @endtags )
 	   This method returns all text found at the current position. It will
 	   return a zero length string if the next token is not text. Any
 	   entities will be converted to their corresponding character.
@@ -135,12 +137,12 @@ DESCRIPTION
 	   occurring before the first of the specified tags found. For
 	   example:
 
-	      $p->get_text("p", "br");
+	      $p-&gtget_text("p", "br");
 
 	   will return the text up to either a paragraph of linebreak element.
 
 	   The text might span tags that should be textified.  This is
-	   controlled by the $p->{textify} attribute, which is a hash that
+	   controlled by the $p-&gt{textify} attribute, which is a hash that
 	   defines how certain tags can be treated as text.  If the name of a
 	   start tag matches a key in this hash then this tag is converted to
 	   text.  The hash value is used to specify which tag attribute to
@@ -150,49 +152,49 @@ DESCRIPTION
 	   this case the routine is called with the start tag token content as
 	   its argument and the return value is treated as the text.
 
-	   The default $p->{textify} value is:
+	   The default $p-&gt{textify} value is:
 
-	     {img => "alt", applet => "alt"}
+	     {img =&gt "alt", applet =&gt "alt"}
 
-	   This means that <IMG> and <APPLET> tags are treated as text, and
+	   This means that &ltIMG&gt and &ltAPPLET&gt tags are treated as text, and
 	   that the text to substitute can be found in the ALT attribute.
 
-       $p->get_trimmed_text
-       $p->get_trimmed_text( @endtags )
-	   Same as $p->get_text above, but will collapse any sequences of
+       $p-&gtget_trimmed_text
+       $p-&gtget_trimmed_text( @endtags )
+	   Same as $p-&gtget_text above, but will collapse any sequences of
 	   white space to a single space character.  Leading and trailing
 	   white space is removed.
 
-       $p->get_phrase
+       $p-&gtget_phrase
 	   This will return all text found at the current position ignoring
 	   any phrasal-level tags.  Text is extracted until the first non
 	   phrasal-level tag.  Textification of tags is the same as for
 	   get_text().	This method will collapse white space in the same way
 	   as get_trimmed_text() does.
 
-	   The definition of <i>phrasal-level tags</i> is obtained from the
+	   The definition of &lti&gtphrasal-level tags&lt/i&gt is obtained from the
 	   HTML::Tagset module.
 
 EXAMPLES
        This example extracts all links from a document.  It will print one
        line for each link, containing the URL and the textual description
-       between the <A>...</A> tags:
+       between the &ltA&gt...&lt/A&gt tags:
 
 	 use HTML::TokeParser;
-	 $p = HTML::TokeParser->new(shift||"index.html");
+	 $p = HTML::TokeParser-&gtnew(shift||"index.html");
 
-	 while (my $token = $p->get_tag("a")) {
-	     my $url = $token->[1]{href} || "-";
-	     my $text = $p->get_trimmed_text("/a");
+	 while (my $token = $p-&gtget_tag("a")) {
+	     my $url = $token-&gt[1]{href} || "-";
+	     my $text = $p-&gtget_trimmed_text("/a");
 	     print "$url\t$text\n";
 	 }
 
-       This example extract the <TITLE> from the document:
+       This example extract the &ltTITLE&gt from the document:
 
 	 use HTML::TokeParser;
-	 $p = HTML::TokeParser->new(shift||"index.html");
-	 if ($p->get_tag("title")) {
-	     my $title = $p->get_trimmed_text;
+	 $p = HTML::TokeParser-&gtnew(shift||"index.html");
+	 if ($p-&gtget_tag("title")) {
+	     my $title = $p-&gtget_trimmed_text;
 	     print "Title: $title\n";
 	 }
 
@@ -208,6 +210,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2008-04-04		   HTML::TokeParser(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

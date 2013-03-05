@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Moose provides several ways in which extensions can hook into Moose and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Extending::Recipe1 - Moose extension overview</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::ExtenUser:Contributed PMoose::Cookbook::Extending::Recipe1(3)
 
 
@@ -137,10 +139,10 @@ USING YOUR EXTENSION
        simply specify it in a list of traits. Currently, this only works for
        (class) metaclass and attribute metaclass traits:
 
-	 use Moose -traits => [ 'Big', 'Blue' ];
+	 use Moose -traits =&gt [ 'Big', 'Blue' ];
 
-	 has 'animal' => (
-	     traits => [ 'Big', 'Blue' ],
+	 has 'animal' =&gt (
+	     traits =&gt [ 'Big', 'Blue' ],
 	     ...
 	 );
 
@@ -160,7 +162,7 @@ USING YOUR EXTENSION
 
        This is one reason why implementing an extension as a subclass can be a
        poor choice. However, you can force the use of certain subclasses at
-       import time by calling "Moose->init_meta" for the caller, and providing
+       import time by calling "Moose-&gtinit_meta" for the caller, and providing
        an alternate metaclass or base object class.
 
        If you do want to do this, you should look at using Moose::Exporter to
@@ -179,21 +181,21 @@ USING YOUR EXTENSION
 	 use MooseX::Embiggen::Meta::Class;
 	 use MooseX::Embiggen::Object;
 
-	 Moose::Exporter->setup_import_methods( also => 'Moose' );
+	 Moose::Exporter-&gtsetup_import_methods( also =&gt 'Moose' );
 
 	 sub init_meta {
 	     shift;    # just your package name
 	     my %options = @_;
 
-	     return Moose->init_meta(
-		 for_class  => $options{for_class},
-		 metaclass  => 'MooseX::Embiggen::Meta::Class',
-		 base_class => 'MooseX::Embiggen::Object',
+	     return Moose-&gtinit_meta(
+		 for_class  =&gt $options{for_class},
+		 metaclass  =&gt 'MooseX::Embiggen::Meta::Class',
+		 base_class =&gt 'MooseX::Embiggen::Object',
 	     );
 	 }
 
        NOTE: Make sure that your "init_meta" returns the metaclass object,
-       just as "Moose->init_meta" does.
+       just as "Moose-&gtinit_meta" does.
 
    Extensions as Metaclass (and Base Object) Roles
        Implementing your extensions as metaclass roles makes your extensions
@@ -221,21 +223,21 @@ USING YOUR EXTENSION
 	 use MooseX::Embiggen::Role::Meta::Method::Constructor;
 	 use MooseX::Embiggen::Role::Object;
 
-	 my ( $import, $unimport, $init_meta ) = Moose::Exporter->build_import_methods(
-	     also => ['Moose'] metaclass_roles =>
+	 my ( $import, $unimport, $init_meta ) = Moose::Exporter-&gtbuild_import_methods(
+	     also =&gt ['Moose'] metaclass_roles =&gt
 		 ['MooseX::Embiggen::Role::Meta::Class'],
-	     attribute_metaclass_roles => ['MooseX::Embiggen::Role::Meta::Attribute'],
-	     constructor_class_roles =>
+	     attribute_metaclass_roles =&gt ['MooseX::Embiggen::Role::Meta::Attribute'],
+	     constructor_class_roles =&gt
 		 ['MooseX::Embiggen::Role::Meta::Method::Constructor'],
-	     base_class_roles => ['MooseX::Embiggen::Role::Object'],
-	     install	      => [qw(import unimport)],
+	     base_class_roles =&gt ['MooseX::Embiggen::Role::Object'],
+	     install	      =&gt [qw(import unimport)],
 	 );
 
 	 sub init_meta {
 	     my $package = shift;
 	     my %options = @_;
-	     Moose->init_meta(%options);
-	     return $package->$init_meta(%options);
+	     Moose-&gtinit_meta(%options);
+	     return $package-&gt$init_meta(%options);
 	 }
 
        As you can see from this example, you can use Moose::Util::MetaRole to
@@ -252,14 +254,14 @@ USING YOUR EXTENSION
 	 use Moose ();
 	 use Moose::Exporter;
 
-	 Moose::Exporter->setup_import_methods(
-	     with_meta => ['embiggen'],
-	     also      => 'Moose',
+	 Moose::Exporter-&gtsetup_import_methods(
+	     with_meta =&gt ['embiggen'],
+	     also      =&gt 'Moose',
 	 );
 
 	 sub embiggen {
 	     my $meta = shift;
-	     $meta->embiggen(@_);
+	     $meta-&gtembiggen(@_);
 	 }
 
        And then the consumer of your extension can use your "embiggen" sub:
@@ -294,7 +296,7 @@ CONCLUSION
        Moose::Exporter and Moose::Util::MetaRole as well.
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -305,6 +307,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-0Moose::Cookbook::Extending::Recipe1(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

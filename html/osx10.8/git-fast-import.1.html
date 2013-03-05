@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This program is usually not what the end user wants to run directly...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>git-fast-import - Backend for fast Git data importers</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 GIT-FAST-IMPORT(1)		  Git Manual		    GIT-FAST-IMPORT(1)
 
 
@@ -38,7 +40,7 @@ DESCRIPTION
        program in use.
 
 OPTIONS
-       --date-format=<fmt>
+       --date-format=&ltfmt&gt
 	   Specify the type of dates the frontend will supply to fast-import
 	   within author, committer and tagger commands. See "Date Formats"
 	   below for details about which formats are supported, and their
@@ -49,39 +51,39 @@ OPTIONS
 	   cause commits to be lost (as the new commit does not contain the
 	   old commit).
 
-       --max-pack-size=<n>
+       --max-pack-size=&ltn&gt
 	   Maximum size of each output packfile. The default is unlimited.
 
-       --big-file-threshold=<n>
+       --big-file-threshold=&ltn&gt
 	   Maximum size of a blob that fast-import will attempt to create a
 	   delta for, expressed in bytes. The default is 512m (512 MiB). Some
 	   importers may wish to lower this on systems with constrained
 	   memory.
 
-       --depth=<n>
+       --depth=&ltn&gt
 	   Maximum delta depth, for blob and tree deltification. Default is
 	   10.
 
-       --active-branches=<n>
+       --active-branches=&ltn&gt
 	   Maximum number of branches to maintain active at once. See "Memory
 	   Utilization" below for details. Default is 5.
 
-       --export-marks=<file>
-	   Dumps the internal marks table to <file> when complete. Marks are
+       --export-marks=&ltfile&gt
+	   Dumps the internal marks table to &ltfile&gt when complete. Marks are
 	   written one per line as :markid SHA-1. Frontends can use this file
 	   to validate imports after they have been completed, or to save the
-	   marks table across incremental runs. As <file> is only opened and
+	   marks table across incremental runs. As &ltfile&gt is only opened and
 	   truncated at checkpoint (or completion) the same path can also be
 	   safely given to --import-marks.
 
-       --import-marks=<file>
-	   Before processing any input, load the marks specified in <file>.
+       --import-marks=&ltfile&gt
+	   Before processing any input, load the marks specified in &ltfile&gt.
 	   The input file must exist, must be readable, and must use the same
 	   format as produced by --export-marks. Multiple options may be
 	   supplied to import more than one set of marks. If a mark is defined
 	   to different values, the last file wins.
 
-       --import-marks-if-exists=<file>
+       --import-marks-if-exists=&ltfile&gt
 	   Like --import-marks but instead of erroring out, silently skips the
 	   file if it does not exist.
 
@@ -97,9 +99,9 @@ OPTIONS
 	   and non-relative marks by interweaving --(no-)-relative-marks with
 	   the --(import|export)-marks= options.
 
-       --cat-blob-fd=<fd>
+       --cat-blob-fd=&ltfd&gt
 	   Write responses to cat-blob and ls queries to the file descriptor
-	   <fd> instead of stdout. Allows progress output intended for the
+	   &ltfd&gt instead of stdout. Allows progress output intended for the
 	   end-user to be separated from other output.
 
        --done
@@ -107,8 +109,8 @@ OPTIONS
 	   be useful for detecting errors that cause the frontend to terminate
 	   before it has started to write a stream.
 
-       --export-pack-edges=<file>
-	   After creating a packfile, print a line of data to <file> listing
+       --export-pack-edges=&ltfile&gt
+	   After creating a packfile, print a line of data to &ltfile&gt listing
 	   the filename of the packfile and the last commit on each branch
 	   that was written to that packfile. This information may be useful
 	   after importing projects whose total object set exceeds the 4 GiB
@@ -208,20 +210,20 @@ INPUT FORMAT
    Date Formats
        The following date formats are supported. A frontend should select the
        format it will use for this import by passing the format name in the
-       --date-format=<fmt> command line option.
+       --date-format=&ltfmt&gt command line option.
 
        raw
-	   This is the Git native format and is <time> SP <offutc>. It is also
+	   This is the Git native format and is &lttime&gt SP &ltoffutc&gt. It is also
 	   fast-import's default format, if --date-format was not specified.
 
-	   The time of the event is specified by <time> as the number of
+	   The time of the event is specified by &lttime&gt as the number of
 	   seconds since the UNIX epoch (midnight, Jan 1, 1970, UTC) and is
 	   written as an ASCII decimal integer.
 
-	   The local offset is specified by `<offutc>` as a positive or
+	   The local offset is specified by `&ltoffutc&gt` as a positive or
 	   negative offset from UTC. For example EST (which is 5 hours behind
-	   UTC) would be expressed in <tz> by `-0500'' while UTC is `+0000''.
-	   The local offset does not affect <time>; it is used only as an
+	   UTC) would be expressed in &lttz&gt by `-0500'' while UTC is `+0000''.
+	   The local offset does not affect &lttime&gt; it is used only as an
 	   advisement to help formatting routines display the timestamp.
 
 	   If the local offset is not available in the source material, use
@@ -264,7 +266,7 @@ INPUT FORMAT
 
        now
 	   Always use the current time and timezone. The literal now must
-	   always be supplied for <when>.
+	   always be supplied for &ltwhen&gt.
 
 	   This is a toy format. The current time and timezone of this system
 	   is always copied into the identity string at the time it is being
@@ -346,20 +348,20 @@ INPUT FORMAT
        Create or update a branch with a new commit, recording one logical
        change to the project.
 
-		   'commit' SP <ref> LF
+		   'commit' SP &ltref&gt LF
 		   mark?
-		   ('author' (SP <name>)? SP LT <email> GT SP <when> LF)?
-		   'committer' (SP <name>)? SP LT <email> GT SP <when> LF
+		   ('author' (SP &ltname&gt)? SP LT &ltemail&gt GT SP &ltwhen&gt LF)?
+		   'committer' (SP &ltname&gt)? SP LT &ltemail&gt GT SP &ltwhen&gt LF
 		   data
-		   ('from' SP <committish> LF)?
-		   ('merge' SP <committish> LF)?
+		   ('from' SP &ltcommittish&gt LF)?
+		   ('merge' SP &ltcommittish&gt LF)?
 		   (filemodify | filedelete | filecopy | filerename | filedeleteall | notemodify)*
 		   LF?
 
-       where <ref> is the name of the branch to make the commit on. Typically
+       where &ltref&gt is the name of the branch to make the commit on. Typically
        branch names are prefixed with refs/heads/ in Git, so importing the CVS
        branch symbol RELENG-1_0 would use refs/heads/RELENG-1_0 for the value
-       of <ref>. The value of <ref> must be a valid refname in Git. As LF is
+       of &ltref&gt. The value of &ltref&gt must be a valid refname in Git. As LF is
        not valid in a Git refname, no quoting or escaping syntax is supported
        here.
 
@@ -396,16 +398,16 @@ INPUT FORMAT
 	   The committer command indicates who made this commit, and when they
 	   made it.
 
-	   Here <name> is the person's display name (for example `Com M
-	   Itter'') and `<email> is the person's email address
+	   Here &ltname&gt is the person's display name (for example `Com M
+	   Itter'') and `&ltemail&gt is the person's email address
 	   (`cm@example.com''). `LT and GT are the literal less-than (\x3c)
 	   and greater-than (\x3e) symbols. These are required to delimit the
-	   email address from the other fields in the line. Note that <name>
-	   and <email> are free-form and may contain any sequence of bytes,
-	   except LT, GT and LF. <name> is typically UTF-8 encoded.
+	   email address from the other fields in the line. Note that &ltname&gt
+	   and &ltemail&gt are free-form and may contain any sequence of bytes,
+	   except LT, GT and LF. &ltname&gt is typically UTF-8 encoded.
 
-	   The time of the change is specified by <when> using the date format
-	   that was selected by the --date-format=<fmt> command line option.
+	   The time of the change is specified by &ltwhen&gt using the date format
+	   that was selected by the --date-format=&ltfmt&gt command line option.
 	   See "Date Formats" above for the set of supported formats, and
 	   their syntax.
 
@@ -425,15 +427,15 @@ INPUT FORMAT
 	   commit.
 
 	   As LF is not valid in a Git refname or SHA-1 expression, no quoting
-	   or escaping syntax is supported within <committish>.
+	   or escaping syntax is supported within &ltcommittish&gt.
 
-	   Here <committish> is any of the following:
+	   Here &ltcommittish&gt is any of the following:
 
 	   o   The name of an existing branch already in fast-import's
 	       internal branch table. If fast-import doesn't know the name,
 	       it's treated as a SHA-1 expression.
 
-	   o   A mark reference, :<idnum>, where <idnum> is the mark number.
+	   o   A mark reference, :&ltidnum&gt, where &ltidnum&gt is the mark number.
 
 	       The reason fast-import uses : to denote a mark reference is
 	       this character is not legal in a Git branch name. The leading :
@@ -472,7 +474,7 @@ INPUT FORMAT
 	   is suggested that frontends do not use more than 15 merge commands
 	   per commit; 16, if starting a new, empty branch.
 
-	   Here <committish> is any of the commit specification expressions
+	   Here &ltcommittish&gt is any of the commit specification expressions
 	   also accepted by from (see above).
 
        filemodify
@@ -484,24 +486,24 @@ INPUT FORMAT
 	       The data content for the file was already supplied by a prior
 	       blob command. The frontend just needs to connect it.
 
-			   'M' SP <mode> SP <dataref> SP <path> LF
+			   'M' SP &ltmode&gt SP &ltdataref&gt SP &ltpath&gt LF
 
-	       Here usually <dataref> must be either a mark reference
-	       (:<idnum>) set by a prior blob command, or a full 40-byte SHA-1
-	       of an existing Git blob object. If <mode> is 040000` then
-	       <dataref> must be the full 40-byte SHA-1 of an existing Git
+	       Here usually &ltdataref&gt must be either a mark reference
+	       (:&ltidnum&gt) set by a prior blob command, or a full 40-byte SHA-1
+	       of an existing Git blob object. If &ltmode&gt is 040000` then
+	       &ltdataref&gt must be the full 40-byte SHA-1 of an existing Git
 	       tree object or a mark reference set with --import-marks.
 
 	   Inline data format
 	       The data content for the file has not been supplied yet. The
 	       frontend wants to supply it as part of this modify command.
 
-			   'M' SP <mode> SP 'inline' SP <path> LF
+			   'M' SP &ltmode&gt SP 'inline' SP &ltpath&gt LF
 			   data
 
 	       See below for a detailed description of the data command.
 
-	   In both formats <mode> is the type of file entry, specified in
+	   In both formats &ltmode&gt is the type of file entry, specified in
 	   octal. Git only supports the following modes:
 
 	   o	100644 or 644: A normal (not-executable) file. The majority of
@@ -520,17 +522,17 @@ INPUT FORMAT
 	   o	040000: A subdirectory. Subdirectories can only be specified
 	       by SHA or through a tree mark set with --import-marks.
 
-	   In both formats <path> is the complete path of the file to be added
+	   In both formats &ltpath&gt is the complete path of the file to be added
 	   (if not already existing) or modified (if already existing).
 
-	   A <path> string must use UNIX-style directory separators (forward
+	   A &ltpath&gt string must use UNIX-style directory separators (forward
 	   slash /), may contain any byte other than LF, and must not start
 	   with double quote (").
 
-	   If an LF or double quote must be encoded into <path> shell-style
+	   If an LF or double quote must be encoded into &ltpath&gt shell-style
 	   quoting should be used, e.g. "path/with\n and \" in it".
 
-	   The value of <path> must be in canonical form. That is it must not:
+	   The value of &ltpath&gt must be in canonical form. That is it must not:
 
 	   o   contain an empty directory component (e.g.  foo//bar is
 	       invalid),
@@ -543,9 +545,9 @@ INPUT FORMAT
 	       foo/../bar are invalid).
 
 	   The root of the tree can be represented by an empty string as
-	   <path>.
+	   &ltpath&gt.
 
-	   It is recommended that <path> always be encoded using UTF-8.
+	   It is recommended that &ltpath&gt always be encoded using UTF-8.
 
        filedelete
 	   Included in a commit command to remove a file or recursively delete
@@ -554,11 +556,11 @@ INPUT FORMAT
 	   be automatically removed too. This cascades up the tree until the
 	   first non-empty directory or the root is reached.
 
-		       'D' SP <path> LF
+		       'D' SP &ltpath&gt LF
 
-	   here <path> is the complete path of the file or subdirectory to be
+	   here &ltpath&gt is the complete path of the file or subdirectory to be
 	   removed from the branch. See filemodify above for a detailed
-	   description of <path>.
+	   description of &ltpath&gt.
 
        filecopy
 	   Recursively copies an existing file or subdirectory to a different
@@ -566,11 +568,11 @@ INPUT FORMAT
 	   exist. If the destination exists it will be completely replaced by
 	   the content copied from the source.
 
-		       'C' SP <path> SP <path> LF
+		       'C' SP &ltpath&gt SP &ltpath&gt LF
 
-	   here the first <path> is the source location and the second <path>
+	   here the first &ltpath&gt is the source location and the second &ltpath&gt
 	   is the destination. See filemodify above for a detailed description
-	   of what <path> may look like. To use a source path that contains SP
+	   of what &ltpath&gt may look like. To use a source path that contains SP
 	   the path must be quoted.
 
 	   A filecopy command takes effect immediately. Once the source
@@ -583,11 +585,11 @@ INPUT FORMAT
 	   within the branch. The existing file or directory must exist. If
 	   the destination exists it will be replaced by the source directory.
 
-		       'R' SP <path> SP <path> LF
+		       'R' SP &ltpath&gt SP &ltpath&gt LF
 
-	   here the first <path> is the source location and the second <path>
+	   here the first &ltpath&gt is the source location and the second &ltpath&gt
 	   is the destination. See filemodify above for a detailed description
-	   of what <path> may look like. To use a source path that contains SP
+	   of what &ltpath&gt may look like. To use a source path that contains SP
 	   the path must be quoted.
 
 	   A filerename command takes effect immediately. Once the source
@@ -626,11 +628,11 @@ INPUT FORMAT
 	   affected paths for a commit are encouraged to do so.
 
        notemodify
-	   Included in a commit <notes_ref> command to add a new note
-	   annotating a <committish> or change this annotation contents.
-	   Internally it is similar to filemodify 100644 on <committish> path
+	   Included in a commit &ltnotes_ref&gt command to add a new note
+	   annotating a &ltcommittish&gt or change this annotation contents.
+	   Internally it is similar to filemodify 100644 on &ltcommittish&gt path
 	   (maybe split into subdirectories). It's not advised to use any
-	   other commands to write to the <notes_ref> tree except
+	   other commands to write to the &ltnotes_ref&gt tree except
 	   filedeleteall to delete all existing notes in this tree. This
 	   command has two different means of specifying the content of the
 	   note.
@@ -640,9 +642,9 @@ INPUT FORMAT
 	       blob command. The frontend just needs to connect it to the
 	       commit that is to be annotated.
 
-			   'N' SP <dataref> SP <committish> LF
+			   'N' SP &ltdataref&gt SP &ltcommittish&gt LF
 
-	       Here <dataref> can be either a mark reference (:<idnum>) set by
+	       Here &ltdataref&gt can be either a mark reference (:&ltidnum&gt) set by
 	       a prior blob command, or a full 40-byte SHA-1 of an existing
 	       Git blob object.
 
@@ -650,12 +652,12 @@ INPUT FORMAT
 	       The data content for the note has not been supplied yet. The
 	       frontend wants to supply it as part of this modify command.
 
-			   'N' SP 'inline' SP <committish> LF
+			   'N' SP 'inline' SP &ltcommittish&gt LF
 			   data
 
 	       See below for a detailed description of the data command.
 
-	   In both formats <committish> is any of the commit specification
+	   In both formats &ltcommittish&gt is any of the commit specification
 	   expressions also accepted by from (see above).
 
    mark
@@ -665,34 +667,34 @@ INPUT FORMAT
        creation command the mark command appears within. This can be commit,
        tag, and blob, but commit is the most common usage.
 
-		   'mark' SP ':' <idnum> LF
+		   'mark' SP ':' &ltidnum&gt LF
 
-       where <idnum> is the number assigned by the frontend to this mark. The
-       value of <idnum> is expressed as an ASCII decimal integer. The value 0
+       where &ltidnum&gt is the number assigned by the frontend to this mark. The
+       value of &ltidnum&gt is expressed as an ASCII decimal integer. The value 0
        is reserved and cannot be used as a mark. Only values greater than or
        equal to 1 may be used as marks.
 
        New marks are created automatically. Existing marks can be moved to
-       another object simply by reusing the same <idnum> in another mark
+       another object simply by reusing the same &ltidnum&gt in another mark
        command.
 
    tag
        Creates an annotated tag referring to a specific commit. To create
        lightweight (non-annotated) tags see the reset command below.
 
-		   'tag' SP <name> LF
-		   'from' SP <committish> LF
-		   'tagger' (SP <name>)? SP LT <email> GT SP <when> LF
+		   'tag' SP &ltname&gt LF
+		   'from' SP &ltcommittish&gt LF
+		   'tagger' (SP &ltname&gt)? SP LT &ltemail&gt GT SP &ltwhen&gt LF
 		   data
 
-       where <name> is the name of the tag to create.
+       where &ltname&gt is the name of the tag to create.
 
        Tag names are automatically prefixed with refs/tags/ when stored in
        Git, so importing the CVS branch symbol RELENG-1_0-FINAL would use just
-       RELENG-1_0-FINAL for <name>, and fast-import will write the
+       RELENG-1_0-FINAL for &ltname&gt, and fast-import will write the
        corresponding ref as refs/tags/RELENG-1_0-FINAL.
 
-       The value of <name> must be a valid refname in Git and therefore may
+       The value of &ltname&gt must be a valid refname in Git and therefore may
        contain forward slashes. As LF is not valid in a Git refname, no
        quoting or escaping syntax is supported here.
 
@@ -722,11 +724,11 @@ INPUT FORMAT
        from command for an existing branch, or to create a new branch from an
        existing commit without creating a new commit.
 
-		   'reset' SP <ref> LF
-		   ('from' SP <committish> LF)?
+		   'reset' SP &ltref&gt LF
+		   ('from' SP &ltcommittish&gt LF)?
 		   LF?
 
-       For a detailed description of <ref> and <committish> see above under
+       For a detailed description of &ltref&gt and &ltcommittish&gt see above under
        commit and from.
 
        The LF after the command is optional (it used to be required).
@@ -762,7 +764,7 @@ INPUT FORMAT
        byte count format, as it is more robust and performs better. The
        delimited format is intended primarily for testing fast-import.
 
-       Comment lines appearing within the <raw> part of data commands are
+       Comment lines appearing within the &ltraw&gt part of data commands are
        always taken to be part of the body of the data and are therefore never
        ignored by fast-import. This makes it safe to import any file/message
        content whose lines might start with #.
@@ -770,18 +772,18 @@ INPUT FORMAT
        Exact byte count format
 	   The frontend must specify the number of bytes of data.
 
-		       'data' SP <count> LF
-		       <raw> LF?
+		       'data' SP &ltcount&gt LF
+		       &ltraw&gt LF?
 
-	   where <count> is the exact number of bytes appearing within <raw>.
-	   The value of <count> is expressed as an ASCII decimal integer. The
-	   LF on either side of <raw> is not included in <count> and will not
+	   where &ltcount&gt is the exact number of bytes appearing within &ltraw&gt.
+	   The value of &ltcount&gt is expressed as an ASCII decimal integer. The
+	   LF on either side of &ltraw&gt is not included in &ltcount&gt and will not
 	   be included in the imported data.
 
-	   The LF after <raw> is optional (it used to be required) but
+	   The LF after &ltraw&gt is optional (it used to be required) but
 	   recommended. Always including it makes debugging a fast-import
 	   stream easier as the next command always starts in column 0 of the
-	   next line, even if <raw> did not end with an LF.
+	   next line, even if &ltraw&gt did not end with an LF.
 
        Delimited format
 	   A delimiter string is used to mark the end of the data. fast-import
@@ -789,19 +791,19 @@ INPUT FORMAT
 	   is primarily useful for testing and is not recommended for real
 	   data.
 
-		       'data' SP '<<' <delim> LF
-		       <raw> LF
-		       <delim> LF
+		       'data' SP '&lt&lt' &ltdelim&gt LF
+		       &ltraw&gt LF
+		       &ltdelim&gt LF
 		       LF?
 
-	   where <delim> is the chosen delimiter string. The string <delim>
-	   must not appear on a line by itself within <raw>, as otherwise
+	   where &ltdelim&gt is the chosen delimiter string. The string &ltdelim&gt
+	   must not appear on a line by itself within &ltraw&gt, as otherwise
 	   fast-import will think the data ends earlier than it really does.
-	   The LF immediately trailing <raw> is part of <raw>. This is one of
+	   The LF immediately trailing &ltraw&gt is part of &ltraw&gt. This is one of
 	   the limitations of the delimited format, it is impossible to supply
 	   a data chunk which does not have an LF as its last byte.
 
-	   The LF after <delim> LF is optional (it used to be required).
+	   The LF after &ltdelim&gt LF is optional (it used to be required).
 
    checkpoint
        Forces fast-import to close the current packfile, start a new one, and
@@ -834,10 +836,10 @@ INPUT FORMAT
        processed from the input stream. The command otherwise has no impact on
        the current import, or on any of fast-import's internal state.
 
-		   'progress' SP <any> LF
+		   'progress' SP &ltany&gt LF
 		   LF?
 
-       The <any> part of the command may contain any sequence of bytes that
+       The &ltany&gt part of the command may contain any sequence of bytes that
        does not contain LF. The LF after the command is optional. Callers may
        wish to process the output through a tool such as sed to remove the
        leading part of the line, for example:
@@ -855,16 +857,16 @@ INPUT FORMAT
        that may be in fast-import's memory but not accessible from the target
        repository.
 
-		   'cat-blob' SP <dataref> LF
+		   'cat-blob' SP &ltdataref&gt LF
 
-       The <dataref> can be either a mark reference (:<idnum>) set previously
+       The &ltdataref&gt can be either a mark reference (:&ltidnum&gt) set previously
        or a full 40-byte SHA-1 of a Git blob, preexisting or ready to be
        written.
 
        Output uses the same format as git cat-file --batch:
 
-	   <sha1> SP 'blob' SP <size> LF
-	   <contents> LF
+	   &ltsha1&gt SP 'blob' SP &ltsize&gt LF
+	   &ltcontents&gt LF
 
        This command can be used anywhere in the stream that comments are
        accepted. In particular, the cat-blob command can be used in the middle
@@ -888,29 +890,29 @@ INPUT FORMAT
 	   names a directory entry within fast-import's active commit. The
 	   path must be quoted in this case.
 
-		       'ls' SP <path> LF
+		       'ls' SP &ltpath&gt LF
 
        Reading from a named tree
-	   The <dataref> can be a mark reference (:<idnum>) or the full
+	   The &ltdataref&gt can be a mark reference (:&ltidnum&gt) or the full
 	   40-byte SHA-1 of a Git tag, commit, or tree object, preexisting or
 	   waiting to be written. The path is relative to the top level of the
-	   tree named by <dataref>.
+	   tree named by &ltdataref&gt.
 
-		       'ls' SP <dataref> SP <path> LF
+		       'ls' SP &ltdataref&gt SP &ltpath&gt LF
 
-       See filemodify above for a detailed description of <path>.
+       See filemodify above for a detailed description of &ltpath&gt.
 
-       Output uses the same format as git ls-tree <tree> -- <path>:
+       Output uses the same format as git ls-tree &lttree&gt -- &ltpath&gt:
 
-	   <mode> SP ('blob' | 'tree' | 'commit') SP <dataref> HT <path> LF
+	   &ltmode&gt SP ('blob' | 'tree' | 'commit') SP &ltdataref&gt HT &ltpath&gt LF
 
-       The <dataref> represents the blob, tree, or commit object at <path> and
+       The &ltdataref&gt represents the blob, tree, or commit object at &ltpath&gt and
        can be used in later cat-blob, filemodify, or ls commands.
 
        If there is no file or subtree at that path, git fast-import will
        instead report
 
-	   missing SP <path> LF
+	   missing SP &ltpath&gt LF
 
        See "Responses To Commands" below for details about how to read this
        output safely.
@@ -919,9 +921,9 @@ INPUT FORMAT
        Require that fast-import supports the specified feature, or abort if it
        does not.
 
-		   'feature' SP <feature> ('=' <argument>)? LF
+		   'feature' SP &ltfeature&gt ('=' &ltargument&gt)? LF
 
-       The <feature> part of the command may be any one of the following:
+       The &ltfeature&gt part of the command may be any one of the following:
 
        date-format, export-marks, relative-marks, no-relative-marks, force
 	   Act as though the corresponding command-line option with a leading
@@ -959,9 +961,9 @@ INPUT FORMAT
        frontend are overridden by any options the user may specify to git
        fast-import itself.
 
-	       'option' SP <option> LF
+	       'option' SP &ltoption&gt LF
 
-       The <option> part of the command may contain any of the options listed
+       The &ltoption&gt part of the command may contain any of the options listed
        in the OPTIONS section that do not change import semantics, without the
        leading -- and is treated in the same way.
 
@@ -1003,8 +1005,8 @@ RESPONSES TO COMMANDS
        the frontend and fast-import via bidirectional pipes:
 
 	   mkfifo fast-import-output
-	   frontend <fast-import-output |
-	   git fast-import >fast-import-output
+	   frontend &ltfast-import-output |
+	   git fast-import &gtfast-import-output
 
        A frontend set up this way can use progress, ls, and cat-blob commands
        to read information from the import in progress.
@@ -1037,22 +1039,22 @@ CRASH REPORTS
 
        An example crash:
 
-	   $ cat >in <<END_OF_INPUT
+	   $ cat &gtin &lt&ltEND_OF_INPUT
 	   # my very first test commit
 	   commit refs/heads/master
-	   committer Shawn O. Pearce <spearce> 19283 -0400
+	   committer Shawn O. Pearce &ltspearce&gt 19283 -0400
 	   # who is that guy anyway?
-	   data <<EOF
+	   data &lt&ltEOF
 	   this is my commit
 	   EOF
 	   M 644 inline .gitignore
-	   data <<EOF
+	   data &lt&ltEOF
 	   .gitignore
 	   EOF
 	   M 777 inline bob
 	   END_OF_INPUT
 
-	   $ git fast-import <in
+	   $ git fast-import &ltin
 	   fatal: Corrupt mode: M 777 inline bob
 	   fast-import: dumping crash report to .git/fast_import_crash_8434
 
@@ -1068,11 +1070,11 @@ CRASH REPORTS
 	   ---------------------------------
 	     # my very first test commit
 	     commit refs/heads/master
-	     committer Shawn O. Pearce <spearce> 19283 -0400
+	     committer Shawn O. Pearce &ltspearce&gt 19283 -0400
 	     # who is that guy anyway?
-	     data <<EOF
+	     data &lt&ltEOF
 	     M 644 inline .gitignore
-	     data <<EOF
+	     data &lt&ltEOF
 	   * M 777 inline bob
 
 	   Active Branch LRU
@@ -1102,7 +1104,7 @@ TIPS AND TRICKS
 
    Use One Mark Per Commit
        When doing a repository conversion, use a unique mark per commit (mark
-       :<n>) and supply the --export-marks option on the command line.
+       :&ltn&gt) and supply the --export-marks option on the command line.
        fast-import will dump a file which lists every mark and the Git object
        SHA-1 that corresponds to it. If the frontend can tie the marks back to
        the source repository, it is easy to verify the accuracy and
@@ -1297,6 +1299,6 @@ GIT
 
 
 Git 1.7.12			  08/19/2012		    GIT-FAST-IMPORT(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

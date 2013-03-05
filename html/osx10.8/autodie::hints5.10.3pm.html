@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Introduction..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>autodie::hints - Provide hints about user subroutines to autodie</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 autodie::hints(3pm)    Perl Programmers Reference Guide    autodie::hints(3pm)
 
 
@@ -18,12 +20,12 @@ NAME
 SYNOPSIS
 	   package Your::Module;
 
-	   our %DOES = ( 'autodie::hints::provider' => 1 );
+	   our %DOES = ( 'autodie::hints::provider' =&gt 1 );
 
 	   sub AUTODIE_HINTS {
 	       return {
-		   foo => { scalar => HINTS, list => SOME_HINTS },
-		   bar => { scalar => HINTS, list => MORE_HINTS },
+		   foo =&gt { scalar =&gt HINTS, list =&gt SOME_HINTS },
+		   bar =&gt { scalar =&gt HINTS, list =&gt MORE_HINTS },
 	       }
 	   }
 
@@ -41,10 +43,10 @@ SYNOPSIS
 	   use Some::Module qw(think_positive);
 
 	   BEGIN {
-	       autodie::hints->set_hints_for(
+	       autodie::hints-&gtset_hints_for(
 		   \&think_positive,
 		   {
-		       fail => sub { $_[0] <= 0 }
+		       fail =&gt sub { $_[0] &lt= 0 }
 		   }
 	       )
 	   }
@@ -105,47 +107,47 @@ DESCRIPTION
        should be identified in scalar and list contexts.
 
        These examples apply for use in the "AUTODIE_HINTS" subroutine and when
-       calling "autodie::hints-"set_hints_for()>.
+       calling "autodie::hints-"set_hints_for()&gt.
 
        The most common context-specific hints are:
 
 	       # Scalar failures always return undef:
-		   {  scalar => undef  }
+		   {  scalar =&gt undef  }
 
 	       # Scalar failures return any false value [default expectation]:
-		   {  scalar => sub { ! $_[0] }  }
+		   {  scalar =&gt sub { ! $_[0] }  }
 
 	       # Scalar failures always return zero explicitly:
-		   {  scalar => '0'  }
+		   {  scalar =&gt '0'  }
 
 	       # List failures always return an empty list:
-		   {  list => []  }
+		   {  list =&gt []  }
 
 	       # List failures return () or (undef) [default expectation]:
-		   {  list => sub { ! @_ || @_ == 1 && !defined $_[0] }  }
+		   {  list =&gt sub { ! @_ || @_ == 1 && !defined $_[0] }  }
 
 	       # List failures return () or a single false value:
-		   {  list => sub { ! @_ || @_ == 1 && !$_[0] }  }
+		   {  list =&gt sub { ! @_ || @_ == 1 && !$_[0] }  }
 
 	       # List failures return (undef, "some string")
-		   {  list => sub { @_ == 2 && !defined $_[0] }  }
+		   {  list =&gt sub { @_ == 2 && !defined $_[0] }  }
 
 	       # Unsuccessful foo() returns 'FAIL' or '_FAIL' in scalar context,
 	       #		    returns (-1) in list context...
-	       autodie::hints->set_hints_for(
+	       autodie::hints-&gtset_hints_for(
 		   \&foo,
 		   {
-		       scalar => qr/^ _? FAIL $/xms,
-		       list   => [-1],
+		       scalar =&gt qr/^ _? FAIL $/xms,
+		       list   =&gt [-1],
 		   }
 	       );
 
 	       # Unsuccessful foo() returns 0 in all contexts...
-	       autodie::hints->set_hints_for(
+	       autodie::hints-&gtset_hints_for(
 		   \&foo,
 		   {
-		       scalar => 0,
-		       list   => [0],
+		       scalar =&gt 0,
+		       list   =&gt [0],
 		   }
 	       );
 
@@ -154,26 +156,26 @@ DESCRIPTION
        "list" hints to the same value:
 
 	       # Unsuccessful foo() returns 0 in all contexts...
-	       autodie::hints->set_hints_for(
+	       autodie::hints-&gtset_hints_for(
 		   \&foo,
 		   {
-		       fail => sub { @_ == 1 and defined $_[0] and $_[0] == 0 }
+		       fail =&gt sub { @_ == 1 and defined $_[0] and $_[0] == 0 }
 		   }
 	       );
 
 	       # Unsuccessful think_positive() returns negative number on failure...
-	       autodie::hints->set_hints_for(
+	       autodie::hints-&gtset_hints_for(
 		   \&think_positive,
 		   {
-		       fail => sub { $_[0] < 0 }
+		       fail =&gt sub { $_[0] &lt 0 }
 		   }
 	       );
 
 	       # Unsuccessful my_system() returns non-zero on failure...
-	       autodie::hints->set_hints_for(
+	       autodie::hints-&gtset_hints_for(
 		   \&my_system,
 		   {
-		       fail => sub { $_[0] != 0 }
+		       fail =&gt sub { $_[0] != 0 }
 		   }
 	       );
 
@@ -187,16 +189,16 @@ Manually setting hints from within your program
 	       use Some::Module qw(foo bar);
 	       use autodie::hints;
 
-	       autodie::hints->set_hints_for(
+	       autodie::hints-&gtset_hints_for(
 		       \&foo,
 		       {
-			       scalar => SCALAR_HINT,
-			       list   => LIST_HINT,
+			       scalar =&gt SCALAR_HINT,
+			       list   =&gt LIST_HINT,
 		       }
 	       );
-	       autodie::hints->set_hints_for(
+	       autodie::hints-&gtset_hints_for(
 		       \&bar,
-		       { fail => SOME_HINT, }
+		       { fail =&gt SOME_HINT, }
 	       );
 
        It is possible to pass either a subroutine reference (recommended) or a
@@ -204,8 +206,8 @@ Manually setting hints from within your program
        can set hints on modules that might get loaded:
 
 	       use autodie::hints;
-	       autodie::hints->set_hints_for(
-		       'Some::Module:bar', { fail => SCALAR_HINT, }
+	       autodie::hints-&gtset_hints_for(
+		       'Some::Module:bar', { fail =&gt SCALAR_HINT, }
 	       );
 
        This technique is most useful when you have a project that uses a lot
@@ -217,7 +219,7 @@ Manually setting hints from within your program
 	       use parent qw(autodie);
 	       use autodie::hints;
 
-	       autodie::hints->set_hints_for(...);
+	       autodie::hints-&gtset_hints_for(...);
 
 	       1;
 
@@ -246,21 +248,21 @@ Adding hints to your module
 	       # We can use the Class::DOES from the CPAN to declare adherence
 	       # to a role.
 
-	       use Class::DOES 'autodie::hints::provider' => 1;
+	       use Class::DOES 'autodie::hints::provider' =&gt 1;
 
 	       # Alternatively, we can declare the role in %DOES.  Note that
 	       # this is an autodie specific optimisation, although Class::DOES
 	       # can be used to promote this to a true role declaration.
 
-	       our %DOES = ( 'autodie::hints::provider' => 1 );
+	       our %DOES = ( 'autodie::hints::provider' =&gt 1 );
 
 	       # Finally, we must define the hints themselves.
 
 	       sub AUTODIE_HINTS {
 		   return {
-		       foo => { scalar => HINTS, list => SOME_HINTS },
-		       bar => { scalar => HINTS, list => MORE_HINTS },
-		       baz => { fail => HINTS },
+		       foo =&gt { scalar =&gt HINTS, list =&gt SOME_HINTS },
+		       bar =&gt { scalar =&gt HINTS, list =&gt MORE_HINTS },
+		       baz =&gt { fail =&gt HINTS },
 		   }
 	       }
 
@@ -303,7 +305,7 @@ Insisting on hints
 
 Diagnostics
        Attempts to set_hints_for unidentifiable subroutine
-	   You've called "autodie::hints->set_hints_for()" using a subroutine
+	   You've called "autodie::hints-&gtset_hints_for()" using a subroutine
 	   reference, but that reference could not be resolved back to a
 	   subroutine name.  It may be an anonymous subroutine (which can't be
 	   made autodying), or may lack a name for other reasons.
@@ -330,7 +332,7 @@ ACKNOWLEDGEMENTS
 	   documentation.
 
 AUTHOR
-       Copyright 2009, Paul Fenwick <pjf@perltraining.com.au>
+       Copyright 2009, Paul Fenwick &ltpjf@perltraining.com.au&gt
 
 LICENSE
        This module is free software.  You may distribute it under the same
@@ -342,6 +344,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-07-25		   autodie::hints(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

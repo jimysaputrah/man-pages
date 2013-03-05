@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Overview..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Parse::RecDescent - Generate Recursive-Descent Parsers</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Parse::RecDescent(3)  User Contributed Perl Documentation Parse::RecDescent(3)
 
 
@@ -34,13 +36,13 @@ SYNOPSIS
 	# Parse $text using rule 'startrule' (which must be
 	# defined in $grammar):
 
-	   $parser->startrule($text);
+	   $parser-&gtstartrule($text);
 
 
 	# Parse $text using rule 'otherrule' (which must also
 	# be defined in $grammar):
 
-	    $parser->otherrule($text);
+	    $parser-&gtotherrule($text);
 
 
 	# Change the universal token prefix pattern
@@ -52,13 +54,13 @@ SYNOPSIS
 	# Replace productions of existing rules (or create new ones)
 	# with the productions defined in $newgrammar:
 
-	   $parser->Replace($newgrammar);
+	   $parser-&gtReplace($newgrammar);
 
 
 	# Extend existing rules (or create new ones)
 	# by adding extra productions defined in $moregrammar:
 
-	   $parser->Extend($moregrammar);
+	   $parser-&gtExtend($moregrammar);
 
 
 	# Global flags (useful as command line arguments under -s):
@@ -115,11 +117,11 @@ DESCRIPTION
 
 	   # acquire $text
 
-	   defined $parser->startrule($text) or print "Bad text!\n";
+	   defined $parser-&gtstartrule($text) or print "Bad text!\n";
 
        The rule through which parsing is initiated must be explicitly defined
        in the grammar (i.e. for the above example, the grammar must include a
-       rule of the form: "startrule: <subrules>".
+       rule of the form: "startrule: &ltsubrules&gt".
 
        If the starting rule succeeds, its value (see below) is returned.
        Failure to generate the original parser or failure to match a text is
@@ -127,7 +129,7 @@ DESCRIPTION
        that can succeed, but which return a value of 0, "0", or "".  So don't
        be tempted to write:
 
-	   $parser->startrule($text) or print "Bad text!\n";
+	   $parser-&gtstartrule($text) or print "Bad text!\n";
 
        Normally, the parser has no effect on the original text. So in the
        previous example the value of $text would be unchanged after having
@@ -135,7 +137,7 @@ DESCRIPTION
 
        If, however, the text to be matched is passed by reference:
 
-	   $parser->startrule(\$text)
+	   $parser-&gtstartrule(\$text)
 
        then any text which was consumed during the match will be removed from
        the start of $text.
@@ -225,7 +227,7 @@ DESCRIPTION
 	   subrule(?)  # Match one-or-zero times
 	   subrule(s)  # Match one-or-more times
 	   subrule(s?) # Match zero-or-more times
-	   subrule(N)  # Match exactly N times for integer N > 0
+	   subrule(N)  # Match exactly N times for integer N &gt 0
 	   subrule(N..M)   # Match between N and M times
 	   subrule(..M)    # Match between 1 and M times
 	   subrule(N..)    # Match at least N times
@@ -251,7 +253,7 @@ DESCRIPTION
 	   program: statement(s /;/)
 
        specifying some sequence of characters to be skipped between each
-       repetition.  This is really just a shorthand for the <leftop:...>
+       repetition.  This is really just a shorthand for the &ltleftop:...&gt
        directive (see below).
 
    Tokens
@@ -277,7 +279,7 @@ DESCRIPTION
        variables from the main package.
 
        Regex tokens can be specified using just slashes as delimiters or with
-       the explicit "m<delimiter>......<delimiter>" syntax:
+       the explicit "m&ltdelimiter&gt......&ltdelimiter&gt" syntax:
 
 	   typedef: "typedef" typename identifier ';'
 
@@ -347,7 +349,7 @@ DESCRIPTION
        "Parse::RecDescent".
 
        The prefix for an individual production can be altered by using the
-       "<skip:...>" directive (see below).
+       "&ltskip:...&gt" directive (see below).
 
    Actions
        An action is a block of Perl code which is to be executed (as the block
@@ -407,7 +409,7 @@ DESCRIPTION
 		   { print $item[-2] }	# PRINTS data
 			# (EASIER THAN: $item[6])
 
-	   The %item hash complements the <@item> array, providing named
+	   The %item hash complements the &lt@item&gt array, providing named
 	   access to the same item values:
 
 	       stuff: /various/ bits 'and' pieces "then" data 'end'
@@ -441,7 +443,7 @@ DESCRIPTION
 
 	   The advantage of using %item, instead of @items is that it removes
 	   the need to track items positions that may change as a grammar
-	   evolves. For example, adding an interim "<skip>" directive of
+	   evolves. For example, adding an interim "&ltskip&gt" directive of
 	   action can silently ruin a trailing action, by moving an @item
 	   element "down" the array one place. In contrast, the named entry of
 	   %item is unaffected by such an insertion.
@@ -497,7 +499,7 @@ DESCRIPTION
 	       hash_include: '#include' filename
 		   { $text = ::loadfile($item[2]) . $text }
 
-	       filename: '<' /[a-z0-9._-]+/i '>'  { $return = $item[2] }
+	       filename: '&lt' /[a-z0-9._-]+/i '&gt'  { $return = $item[2] }
 	       | '"' /[a-z0-9._-]+/i '"'  { $return = $item[2] }
 
        $thisline and $prevline
@@ -533,7 +535,7 @@ DESCRIPTION
 
 	       $parser = new Parse::RecDescent ($grammar);
 
-	       $parser->input($text, 10);  # START LINE NUMBERS AT 10
+	       $parser-&gtinput($text, 10);  # START LINE NUMBERS AT 10
 
        $thiscolumn and $prevcolumn
 	   $thiscolumn stores the current column number within the current
@@ -576,7 +578,7 @@ DESCRIPTION
 	   hashes, and only recompute the required offset when the variable's
 	   value is used.
 
-	   Assignment to $thisoffset or <$prevoffset> is a fatal error.
+	   Assignment to $thisoffset or &lt$prevoffset&gt is a fatal error.
 
 	   Modifying the value of the variable $text will not affect the
 	   offset counting mechanism.
@@ -638,7 +640,7 @@ DESCRIPTION
 	   for the scope of the current rule as follows:
 
 	       rule: subrule1 subrule2
-	       | { $thisparser = $::otherparser } <reject>
+	       | { $thisparser = $::otherparser } &ltreject&gt
 	       | subrule3 subrule4
 	       | subrule5
 
@@ -658,7 +660,7 @@ DESCRIPTION
 
        $score and $score_return
 	   $score stores the best production score to date, as specified by an
-	   earlier "<score:...>" directive. $score_return stores the
+	   earlier "&ltscore:...&gt" directive. $score_return stores the
 	   corresponding return value for the successful production.
 
 	   See "Scored productions".
@@ -667,7 +669,7 @@ DESCRIPTION
        objects in some non-obvious ways. Tinkering with the other members of
        these objects will probably cause Bad Things to happen, unless you
        really know what you're doing. The only exception to this advice is
-       that the use of "$this...->{local}" is always safe.
+       that the use of "$this...-&gt{local}" is always safe.
 
    Start-up Actions
        Any actions which appear before the first rule definition in a grammar
@@ -704,13 +706,13 @@ DESCRIPTION
        production in the corresponding grammar.
 
        Alternatively, you can hard-code the autoaction within a grammar, using
-       the "<autoaction:...>" directive.
+       the "&ltautoaction:...&gt" directive.
 
        So, for example, to construct a simple parse tree you could write:
 
 	   $::RD_AUTOACTION = q { [@item] };
 
-	   parser = Parse::RecDescent->new(q{
+	   parser = Parse::RecDescent-&gtnew(q{
 	   expression: and_expr '||' expression | and_expr
 	   and_expr:   not_expr '&&' and_expr	| not_expr
 	   not_expr:   '!' brack_expr	    | brack_expr
@@ -720,8 +722,8 @@ DESCRIPTION
 
        or:
 
-	   parser = Parse::RecDescent->new(q{
-	   <autoaction: { [@item] } >
+	   parser = Parse::RecDescent-&gtnew(q{
+	   &ltautoaction: { [@item] } &gt
 
 	   expression: and_expr '||' expression | and_expr
 	   and_expr:   not_expr '&&' and_expr	| not_expr
@@ -762,9 +764,9 @@ DESCRIPTION
        nodes):
 
 	   $::RD_AUTOACTION = q
-	     { $#item==1 ? $item[1] : "$item[0]_node"->new(@item[1..$#item]) };
+	     { $#item==1 ? $item[1] : "$item[0]_node"-&gtnew(@item[1..$#item]) };
 
-	   parser = Parse::RecDescent->new(q{
+	   parser = Parse::RecDescent-&gtnew(q{
 	       expression: and_expr '||' expression | and_expr
 	       and_expr:   not_expr '&&' and_expr   | not_expr
 	       not_expr:   '!' brack_expr	    | brack_expr
@@ -774,10 +776,10 @@ DESCRIPTION
 
        or:
 
-	   parser = Parse::RecDescent->new(q{
-	       <autoaction:
-		 $#item==1 ? $item[1] : "$item[0]_node"->new(@item[1..$#item])
-	       >
+	   parser = Parse::RecDescent-&gtnew(q{
+	       &ltautoaction:
+		 $#item==1 ? $item[1] : "$item[0]_node"-&gtnew(@item[1..$#item])
+	       &gt
 
 	       expression: and_expr '||' expression | and_expr
 	       and_expr:   not_expr '&&' and_expr   | not_expr
@@ -788,40 +790,40 @@ DESCRIPTION
 
        which are equivalent to:
 
-	   parser = Parse::RecDescent->new(q{
+	   parser = Parse::RecDescent-&gtnew(q{
 	       expression: and_expr '||' expression
-		   { "expression_node"->new(@item[1..3]) }
+		   { "expression_node"-&gtnew(@item[1..3]) }
 	       | and_expr
 
 	       and_expr:   not_expr '&&' and_expr
-		   { "and_expr_node"->new(@item[1..3]) }
+		   { "and_expr_node"-&gtnew(@item[1..3]) }
 	       |   not_expr
 
 	       not_expr:   '!' brack_expr
-		   { "not_expr_node"->new(@item[1..2]) }
+		   { "not_expr_node"-&gtnew(@item[1..2]) }
 	       |   brack_expr
 
 	       brack_expr: '(' expression ')'
-		   { "brack_expr_node"->new(@item[1..3]) }
+		   { "brack_expr_node"-&gtnew(@item[1..3]) }
 	       | identifier
 
 	       identifier: /[a-z]+/i
-		   { "identifer_node"->new(@item[1]) }
+		   { "identifer_node"-&gtnew(@item[1]) }
 	   });
 
        Note that, if a production already ends in an action, no autoaction is
        appended to it. For example, in this version:
 
 	   $::RD_AUTOACTION = q
-	     { $#item==1 ? $item[1] : "$item[0]_node"->new(@item[1..$#item]) };
+	     { $#item==1 ? $item[1] : "$item[0]_node"-&gtnew(@item[1..$#item]) };
 
-	   parser = Parse::RecDescent->new(q{
+	   parser = Parse::RecDescent-&gtnew(q{
 	       expression: and_expr '&&' expression | and_expr
 	       and_expr:   not_expr '&&' and_expr   | not_expr
 	       not_expr:   '!' brack_expr	    | brack_expr
 	       brack_expr: '(' expression ')'	    | identifier
 	       identifier: /[a-z]+/i
-		   { 'terminal_node'->new($item[1]) }
+		   { 'terminal_node'-&gtnew($item[1]) }
 	   });
 
        each "identifier" match produces a "terminal_node" object, not an
@@ -834,7 +836,7 @@ DESCRIPTION
        A commonly needed autoaction is one that builds a parse-tree. It is
        moderately tricky to set up such an action (which must treat terminals
        differently from non-terminals), so Parse::RecDescent simplifies the
-       process by providing the "<autotree>" directive.
+       process by providing the "&ltautotree&gt" directive.
 
        If this directive appears at the start of grammar, it causes
        Parse::RecDescent to insert autoactions at the end of any rule except
@@ -844,7 +846,7 @@ DESCRIPTION
 
        So, for example, the following grammar:
 
-	   <autotree>
+	   &ltautotree&gt
 
 	   file    : command(s)
 	   command : get | set | vet
@@ -864,8 +866,8 @@ DESCRIPTION
 	   set : 'set' ident 'to' value ';'    { bless \%item, $item[0] }
 	   vet : 'check' ident 'is' value ';'  { bless \%item, $item[0] }
 
-	   ident   : /\w+/  { bless {__VALUE__=>$item[1]}, $item[0] }
-	   value   : /\d+/  { bless {__VALUE__=>$item[1]}, $item[0] }
+	   ident   : /\w+/  { bless {__VALUE__=&gt$item[1]}, $item[0] }
+	   value   : /\d+/  { bless {__VALUE__=&gt$item[1]}, $item[0] }
 
        Note that each node in the tree is blessed into a class of the same
        name as the rule itself. This makes it easy to build object-oriented
@@ -877,18 +879,18 @@ DESCRIPTION
        structure like this:
 
 	   {
-	     file => {
-	       command => {
-		[ get => {
-		   identifier => { __VALUE__ => 'a' },
+	     file =&gt {
+	       command =&gt {
+		[ get =&gt {
+		   identifier =&gt { __VALUE__ =&gt 'a' },
 		     },
-		  set => {
-		   identifier => { __VALUE__ => 'b' },
-		   value      => { __VALUE__ => '7' },
+		  set =&gt {
+		   identifier =&gt { __VALUE__ =&gt 'b' },
+		   value      =&gt { __VALUE__ =&gt '7' },
 		     },
-		  vet => {
-		   identifier => { __VALUE__ => 'b' },
-		   value      => { __VALUE__ => '7' },
+		  vet =&gt {
+		   identifier =&gt { __VALUE__ =&gt 'b' },
+		   value      =&gt { __VALUE__ =&gt '7' },
 		     },
 		 ],
 		  },
@@ -990,37 +992,37 @@ DESCRIPTION
    Directives
        Directives are special pre-defined actions which may be used to alter
        the behaviour of the parser. There are currently twenty-three
-       directives: "<commit>", "<uncommit>", "<reject>", "<score>",
-       "<autoscore>", "<skip>", "<resync>", "<error>", "<warn>", "<hint>",
-       "<trace_build>", "<trace_parse>", "<nocheck>", "<rulevar>",
-       "<matchrule>", "<leftop>", "<rightop>", "<defer>", "<nocheck>",
-       "<perl_quotelike>", "<perl_codeblock>", "<perl_variable>", and
-       "<token>".
+       directives: "&ltcommit&gt", "&ltuncommit&gt", "&ltreject&gt", "&ltscore&gt",
+       "&ltautoscore&gt", "&ltskip&gt", "&ltresync&gt", "&lterror&gt", "&ltwarn&gt", "&lthint&gt",
+       "&lttrace_build&gt", "&lttrace_parse&gt", "&ltnocheck&gt", "&ltrulevar&gt",
+       "&ltmatchrule&gt", "&ltleftop&gt", "&ltrightop&gt", "&ltdefer&gt", "&ltnocheck&gt",
+       "&ltperl_quotelike&gt", "&ltperl_codeblock&gt", "&ltperl_variable&gt", and
+       "&lttoken&gt".
 
        Committing and uncommitting
-	   The "<commit>" and "<uncommit>" directives permit the recursive
+	   The "&ltcommit&gt" and "&ltuncommit&gt" directives permit the recursive
 	   descent of the parse tree to be pruned (or "cut") for efficiency.
-	   Within a rule, a "<commit>" directive instructs the rule to ignore
+	   Within a rule, a "&ltcommit&gt" directive instructs the rule to ignore
 	   subsequent productions if the current production fails. For
 	   example:
 
-	       command: 'find' <commit> filename
-		  | 'open' <commit> filename
+	       command: 'find' &ltcommit&gt filename
+		  | 'open' &ltcommit&gt filename
 		  | 'move' filename filename
 
 	   Clearly, if the leading token 'find' is matched in the first
 	   production but that production fails for some other reason, then
 	   the remaining productions cannot possibly match. The presence of
-	   the "<commit>" causes the "command" rule to fail immediately if an
+	   the "&ltcommit&gt" causes the "command" rule to fail immediately if an
 	   invalid "find" command is found, and likewise if an invalid "open"
 	   command is encountered.
 
 	   It is also possible to revoke a previous commitment. For example:
 
-	       if_statement: 'if' <commit> condition
-		   'then' block <uncommit>
+	       if_statement: 'if' &ltcommit&gt condition
+		   'then' block &ltuncommit&gt
 		   'else' block
-		   | 'if' <commit> condition
+		   | 'if' &ltcommit&gt condition
 		   'then' block
 
 	   In this case, a failure to find an "else" block in the first
@@ -1028,127 +1030,127 @@ DESCRIPTION
 	   failure to find a "condition" certainly should.
 
 	   As a special case, any production in which the first item is an
-	   "<uncommit>" immediately revokes a preceding "<commit>" (even
+	   "&ltuncommit&gt" immediately revokes a preceding "&ltcommit&gt" (even
 	   though the production would not otherwise have been tried). For
 	   example, in the rule:
 
 	       request: 'explain' expression
-		  | 'explain' <commit> keyword
+		  | 'explain' &ltcommit&gt keyword
 		  | 'save'
 		  | 'quit'
-		  | <uncommit> term '?'
+		  | &ltuncommit&gt term '?'
 
 	   if the text being matched was "explain?", and the first two
-	   productions failed, then the "<commit>" in production two would
+	   productions failed, then the "&ltcommit&gt" in production two would
 	   cause productions three and four to be skipped, but the leading
-	   "<uncommit>" in the production five would allow that production to
+	   "&ltuncommit&gt" in the production five would allow that production to
 	   attempt a match.
 
-	   Note in the preceding example, that the "<commit>" was only placed
+	   Note in the preceding example, that the "&ltcommit&gt" was only placed
 	   in production two. If production one had been:
 
-	       request: 'explain' <commit> expression
+	       request: 'explain' &ltcommit&gt expression
 
 	   then production two would be (inappropriately) skipped if a leading
 	   "explain..." was encountered.
 
-	   Both "<commit>" and "<uncommit>" directives always succeed, and
+	   Both "&ltcommit&gt" and "&ltuncommit&gt" directives always succeed, and
 	   their value is always 1.
 
        Rejecting a production
-	   The "<reject>" directive immediately causes the current production
+	   The "&ltreject&gt" directive immediately causes the current production
 	   to fail (it is exactly equivalent to, but more obvious than, the
-	   action "{undef}"). A "<reject>" is useful when it is desirable to
+	   action "{undef}"). A "&ltreject&gt" is useful when it is desirable to
 	   get the side effects of the actions in one production, without
 	   prejudicing a match by some other production later in the rule. For
 	   example, to insert tracing code into the parse:
 
-	       complex_rule: { print "In complex rule...\n"; } <reject>
+	       complex_rule: { print "In complex rule...\n"; } &ltreject&gt
 
 	       complex_rule: simple_rule '+' 'i' '*' simple_rule
 		   | 'i' '*' simple_rule
 		   | simple_rule
 
 	   It is also possible to specify a conditional rejection, using the
-	   form "<reject:condition>", which only rejects if the specified
+	   form "&ltreject:condition&gt", which only rejects if the specified
 	   condition is true. This form of rejection is exactly equivalent to
-	   the action "{(condition)?undef:1}>".  For example:
+	   the action "{(condition)?undef:1}&gt".  For example:
 
 	       command: save_command
 		  | restore_command
-		  | <reject: defined $::tolerant> { exit }
-		  | <error: Unknown command. Ignored.>
+		  | &ltreject: defined $::tolerant&gt { exit }
+		  | &lterror: Unknown command. Ignored.&gt
 
-	   A "<reject>" directive never succeeds (and hence has no associated
+	   A "&ltreject&gt" directive never succeeds (and hence has no associated
 	   value). A conditional rejection may succeed (if its condition is
 	   not satisfied), in which case its value is 1.
 
 	   As an extra optimization, "Parse::RecDescent" ignores any
-	   production which begins with an unconditional "<reject>" directive,
+	   production which begins with an unconditional "&ltreject&gt" directive,
 	   since any such production can never successfully match or have any
 	   useful side-effects. A level 1 warning is issued in all such cases.
 
-	   Note that productions beginning with conditional "<reject:...>"
+	   Note that productions beginning with conditional "&ltreject:...&gt"
 	   directives are never "optimized away" in this manner, even if they
-	   are always guaranteed to fail (for example: "<reject:1>")
+	   are always guaranteed to fail (for example: "&ltreject:1&gt")
 
 	   Due to the way grammars are parsed, there is a minor restriction on
-	   the condition of a conditional "<reject:...>": it cannot contain
-	   any raw '<' or '>' characters. For example:
+	   the condition of a conditional "&ltreject:...&gt": it cannot contain
+	   any raw '&lt' or '&gt' characters. For example:
 
-	       line: cmd <reject: $thiscolumn > max> data
+	       line: cmd &ltreject: $thiscolumn &gt max&gt data
 
 	   results in an error when a parser is built from this grammar (since
-	   the grammar parser has no way of knowing whether the first > is a
-	   "less than" or the end of the "<reject:...>".
+	   the grammar parser has no way of knowing whether the first &gt is a
+	   "less than" or the end of the "&ltreject:...&gt".
 
 	   To overcome this problem, put the condition inside a do{} block:
 
-	       line: cmd <reject: do{$thiscolumn > max}> data
+	       line: cmd &ltreject: do{$thiscolumn &gt max}&gt data
 
 	   Note that the same problem may occur in other directives that take
 	   arguments. The same solution will work in all cases.
 
        Skipping between terminals
-	   The "<skip>" directive enables the terminal prefix used in a
+	   The "&ltskip&gt" directive enables the terminal prefix used in a
 	   production to be changed. For example:
 
-	       OneLiner: Command <skip:'[ \t]*'> Arg(s) /;/
+	       OneLiner: Command &ltskip:'[ \t]*'&gt Arg(s) /;/
 
 	   causes only blanks and tabs to be skipped before terminals in the
-	   "Arg" subrule (and any of its subrules>, and also before the final
+	   "Arg" subrule (and any of its subrules&gt, and also before the final
 	   "/;/" terminal.  Once the production is complete, the previous
 	   terminal prefix is reinstated. Note that this implies that distinct
 	   productions of a rule must reset their terminal prefixes
 	   individually.
 
-	   The "<skip>" directive evaluates to the previous terminal prefix,
+	   The "&ltskip&gt" directive evaluates to the previous terminal prefix,
 	   so it's easy to reinstate a prefix later in a production:
 
-	       Command: <skip:","> CSV(s) <skip:$item[1]> Modifier
+	       Command: &ltskip:","&gt CSV(s) &ltskip:$item[1]&gt Modifier
 
 	   The value specified after the colon is interpolated into a pattern,
 	   so all of the following are equivalent (though their efficiency
 	   increases down the list):
 
-	       <skip: "$colon|$comma">	 # ASSUMING THE VARS HOLD THE OBVIOUS VALUES
+	       &ltskip: "$colon|$comma"&gt	 # ASSUMING THE VARS HOLD THE OBVIOUS VALUES
 
-	       <skip: ':|,'>
+	       &ltskip: ':|,'&gt
 
-	       <skip: q{[:,]}>
+	       &ltskip: q{[:,]}&gt
 
-	       <skip: qr/[:,]/>
+	       &ltskip: qr/[:,]/&gt
 
 	   There is no way of directly setting the prefix for an entire rule,
 	   except as follows:
 
-	       Rule: <skip: '[ \t]*'> Prod1
-	       | <skip: '[ \t]*'> Prod2a Prod2b
-	       | <skip: '[ \t]*'> Prod3
+	       Rule: &ltskip: '[ \t]*'&gt Prod1
+	       | &ltskip: '[ \t]*'&gt Prod2a Prod2b
+	       | &ltskip: '[ \t]*'&gt Prod3
 
 	   or, better:
 
-	       Rule: <skip: '[ \t]*'>
+	       Rule: &ltskip: '[ \t]*'&gt
 	       (
 	       Prod1
 		 | Prod2a Prod2b
@@ -1162,55 +1164,55 @@ DESCRIPTION
 	   again.
 
        Resynchronization
-	   The "<resync>" directive provides a visually distinctive means of
+	   The "&ltresync&gt" directive provides a visually distinctive means of
 	   consuming some of the text being parsed, usually to skip an
-	   erroneous input. In its simplest form "<resync>" simply consumes
+	   erroneous input. In its simplest form "&ltresync&gt" simply consumes
 	   text up to and including the next newline ("\n") character,
 	   succeeding only if the newline is found, in which case it causes
 	   its surrounding rule to return zero on success.
 
-	   In other words, a "<resync>" is exactly equivalent to the token
+	   In other words, a "&ltresync&gt" is exactly equivalent to the token
 	   "/[^\n]*\n/" followed by the action "{ $return = 0 }" (except that
-	   productions beginning with a "<resync>" are ignored when generating
+	   productions beginning with a "&ltresync&gt" are ignored when generating
 	   error messages). A typical use might be:
 
 	       script : command(s)
 
 	       command: save_command
 		  | restore_command
-		  | <resync> # TRY NEXT LINE, IF POSSIBLE
+		  | &ltresync&gt # TRY NEXT LINE, IF POSSIBLE
 
 	   It is also possible to explicitly specify a resynchronization
-	   pattern, using the "<resync:pattern>" variant. This version
+	   pattern, using the "&ltresync:pattern&gt" variant. This version
 	   succeeds only if the specified pattern matches (and consumes) the
-	   parsed text. In other words, "<resync:pattern>" is exactly
+	   parsed text. In other words, "&ltresync:pattern&gt" is exactly
 	   equivalent to the token "/pattern/" (followed by a
 	   "{ $return = 0 }" action). For example, if commands were terminated
 	   by newlines or semi-colons:
 
 	       command: save_command
 		  | restore_command
-		  | <resync:[^;\n]*[;\n]>
+		  | &ltresync:[^;\n]*[;\n]&gt
 
-	   The value of a successfully matched "<resync>" directive (of either
+	   The value of a successfully matched "&ltresync&gt" directive (of either
 	   type) is the text that it consumed. Note, however, that since the
 	   directive also sets $return, a production consisting of a lone
-	   "<resync>" succeeds but returns the value zero (which a calling
+	   "&ltresync&gt" succeeds but returns the value zero (which a calling
 	   rule may find useful to distinguish between "true" matches and
 	   "tolerant" matches).  Remember that returning a zero value
 	   indicates that the rule succeeded (since only an "undef" denotes
 	   failure within "Parse::RecDescent" parsers.
 
        Error handling
-	   The "<error>" directive provides automatic or user-defined
+	   The "&lterror&gt" directive provides automatic or user-defined
 	   generation of error messages during a parse. In its simplest form
-	   "<error>" prepares an error message based on the mismatch between
+	   "&lterror&gt" prepares an error message based on the mismatch between
 	   the last item expected and the text which cause it to fail. For
 	   example, given the rule:
 
 	       McCoy: curse ',' name ', I'm a doctor, not a' a_profession '!'
 		| pronoun 'dead,' name '!'
-		| <error>
+		| &lterror&gt
 
 	   the following strings would produce the following messages:
 
@@ -1246,38 +1248,38 @@ DESCRIPTION
 
 	       Spock: "Fascinating ',' (name | 'Captain') '.'
 		| "Highly illogical, doctor."
-		| <error: He never said that!>
+		| &lterror: He never said that!&gt
 
 	   which would result in all failures to parse a "Spock" subrule
 	   printing the following message:
 
-		  ERROR (line <N>): Invalid Spock:  He never said that!
+		  ERROR (line &ltN&gt): Invalid Spock:  He never said that!
 
 	   The error message is treated as a "qq{...}" string and interpolated
 	   when the error is generated (not when the directive is specified!).
 	   Hence:
 
-	       <error: Mystical error near "$text">
+	       &lterror: Mystical error near "$text"&gt
 
 	   would correctly insert the ambient text string which caused the
 	   error.
 
-	   There are two other forms of error directive: "<error?>" and
-	   "<error?: msg>". These behave just like "<error>" and
-	   "<error: msg>" respectively, except that they are only triggered if
+	   There are two other forms of error directive: "&lterror?&gt" and
+	   "&lterror?: msg&gt". These behave just like "&lterror&gt" and
+	   "&lterror: msg&gt" respectively, except that they are only triggered if
 	   the rule is "committed" at the time they are encountered. For
 	   example:
 
-	       Scotty: "Ya kenna change the Laws of Phusics," <commit> name
-		 | name <commit> ',' 'she's goanta blaw!'
-		 | <error?>
+	       Scotty: "Ya kenna change the Laws of Phusics," &ltcommit&gt name
+		 | name &ltcommit&gt ',' 'she's goanta blaw!'
+		 | &lterror?&gt
 
 	   will only generate an error for a string beginning with "Ya kenna
 	   change the Laws o' Phusics," or a valid name, but which still fails
 	   to match the corresponding production. That is,
-	   "$parser->Scotty("Aye, Cap'ain")" will fail silently (since neither
+	   "$parser-&gtScotty("Aye, Cap'ain")" will fail silently (since neither
 	   production will "commit" the rule on that input), whereas
-	   "$parser->Scotty("Mr Spock, ah jest kenna do'ut!")"	will fail with
+	   "$parser-&gtScotty("Mr Spock, ah jest kenna do'ut!")"	will fail with
 	   the error message:
 
 		  ERROR (line 1): Invalid Scotty: expected 'she's goanta blaw!'
@@ -1286,29 +1288,29 @@ DESCRIPTION
 	   since in that case the second production would commit after
 	   matching the leading name.
 
-	   Note that to allow this behaviour, all "<error>" directives which
+	   Note that to allow this behaviour, all "&lterror&gt" directives which
 	   are the first item in a production automatically uncommit the rule
 	   just long enough to allow their production to be attempted (that
 	   is, when their production fails, the commitment is reinstated so
 	   that subsequent productions are skipped).
 
 	   In order to permanently uncommit the rule before an error message,
-	   it is necessary to put an explicit "<uncommit>" before the
-	   "<error>". For example:
+	   it is necessary to put an explicit "&ltuncommit&gt" before the
+	   "&lterror&gt". For example:
 
-	       line: 'Kirk:'  <commit> Kirk
-	       | 'Spock:' <commit> Spock
-	       | 'McCoy:' <commit> McCoy
-	       | <uncommit> <error?> <reject>
-	       | <resync>
+	       line: 'Kirk:'  &ltcommit&gt Kirk
+	       | 'Spock:' &ltcommit&gt Spock
+	       | 'McCoy:' &ltcommit&gt McCoy
+	       | &ltuncommit&gt &lterror?&gt &ltreject&gt
+	       | &ltresync&gt
 
-	   Error messages generated by the various "<error...>" directives are
+	   Error messages generated by the various "&lterror...&gt" directives are
 	   not displayed immediately. Instead, they are "queued" in a buffer
 	   and are only displayed once parsing ultimately fails. Moreover,
-	   "<error...>" directives that cause one production of a rule to fail
+	   "&lterror...&gt" directives that cause one production of a rule to fail
 	   are automatically removed from the message queue if another
 	   production subsequently causes the entire rule to succeed.  This
-	   means that you can put "<error...>" directives wherever useful
+	   means that you can put "&lterror...&gt" directives wherever useful
 	   diagnosis can be done, and only those associated with actual parser
 	   failure will ever be displayed. Also see "Gotchas".
 
@@ -1316,7 +1318,7 @@ DESCRIPTION
 	   generated either at the very lowest level within the grammar, or at
 	   the very highest. A good rule of thumb is to identify those
 	   subrules which consist mainly (or entirely) of terminals, and then
-	   put an "<error...>" directive at the end of any other rule which
+	   put an "&lterror...&gt" directive at the end of any other rule which
 	   calls one or more of those subrules.
 
 	   There is one other situation in which the output of the various
@@ -1325,45 +1327,45 @@ DESCRIPTION
 	   "Look-ahead"). In this case, the error directive will still cause
 	   the rule to fail, but will do so silently.
 
-	   An unconditional "<error>" directive always fails (and hence has no
+	   An unconditional "&lterror&gt" directive always fails (and hence has no
 	   associated value). This means that encountering such a directive
 	   always causes the production containing it to fail. Hence an
-	   "<error>" directive will inevitably be the last (useful) item of a
+	   "&lterror&gt" directive will inevitably be the last (useful) item of a
 	   rule (a level 3 warning is issued if a production contains items
-	   after an unconditional "<error>" directive).
+	   after an unconditional "&lterror&gt" directive).
 
-	   An "<error?>" directive will succeed (that is: fail to fail :-), if
+	   An "&lterror?&gt" directive will succeed (that is: fail to fail :-), if
 	   the current rule is uncommitted when the directive is encountered.
 	   In that case the directive's associated value is zero. Hence, this
 	   type of error directive can be used before the end of a production.
 	   For example:
 
-	       command: 'do' <commit> something
-		  | 'report' <commit> something
-		  | <error?: Syntax error> <error: Unknown command>
+	       command: 'do' &ltcommit&gt something
+		  | 'report' &ltcommit&gt something
+		  | &lterror?: Syntax error&gt &lterror: Unknown command&gt
 
-	   Warning: The "<error?>" directive does not mean "always fail (but
+	   Warning: The "&lterror?&gt" directive does not mean "always fail (but
 	   do so silently unless committed)". It actually means "only fail
 	   (and report) if committed, otherwise succeed". To achieve the "fail
 	   silently if uncommitted" semantics, it is necessary to use:
 
-	       rule: item <commit> item(s)
-	       | <error?> <reject>  # FAIL SILENTLY UNLESS COMMITTED
+	       rule: item &ltcommit&gt item(s)
+	       | &lterror?&gt &ltreject&gt  # FAIL SILENTLY UNLESS COMMITTED
 
-	   However, because people seem to expect a lone "<error?>" directive
+	   However, because people seem to expect a lone "&lterror?&gt" directive
 	   to work like this:
 
-	       rule: item <commit> item(s)
-	       | <error?: Error message if committed>
-	       | <error:  Error message if uncommitted>
+	       rule: item &ltcommit&gt item(s)
+	       | &lterror?: Error message if committed&gt
+	       | &lterror:  Error message if uncommitted&gt
 
-	   Parse::RecDescent automatically appends a "<reject>" directive if
-	   the "<error?>" directive is the only item in a production. A level
+	   Parse::RecDescent automatically appends a "&ltreject&gt" directive if
+	   the "&lterror?&gt" directive is the only item in a production. A level
 	   2 warning (see below) is issued when this happens.
 
 	   The level of error reporting during both parser construction and
 	   parsing is controlled by the presence or absence of four global
-	   variables: $::RD_ERRORS, $::RD_WARN, $::RD_HINT, and <$::RD_TRACE>.
+	   variables: $::RD_ERRORS, $::RD_WARN, $::RD_HINT, and &lt$::RD_TRACE&gt.
 	   If $::RD_ERRORS is defined (and, by default, it is) then fatal
 	   errors are reported.
 
@@ -1379,8 +1381,8 @@ DESCRIPTION
 	   non-fatal errors are automatically reported.
 
 	   There is also a grammar directive to turn on warnings from within
-	   the grammar: "<warn>". It takes an optional argument, which
-	   specifies the warning level: "<warn: 2>".
+	   the grammar: "&ltwarn&gt". It takes an optional argument, which
+	   specifies the warning level: "&ltwarn: 2&gt".
 
 	   See "DIAGNOSTICS" for a list of the varous error and warning
 	   messages that Parse::RecDescent generates when these two variables
@@ -1391,7 +1393,7 @@ DESCRIPTION
 	   Defining $::RD_HINT causes the parser generator to offer more
 	   detailed analyses and hints on both errors and warnings.  Note that
 	   setting $::RD_HINT at any point automagically sets $::RD_WARN to 1.
-	   There is also a "<hint>" directive, which can be hard-coded into a
+	   There is also a "&lthint&gt" directive, which can be hard-coded into a
 	   grammar.
 
 	   Defining $::RD_TRACE causes the parser generator and the parser to
@@ -1401,16 +1403,16 @@ DESCRIPTION
 	   value (N) greater than 1, only the N characters of the "current
 	   parsing context" (that is, where in the input string we are at any
 	   point in the parse) is reported at any time.
-	      > $::RD_TRACE is mainly useful for debugging a grammar that
+	      &gt $::RD_TRACE is mainly useful for debugging a grammar that
 	   isn't behaving as you expected it to. To this end, if $::RD_TRACE
 	   is defined when a parser is built, any actual parser code which is
 	   generated is also written to a file named "RD_TRACE" in the local
 	   directory.
 
 	   There are two directives associated with the $::RD_TRACE variable.
-	   If a grammar contains a "<trace_build>" directive anywhere in its
+	   If a grammar contains a "&lttrace_build&gt" directive anywhere in its
 	   specification, $::RD_TRACE is turned on during the parser
-	   construction phase.	If a grammar contains a "<trace_parse>"
+	   construction phase.	If a grammar contains a "&lttrace_parse&gt"
 	   directive anywhere in its specification, $::RD_TRACE is turned on
 	   during any parse the parser performs.
 
@@ -1438,11 +1440,11 @@ DESCRIPTION
 	       Parse::RecDescent::redirect_reporting_to($fh);
 
 	   The optional second argument specifies the mode in which data is to
-	   be written to the handle. By default the "overwrite" mode ('>') is
-	   used, but you can explicitly pass '>>' to select "append" mode:
+	   be written to the handle. By default the "overwrite" mode ('&gt') is
+	   used, but you can explicitly pass '&gt&gt' to select "append" mode:
 
 	       # Append reports to my log file...
-	       Parse::RecDescent::redirect_reporting_to($my_log_file, '>>');
+	       Parse::RecDescent::redirect_reporting_to($my_log_file, '&gt&gt');
 
 	   The subroutine returns true if it successfully redirects all
 	   reporting streams, or false if it is not able to do so (typically
@@ -1457,26 +1459,26 @@ DESCRIPTION
 	   These checks are important safeguards during development, but
 	   unnecessary overheads when the grammar is stable and ready to be
 	   deployed. So Parse::RecDescent provides a directive to disable
-	   them: "<nocheck>".
+	   them: "&ltnocheck&gt".
 
-	   If a grammar contains a "<nocheck>" directive anywhere in its
+	   If a grammar contains a "&ltnocheck&gt" directive anywhere in its
 	   specification, the extra compile-time checks are by-passed.
 
        Specifying local variables
 	   It is occasionally convenient to specify variables which are local
 	   to a single rule. This may be achieved by including a
-	   "<rulevar:...>" directive anywhere in the rule. For example:
+	   "&ltrulevar:...&gt" directive anywhere in the rule. For example:
 
-	       markup: <rulevar: $tag>
+	       markup: &ltrulevar: $tag&gt
 
-	       markup: tag {($tag=$item[1]) =~ s/^<|>$//g} body[$tag]
+	       markup: tag {($tag=$item[1]) =~ s/^&lt|&gt$//g} body[$tag]
 
-	   The example "<rulevar: $tag>" directive causes a "my" variable
+	   The example "&ltrulevar: $tag&gt" directive causes a "my" variable
 	   named $tag to be declared at the start of the subroutine
 	   implementing the "markup" rule (that is, before the first
 	   production, regardless of where in the rule it is specified).
 
-	   Specifically, any directive of the form: "<rulevar:text>" causes a
+	   Specifically, any directive of the form: "&ltrulevar:text&gt" causes a
 	   line of the form "my text;" to be added at the beginning of the
 	   rule subroutine, immediately after the definitions of the following
 	   local variables:
@@ -1486,24 +1488,24 @@ DESCRIPTION
 	       $thisline   @arg
 	       $text   %arg
 
-	   This means that the following "<rulevar>" directives work as
+	   This means that the following "&ltrulevar&gt" directives work as
 	   expected:
 
-	       <rulevar: $count = 0 >
+	       &ltrulevar: $count = 0 &gt
 
-	       <rulevar: $firstarg = $arg[0] || '' >
+	       &ltrulevar: $firstarg = $arg[0] || '' &gt
 
-	       <rulevar: $myItems = \@item >
+	       &ltrulevar: $myItems = \@item &gt
 
-	       <rulevar: @context = ( $thisline, $text, @arg ) >
+	       &ltrulevar: @context = ( $thisline, $text, @arg ) &gt
 
-	       <rulevar: ($name,$age) = $arg{"name","age"} >
+	       &ltrulevar: ($name,$age) = $arg{"name","age"} &gt
 
 	   If a variable that is also visible to subrules is required, it
 	   needs to be "local"'d, not "my"'d. "rulevar" defaults to "my", but
 	   if "local" is explicitly specified:
 
-	       <rulevar: local $count = 0 >
+	       &ltrulevar: local $count = 0 &gt
 
 	   then a "local"-ized variable is declared instead, and will be
 	   available within subrules.
@@ -1513,21 +1515,21 @@ DESCRIPTION
 	   To preserve values between match attempts, values can be stored
 	   within the "local" member of the $thisrule object:
 
-	       countedrule: { $thisrule->{"local"}{"count"}++ }
-		    <reject>
+	       countedrule: { $thisrule-&gt{"local"}{"count"}++ }
+		    &ltreject&gt
 		  | subrule1
 		  | subrule2
-		  | <reject: $thisrule->{"local"}{"count"} == 1>
+		  | &ltreject: $thisrule-&gt{"local"}{"count"} == 1&gt
 		    subrule3
 
-	   When matching a rule, each "<rulevar>" directive is matched as if
-	   it were an unconditional "<reject>" directive (that is, it causes
+	   When matching a rule, each "&ltrulevar&gt" directive is matched as if
+	   it were an unconditional "&ltreject&gt" directive (that is, it causes
 	   any production in which it appears to immediately fail to match).
 	   For this reason (and to improve readability) it is usual to specify
-	   any "<rulevar>" directive in a separate production at the start of
+	   any "&ltrulevar&gt" directive in a separate production at the start of
 	   the rule (this has the added advantage that it enables
 	   "Parse::RecDescent" to optimize away such productions, just as it
-	   does for the "<reject>" directive).
+	   does for the "&ltreject&gt" directive).
 
        Dynamically matched rules
 	   Because regexes and double-quoted strings are interpolated, it is
@@ -1536,17 +1538,17 @@ DESCRIPTION
 
 	       command:  keyword  body	"end $item[1]"
 
-	   which ensures that a command block is bounded by a "<keyword>...end
-	   <same keyword>" pair.
+	   which ensures that a command block is bounded by a "&ltkeyword&gt...end
+	   &ltsame keyword&gt" pair.
 
 	   Building productions in which subrules are context sensitive is
-	   also possible, via the "<matchrule:...>" directive. This directive
+	   also possible, via the "&ltmatchrule:...&gt" directive. This directive
 	   behaves identically to a subrule item, except that the rule which
 	   is invoked to match it is determined by the string specified after
 	   the colon. For example, we could rewrite the "command" rule like
 	   this:
 
-	       command:  keyword  <matchrule:body>  "end $item[1]"
+	       command:  keyword  &ltmatchrule:body&gt  "end $item[1]"
 
 	   Whatever appears after the colon in the directive is treated as an
 	   interpolated string (that is, as if it appeared in "qq{...}"
@@ -1554,11 +1556,11 @@ DESCRIPTION
 	   the subrule to be matched.
 
 	   Of course, just putting a constant string like "body" in a
-	   "<matchrule:...>" directive is of little interest or benefit.  The
+	   "&ltmatchrule:...&gt" directive is of little interest or benefit.  The
 	   power of directive is seen when we use a string that interpolates
 	   to something interesting. For example:
 
-	       command:    keyword <matchrule:$item[1]_body> "end $item[1]"
+	       command:    keyword &ltmatchrule:$item[1]_body&gt "end $item[1]"
 
 	       keyword:    'while' | 'if' | 'function'
 
@@ -1575,14 +1577,14 @@ DESCRIPTION
 		  |    'if'	  if_body   "end if"
 		  |    'function' function_body "end function"
 
-	   When a "<matchrule:...>" directive is used as a repeated subrule,
+	   When a "&ltmatchrule:...&gt" directive is used as a repeated subrule,
 	   the rule name expression is "late-bound". That is, the name of the
 	   rule to be called is re-evaluated each time a match attempt is
 	   made. Hence, the following grammar:
 
 	       { $::species = 'dogs' }
 
-	       pair:   'two' <matchrule:$::species>(s)
+	       pair:   'two' &ltmatchrule:$::species&gt(s)
 
 	       dogs:   /dogs/ { $::species = 'cats' }
 
@@ -1618,7 +1620,7 @@ DESCRIPTION
 
 	       # and in the grammar...
 
-	       <matchrule:$rulename>[@args]
+	       &ltmatchrule:$rulename&gt[@args]
 
 	   but not:
 
@@ -1626,22 +1628,22 @@ DESCRIPTION
 
 	       # and in the grammar...
 
-	       <matchrule:$rulename>
+	       &ltmatchrule:$rulename&gt
 
        Deferred actions
-	   The "<defer:...>" directive is used to specify an action to be
+	   The "&ltdefer:...&gt" directive is used to specify an action to be
 	   performed when (and only if!) the current production ultimately
 	   succeeds.
 
-	   Whenever a "<defer:...>" directive appears, the code it specifies
+	   Whenever a "&ltdefer:...&gt" directive appears, the code it specifies
 	   is converted to a closure (an anonymous subroutine reference) which
 	   is queued within the active parser object. Note that, because the
 	   deferred code is converted to a closure, the values of any "local"
-	   variable (such as $text, <@item>, etc.) are preserved until the
+	   variable (such as $text, &lt@item&gt, etc.) are preserved until the
 	   deferred code is actually executed.
 
 	   If the parse ultimately succeeds and the production in which the
-	   "<defer:...>" directive was evaluated formed part of the successful
+	   "&ltdefer:...&gt" directive was evaluated formed part of the successful
 	   parse, then the deferred code is executed immediately before the
 	   parse returns. If however the production which queued a deferred
 	   action fails, or one of the higher-level rules which called that
@@ -1679,24 +1681,24 @@ DESCRIPTION
 	   production of "sentence" succeeds, causing the actions of the
 	   subrules "noun" and "intrans" to be executed as well.
 
-	   On the other hand, if the actions were replaced by "<defer:...>"
+	   On the other hand, if the actions were replaced by "&ltdefer:...&gt"
 	   directives:
 
 	       sentence: noun trans noun
 	       | noun intrans
 
 	       noun:	 'the dog'
-		   <defer: print "$item[1]\t(noun)\n" >
+		   &ltdefer: print "$item[1]\t(noun)\n" &gt
 	       |     'the meat'
-		   <defer: print "$item[1]\t(noun)\n" >
+		   &ltdefer: print "$item[1]\t(noun)\n" &gt
 
 	       trans:	 'ate'
-		   <defer: print "$item[1]\t(transitive)\n" >
+		   &ltdefer: print "$item[1]\t(transitive)\n" &gt
 
 	       intrans:  'ate'
-		   <defer: print "$item[1]\t(intransitive)\n" >
+		   &ltdefer: print "$item[1]\t(intransitive)\n" &gt
 		  |  'barked'
-		   <defer: print "$item[1]\t(intransitive)\n" >
+		   &ltdefer: print "$item[1]\t(intransitive)\n" &gt
 
 	   the output would be:
 
@@ -1726,7 +1728,7 @@ DESCRIPTION
 	   specific input.
 
 	   Whether or not the action it specifies is ever executed, a
-	   "<defer:...>" directive always succeeds, returning the number of
+	   "&ltdefer:...&gt" directive always succeeds, returning the number of
 	   deferred actions currently queued at that point.
 
        Parsing Perl
@@ -1734,7 +1736,7 @@ DESCRIPTION
 	   Perl, namely: quote-like operators, Perl variables, and complete
 	   code blocks.
 
-	   The "<perl_quotelike>" directive can be used to parse any Perl
+	   The "&ltperl_quotelike&gt" directive can be used to parse any Perl
 	   quote-like operator: 'a string', "m/a pattern/", "tr{ans}{lation}",
 	   etc.  It does this by calling Text::Balanced::quotelike().
 
@@ -1771,15 +1773,15 @@ DESCRIPTION
 	   If a quote-like expression is not found, the directive fails with
 	   the usual "undef" value.
 
-	   The "<perl_variable>" directive can be used to parse any Perl
-	   variable: $scalar, @array, %hash, $ref->{field}[$index], etc.  It
+	   The "&ltperl_variable&gt" directive can be used to parse any Perl
+	   variable: $scalar, @array, %hash, $ref-&gt{field}[$index], etc.  It
 	   does this by calling Text::Balanced::extract_variable().
 
 	   If the directive matches text representing a valid Perl variable
 	   specification, it returns that text. Otherwise it fails with the
 	   usual "undef" value.
 
-	   The "<perl_codeblock>" directive can be used to parse curly-brace-
+	   The "&ltperl_codeblock&gt" directive can be used to parse curly-brace-
 	   delimited block of Perl code, such as: { $a = 1; f() =~ m/pat/; }.
 	   It does this by calling Text::Balanced::extract_codeblock().
 
@@ -1790,7 +1792,7 @@ DESCRIPTION
 	   You can also tell it what kind of brackets to use as the outermost
 	   delimiters. For example:
 
-	       arglist: <perl_codeblock ()>
+	       arglist: &ltperl_codeblock ()&gt
 
 	   causes an arglist to match a perl code block whose outermost
 	   delimiters are "(...)" (rather than the default "{...}").
@@ -1798,29 +1800,29 @@ DESCRIPTION
        Constructing tokens
 	   Eventually, Parse::RecDescent will be able to parse tokenized
 	   input, as well as ordinary strings. In preparation for this joyous
-	   day, the "<token:...>" directive has been provided.	This directive
+	   day, the "&lttoken:...&gt" directive has been provided.	This directive
 	   creates a token which will be suitable for input to a
 	   Parse::RecDescent parser (when it eventually supports tokenized
 	   input).
 
 	   The text of the token is the value of the immediately preceding
-	   item in the production. A "<token:...>" directive always succeeds
+	   item in the production. A "&lttoken:...&gt" directive always succeeds
 	   with a return value which is the hash reference that is the new
 	   token. It also sets the return value for the production to that
 	   hash ref.
 
-	   The "<token:...>" directive makes it easy to build a
+	   The "&lttoken:...&gt" directive makes it easy to build a
 	   Parse::RecDescent-compatible lexer in Parse::RecDescent:
 
 	       my $lexer = new Parse::RecDescent q
 	       {
 	       lex:    token(s)
 
-	       token:  /a\b/	      <token:INDEF>
-		    |  /the\b/	      <token:DEF>
-		    |  /fly\b/	      <token:NOUN,VERB>
-		    |  /[a-z]+/i { lc $item[1] }  <token:ALPHA>
-		    |  <error: Unknown token>
+	       token:  /a\b/	      &lttoken:INDEF&gt
+		    |  /the\b/	      &lttoken:DEF&gt
+		    |  /fly\b/	      &lttoken:NOUN,VERB&gt
+		    |  /[a-z]+/i { lc $item[1] }  &lttoken:ALPHA&gt
+		    |  &lterror: Unknown token&gt
 
 	       };
 
@@ -1836,13 +1838,13 @@ DESCRIPTION
 
 	   either with a pre-lexing phase:
 
-	       $parser->startrule( $lexer->lex($data) );
+	       $parser-&gtstartrule( $lexer-&gtlex($data) );
 
 	   or with a lex-on-demand approach:
 
-	       $parser->startrule( sub{$lexer->token(\$data)} );
+	       $parser-&gtstartrule( sub{$lexer-&gttoken(\$data)} );
 
-	   But at present, only the "<token:...>" directive is actually
+	   But at present, only the "&lttoken:...&gt" directive is actually
 	   implemented. The rest is vapourware.
 
        Specifying operations
@@ -1870,40 +1872,40 @@ DESCRIPTION
 
 	   and either way is ugly and hard to get right.
 
-	   The "<leftop:...>" and "<rightop:...>" directives provide an easier
-	   way of specifying such operations. Using "<leftop:...>" the above
+	   The "&ltleftop:...&gt" and "&ltrightop:...&gt" directives provide an easier
+	   way of specifying such operations. Using "&ltleftop:...&gt" the above
 	   examples become:
 
-	       disjunction:    <leftop: conjunction 'or' conjunction>
-	       conjunction:    <leftop: atom 'and' atom>
+	       disjunction:    &ltleftop: conjunction 'or' conjunction&gt
+	       conjunction:    &ltleftop: atom 'and' atom&gt
 
-	   The "<leftop:...>" directive specifies a left-associative binary
+	   The "&ltleftop:...&gt" directive specifies a left-associative binary
 	   operator.  It is specified around three other grammar elements
 	   (typically subrules or terminals), which match the left operand,
 	   the operator itself, and the right operand respectively.
 
-	   A "<leftop:...>" directive such as:
+	   A "&ltleftop:...&gt" directive such as:
 
-	       disjunction:    <leftop: conjunction 'or' conjunction>
+	       disjunction:    &ltleftop: conjunction 'or' conjunction&gt
 
 	   is converted to the following:
 
 	       disjunction:    ( conjunction ('or' conjunction)(s?)
 		   { $return = [ $item[1], @{$item[2]} ] } )
 
-	   In other words, a "<leftop:...>" directive matches the left operand
+	   In other words, a "&ltleftop:...&gt" directive matches the left operand
 	   followed by zero or more repetitions of both the operator and the
 	   right operand. It then flattens the matched items into an anonymous
-	   array which becomes the (single) value of the entire "<leftop:...>"
+	   array which becomes the (single) value of the entire "&ltleftop:...&gt"
 	   directive.
 
-	   For example, an "<leftop:...>" directive such as:
+	   For example, an "&ltleftop:...&gt" directive such as:
 
-	       output:	<leftop: ident '<<' expr >
+	       output:	&ltleftop: ident '&lt&lt' expr &gt
 
 	   when given a string such as:
 
-	       cout << var << "str" << 3
+	       cout &lt&lt var &lt&lt "str" &lt&lt 3
 
 	   would match, and $item[1] would be set to:
 
@@ -1911,20 +1913,20 @@ DESCRIPTION
 
 	   In other words:
 
-	       output:	<leftop: ident '<<' expr >
+	       output:	&ltleftop: ident '&lt&lt' expr &gt
 
 	   is equivalent to a left-associative operator:
 
 	       output:	ident	       { $return = [$item[1]]	}
-		 |  ident '<<' expr	   { $return = [@item[1,3]]	}
-		 |  ident '<<' expr '<<' expr	   { $return = [@item[1,3,5]]	}
-		 |  ident '<<' expr '<<' expr '<<' expr    { $return = [@item[1,3,5,7]] }
+		 |  ident '&lt&lt' expr	   { $return = [@item[1,3]]	}
+		 |  ident '&lt&lt' expr '&lt&lt' expr	   { $return = [@item[1,3,5]]	}
+		 |  ident '&lt&lt' expr '&lt&lt' expr '&lt&lt' expr    { $return = [@item[1,3,5,7]] }
 		 #  ...etc...
 
-	   Similarly, the "<rightop:...>" directive takes a left operand, an
+	   Similarly, the "&ltrightop:...&gt" directive takes a left operand, an
 	   operator, and a right operand:
 
-	       assign:	<rightop: var '=' expr >
+	       assign:	&ltrightop: var '=' expr &gt
 
 	   and converts them to:
 
@@ -1939,21 +1941,21 @@ DESCRIPTION
 		 |  var '=' var '=' var '=' expr   { $return = [@item[1,3,5,7]] }
 		 #  ...etc...
 
-	   Note that for both the "<leftop:...>" and "<rightop:...>"
+	   Note that for both the "&ltleftop:...&gt" and "&ltrightop:...&gt"
 	   directives, the directive does not normally return the operator
 	   itself, just a list of the operands involved. This is particularly
 	   handy for specifying lists:
 
-	       list: '(' <leftop: list_item ',' list_item> ')'
+	       list: '(' &ltleftop: list_item ',' list_item&gt ')'
 		   { $return = $item[2] }
 
 	   There is, however, a problem: sometimes the operator is itself
-	   significant.  For example, in a Perl list a comma and a "=>" are
-	   both valid separators, but the "=>" has additional stringification
+	   significant.  For example, in a Perl list a comma and a "=&gt" are
+	   both valid separators, but the "=&gt" has additional stringification
 	   semantics.  Hence it's important to know which was used in each
 	   case.
 
-	   To solve this problem the "<leftop:...>" and "<rightop:...>"
+	   To solve this problem the "&ltleftop:...&gt" and "&ltrightop:...&gt"
 	   directives do return the operator(s) as well, under two
 	   circumstances.  The first case is where the operator is specified
 	   as a subrule. In that instance, whatever the operator matches is
@@ -1969,42 +1971,42 @@ DESCRIPTION
 
 	   In other words, given the input:
 
-	       ( a=>1, b=>2 )
+	       ( a=&gt1, b=&gt2 )
 
 	   the specifications:
 
-	       list:	  '('  <leftop: list_item separator list_item>	')'
+	       list:	  '('  &ltleftop: list_item separator list_item&gt	')'
 
-	       separator: ',' | '=>'
+	       separator: ',' | '=&gt'
 
 	   or:
 
-	       list:	  '('  <leftop: list_item /(,|=>)/ list_item>  ')'
+	       list:	  '('  &ltleftop: list_item /(,|=&gt)/ list_item&gt  ')'
 
 	   cause the list separators to be interleaved with the operands in
 	   the anonymous array in $item[2]:
 
-	       [ 'a', '=>', '1', ',', 'b', '=>', '2' ]
+	       [ 'a', '=&gt', '1', ',', 'b', '=&gt', '2' ]
 
 	   But the following version:
 
-	       list:	  '('  <leftop: list_item /,|=>/ list_item>  ')'
+	       list:	  '('  &ltleftop: list_item /,|=&gt/ list_item&gt  ')'
 
 	   returns only the operators:
 
 	       [ 'a', '1', 'b', '2' ]
 
 	   Of course, none of the above specifications handle the case of an
-	   empty list, since the "<leftop:...>" and "<rightop:...>" directives
+	   empty list, since the "&ltleftop:...&gt" and "&ltrightop:...&gt" directives
 	   require at least a single right or left operand to match. To
 	   specify that the operator can match "trivially", it's necessary to
 	   add a "(s?)" qualifier to the directive:
 
-	       list:	  '('  <leftop: list_item /(,|=>)/ list_item>(s?)  ')'
+	       list:	  '('  &ltleftop: list_item /(,|=&gt)/ list_item&gt(s?)  ')'
 
 	   Note that in almost all the above examples, the first and third
-	   arguments of the "<leftop:...>" directive were the same subrule.
-	   That is because "<leftop:...>"'s are frequently used to specify
+	   arguments of the "&ltleftop:...&gt" directive were the same subrule.
+	   That is because "&ltleftop:...&gt"'s are frequently used to specify
 	   "separated" lists of the same type of item. To make such lists
 	   easier to specify, the following syntax:
 
@@ -2012,7 +2014,7 @@ DESCRIPTION
 
 	   is exactly equivalent to:
 
-	       list:   <leftop: element /,/ element>
+	       list:   &ltleftop: element /,/ element&gt
 
 	   Note that the separator must be specified as a raw pattern (i.e.
 	   not a string or subrule).
@@ -2035,25 +2037,25 @@ DESCRIPTION
 	   been "fruit flies like a banana", then the second production is
 	   probably the right match.
 
-	   To cater for such situtations, the "<score:...>" can be used.  The
-	   directive is equivalent to an unconditional "<reject>", except that
+	   To cater for such situtations, the "&ltscore:...&gt" can be used.  The
+	   directive is equivalent to an unconditional "&ltreject&gt", except that
 	   it allows you to specify a "score" for the current production. If
 	   that score is numerically greater than the best score of any
 	   preceding production, the current production is cached for later
 	   consideration. If no later production matches, then the cached
 	   production is treated as having matched, and the value of the item
-	   immediately before its "<score:...>" directive is returned as the
+	   immediately before its "&ltscore:...&gt" directive is returned as the
 	   result.
 
-	   In other words, by putting a "<score:...>" directive at the end of
+	   In other words, by putting a "&ltscore:...&gt" directive at the end of
 	   each production, you can select which production matches using
 	   criteria other than specification order. For example:
 
-	       sentence: verb noun preposition article noun { [@item] } <score: sensible(@item)>
-	       | adjective noun verb article noun   { [@item] } <score: sensible(@item)>
-	       | noun verb preposition article noun { [@item] } <score: sensible(@item)>
+	       sentence: verb noun preposition article noun { [@item] } &ltscore: sensible(@item)&gt
+	       | adjective noun verb article noun   { [@item] } &ltscore: sensible(@item)&gt
+	       | noun verb preposition article noun { [@item] } &ltscore: sensible(@item)&gt
 
-	   Now, when each production reaches its respective "<score:...>"
+	   Now, when each production reaches its respective "&ltscore:...&gt"
 	   directive, the subroutine "sensible" will be called to evaluate the
 	   matched items (somehow). Once all productions have been tried, the
 	   one which "sensible" scored most highly will be the one that is
@@ -2069,40 +2071,40 @@ DESCRIPTION
 	   grammar resolves the ambiguity by selecting the rule that results
 	   in the fewest fields:
 
-	       line: seplist[sep=>',']	<score: -@{$item[1]}>
-	       | seplist[sep=>':']  <score: -@{$item[1]}>
-	       | seplist[sep=>" "]  <score: -@{$item[1]}>
+	       line: seplist[sep=&gt',']	&ltscore: -@{$item[1]}&gt
+	       | seplist[sep=&gt':']  &ltscore: -@{$item[1]}&gt
+	       | seplist[sep=&gt" "]  &ltscore: -@{$item[1]}&gt
 
-	       seplist: <skip:""> <leftop: /[^$arg{sep}]*/ "$arg{sep}" /[^$arg{sep}]*/>
+	       seplist: &ltskip:""&gt &ltleftop: /[^$arg{sep}]*/ "$arg{sep}" /[^$arg{sep}]*/&gt
 
-	   Note the use of negation within the "<score:...>" directive to
+	   Note the use of negation within the "&ltscore:...&gt" directive to
 	   ensure that the seplist with the most items gets the lowest score.
 
 	   As the above examples indicate, it is often the case that all
-	   productions in a rule use exactly the same "<score:...>" directive.
+	   productions in a rule use exactly the same "&ltscore:...&gt" directive.
 	   It is tedious to have to repeat this identical directive in every
 	   production, so Parse::RecDescent also provides the
-	   "<autoscore:...>" directive.
+	   "&ltautoscore:...&gt" directive.
 
-	   If an "<autoscore:...>" directive appears in any production of a
+	   If an "&ltautoscore:...&gt" directive appears in any production of a
 	   rule, the code it specifies is used as the scoring code for every
 	   production of that rule, except productions that already end with
-	   an explicit "<score:...>" directive. Thus the rules above could be
+	   an explicit "&ltscore:...&gt" directive. Thus the rules above could be
 	   rewritten:
 
-	       line: <autoscore: -@{$item[1]}>
-	       line: seplist[sep=>',']
-	       | seplist[sep=>':']
-	       | seplist[sep=>" "]
+	       line: &ltautoscore: -@{$item[1]}&gt
+	       line: seplist[sep=&gt',']
+	       | seplist[sep=&gt':']
+	       | seplist[sep=&gt" "]
 
 
-	       sentence: <autoscore: sensible(@item)>
+	       sentence: &ltautoscore: sensible(@item)&gt
 	       | verb noun preposition article noun { [@item] }
 	       | adjective noun verb article noun   { [@item] }
 	       | noun verb preposition article noun { [@item] }
 
-	   Note that the "<autoscore:...>" directive itself acts as an
-	   unconditional "<reject>", and (like the "<rulevar:...>" directive)
+	   Note that the "&ltautoscore:...&gt" directive itself acts as an
+	   unconditional "&ltreject&gt", and (like the "&ltrulevar:...&gt" directive)
 	   is pruned at compile-time wherever possible.
 
        Dispensing with grammar checks
@@ -2118,7 +2120,7 @@ DESCRIPTION
 
 	   These checks are important during development, but can slow down
 	   parser construction in stable code. So Parse::RecDescent provides
-	   the <nocheck> directive to turn them off. The directive can only
+	   the &ltnocheck&gt directive to turn them off. The directive can only
 	   appear before the first rule definition, and switches off checking
 	   throughout the rest of the current grammar.
 
@@ -2175,9 +2177,9 @@ DESCRIPTION
        using the local variable %arg instead of @arg. Hence we could rewrite
        the previous example:
 
-	   classdecl: keyword decl[keyword => $item[1],
-	       caller  => $item[0],
-	       type    => 'keyword']
+	   classdecl: keyword decl[keyword =&gt $item[1],
+	       caller  =&gt $item[0],
+	       type    =&gt 'keyword']
 
 	   keyword:   'struct' | 'class';
 
@@ -2188,20 +2190,20 @@ DESCRIPTION
        choose whichever convention (or combination of conventions) suits best.
 
        Subrule argument lists are also useful for creating "rule templates"
-       (especially when used in conjunction with the "<matchrule:...>"
+       (especially when used in conjunction with the "&ltmatchrule:...&gt"
        directive). For example, the subrule:
 
-	   list:     <matchrule:$arg{rule}> /$arg{sep}/ list[%arg]
+	   list:     &ltmatchrule:$arg{rule}&gt /$arg{sep}/ list[%arg]
 	       { $return = [ $item[1], @{$item[3]} ] }
-	   |	 <matchrule:$arg{rule}>
+	   |	 &ltmatchrule:$arg{rule}&gt
 	       { $return = [ $item[1]] }
 
        is a handy template for the common problem of matching a separated
        list.  For example:
 
-	   function: 'func' name '(' list[rule=>'param',sep=>';'] ')'
+	   function: 'func' name '(' list[rule=&gt'param',sep=&gt';'] ')'
 
-	   param:    list[rule=>'name',sep=>','] ':' typename
+	   param:    list[rule=&gt'name',sep=&gt','] ':' typename
 
 	   name:     /\w+/
 
@@ -2246,7 +2248,7 @@ DESCRIPTION
 
 	   $parser = new Parse::RecDescent ( $grammar );
 
-	   $parser->data($text, 1, "str", 2, \@arr);
+	   $parser-&gtdata($text, 1, "str", 2, \@arr);
 
 	   #	     ^^^^^  ^  ^^^^^^^^^^^^^^^
 	   #	   |	|     |
@@ -2266,8 +2268,8 @@ DESCRIPTION
 
        Every alternation implicitly defines a new subrule, whose
        automatically-generated name indicates its origin:
-       "_alternation_<I>_of_production_<P>_of_rule<R>" for the appropriate
-       values of <I>, <P>, and <R>. A call to this implicit subrule is then
+       "_alternation_&ltI&gt_of_production_&ltP&gt_of_rule&ltR&gt" for the appropriate
+       values of &ltI&gt, &ltP&gt, and &ltR&gt. A call to this implicit subrule is then
        inserted in place of the brackets. Hence the above example is merely a
        convenient short-hand for:
 
@@ -2285,20 +2287,20 @@ DESCRIPTION
 	   character: 'the' ( 'high' "plains"  # Silent, with poncho
 		| /no[- ]name/ # Silent, no poncho
 		| vengeance_seeking    # Poncho-optional
-		| <error>
+		| &lterror&gt
 		) drifter
 
        In this case, if an error occurred, the automatically generated message
        would be:
 
-	   ERROR (line <N>): Invalid implicit subrule: Expected
+	   ERROR (line &ltN&gt): Invalid implicit subrule: Expected
 		 'high' or /no[- ]name/ or generic,
 		 but found "pacifist" instead
 
        Since every alternation actually has a name, it's even possible to
        extend or replace them:
 
-	   parser->Replace(
+	   parser-&gtReplace(
 	   "_alternation_1_of_production_1_of_rule_character:
 	       'generic Eastwood'"
 	       );
@@ -2319,7 +2321,7 @@ DESCRIPTION
        are specified. For example:
 
 	   $add = "name: 'Jimmy-Bob' | 'Bobby-Jim'\ndesc: colour /necks?/";
-	   parser->Extend($add);
+	   parser-&gtExtend($add);
 
        adds two productions to the rule "name" (creating it if necessary) and
        one production to the rule "desc".
@@ -2329,7 +2331,7 @@ DESCRIPTION
        productions.  Hence after:
 
 	   $add = "name: 'Jimmy-Bob' | 'Bobby-Jim'\ndesc: colour /necks?/";
-	   parser->Replace($add);
+	   parser-&gtReplace($add);
 
        are are only valid "name"s and the one possible description.
 
@@ -2337,15 +2339,15 @@ DESCRIPTION
        them inside the action of an executing parser. For example:
 
 	   typedef: 'typedef' type_name identifier ';'
-		  { $thisparser->Extend("type_name: '$item[3]'") }
-	      | <error>
+		  { $thisparser-&gtExtend("type_name: '$item[3]'") }
+	      | &lterror&gt
 
 	   identifier: ...!type_name /[A-Za-z_]w*/
 
        which automatically prevents type names from being typedef'd, or:
 
 	   command: 'map' key_name 'to' abort_key
-		  { $thisparser->Replace("abort_key: '$item[2]'") }
+		  { $thisparser-&gtReplace("abort_key: '$item[2]'") }
 	      | 'map' key_name 'to' key_name
 		  { map_key($item[2],$item[4]) }
 	      | abort_key
@@ -2369,12 +2371,12 @@ DESCRIPTION
        be far more efficient:
 
 	   typedef: 'typedef' type_name/ identifier ';'
-		  { $thisparser->{local}{type_name} .= "|$item[3]" }
-	      | <error>
+		  { $thisparser-&gt{local}{type_name} .= "|$item[3]" }
+	      | &lterror&gt
 
 	   identifier: ...!type_name /[A-Za-z_]w*/
 
-	   type_name: /$thisparser->{local}{type_name}/
+	   type_name: /$thisparser-&gt{local}{type_name}/
 
    Precompiling parsers
        Normally Parse::RecDescent builds a parser from a grammar at run-time.
@@ -2395,14 +2397,14 @@ DESCRIPTION
 
 	   use Parse::RecDescent;
 
-	   Parse::RecDescent->Precompile($grammar, "PreGrammar");
+	   Parse::RecDescent-&gtPrecompile($grammar, "PreGrammar");
 
        The first argument is the grammar string, the second is the name of the
        class to be built. The name of the module file is generated
        automatically by appending ".pm" to the last element of the class name.
        Thus
 
-	   Parse::RecDescent->Precompile($grammar, "My::New::Parser");
+	   Parse::RecDescent-&gtPrecompile($grammar, "My::New::Parser");
 
        would produce a module file named Parser.pm.
 
@@ -2414,7 +2416,7 @@ DESCRIPTION
        If your grammar is specified in a file named grammar, you can generate
        a class named Yet::Another::Grammar like so:
 
-	   > perl -MParse::RecDescent - grammar Yet::Another::Grammar
+	   &gt perl -MParse::RecDescent - grammar Yet::Another::Grammar
 
        This would produce a file named Grammar.pm containing the full
        definition of a class called Yet::Another::Grammar. Of course, to use
@@ -2426,7 +2428,7 @@ DESCRIPTION
        to create a parser object. For example:
 
 	   use Yet::Another::Grammar;
-	   my $parser = Yet::Another::Grammar->new();
+	   my $parser = Yet::Another::Grammar-&gtnew();
 
        The effect of these two lines is exactly the same as:
 
@@ -2434,9 +2436,9 @@ DESCRIPTION
 
 	   open GRAMMAR_FILE, "grammar" or die;
 	   local $/;
-	   my $grammar = <GRAMMAR_FILE>;
+	   my $grammar = &ltGRAMMAR_FILE&gt;
 
-	   my $parser = Parse::RecDescent->new($grammar);
+	   my $parser = Parse::RecDescent-&gtnew($grammar);
 
        only considerably faster.
 
@@ -2458,10 +2460,10 @@ GOTCHAS
 	   line: line_type_1
 	   | line_type_2
 	   | line_type_3
-	   | <error>
+	   | &lterror&gt
 
        The expectation seems to be that any line that is not of type 1, 2 or 3
-       will invoke the "<error>" directive and thereby cause the parse to
+       will invoke the "&lterror&gt" directive and thereby cause the parse to
        fail.
 
        Unfortunately, that only happens if the error occurs in the very first
@@ -2478,7 +2480,7 @@ GOTCHAS
 	   line: line_type_1
 	   | line_type_2
 	   | line_type_3
-	   | <error>
+	   | &lterror&gt
 
 	   eofile: /^\Z/
 
@@ -2503,14 +2505,14 @@ GOTCHAS
        Apart from returning the wrong value, returning an empty string will
        trip up code such as:
 
-	   $parser->file($filetext) || die;
+	   $parser-&gtfile($filetext) || die;
 
        (since "" is false).
 
        Remember that Parse::RecDescent returns undef on failure, so the only
        safe test for failure is:
 
-	   defined($parser->file($filetext)) || die;
+	   defined($parser-&gtfile($filetext)) || die;
 
    2. Using a "return" in an action
        An action is like a "do" block inside the subroutine implementing the
@@ -2548,14 +2550,14 @@ DIAGNOSTICS
 
        o   "Obvious" cases of left-recursion (fatal error).
 
-       o   Missing or extra components in a "<leftop>" or "<rightop>"
+       o   Missing or extra components in a "&ltleftop&gt" or "&ltrightop&gt"
 	   directive.
 
        o   Unrecognisable components in the grammar specification (fatal
 	   error).
 
        o   "Orphaned" rule components specified before the first rule (fatal
-	   error) or after an "<error>" directive (level 3 warning).
+	   error) or after an "&lterror&gt" directive (level 3 warning).
 
        o   Missing rule definitions (this only generates a level 3 warning,
 	   since you may be providing them later via
@@ -2571,14 +2573,14 @@ DIAGNOSTICS
 	   "Parse::RecDescent::Extend". (Only a level 2 warning is generated,
 	   since such rules can still be used as subrules).
 
-       o   Productions which consist of a single "<error?>" directive, and
+       o   Productions which consist of a single "&lterror?&gt" directive, and
 	   which therefore may succeed unexpectedly (a level 2 warning, since
 	   this might conceivably be the desired effect).
 
        o   Multiple consecutive lookahead specifiers (a level 1 warning only,
 	   since their effects simply accumulate).
 
-       o   Productions which start with a "<reject>" or "<rulevar:...>"
+       o   Productions which start with a "&ltreject&gt" or "&ltrulevar:...&gt"
 	   directive. Such productions are optimized away (a level 1 warning).
 
        o   Rules which are autogenerated under $::AUTOSTUB (a level 1
@@ -2656,10 +2658,10 @@ ON-GOING ISSUES AND FUTURE DIRECTIONS
 	   (currently minimalist) grammar specification syntax, and (worse)
 	   introducing more overhead into the generated parsers.
 
-       3.  An "<autocommit>" directive would be nice. That is, it would be
+       3.  An "&ltautocommit&gt" directive would be nice. That is, it would be
 	   useful to be able to say:
 
-	       command: <autocommit>
+	       command: &ltautocommit&gt
 	       command: 'find' name
 		  | 'find' address
 		  | 'do' command 'at' time 'if' condition
@@ -2670,17 +2672,17 @@ ON-GOING ISSUES AND FUTURE DIRECTIONS
 	   and have the generator work out that this should be "pruned" thus:
 
 	       command: 'find' name
-		  | 'find' <commit> address
-		  | 'do' <commit> command <uncommit>
+		  | 'find' &ltcommit&gt address
+		  | 'do' &ltcommit&gt command &ltuncommit&gt
 		   'at' time
-		   'if' <commit> condition
-		  | 'do' <commit> command <uncommit>
-		   'at' <commit> time
-		  | 'do' <commit> command
+		   'if' &ltcommit&gt condition
+		  | 'do' &ltcommit&gt command &ltuncommit&gt
+		   'at' &ltcommit&gt time
+		  | 'do' &ltcommit&gt command
 		  | unusual_command
 
-	   There are several issues here. Firstly, should the "<autocommit>"
-	   automatically install an "<uncommit>" at the start of the last
+	   There are several issues here. Firstly, should the "&ltautocommit&gt"
+	   automatically install an "&ltuncommit&gt" at the start of the last
 	   production (on the grounds that the "command" rule doesn't know
 	   whether an "unusual_command" might start with "find" or "do") or
 	   should the "unusual_command" subgraph be analysed (to see if it
@@ -2700,10 +2702,10 @@ ON-GOING ISSUES AND FUTURE DIRECTIONS
 
 SUPPORT
    Mailing List
-       Visit <http://www.perlfoundation.org/perl5/index.cgi?parse_recdescent>
+       Visit &lthttp://www.perlfoundation.org/perl5/index.cgi?parse_recdescent&gt
        to sign up for the mailing list.
 
-       <http://www.PerlMonks.org> is also a good place to ask questions.
+       &lthttp://www.PerlMonks.org&gt is also a good place to ask questions.
 
    FAQ
        Visit Parse::RecDescent::FAQ for answers to frequently (and not so
@@ -2714,7 +2716,7 @@ SEE ALSO
        Perl 5.10 regular expressions.
 
 LICENCE AND COPYRIGHT
-       Copyright (c) 1997-2007, Damian Conway "<DCONWAY@CPAN.org>". All rights
+       Copyright (c) 1997-2007, Damian Conway "&ltDCONWAY@CPAN.org&gt". All rights
        reserved.
 
        This module is free software; you can redistribute it and/or modify it
@@ -2745,6 +2747,6 @@ DISCLAIMER OF WARRANTY
 
 
 perl v5.12.4			  2012-06-20		  Parse::RecDescent(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

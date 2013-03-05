@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""File::Temp" can be used to create and open temporary files in a safe..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>File::Temp - return name and handle of a temporary file safely</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 File::Temp(3pm)        Perl Programmers Reference Guide        File::Temp(3pm)
 
 
@@ -21,14 +23,14 @@ SYNOPSIS
 	 $fh = tempfile();
 	 ($fh, $filename) = tempfile();
 
-	 ($fh, $filename) = tempfile( $template, DIR => $dir);
-	 ($fh, $filename) = tempfile( $template, SUFFIX => '.dat');
-	 ($fh, $filename) = tempfile( $template, TMPDIR => 1 );
+	 ($fh, $filename) = tempfile( $template, DIR =&gt $dir);
+	 ($fh, $filename) = tempfile( $template, SUFFIX =&gt '.dat');
+	 ($fh, $filename) = tempfile( $template, TMPDIR =&gt 1 );
 
 	 binmode( $fh, ":utf8" );
 
-	 $dir = tempdir( CLEANUP => 1 );
-	 ($fh, $filename) = tempfile( DIR => $dir );
+	 $dir = tempdir( CLEANUP =&gt 1 );
+	 ($fh, $filename) = tempfile( DIR =&gt $dir );
 
        Object interface:
 
@@ -36,16 +38,16 @@ SYNOPSIS
 	 use File::Temp ();
 	 use File::Temp qw/ :seekable /;
 
-	 $fh = File::Temp->new();
-	 $fname = $fh->filename;
+	 $fh = File::Temp-&gtnew();
+	 $fname = $fh-&gtfilename;
 
-	 $fh = File::Temp->new(TEMPLATE => $template);
-	 $fname = $fh->filename;
+	 $fh = File::Temp-&gtnew(TEMPLATE =&gt $template);
+	 $fname = $fh-&gtfilename;
 
-	 $tmp = File::Temp->new( UNLINK => 0, SUFFIX => '.dat' );
+	 $tmp = File::Temp-&gtnew( UNLINK =&gt 0, SUFFIX =&gt '.dat' );
 	 print $tmp "Some data\n";
 	 print "Filename is $tmp\n";
-	 $tmp->seek( 0, SEEK_END );
+	 $tmp-&gtseek( 0, SEEK_END );
 
        The following interfaces are provided for compatibility with existing
        APIs. They should not be used in new code.
@@ -118,7 +120,7 @@ OBJECT-ORIENTED INTERFACE
 
        new Create a temporary file object.
 
-	     my $tmp = File::Temp->new();
+	     my $tmp = File::Temp-&gtnew();
 
 	   by default the object is constructed as if "tempfile" was called
 	   without options, but with the additional behaviour that the
@@ -130,9 +132,9 @@ OBJECT-ORIENTED INTERFACE
 	   filename template is specified using the TEMPLATE option. The OPEN
 	   option is not supported (the file is always opened).
 
-	    $tmp = File::Temp->new( TEMPLATE => 'tempXXXXX',
-				   DIR => 'mydir',
-				   SUFFIX => '.dat');
+	    $tmp = File::Temp-&gtnew( TEMPLATE =&gt 'tempXXXXX',
+				   DIR =&gt 'mydir',
+				   SUFFIX =&gt '.dat');
 
 	   Arguments are case insensitive.
 
@@ -141,21 +143,21 @@ OBJECT-ORIENTED INTERFACE
        newdir
 	   Create a temporary directory using an object oriented interface.
 
-	     $dir = File::Temp->newdir();
+	     $dir = File::Temp-&gtnewdir();
 
 	   By default the directory is deleted when the object goes out of
 	   scope.
 
 	   Supports the same options as the "tempdir" function. Note that
-	   directories created with this method default to CLEANUP => 1.
+	   directories created with this method default to CLEANUP =&gt 1.
 
-	     $dir = File::Temp->newdir( $template, %options );
+	     $dir = File::Temp-&gtnewdir( $template, %options );
 
        filename
 	   Return the name of the temporary file associated with this object
 	   (if the object was created using the "new" constructor).
 
-	     $filename = $tmp->filename;
+	     $filename = $tmp-&gtfilename;
 
 	   This method is called automatically when the object is used as a
 	   string.
@@ -164,7 +166,7 @@ OBJECT-ORIENTED INTERFACE
 	   Return the name of the temporary directory associated with this
 	   object (if the object was created using the "newdir" constructor).
 
-	     $dirname = $tmpdir->dirname;
+	     $dirname = $tmpdir-&gtdirname;
 
 	   This method is called automatically when the object is used in
 	   string context.
@@ -174,7 +176,7 @@ OBJECT-ORIENTED INTERFACE
 	   scope.  The file is removed if this value is true and $KEEP_ALL is
 	   not.
 
-	    $fh->unlink_on_destroy( 1 );
+	    $fh-&gtunlink_on_destroy( 1 );
 
 	   Default is for the file to be removed.
 
@@ -218,25 +220,25 @@ FUNCTIONS
 	   to generate the filename.  At least four `X' characters must be
 	   present at the end of the template.
 
-	     ($fh, $filename) = tempfile($template, SUFFIX => $suffix)
+	     ($fh, $filename) = tempfile($template, SUFFIX =&gt $suffix)
 
 	   Same as previously, except that a suffix is added to the template
 	   after the `X' translation.  Useful for ensuring that a temporary
 	   filename has a particular extension when needed by other
 	   applications.  But see the WARNING at the end.
 
-	     ($fh, $filename) = tempfile($template, DIR => $dir);
+	     ($fh, $filename) = tempfile($template, DIR =&gt $dir);
 
 	   Translates the template as before except that a directory name is
 	   specified.
 
-	     ($fh, $filename) = tempfile($template, TMPDIR => 1);
+	     ($fh, $filename) = tempfile($template, TMPDIR =&gt 1);
 
-	   Equivalent to specifying a DIR of "File::Spec->tmpdir", writing the
+	   Equivalent to specifying a DIR of "File::Spec-&gttmpdir", writing the
 	   file into the same temporary directory as would be used if no
 	   template was specified at all.
 
-	     ($fh, $filename) = tempfile($template, UNLINK => 1);
+	     ($fh, $filename) = tempfile($template, UNLINK =&gt 1);
 
 	   Return the filename and filehandle as before except that the file
 	   is automatically removed when the program exits (dependent on
@@ -255,7 +257,7 @@ FUNCTIONS
 	   (File::Spec) unless a directory is specified explicitly with the
 	   DIR option.
 
-	     $fh = tempfile( DIR => $dir );
+	     $fh = tempfile( DIR =&gt $dir );
 
 	   If called in scalar context, only the filehandle is returned and
 	   the file will automatically be deleted when closed on operating
@@ -268,7 +270,7 @@ FUNCTIONS
 	   file is marked for deletion when the program ends (equivalent to
 	   setting UNLINK to 1). The "UNLINK" flag is ignored if present.
 
-	     (undef, $filename) = tempfile($template, OPEN => 0);
+	     (undef, $filename) = tempfile($template, OPEN =&gt 0);
 
 	   This will return the filename based on the template but will not
 	   open this file.  Cannot be used in conjunction with UNLINK set to
@@ -286,7 +288,7 @@ FUNCTIONS
 	   option can be passed to tempfile. By default EXLOCK will be true
 	   (this retains compatibility with earlier releases).
 
-	     ($fh, $filename) = tempfile($template, EXLOCK => 0);
+	     ($fh, $filename) = tempfile($template, EXLOCK =&gt 0);
 
 	   Options can be combined as required.
 
@@ -316,31 +318,31 @@ FUNCTIONS
 	   directory name. At least four `X' characters must be in the
 	   template.
 
-	     $tempdir = tempdir ( DIR => $dir );
+	     $tempdir = tempdir ( DIR =&gt $dir );
 
 	   Specifies the directory to use for the temporary directory.	The
 	   temporary directory name is derived from an internal template.
 
-	     $tempdir = tempdir ( $template, DIR => $dir );
+	     $tempdir = tempdir ( $template, DIR =&gt $dir );
 
 	   Prepend the supplied directory name to the template. The template
 	   should not include parent directory specifications itself. Any
 	   parent directory specifications are removed from the template
 	   before prepending the supplied directory.
 
-	     $tempdir = tempdir ( $template, TMPDIR => 1 );
+	     $tempdir = tempdir ( $template, TMPDIR =&gt 1 );
 
 	   Using the supplied template, create the temporary directory in a
 	   standard location for temporary files. Equivalent to doing
 
-	     $tempdir = tempdir ( $template, DIR => File::Spec->tmpdir);
+	     $tempdir = tempdir ( $template, DIR =&gt File::Spec-&gttmpdir);
 
 	   but shorter. Parent directory specifications are stripped from the
 	   template itself. The "TMPDIR" option is ignored if "DIR" is set
 	   explicitly.	Additionally, "TMPDIR" is implied if neither a
 	   template nor a directory are supplied.
 
-	     $tempdir = tempdir( $template, CLEANUP => 1);
+	     $tempdir = tempdir( $template, CLEANUP =&gt 1);
 
 	   Create a temporary directory using the supplied template, but
 	   attempt to remove it (and all files inside it) when the program
@@ -624,7 +626,7 @@ PACKAGE VARIABLES
 
 	   The level can be changed as follows:
 
-	     File::Temp->safe_level( File::Temp::HIGH );
+	     File::Temp-&gtsafe_level( File::Temp::HIGH );
 
 	   The level constants are not exported by the module.
 
@@ -645,7 +647,7 @@ PACKAGE VARIABLES
 	   If you really need to see whether the change has been accepted
 	   simply examine the return value of "safe_level".
 
-	     $newlevel = File::Temp->safe_level( File::Temp::HIGH );
+	     $newlevel = File::Temp-&gtsafe_level( File::Temp::HIGH );
 	     die "Could not change to high security"
 		 if $newlevel != File::Temp::HIGH;
 
@@ -661,8 +663,8 @@ PACKAGE VARIABLES
 	   Default is to assume that any UID less than or equal to 10 is a
 	   root UID.
 
-	     File::Temp->top_system_uid(10);
-	     my $topid = File::Temp->top_system_uid;
+	     File::Temp-&gttop_system_uid(10);
+	     my $topid = File::Temp-&gttop_system_uid;
 
 	   This value can be adjusted to reduce security checking if required.
 	   The value is only relevant when "safe_level" is set to MEDIUM or
@@ -700,7 +702,7 @@ WARNING
 
        If you need to pass the handle to something that expects a filename
        then, on a unix system, use ""/dev/fd/" . fileno($fh)" for arbitrary
-       programs, or more generally ""+<=&" . fileno($fh)" for Perl programs.
+       programs, or more generally ""+&lt=&" . fileno($fh)" for Perl programs.
        You will have to clear the close-on-exec bit on that file descriptor
        before passing it to another process.
 
@@ -761,7 +763,7 @@ SEE ALSO
        "tempdir" function.
 
 AUTHOR
-       Tim Jenness <tjenness@cpan.org>
+       Tim Jenness &lttjenness@cpan.org&gt
 
        Copyright (C) 2007-2009 Tim Jenness.  Copyright (C) 1999-2007 Tim
        Jenness and the UK Particle Physics and Astronomy Research Council. All
@@ -776,6 +778,6 @@ AUTHOR
 
 
 perl v5.12.4			  2011-06-01		       File::Temp(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Perl has two simple, built-in ways to open files: the shell way for..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlopentut - tutorial on opening things in Perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLOPENTUT(1)	       Perl Programmers Reference Guide 	PERLOPENTUT(1)
 
 
@@ -27,18 +29,18 @@ Open a la shell
        shell:
 
 	   $ myprogram file1 file2 file3
-	   $ myprogram	  <  inputfile
-	   $ myprogram	  >  outputfile
-	   $ myprogram	  >> outputfile
+	   $ myprogram	  &lt  inputfile
+	   $ myprogram	  &gt  outputfile
+	   $ myprogram	  &gt&gt outputfile
 	   $ myprogram	  |  otherprogram
 	   $ otherprogram |  myprogram
 
        And here are some more advanced examples:
 
 	   $ otherprogram      | myprogram f1 - f2
-	   $ otherprogram 2>&1 | myprogram -
-	   $ myprogram	   <&3
-	   $ myprogram	   >&4
+	   $ otherprogram 2&gt&1 | myprogram -
+	   $ myprogram	   &lt&3
+	   $ myprogram	   &gt&4
 
        Programmers accustomed to constructs like those above can take comfort
        in learning that Perl directly supports these familiar constructs using
@@ -55,16 +57,16 @@ Open a la shell
        For example:
 
 	   open(INFO,	   "datafile") || die("can't open datafile: $!");
-	   open(INFO,	"<  datafile") || die("can't open datafile: $!");
-	   open(RESULTS,">  runstats") || die("can't open runstats: $!");
-	   open(LOG,	">> logfile ") || die("can't open logfile:  $!");
+	   open(INFO,	"&lt  datafile") || die("can't open datafile: $!");
+	   open(RESULTS,"&gt  runstats") || die("can't open runstats: $!");
+	   open(LOG,	"&gt&gt logfile ") || die("can't open logfile:  $!");
 
        If you prefer the low-punctuation version, you could write that this
        way:
 
-	   open INFO,	"<  datafile"  or die "can't open datafile: $!";
-	   open RESULTS,">  runstats"  or die "can't open runstats: $!";
-	   open LOG,	">> logfile "  or die "can't open logfile:  $!";
+	   open INFO,	"&lt  datafile"  or die "can't open datafile: $!";
+	   open RESULTS,"&gt  runstats"  or die "can't open runstats: $!";
+	   open LOG,	"&gt&gt logfile "  or die "can't open logfile:  $!";
 
        A few things to notice.	First, the leading less-than is optional.  If
        omitted, Perl assumes that you want to open the file for reading.
@@ -73,7 +75,7 @@ Open a la shell
        the second uses "or", which has lower precedence.  Using "||" in the
        latter examples would effectively mean
 
-	   open INFO, ( "<  datafile"  || die "can't open datafile: $!" );
+	   open INFO, ( "&lt  datafile"  || die "can't open datafile: $!" );
 
        which is definitely not what you want.
 
@@ -81,15 +83,15 @@ Open a la shell
        whitespace before or after the filename is ignored.  This is good,
        because you wouldn't want these to do different things:
 
-	   open INFO,	"<datafile"
-	   open INFO,	"< datafile"
-	   open INFO,	"<  datafile"
+	   open INFO,	"&ltdatafile"
+	   open INFO,	"&lt datafile"
+	   open INFO,	"&lt  datafile"
 
        Ignoring surrounding whitespace also helps for when you read a filename
        in from a different file, and forget to trim it before opening:
 
-	   $filename = <INFO>;	       # oops, \n still there
-	   open(EXTRA, "< $filename") || die "can't open $filename: $!";
+	   $filename = &ltINFO&gt;	       # oops, \n still there
+	   open(EXTRA, "&lt $filename") || die "can't open $filename: $!";
 
        This is not a bug, but a feature.  Because "open" mimics the shell in
        its style of using redirection arrows to specify how to open the file,
@@ -100,7 +102,7 @@ Open a la shell
        There is also a 3-argument version of "open", which lets you put the
        special redirection characters into their own argument:
 
-	   open( INFO, ">", $datafile ) || die "Can't create $datafile: $!";
+	   open( INFO, "&gt", $datafile ) || die "Can't create $datafile: $!";
 
        In this case, the filename to open is the actual string in $datafile,
        so you don't have to worry about $datafile containing characters that
@@ -114,7 +116,7 @@ Open a la shell
        a filehandle and put a reference to it in the first argument, like so:
 
 	   open( my $in, $infile )   or die "Couldn't read $infile: $!";
-	   while ( <$in> ) {
+	   while ( &lt$in&gt ) {
 	       # do something with $_
 	   }
 	   close $in;
@@ -129,7 +131,7 @@ Open a la shell
        automatically closes when it goes out of scope or when you undefine it:
 
 	   sub firstline {
-	       open( my $in, shift ) && return scalar <$in>;
+	       open( my $in, shift ) && return scalar &lt$in&gt;
 	       # no close() required
 	   }
 
@@ -155,13 +157,13 @@ Open a la shell
        handle for reading.  For example:
 
 	   open(NET, "netstat -i -n |")    || die "can't fork netstat: $!";
-	   while (<NET>) { }		   # do something with input
+	   while (&ltNET&gt) { }		   # do something with input
 	   close(NET)			   || die "can't close netstat: $!";
 
        What happens if you try to open a pipe to or from a non-existent
        command?  If possible, Perl will detect the failure and set $! as
        usual.  But if the command contains special shell characters, such as
-       ">" or "*", called 'metacharacters', Perl does not execute the command
+       "&gt" or "*", called 'metacharacters', Perl does not execute the command
        directly.  Instead, Perl runs the shell, which then tries to run the
        command.  This means that it's the shell that gets the error
        indication.  In such a case, the "open" call will only indicate failure
@@ -186,7 +188,7 @@ Open a la shell
 	   my $collection = shift(@ARGV);
 	   open my $fortune, '-|', 'fortune', $collection
 	       or die "Could not find fortune - $!";
-	   while (<$fortune>)
+	   while (&lt$fortune&gt)
 	   {
 	       print uc($_);
 	   }
@@ -223,13 +225,13 @@ Open a la shell
        whether it only works on existing files or always clobbers existing
        ones.
 
-	   open(WTMP, "+< /usr/adm/wtmp")
+	   open(WTMP, "+&lt /usr/adm/wtmp")
 	       || die "can't open /usr/adm/wtmp: $!";
 
-	   open(SCREEN, "+> lkscreen")
+	   open(SCREEN, "+&gt lkscreen")
 	       || die "can't open lkscreen: $!";
 
-	   open(LOGFILE, "+>> /var/log/applog")
+	   open(LOGFILE, "+&gt&gt /var/log/applog")
 	       || die "can't open /var/log/applog: $!";
 
        The first one won't create a new file, and the second one will always
@@ -256,7 +258,7 @@ Open a la shell
 
    Filters
        One of the most common uses for "open" is one you never even notice.
-       When you process the ARGV filehandle using "<ARGV>", Perl actually does
+       When you process the ARGV filehandle using "&ltARGV&gt", Perl actually does
        an implicit open on each file in @ARGV.	Thus a program called like
        this:
 
@@ -265,13 +267,13 @@ Open a la shell
        can have all its files opened and processed one at a time using a
        construct no more complex than:
 
-	   while (<>) {
+	   while (&lt&gt) {
 	       # do something with $_
 	   }
 
        If @ARGV is empty when the loop first begins, Perl pretends you've
        opened up minus, that is, the standard input.  In fact, $ARGV, the
-       currently open file during "<ARGV>" processing, is even set to "-" in
+       currently open file during "&ltARGV&gt" processing, is even set to "-" in
        these circumstances.
 
        You are welcome to pre-process your @ARGV before starting the loop to
@@ -290,9 +292,9 @@ Open a la shell
        Or the standard Getopt::Long module to permit named arguments:
 
 	   use Getopt::Long;
-	   GetOptions( "verbose"  => \$verbose,        # --verbose
-		       "Debug"	  => \$debug,	       # --Debug
-		       "output=s" => \$output );
+	   GetOptions( "verbose"  =&gt \$verbose,        # --verbose
+		       "Debug"	  =&gt \$debug,	       # --Debug
+		       "output=s" =&gt \$output );
 		   # --output=somestring or --output somestring
 
        Another reason for preprocessing arguments is to make an empty argument
@@ -314,17 +316,17 @@ Open a la shell
        Here's an example:
 
 	   $pwdinfo = `domainname` =~ /^(\(none\))?$/
-			   ? '< /etc/passwd'
+			   ? '&lt /etc/passwd'
 			   : 'ypcat passwd |';
 
 	   open(PWD, $pwdinfo)
 		       or die "can't open $pwdinfo: $!";
 
        This sort of thing also comes into play in filter processing.  Because
-       "<ARGV>" processing employs the normal, shell-style Perl "open", it
+       "&ltARGV&gt" processing employs the normal, shell-style Perl "open", it
        respects all the special things we've already seen:
 
-	   $ myprogram f1 "cmd1|" - f2 "cmd2|" f3 < tmpfile
+	   $ myprogram f1 "cmd1|" - f2 "cmd2|" f3 &lt tmpfile
 
        That program will read from the file f1, the process cmd1, standard
        input (tmpfile in this case), the f2 file, the cmd2 command, and
@@ -346,7 +348,7 @@ Open a la shell
 
 	   @ARGV = map { m#^\w+://# ? "GET $_ |" : $_ } @ARGV;
 
-       It's not for nothing that this is called magic "<ARGV>".  Pretty nifty,
+       It's not for nothing that this is called magic "&ltARGV&gt".  Pretty nifty,
        eh?
 
 Open a la C
@@ -401,23 +403,23 @@ Open a la C
 
        To open a file for reading:
 
-	   open(FH, "< $path");
+	   open(FH, "&lt $path");
 	   sysopen(FH, $path, O_RDONLY);
 
        To open a file for writing, creating a new file if needed or else
        truncating an old file:
 
-	   open(FH, "> $path");
+	   open(FH, "&gt $path");
 	   sysopen(FH, $path, O_WRONLY | O_TRUNC | O_CREAT);
 
        To open a file for appending, creating one if necessary:
 
-	   open(FH, ">> $path");
+	   open(FH, "&gt&gt $path");
 	   sysopen(FH, $path, O_WRONLY | O_APPEND | O_CREAT);
 
        To open a file for update, where the file must already exist:
 
-	   open(FH, "+< $path");
+	   open(FH, "+&lt $path");
 	   sysopen(FH, $path, O_RDWR);
 
        And here are things you can do with "sysopen" that you cannot do with a
@@ -472,14 +474,14 @@ Obscure Open Tricks
        Sometimes you already have a filehandle open, and want to make another
        handle that's a duplicate of the first one.  In the shell, we place an
        ampersand in front of a file descriptor number when doing redirections.
-       For example, "2>&1" makes descriptor 2 (that's STDERR in Perl) be
+       For example, "2&gt&1" makes descriptor 2 (that's STDERR in Perl) be
        redirected into descriptor 1 (which is usually Perl's STDOUT).  The
        same is essentially true in Perl: a filename that begins with an
        ampersand is treated instead as a file descriptor if a number, or as a
        filehandle if a string.
 
-	   open(SAVEOUT, ">&SAVEERR") || die "couldn't dup SAVEERR: $!";
-	   open(MHCONTEXT, "<&4")     || die "couldn't dup fd4: $!";
+	   open(SAVEOUT, "&gt&SAVEERR") || die "couldn't dup SAVEERR: $!";
+	   open(MHCONTEXT, "&lt&4")     || die "couldn't dup fd4: $!";
 
        That means that if a function is expecting a filename, but you don't
        want to give it a filename because you already have the file open, you
@@ -500,15 +502,15 @@ Obscure Open Tricks
        fileno() to pull out the proper descriptor number, assuming you can:
 
 	   use IO::Socket;
-	   $handle = IO::Socket::INET->new("www.perl.com:80");
-	   $fd = $handle->fileno;
+	   $handle = IO::Socket::INET-&gtnew("www.perl.com:80");
+	   $fd = $handle-&gtfileno;
 	   somefunction("&$fd");  # not an indirect function call
 
        It can be easier (and certainly will be faster) just to use real
        filehandles though:
 
 	   use IO::Socket;
-	   local *REMOTE = IO::Socket::INET->new("www.perl.com:80");
+	   local *REMOTE = IO::Socket::INET-&gtnew("www.perl.com:80");
 	   die "can't connect" unless defined(fileno(REMOTE));
 	   somefunction("&main::REMOTE");
 
@@ -521,10 +523,10 @@ Obscure Open Tricks
        a concern these days.  Here's an example of that:
 
 	   $fd = $ENV{"MHCONTEXTFD"};
-	   open(MHCONTEXT, "<&=$fd")   or die "couldn't fdopen $fd: $!";
+	   open(MHCONTEXT, "&lt&=$fd")   or die "couldn't fdopen $fd: $!";
 
-       If you're using magic "<ARGV>", you could even pass in as a command
-       line argument in @ARGV something like "<&=$MHCONTEXTFD", but we've
+       If you're using magic "&ltARGV&gt", you could even pass in as a command
+       line argument in @ARGV something like "&lt&=$MHCONTEXTFD", but we've
        never seen anyone actually do this.
 
    Dispelling the Dweomer
@@ -542,7 +544,7 @@ Obscure Open Tricks
        an ASCII NUL byte ("\0") at the end of the string.
 
 	   $file =~ s#^(\s)#./$1#;
-	   open(FH, "< $file\0")   || die "can't open $file: $!";
+	   open(FH, "&lt $file\0")   || die "can't open $file: $!";
 
        This assumes, of course, that your system considers dot the current
        working directory, slash the directory separator, and disallows ASCII
@@ -552,7 +554,7 @@ Obscure Open Tricks
        "Classic" Macintosh system, which uses a colon where the rest of us use
        a slash.  Maybe "sysopen" isn't such a bad idea after all.
 
-       If you want to use "<ARGV>" processing in a totally boring and non-
+       If you want to use "&ltARGV&gt" processing in a totally boring and non-
        magical way, you could do this first:
 
 	   #   "Sam sat on the ground and put his head in his hands.
@@ -562,7 +564,7 @@ Obscure Open Tricks
 	       s#^([^./])#./$1#;
 	       $_ .= "\0";
 	   }
-	   while (<>) {
+	   while (&lt&gt) {
 	       # now process $_
 	   }
 
@@ -573,7 +575,7 @@ Obscure Open Tricks
        You've probably noticed how Perl's "warn" and "die" functions can
        produce messages like:
 
-	   Some warning at scriptname line 29, <FH> line 7.
+	   Some warning at scriptname line 29, &ltFH&gt line 7.
 
        That's because you opened a filehandle FH, and had read in seven
        records from it.  But what was the name of the file, rather than the
@@ -582,15 +584,15 @@ Obscure Open Tricks
        If you aren't running with "strict refs", or if you've turned them off
        temporarily, then all you have to do is this:
 
-	   open($path, "< $path") || die "can't open $path: $!";
-	   while (<$path>) {
+	   open($path, "&lt $path") || die "can't open $path: $!";
+	   while (&lt$path&gt) {
 	       # whatever
 	   }
 
        Since you're using the pathname of the file as its handle, you'll get
        warnings more like
 
-	   Some warning at scriptname line 29, </etc/motd> line 7.
+	   Some warning at scriptname line 29, &lt/etc/motd&gt line 7.
 
    Single Argument Open
        Remember how we said that Perl's open took two arguments?  That was a
@@ -601,7 +603,7 @@ Obscure Open Tricks
 
 	   $FILE = "/etc/motd";
 	   open FILE or die "can't open $FILE: $!";
-	   while (<FILE>) {
+	   while (&ltFILE&gt) {
 	       # whatever
 	   }
 
@@ -622,10 +624,10 @@ Obscure Open Tricks
        You don't have to accept the STDIN and STDOUT you were given.  You are
        welcome to reopen them if you'd like.
 
-	   open(STDIN, "< datafile")
+	   open(STDIN, "&lt datafile")
 	       || die "can't open datafile: $!";
 
-	   open(STDOUT, "> output")
+	   open(STDOUT, "&gt output")
 	       || die "can't open output: $!";
 
        And then these can be accessed directly or passed on to subprocesses.
@@ -645,7 +647,7 @@ Obscure Open Tricks
        in a different process:
 
 	   head(100);
-	   while (<>) {
+	   while (&lt&gt) {
 	       print;
 	   }
 
@@ -653,8 +655,8 @@ Obscure Open Tricks
 	       my $lines = shift || 20;
 	       return if $pid = open(STDOUT, "|-");	  # return if parent
 	       die "cannot fork: $!" unless defined $pid;
-	       while (<STDIN>) {
-		   last if --$lines < 0;
+	       while (&ltSTDIN&gt) {
+		   last if --$lines &lt 0;
 		   print;
 	       }
 	       exit;
@@ -734,13 +736,13 @@ Other I/O Issues
 	   sysopen(TTYIN, "/dev/ttyS1", O_RDWR | O_NDELAY | O_NOCTTY)
 		       # (O_NOCTTY no longer needed on POSIX systems)
 	       or die "can't open /dev/ttyS1: $!";
-	   open(TTYOUT, "+>&TTYIN")
+	   open(TTYOUT, "+&gt&TTYIN")
 	       or die "can't dup TTYIN: $!";
 
 	   $ofh = select(TTYOUT); $| = 1; select($ofh);
 
 	   print TTYOUT "+++at\015";
-	   $answer = <TTYIN>;
+	   $answer = &ltTTYIN&gt;
 
        With descriptors that you haven't opened using "sysopen", such as
        sockets, you can set them to be non-blocking using "fcntl":
@@ -767,7 +769,7 @@ Other I/O Issues
        it, you can use FH as a bidirectional filehandle.
 
 	   use IO::Socket;
-	   local *FH = IO::Socket::INET->new("www.perl.com:80");
+	   local *FH = IO::Socket::INET-&gtnew("www.perl.com:80");
 
        For opening up a URL, the LWP modules from CPAN are just what the
        doctor ordered.	There's no filehandle interface, but it's still easy
@@ -792,7 +794,7 @@ Other I/O Issues
 
 	   binmode(STDIN);
 	   binmode(STDOUT);
-	   while (<STDIN>) { print }
+	   while (&ltSTDIN&gt) { print }
 
        Passing "sysopen" a non-standard flag option will also open the file in
        binary mode on those systems that support it.  This is the equivalent
@@ -854,7 +856,7 @@ Other I/O Issues
 
 	   use 5.004;
 	   use Fcntl qw(:DEFAULT :flock);
-	   open(FH, "< filename")  or die "can't open filename: $!";
+	   open(FH, "&lt filename")  or die "can't open filename: $!";
 	   flock(FH, LOCK_SH)	   or die "can't lock filename: $!";
 	   # now read from FH
 
@@ -868,7 +870,7 @@ Other I/O Issues
 
 	   use 5.004;
 	   use Fcntl qw(:DEFAULT :flock);
-	   open(FH, "< filename")  or die "can't open filename: $!";
+	   open(FH, "&lt filename")  or die "can't open filename: $!";
 	   unless (flock(FH, LOCK_SH | LOCK_NB)) {
 	       $| = 1;
 	       print "Waiting for lock...";
@@ -904,7 +906,7 @@ Other I/O Issues
 	   flock(FH, LOCK_EX)
 	       or die "can't write-lock numfile: $!";
 
-	   $num = <FH> || 0;
+	   $num = &ltFH&gt || 0;
 	   seek(FH, 0, 0)
 	       or die "can't rewind numfile : $!";
 	   print FH $num+1, "\n"
@@ -930,9 +932,9 @@ Other I/O Issues
 
        o   The three-(or more)-argument form of "open" is being used and the
 	   second argument contains something else in addition to the usual
-	   '<', '>', '>>', '|' and their variants, for example:
+	   '&lt', '&gt', '&gt&gt', '|' and their variants, for example:
 
-	       open(my $fh, "<:crlf", $fn);
+	       open(my $fh, "&lt:crlf", $fn);
 
        o   The two-argument form of "binmode" is being used, for example
 
@@ -963,6 +965,6 @@ HISTORY
 
 
 perl v5.10.1			  2009-02-12			PERLOPENTUT(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

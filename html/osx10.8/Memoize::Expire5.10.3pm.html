@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Memoize::Expire is a plug-in module for Memoize.  It allows the cached..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Memoize::Expire - Plug-in module for automatic expiration of memoized</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Memoize::Expire(3pm)   Perl Programmers Reference Guide   Memoize::Expire(3pm)
 
 
@@ -19,11 +21,11 @@ NAME
 SYNOPSIS
 	 use Memoize;
 	 use Memoize::Expire;
-	 tie my %cache => 'Memoize::Expire',
-			    LIFETIME => $lifetime,    # In seconds
-			    NUM_USES => $n_uses;
+	 tie my %cache =&gt 'Memoize::Expire',
+			    LIFETIME =&gt $lifetime,    # In seconds
+			    NUM_USES =&gt $n_uses;
 
-	 memoize 'function', SCALAR_CACHE => [HASH => \%cache ];
+	 memoize 'function', SCALAR_CACHE =&gt [HASH =&gt \%cache ];
 
 DESCRIPTION
        Memoize::Expire is a plug-in module for Memoize.  It allows the cached
@@ -72,16 +74,16 @@ DESCRIPTION
 	 use DB_File;
 
 	 # Set up persistence
-	 tie my %disk_cache => 'DB_File', $filename, O_CREAT|O_RDWR, 0666];
+	 tie my %disk_cache =&gt 'DB_File', $filename, O_CREAT|O_RDWR, 0666];
 
 	 # Set up expiration policy, supplying persistent hash as a target
-	 tie my %cache => 'Memoize::Expire',
-			    LIFETIME => $lifetime,    # In seconds
-			    NUM_USES => $n_uses,
-			    HASH => \%disk_cache;
+	 tie my %cache =&gt 'Memoize::Expire',
+			    LIFETIME =&gt $lifetime,    # In seconds
+			    NUM_USES =&gt $n_uses,
+			    HASH =&gt \%disk_cache;
 
 	 # Set up memoization, supplying expiring persistent hash for cache
-	 memoize 'function', SCALAR_CACHE => [ HASH => \%cache ];
+	 memoize 'function', SCALAR_CACHE =&gt [ HASH =&gt \%cache ];
 
 INTERFACE
        There is nothing special about Memoize::Expire.	It is just an example.
@@ -113,10 +115,10 @@ INTERFACE
        The user who wants the memoization cache to be expired according to
        your policy will say so by writing
 
-	 tie my %cache => 'MyExpirePolicy', args...;
-	 memoize 'function', SCALAR_CACHE => [HASH => \%cache];
+	 tie my %cache =&gt 'MyExpirePolicy', args...;
+	 memoize 'function', SCALAR_CACHE =&gt [HASH =&gt \%cache];
 
-       This will invoke "MyExpirePolicy->TIEHASH(args)".
+       This will invoke "MyExpirePolicy-&gtTIEHASH(args)".
        MyExpirePolicy::TIEHASH should do whatever is appropriate to set up the
        cache, and it should return the cache object to the caller.
 
@@ -126,7 +128,7 @@ INTERFACE
        and things like that.  Let us call this object `C'.
 
        When Memoize needs to check to see if an entry is in the cache already,
-       it will invoke "C->EXISTS(key)".  "key" is the normalized function
+       it will invoke "C-&gtEXISTS(key)".  "key" is the normalized function
        argument.  MyExpirePolicy::EXISTS should return 0 if the key is not in
        the cache, or if it has expired, and 1 if an unexpired value is in the
        cache.  It should not return "undef", because there is a bug in some
@@ -134,10 +136,10 @@ INTERFACE
        returns "undef".
 
        If your EXISTS function returns true, Memoize will try to fetch the
-       cached value by invoking "C->FETCH(key)".  MyExpirePolicy::FETCH should
+       cached value by invoking "C-&gtFETCH(key)".  MyExpirePolicy::FETCH should
        return the cached value.  Otherwise, Memoize will call the memoized
        function to compute the appropriate value, and will store it into the
-       cache by calling "C->STORE(key, value)".
+       cache by calling "C-&gtSTORE(key, value)".
 
        Here is a very brief example of a policy module that expires each cache
        item after ten seconds.
@@ -147,13 +149,13 @@ INTERFACE
 	       sub TIEHASH {
 		 my ($package, %args) = @_;
 		 my $cache = $args{HASH} || {};
-		 bless $cache => $package;
+		 bless $cache =&gt $package;
 	       }
 
 	       sub EXISTS {
 		 my ($cache, $key) = @_;
-		 if (exists $cache->{$key} &&
-		     $cache->{$key}{EXPIRE_TIME} > time) {
+		 if (exists $cache-&gt{$key} &&
+		     $cache-&gt{$key}{EXPIRE_TIME} &gt time) {
 		   return 1
 		 } else {
 		   return 0;  # Do NOT return `undef' here.
@@ -162,20 +164,20 @@ INTERFACE
 
 	       sub FETCH {
 		 my ($cache, $key) = @_;
-		 return $cache->{$key}{VALUE};
+		 return $cache-&gt{$key}{VALUE};
 	       }
 
 	       sub STORE {
 		 my ($cache, $key, $newvalue) = @_;
-		 $cache->{$key}{VALUE} = $newvalue;
-		 $cache->{$key}{EXPIRE_TIME} = time + 10;
+		 $cache-&gt{$key}{VALUE} = $newvalue;
+		 $cache-&gt{$key}{EXPIRE_TIME} = time + 10;
 	       }
 
        To use this expiration policy, the user would say
 
 	       use Memoize;
-	       tie my %cache10sec => 'Memoize::TenSecondExpire';
-	       memoize 'function', SCALAR_CACHE => [HASH => \%cache10sec];
+	       tie my %cache10sec =&gt 'Memoize::TenSecondExpire';
+	       memoize 'function', SCALAR_CACHE =&gt [HASH =&gt \%cache10sec];
 
        Memoize would then call "function" whenever a cached value was entirely
        absent or was older than ten seconds.
@@ -190,7 +192,7 @@ ALTERNATIVES
        work with Memoize and provides expiration of least-recently-used data.
        The cache is held at a fixed number of entries, and when new data comes
        in, the least-recently used data is expired.  See
-       <http://search.cpan.org/search?mode=module&query=ExpireLRU>.
+       &lthttp://search.cpan.org/search?mode=module&query=ExpireLRU&gt.
 
        Joshua Chamas's Tie::Cache module may be useful as an expiration
        manager.  (If you try this, let me know how it works out.)
@@ -234,6 +236,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-02-12		  Memoize::Expire(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

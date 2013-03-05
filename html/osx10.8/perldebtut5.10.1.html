@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="A (very) lightweight introduction in the use of the perl debugger, and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perldebtut - Perl debugging tutorial</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLDEBTUT(1)	       Perl Programmers Reference Guide 	 PERLDEBTUT(1)
 
 
@@ -79,7 +81,7 @@ use strict
        We then do (always a good idea) a syntax check before we try to run it
        again:
 
-	       > perl -c hello
+	       &gt perl -c hello
 	       hello syntax OK
 
        And now when we run it, we get "\n" still, but at least we know why.
@@ -96,10 +98,10 @@ Looking at data and -w and v
 
 	       my $key = 'welcome';
 	       my %data = (
-		       'this' => qw(that),
-		       'tom' => qw(and jerry),
-		       'welcome' => q(Hello World),
-		       'zip' => q(welcome),
+		       'this' =&gt qw(that),
+		       'tom' =&gt qw(and jerry),
+		       'welcome' =&gt q(Hello World),
+		       'zip' =&gt q(welcome),
 	       );
 	       my @data = keys %data;
 
@@ -119,7 +121,7 @@ Looking at data and -w and v
 
        And try again:
 
-	       > perl data
+	       &gt perl data
 	       All OK
 
 	       done: ''
@@ -129,7 +131,7 @@ Looking at data and -w and v
        approach.  That is, we bring in the cavalry by giving perl the '-d'
        switch on the command line:
 
-	       > perl -d data
+	       &gt perl -d data
 	       Default die handler restored.
 
 	       Loading DB routines from perl5db.pl version 1.07
@@ -146,8 +148,8 @@ Looking at data and -w and v
        Before we go any further, you'll want to know how to quit the debugger:
        use just the letter 'q', not the words 'quit' or 'exit':
 
-	       DB<1> q
-	       >
+	       DB&lt1&gt q
+	       &gt
 
        That's it, you're back on home turf again.
 
@@ -165,12 +167,12 @@ help
 	 l [ln|sub]  List source code		 T	     Stack trace
 	 - or .      List previous/current line  s [expr]    Single step [in expr]
 	 v [line]    View around line		 n [expr]    Next, steps over subs
-	 f filename  View source in file	 <CR/Enter>  Repeat last n or s
+	 f filename  View source in file	 &ltCR/Enter&gt  Repeat last n or s
 	 /pattern/ ?patt?   Search forw/backw	 r	     Return from subroutine
 	 M	     Show module versions	 c [ln|sub]  Continue until position
 	Debugger controls:			 L	     List break/watch/actions
 	 o [...]     Set debugger options	 t [expr]    Toggle trace [trace expr]
-	 <[<]|{[{]|>[>] [cmd] Do pre/post-prompt b [ln|event|sub] [cnd] Set breakpoint
+	 &lt[&lt]|{[{]|&gt[&gt] [cmd] Do pre/post-prompt b [ln|event|sub] [cnd] Set breakpoint
 	 ! [N|pat]   Redo a previous command	 B ln|*      Delete a/all breakpoints
 	 H [-num]    Display last num commands	 a [ln] cmd  Do cmd before line
 	 = [a val]   Define/list an alias	 A ln|*      Delete a/all actions
@@ -184,7 +186,7 @@ help
 	 S [[!]pat]	List subroutine names [not] matching pattern
 	 V [Pk [Vars]]	List Variables in Package.  Vars can be ~pattern or !pattern.
 	 X [Vars]	Same as "V current_package [Vars]".
-	 y [n [Vars]]	List lexicals in higher scope <n>.  Vars same as V.
+	 y [n [Vars]]	List lexicals in higher scope &ltn&gt.  Vars same as V.
 	For more help, type h cmd_letter, or run man perldebug for all docs.
 
        More confusing options than you can shake a big stick at!  It's not as
@@ -198,7 +200,7 @@ help
        pattern) as shown below.  'V' and 'X' show variables in the program by
        package scope and can be constrained by pattern.
 
-	       DB<2>S str
+	       DB&lt2&gtS str
 	       dumpvar::stringify
 	       strict::bits
 	       strict::import
@@ -207,32 +209,32 @@ help
        Using 'X' and cousins requires you not to use the type identifiers
        ($@%), just the 'name':
 
-	       DM<3>X ~err
-	       FileHandle(stderr) => fileno(2)
+	       DM&lt3&gtX ~err
+	       FileHandle(stderr) =&gt fileno(2)
 
        Remember we're in our tiny program with a problem, we should have a
        look at where we are, and what our data looks like. First of all let's
        view some code at our present position (the first line of code in this
        case), via 'v':
 
-	       DB<4> v
+	       DB&lt4&gt v
 	       1       #!/usr/bin/perl
 	       2:      use strict;
 	       3
-	       4==>    my $key = 'welcome';
+	       4==&gt    my $key = 'welcome';
 	       5:      my %data = (
-	       6	       'this' => qw(that),
-	       7	       'tom' => qw(and jerry),
-	       8	       'welcome' => q(Hello World),
-	       9	       'zip' => q(welcome),
+	       6	       'this' =&gt qw(that),
+	       7	       'tom' =&gt qw(and jerry),
+	       8	       'welcome' =&gt q(Hello World),
+	       9	       'zip' =&gt q(welcome),
 	       10      );
 
        At line number 4 is a helpful pointer, that tells you where you are
        now.  To see more code, type 'v' again:
 
-	       DB<4> v
-	       8	       'welcome' => q(Hello World),
-	       9	       'zip' => q(welcome),
+	       DB&lt4&gt v
+	       8	       'welcome' =&gt q(Hello World),
+	       9	       'zip' =&gt q(welcome),
 	       10      );
 	       11:     my @data = keys %data;
 	       12:     print "All OK\n" if grep($key, keys %data);
@@ -242,14 +244,14 @@ help
 
        And if you wanted to list line 5 again, type 'l 5', (note the space):
 
-	       DB<4> l 5
+	       DB&lt4&gt l 5
 	       5:      my %data = (
 
        In this case, there's not much to see, but of course normally there's
        pages of stuff to wade through, and 'l' can be very useful.  To reset
        your view to the line we're about to execute, type a lone period '.':
 
-	       DB<5> .
+	       DB&lt5&gt .
 	       main::(./data_a:4):     my $key = 'welcome';
 
        The line shown is the one that is about to be executed next, it hasn't
@@ -258,24 +260,24 @@ help
        need to do is to step through the next executable statement with an
        's':
 
-	       DB<6> s
+	       DB&lt6&gt s
 	       main::(./data_a:5):     my %data = (
-	       main::(./data_a:6):	       'this' => qw(that),
-	       main::(./data_a:7):	       'tom' => qw(and jerry),
-	       main::(./data_a:8):	       'welcome' => q(Hello World),
-	       main::(./data_a:9):	       'zip' => q(welcome),
+	       main::(./data_a:6):	       'this' =&gt qw(that),
+	       main::(./data_a:7):	       'tom' =&gt qw(and jerry),
+	       main::(./data_a:8):	       'welcome' =&gt q(Hello World),
+	       main::(./data_a:9):	       'zip' =&gt q(welcome),
 	       main::(./data_a:10):    );
 
        Now we can have a look at that first ($key) variable:
 
-	       DB<7> p $key
+	       DB&lt7&gt p $key
 	       welcome
 
        line 13 is where the action is, so let's continue down to there via the
        letter 'c', which by the way, inserts a 'one-time-only' breakpoint at
        the given line or sub routine:
 
-	       DB<8> c 13
+	       DB&lt8&gt c 13
 	       All OK
 	       main::(./data_a:13):    print "$data{$key}\n";
 
@@ -283,20 +285,20 @@ help
        just before the meat of our task.  We could try to print out a couple
        of variables to see what is happening:
 
-	       DB<9> p $data{$key}
+	       DB&lt9&gt p $data{$key}
 
        Not much in there, lets have a look at our hash:
 
-	       DB<10> p %data
+	       DB&lt10&gt p %data
 	       Hello Worldziptomandwelcomejerrywelcomethisthat
 
-	       DB<11> p keys %data
+	       DB&lt11&gt p keys %data
 	       Hello Worldtomwelcomejerrythis
 
        Well, this isn't very easy to read, and using the helpful manual (h h),
        the 'x' command looks promising:
 
-	       DB<12> x %data
+	       DB&lt12&gt x %data
 	       0  'Hello World'
 	       1  'zip'
 	       2  'tom'
@@ -313,13 +315,13 @@ help
        and, in this case, not particularly helpful.  The trick here, is to use
        a reference to the data structure:
 
-	       DB<13> x \%data
+	       DB&lt13&gt x \%data
 	       0  HASH(0x8194bc4)
-		  'Hello World' => 'zip'
-		  'jerry' => 'welcome'
-		  'this' => 'that'
-		  'tom' => 'and'
-		  'welcome' => undef
+		  'Hello World' =&gt 'zip'
+		  'jerry' =&gt 'welcome'
+		  'this' =&gt 'that'
+		  'tom' =&gt 'and'
+		  'welcome' =&gt undef
 
        The reference is truly dumped and we can finally see what we're dealing
        with.  Our quoting was perfectly valid but wrong for our purposes, with
@@ -329,13 +331,13 @@ help
        The '-w' switch would have told us about this, had we used it at the
        start, and saved us a lot of trouble:
 
-	       > perl -w data
+	       &gt perl -w data
 	       Odd number of elements in hash assignment at ./data line 5.
 
-       We fix our quoting: 'tom' => q(and jerry), and run it again, this time
+       We fix our quoting: 'tom' =&gt q(and jerry), and run it again, this time
        we get our expected output:
 
-	       > perl -w data
+	       &gt perl -w data
 	       Hello World
 
        While we're here, take a closer look at the 'x' command, it's really
@@ -346,7 +348,7 @@ help
        debugger: it wants some form of input from STDIN, so we give it
        something non-committal, a zero:
 
-	       > perl -de 0
+	       &gt perl -de 0
 	       Default die handler restored.
 
 	       Loading DB routines from perl5db.pl version 1.07
@@ -359,58 +361,58 @@ help
        Now build an on-the-fly object over a couple of lines (note the
        backslash):
 
-	       DB<1> $obj = bless({'unique_id'=>'123', 'attr'=> \
-	       cont:   {'col' => 'black', 'things' => [qw(this that etc)]}}, 'MY_class')
+	       DB&lt1&gt $obj = bless({'unique_id'=&gt'123', 'attr'=&gt \
+	       cont:   {'col' =&gt 'black', 'things' =&gt [qw(this that etc)]}}, 'MY_class')
 
        And let's have a look at it:
 
-	       DB<2> x $obj
+	       DB&lt2&gt x $obj
 	       0  MY_class=HASH(0x828ad98)
-		       'attr' => HASH(0x828ad68)
-	       'col' => 'black'
-	       'things' => ARRAY(0x828abb8)
+		       'attr' =&gt HASH(0x828ad68)
+	       'col' =&gt 'black'
+	       'things' =&gt ARRAY(0x828abb8)
 		       0  'this'
 		       1  'that'
 		       2  'etc'
-		       'unique_id' => 123
-	       DB<3>
+		       'unique_id' =&gt 123
+	       DB&lt3&gt
 
        Useful, huh?  You can eval nearly anything in there, and experiment
        with bits of code or regexes until the cows come home:
 
-	       DB<3> @data = qw(this that the other atheism leather theory scythe)
+	       DB&lt3&gt @data = qw(this that the other atheism leather theory scythe)
 
-	       DB<4> p 'saw -> '.($cnt += map { print "\t:\t$_\n" } grep(/the/, sort @data))
+	       DB&lt4&gt p 'saw -&gt '.($cnt += map { print "\t:\t$_\n" } grep(/the/, sort @data))
 	       atheism
 	       leather
 	       other
 	       scythe
 	       the
 	       theory
-	       saw -> 6
+	       saw -&gt 6
 
        If you want to see the command History, type an 'H':
 
-	       DB<5> H
-	       4: p 'saw -> '.($cnt += map { print "\t:\t$_\n" } grep(/the/, sort @data))
+	       DB&lt5&gt H
+	       4: p 'saw -&gt '.($cnt += map { print "\t:\t$_\n" } grep(/the/, sort @data))
 	       3: @data = qw(this that the other atheism leather theory scythe)
 	       2: x $obj
-	       1: $obj = bless({'unique_id'=>'123', 'attr'=>
-	       {'col' => 'black', 'things' => [qw(this that etc)]}}, 'MY_class')
-	       DB<5>
+	       1: $obj = bless({'unique_id'=&gt'123', 'attr'=&gt
+	       {'col' =&gt 'black', 'things' =&gt [qw(this that etc)]}}, 'MY_class')
+	       DB&lt5&gt
 
        And if you want to repeat any previous command, use the exclamation:
        '!':
 
-	       DB<5> !4
-	       p 'saw -> '.($cnt += map { print "$_\n" } grep(/the/, sort @data))
+	       DB&lt5&gt !4
+	       p 'saw -&gt '.($cnt += map { print "$_\n" } grep(/the/, sort @data))
 	       atheism
 	       leather
 	       other
 	       scythe
 	       the
 	       theory
-	       saw -> 12
+	       saw -&gt 12
 
        For more on references see perlref and perlreftut
 
@@ -456,10 +458,10 @@ Stepping through code
        For some reason, the Fahrenheit to Celsius conversion fails to return
        the expected output.  This is what it does:
 
-	       > temp -c0.72
+	       &gt temp -c0.72
 	       33.30 f
 
-	       > temp -f33.3
+	       &gt temp -f33.3
 	       162.94 c
 
        Not very consistent!  We'll set a breakpoint in the code manually and
@@ -475,7 +477,7 @@ Stepping through code
 	       if ($deg eq 'c')
 		       ...
 
-	       > perl -d temp -f33.3
+	       &gt perl -d temp -f33.3
 	       Default die handler restored.
 
 	       Loading DB routines from perl5db.pl version 1.07
@@ -487,16 +489,16 @@ Stepping through code
 
        We'll simply continue down to our pre-set breakpoint with a 'c':
 
-	       DB<1> c
+	       DB&lt1&gt c
 	       main::(temp:10): 	       if ($deg eq 'c') {
 
        Followed by a view command to see where we are:
 
-	       DB<1> v
+	       DB&lt1&gt v
 	       7:	       my ($deg, $num) = ($1, $2);
 	       8:	       my ($in, $out) = ($num, $num);
 	       9:	       $DB::single=2;
-	       10==>	       if ($deg eq 'c') {
+	       10==&gt	       if ($deg eq 'c') {
 	       11:		       $deg = 'f';
 	       12:		       $out = &c2f($num);
 	       13	       } else {
@@ -506,19 +508,19 @@ Stepping through code
 
        And a print to show what values we're currently using:
 
-	       DB<1> p $deg, $num
+	       DB&lt1&gt p $deg, $num
 	       f33.3
 
        We can put another break point on any line beginning with a colon,
        we'll use line 17 as that's just as we come out of the subroutine, and
        we'd like to pause there later on:
 
-	       DB<2> b 17
+	       DB&lt2&gt b 17
 
        There's no feedback from this, but you can see what breakpoints are set
        by using the list 'L' command:
 
-	       DB<3> L
+	       DB&lt3&gt L
 	       temp:
 		       17:	      print "$out $deg\n";
 		       break if (1)
@@ -529,14 +531,14 @@ Stepping through code
        line number, we'll use the subroutine name, followed by the now
        familiar 'v':
 
-	       DB<3> c f2c
+	       DB&lt3&gt c f2c
 	       main::f2c(temp:30):	       my $f = shift;
 
-	       DB<4> v
+	       DB&lt4&gt v
 	       24:     exit;
 	       25
 	       26      sub f2c {
-	       27==>	       my $f = shift;
+	       27==&gt	       my $f = shift;
 	       28:	       my $c = 5 * $f - 32 / 9;
 	       29:	       return $c;
 	       30      }
@@ -550,41 +552,41 @@ Stepping through code
        descend into it for inspection.	In this case though, we simply
        continue down to line 29:
 
-	       DB<4> c 29
+	       DB&lt4&gt c 29
 	       main::f2c(temp:29):	       return $c;
 
        And have a look at the return value:
 
-	       DB<5> p $c
+	       DB&lt5&gt p $c
 	       162.944444444444
 
        This is not the right answer at all, but the sum looks correct.	I
        wonder if it's anything to do with operator precedence?	We'll try a
        couple of other possibilities with our sum:
 
-	       DB<6> p (5 * $f - 32 / 9)
+	       DB&lt6&gt p (5 * $f - 32 / 9)
 	       162.944444444444
 
-	       DB<7> p 5 * $f - (32 / 9)
+	       DB&lt7&gt p 5 * $f - (32 / 9)
 	       162.944444444444
 
-	       DB<8> p (5 * $f) - 32 / 9
+	       DB&lt8&gt p (5 * $f) - 32 / 9
 	       162.944444444444
 
-	       DB<9> p 5 * ($f - 32) / 9
+	       DB&lt9&gt p 5 * ($f - 32) / 9
 	       0.722222222222221
 
        :-) that's more like it!  Ok, now we can set our return variable and
        we'll return out of the sub with an 'r':
 
-	       DB<10> $c = 5 * ($f - 32) / 9
+	       DB&lt10&gt $c = 5 * ($f - 32) / 9
 
-	       DB<11> r
+	       DB&lt11&gt r
 	       scalar context return from main::f2c: 0.722222222222221
 
        Looks good, let's just continue off the end of the script:
 
-	       DB<12> c
+	       DB&lt12&gt c
 	       0.72 c
 	       Debugged program terminated.  Use q to quit or R to restart,
 	       use O inhibit_exit to avoid stopping after program termination,
@@ -608,22 +610,22 @@ REGULAR EXPRESSIONS
        Ever wanted to know what a regex looked like?  You'll need perl
        compiled with the DEBUGGING flag for this one:
 
-	       > perl -Dr -e '/^pe(a)*rl$/i'
+	       &gt perl -Dr -e '/^pe(a)*rl$/i'
 	       Compiling REx `^pe(a)*rl$'
 	       size 17 first at 2
 	       rarest char
 		at 0
 		  1: BOL(2)
-		  2: EXACTF <pe>(4)
+		  2: EXACTF &ltpe&gt(4)
 		  4: CURLYN[1] {0,32767}(14)
 		  6:   NOTHING(8)
-		  8:   EXACTF <a>(0)
+		  8:   EXACTF &lta&gt(0)
 		 12:   WHILEM(0)
 		 13: NOTHING(14)
-		 14: EXACTF <rl>(16)
+		 14: EXACTF &ltrl&gt(16)
 		 16: EOL(17)
 		 17: END(0)
-	       floating `'$ at 4..2147483647 (checking floating) stclass `EXACTF <pe>'
+	       floating `'$ at 4..2147483647 (checking floating) stclass `EXACTF &ltpe&gt'
        anchored(BOL) minlen 4
 	       Omitting $` $& $' support.
 
@@ -662,7 +664,7 @@ CGI
        running their CGI script from the command-line, try something like
        this:
 
-	       > perl -d my_cgi.pl -nodebug
+	       &gt perl -d my_cgi.pl -nodebug
 
        Of course CGI and perlfaq9 will tell you more.
 
@@ -703,21 +705,21 @@ SEE ALSO
        perldebug, perldebguts, perldiag, dprofpp, perlrun
 
 AUTHOR
-       Richard Foley <richard.foley@rfi.net> Copyright (c) 2000
+       Richard Foley &ltrichard.foley@rfi.net&gt Copyright (c) 2000
 
 CONTRIBUTORS
        Various people have made helpful suggestions and contributions, in
        particular:
 
-       Ronald J Kimball <rjk@linguist.dartmouth.edu>
+       Ronald J Kimball &ltrjk@linguist.dartmouth.edu&gt
 
-       Hugo van der Sanden <hv@crypt0.demon.co.uk>
+       Hugo van der Sanden &lthv@crypt0.demon.co.uk&gt
 
-       Peter Scott <Peter@PSDT.com>
+       Peter Scott &ltPeter@PSDT.com&gt
 
 
 
 perl v5.10.1			  2009-02-12			 PERLDEBTUT(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

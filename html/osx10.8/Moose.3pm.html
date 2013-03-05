@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Moose is an extension of the Perl 5 object system...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose - A postmodern object system for Perl 5</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose(3)	      User Contributed Perl Documentation	      Moose(3)
 
 
@@ -22,13 +24,13 @@ SYNOPSIS
 	 package Point;
 	 use Moose; # automatically turns on strict and warnings
 
-	 has 'x' => (is => 'rw', isa => 'Int');
-	 has 'y' => (is => 'rw', isa => 'Int');
+	 has 'x' =&gt (is =&gt 'rw', isa =&gt 'Int');
+	 has 'y' =&gt (is =&gt 'rw', isa =&gt 'Int');
 
 	 sub clear {
 	     my $self = shift;
-	     $self->x(0);
-	     $self->y(0);
+	     $self-&gtx(0);
+	     $self-&gty(0);
 	 }
 
 	 package Point3D;
@@ -36,11 +38,11 @@ SYNOPSIS
 
 	 extends 'Point';
 
-	 has 'z' => (is => 'rw', isa => 'Int');
+	 has 'z' =&gt (is =&gt 'rw', isa =&gt 'Int');
 
-	 after 'clear' => sub {
+	 after 'clear' =&gt sub {
 	     my $self = shift;
-	     $self->z(0);
+	     $self-&gtz(0);
 	 };
 
 DESCRIPTION
@@ -69,7 +71,7 @@ DESCRIPTION
        The "MooseX::" namespace is the official place to find Moose
        extensions.  These extensions can be found on the CPAN.	The easiest
        way to find them is to search for them
-       (<http://search.cpan.org/search?query=MooseX::>), or to examine
+       (&lthttp://search.cpan.org/search?query=MooseX::&gt), or to examine
        Task::Moose which aims to keep an up-to-date, easily installable list
        of Moose extensions.
 
@@ -80,10 +82,10 @@ TRANSLATIONS
        Japanese
 	   Japanese docs can be found at
 	   http://perldoc.perlassociation.org/pod/Moose-Doc-JA/index.html
-	   <http://perldoc.perlassociation.org/pod/Moose-Doc-JA/index.html>.
+	   &lthttp://perldoc.perlassociation.org/pod/Moose-Doc-JA/index.html&gt.
 	   The source POD files can be found in GitHub:
-	   http://github.com/jpa/Moose-Doc-JA <http://github.com/jpa/Moose-
-	   Doc-JA>
+	   http://github.com/jpa/Moose-Doc-JA &lthttp://github.com/jpa/Moose-
+	   Doc-JA&gt
 
 BUILDING CLASSES WITH MOOSE
        Moose makes every attempt to provide as much convenience as possible
@@ -126,8 +128,8 @@ EXPORTED FUNCTIONS
 	   Each superclass can be followed by a hash reference with options.
 	   Currently, only -version is recognized:
 
-	       extends 'My::Parent'	 => { -version => 0.01 },
-		       'My::OtherParent' => { -version => 0.03 };
+	       extends 'My::Parent'	 =&gt { -version =&gt 0.01 },
+		       'My::OtherParent' =&gt { -version =&gt 0.03 };
 
 	   An exception will be thrown if the version requirements are not
 	   satisfied.
@@ -138,8 +140,8 @@ EXPORTED FUNCTIONS
 	   Like with "extends", each specified role can be followed by a hash
 	   reference with a -version option:
 
-	       with 'My::Role'	    => { -version => 0.32 },
-		    'My::Otherrole' => { -version => 0.23 };
+	       with 'My::Role'	    =&gt { -version =&gt 0.32 },
+		    'My::Otherrole' =&gt { -version =&gt 0.23 };
 
 	   The specified version requirements must be satisfied, otherwise an
 	   exception will be thrown.
@@ -147,7 +149,7 @@ EXPORTED FUNCTIONS
 	   If your role takes options or arguments, they can be passed along
 	   in the hash reference as well.
 
-       has $name|@$names => %options
+       has $name|@$names =&gt %options
 	   This will install an attribute of a given $name into the current
 	   class. If the first parameter is an array reference, it will create
 	   an attribute for every $name in the list. The %options will be
@@ -156,7 +158,7 @@ EXPORTED FUNCTIONS
 	   the valid options can be found there. These are the most commonly
 	   used options:
 
-	   is => 'rw'|'ro'
+	   is =&gt 'rw'|'ro'
 	       The is option accepts either rw (for read/write) or ro (for
 	       read only). These will create either a read/write accessor or a
 	       read-only accessor respectively, using the same name as the
@@ -167,7 +169,7 @@ EXPORTED FUNCTIONS
 	       Class::MOP::Attribute, however if you use those, you won't need
 	       the is option.
 
-	   isa => $type_name
+	   isa =&gt $type_name
 	       The isa option uses Moose's type constraint facilities to set
 	       up runtime type checking for this attribute. Moose will perform
 	       the checks during class construction, and within any accessors.
@@ -177,37 +179,37 @@ EXPORTED FUNCTIONS
 	       information on how to define a new type, and how to retrieve
 	       type meta-data).
 
-	   coerce => (1|0)
+	   coerce =&gt (1|0)
 	       This will attempt to use coercion with the supplied type
 	       constraint to change the value passed into any accessors or
 	       constructors. You must supply a type constraint, and that type
 	       constraint must define a coercion. See
 	       Moose::Cookbook::Basics::Recipe5 for an example.
 
-	   does => $role_name
+	   does =&gt $role_name
 	       This will accept the name of a role which the value stored in
 	       this attribute is expected to have consumed.
 
-	   required => (1|0)
+	   required =&gt (1|0)
 	       This marks the attribute as being required. This means a value
 	       must be supplied during class construction, or the attribute
 	       must be lazy and have either a default or a builder. Note that
-	       c<required> does not say anything about the attribute's value,
+	       c&ltrequired&gt does not say anything about the attribute's value,
 	       which can be "undef".
 
-	   weak_ref => (1|0)
+	   weak_ref =&gt (1|0)
 	       This will tell the class to store the value of this attribute
 	       as a weakened reference. If an attribute is a weakened
 	       reference, it cannot also be coerced. Note that when a weak ref
 	       expires, the attribute's value becomes undefined, and is still
 	       considered to be set for purposes of predicate, default, etc.
 
-	   lazy => (1|0)
+	   lazy =&gt (1|0)
 	       This will tell the class to not create this slot until
 	       absolutely necessary.  If an attribute is marked as lazy it
 	       must have a default or builder supplied.
 
-	   trigger => $code
+	   trigger =&gt $code
 	       The trigger option is a CODE reference which will be called
 	       after the value of the attribute is set. The CODE ref is passed
 	       the instance itself, the updated value, and the original value
@@ -219,7 +221,7 @@ EXPORTED FUNCTIONS
 	       either in the constructor, or using the writer. Default and
 	       built values will not cause the trigger to be fired.
 
-	   handles => ARRAY | HASH | REGEXP | ROLE | ROLETYPE | DUCKTYPE |
+	   handles =&gt ARRAY | HASH | REGEXP | ROLE | ROLETYPE | DUCKTYPE |
 	   CODE
 	       The handles option provides Moose classes with automated
 	       delegation features.  This is a pretty complex and powerful
@@ -274,21 +276,21 @@ EXPORTED FUNCTIONS
 		     package Tree;
 		     use Moose;
 
-		     has 'node' => (is => 'rw', isa => 'Any');
+		     has 'node' =&gt (is =&gt 'rw', isa =&gt 'Any');
 
-		     has 'children' => (
-			 is	 => 'ro',
-			 isa	 => 'ArrayRef',
-			 default => sub { [] }
+		     has 'children' =&gt (
+			 is	 =&gt 'ro',
+			 isa	 =&gt 'ArrayRef',
+			 default =&gt sub { [] }
 		     );
 
-		     has 'parent' => (
-			 is	     => 'rw',
-			 isa	     => 'Tree',
-			 weak_ref    => 1,
-			 handles     => {
-			     parent_node => 'node',
-			     siblings	 => 'children',
+		     has 'parent' =&gt (
+			 is	     =&gt 'rw',
+			 isa	     =&gt 'Tree',
+			 weak_ref    =&gt 1,
+			 handles     =&gt {
+			     parent_node =&gt 'node',
+			     siblings	 =&gt 'children',
 			 }
 		     );
 
@@ -300,12 +302,12 @@ EXPORTED FUNCTIONS
 		   You may also use an array reference to curry arguments to
 		   the original method.
 
-		     has 'thing' => (
+		     has 'thing' =&gt (
 			 ...
-			 handles => { set_foo => [ set => 'foo' ] },
+			 handles =&gt { set_foo =&gt [ set =&gt 'foo' ] },
 		     );
 
-		     # $self->set_foo(...) calls $self->thing->set('foo', ...)
+		     # $self-&gtset_foo(...) calls $self-&gtthing-&gtset('foo', ...)
 
 		   The first element of the array reference is the original
 		   method name, and the rest is a list of curried arguments.
@@ -351,7 +353,7 @@ EXPORTED FUNCTIONS
 		   class being delegated to. It expects you to return a hash
 		   (not a HASH ref) of the methods you want mapped.
 
-	   traits => [ @role_names ]
+	   traits =&gt [ @role_names ]
 	       This tells Moose to take the list of @role_names and apply them
 	       to the attribute meta-object. Custom attribute metaclass traits
 	       are useful for extending the capabilities of the has keyword:
@@ -364,13 +366,13 @@ EXPORTED FUNCTIONS
 	       Also see Moose::Cookbook::Meta::Recipe3 for a metaclass trait
 	       example.
 
-	   builder => Str
+	   builder =&gt Str
 	       The value of this key is the name of the method that will be
 	       called to obtain the value used to initialize the attribute.
 	       See the builder option docs in Class::MOP::Attribute and/or
 	       Moose::Cookbook::Basics::Recipe8 for more information.
 
-	   default => SCALAR | CODE
+	   default =&gt SCALAR | CODE
 	       The value of this key is the default value which will
 	       initialize the attribute.
 
@@ -380,12 +382,12 @@ EXPORTED FUNCTIONS
 	       that inside a CODE reference.  See the default option docs in
 	       Class::MOP::Attribute for more information.
 
-	   clearer => Str
+	   clearer =&gt Str
 	       Creates a method allowing you to clear the value. See the
 	       clearer option docs in Class::MOP::Attribute for more
 	       information.
 
-	   predicate => Str
+	   predicate =&gt Str
 	       Creates a method to perform a basic test to see if a value has
 	       been set in the attribute. See the predicate option docs in
 	       Class::MOP::Attribute for more information.
@@ -393,11 +395,11 @@ EXPORTED FUNCTIONS
 	       Note that the predicate will return true even for a "weak_ref"
 	       attribute whose value has expired.
 
-	   documentation => $string
+	   documentation =&gt $string
 	       An arbitrary string that can be retrieved later by calling
-	       "$attr->documentation".
+	       "$attr-&gtdocumentation".
 
-       has +$name => %options
+       has +$name =&gt %options
 	   This is variation on the normal attribute creator "has" which
 	   allows you to clone and extend an attribute from a superclass or
 	   from a role. Here is an example of the superclass usage:
@@ -405,10 +407,10 @@ EXPORTED FUNCTIONS
 	     package Foo;
 	     use Moose;
 
-	     has 'message' => (
-		 is	 => 'rw',
-		 isa	 => 'Str',
-		 default => 'Hello, I am a Foo'
+	     has 'message' =&gt (
+		 is	 =&gt 'rw',
+		 isa	 =&gt 'Str',
+		 default =&gt 'Hello, I am a Foo'
 	     );
 
 	     package My::Foo;
@@ -416,11 +418,11 @@ EXPORTED FUNCTIONS
 
 	     extends 'Foo';
 
-	     has '+message' => (default => 'Hello I am My::Foo');
+	     has '+message' =&gt (default =&gt 'Hello I am My::Foo');
 
 	   What is happening here is that My::Foo is cloning the "message"
-	   attribute from its parent class Foo, retaining the "is => 'rw'" and
-	   "isa => 'Str'" characteristics, but changing the value in
+	   attribute from its parent class Foo, retaining the "is =&gt 'rw'" and
+	   "isa =&gt 'Str'" characteristics, but changing the value in
 	   "default".
 
 	   Here is another example, but within the context of a role:
@@ -428,10 +430,10 @@ EXPORTED FUNCTIONS
 	     package Foo::Role;
 	     use Moose::Role;
 
-	     has 'message' => (
-		 is	 => 'rw',
-		 isa	 => 'Str',
-		 default => 'Hello, I am a Foo'
+	     has 'message' =&gt (
+		 is	 =&gt 'rw',
+		 isa	 =&gt 'Str',
+		 default =&gt 'Hello, I am a Foo'
 	     );
 
 	     package My::Foo;
@@ -439,7 +441,7 @@ EXPORTED FUNCTIONS
 
 	     with 'Foo::Role';
 
-	     has '+message' => (default => 'Hello I am My::Foo');
+	     has '+message' =&gt (default =&gt 'Hello I am My::Foo');
 
 	   In this case, we are basically taking the attribute which the role
 	   supplied and altering it within the bounds of this feature.
@@ -467,9 +469,9 @@ EXPORTED FUNCTIONS
 	       definition.  These traits will be composed into the attribute,
 	       but preexisting traits are not overridden, or removed.
 
-       before $name|@names|\@names|qr/.../ => sub { ... }
-       after $name|@names|\@names|qr/.../ => sub { ... }
-       around $name|@names|\@names|qr/.../ => sub { ... }
+       before $name|@names|\@names|qr/.../ =&gt sub { ... }
+       after $name|@names|\@names|qr/.../ =&gt sub { ... }
+       around $name|@names|\@names|qr/.../ =&gt sub { ... }
 	   These three items are syntactic sugar for the before, after, and
 	   around method modifier features that Class::MOP provides. More
 	   information on these may be found in Moose::Manual::MethodModifiers
@@ -513,7 +515,7 @@ METACLASS
        When you use Moose, you can specify traits which will be applied to
        your metaclass:
 
-	   use Moose -traits => 'My::Trait';
+	   use Moose -traits =&gt 'My::Trait';
 
        This is very similar to the attribute traits feature. When you do this,
        your class's "meta" object will have the specified traits applied to
@@ -548,12 +550,12 @@ UNIMPORTING FUNCTIONS
 	   package Person;
 	   use Moose;
 
-	   has 'first_name' => (is => 'rw', isa => 'Str');
-	   has 'last_name'  => (is => 'rw', isa => 'Str');
+	   has 'first_name' =&gt (is =&gt 'rw', isa =&gt 'Str');
+	   has 'last_name'  =&gt (is =&gt 'rw', isa =&gt 'Str');
 
 	   sub full_name {
 	       my $self = shift;
-	       $self->first_name . ' ' . $self->last_name
+	       $self-&gtfirst_name . ' ' . $self-&gtlast_name
 	   }
 
 	   no Moose; # keywords are removed from the Person package
@@ -626,7 +628,7 @@ GETTING HELP
        message. To subscribe, send an empty message to
        moose-subscribe@perl.org
 
-       You can also visit us at "#moose" on <irc://irc.perl.org/#moose> This
+       You can also visit us at "#moose" on &ltirc://irc.perl.org/#moose&gt This
        channel is quite active, and questions at all levels (on Moose-related
        topics ;) are welcome.
 
@@ -644,18 +646,18 @@ ACKNOWLEDGEMENTS
        fixes.
 
 SEE ALSO
-       <http://www.iinteractive.com/moose>
+       &lthttp://www.iinteractive.com/moose&gt
 	   This is the official web home of Moose, it contains links to our
 	   public git repository as well as links to a number of talks and
 	   articles on Moose and Moose related technologies.
 
        The Moose is flying, a tutorial by Randal Schwartz
-	   Part 1 - <http://www.stonehenge.com/merlyn/LinuxMag/col94.html>
+	   Part 1 - &lthttp://www.stonehenge.com/merlyn/LinuxMag/col94.html&gt
 
-	   Part 2 - <http://www.stonehenge.com/merlyn/LinuxMag/col95.html>
+	   Part 2 - &lthttp://www.stonehenge.com/merlyn/LinuxMag/col95.html&gt
 
        Several Moose extension modules in the "MooseX::" namespace.
-	   See <http://search.cpan.org/search?query=MooseX::> for extensions.
+	   See &lthttp://search.cpan.org/search?query=MooseX::&gt for extensions.
 
    Books
        The Art of the MetaObject Protocol
@@ -665,7 +667,7 @@ SEE ALSO
 
    Papers
        http://www.cs.utah.edu/plt/publications/oopsla04-gff.pdf
-       <http://www.cs.utah.edu/plt/publications/oopsla04-gff.pdf>
+       &lthttp://www.cs.utah.edu/plt/publications/oopsla04-gff.pdf&gt
 	   This paper (suggested by lbr on #moose) was what lead to the
 	   implementation of the "super"/"override" and "inner"/"augment"
 	   features. If you really want to understand them, I suggest you read
@@ -676,10 +678,10 @@ BUGS
        exception.
 
        Please report any bugs to "bug-moose@rt.cpan.org", or through the web
-       interface at <http://rt.cpan.org>.
+       interface at &lthttp://rt.cpan.org&gt.
 
        You can also discuss feature requests or possible bugs on the Moose
-       mailing list (moose@perl.org) or on IRC at <irc://irc.perl.org/#moose>.
+       mailing list (moose@perl.org) or on IRC at &ltirc://irc.perl.org/#moose&gt.
 
 FEATURE REQUESTS
        We are very strict about what features we add to the Moose core,
@@ -690,7 +692,7 @@ FEATURE REQUESTS
        That said, occasionally there is a feature needed in the meta-system to
        support your planned extension, in which case you should either email
        the mailing list (moose@perl.org) or join us on IRC at
-       <irc://irc.perl.org/#moose> to discuss. The Moose::Manual::Contributing
+       &ltirc://irc.perl.org/#moose&gt to discuss. The Moose::Manual::Contributing
        has more detail about how and when you can contribute.
 
 CABAL
@@ -699,21 +701,21 @@ CABAL
        the wider purview of Moose. They help maintain not just the code but
        the community as well.
 
-       Stevan (stevan) Little <stevan@iinteractive.com>
+       Stevan (stevan) Little &ltstevan@iinteractive.com&gt
 
-       Jesse (doy) Luehrs <doy at tozt dot net>
+       Jesse (doy) Luehrs &ltdoy at tozt dot net&gt
 
        Yuval (nothingmuch) Kogman
 
-       Shawn (sartak) Moore <sartak@bestpractical.com>
+       Shawn (sartak) Moore &ltsartak@bestpractical.com&gt
 
-       Hans Dieter (confound) Pearcey <hdp@pobox.com>
+       Hans Dieter (confound) Pearcey &lthdp@pobox.com&gt
 
        Chris (perigrin) Prather
 
-       Florian Ragwitz <rafl@debian.org>
+       Florian Ragwitz &ltrafl@debian.org&gt
 
-       Dave (autarch) Rolsky <autarch@urth.org>
+       Dave (autarch) Rolsky &ltautarch@urth.org&gt
 
 CONTRIBUTORS
        Aankhen
@@ -775,7 +777,7 @@ CONTRIBUTORS
        ... and many other #moose folks
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -786,6 +788,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-06			      Moose(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

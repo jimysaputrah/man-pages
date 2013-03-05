@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>encoding - allows you to write your script in non-ascii or non-utf8</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 encoding(3pm)	       Perl Programmers Reference Guide 	 encoding(3pm)
 
 
@@ -26,14 +28,14 @@ SYNOPSIS
 
 	 # more control
 
-	 # A simple euc-cn => utf-8 converter
-	 use encoding "euc-cn", STDOUT => "utf8";  while(<>){print};
+	 # A simple euc-cn =&gt utf-8 converter
+	 use encoding "euc-cn", STDOUT =&gt "utf8";  while(&lt&gt){print};
 
 	 # "no encoding;" supported (but not scoped!)
 	 no encoding;
 
 	 # an alternate way, Filter
-	 use encoding "euc-jp", Filter=>1;
+	 use encoding "euc-jp", Filter=&gt1;
 	 # now you can use kanji identifiers -- in euc-jp!
 
 	 # switch on locale -
@@ -68,7 +70,7 @@ ABSTRACT
        You can write code in EUC-JP as follows:
 
 	 my $Rakuda = "\xF1\xD1\xF1\xCC"; # Camel in Kanji
-		      #<-char-><-char->   # 4 octets
+		      #&lt-char-&gt&lt-char-&gt   # 4 octets
 	 s/\bCamel\b/$Rakuda/;
 
        And with "use encoding "euc-jp"" in effect, it is the same thing as the
@@ -151,17 +153,17 @@ USAGE
 	   is consulted.  If no encoding can be found, the error "Unknown
 	   encoding 'ENCNAME'" will be thrown.
 
-       use encoding ENCNAME [ STDIN => ENCNAME_IN ...] ;
+       use encoding ENCNAME [ STDIN =&gt ENCNAME_IN ...] ;
 	   You can also individually set encodings of STDIN and STDOUT via the
-	   "STDIN => ENCNAME" form.  In this case, you cannot omit the first
-	   ENCNAME.  "STDIN => undef" turns the IO transcoding completely off.
+	   "STDIN =&gt ENCNAME" form.  In this case, you cannot omit the first
+	   ENCNAME.  "STDIN =&gt undef" turns the IO transcoding completely off.
 
 	   When ${^UNICODE} exists and non-zero, these options will completely
 	   ignored.  ${^UNICODE} is a variable introduced in perl 5.8.1.  See
 	   perlrun see "${^UNICODE}" in perlvar and "-C" in perlrun for
 	   details (perl 5.8.1 and later).
 
-       use encoding ENCNAME Filter=>1;
+       use encoding ENCNAME Filter=&gt1;
 	   This turns the encoding pragma into a source filter.  While the
 	   default approach just decodes interpolated literals (in qq() and
 	   qr()), this will apply a source filter to the entire source code.
@@ -175,7 +177,7 @@ The Filter Option
        The magic of "use encoding" is not applied to the names of identifiers.
        In order to make "${"\x{4eba}"}++" ($human++, where human is a single
        Han ideograph) work, you still need to write your script in UTF-8 -- or
-       use a source filter.  That's what 'Filter=>1' does.
+       use a source filter.  That's what 'Filter=&gt1' does.
 
        What does this mean?  Your source code behaves as if it is written in
        UTF-8 with 'use utf8' in effect.  So even if your editor only supports
@@ -189,7 +191,7 @@ The Filter Option
 
    Filter-related changes at Encode version 1.87
        o   The Filter option now sets STDIN and STDOUT like non-filter
-	   options.  And "STDIN=>ENCODING" and "STDOUT=>ENCODING" work like
+	   options.  And "STDIN=&gtENCODING" and "STDOUT=&gtENCODING" work like
 	   non-filter version.
 
        o   "use utf8" is implicitly declared so you no longer have to "use
@@ -199,7 +201,7 @@ CAVEATS
    NOT SCOPED
        The pragma is a per script, not a per block lexical.  Only the last
        "use encoding" or "no encoding" matters, and it affects the whole
-       script.	However, the <no encoding> pragma is supported and use
+       script.	However, the &ltno encoding&gt pragma is supported and use
        encoding can appear as many times as you want in a given script.  The
        multiple use of this pragma is discouraged.
 
@@ -353,11 +355,11 @@ KNOWN PROBLEMS
 	     # replace *non-ascii* with a non-ascii string
 	     my $camel;
 	     format STDOUT =
-	     *non-ascii*@>>>>>>>
+	     *non-ascii*@&gt&gt&gt&gt&gt&gt&gt
 	     $camel
 	     .
 	     $camel = "*non-ascii*";
-	     binmode(STDOUT=>':encoding(utf8)'); # bang!
+	     binmode(STDOUT=&gt':encoding(utf8)'); # bang!
 	     write;		 # funny
 	     print $camel, "\n"; # fine
 
@@ -410,6 +412,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-01			 encoding(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

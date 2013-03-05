@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This is not perldebug, which tells you how to use the debugger.	This..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perldebguts - Guts of Perl debugging</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLDEBGUTS(1)	       Perl Programmers Reference Guide 	PERLDEBGUTS(1)
 
 
@@ -38,7 +40,7 @@ Debugger Internals
 	   'perl5db.pl'}" if not present) before the first line of your
 	   program.
 
-       o   Each array "@{"_<$filename"}" holds the lines of $filename for a
+       o   Each array "@{"_&lt$filename"}" holds the lines of $filename for a
 	   file compiled by Perl.  The same is also true for "eval"ed strings
 	   that contain subroutines, or which are currently being executed.
 	   The $filename for "eval"ed strings looks like "(eval 34)".  Code
@@ -47,7 +49,7 @@ Debugger Internals
 	   Values in this array are magical in numeric context: they compare
 	   equal to zero only if the line is not breakable.
 
-       o   Each hash "%{"_<$filename"}" contains breakpoints and actions keyed
+       o   Each hash "%{"_&lt$filename"}" contains breakpoints and actions keyed
 	   by line number.  Individual entries (as opposed to the whole hash)
 	   are settable.  Perl only cares about Boolean true here, although
 	   the values used by perl5db.pl have the form
@@ -57,13 +59,13 @@ Debugger Internals
 	   which are currently being executed.	The $filename for "eval"ed
 	   strings looks like "(eval 34)" or  "(re_eval 19)".
 
-       o   Each scalar "${"_<$filename"}" contains "_<$filename".  This is
+       o   Each scalar "${"_&lt$filename"}" contains "_&lt$filename".  This is
 	   also the case for evaluated strings that contain subroutines, or
 	   which are currently being executed.	The $filename for "eval"ed
 	   strings looks like "(eval 34)" or "(re_eval 19)".
 
        o   After each "require"d file is compiled, but before it is executed,
-	   "DB::postponed(*{"_<$filename"})" is called if the subroutine
+	   "DB::postponed(*{"_&lt$filename"})" is called if the subroutine
 	   "DB::postponed" exists.  Here, the $filename is the expanded name
 	   of the "require"d file, as found in the values of %INC.
 
@@ -82,7 +84,7 @@ Debugger Internals
 	   variables $DB::trace, $DB::single, or $DB::signal is true.  These
 	   variables are not "local"izable.  This feature is disabled when
 	   executing inside "DB::DB()", including functions called from it
-	   unless "$^D & (1<<30)" is true.
+	   unless "$^D & (1&lt&lt30)" is true.
 
        o   When execution of the program reaches a subroutine call, a call to
 	   &DB::sub(args) is made instead, with $DB::sub holding the name of
@@ -112,7 +114,7 @@ Debugger Internals
        Another brief debugger, slightly more useful, can be created with only
        the line:
 
-	 sub DB::DB {print ++$i; scalar <STDIN>}
+	 sub DB::DB {print ++$i; scalar &ltSTDIN&gt}
 
        This debugger prints a number which increments for each statement
        encountered and waits for you to hit a newline before continuing to the
@@ -145,7 +147,7 @@ Debugger Internals
        In addition to the file and subroutine-related variables mentioned
        above, the debugger also maintains various magical internal variables.
 
-       o   @DB::dbline is an alias for "@{"::_<current_file"}", which holds
+       o   @DB::dbline is an alias for "@{"::_&ltcurrent_file"}", which holds
 	   the lines of the currently-selected file (compiled by Perl), either
 	   explicitly chosen with the debugger's "f" command, or implicitly by
 	   flow of execution.
@@ -153,7 +155,7 @@ Debugger Internals
 	   Values in this array are magical in numeric context: they compare
 	   equal to zero only if the line is not breakable.
 
-       o   %DB::dbline, is an alias for "%{"::_<current_file"}", which
+       o   %DB::dbline, is an alias for "%{"::_&ltcurrent_file"}", which
 	   contains breakpoints and actions keyed by line number in the
 	   currently-selected file, either explicitly chosen with the
 	   debugger's "f" command, or implicitly by flow of execution.
@@ -179,7 +181,7 @@ Debugger Internals
 
        o   "DB::print_trace(FH, skip[, count[, short]])" prints formatted info
 	   about caller frames.  The last two functions may be convenient as
-	   arguments to "<", "<<" commands.
+	   arguments to "&lt", "&lt&lt" commands.
 
        Note that any variables and functions that are not documented in this
        manpages (or in perldebug) are considered for internal use only, and as
@@ -198,11 +200,11 @@ Frame Listing Output Examples
 	Enter h or `h h' for help.
 
 	main::(-e:1):	0
-	  DB<1> sub foo { 14 }
+	  DB&lt1&gt sub foo { 14 }
 
-	  DB<2> sub bar { 3 }
+	  DB&lt2&gt sub bar { 3 }
 
-	  DB<3> t print foo() * bar()
+	  DB&lt3&gt t print foo() * bar()
 	main::((eval 172):3):	print foo() + bar();
 	main::foo((eval 168):2):
 	main::bar((eval 170):2):
@@ -210,9 +212,9 @@ Frame Listing Output Examples
 
        with this one, once the "o"ption "frame=2" has been set:
 
-	  DB<4> o f=2
+	  DB&lt4&gt o f=2
 		       frame = '2'
-	  DB<5> t print foo() * bar()
+	  DB&lt5&gt t print foo() * bar()
 	3:	foo() * bar()
 	entering main::foo
 	 2:	sub foo { 14 };
@@ -372,19 +374,19 @@ Debugging regular expressions
 	 rarest char g at 0
 	 rarest char d at 0
 	    1: ANYOF[bc](12)
-	   12: EXACT <d>(14)
+	   12: EXACT &ltd&gt(14)
 	   14: CURLYX[0] {1,32767}(28)
 	   16:	 OPEN1(18)
-	   18:	   EXACT <e>(20)
+	   18:	   EXACT &lte&gt(20)
 	   20:	   STAR(23)
-	   21:	     EXACT <f>(0)
-	   23:	   EXACT <g>(25)
+	   21:	     EXACT &ltf&gt(0)
+	   23:	   EXACT &ltg&gt(25)
 	   25:	 CLOSE1(27)
 	   27:	 WHILEM[1/1](0)
 	   28: NOTHING(29)
-	   29: EXACT <h>(31)
+	   29: EXACT &lth&gt(31)
 	   31: ANYOF[ij](42)
-	   42: EXACT <k>(44)
+	   42: EXACT &ltk&gt(44)
 	   44: EOL(45)
 	   45: END(0)
 	 anchored `de' at 1 floating `gh' at 3..2147483647 (checking floating)
@@ -599,7 +601,7 @@ Debugging regular expressions
        labeled "1:" (the "1: ANYOF[bc]") begins at character position 1 in the
        pre-compiled form of the regex, and has a length of 4 characters.
        "5[1]" in position 12 indicates that the node labeled "12:" (the "12:
-       EXACT <d>") begins at character position 5 in the pre-compiled form of
+       EXACT &ltd&gt") begins at character position 5 in the pre-compiled form of
        the regex, and has a length of 1 character.  "12[1]" in position 14
        indicates that the node labeled "14:" (the "14: CURLYX[0] {1,32767}")
        begins at character position 12 in the pre-compiled form of the regex,
@@ -617,27 +619,27 @@ Debugging regular expressions
 
 	 Matching `[bc]d(ef*g)+h[ij]k$' against `abcdefg__gh__'
 	   Setting an EVAL scope, savestack=3
-	    2 <ab> <cdefg__gh_>    |  1: ANYOF
-	    3 <abc> <defg__gh_>    | 11: EXACT <d>
-	    4 <abcd> <efg__gh_>    | 13: CURLYX {1,32767}
-	    4 <abcd> <efg__gh_>    | 26:   WHILEM
+	    2 &ltab&gt &ltcdefg__gh_&gt    |  1: ANYOF
+	    3 &ltabc&gt &ltdefg__gh_&gt    | 11: EXACT &ltd&gt
+	    4 &ltabcd&gt &ltefg__gh_&gt    | 13: CURLYX {1,32767}
+	    4 &ltabcd&gt &ltefg__gh_&gt    | 26:   WHILEM
 				       0 out of 1..32767  cc=effff31c
-	    4 <abcd> <efg__gh_>    | 15:     OPEN1
-	    4 <abcd> <efg__gh_>    | 17:     EXACT <e>
-	    5 <abcde> <fg__gh_>    | 19:     STAR
-				    EXACT <f> can match 1 times out of 32767...
+	    4 &ltabcd&gt &ltefg__gh_&gt    | 15:     OPEN1
+	    4 &ltabcd&gt &ltefg__gh_&gt    | 17:     EXACT &lte&gt
+	    5 &ltabcde&gt &ltfg__gh_&gt    | 19:     STAR
+				    EXACT &ltf&gt can match 1 times out of 32767...
 	   Setting an EVAL scope, savestack=3
-	    6 <bcdef> <g__gh__>    | 22:       EXACT <g>
-	    7 <bcdefg> <__gh__>    | 24:       CLOSE1
-	    7 <bcdefg> <__gh__>    | 26:       WHILEM
+	    6 &ltbcdef&gt &ltg__gh__&gt    | 22:       EXACT &ltg&gt
+	    7 &ltbcdefg&gt &lt__gh__&gt    | 24:       CLOSE1
+	    7 &ltbcdefg&gt &lt__gh__&gt    | 26:       WHILEM
 					   1 out of 1..32767  cc=effff31c
 	   Setting an EVAL scope, savestack=12
-	    7 <bcdefg> <__gh__>    | 15:	 OPEN1
-	    7 <bcdefg> <__gh__>    | 17:	 EXACT <e>
+	    7 &ltbcdefg&gt &lt__gh__&gt    | 15:	 OPEN1
+	    7 &ltbcdefg&gt &lt__gh__&gt    | 17:	 EXACT &lte&gt
 	      restoring \1 to 4(4)..7
 					   failed, try continuation...
-	    7 <bcdefg> <__gh__>    | 27:	 NOTHING
-	    7 <bcdefg> <__gh__>    | 28:	 EXACT <h>
+	    7 &ltbcdefg&gt &lt__gh__&gt    | 27:	 NOTHING
+	    7 &ltbcdefg&gt &lt__gh__&gt    | 28:	 EXACT &lth&gt
 					   failed...
 				       failed...
 
@@ -645,7 +647,7 @@ Debugging regular expressions
        node of the compiled regex that is currently being tested against the
        target string.  The format of these lines is
 
-       "    "STRING-OFFSET <PRE-STRING> <POST-STRING>	|ID:  TYPE
+       "    "STRING-OFFSET &ltPRE-STRING&gt &ltPOST-STRING&gt	|ID:  TYPE
 
        The TYPE info is indented with respect to the backtracking level.
        Other incidental information appears interspersed within.
@@ -697,8 +699,8 @@ Debugging Perl memory usage
        If your perl is using Perl's malloc() and was compiled with the
        necessary switches (this is the default), then it will print memory
        usage statistics after compiling your code when
-       "$ENV{PERL_DEBUG_MSTATS} > 1", and before termination of the program
-       when "$ENV{PERL_DEBUG_MSTATS} >= 1".  The report format is similar to
+       "$ENV{PERL_DEBUG_MSTATS} &gt 1", and before termination of the program
+       when "$ENV{PERL_DEBUG_MSTATS} &gt= 1".  The report format is similar to
        the following example:
 
 	 $ PERL_DEBUG_MSTATS=2 perl -e "require Carp"
@@ -791,6 +793,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-07			PERLDEBGUTS(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

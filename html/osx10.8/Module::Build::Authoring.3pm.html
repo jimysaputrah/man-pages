@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="When creating a "Build.PL" script for a module, something like the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Module::Build::Authoring - Authoring Module::Build modules</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Module::Build::AuthorinPerlmProgrammers ReferenceModule::Build::Authoring(3pm)
 
 
@@ -20,26 +22,26 @@ DESCRIPTION
        following code will typically be used:
 
 	 use Module::Build;
-	 my $build = Module::Build->new
+	 my $build = Module::Build-&gtnew
 	   (
-	    module_name => 'Foo::Bar',
-	    license  => 'perl',
-	    requires => {
-			 'perl' 	 => '5.6.1',
-			 'Some::Module'  => '1.23',
-			 'Other::Module' => '>= 1.2, != 1.5, < 2.0',
+	    module_name =&gt 'Foo::Bar',
+	    license  =&gt 'perl',
+	    requires =&gt {
+			 'perl' 	 =&gt '5.6.1',
+			 'Some::Module'  =&gt '1.23',
+			 'Other::Module' =&gt '&gt= 1.2, != 1.5, &lt 2.0',
 			},
 	   );
-	 $build->create_build_script;
+	 $build-&gtcreate_build_script;
 
        A simple module could get away with something as short as this for its
        "Build.PL" script:
 
 	 use Module::Build;
-	 Module::Build->new(
-	   module_name => 'Foo::Bar',
-	   license     => 'perl',
-	 )->create_build_script;
+	 Module::Build-&gtnew(
+	   module_name =&gt 'Foo::Bar',
+	   license     =&gt 'perl',
+	 )-&gtcreate_build_script;
 
        The model used by "Module::Build" is a lot like the "MakeMaker"
        metaphor, with the following correspondences:
@@ -58,7 +60,7 @@ DESCRIPTION
 
        For information on providing compatibility with "ExtUtils::MakeMaker",
        see Module::Build::Compat and
-       <http://www.makemaker.org/wiki/index.cgi?ModuleBuildConversionGuide>.
+       &lthttp://www.makemaker.org/wiki/index.cgi?ModuleBuildConversionGuide&gt.
 
 STRUCTURE
        Module::Build creates a class hierarchy conducive to customization.
@@ -95,14 +97,14 @@ SUBCLASSING
 	 use lib q(/nonstandard/library/path);
 	 use My::Builder;  # Or whatever you want to call it
 
-	 my $build = My::Builder->new
+	 my $build = My::Builder-&gtnew
 	   (
-	    module_name => 'Foo::Bar',	# All the regular args...
-	    license	=> 'perl',
-	    dist_author => 'A N Other <me@here.net.au>',
-	    requires	=> { Carp => 0 }
+	    module_name =&gt 'Foo::Bar',	# All the regular args...
+	    license	=&gt 'perl',
+	    dist_author =&gt 'A N Other &ltme@here.net.au&gt',
+	    requires	=&gt { Carp =&gt 0 }
 	   );
-	 $build->create_build_script;
+	 $build-&gtcreate_build_script;
 
        This is relatively straightforward, and is the best way to do things if
        your My::Builder class contains lots of code.  The
@@ -123,24 +125,24 @@ SUBCLASSING
 	 #!/usr/bin/perl
 
 	 use Module::Build;
-	 my $class = Module::Build->subclass
+	 my $class = Module::Build-&gtsubclass
 	   (
-	    class => 'My::Builder',
-	    code => q{
+	    class =&gt 'My::Builder',
+	    code =&gt q{
 	      sub ACTION_foo {
 		print "I'm fooing to death!\n";
 	      }
 	    },
 	   );
 
-	 my $build = $class->new
+	 my $build = $class-&gtnew
 	   (
-	    module_name => 'Foo::Bar',	# All the regular args...
-	    license	=> 'perl',
-	    dist_author => 'A N Other <me@here.net.au>',
-	    requires	=> { Carp => 0 }
+	    module_name =&gt 'Foo::Bar',	# All the regular args...
+	    license	=&gt 'perl',
+	    dist_author =&gt 'A N Other &ltme@here.net.au&gt',
+	    requires	=&gt { Carp =&gt 0 }
 	   );
-	 $build->create_build_script;
+	 $build-&gtcreate_build_script;
 
        Behind the scenes, this actually does create a ".pm" file, since the
        code you provide must persist after Build.PL is run if it is to be very
@@ -190,18 +192,18 @@ PREREQUISITES
        The prerequisites are given in a hash reference, where the keys are the
        module names and the values are version specifiers:
 
-	 requires => {
-		      Foo::Module => '2.4',
-		      Bar::Module => 0,
-		      Ken::Module => '>= 1.2, != 1.5, < 2.0',
-		      perl => '5.6.0'
+	 requires =&gt {
+		      Foo::Module =&gt '2.4',
+		      Bar::Module =&gt 0,
+		      Ken::Module =&gt '&gt= 1.2, != 1.5, &lt 2.0',
+		      perl =&gt '5.6.0'
 		     },
 
        The above four version specifiers have different effects.  The value
        '2.4' means that at least version 2.4 of "Foo::Module" must be
        installed.  The value 0 means that any version of "Bar::Module" is
        acceptable, even if "Bar::Module" doesn't define a version.  The more
-       verbose value '>= 1.2, != 1.5, < 2.0' means that "Ken::Module"'s
+       verbose value '&gt= 1.2, != 1.5, &lt 2.0' means that "Ken::Module"'s
        version must be at least 1.2, less than 2.0, and not equal to 1.5.  The
        list of criteria is separated by commas, and all criteria must be
        satisfied.
@@ -246,20 +248,20 @@ AUTOMATION
        module non-interactively.  For instance, the following Perl script will
        invoke the entire build/install procedure:
 
-	 my $build = Module::Build->new(module_name => 'MyModule');
-	 $build->dispatch('build');
-	 $build->dispatch('test');
-	 $build->dispatch('install');
+	 my $build = Module::Build-&gtnew(module_name =&gt 'MyModule');
+	 $build-&gtdispatch('build');
+	 $build-&gtdispatch('test');
+	 $build-&gtdispatch('install');
 
        If any of these steps encounters an error, it will throw a fatal
        exception.
 
        You can also pass arguments as part of the build process:
 
-	 my $build = Module::Build->new(module_name => 'MyModule');
-	 $build->dispatch('build');
-	 $build->dispatch('test', verbose => 1);
-	 $build->dispatch('install', sitelib => '/my/secret/place/');
+	 my $build = Module::Build-&gtnew(module_name =&gt 'MyModule');
+	 $build-&gtdispatch('build');
+	 $build-&gtdispatch('test', verbose =&gt 1);
+	 $build-&gtdispatch('install', sitelib =&gt '/my/secret/place/');
 
        Building and installing modules in this way skips creating the "Build"
        script.
@@ -270,23 +272,23 @@ MIGRATION
        "WriteMakefile" in your Makefile.PL so that "MakeMaker" doesn't try to
        run your Build.PL as a normal .PL file:
 
-	 PL_FILES => {},
+	 PL_FILES =&gt {},
 
        You may also be interested in looking at the "Module::Build::Compat"
        module, which can automatically create various kinds of Makefile.PL
        compatibility layers.
 
 AUTHOR
-       Ken Williams <kwilliams@cpan.org>
+       Ken Williams &ltkwilliams@cpan.org&gt
 
        Development questions, bug reports, and patches should be sent to the
-       Module-Build mailing list at <module-build@perl.org>.
+       Module-Build mailing list at &ltmodule-build@perl.org&gt.
 
        Bug reports are also welcome at
-       <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Module-Build>.
+       &lthttp://rt.cpan.org/NoAuth/Bugs.html?Dist=Module-Build&gt.
 
        The latest development version is available from the Subversion
-       repository at <https://svn.perl.org/modules/Module-Build/trunk/>
+       repository at &lthttps://svn.perl.org/modules/Module-Build/trunk/&gt
 
 SEE ALSO
        perl(1), Module::Build(3), Module::Build::API(3),
@@ -294,15 +296,15 @@ SEE ALSO
 
        META.yml Specification:
        http://module-build.sourceforge.net/META-spec-current.html
-       <http://module-build.sourceforge.net/META-spec-current.html>
+       &lthttp://module-build.sourceforge.net/META-spec-current.html&gt
 
-       <http://www.dsmit.com/cons/>
+       &lthttp://www.dsmit.com/cons/&gt
 
-       <http://search.cpan.org/dist/PerlBuildSystem/>
+       &lthttp://search.cpan.org/dist/PerlBuildSystem/&gt
 
 
 
 perl v5.12.4			  2011-06-07	 Module::Build::Authoring(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

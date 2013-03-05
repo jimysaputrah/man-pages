@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>snfs.cfgx - Xsan Volume Configuration File</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 snfs.cfgx(5)							  snfs.cfgx(5)
 
 
@@ -102,12 +104,12 @@ ELEMENTS
 	  allocSessionReservationSize		0	134217728  1099511627776
 	  fileLockResyncTimeout-	       20		0	      60
 	  bufferCacheSize-		      32M	     128k	      1G
-	  cvRootDir-			      "/"    valid dir with < 1024 chars
+	  cvRootDir-			      "/"    valid dir with &lt 1024 chars
 	  dataMigrationThreadPoolSize	      128		1	FFFFFFFF
 	  debug 			 00000000	 00000000	FFFFFFFF
 	  dirWarp			    true	    false	    true
 	  eventFiles-			    true	    false	    true
-	  eventFileDir- 		  special    valid dir with < 1024 chars
+	  eventFileDir- 		  special    valid dir with &lt 1024 chars
 	  extentCountThreshold		    49152		0      0x1FFFC00
 	  filelocks			    false	    false	    true
 	  forcePerfectFit-		    false	    false	    true
@@ -128,7 +130,7 @@ ELEMENTS
 	  remoteNotification		    false	    false	    true
 	  reservedSpace 		     true	    false	    true
 	  restoreJournal-		    false	    false	    true
-	  restoreJournalDir-		  special    valid dir with < 1024 chars
+	  restoreJournalDir-		  special    valid dir with &lt 1024 chars
 	  restoreJournalMaxMB-			0		0	     168
 	  restoreJournalMaxHours-		0		0	  102400
 	  storageManager		    false	    false	    true
@@ -184,7 +186,7 @@ ELEMENTS
 
        Put together it looks like this:
 
-     <diskType typeName="MetaDrive" sectors="99999999" sectorSize="512"/>
+     &ltdiskType typeName="MetaDrive" sectors="99999999" sectorSize="512"/&gt
 
    stripeGroups
        The stripeGroups element contains one or more stripeGroup elements.
@@ -252,8 +254,8 @@ ELEMENTS
 
        A stripegroup element looks like the following:
 
-    <stripeGroup index="0" name="MyStripeGroup" status="up" stripeBreadth="4194304" read="true" write="true" metadata="false" journal="false" userdata="true" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate">
-      </stripeGroup>
+    &ltstripeGroup index="0" name="MyStripeGroup" status="up" stripeBreadth="4194304" read="true" write="true" metadata="false" journal="false" userdata="true" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate"&gt
+      &lt/stripeGroup&gt
 
    affinities
        The  affinities	element is only valid in storage pools that have user-
@@ -274,7 +276,7 @@ ELEMENTS
 
        For example:
 
-     <affinity>MyAff1</affinity>
+     &ltaffinity&gtMyAff1&lt/affinity&gt
 
    disk
        A  disk element defines a disk to use in the storage pool.  It contains
@@ -297,115 +299,115 @@ ELEMENTS
 
        For example:
 
-    <disk index="0" diskLabel="CvfsDisk2" diskType="VideoDrive" ordinal="0"/>
+    &ltdisk index="0" diskLabel="CvfsDisk2" diskType="VideoDrive" ordinal="0"/&gt
 
 
 EXAMPLE CONFIGURATION FILE
 
 
-<?xml version="1.0" encoding="UTF-8"?>
-<configDoc xmlns="http://www.quantum.com/snfs" version="1.0">
-  <config configVersion="0" name="example" fsBlockSize="16384" journalSize="16777216">
-    <globals>
-      <abmFreeLimit>false</abmFreeLimit>
-      <allocationStrategy>round</allocationStrategy>
-      <haFsType>HaUnmonitored</haFsType>
-      <bufferCacheSize>33554432</bufferCacheSize>
-      <cvRootDir>/</cvRootDir>
-      <storageManager>false</storageManager>
-      <dataMigrationThreadPoolSize>128</dataMigrationThreadPoolSize>
-      <debug>00000000</debug>
-      <dirWarp>true</dirWarp>
-      <extentCountThreshold>49152</extentCountThreshold>
-      <enableSpotlight>false</enableSpotlight>
-      <enforceAcls>false</enforceAcls>
-      <fileLocks>false</fileLocks>
-      <fileLockResyncTimeOut>20</fileLockResyncTimeOut>
-      <forcePerfectFit>false</forcePerfectFit>
-      <fsCapacityThreshold>0</fsCapacityThreshold>
-      <globalSuperUser>true</globalSuperUser>
-      <inodeCacheSize>32768</inodeCacheSize>
-      <inodeExpandMin>0</inodeExpandMin>
-      <inodeExpandInc>0</inodeExpandInc>
-      <inodeExpandMax>0</inodeExpandMax>
-      <inodeDeleteMax>0</inodeDeleteMax>
-      <inodeStripeWidth>0</inodeStripeWidth>
-      <maxConnections>32</maxConnections>
-      <maxLogs>4</maxLogs>
-      <remoteNotification>false</remoteNotification>
-      <reservedSpace>true</reservedSpace>
-      <fsmRealTime>false</fsmRealTime>
-      <fsmMemLocked>false</fsmMemLocked>
-      <opHangLimitSecs>300</opHangLimitSecs>
-      <perfectFitSize>131072</perfectFitSize>
-      <quotas>false</quotas>
-      <restoreJournal>false</restoreJournal>
-      <restoreJournalDir></restoreJournalDir>
-      <restoreJournalMaxHours>0</restoreJournalMaxHours>
-      <restoreJournalMaxMb>0</restoreJournalMaxMb>
-      <stripeAlignSize>-1</stripeAlignSize>
-      <trimOnClose>0</trimOnClose>
-      <threadPoolSize>32</threadPoolSize>
-      <unixDirectoryCreationModeOnWindows>644</unixDirectoryCreationModeOnWindows>
-      <unixIdFabricationOnWindows>false</unixIdFabricationOnWindows>
-      <unixFileCreationModeOnWindows>755</unixFileCreationModeOnWindows>
-      <unixNobodyUidOnWindows>60001</unixNobodyUidOnWindows>
-      <unixNobodyGidOnWindows>60001</unixNobodyGidOnWindows>
-      <windowsSecurity>true</windowsSecurity>
-      <eventFiles>true</eventFiles>
-      <eventFileDir></eventFileDir>
-      <allocSessionReservationSize>0</allocSessionReservationSize>
-    </globals>
-    <diskTypes>
-      <diskType typeName="MetaDrive" sectors="99999999" sectorSize="512"/>
-      <diskType typeName="JournalDrive" sectors="99999999" sectorSize="512"/>
-      <diskType typeName="VideoDrive" sectors="99999999" sectorSize="512"/>
-      <diskType typeName="AudioDrive" sectors="99999999" sectorSize="512"/>
-      <diskType typeName="DataDrive" sectors="99999999" sectorSize="512"/>
-    </diskTypes>
-    <stripeGroups>
-      <stripeGroup index="0" name="MetaFiles" status="up" stripeBreadth="262144" read="true" write="true" metadata="true" journal="false" userdata="false" realTimeIOs="200" realTimeIOsReserve="1" realTimeMB="200" realTimeMBReserve="1" realTimeTokenTimeout="0" multipathMethod="rotate">
-	<disk index="0" diskLabel="CvfsDisk0" diskType="MetaDrive" ordinal="0"/>
-      </stripeGroup>
-      <stripeGroup index="1" name="JournFiles" status="up" stripeBreadth="262144" read="true" write="true" metadata="false" journal="true" userdata="false" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate">
-	<disk index="0" diskLabel="CvfsDisk1" diskType="JournalDrive" ordinal="1"/>
-      </stripeGroup>
-      <stripeGroup index="2" name="VideoFiles" status="up" stripeBreadth="4194304" read="true" write="true" metadata="false" journal="false" userdata="true" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate">
-	<affinities exclusive="true">
-	  <affinity>Video</affinity>
-	</affinities>
-	<disk index="0" diskLabel="CvfsDisk2" diskType="VideoDrive" ordinal="2"/>
-	<disk index="1" diskLabel="CvfsDisk3" diskType="VideoDrive" ordinal="3"/>
-	<disk index="2" diskLabel="CvfsDisk4" diskType="VideoDrive" ordinal="4"/>
-	<disk index="3" diskLabel="CvfsDisk5" diskType="VideoDrive" ordinal="5"/>
-	<disk index="4" diskLabel="CvfsDisk6" diskType="VideoDrive" ordinal="6"/>
-	<disk index="5" diskLabel="CvfsDisk7" diskType="VideoDrive" ordinal="7"/>
-	<disk index="6" diskLabel="CvfsDisk8" diskType="VideoDrive" ordinal="8"/>
-	<disk index="7" diskLabel="CvfsDisk9" diskType="VideoDrive" ordinal="9"/>
-      </stripeGroup>
-      <stripeGroup index="3" name="AudioFiles" status="up" stripeBreadth="1048576" read="true" write="true" metadata="false" journal="false" userdata="true" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate">
-	<affinities exclusive="true">
-	  <affinity>Audio</affinity>
-	</affinities>
-	<disk index="0" diskLabel="CvfsDisk10" diskType="AudioDrive" ordinal="10"/>
-	<disk index="1" diskLabel="CvfsDisk11" diskType="AudioDrive" ordinal="11"/>
-	<disk index="2" diskLabel="CvfsDisk12" diskType="AudioDrive" ordinal="12"/>
-	<disk index="3" diskLabel="CvfsDisk13" diskType="AudioDrive" ordinal="13"/>
-      </stripeGroup>
-      <stripeGroup index="4" name="RegularFiles" status="up" stripeBreadth="262144" read="true" write="true" metadata="false" journal="false" userdata="true" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate">
-	<disk index="0" diskLabel="CvfsDisk14" diskType="DataDrive" ordinal="14"/>
-	<disk index="1" diskLabel="CvfsDisk15" diskType="DataDrive" ordinal="15"/>
-	<disk index="2" diskLabel="CvfsDisk16" diskType="DataDrive" ordinal="16"/>
-	<disk index="3" diskLabel="CvfsDisk17" diskType="DataDrive" ordinal="17"/>
-      </stripeGroup>
-    </stripeGroups>
-  </config>
-</configDoc>
+&lt?xml version="1.0" encoding="UTF-8"?&gt
+&ltconfigDoc xmlns="http://www.quantum.com/snfs" version="1.0"&gt
+  &ltconfig configVersion="0" name="example" fsBlockSize="16384" journalSize="16777216"&gt
+    &ltglobals&gt
+      &ltabmFreeLimit&gtfalse&lt/abmFreeLimit&gt
+      &ltallocationStrategy&gtround&lt/allocationStrategy&gt
+      &lthaFsType&gtHaUnmonitored&lt/haFsType&gt
+      &ltbufferCacheSize&gt33554432&lt/bufferCacheSize&gt
+      &ltcvRootDir&gt/&lt/cvRootDir&gt
+      &ltstorageManager&gtfalse&lt/storageManager&gt
+      &ltdataMigrationThreadPoolSize&gt128&lt/dataMigrationThreadPoolSize&gt
+      &ltdebug&gt00000000&lt/debug&gt
+      &ltdirWarp&gttrue&lt/dirWarp&gt
+      &ltextentCountThreshold&gt49152&lt/extentCountThreshold&gt
+      &ltenableSpotlight&gtfalse&lt/enableSpotlight&gt
+      &ltenforceAcls&gtfalse&lt/enforceAcls&gt
+      &ltfileLocks&gtfalse&lt/fileLocks&gt
+      &ltfileLockResyncTimeOut&gt20&lt/fileLockResyncTimeOut&gt
+      &ltforcePerfectFit&gtfalse&lt/forcePerfectFit&gt
+      &ltfsCapacityThreshold&gt0&lt/fsCapacityThreshold&gt
+      &ltglobalSuperUser&gttrue&lt/globalSuperUser&gt
+      &ltinodeCacheSize&gt32768&lt/inodeCacheSize&gt
+      &ltinodeExpandMin&gt0&lt/inodeExpandMin&gt
+      &ltinodeExpandInc&gt0&lt/inodeExpandInc&gt
+      &ltinodeExpandMax&gt0&lt/inodeExpandMax&gt
+      &ltinodeDeleteMax&gt0&lt/inodeDeleteMax&gt
+      &ltinodeStripeWidth&gt0&lt/inodeStripeWidth&gt
+      &ltmaxConnections&gt32&lt/maxConnections&gt
+      &ltmaxLogs&gt4&lt/maxLogs&gt
+      &ltremoteNotification&gtfalse&lt/remoteNotification&gt
+      &ltreservedSpace&gttrue&lt/reservedSpace&gt
+      &ltfsmRealTime&gtfalse&lt/fsmRealTime&gt
+      &ltfsmMemLocked&gtfalse&lt/fsmMemLocked&gt
+      &ltopHangLimitSecs&gt300&lt/opHangLimitSecs&gt
+      &ltperfectFitSize&gt131072&lt/perfectFitSize&gt
+      &ltquotas&gtfalse&lt/quotas&gt
+      &ltrestoreJournal&gtfalse&lt/restoreJournal&gt
+      &ltrestoreJournalDir&gt&lt/restoreJournalDir&gt
+      &ltrestoreJournalMaxHours&gt0&lt/restoreJournalMaxHours&gt
+      &ltrestoreJournalMaxMb&gt0&lt/restoreJournalMaxMb&gt
+      &ltstripeAlignSize&gt-1&lt/stripeAlignSize&gt
+      &lttrimOnClose&gt0&lt/trimOnClose&gt
+      &ltthreadPoolSize&gt32&lt/threadPoolSize&gt
+      &ltunixDirectoryCreationModeOnWindows&gt644&lt/unixDirectoryCreationModeOnWindows&gt
+      &ltunixIdFabricationOnWindows&gtfalse&lt/unixIdFabricationOnWindows&gt
+      &ltunixFileCreationModeOnWindows&gt755&lt/unixFileCreationModeOnWindows&gt
+      &ltunixNobodyUidOnWindows&gt60001&lt/unixNobodyUidOnWindows&gt
+      &ltunixNobodyGidOnWindows&gt60001&lt/unixNobodyGidOnWindows&gt
+      &ltwindowsSecurity&gttrue&lt/windowsSecurity&gt
+      &lteventFiles&gttrue&lt/eventFiles&gt
+      &lteventFileDir&gt&lt/eventFileDir&gt
+      &ltallocSessionReservationSize&gt0&lt/allocSessionReservationSize&gt
+    &lt/globals&gt
+    &ltdiskTypes&gt
+      &ltdiskType typeName="MetaDrive" sectors="99999999" sectorSize="512"/&gt
+      &ltdiskType typeName="JournalDrive" sectors="99999999" sectorSize="512"/&gt
+      &ltdiskType typeName="VideoDrive" sectors="99999999" sectorSize="512"/&gt
+      &ltdiskType typeName="AudioDrive" sectors="99999999" sectorSize="512"/&gt
+      &ltdiskType typeName="DataDrive" sectors="99999999" sectorSize="512"/&gt
+    &lt/diskTypes&gt
+    &ltstripeGroups&gt
+      &ltstripeGroup index="0" name="MetaFiles" status="up" stripeBreadth="262144" read="true" write="true" metadata="true" journal="false" userdata="false" realTimeIOs="200" realTimeIOsReserve="1" realTimeMB="200" realTimeMBReserve="1" realTimeTokenTimeout="0" multipathMethod="rotate"&gt
+	&ltdisk index="0" diskLabel="CvfsDisk0" diskType="MetaDrive" ordinal="0"/&gt
+      &lt/stripeGroup&gt
+      &ltstripeGroup index="1" name="JournFiles" status="up" stripeBreadth="262144" read="true" write="true" metadata="false" journal="true" userdata="false" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate"&gt
+	&ltdisk index="0" diskLabel="CvfsDisk1" diskType="JournalDrive" ordinal="1"/&gt
+      &lt/stripeGroup&gt
+      &ltstripeGroup index="2" name="VideoFiles" status="up" stripeBreadth="4194304" read="true" write="true" metadata="false" journal="false" userdata="true" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate"&gt
+	&ltaffinities exclusive="true"&gt
+	  &ltaffinity&gtVideo&lt/affinity&gt
+	&lt/affinities&gt
+	&ltdisk index="0" diskLabel="CvfsDisk2" diskType="VideoDrive" ordinal="2"/&gt
+	&ltdisk index="1" diskLabel="CvfsDisk3" diskType="VideoDrive" ordinal="3"/&gt
+	&ltdisk index="2" diskLabel="CvfsDisk4" diskType="VideoDrive" ordinal="4"/&gt
+	&ltdisk index="3" diskLabel="CvfsDisk5" diskType="VideoDrive" ordinal="5"/&gt
+	&ltdisk index="4" diskLabel="CvfsDisk6" diskType="VideoDrive" ordinal="6"/&gt
+	&ltdisk index="5" diskLabel="CvfsDisk7" diskType="VideoDrive" ordinal="7"/&gt
+	&ltdisk index="6" diskLabel="CvfsDisk8" diskType="VideoDrive" ordinal="8"/&gt
+	&ltdisk index="7" diskLabel="CvfsDisk9" diskType="VideoDrive" ordinal="9"/&gt
+      &lt/stripeGroup&gt
+      &ltstripeGroup index="3" name="AudioFiles" status="up" stripeBreadth="1048576" read="true" write="true" metadata="false" journal="false" userdata="true" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate"&gt
+	&ltaffinities exclusive="true"&gt
+	  &ltaffinity&gtAudio&lt/affinity&gt
+	&lt/affinities&gt
+	&ltdisk index="0" diskLabel="CvfsDisk10" diskType="AudioDrive" ordinal="10"/&gt
+	&ltdisk index="1" diskLabel="CvfsDisk11" diskType="AudioDrive" ordinal="11"/&gt
+	&ltdisk index="2" diskLabel="CvfsDisk12" diskType="AudioDrive" ordinal="12"/&gt
+	&ltdisk index="3" diskLabel="CvfsDisk13" diskType="AudioDrive" ordinal="13"/&gt
+      &lt/stripeGroup&gt
+      &ltstripeGroup index="4" name="RegularFiles" status="up" stripeBreadth="262144" read="true" write="true" metadata="false" journal="false" userdata="true" realTimeIOs="0" realTimeIOsReserve="0" realTimeMB="0" realTimeMBReserve="0" realTimeTokenTimeout="0" multipathMethod="rotate"&gt
+	&ltdisk index="0" diskLabel="CvfsDisk14" diskType="DataDrive" ordinal="14"/&gt
+	&ltdisk index="1" diskLabel="CvfsDisk15" diskType="DataDrive" ordinal="15"/&gt
+	&ltdisk index="2" diskLabel="CvfsDisk16" diskType="DataDrive" ordinal="16"/&gt
+	&ltdisk index="3" diskLabel="CvfsDisk17" diskType="DataDrive" ordinal="17"/&gt
+      &lt/stripeGroup&gt
+    &lt/stripeGroups&gt
+  &lt/config&gt
+&lt/configDoc&gt
 
 
 FILES
        /Library/Preferences/Xsan/*.cfgx
-       /Library/Logs/Xsan/data/<fsname>/config_history/*.cfgx.<TIMESTAMP>
+       /Library/Logs/Xsan/data/&ltfsname&gt/config_history/*.cfgx.&ltTIMESTAMP&gt
 
 SEE ALSO
        snfs_config(5), snfs.cfg(5)
@@ -413,6 +415,6 @@ SEE ALSO
 
 
 Xsan File System		 December 2009			  snfs.cfgx(5)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

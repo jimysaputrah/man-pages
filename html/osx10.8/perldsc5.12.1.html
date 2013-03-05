@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The single feature most sorely lacking in the Perl programming language..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perldsc - Perl Data Structures Cookbook</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLDSC(1)	       Perl Programmers Reference Guide 	    PERLDSC(1)
 
 
@@ -118,8 +120,8 @@ REFERENCES
        variables.  If you want to get at the thing a reference is referring
        to, then you have to do this yourself using either prefix typing
        indicators, like "${$blah}", "@{$blah}", "@{$blah[$i]}", or else
-       postfix pointer arrows, like "$a->[3]", "$h->{fred}", or even
-       "$ob->method()->[3]".
+       postfix pointer arrows, like "$a-&gt[3]", "$h-&gt{fred}", or even
+       "$ob-&gtmethod()-&gt[3]".
 
 COMMON MISTAKES
        The two most common mistakes made in constructing something like an
@@ -159,14 +161,14 @@ COMMON MISTAKES
        therefore all hold whatever was last in @array!	It's similar to the
        problem demonstrated in the following C program:
 
-	   #include <pwd.h>
+	   #include &ltpwd.h&gt
 	   main() {
 	       struct passwd *getpwnam(), *rp, *dp;
 	       rp = getpwnam("root");
 	       dp = getpwnam("daemon");
 
 	       printf("daemon name is %s\nroot name is %s\n",
-		       dp->pw_name, rp->pw_name);
+		       dp-&gtpw_name, rp-&gtpw_name);
 	   }
 
        Which will print
@@ -254,7 +256,7 @@ CAVEAT ON PRECEDENCE
        Speaking of things like "@{$AoA[$i]}", the following are actually the
        same thing:
 
-	   $aref->[2][2]       # clear
+	   $aref-&gt[2][2]       # clear
 	   $$aref[2][2]        # confusing
 
        That's because Perl's precedence rules on its five prefix dereferencers
@@ -297,7 +299,7 @@ WHY YOU SHOULD ALWAYS "use strict"
        because you were accidentally accessing @aref, an undeclared variable,
        and it would thereby remind you to write instead:
 
-	   print $aref->[2][2]
+	   print $aref-&gt[2][2]
 
 DEBUGGING
        Before version 5.002, the standard Perl debugger didn't do a very nice
@@ -307,7 +309,7 @@ DEBUGGING
        example, given the assignment to $AoA above, here's the debugger
        output:
 
-	   DB<1> x $AoA
+	   DB&lt1&gt x $AoA
 	   $AoA = ARRAY(0x13b5a0)
 	      0  ARRAY(0x1f0a24)
 		 0  'fred'
@@ -341,7 +343,7 @@ ARRAYS OF ARRAYS
 
    Generation of an ARRAY OF ARRAYS
 	# reading from file
-	while ( <> ) {
+	while ( &lt&gt ) {
 	    push @AoA, [ split ];
 	}
 
@@ -386,22 +388,22 @@ ARRAYS OF ARRAYS
 HASHES OF ARRAYS
    Declaration of a HASH OF ARRAYS
 	%HoA = (
-	       flintstones	  => [ "fred", "barney" ],
-	       jetsons		  => [ "george", "jane", "elroy" ],
-	       simpsons 	  => [ "homer", "marge", "bart" ],
+	       flintstones	  =&gt [ "fred", "barney" ],
+	       jetsons		  =&gt [ "george", "jane", "elroy" ],
+	       simpsons 	  =&gt [ "homer", "marge", "bart" ],
 	     );
 
    Generation of a HASH OF ARRAYS
 	# reading from file
 	# flintstones: fred barney wilma dino
-	while ( <> ) {
+	while ( &lt&gt ) {
 	    next unless s/^(.*?):\s*//;
 	    $HoA{$1} = [ split ];
 	}
 
 	# reading from file; more temps
 	# flintstones: fred barney wilma dino
-	while ( $line = <> ) {
+	while ( $line = &lt&gt ) {
 	    ($who, $rest) = split /:\s*/, $line, 2;
 	    @fields = split ' ', $rest;
 	    $HoA{$who} = [ @fields ];
@@ -443,13 +445,13 @@ HASHES OF ARRAYS
 	}
 
 	# print the whole thing sorted by number of members
-	foreach $family ( sort { @{$HoA{$b}} <=> @{$HoA{$a}} } keys %HoA ) {
+	foreach $family ( sort { @{$HoA{$b}} &lt=&gt @{$HoA{$a}} } keys %HoA ) {
 	    print "$family: @{ $HoA{$family} }\n"
 	}
 
 	# print the whole thing sorted by number of members and name
 	foreach $family ( sort {
-				   @{$HoA{$b}} <=> @{$HoA{$a}}
+				   @{$HoA{$b}} &lt=&gt @{$HoA{$a}}
 					       ||
 					   $a cmp $b
 		   } keys %HoA )
@@ -461,29 +463,29 @@ ARRAYS OF HASHES
    Declaration of an ARRAY OF HASHES
 	@AoH = (
 	       {
-		   Lead     => "fred",
-		   Friend   => "barney",
+		   Lead     =&gt "fred",
+		   Friend   =&gt "barney",
 	       },
 	       {
-		   Lead     => "george",
-		   Wife     => "jane",
-		   Son	    => "elroy",
+		   Lead     =&gt "george",
+		   Wife     =&gt "jane",
+		   Son	    =&gt "elroy",
 	       },
 	       {
-		   Lead     => "homer",
-		   Wife     => "marge",
-		   Son	    => "bart",
+		   Lead     =&gt "homer",
+		   Wife     =&gt "marge",
+		   Son	    =&gt "bart",
 	       }
 	 );
 
    Generation of an ARRAY OF HASHES
 	# reading from file
 	# format: LEAD=fred FRIEND=barney
-	while ( <> ) {
+	while ( &lt&gt ) {
 	    $rec = {};
 	    for $field ( split ) {
 		($key, $value) = split /=/, $field;
-		$rec->{$key} = $value;
+		$rec-&gt{$key} = $value;
 	    }
 	    push @AoH, $rec;
 	}
@@ -492,7 +494,7 @@ ARRAYS OF HASHES
 	# reading from file
 	# format: LEAD=fred FRIEND=barney
 	# no temp
-	while ( <> ) {
+	while ( &lt&gt ) {
 	    push @AoH, { split /[\s+=]/ };
 	}
 
@@ -503,7 +505,7 @@ ARRAYS OF HASHES
 	}
 
 	# likewise, but using no temp vars
-	while (<>) {
+	while (&lt&gt) {
 	    push @AoH, { parsepairs($_) };
 	}
 
@@ -522,7 +524,7 @@ ARRAYS OF HASHES
 	for $href ( @AoH ) {
 	    print "{ ";
 	    for $role ( keys %$href ) {
-		print "$role=$href->{$role} ";
+		print "$role=$href-&gt{$role} ";
 	    }
 	    print "}\n";
 	}
@@ -546,26 +548,26 @@ ARRAYS OF HASHES
 HASHES OF HASHES
    Declaration of a HASH OF HASHES
 	%HoH = (
-	       flintstones => {
-		       lead	 => "fred",
-		       pal	 => "barney",
+	       flintstones =&gt {
+		       lead	 =&gt "fred",
+		       pal	 =&gt "barney",
 	       },
-	       jetsons	   => {
-		       lead	 => "george",
-		       wife	 => "jane",
-		       "his boy" => "elroy",
+	       jetsons	   =&gt {
+		       lead	 =&gt "george",
+		       wife	 =&gt "jane",
+		       "his boy" =&gt "elroy",
 	       },
-	       simpsons    => {
-		       lead	 => "homer",
-		       wife	 => "marge",
-		       kid	 => "bart",
+	       simpsons    =&gt {
+		       lead	 =&gt "homer",
+		       wife	 =&gt "marge",
+		       kid	 =&gt "bart",
 	       },
 	);
 
    Generation of a HASH OF HASHES
 	# reading from file
 	# flintstones: lead=fred pal=barney wife=wilma pet=dino
-	while ( <> ) {
+	while ( &lt&gt ) {
 	    next unless s/^(.*?):\s*//;
 	    $who = $1;
 	    for $field ( split ) {
@@ -575,14 +577,14 @@ HASHES OF HASHES
 
 
 	# reading from file; more temps
-	while ( <> ) {
+	while ( &lt&gt ) {
 	    next unless s/^(.*?):\s*//;
 	    $who = $1;
 	    $rec = {};
 	    $HoH{$who} = $rec;
 	    for $field ( split ) {
 		($key, $value) = split /=/, $field;
-		$rec->{$key} = $value;
+		$rec-&gt{$key} = $value;
 	    }
 	}
 
@@ -599,8 +601,8 @@ HASHES OF HASHES
 
 	# append new members to an existing family
 	%new_folks = (
-	    wife => "wilma",
-	    pet  => "dino",
+	    wife =&gt "wilma",
+	    pet  =&gt "dino",
 	);
 
 	for $what (keys %new_folks) {
@@ -634,7 +636,7 @@ HASHES OF HASHES
 
 
 	# print the whole thing sorted by number of members
-	foreach $family ( sort { keys %{$HoH{$b}} <=> keys %{$HoH{$a}} } keys %HoH ) {
+	foreach $family ( sort { keys %{$HoH{$b}} &lt=&gt keys %{$HoH{$a}} } keys %HoH ) {
 	    print "$family: { ";
 	    for $role ( sort keys %{ $HoH{$family} } ) {
 		print "$role=$HoH{$family}{$role} ";
@@ -647,10 +649,10 @@ HASHES OF HASHES
 	for ( qw(lead wife son daughter pal pet) ) { $rank{$_} = ++$i }
 
 	# now print the whole thing sorted by number of members
-	foreach $family ( sort { keys %{ $HoH{$b} } <=> keys %{ $HoH{$a} } } keys %HoH ) {
+	foreach $family ( sort { keys %{ $HoH{$b} } &lt=&gt keys %{ $HoH{$a} } } keys %HoH ) {
 	    print "$family: { ";
 	    # and print these according to rank order
-	    for $role ( sort { $rank{$a} <=> $rank{$b} }  keys %{ $HoH{$family} } ) {
+	    for $role ( sort { $rank{$a} &lt=&gt $rank{$b} }  keys %{ $HoH{$family} } ) {
 		print "$role=$HoH{$family}{$role} ";
 	    }
 	    print "}\n";
@@ -662,61 +664,61 @@ MORE ELABORATE RECORDS
        of many different sorts:
 
 	    $rec = {
-		TEXT	  => $string,
-		SEQUENCE  => [ @old_values ],
-		LOOKUP	  => { %some_table },
-		THATCODE  => \&some_function,
-		THISCODE  => sub { $_[0] ** $_[1] },
-		HANDLE	  => \*STDOUT,
+		TEXT	  =&gt $string,
+		SEQUENCE  =&gt [ @old_values ],
+		LOOKUP	  =&gt { %some_table },
+		THATCODE  =&gt \&some_function,
+		THISCODE  =&gt sub { $_[0] ** $_[1] },
+		HANDLE	  =&gt \*STDOUT,
 	    };
 
-	    print $rec->{TEXT};
+	    print $rec-&gt{TEXT};
 
-	    print $rec->{SEQUENCE}[0];
-	    $last = pop @ { $rec->{SEQUENCE} };
+	    print $rec-&gt{SEQUENCE}[0];
+	    $last = pop @ { $rec-&gt{SEQUENCE} };
 
-	    print $rec->{LOOKUP}{"key"};
-	    ($first_k, $first_v) = each %{ $rec->{LOOKUP} };
+	    print $rec-&gt{LOOKUP}{"key"};
+	    ($first_k, $first_v) = each %{ $rec-&gt{LOOKUP} };
 
-	    $answer = $rec->{THATCODE}->($arg);
-	    $answer = $rec->{THISCODE}->($arg1, $arg2);
+	    $answer = $rec-&gt{THATCODE}-&gt($arg);
+	    $answer = $rec-&gt{THISCODE}-&gt($arg1, $arg2);
 
 	    # careful of extra block braces on fh ref
-	    print { $rec->{HANDLE} } "a string\n";
+	    print { $rec-&gt{HANDLE} } "a string\n";
 
 	    use FileHandle;
-	    $rec->{HANDLE}->autoflush(1);
-	    $rec->{HANDLE}->print(" a string\n");
+	    $rec-&gt{HANDLE}-&gtautoflush(1);
+	    $rec-&gt{HANDLE}-&gtprint(" a string\n");
 
    Declaration of a HASH OF COMPLEX RECORDS
 	    %TV = (
-	       flintstones => {
-		   series   => "flintstones",
-		   nights   => [ qw(monday thursday friday) ],
-		   members  => [
-		       { name => "fred",    role => "lead", age  => 36, },
-		       { name => "wilma",   role => "wife", age  => 31, },
-		       { name => "pebbles", role => "kid",  age  =>  4, },
+	       flintstones =&gt {
+		   series   =&gt "flintstones",
+		   nights   =&gt [ qw(monday thursday friday) ],
+		   members  =&gt [
+		       { name =&gt "fred",    role =&gt "lead", age  =&gt 36, },
+		       { name =&gt "wilma",   role =&gt "wife", age  =&gt 31, },
+		       { name =&gt "pebbles", role =&gt "kid",  age  =&gt  4, },
 		   ],
 	       },
 
-	       jetsons	   => {
-		   series   => "jetsons",
-		   nights   => [ qw(wednesday saturday) ],
-		   members  => [
-		       { name => "george",  role => "lead", age  => 41, },
-		       { name => "jane",    role => "wife", age  => 39, },
-		       { name => "elroy",   role => "kid",  age  =>  9, },
+	       jetsons	   =&gt {
+		   series   =&gt "jetsons",
+		   nights   =&gt [ qw(wednesday saturday) ],
+		   members  =&gt [
+		       { name =&gt "george",  role =&gt "lead", age  =&gt 41, },
+		       { name =&gt "jane",    role =&gt "wife", age  =&gt 39, },
+		       { name =&gt "elroy",   role =&gt "kid",  age  =&gt  9, },
 		   ],
 		},
 
-	       simpsons    => {
-		   series   => "simpsons",
-		   nights   => [ qw(monday) ],
-		   members  => [
-		       { name => "homer", role => "lead", age  => 34, },
-		       { name => "marge", role => "wife", age => 37, },
-		       { name => "bart",  role => "kid",  age  =>  11, },
+	       simpsons    =&gt {
+		   series   =&gt "simpsons",
+		   nights   =&gt [ qw(monday) ],
+		   members  =&gt [
+		       { name =&gt "homer", role =&gt "lead", age  =&gt 34, },
+		       { name =&gt "marge", role =&gt "wife", age =&gt 37, },
+		       { name =&gt "bart",  role =&gt "kid",  age  =&gt  11, },
 		   ],
 		},
 	     );
@@ -730,19 +732,19 @@ MORE ELABORATE RECORDS
 
 	    # here's a piece by piece build up
 	    $rec = {};
-	    $rec->{series} = "flintstones";
-	    $rec->{nights} = [ find_days() ];
+	    $rec-&gt{series} = "flintstones";
+	    $rec-&gt{nights} = [ find_days() ];
 
 	    @members = ();
 	    # assume this file in field=value syntax
-	    while (<>) {
+	    while (&lt&gt) {
 		%fields = split /[\s=]+/;
 		push @members, { %fields };
 	    }
-	    $rec->{members} = [ @members ];
+	    $rec-&gt{members} = [ @members ];
 
 	    # now remember the whole thing
-	    $TV{ $rec->{series} } = $rec;
+	    $TV{ $rec-&gt{series} } = $rec;
 
 	    ###########################################################
 	    # now, you might want to make interesting extra fields that
@@ -755,13 +757,13 @@ MORE ELABORATE RECORDS
 	    foreach $family (keys %TV) {
 		$rec = $TV{$family}; # temp pointer
 		@kids = ();
-		for $person ( @{ $rec->{members} } ) {
-		    if ($person->{role} =~ /kid|son|daughter/) {
+		for $person ( @{ $rec-&gt{members} } ) {
+		    if ($person-&gt{role} =~ /kid|son|daughter/) {
 			push @kids, $person;
 		    }
 		}
 		# REMEMBER: $rec and $TV{$family} point to same data!!
-		$rec->{kids} = [ @kids ];
+		$rec-&gt{kids} = [ @kids ];
 	    }
 
 	    # you copied the array, but the array itself contains pointers
@@ -782,11 +784,11 @@ MORE ELABORATE RECORDS
 		print " is on during @{ $TV{$family}{nights} }\n";
 		print "its members are:\n";
 		for $who ( @{ $TV{$family}{members} } ) {
-		    print " $who->{name} ($who->{role}), age $who->{age}\n";
+		    print " $who-&gt{name} ($who-&gt{role}), age $who-&gt{age}\n";
 		}
 		print "it turns out that $TV{$family}{lead} has ";
 		print scalar ( @{ $TV{$family}{kids} } ), " kids named ";
-		print join (", ", map { $_->{name} } @{ $TV{$family}{kids} } );
+		print join (", ", map { $_-&gt{name} } @{ $TV{$family}{kids} } );
 		print "\n";
 	    }
 
@@ -803,13 +805,13 @@ SEE ALSO
        perlref, perllol, perldata, perlobj
 
 AUTHOR
-       Tom Christiansen <tchrist@perl.com>
+       Tom Christiansen &lttchrist@perl.com&gt
 
        Last update: Wed Oct 23 04:57:50 MET DST 1996
 
 
 
 perl v5.12.4			  2011-06-01			    PERLDSC(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The biggest trap of all is forgetting to "use warnings" or use the -w..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perltrap - Perl traps for the unwary</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLTRAP(1)	       Perl Programmers Reference Guide 	   PERLTRAP(1)
 
 
@@ -61,7 +63,7 @@ DESCRIPTION
 	   does not have the newline stripped.	($0 is the name of the program
 	   executed.)  See perlvar.
 
-       o   $<digit> does not refer to fields--it refers to substrings matched
+       o   $&ltdigit&gt does not refer to fields--it refers to substrings matched
 	   by the last match pattern.
 
        o   The print() statement does not add field and record separators
@@ -84,7 +86,7 @@ DESCRIPTION
 	   null string would render "/pat/ /pat/" unparsable, because the
 	   third slash would be interpreted as a division operator--the
 	   tokenizer is in fact slightly context sensitive for operators like
-	   "/", "?", and ">".  And in fact, "." itself can be the beginning of
+	   "/", "?", and "&gt".  And in fact, "." itself can be the beginning of
 	   a number.)
 
        o   The "next", "exit", and "continue" keywords work differently.
@@ -181,10 +183,10 @@ DESCRIPTION
        o   The environment is not automatically made available as separate
 	   scalar variables.
 
-       o   The shell's "test" uses "=", "!=", "<" etc for string comparisons
+       o   The shell's "test" uses "=", "!=", "&lt" etc for string comparisons
 	   and "-eq", "-ne", "-lt" etc for numeric comparisons. This is the
 	   reverse of Perl, which uses "eq", "ne", "lt" for string
-	   comparisons, and "==", "!=" "<" etc for numeric comparisons.
+	   comparisons, and "==", "!=" "&lt" etc for numeric comparisons.
 
    Perl Traps
        Practicing Perl Programmers should take note of the following:
@@ -207,13 +209,13 @@ DESCRIPTION
 	   $_, or @ARGV, or whatever, but that others which you might expect
 	   to do not.
 
-       o   The <FH> construct is not the name of the filehandle, it is a
+       o   The &ltFH&gt construct is not the name of the filehandle, it is a
 	   readline operation on that handle.  The data read is assigned to $_
 	   only if the file read is the sole condition in a while loop:
 
-	       while (<FH>)	 { }
-	       while (defined($_ = <FH>)) { }..
-	       <FH>;  # data discarded!
+	       while (&ltFH&gt)	 { }
+	       while (defined($_ = &ltFH&gt)) { }..
+	       &ltFH&gt;  # data discarded!
 
        o   Remember not to use "=" when you need "=~"; these two constructs
 	   are quite different:
@@ -279,7 +281,7 @@ DESCRIPTION
 	   Everything else.
 
        If you find an example of a conversion trap that is not listed here,
-       please submit it to <perlbug@perl.org> for inclusion.  Also note that
+       please submit it to &ltperlbug@perl.org&gt for inclusion.  Also note that
        at least some of these can be caught with the "use warnings" pragma or
        the -w switch.
 
@@ -718,7 +720,7 @@ DESCRIPTION
 
 		$foo = "x";
 		&mod($foo);
-		for ($x = 0; $x < 3; $x++) {
+		for ($x = 0; $x &lt 3; $x++) {
 		    &mod("a");
 		}
 		sub mod {
@@ -745,7 +747,7 @@ DESCRIPTION
 		print "$x", defined $x
 
 		# perl 4: 1
-		# perl 5: <no output, $x is not called into existence>
+		# perl 5: &ltno output, $x is not called into existence&gt
 
        o    Variable Suicide
 
@@ -765,7 +767,7 @@ DESCRIPTION
 		    print "SUB: ", $theArgument{"aKey"}, "\n";
 		    $aNewLocal{"aKey"} = "level $GlobalLevel";	 # what should print
 		    $GlobalLevel++;
-		    if( $GlobalLevel<4 ) {
+		    if( $GlobalLevel&lt4 ) {
 			&test( *aNewLocal );
 		    }
 		}
@@ -792,7 +794,7 @@ DESCRIPTION
 
 		@fmt = ("foo","bar","baz");
 		format STDOUT=
-		@<<<<< @||||| @>>>>>
+		@&lt&lt&lt&lt&lt @||||| @&gt&gt&gt&gt&gt
 		@fmt;
 		.
 		write;
@@ -1001,9 +1003,9 @@ DESCRIPTION
 		}
 		$good = build_match('foo','bar');
 		$bad = build_match('baz','blarch');
-		print $good->('foo stuff bar') ? "ok\n" : "not ok\n";
-		print $bad->('baz stuff blarch') ? "ok\n" : "not ok\n";
-		print $bad->('foo stuff bar') ? "not ok\n" : "ok\n";
+		print $good-&gt('foo stuff bar') ? "ok\n" : "not ok\n";
+		print $bad-&gt('baz stuff blarch') ? "ok\n" : "not ok\n";
+		print $bad-&gt('foo stuff bar') ? "not ok\n" : "ok\n";
 
 	    For most builds of Perl5, this will print: ok not ok not ok
 
@@ -1045,7 +1047,7 @@ DESCRIPTION
 		$string =~ s`^`hostname`;
 		print $string, "\n";
 
-		# perl4 prints: <the local hostname>
+		# perl4 prints: &ltthe local hostname&gt
 		# perl5 prints: hostname
 
        o    Stricter parsing of variables in regular expressions
@@ -1120,7 +1122,7 @@ DESCRIPTION
 
 	    reverse is no longer allowed as the name of a sort subroutine.
 
-		sub reverse{ print "yup "; $a <=> $b }
+		sub reverse{ print "yup "; $a &lt=&gt $b }
 		print sort reverse (2,1,3);
 
 		# perl4 prints: yup yup 123
@@ -1168,12 +1170,12 @@ DESCRIPTION
 
        o    SysV "seek()" appends correctly
 
-	    Under SysV OSes, "seek()" on a file opened to append ">>" now does
+	    Under SysV OSes, "seek()" on a file opened to append "&gt&gt" now does
 	    the right thing w.r.t. the fopen() manpage. e.g., - When a file is
 	    opened for append,	it  is	impossible to overwrite information
 	    already in the file.
 
-		open(TEST,">>seek.test");
+		open(TEST,"&gt&gtseek.test");
 		$start = tell TEST;
 		foreach(1 .. 9){
 		    print TEST "$_ ";
@@ -1196,8 +1198,8 @@ DESCRIPTION
 		print "To: someone@somewhere.com\n";
 
 		# perl4 prints: To:someone@somewhere.com
-		# perl < 5.6.1, error : In string, @somewhere now must be written as \@somewhere
-		# perl >= 5.6.1, warning : Possible unintended interpolation of @somewhere in string
+		# perl &lt 5.6.1, error : In string, @somewhere now must be written as \@somewhere
+		# perl &gt= 5.6.1, warning : Possible unintended interpolation of @somewhere in string
 
        o    Double-quoted strings may no longer end with an unescaped $
 
@@ -1420,6 +1422,6 @@ DESCRIPTION
 
 
 perl v5.10.1			  2009-07-16			   PERLTRAP(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

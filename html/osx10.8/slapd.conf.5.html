@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The  file  /etc/openldap/slapd.conf  contains configuration information..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>slapd.conf - configuration file for slapd, the stand-alone LDAP daemon</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 SLAPD.CONF(5)							 SLAPD.CONF(5)
 
 
@@ -34,10 +36,10 @@ DESCRIPTION
        The general format of slapd.conf is as follows:
 
 	   # comment - these options apply to every database
-	   <global configuration options>
+	   &ltglobal configuration options&gt
 	   # first database definition & configuration options
-	   database <backend 1 type>
-	   <configuration options specific to backend 1>
+	   database &ltbackend 1 type&gt
+	   &ltconfiguration options specific to backend 1&gt
 	   # subsequent database definitions & configuration options
 	   ...
 
@@ -61,25 +63,25 @@ DESCRIPTION
        The specific configuration options available are discussed below in the
        Global  Configuration  Options,	General  Backend  Options, and General
        Database  Options.   Backend-specific  options  are  discussed  in  the
-       slapd-<backend>(5)  manual  pages.   Refer to the "OpenLDAP Administra-
+       slapd-&ltbackend&gt(5)  manual  pages.   Refer to the "OpenLDAP Administra-
        tor's Guide" for more details on the slapd configuration file.
 
 GLOBAL CONFIGURATION OPTIONS
        Options described in this section apply to all backends, unless specif-
        ically  overridden  in  a  backend definition. Arguments that should be
-       replaced by actual text are shown in brackets <>.
+       replaced by actual text are shown in brackets &lt&gt.
 
-       access to <what> [ by <who> <access> <control> ]+
-	      Grant access (specified by <access>) to a set of entries	and/or
-	      attributes  (specified  by  <what>)  by  one  or more requestors
-	      (specified by <who>).  If no access controls  are  present,  the
+       access to &ltwhat&gt [ by &ltwho&gt &ltaccess&gt &ltcontrol&gt ]+
+	      Grant access (specified by &ltaccess&gt) to a set of entries	and/or
+	      attributes  (specified  by  &ltwhat&gt)  by  one  or more requestors
+	      (specified by &ltwho&gt).  If no access controls  are  present,  the
 	      default  policy  allows anyone and everyone to read anything but
 	      restricts updates to rootdn.  (e.g., "access to * by  *  read").
 	      The   rootdn   can   always  read  and  write  EVERYTHING!   See
 	      slapd.access(5) and the "OpenLDAP's Administrator's  Guide"  for
 	      details.
 
-       allow <features>
+       allow &ltfeatures&gt
 	      Specify  a  set  of features (separated by white space) to allow
 	      (default	none).	 bind_v2  allows  acceptance  of  LDAPv2  bind
 	      requests.   Note	that  slapd(8) does not truly implement LDAPv2
@@ -93,7 +95,7 @@ GLOBAL CONFIGURATION OPTIONS
 	      to  be  processed (subject to access controls, authorization and
 	      other administrative limits).
 
-       argsfile <filename>
+       argsfile &ltfilename&gt
 	      The (absolute) name of a file that will hold the slapd  server's
 	      command line (program name and options).
 
@@ -121,26 +123,26 @@ GLOBAL CONFIGURATION OPTIONS
 	      4520  section  3.5.  OpenLDAP also has the `binary' option built
 	      in, but this is a transfer option, not a tagging option.
 
-       attributetype  ( <oid>  [NAME <name>]  [DESC <description>]  [OBSOLETE]
-	      [SUP <oid>]   [EQUALITY <oid>]  [ORDERING <oid>]	[SUBSTR <oid>]
-	      [SYNTAX <oidlen>] 	 [SINGLE-VALUE] 	  [COLLECTIVE]
-	      [NO-USER-MODIFICATION] [USAGE <attributeUsage>] )
+       attributetype  ( &ltoid&gt  [NAME &ltname&gt]  [DESC &ltdescription&gt]  [OBSOLETE]
+	      [SUP &ltoid&gt]   [EQUALITY &ltoid&gt]  [ORDERING &ltoid&gt]	[SUBSTR &ltoid&gt]
+	      [SYNTAX &ltoidlen&gt] 	 [SINGLE-VALUE] 	  [COLLECTIVE]
+	      [NO-USER-MODIFICATION] [USAGE &ltattributeUsage&gt] )
 	      Specify an attribute type using the LDAPv3 syntax defined in RFC
 	      4512.  The slapd parser  extends	the  RFC  4512	definition  by
 	      allowing string forms as well as numeric OIDs to be used for the
 	      attribute   OID	and   attribute   syntax   OID.    (See    the
 	      objectidentifier description.)
 
-       authid-rewrite<cmd> <args>
+       authid-rewrite&ltcmd&gt &ltargs&gt
 	      Used  by	the  authentication  framework	to convert simple user
 	      names to an  LDAP  DN  used  for	authorization  purposes.   Its
 	      purpose  is  analogous to that of authz-regexp (see below).  The
 	      prefix authid- is followed by a set of rules analogous to  those
 	      described  in  slapo-rwm(5) for data rewriting (replace the rwm-
-	      prefix  with  authid-).	authid-rewrite<cmd>  and  authz-regexp
+	      prefix  with  authid-).	authid-rewrite&ltcmd&gt  and  authz-regexp
 	      rules should not be intermixed.
 
-       authz-policy <policy>
+       authz-policy &ltpolicy&gt
 	      Used  to	specify  which	rules  to use for Proxy Authorization.
 	      Proxy authorization allows  a  client  to  authenticate  to  the
 	      server  using  one  user's  credentials, but specify a different
@@ -166,46 +168,46 @@ GLOBAL CONFIGURATION OPTIONS
 	      modify  it.   The  value	of  authzFrom and authzTo describes an
 	      identity or a set of identities; it can take five forms:
 
-		     ldap:///<base>??[<scope>]?<filter>
-		     dn[.<dnstyle>]:<pattern>
-		     u[.<mech>[/<realm>]]:<pattern>
-		     group[/objectClass[/attributeType]]:<pattern>
-		     <pattern>
+		     ldap:///&ltbase&gt??[&ltscope&gt]?&ltfilter&gt
+		     dn[.&ltdnstyle&gt]:&ltpattern&gt
+		     u[.&ltmech&gt[/&ltrealm&gt]]:&ltpattern&gt
+		     group[/objectClass[/attributeType]]:&ltpattern&gt
+		     &ltpattern&gt
 
-		     <dnstyle>:={exact|onelevel|children|subtree|regex}
+		     &ltdnstyle&gt:={exact|onelevel|children|subtree|regex}
 
-	      The first form is a valid LDAP URI where the <host>:<port>,  the
-	      <attrs>  and  the  <extensions> portions must be absent, so that
+	      The first form is a valid LDAP URI where the &lthost&gt:&ltport&gt,  the
+	      &ltattrs&gt  and  the  &ltextensions&gt portions must be absent, so that
 	      the search occurs locally on either authzFrom or	authzTo.   The
 	      second  form  is	a DN, with the optional style modifiers exact,
 	      onelevel, children, and subtree for  exact,  onelevel,  children
-	      and  subtree  matches,  which  cause  <pattern> to be normalized
+	      and  subtree  matches,  which  cause  &ltpattern&gt to be normalized
 	      according to the DN normalization rules, or  the	special  regex
-	      style,  which  causes  the  <pattern>  to  be treated as a POSIX
+	      style,  which  causes  the  &ltpattern&gt  to  be treated as a POSIX
 	      (''extended'') regular  expression,  as  discussed  in  regex(7)
 	      and/or re_format(7).  A pattern of * means any non-anonymous DN.
-	      The third form is a SASL id, with the optional fields <mech> and
-	      <realm> that allow to specify a SASL mechanism, and eventually a
+	      The third form is a SASL id, with the optional fields &ltmech&gt and
+	      &ltrealm&gt that allow to specify a SASL mechanism, and eventually a
 	      SASL realm, for those mechanisms that support one.  The need  to
 	      allow  the  specification  of  a mechanism is still debated, and
 	      users are strongly discouraged to rely on this possibility.  The
 	      fourth  form is a group specification, consisting of the keyword
 	      group, optionally followed by the  specification	of  the  group
 	      objectClass   and  member  attributeType.   The  group  with  DN
-	      <pattern> is searched with base scope, and in case of match, the
+	      &ltpattern&gt is searched with base scope, and in case of match, the
 	      values of the member attributeType are searched for the asserted
 	      DN.   For  backwards  compatibility,  if	no  identity  type  is
-	      provided,  i.e.  only  <pattern>	is  present,  an  exact  DN is
-	      assumed;	as  a  consequence,  <pattern>	is  subjected  to   DN
+	      provided,  i.e.  only  &ltpattern&gt	is  present,  an  exact  DN is
+	      assumed;	as  a  consequence,  &ltpattern&gt	is  subjected  to   DN
 	      normalization.	Since  the  interpretation  of	authzFrom  and
 	      authzTo can impact security, users are  strongly	encouraged  to
 	      explicitly  set the type of identity specification that is being
 	      used.  A subset of these rules can be used as third arg  in  the
 	      authz-regexp  statement  (see  below);  significantly,  the URI,
-	      provided it results in exactly one entry, and the  dn.exact:<dn>
+	      provided it results in exactly one entry, and the  dn.exact:&ltdn&gt
 	      forms.
 
-       authz-regexp <match> <replace>
+       authz-regexp &ltmatch&gt &ltreplace&gt
 	      Used  by	the  authentication  framework	to convert simple user
 	      names, such as provided by SASL  subsystem,  or  extracted  from
 	      certificates  in	case  of cert-based SASL EXTERNAL, or provided
@@ -216,7 +218,7 @@ GLOBAL CONFIGURATION OPTIONS
 	      subsystem, the SASL USERNAME, REALM, and	MECHANISM  are	taken,
 	      when available, and combined into a name of the form
 
-		     UID=<username>[[,CN=<realm>],CN=<mechanism>],CN=auth
+		     UID=&ltusername&gt[[,CN=&ltrealm&gt],CN=&ltmechanism&gt],CN=auth
 
 	      This   name   is	 then	compared   against   the  match  POSIX
 	      (''extended'')  regular  expression,  and  if   the   match   is
@@ -254,27 +256,27 @@ GLOBAL CONFIGURATION OPTIONS
 	      the file, stopping at the first successful match.
 
 
-       concurrency <integer>
+       concurrency &ltinteger&gt
 	      Specify  a  desired  level  of  concurrency.   Provided  to  the
 	      underlying  thread  system  as  a  hint.	 The default is not to
 	      provide any hint.
 
-       conn_max_pending <integer>
+       conn_max_pending &ltinteger&gt
 	      Specify the maximum number of pending requests for an  anonymous
 	      session.	 If  requests are submitted faster than the server can
 	      process them, they will be queued up to this limit. If the limit
 	      is exceeded, the session is closed. The default is 100.
 
-       conn_max_pending_auth <integer>
+       conn_max_pending_auth &ltinteger&gt
 	      Specify	the   maximum	number	of  pending  requests  for  an
 	      authenticated session.  The default is 1000.
 
-       defaultsearchbase <dn>
+       defaultsearchbase &ltdn&gt
 	      Specify a default search base to use when client submits a  non-
 	      base  search  request with an empty base DN.  Base scoped search
 	      requests with an empty base DN are not affected.
 
-       disallow <features>
+       disallow &ltfeatures&gt
 	      Specify a set of features (separated by white space) to disallow
 	      (default none).  bind_anon disables acceptance of anonymous bind
 	      requests.  Note that this setting does  not  prohibit  anonymous
@@ -288,8 +290,8 @@ GLOBAL CONFIGURATION OPTIONS
 	      dontusecopy_non_critical disables acceptance of the  dontUseCopy
 	      control (a work in progress) when criticality is FALSE.
 
-       ditcontentrule  ( <oid>	[NAME <name>]  [DESC <description>] [OBSOLETE]
-	      [AUX <oids>] [MUST <oids>] [MAY <oids>] [NOT <oids>] )
+       ditcontentrule  ( &ltoid&gt	[NAME &ltname&gt]  [DESC &ltdescription&gt] [OBSOLETE]
+	      [AUX &ltoids&gt] [MUST &ltoids&gt] [MAY &ltoids&gt] [NOT &ltoids&gt] )
 	      Specify an DIT Content Rule using the LDAPv3 syntax  defined  in
 	      RFC  4512.   The slapd parser extends the RFC 4512 definition by
 	      allowing string forms as well as numeric OIDs to be used for the
@@ -308,36 +310,36 @@ GLOBAL CONFIGURATION OPTIONS
 	      currently active clients.  The default is off.  You may wish  to
 	      use idletimeout along with this option.
 
-       idletimeout <integer>
+       idletimeout &ltinteger&gt
 	      Specify the number of seconds to wait before forcibly closing an
 	      idle client  connection.	 A  idletimeout  of  0	disables  this
 	      feature.	 The  default  is  0.  You  may  also  want to set the
 	      writetimeout option.
 
-       include <filename>
+       include &ltfilename&gt
 	      Read additional configuration information from  the  given  file
 	      before continuing with the next line of the current file.
 
-       index_intlen <integer>
+       index_intlen &ltinteger&gt
 	      Specify  the  key  length  for ordered integer indices. The most
 	      significant bytes of the binary integer will be used  for  index
 	      keys.  The default value is 4, which provides exact indexing for
 	      31 bit values.  A floating point representation is used to index
 	      too large values.
 
-       index_substr_if_minlen <integer>
+       index_substr_if_minlen &ltinteger&gt
 	      Specify  the minimum length for subinitial and subfinal indices.
 	      An attribute value must have at least this  many	characters  in
 	      order  to be processed by the indexing functions. The default is
 	      2.
 
-       index_substr_if_maxlen <integer>
+       index_substr_if_maxlen &ltinteger&gt
 	      Specify the maximum length for subinitial and subfinal  indices.
 	      Only  this  many	characters  of	an  attribute  value  will  be
 	      processed by the indexing functions; any excess  characters  are
 	      ignored. The default is 4.
 
-       index_substr_any_len <integer>
+       index_substr_any_len &ltinteger&gt
 	      Specify  the  length used for subany indices. An attribute value
 	      must  have  at  least  this  many  characters  in  order	to  be
 	      processed.  Attribute  values  longer  than  this length will be
@@ -346,7 +348,7 @@ GLOBAL CONFIGURATION OPTIONS
 	      lookups  when   the   filter   string   is   longer   than   the
 	      index_substr_if_maxlen value.
 
-       index_substr_any_step <integer>
+       index_substr_any_step &ltinteger&gt
 	      Specify  the steps used in subany index lookups. This value sets
 	      the offset  for  the  segments  of  a  filter  string  that  are
 	      processed  for  a  subany  index	lookup.  The default is 2. For
@@ -360,7 +362,7 @@ GLOBAL CONFIGURATION OPTIONS
        that depend on these parameters and recreating them with  slapindex(8).
 
 
-       ldapsyntax ( <oid> [DESC <description>] [X-SUBST <substitute-syntax>] )
+       ldapsyntax ( &ltoid&gt [DESC &ltdescription&gt] [X-SUBST &ltsubstitute-syntax&gt] )
 	      Specify an LDAP syntax using the LDAPv3 syntax  defined  in  RFC
 	      4512.   The  slapd  parser  extends  the	RFC 4512 definition by
 	      allowing string forms as well as numeric OIDs to be used for the
@@ -376,24 +378,24 @@ GLOBAL CONFIGURATION OPTIONS
 	      handlers would be associated to the resulting syntax  structure.
 
 
-       listener-threads <integer>
+       listener-threads &ltinteger&gt
 	      Specify the number of threads to use for the connection manager.
 	      The default is 1 and this is typically adequate for up to 16 CPU
 	      cores.  The value should be set to a power of 2.
 
-       localSSF <SSF>
+       localSSF &ltSSF&gt
 	      Specifies  the  Security Strength Factor (SSF) to be given local
 	      LDAP sessions, such as those to the ldapi://  listener.	For  a
 	      description  of  SSF  values,  see sasl-secprops's minssf option
 	      description.  The default is 71.
 
-       logfile <filename>
+       logfile &ltfilename&gt
 	      Specify a file for recording  debug  log	messages.  By  default
 	      these  messages  only go to stderr and are not recorded anywhere
 	      else. Specifying a logfile copies messages to  both  stderr  and
 	      the logfile.
 
-       loglevel <integer> [...]
+       loglevel &ltinteger&gt [...]
 	      Specify  the  level  at which debugging statements and operation
 	      statistics  should  be  syslogged  (currently  logged   to   the
 	      syslogd(8)   LOG_LOCAL4  facility).   They  must	be  considered
@@ -450,39 +452,39 @@ GLOBAL CONFIGURATION OPTIONS
 	      be  included  when  using  other	loglevels, to help analyze the
 	      logs.
 
-       moduleload <filename>
+       moduleload &ltfilename&gt
 	      Specify the name of a dynamically loadable module to  load.  The
 	      filename may be an absolute path name or a simple filename. Non-
 	      absolute names are searched for in the directories specified  by
 	      the modulepath option. This option and the modulepath option are
 	      only usable if slapd was compiled with --enable-modules.
 
-       modulepath <pathspec>
+       modulepath &ltpathspec&gt
 	      Specify a list of directories to search  for  loadable  modules.
 	      Typically  the  path  is colon-separated but this depends on the
 	      operating system.  The default is MODULEDIR, which is where  the
 	      standard OpenLDAP install will place its modules.
 
-       objectclass   ( <oid>   [NAME <name>]  [DESC <description>]  [OBSOLETE]
-	      [SUP <oids>]  [{	ABSTRACT   |   STRUCTURAL   |	AUXILIARY   }]
-	      [MUST <oids>] [MAY <oids>] )
+       objectclass   ( &ltoid&gt   [NAME &ltname&gt]  [DESC &ltdescription&gt]  [OBSOLETE]
+	      [SUP &ltoids&gt]  [{	ABSTRACT   |   STRUCTURAL   |	AUXILIARY   }]
+	      [MUST &ltoids&gt] [MAY &ltoids&gt] )
 	      Specify  an  objectclass	using the LDAPv3 syntax defined in RFC
 	      4512.  The slapd parser  extends	the  RFC  4512	definition  by
 	      allowing string forms as well as numeric OIDs to be used for the
 	      object  class  OID.   (See  the  objectidentifier  description.)
 	      Object classes are "STRUCTURAL" by default.
 
-       objectidentifier <name> { <oid> | <name>[:<suffix>] }
+       objectidentifier &ltname&gt { &ltoid&gt | &ltname&gt[:&ltsuffix&gt] }
 	      Define  a  string name that equates to the given OID. The string
 	      can be used in place of  the  numeric  OID  in  objectclass  and
 	      attribute  definitions.  The name can also be used with a suffix
 	      of the form ":xx" in which case the value "oid.xx" will be used.
 
-       password-hash <hash> [<hash>...]
+       password-hash &lthash&gt [&lthash&gt...]
 	      This  option  configures	one  or  more  hashes  to  be  used in
 	      generation  of  user  passwords  stored  in   the   userPassword
 	      attribute  during  processing  of  LDAP Password Modify Extended
-	      Operations (RFC 3062).  The <hash> must be one of {SSHA}, {SHA},
+	      Operations (RFC 3062).  The &lthash&gt must be one of {SSHA}, {SHA},
 	      {SMD5}, {MD5}, {CRYPT}, and {CLEARTEXT}.	The default is {SSHA}.
 
 	      {SHA} and {SSHA} use  the  SHA-1	algorithm  (FIPS  160-1),  the
@@ -500,7 +502,7 @@ GLOBAL CONFIGURATION OPTIONS
 	      applications handling of userPassword during LDAP  Add,  Modify,
 	      or other LDAP operations.
 
-       password-crypt-salt-format <format>
+       password-crypt-salt-format &ltformat&gt
 	      Specify	the  format  of  the  salt  passed  to	crypt(3)  when
 	      generating  {CRYPT}   passwords	(see   password-hash)	during
 	      processing  of  LDAP  Password  Modify  Extended Operations (RFC
@@ -514,16 +516,16 @@ GLOBAL CONFIGURATION OPTIONS
 	      algorithm and provides 8 random characters of salt.  The default
 	      is "%s", which provides 31 characters of salt.
 
-       pidfile <filename>
+       pidfile &ltfilename&gt
 	      The (absolute) name of a file that will hold the slapd  server's
 	      process ID (see getpid(2)).
 
-       referral <url>
+       referral &lturl&gt
 	      Specify  the  referral  to pass back when slapd(8) cannot find a
 	      local database to  handle  a  request.   If  specified  multiple
 	      times, each url is provided.
 
-       require <conditions>
+       require &ltconditions&gt
 	      Specify  a  set  of  conditions  (separated  by  white space) to
 	      require (default none).  The directive may be specified globally
 	      and/or  per-database;  databases	inherit  global conditions, so
@@ -543,7 +545,7 @@ GLOBAL CONFIGURATION OPTIONS
 	      Enable/disable client name unverified reverse lookup (default is
 	      off if compiled with --enable-rlookups).
 
-       rootDSE <file>
+       rootDSE &ltfile&gt
 	      Specify  the  name  of  an  LDIF(5) file containing user defined
 	      attributes for the root DSE.  These attributes are  returned  in
 	      addition to the attributes normally produced by slapd.
@@ -554,19 +556,19 @@ GLOBAL CONFIGURATION OPTIONS
 		  ldapsearch -x -b "" -s base "+"
 	      See RFC 4512 section 5.1 for details.
 
-       sasl-auxprops <plugin> [...]
+       sasl-auxprops &ltplugin&gt [...]
 	      Specify which auxprop plugins to use for authentication lookups.
 	      The default is empty, which just uses slapd's internal  support.
 	      Usually no other auxprop plugins are needed.
 
-       sasl-host <fqdn>
+       sasl-host &ltfqdn&gt
 	      Used  to	specify  the fully qualified domain name used for SASL
 	      processing.
 
-       sasl-realm <realm>
+       sasl-realm &ltrealm&gt
 	      Specify SASL realm.  Default is empty.
 
-       sasl-secprops <properties>
+       sasl-secprops &ltproperties&gt
 	      Used to specify Cyrus SASL security properties.  The  none  flag
 	      (without	any  other  properties)  causes  the  flag  properties
 	      default, "noanonymous,noplain", to be cleared.  The noplain flag
@@ -577,46 +579,46 @@ GLOBAL CONFIGURATION OPTIONS
 	      which  support  anonymous  login.   The  forwardsec flag require
 	      forward  secrecy	between  sessions.    The   passcred   require
 	      mechanisms  which  pass client credentials (and allow mechanisms
-	      which can pass  credentials  to  do  so).   The  minssf=<factor>
+	      which can pass  credentials  to  do  so).   The  minssf=&ltfactor&gt
 	      property	specifies  the	minimum  acceptable  security strength
 	      factor as an integer approximate to effective  key  length  used
 	      for  encryption.	 0  (zero)  implies  no  protection, 1 implies
 	      integrity protection only, 56 allows DES or other weak  ciphers,
 	      112  allows triple DES and other strong ciphers, 128 allows RC4,
 	      Blowfish and other modern strong ciphers.   The  default	is  0.
-	      The  maxssf=<factor>  property  specifies the maximum acceptable
+	      The  maxssf=&ltfactor&gt  property  specifies the maximum acceptable
 	      security strength factor as an integer (see minssf description).
-	      The   default   is   INT_MAX.   The  maxbufsize=<size>  property
+	      The   default   is   INT_MAX.   The  maxbufsize=&ltsize&gt  property
 	      specifies  the  maximum  security  layer	receive  buffer   size
 	      allowed.	0 disables security layers.  The default is 65536.
 
-       schemadn <dn>
+       schemadn &ltdn&gt
 	      Specify  the  distinguished name for the subschema subentry that
 	      controls	the  entries  on  this	 server.    The   default   is
 	      "cn=Subschema".
 
-       security <factors>
+       security &ltfactors&gt
 	      Specify  a  set of security strength factors (separated by white
 	      space) to require  (see  sasl-secprops's	minssf	option	for  a
 	      description of security strength factors).  The directive may be
-	      specified globally and/or per-database.  ssf=<n>	specifies  the
-	      overall  security  strength factor.  transport=<n> specifies the
-	      transport security strength factor.  tls=<n> specifies  the  TLS
-	      security	strength factor.  sasl=<n> specifies the SASL security
-	      strength factor.	update_ssf=<n> specifies the overall  security
+	      specified globally and/or per-database.  ssf=&ltn&gt	specifies  the
+	      overall  security  strength factor.  transport=&ltn&gt specifies the
+	      transport security strength factor.  tls=&ltn&gt specifies  the  TLS
+	      security	strength factor.  sasl=&ltn&gt specifies the SASL security
+	      strength factor.	update_ssf=&ltn&gt specifies the overall  security
 	      strength	  factor    to	  require   for   directory   updates.
-	      update_transport=<n> specifies the transport  security  strength
-	      factor   to   require  for  directory  updates.	update_tls=<n>
+	      update_transport=&ltn&gt specifies the transport  security  strength
+	      factor   to   require  for  directory  updates.	update_tls=&ltn&gt
 	      specifies the  TLS  security  strength  factor  to  require  for
-	      directory  updates.  update_sasl=<n> specifies the SASL security
+	      directory  updates.  update_sasl=&ltn&gt specifies the SASL security
 	      strength	 factor   to   require	  for	 directory    updates.
-	      simple_bind=<n>  specifies the security strength factor required
+	      simple_bind=&ltn&gt  specifies the security strength factor required
 	      for simple  username/password  authentication.   Note  that  the
 	      transport   factor  is  measure  of  security  provided  by  the
 	      underlying transport, e.g. ldapi:// (and eventually IPSEC).   It
 	      is not normally used.
 
-       serverID <integer> [<URL>]
+       serverID &ltinteger&gt [&ltURL&gt]
 	      Specify an integer ID from 0 to 4095 for this server (limited to
 	      3 hexadecimal digits).  The  ID  may  also  be  specified  as  a
 	      hexadecimal  ID by prefixing the value with "0x".  These IDs are
@@ -632,24 +634,24 @@ GLOBAL CONFIGURATION OPTIONS
 
 	    serverID 1
 
-       sizelimit {<integer>|unlimited}
+       sizelimit {&ltinteger&gt|unlimited}
 
-       sizelimit size[.{soft|hard|unchecked}]=<integer> [...]
+       sizelimit size[.{soft|hard|unchecked}]=&ltinteger&gt [...]
 	      Specify the maximum number of entries to return  from  a	search
 	      operation.   The	default  size  limit is 500.  Use unlimited to
 	      specify no limits.   The	second	format	allows	a  fine  grain
 	      setting of the size limits.  Extra args can be added on the same
 	      line.  See limits for an explanation of the different flags.
 
-       sockbuf_max_incoming <integer>
+       sockbuf_max_incoming &ltinteger&gt
 	      Specify  the  maximum  incoming  LDAP  PDU  size	for  anonymous
 	      sessions.  The default is 262143.
 
-       sockbuf_max_incoming_auth <integer>
+       sockbuf_max_incoming_auth &ltinteger&gt
 	      Specify  the  maximum  incoming  LDAP PDU size for authenticated
 	      sessions.  The default is 4194303.
 
-       sortvals <attr> [...]
+       sortvals &ltattr&gt [...]
 	      Specify a list of  multi-valued  attributes  whose  values  will
 	      always  be  maintained  in  sorted order. Using this option will
 	      allow  Modify,  Compare,	and  filter   evaluations   on	 these
@@ -658,20 +660,20 @@ GLOBAL CONFIGURATION OPTIONS
 	      may  not	correspond  to lexical order or any other recognizable
 	      order.
 
-       tcp-buffer [listener=<URL>] [{read|write}=]<size>
+       tcp-buffer [listener=&ltURL&gt] [{read|write}=]&ltsize&gt
 	      Specify the size of the TCP buffer.  A  global  value  for  both
 	      read  and  write TCP buffers related to any listener is defined,
 	      unless the listener is explicitly specified, or either the  read
 	      or  write  qualifiers  are  used.  See tcp(7) for details.  Note
 	      that some OS-es implement automatic TCP buffer tuning.
 
-       threads <integer>
+       threads &ltinteger&gt
 	      Specify the maximum  size  of  the  primary  thread  pool.   The
 	      default is 16; the minimum value is 2.
 
-       timelimit {<integer>|unlimited}
+       timelimit {&ltinteger&gt|unlimited}
 
-       timelimit time[.{soft|hard}]=<integer> [...]
+       timelimit time[.{soft|hard}]=&ltinteger&gt [...]
 	      Specify  the maximum number of seconds (in real time) slapd will
 	      spend answering a search request.  The  default  time  limit  is
 	      3600.   Use  unlimited  to specify no limits.  The second format
@@ -679,12 +681,12 @@ GLOBAL CONFIGURATION OPTIONS
 	      be added on the same line.  See limits for an explanation of the
 	      different flags.
 
-       tool-threads <integer>
+       tool-threads &ltinteger&gt
 	      Specify the maximum number of threads to use in tool mode.  This
 	      should  not  be  greater	than the number of CPUs in the system.
 	      The default is 1.
 
-       writetimeout <integer>
+       writetimeout &ltinteger&gt
 	      Specify the number of seconds to wait before forcibly closing  a
 	      connection  with an outstanding write. This allows recovery from
 	      various network hang conditions.	A writetimeout of  0  disables
@@ -694,9 +696,9 @@ TLS OPTIONS
        If  slapd is built with support for Transport Layer Security, there are
        more options you can specify.
 
-       TLSCipherSuite <cipher-suite-spec>
+       TLSCipherSuite &ltcipher-suite-spec&gt
 	      Permits configuring  what  ciphers  will	be  accepted  and  the
-	      preference   order.   <cipher-suite-spec>  should  be  a	cipher
+	      preference   order.   &ltcipher-suite-spec&gt  should  be  a	cipher
 	      specification for the TLS library in use	(OpenSSL,  GnuTLS,  or
 	      Mozilla NSS).  Example:
 
@@ -708,7 +710,7 @@ TLS OPTIONS
 
 	      To check what ciphers a given spec selects in OpenSSL, use:
 
-		   openssl ciphers -v <cipher-suite-spec>
+		   openssl ciphers -v &ltcipher-suite-spec&gt
 
 	      With  GnuTLS the available specs can be found in the manual page
 	      of gnutls-cli(1) (see the description of the option --priority).
@@ -726,7 +728,7 @@ TLS OPTIONS
 	      code for Mozilla NSS in the file sslinfo.c in the structure
 		      static const SSLCipherSuiteInfo suiteInfo[]
 
-       TLSCACertificateFile <filename>
+       TLSCACertificateFile &ltfilename&gt
 	      Specifies  the  file  that  contains certificates for all of the
 	      Certificate  Authorities	that  slapd   will   recognize.    The
 	      certificate  for	the CA that signed the server certificate must
@@ -736,18 +738,18 @@ TLS OPTIONS
 	      Multiple certificates are simply appended to the file; the order
 	      is not significant.
 
-       TLSCACertificatePath <path>
+       TLSCACertificatePath &ltpath&gt
 	      Specifies the path of  a	directory  that  contains  Certificate
 	      Authority  certificates  in  separate  individual files. Usually
 	      only one of this	or  the  TLSCACertificateFile  is  used.  This
 	      directive is not supported when using GnuTLS.
 
-	      When  using  Mozilla  NSS,  <path>  may  contain	a  Mozilla NSS
-	      cert/key database.  If <path> contains a	Mozilla  NSS  cert/key
+	      When  using  Mozilla  NSS,  &ltpath&gt  may  contain	a  Mozilla NSS
+	      cert/key database.  If &ltpath&gt contains a	Mozilla  NSS  cert/key
 	      database	and  CA  cert  files,  OpenLDAP  will use the cert/key
 	      database and will ignore the CA cert files.
 
-       TLSCertificateFile <filename>
+       TLSCertificateFile &ltfilename&gt
 	      Specifies the file that contains the slapd server certificate.
 
 	      When using Mozilla NSS, if using a cert/key database  (specified
@@ -760,7 +762,7 @@ TLS OPTIONS
 	      Use certutil -L to list the certificates by name:
 		   certutil -d /path/to/certdbdir -L
 
-       TLSCertificateKeyFile <filename>
+       TLSCertificateKeyFile &ltfilename&gt
 	      Specifies  the  file  that contains the slapd server private key
 	      that matches the certificate stored  in  the  TLSCertificateFile
 	      file.   Currently,  the private key must not be protected with a
@@ -779,7 +781,7 @@ TLS OPTIONS
 	      You must have the old password,  if  any.   Ignore  the  WARNING
 	      about  the running browser.  Press 'Enter' for the new password.
 
-       TLSDHParamFile <filename>
+       TLSDHParamFile &ltfilename&gt
 	      This directive specifies the file that contains  parameters  for
 	      Diffie-Hellman  ephemeral  key  exchange.   This	is required in
 	      order to use a DSA certificate on the server. If	multiple  sets
@@ -793,16 +795,16 @@ TLS OPTIONS
 	      directive is ignored.  This  directive  is  ignored  when  using
 	      Mozilla NSS.
 
-       TLSRandFile <filename>
+       TLSRandFile &ltfilename&gt
 	      Specifies   the	file   to   obtain   random   bits  from  when
 	      /dev/[u]random is not available.	Generally set to the  name  of
 	      the  EGD/PRNGD  socket.	The  environment variable RANDFILE can
 	      also be used to specify the filename.  This directive is ignored
 	      with GnuTLS and Mozilla NSS.
 
-       TLSVerifyClient <level>
+       TLSVerifyClient &ltlevel&gt
 	      Specifies  what  checks  to perform on client certificates in an
-	      incoming TLS session, if any.  The <level> can be  specified  as
+	      incoming TLS session, if any.  The &ltlevel&gt can be  specified  as
 	      one of the following keywords:
 
 	      never  This is the default.  slapd will not ask the client for a
@@ -830,12 +832,12 @@ TLS OPTIONS
 		     setting  must  be	chosen	 to   enable   SASL   EXTERNAL
 		     authentication.
 
-       TLSCRLCheck <level>
+       TLSCRLCheck &ltlevel&gt
 	      Specifies  if  the  Certificate  Revocation List (CRL) of the CA
 	      should be used to verify if the  client  certificates  have  not
 	      been revoked. This requires TLSCACertificatePath parameter to be
 	      set. This directive is ignored  with  GnuTLS  and  Mozilla  NSS.
-	      <level> can be specified as one of the following keywords:
+	      &ltlevel&gt can be specified as one of the following keywords:
 
 	      none   No CRL checks are performed
 
@@ -843,7 +845,7 @@ TLS OPTIONS
 
 	      all    Check the CRL for a whole certificate chain
 
-       TLSCRLFile <filename>
+       TLSCRLFile &ltfilename&gt
 	      Specifies  a file containing a Certificate Revocation List to be
 	      used for verifying that certificates have not been revoked. This
 	      directive is only valid when using GnuTLS and Mozilla NSS.
@@ -853,8 +855,8 @@ GENERAL BACKEND OPTIONS
        for the specified  backend.   They  are	supported  by  every  type  of
        backend.
 
-       backend <databasetype>
-	      Mark  the  beginning  of	a  backend  definition. <databasetype>
+       backend &ltdatabasetype&gt
+	      Mark  the  beginning  of	a  backend  definition. &ltdatabasetype&gt
 	      should be one of bdb, config, dnssrv,  hdb,  ldap,  ldif,  meta,
 	      monitor,	null, passwd, perl, relay, shell, or sql, depending on
 	      which backend will serve the database.
@@ -866,9 +868,9 @@ GENERAL DATABASE OPTIONS
        every type of backend.  Note that the database and at least one	suffix
        option are mandatory for each database.
 
-       database <databasetype>
+       database &ltdatabasetype&gt
 	      Mark  the  beginning  of	a  new	database  instance definition.
-	      <databasetype> should be one of bdb, config, dnssrv, hdb,  ldap,
+	      &ltdatabasetype&gt should be one of bdb, config, dnssrv, hdb,  ldap,
 	      ldif,  meta,  monitor, null, passwd, perl, relay, shell, or sql,
 	      depending on which backend will serve the database.
 
@@ -883,14 +885,14 @@ GENERAL DATABASE OPTIONS
 	      See  the	slapd.access(5)  manual  page  for more details on ACL
 	      requirements for Add operations.
 
-       extra_attrs <attrlist>
+       extra_attrs &ltattrlist&gt
 	      Lists what attributes need  to  be  added  to  search  requests.
 	      Local  storage backends return the entire entry to the frontend.
 	      The  frontend  takes  care  of  only  returning  the   requested
 	      attributes  that	are  allowed  by ACLs.	However, features like
 	      access checking and so may need specific attributes that are not
 	      automatically  returned  by  remote storage backends, like proxy
-	      backends and so on.  <attrlist> is a list of attributes that are
+	      backends and so on.  &ltattrlist&gt is a list of attributes that are
 	      needed  for  internal  purposes  and  thus  always  need	to  be
 	      collected, even when not explicitly requested by clients.
 
@@ -908,20 +910,20 @@ GENERAL DATABASE OPTIONS
 	      entryCSN	and  entryUUID	attributes,  which  are  needed by the
 	      syncrepl provider. By default, lastmod is on.
 
-       limits <selector> <limit> [<limit> [...]]
+       limits &ltselector&gt &ltlimit&gt [&ltlimit&gt [...]]
 	      Specify time and size limits based on the operation's  initiator
-	      or base DN.  The argument <selector> can be any of
+	      or base DN.  The argument &ltselector&gt can be any of
 
-		     anonymous	  |    users	|    [<dnspec>=]<pattern>    |
-		     group[/oc[/at]]=<pattern>
+		     anonymous	  |    users	|    [&ltdnspec&gt=]&ltpattern&gt    |
+		     group[/oc[/at]]=&ltpattern&gt
 
 	      with
 
-		     <dnspec> ::= dn[.<type>][.<style>]
+		     &ltdnspec&gt ::= dn[.&lttype&gt][.&ltstyle&gt]
 
-		     <type>  ::= self | this
+		     &lttype&gt  ::= self | this
 
-		     <style>  ::= exact | base | onelevel | subtree | children
+		     &ltstyle&gt  ::= exact | base | onelevel | subtree | children
 		     | regex | anonymous
 
 	      DN type self is the default and means the bound user, while this
@@ -937,7 +939,7 @@ GENERAL DATABASE OPTIONS
 	      requires	the  (default)	match  based  on  POSIX (''extended'')
 	      regular expression pattern.  Finally, anonymous matches  unbound
 	      operations;  the pattern field is ignored.  The same behavior is
-	      obtained by using the anonymous form of the  <selector>  clause.
+	      obtained by using the anonymous form of the  &ltselector&gt  clause.
 	      The   term   group,   with   the	optional  objectClass  oc  and
 	      attributeType at fields, followed by pattern,  sets  the	limits
 	      for  any	DN  listed  in the values of the at attribute (default
@@ -946,7 +948,7 @@ GENERAL DATABASE OPTIONS
 
 	      The currently supported limits are size and time.
 
-	      The  syntax  for	time  limits  is time[.{soft|hard}]=<integer>,
+	      The  syntax  for	time  limits  is time[.{soft|hard}]=&ltinteger&gt,
 	      where  integer  is  the  number  of  seconds  slapd  will  spend
 	      answering  a  search  request.   If  no time limit is explicitly
 	      requested by  the  client,  the  soft  limit  is	used;  if  the
@@ -960,7 +962,7 @@ GENERAL DATABASE OPTIONS
 	      original behavior.
 
 	      The	 syntax        for	  size	      limits	    is
-	      size[.{soft|hard|unchecked}]=<integer>,  where  integer  is  the
+	      size[.{soft|hard|unchecked}]=&ltinteger&gt,  where  integer  is  the
 	      maximum number of entries slapd will return answering  a	search
 	      request.	 If  no  size  limit  is  explicitly  requested by the
 	      client, the soft limit is used;  if  the	requested  size  limit
@@ -994,14 +996,14 @@ GENERAL DATABASE OPTIONS
 	      entries to be returned.  However, the size limit applies to  the
 	      total  count of entries returned within the search, and not to a
 	      single page.  Additional size limits may be enforced; the syntax
-	      is  size.pr={<integer>|noEstimate|unlimited},  where  integer is
+	      is  size.pr={&ltinteger&gt|noEstimate|unlimited},  where  integer is
 	      the max page size if no  explicit  limit	is  set;  the  keyword
 	      noEstimate inhibits the server from returning an estimate of the
 	      total number of  entries	that  might  be  returned  (note:  the
 	      current  implementation  does  not  return  any  estimate).  The
 	      keyword unlimited indicates that no  limit  is  applied  to  the
 	      pagedResults	control     page     size.	The	syntax
-	      size.prtotal={<integer>|unlimited|disabled}  allows  to  set   a
+	      size.prtotal={&ltinteger&gt|unlimited|disabled}  allows  to  set   a
 	      limit on the total number of entries that a pagedResults control
 	      allows to return.  By default it is set to the hard limit.  When
 	      set,  integer is the max number of entries that the whole search
@@ -1020,7 +1022,7 @@ GENERAL DATABASE OPTIONS
 	      means of the RFC 4533 LDAP Content Synchronization protocol (see
 	      syncrepl for details).
 
-       maxderefdepth <depth>
+       maxderefdepth &ltdepth&gt
 	      Specifies  the  maximum  number  of  aliases to dereference when
 	      trying to resolve an entry, used to avoid infinite alias	loops.
 	      The default is 15.
@@ -1041,7 +1043,7 @@ GENERAL DATABASE OPTIONS
 	      database-specific  monitoring.   The  default  depends  on   the
 	      backend type.
 
-       overlay <overlay-name>
+       overlay &ltoverlay-name&gt
 	      Add  the	specified  overlay  to	this database. An overlay is a
 	      piece of code that intercepts database operations  in  order  to
 	      extend or change them. Overlays are pushed onto a stack over the
@@ -1057,18 +1059,18 @@ GENERAL DATABASE OPTIONS
 	      attempts to modify the database will  return  an	"unwilling  to
 	      perform" error.  By default, readonly is off.
 
-       restrict <oplist>
+       restrict &ltoplist&gt
 	      Specify  a  whitespace  separated  list  of  operations that are
 	      restricted.   If	defined  inside  a   database	specification,
 	      restrictions  apply  only  to  that database, otherwise they are
 	      global.  Operations can be any of add,  bind,  compare,  delete,
-	      extended[=<OID>], modify, rename, search, or the special pseudo-
+	      extended[=&ltOID&gt], modify, rename, search, or the special pseudo-
 	      operations read and write, which respectively summarize read and
 	      write  operations.   The	use of restrict write is equivalent to
 	      readonly	on  (see  above).   The  extended  keyword  allows  to
 	      indicate the OID of the specific operation to be restricted.
 
-       rootdn <dn>
+       rootdn &ltdn&gt
 	      Specify  the  distinguished  name  that is not subject to access
 	      control or administrative limit restrictions for	operations  on
 	      this  database.	This  DN  may or may not be associated with an
@@ -1080,7 +1082,7 @@ GENERAL DATABASE OPTIONS
 	      the   rootpw   directive.   Many	optional  features,  including
 	      syncrepl, require the rootdn to be defined for the database.
 
-       rootpw <password>
+       rootpw &ltpassword&gt
 	      Specify a password (or hash of the  password)  for  the  rootdn.
 	      The  password  can  only	be  set  if  the  rootdn is within the
 	      namingContext (suffix) of the database.  This option accepts all
@@ -1091,7 +1093,7 @@ GENERAL DATABASE OPTIONS
 	      authentication  of  the  root  DN is by other means (e.g. SASL).
 	      Use of SASL is encouraged.
 
-       suffix <dn suffix>
+       suffix &ltdn suffix&gt
 	      Specify the DN suffix of queries that will  be  passed  to  this
 	      backend  database.   Multiple  suffix  lines can be given and at
 	      least one is required for each database definition.
@@ -1152,22 +1154,22 @@ GENERAL DATABASE OPTIONS
 	      "cn=ldapsync". By  default  the  contextCSN  is  stored  in  the
 	      context entry.
 
-       syncrepl    rid=<replica    ID>	  provider=ldap[s]://<hostname>[:port]
-	      searchbase=<base	  DN>	  [type=refreshOnly|refreshAndPersist]
-	      [interval=dd:hh:mm:ss]	[retry=[<retry	  interval>    <#   of
-	      retries>]+]  [filter=<filter  str>]  [scope=sub|one|base|subord]
-	      [attrs=<attr	list>]	   [attrsonly]	   [sizelimit=<limit>]
-	      [timelimit=<limit>]		       [schemachecking=on|off]
-	      [network-timeout=<seconds>]		   [timeout=<seconds>]
-	      [bindmethod=simple|sasl]	   [binddn=<dn>]     [saslmech=<mech>]
-	      [authcid=<identity>] [authzid=<identity>] [credentials=<passwd>]
-	      [realm=<realm>]			       [secprops=<properties>]
-	      [keepalive=<idle>:<probes>:<interval>]   [starttls=yes|critical]
-	      [tls_cert=<file>]      [tls_key=<file>]	   [tls_cacert=<file>]
-	      [tls_cacertdir=<path>]	  [tls_reqcert=never|allow|try|demand]
-	      [tls_ciphersuite=<ciphers>]	  [tls_crlcheck=none|peer|all]
-	      [suffixmassage=<real DN>] [logbase=<base DN>] [logfilter=<filter
-	      str>] [syncdata=default|accesslog|changelog]
+       syncrepl    rid=&ltreplica    ID&gt	  provider=ldap[s]://&lthostname&gt[:port]
+	      searchbase=&ltbase	  DN&gt	  [type=refreshOnly|refreshAndPersist]
+	      [interval=dd:hh:mm:ss]	[retry=[&ltretry	  interval&gt    &lt#   of
+	      retries&gt]+]  [filter=&ltfilter  str&gt]  [scope=sub|one|base|subord]
+	      [attrs=&ltattr	list&gt]	   [attrsonly]	   [sizelimit=&ltlimit&gt]
+	      [timelimit=&ltlimit&gt]		       [schemachecking=on|off]
+	      [network-timeout=&ltseconds&gt]		   [timeout=&ltseconds&gt]
+	      [bindmethod=simple|sasl]	   [binddn=&ltdn&gt]     [saslmech=&ltmech&gt]
+	      [authcid=&ltidentity&gt] [authzid=&ltidentity&gt] [credentials=&ltpasswd&gt]
+	      [realm=&ltrealm&gt]			       [secprops=&ltproperties&gt]
+	      [keepalive=&ltidle&gt:&ltprobes&gt:&ltinterval&gt]   [starttls=yes|critical]
+	      [tls_cert=&ltfile&gt]      [tls_key=&ltfile&gt]	   [tls_cacert=&ltfile&gt]
+	      [tls_cacertdir=&ltpath&gt]	  [tls_reqcert=never|allow|try|demand]
+	      [tls_ciphersuite=&ltciphers&gt]	  [tls_crlcheck=none|peer|all]
+	      [suffixmassage=&ltreal DN&gt] [logbase=&ltbase DN&gt] [logfilter=&ltfilter
+	      str&gt] [syncdata=default|accesslog|changelog]
 	      Specify the current database as a replica which is  kept	up-to-
 	      date  with  the  master  content	by  establishing  the  current
 	      slapd(8) as a  replication  consumer  site  running  a  syncrepl
@@ -1182,7 +1184,7 @@ GENERAL DATABASE OPTIONS
 	      greater than 999 (limited to three decimal digits).
 
 	      provider	specifies the replication provider site containing the
-	      master content as an LDAP URI.  If  <port>  is  not  given,  the
+	      master content as an LDAP URI.  If  &ltport&gt  is  not  given,  the
 	      standard LDAP port number (389 or 636) is used.
 
 	      The  content  of	the syncrepl replica is defined using a search
@@ -1219,10 +1221,10 @@ GENERAL DATABASE OPTIONS
 
 	      If an error occurs during replication, the consumer will attempt
 	      to reconnect according to the retry parameter which is a list of
-	      the  <retry  interval>  and  <# of retries> pairs.  For example,
+	      the  &ltretry  interval&gt  and  &lt# of retries&gt pairs.  For example,
 	      retry="60 10 300 3" lets the consumer retry every 60 seconds for
 	      the first 10 times and then retry every 300 seconds for the next
-	      3 times before stop retrying. The `+' in <#  of  retries>  means
+	      3 times before stop retrying. The `+' in &lt#  of  retries&gt  means
 	      indefinite  number  of  retries  until success.  If no retry was
 	      specified, by default syncrepl retries every hour forever.
 
@@ -1296,14 +1298,14 @@ GENERAL DATABASE OPTIONS
 	      changelog format. If the syncdata parameter is omitted or set to
 	      "default" then the log parameters are ignored.
 
-       updatedn <dn>
+       updatedn &ltdn&gt
 	      This  option  is	only  applicable  in  a  slave	database.   It
 	      specifies  the  DN  permitted  to  update  (subject  to	access
 	      controls)  the  replica.	It is only needed in certain push-mode
 	      replication scenarios.  Generally, this DN  should  not  be  the
 	      same as the rootdn used at the master.
 
-       updateref <url>
+       updateref &lturl&gt
 	      Specify  the  referral  to  pass	back when slapd(8) is asked to
 	      modify a	replicated  local  database.   If  specified  multiple
 	      times, each url is provided.
@@ -1366,12 +1368,12 @@ SEE ALSO
 
 ACKNOWLEDGEMENTS
        OpenLDAP Software is developed and maintained by The  OpenLDAP  Project
-       <http://www.openldap.org/>.    OpenLDAP	 Software   is	 derived  from
+       &lthttp://www.openldap.org/&gt.    OpenLDAP	 Software   is	 derived  from
        University of Michigan LDAP 3.3 Release.
 
 
 
 OpenLDAP 2.4.28 		  2011/11/24			 SLAPD.CONF(5)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="File::Fetch is a generic file fetching mechanism...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>File::Fetch - A generic file fetching mechanism</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 File::Fetch(3pm)       Perl Programmers Reference Guide       File::Fetch(3pm)
 
 
@@ -19,20 +21,20 @@ SYNOPSIS
 	   use File::Fetch;
 
 	   ### build a File::Fetch object ###
-	   my $ff = File::Fetch->new(uri => 'http://some.where.com/dir/a.txt');
+	   my $ff = File::Fetch-&gtnew(uri =&gt 'http://some.where.com/dir/a.txt');
 
 	   ### fetch the uri to cwd() ###
-	   my $where = $ff->fetch() or die $ff->error;
+	   my $where = $ff-&gtfetch() or die $ff-&gterror;
 
 	   ### fetch the uri to /tmp ###
-	   my $where = $ff->fetch( to => '/tmp' );
+	   my $where = $ff-&gtfetch( to =&gt '/tmp' );
 
 	   ### parsed bits from the uri ###
-	   $ff->uri;
-	   $ff->scheme;
-	   $ff->host;
-	   $ff->path;
-	   $ff->file;
+	   $ff-&gturi;
+	   $ff-&gtscheme;
+	   $ff-&gthost;
+	   $ff-&gtpath;
+	   $ff-&gtfile;
 
 DESCRIPTION
        File::Fetch is a generic file fetching mechanism.
@@ -45,17 +47,17 @@ DESCRIPTION
 ACCESSORS
        A "File::Fetch" object has the following accessors
 
-       $ff->uri
+       $ff-&gturi
 	   The uri you passed to the constructor
 
-       $ff->scheme
+       $ff-&gtscheme
 	   The scheme from the uri (like 'file', 'http', etc)
 
-       $ff->host
+       $ff-&gthost
 	   The hostname in the uri.  Will be empty if host was originally
 	   'localhost' for a 'file://' url.
 
-       $ff->vol
+       $ff-&gtvol
 	   On operating systems with the concept of a volume the second
 	   element of a file:// is considered to the be volume specification
 	   for the file.  Thus on Win32 this routine returns the volume, on
@@ -70,20 +72,20 @@ ACCESSORS
 	   because VMS file specifications are converted to absolute UNIX
 	   format and the volume information is transparently included.
 
-       $ff->share
+       $ff-&gtshare
 	   On systems with the concept of a network share (currently only
 	   Windows) returns the sharename from a file://// url.  On other
 	   operating systems returns empty.
 
-       $ff->path
+       $ff-&gtpath
 	   The path from the uri, will be at least a single '/'.
 
-       $ff->file
+       $ff-&gtfile
 	   The name of the remote file. For the local file name, the result of
-	   $ff->output_file will be used.
+	   $ff-&gtoutput_file will be used.
 
-       $ff->output_file
-	   The name of the output file. This is the same as $ff->file, but any
+       $ff-&gtoutput_file
+	   The name of the output file. This is the same as $ff-&gtfile, but any
 	   query parameters are stripped off. For example:
 
 	       http://example.com/index.html?x=y
@@ -92,29 +94,29 @@ ACCESSORS
 	   "index.html?x=y".
 
 METHODS
-   $ff = File::Fetch->new( uri => 'http://some.where.com/dir/file.txt' );
+   $ff = File::Fetch-&gtnew( uri =&gt 'http://some.where.com/dir/file.txt' );
        Parses the uri and creates a corresponding File::Fetch::Item object,
        that is ready to be "fetch"ed and returns it.
 
        Returns false on failure.
 
-   $where = $ff->fetch( [to => /my/output/dir/ | \$scalar] )
+   $where = $ff-&gtfetch( [to =&gt /my/output/dir/ | \$scalar] )
        Fetches the file you requested and returns the full path to the file.
 
        By default it writes to "cwd()", but you can override that by
        specifying the "to" argument:
 
 	   ### file fetch to /tmp, full path to the file in $where
-	   $where = $ff->fetch( to => '/tmp' );
+	   $where = $ff-&gtfetch( to =&gt '/tmp' );
 
 	   ### file slurped into $scalar, full path to the file in $where
 	   ### file is downloaded to a temp directory and cleaned up at exit time
-	   $where = $ff->fetch( to => \$scalar );
+	   $where = $ff-&gtfetch( to =&gt \$scalar );
 
        Returns the full path to the downloaded file on success, and false on
        failure.
 
-   $ff->error([BOOL])
+   $ff-&gterror([BOOL])
        Returns the last encountered error as string.  Pass it a true value to
        get the "Carp::longmess()" output instead.
 
@@ -125,10 +127,10 @@ HOW IT WORKS
        Below is a mapping of what utilities will be used in what order for
        what schemes, if available:
 
-	   file    => LWP, lftp, file
-	   http    => LWP, wget, curl, lftp, lynx
-	   ftp	   => LWP, Net::FTP, wget, curl, lftp, ncftp, ftp
-	   rsync   => rsync
+	   file    =&gt LWP, lftp, file
+	   http    =&gt LWP, wget, curl, lftp, lynx
+	   ftp	   =&gt LWP, Net::FTP, wget, curl, lftp, ncftp, ftp
+	   rsync   =&gt rsync
 
        If you'd like to disable the use of one or more of these utilities
        and/or modules, see the $BLACKLIST variable further down.
@@ -223,15 +225,15 @@ MAPPING
        Here's a quick mapping for the utilities/modules, and their names for
        the $BLACKLIST, $METHOD_FAIL and other internal functions.
 
-	   LWP	       => lwp
-	   Net::FTP    => netftp
-	   wget        => wget
-	   lynx        => lynx
-	   ncftp       => ncftp
-	   ftp	       => ftp
-	   curl        => curl
-	   rsync       => rsync
-	   lftp        => lftp
+	   LWP	       =&gt lwp
+	   Net::FTP    =&gt netftp
+	   wget        =&gt wget
+	   lynx        =&gt lynx
+	   ncftp       =&gt ncftp
+	   ftp	       =&gt ftp
+	   curl        =&gt curl
+	   rsync       =&gt rsync
+	   lftp        =&gt lftp
 
 FREQUENTLY ASKED QUESTIONS
    So how do I use a proxy with File::Fetch?
@@ -274,10 +276,10 @@ TODO
 	   To indicate to rather use commandline tools than modules
 
 BUG REPORTS
-       Please report bugs or other issues to <bug-file-fetch@rt.cpan.org<gt>.
+       Please report bugs or other issues to &ltbug-file-fetch@rt.cpan.org&ltgt&gt.
 
 AUTHOR
-       This module by Jos Boumans <kane@cpan.org>.
+       This module by Jos Boumans &ltkane@cpan.org&gt.
 
 COPYRIGHT
        This library is free software; you may redistribute and/or modify it
@@ -286,6 +288,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-06-27		      File::Fetch(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

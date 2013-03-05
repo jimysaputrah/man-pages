@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The dispatch_async() and dispatch_sync() functions schedule blocks for..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>dispatch_async, dispatch_sync -- schedule blocks for execution</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 
 dispatch_async(3)	 BSD Library Functions Manual	     dispatch_async(3)
 
@@ -15,7 +17,7 @@ NAME
      dispatch_async, dispatch_sync -- schedule blocks for execution
 
 SYNOPSIS
-     #include <dispatch/dispatch.h>
+     #include &ltdispatch/dispatch.h&gt
 
      void
      dispatch_async(dispatch_queue_t queue, void (^block)(void));
@@ -108,8 +110,8 @@ COMPLETION CALLBACKS
 
 	     dispatch_retain(destination_queue);
 
-	     dispatch_async(obj->queue, ^{
-		     ssize_t r = read(obj->fd, where, bytes);
+	     dispatch_async(obj-&gtqueue, ^{
+		     ssize_t r = read(obj-&gtfd, where, bytes);
 		     int err = errno;
 
 		     dispatch_async(destination_queue, ^{
@@ -142,13 +144,13 @@ RECURSIVE LOCKS
      void
      sloppy_lock(object_t object, void (^block)(void))
      {
-	     if (object->owner == pthread_self()) {
+	     if (object-&gtowner == pthread_self()) {
 		     return block();
 	     }
-	     dispatch_sync(object->queue, ^{
-		     object->owner = pthread_self();
+	     dispatch_sync(object-&gtqueue, ^{
+		     object-&gtowner = pthread_self();
 		     block();
-		     object->owner = NULL;
+		     object-&gtowner = NULL;
 	     });
      }
 
@@ -201,6 +203,6 @@ SEE ALSO
      dispatch_queue_create(3), dispatch_semaphore_create(3)
 
 Darwin				  May 1, 2009				Darwin
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

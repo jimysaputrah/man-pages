@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="******************************** NOIICE *******************..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Apache2::SizeLimit - Because size does matter.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Apache2::SizeLimit(3) User Contributed Perl DocumentationApache2::SizeLimit(3)
 
 
@@ -18,11 +20,11 @@ NAME
 SYNOPSIS
 	   PerlLoadModule Apache2::SizeLimit
 
-	   <Perl>
-	    Apache2::SizeLimit->set_max_process_size(150_000);	 # Max size in KB
-	    Apache2::SizeLimit->set_min_shared_size(10_000);	 # Min share in KB
-	    Apache2::SizeLimit->set_max_unshared_size(120_000);  # Max unshared size in KB
-	   </Perl>
+	   &ltPerl&gt
+	    Apache2::SizeLimit-&gtset_max_process_size(150_000);	 # Max size in KB
+	    Apache2::SizeLimit-&gtset_min_shared_size(10_000);	 # Min share in KB
+	    Apache2::SizeLimit-&gtset_max_unshared_size(120_000);  # Max unshared size in KB
+	   &lt/Perl&gt
 
 	   PerlCleanupHandler Apache2::SizeLimit
 
@@ -57,17 +59,17 @@ API
        You can set set the size limits from a Perl module or script loaded by
        Apache by calling the appropriate class method on "Apache2::SizeLimit":
 
-       o   Apache2::SizeLimit->set_max_process_size($size)
+       o   Apache2::SizeLimit-&gtset_max_process_size($size)
 
 	   This sets the maximum size of the process, including both shared
 	   and unshared memory.
 
-       o   Apache2::SizeLimit->set_max_unshared_size($size)
+       o   Apache2::SizeLimit-&gtset_max_unshared_size($size)
 
 	   This sets the maximum amount of unshared memory the process can
 	   use.
 
-       o   Apache2::SizeLimit->set_min_shared_size($size)
+       o   Apache2::SizeLimit-&gtset_min_shared_size($size)
 
 	   This sets the minimum amount of shared memory the process must
 	   have.
@@ -85,7 +87,7 @@ API
 
 	   PerlCleanupHandler Apache2::SizeLimit
 
-       This will ensure that "Apache2::SizeLimit->handler()" is run for all
+       This will ensure that "Apache2::SizeLimit-&gthandler()" is run for all
        requests.
 
        If you want to combine this module with a cleanup handler of your own,
@@ -98,7 +100,7 @@ API
 
        If you have some cleanup code you need to run, but stacked handlers
        aren't appropriate for your setup, you can also explicitly call the
-       "Apache2::SizeLimit->handler()" function from your own cleanup handler:
+       "Apache2::SizeLimit-&gthandler()" function from your own cleanup handler:
 
 	   package My::CleanupHandler
 
@@ -109,10 +111,10 @@ API
 	       # request
 	       File::Temp::cleanup();
 
-	       return Apache2::SizeLimit->handler($r);
+	       return Apache2::SizeLimit-&gthandler($r);
 	   }
 
-       o   Apache2::SizeLimit->add_cleanup_handler($r)
+       o   Apache2::SizeLimit-&gtadd_cleanup_handler($r)
 
 	   You can call this method inside a request to run
 	   "Apache2::SizeLimit"'s "handler()" method for just that request.
@@ -124,7 +126,7 @@ API
        platforms (e.g. linux), you may not want to check the process size for
        every request.
 
-       o   Apache2::SizeLimit->set_check_interval($interval)
+       o   Apache2::SizeLimit-&gtset_check_interval($interval)
 
 	   Calling this causes "Apache2::SizeLimit" to only check the process
 	   size every $interval requests. If you want this to affect all
@@ -157,7 +159,7 @@ PER-PLATFORM BEHAVIOR
    linux
        For linux we read the process size out of /proc/self/statm. If you are
        worried about performance, you can consider using
-       "Apache2::SizeLimit->set_check_interval()" to reduce how often this
+       "Apache2::SizeLimit-&gtset_check_interval()" to reduce how often this
        read happens.
 
        As of linux 2.6, /proc/self/statm does not report the amount of memory
@@ -178,36 +180,36 @@ PER-PLATFORM BEHAVIOR
        must look at each page table entry of a process.  Further, on
        multiprocessor systems the access is synchronized with spinlocks.
        Again, you might consider using
-       "Apache2::SizeLimit->set_check_interval()".
+       "Apache2::SizeLimit-&gtset_check_interval()".
 
        Copy-on-write and Shared Memory
 
        The following example shows the effect of copy-on-write:
 
-	 <Perl>
+	 &ltPerl&gt
 	   require Apache2::SizeLimit;
 	   package X;
 	   use strict;
-	   use Apache2::Const -compile => qw(OK);
+	   use Apache2::Const -compile =&gt qw(OK);
 
 	   my $x = "a" x (1024*1024);
 
 	   sub handler {
 	     my $r = shift;
-	     my ($size, $shared) = $Apache2::SizeLimit->_check_size();
+	     my ($size, $shared) = $Apache2::SizeLimit-&gt_check_size();
 	     $x =~ tr/a/b/;
-	     my ($size2, $shared2) = $Apache2::SizeLimit->_check_size();
-	     $r->content_type('text/plain');
-	     $r->print("1: size=$size shared=$shared\n");
-	     $r->print("2: size=$size2 shared=$shared2\n");
+	     my ($size2, $shared2) = $Apache2::SizeLimit-&gt_check_size();
+	     $r-&gtcontent_type('text/plain');
+	     $r-&gtprint("1: size=$size shared=$shared\n");
+	     $r-&gtprint("2: size=$size2 shared=$shared2\n");
 	     return OK;
 	   }
-	 </Perl>
+	 &lt/Perl&gt
 
-	 <Location /X>
+	 &ltLocation /X&gt
 	   SetHandler modperl
 	   PerlResponseHandler X
-	 </Location>
+	 &lt/Location&gt
 
        The parent Apache process allocates memory for the string in $x. The
        "tr"-command then overwrites all "a" with "b" if the handler is called
@@ -217,7 +219,7 @@ PER-PLATFORM BEHAVIOR
 
        If /proc/self/smaps is available curl shows:
 
-	 r2@s93:~/work/mp2> curl http://localhost:8181/X
+	 r2@s93:~/work/mp2&gt curl http://localhost:8181/X
 	 1: size=13452 shared=7456
 	 2: size=13452 shared=6432
 
@@ -226,7 +228,7 @@ PER-PLATFORM BEHAVIOR
 
        Without /proc/self/smaps it says:
 
-	 r2@s93:~/work/mp2> curl http://localhost:8181/X
+	 r2@s93:~/work/mp2&gt curl http://localhost:8181/X
 	 1: size=13052 shared=3628
 	 2: size=13052 shared=3636
 
@@ -329,28 +331,28 @@ SUPPORT
 
        If you have a question or you want to submit a bug report or make a
        contribution, please do not email individual authors, but send an email
-       to the modperl <at> perl.apache.org mailing list. This list is
+       to the modperl &ltat&gt perl.apache.org mailing list. This list is
        moderated, so unless you are subscribed to it, your message will have
        to be approved first by a moderator. Therefore please allow some time
        (up to a few days) for your post to propagate to the list.
 
 AUTHOR
-       Doug Bagley <doug+modperl@bagley.org>, channeling Procrustes.
+       Doug Bagley &ltdoug+modperl@bagley.org&gt, channeling Procrustes.
 
-       Brian Moseley <ix@maz.org>: Solaris 2.6 support
+       Brian Moseley &ltix@maz.org&gt: Solaris 2.6 support
 
-       Doug Steinwand and Perrin Harkins <perrin@elem.com>: added support for
+       Doug Steinwand and Perrin Harkins &ltperrin@elem.com&gt: added support for
        shared memory and additional diagnostic info
 
-       Matt Phillips <mphillips@virage.com> and Mohamed Hendawi
-       <mhendawi@virage.com>: Win32 support
+       Matt Phillips &ltmphillips@virage.com&gt and Mohamed Hendawi
+       &ltmhendawi@virage.com&gt: Win32 support
 
-       Dave Rolsky <autarch@urth.org>, maintenance and fixes outside of
+       Dave Rolsky &ltautarch@urth.org&gt, maintenance and fixes outside of
        mod_perl tree (0.9+).
 
 
 
 perl v5.12.4			  2011-02-02		 Apache2::SizeLimit(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

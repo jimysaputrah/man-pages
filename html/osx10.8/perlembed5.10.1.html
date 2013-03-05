@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="PREAMBLE..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlembed - how to embed perl in your C program</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLEMBED(1)	       Perl Programmers Reference Guide 	  PERLEMBED(1)
 
 
@@ -153,8 +155,8 @@ DESCRIPTION
        portable version of miniperlmain.c containing the essentials of
        embedding:
 
-	   #include <EXTERN.h>		     /* from the Perl distribution     */
-	   #include <perl.h>		     /* from the Perl distribution     */
+	   #include &ltEXTERN.h&gt		     /* from the Perl distribution     */
+	   #include &ltperl.h&gt		     /* from the Perl distribution     */
 
 	   static PerlInterpreter *my_perl;  /***    The Perl interpreter    ***/
 
@@ -199,7 +201,7 @@ DESCRIPTION
 	   % interp
 	   print "Pretty Good Perl \n";
 	   print "10890 - 9801 is ", 10890 - 9801;
-	   <CTRL-D>
+	   &ltCTRL-D&gt
 	   Pretty Good Perl
 	   10890 - 9801 is 1089
 
@@ -219,8 +221,8 @@ DESCRIPTION
 
        That's shown below, in a program I'll call showtime.c.
 
-	   #include <EXTERN.h>
-	   #include <perl.h>
+	   #include &ltEXTERN.h&gt
+	   #include &ltperl.h&gt
 
 	   static PerlInterpreter *my_perl;
 
@@ -291,8 +293,8 @@ DESCRIPTION
        executes three Perl strings, extracting an "int" from the first, a
        "float" from the second, and a "char *" from the third.
 
-	  #include <EXTERN.h>
-	  #include <perl.h>
+	  #include &ltEXTERN.h&gt
+	  #include &ltperl.h&gt
 
 	  static PerlInterpreter *my_perl;
 
@@ -376,8 +378,8 @@ DESCRIPTION
        Here's a sample program, match.c, that uses all three (long lines have
        been wrapped here):
 
-	#include <EXTERN.h>
-	#include <perl.h>
+	#include &ltEXTERN.h&gt
+	#include &ltperl.h&gt
 
 	static PerlInterpreter *my_perl;
 
@@ -510,7 +512,7 @@ DESCRIPTION
 	    num_matches = matches(text, "m/(wi..)/g", &match_list);
 	    printf("matches: m/(wi..)/g found %d matches...\n", num_matches);
 
-	    for (i = 0; i < num_matches; i++)
+	    for (i = 0; i &lt num_matches; i++)
 	       printf("match: %s\n", SvPV_nolen(*av_fetch(match_list, i, FALSE)));
 	    printf("\n");
 
@@ -584,8 +586,8 @@ DESCRIPTION
        contains all the perlguts necessary to push the two arguments into
        expo() and to pop the return value out.	Take a deep breath...
 
-	   #include <EXTERN.h>
-	   #include <perl.h>
+	   #include &ltEXTERN.h&gt
+	   #include &ltperl.h&gt
 
 	   static PerlInterpreter *my_perl;
 
@@ -698,17 +700,17 @@ DESCRIPTION
 	    my $mtime = -M $filename;
 	    if(defined $Cache{$package}{mtime}
 	       &&
-	       $Cache{$package}{mtime} <= $mtime)
+	       $Cache{$package}{mtime} &lt= $mtime)
 	    {
 	       # we have compiled this subroutine already,
 	       # it has not been updated on disk, nothing left to do
-	       print STDERR "already compiled $package->handler\n";
+	       print STDERR "already compiled $package-&gthandler\n";
 	    }
 	    else {
 	       local *FH;
 	       open FH, $filename or die "open '$filename' $!";
 	       local($/) = undef;
-	       my $sub = <FH>;
+	       my $sub = &ltFH&gt;
 	       close FH;
 
 	       #wrap the code into a subroutine inside our unique package
@@ -724,13 +726,13 @@ DESCRIPTION
 	       $Cache{$package}{mtime} = $mtime unless $delete;
 	    }
 
-	    eval {$package->handler;};
+	    eval {$package-&gthandler;};
 	    die $@ if $@;
 
 	    delete_package($package) if $delete;
 
 	    #take a look if you want
-	    #print Devel::Symdump->rnew($package)->as_string, $/;
+	    #print Devel::Symdump-&gtrnew($package)-&gtas_string, $/;
 	}
 
 	1;
@@ -738,8 +740,8 @@ DESCRIPTION
 	__END__
 
 	/* persistent.c */
-	#include <EXTERN.h>
-	#include <perl.h>
+	#include &ltEXTERN.h&gt
+	#include &ltperl.h&gt
 
 	/* 1 = clean out filename's symbol table after each request, 0 = don't */
 	#ifndef DO_CLEAN
@@ -813,7 +815,7 @@ DESCRIPTION
 	Enter file name: test.pl
 	foo says: hello
 	Enter file name: test.pl
-	already compiled Embed::test_2epl->handler
+	already compiled Embed::test_2epl-&gthandler
 	foo says: hello
 	Enter file name: ^C
 
@@ -892,8 +894,8 @@ DESCRIPTION
 
        Let's give it a try:
 
-	#include <EXTERN.h>
-	#include <perl.h>
+	#include &ltEXTERN.h&gt
+	#include &ltperl.h&gt
 
 	/* we're going to embed two interpreters */
 	/* we're going to embed two interpreters */
@@ -1040,22 +1042,22 @@ Embedding Perl under Win32
        genmake, which generates a simple makefile to build a program from a
        single C source file.  It can be used like this:
 
-	C:\ExtUtils-Embed\eg> perl genmake interp.c
-	C:\ExtUtils-Embed\eg> nmake
-	C:\ExtUtils-Embed\eg> interp -e "print qq{I'm embedded in Win32!\n}"
+	C:\ExtUtils-Embed\eg&gt perl genmake interp.c
+	C:\ExtUtils-Embed\eg&gt nmake
+	C:\ExtUtils-Embed\eg&gt interp -e "print qq{I'm embedded in Win32!\n}"
 
        You may wish to use a more robust environment such as the Microsoft
        Developer Studio.  In this case, run this to generate perlxsi.c:
 
 	perl -MExtUtils::Embed -e xsinit
 
-       Create a new project and Insert -> Files into Project: perlxsi.c,
+       Create a new project and Insert -&gt Files into Project: perlxsi.c,
        perl.lib, and your own source files, e.g. interp.c.  Typically you'll
        find perl.lib in C:\perl\lib\CORE, if not, you should see the CORE
        directory relative to "perl -V:archlib".  The studio will also need
        this path so it knows where to find Perl include files.	This path can
-       be added via the Tools -> Options -> Directories menu.  Finally, select
-       Build -> Build interp.exe and you're ready to go.
+       be added via the Tools -&gt Options -&gt Directories menu.  Finally, select
+       Build -&gt Build interp.exe and you're ready to go.
 
 Hiding Perl_
        If you completely hide the short forms forms of the Perl public API,
@@ -1081,8 +1083,8 @@ MORAL
        as you wish.
 
 AUTHOR
-       Jon Orwant <orwant@media.mit.edu> and Doug MacEachern
-       <dougm@covalent.net>, with small contributions from Tim Bunce, Tom
+       Jon Orwant &ltorwant@media.mit.edu&gt and Doug MacEachern
+       &ltdougm@covalent.net&gt, with small contributions from Tim Bunce, Tom
        Christiansen, Guy Decoux, Hallvard Furuseth, Dov Grobgeld, and Ilya
        Zakharevich.
 
@@ -1117,6 +1119,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-04-22			  PERLEMBED(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

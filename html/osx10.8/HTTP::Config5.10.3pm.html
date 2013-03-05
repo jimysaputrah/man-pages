@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="An "HTTP::Config" object is a list of entries that can be matched..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>HTTP::Config - Configuration for request and response objects</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 HTTP::Config(3)       User Contributed Perl Documentation      HTTP::Config(3)
 
 
@@ -17,14 +19,14 @@ NAME
 
 SYNOPSIS
 	use HTTP::Config;
-	my $c = HTTP::Config->new;
-	$c->add(m_domain => ".example.com", m_scheme => "http", verbose => 1);
+	my $c = HTTP::Config-&gtnew;
+	$c-&gtadd(m_domain =&gt ".example.com", m_scheme =&gt "http", verbose =&gt 1);
 
 	use HTTP::Request;
-	my $request = HTTP::Request->new(GET => "http://www.example.com");
+	my $request = HTTP::Request-&gtnew(GET =&gt "http://www.example.com");
 
-	if (my @m = $c->matching($request)) {
-	   print "Yadayada\n" if $m[0]->{verbose};
+	if (my @m = $c-&gtmatching($request)) {
+	   print "Yadayada\n" if $m[0]-&gt{verbose};
 	}
 
 DESCRIPTION
@@ -39,31 +41,31 @@ DESCRIPTION
 
        The following methods are provided:
 
-       $conf = HTTP::Config->new
+       $conf = HTTP::Config-&gtnew
 	   Constructs a new empty "HTTP::Config" object and returns it.
 
-       $conf->entries
+       $conf-&gtentries
 	   Returns the list of entries in the configuration object.  In scalar
 	   context returns the number of entries.
 
-       $conf->empty
+       $conf-&gtempty
 	   Return true if there are no entries in the configuration object.
-	   This is just a shorthand for "not $conf->entries".
+	   This is just a shorthand for "not $conf-&gtentries".
 
-       $conf->add( %matchspec, %other )
-       $conf->add( \%entry )
+       $conf-&gtadd( %matchspec, %other )
+       $conf-&gtadd( \%entry )
 	   Adds a new entry to the configuration.  You can either pass
 	   separate key/value pairs or a hash reference.
 
-       $conf->remove( %spec )
+       $conf-&gtremove( %spec )
 	   Removes (and returns) the entries that have matches for all the
 	   key/value pairs in %spec.  If %spec is empty this will match all
 	   entries; so it will empty the configuation object.
 
-       $conf->matching( $uri, $request, $response )
-       $conf->matching( $uri )
-       $conf->matching( $request )
-       $conf->matching( $response )
+       $conf-&gtmatching( $uri, $request, $response )
+       $conf-&gtmatching( $uri )
+       $conf-&gtmatching( $request )
+       $conf-&gtmatching( $response )
 	   Returns the entries that match the given $uri, $request and
 	   $response triplet.
 
@@ -77,9 +79,9 @@ DESCRIPTION
 	   scalar context returns the most specific match or "undef" in none
 	   match.
 
-       $conf->add_item( $item, %matchspec )
-       $conf->remove_items( %spec )
-       $conf->matching_items( $uri, $request, $response )
+       $conf-&gtadd_item( $item, %matchspec )
+       $conf-&gtremove_items( %spec )
+       $conf-&gtmatching_items( $uri, $request, $response )
 	   Wrappers that hides the entries themselves.
 
    Matching
@@ -90,75 +92,75 @@ DESCRIPTION
        Entries that require match against a response object attribute will
        never match unless a response object was provided.
 
-       m_scheme => $scheme
+       m_scheme =&gt $scheme
 	   Matches if the URI uses the specified scheme; e.g. "http".
 
-       m_secure => $bool
+       m_secure =&gt $bool
 	   If $bool is TRUE; matches if the URI uses a secure scheme.  If
 	   $bool is FALSE; matches if the URI does not use a secure scheme.
 	   An example of a secure scheme is "https".
 
-       m_host_port => "$hostname:$port"
+       m_host_port =&gt "$hostname:$port"
 	   Matches if the URI's host_port method return the specified value.
 
-       m_host => $hostname
+       m_host =&gt $hostname
 	   Matches if the URI's host method returns the specified value.
 
-       m_port => $port
+       m_port =&gt $port
 	   Matches if the URI's port method returns the specified value.
 
-       m_domain => ".$domain"
+       m_domain =&gt ".$domain"
 	   Matches if the URI's host method return a value that within the
 	   given domain.  The hostname "www.example.com" will for instance
 	   match the domain ".com".
 
-       m_path => $path
+       m_path =&gt $path
 	   Matches if the URI's path method returns the specified value.
 
-       m_path_prefix => $path
+       m_path_prefix =&gt $path
 	   Matches if the URI's path is the specified path or has the
 	   specified path as prefix.
 
-       m_path_match => $Regexp
+       m_path_match =&gt $Regexp
 	   Matches if the regular expression matches the URI's path.  Eg.
 	   qr/\.html$/.
 
-       m_method => $method
+       m_method =&gt $method
 	   Matches if the request method matches the specified value. Eg.
 	   "GET" or "POST".
 
-       m_code => $digit
-       m_code => $status_code
+       m_code =&gt $digit
+       m_code =&gt $status_code
 	   Matches if the response status code matches.  If a single digit is
 	   specified; matches for all response status codes beginning with
 	   that digit.
 
-       m_proxy => $url
+       m_proxy =&gt $url
 	   Matches if the request is to be sent to the given Proxy server.
 
-       m_media_type => "*/*"
-       m_media_type => "text/*"
-       m_media_type => "html"
-       m_media_type => "xhtml"
-       m_media_type => "text/html"
+       m_media_type =&gt "*/*"
+       m_media_type =&gt "text/*"
+       m_media_type =&gt "html"
+       m_media_type =&gt "xhtml"
+       m_media_type =&gt "text/html"
 	   Matches if the response media type matches.
 
-	   With a value of "html" matches if $response->content_is_html
+	   With a value of "html" matches if $response-&gtcontent_is_html
 	   returns TRUE.  With a value of "xhtml" matches if
-	   $response->content_is_xhtml returns TRUE.
+	   $response-&gtcontent_is_xhtml returns TRUE.
 
-       m_uri__$method => undef
+       m_uri__$method =&gt undef
 	   Matches if the URI object provides the method.
 
-       m_uri__$method => $string
+       m_uri__$method =&gt $string
 	   Matches if the URI's $method method returns the given value.
 
-       m_header__$field => $string
+       m_header__$field =&gt $string
 	   Matches if either the request or the response have a header $field
 	   with the given value.
 
-       m_response_attr__$key => undef
-       m_response_attr__$key => $string
+       m_response_attr__$key =&gt undef
+       m_response_attr__$key =&gt $string
 	   Matches if the response object has that key, or the entry has the
 	   given value.
 
@@ -174,6 +176,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2010-05-05		       HTTP::Config(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

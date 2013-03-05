@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The "Encode" module provides the interfaces between Perl's strings and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Encode - character encodings</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Encode(3pm)	       Perl Programmers Reference Guide 	   Encode(3pm)
 
 
@@ -121,7 +123,7 @@ PERL ENCODING API
 	   $utf8 = do{
 	     $obj = find_encoding($name);
 	     croak qq(encoding "$name" not found) unless ref $obj;
-	     $obj->decode($bytes)
+	     $obj-&gtdecode($bytes)
 	   };
 
 	 with more error checking.
@@ -129,16 +131,16 @@ PERL ENCODING API
 	 Therefore you can save time by reusing this object as follows;
 
 	   my $enc = find_encoding("iso-8859-1");
-	   while(<>){
-	      my $utf8 = $enc->decode($_);
+	   while(&lt&gt){
+	      my $utf8 = $enc-&gtdecode($_);
 	      # and do someting with $utf8;
 	   }
 
-	 Besides "->decode" and "->encode", other methods are available as
-	 well.	For instance, "-> name" returns the canonical name of the
+	 Besides "-&gtdecode" and "-&gtencode", other methods are available as
+	 well.	For instance, "-&gt name" returns the canonical name of the
 	 encoding object.
 
-	   find_encoding("latin1")->name; # iso-8859-1
+	   find_encoding("latin1")-&gtname; # iso-8859-1
 
 	 See Encode::Encoding for details.
 
@@ -201,21 +203,21 @@ PERL ENCODING API
 
    Listing available encodings
 	 use Encode;
-	 @list = Encode->encodings();
+	 @list = Encode-&gtencodings();
 
        Returns a list of the canonical names of the available encodings that
        are loaded.  To get a list of all available encodings including the
        ones that are not loaded yet, say
 
-	 @all_encodings = Encode->encodings(":all");
+	 @all_encodings = Encode-&gtencodings(":all");
 
        Or you can give the name of a specific module.
 
-	 @with_jp = Encode->encodings("Encode::JP");
+	 @with_jp = Encode-&gtencodings("Encode::JP");
 
        When "::" is not in the name, "Encode::" is assumed.
 
-	 @ebcdic = Encode->encodings("EBCDIC");
+	 @ebcdic = Encode-&gtencodings("EBCDIC");
 
        To find out in detail which encodings are supported by this package,
        see Encode::Supported.
@@ -225,7 +227,7 @@ PERL ENCODING API
 
 	 use Encode;
 	 use Encode::Alias;
-	 define_alias(newName => ENCODING);
+	 define_alias(newName =&gt ENCODING);
 
        After that, newName can be used as an alias for ENCODING.  ENCODING may
        be either the name of an encoding or an encoding object
@@ -253,8 +255,8 @@ PERL ENCODING API
 
 	 use Encode;
 	 my $enc = find_encoding('UTF-8');
-	 warn $enc->name;      # utf-8-strict
-	 warn $enc->mime_name; # UTF-8
+	 warn $enc-&gtname;      # utf-8-strict
+	 warn $enc-&gtmime_name; # UTF-8
 
        See also:  Encode::Encoding
 
@@ -264,14 +266,14 @@ Encoding via PerlIO
        following two examples are totally identical in their functionality.
 
 	 # via PerlIO
-	 open my $in,  "<:encoding(shiftjis)", $infile	or die;
-	 open my $out, ">:encoding(euc-jp)",   $outfile or die;
-	 while(<$in>){ print $out $_; }
+	 open my $in,  "&lt:encoding(shiftjis)", $infile	or die;
+	 open my $out, "&gt:encoding(euc-jp)",   $outfile or die;
+	 while(&lt$in&gt){ print $out $_; }
 
 	 # via from_to
-	 open my $in,  "<", $infile  or die;
-	 open my $out, ">", $outfile or die;
-	 while(<$in>){
+	 open my $in,  "&lt", $infile  or die;
+	 open my $out, "&gt", $outfile or die;
+	 while(&lt$in&gt){
 	   from_to($_, "shiftjis", "euc-jp", 1);
 	   print $out $_;
 	 }
@@ -281,7 +283,7 @@ Encoding via PerlIO
        "perlio_ok" method.
 
 	 Encode::perlio_ok("hz");	      # False
-	 find_encoding("euc-cn")->perlio_ok;  # True where PerlIO is available
+	 find_encoding("euc-cn")-&gtperlio_ok;  # True where PerlIO is available
 
 	 use Encode qw(perlio_ok);	      # exported upon request
 	 perlio_ok("euc-jp")
@@ -305,7 +307,7 @@ Handling Malformed Data
 
        CHECK = Encode::FB_DEFAULT ( == 0)
 	 If CHECK is 0, (en|de)code will put a substitution character in place
-	 of a malformed character.  When you encode, <subchar> will be used.
+	 of a malformed character.  When you encode, &ltsubchar&gt will be used.
 	 When you decode the code point 0xFFFD is used.  If the data is
 	 supposed to be UTF-8, an optional lexical warning (category utf8) is
 	 given.
@@ -379,9 +381,9 @@ Handling Malformed Data
        ord value of unmapped caharacter as an argument and returns a string
        that represents the fallback character.	For instance,
 
-	 $ascii = encode("ascii", $utf8, sub{ sprintf "<U+%04X>", shift });
+	 $ascii = encode("ascii", $utf8, sub{ sprintf "&ltU+%04X&gt", shift });
 
-       Acts like FB_PERLQQ but <U+XXXX> is used instead of \x{XXXX}.
+       Acts like FB_PERLQQ but &ltU+XXXX&gt is used instead of \x{XXXX}.
 
 Defining Encodings
        To define a new encoding, use:
@@ -491,11 +493,11 @@ UTF-8 vs. utf8 vs. UTF8
 
        Now that is overruled by Larry Wall himself.
 
-	 From: Larry Wall <larry@wall.org>
+	 From: Larry Wall &ltlarry@wall.org&gt
 	 Date: December 04, 2004 11:51:58 JST
 	 To: perl-unicode@perl.org
 	 Subject: Re: Make Encode.pm support the real UTF-8
-	 Message-Id: <20041204025158.GA28754@wall.org>
+	 Message-Id: &lt20041204025158.GA28754@wall.org&gt
 
 	 On Fri, Dec 03, 2004 at 10:12:12PM +0000, Tim Bunce wrote:
 	 : I've no problem with 'utf8' being perl's unrestricted uft8 encoding,
@@ -521,10 +523,10 @@ UTF-8 vs. utf8 vs. UTF8
        Yes, the hyphen between "UTF" and "8" is important.  Without it Encode
        goes "liberal"
 
-	 find_encoding("UTF-8")->name # is 'utf-8-strict'
-	 find_encoding("utf-8")->name # ditto. names are case insensitive
-	 find_encoding("utf_8")->name  # ditto. "_" are treated as "-"
-	 find_encoding("UTF8")->name  # is 'utf8'.
+	 find_encoding("UTF-8")-&gtname # is 'utf-8-strict'
+	 find_encoding("utf-8")-&gtname # ditto. names are case insensitive
+	 find_encoding("utf_8")-&gtname  # ditto. "_" are treated as "-"
+	 find_encoding("UTF8")-&gtname  # is 'utf8'.
 
        The UTF8 flag is internally called UTF8, without a hyphen. It indicates
        whether a string is internally encoded as utf8, also without a hypen.
@@ -532,12 +534,12 @@ UTF-8 vs. utf8 vs. UTF8
 SEE ALSO
        Encode::Encoding, Encode::Supported, Encode::PerlIO, encoding,
        perlebcdic, "open" in perlfunc, perlunicode, perluniintro, perlunifaq,
-       perlunitut utf8, the Perl Unicode Mailing List <perl-unicode@perl.org>
+       perlunitut utf8, the Perl Unicode Mailing List &ltperl-unicode@perl.org&gt
 
 MAINTAINER
        This project was originated by Nick Ing-Simmons and later maintained by
-       Dan Kogai <dankogai@dan.co.jp>.	See AUTHORS for a full list of people
-       involved.  For any questions, use <perl-unicode@perl.org> so we can all
+       Dan Kogai &ltdankogai@dan.co.jp&gt.	See AUTHORS for a full list of people
+       involved.  For any questions, use &ltperl-unicode@perl.org&gt so we can all
        share.
 
        While Dan Kogai retains the copyright as a maintainer, the credit
@@ -545,7 +547,7 @@ MAINTAINER
        codes.
 
 COPYRIGHT
-       Copyright 2002-2006 Dan Kogai <dankogai@dan.co.jp>
+       Copyright 2002-2006 Dan Kogai &ltdankogai@dan.co.jp&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -553,6 +555,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-07-13			   Encode(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

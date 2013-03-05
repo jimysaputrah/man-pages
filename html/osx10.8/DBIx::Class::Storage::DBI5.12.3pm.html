@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This class represents the connection to an RDBMS via DBI.  See..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Storage::DBI - DBI storage handler</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::Storage::User3Contributed Perl DocumeDBIx::Class::Storage::DBI(3)
 
 
@@ -16,20 +18,20 @@ NAME
        DBIx::Class::Storage::DBI - DBI storage handler
 
 SYNOPSIS
-	 my $schema = MySchema->connect('dbi:SQLite:my.db');
+	 my $schema = MySchema-&gtconnect('dbi:SQLite:my.db');
 
-	 $schema->storage->debug(1);
+	 $schema-&gtstorage-&gtdebug(1);
 
-	 my @stuff = $schema->storage->dbh_do(
+	 my @stuff = $schema-&gtstorage-&gtdbh_do(
 	   sub {
 	     my ($storage, $dbh, @args) = @_;
-	     $dbh->do("DROP TABLE authors");
+	     $dbh-&gtdo("DROP TABLE authors");
 	   },
 	   @column_list
 	 );
 
-	 $schema->resultset('Book')->search({
-	    written_on => $schema->storage->datetime_parser->format_datetime(DateTime->now)
+	 $schema-&gtresultset('Book')-&gtsearch({
+	    written_on =&gt $schema-&gtstorage-&gtdatetime_parser-&gtformat_datetime(DateTime-&gtnow)
 	 });
 
 DESCRIPTION
@@ -55,21 +57,21 @@ METHODS
 	   handle optionally followed by extra attributes recognized by
 	   DBIx::Class:
 
-	     $connect_info_args = [ sub { DBI->connect (...) }, \%extra_attributes? ];
+	     $connect_info_args = [ sub { DBI-&gtconnect (...) }, \%extra_attributes? ];
 
        o   A single hashref with all the attributes and the dsn/user/password
 	   mixed together:
 
 	     $connect_info_args = [{
-	       dsn => $dsn,
-	       user => $user,
-	       password => $pass,
+	       dsn =&gt $dsn,
+	       user =&gt $user,
+	       password =&gt $pass,
 	       %dbi_attributes,
 	       %extra_attributes,
 	     }];
 
 	     $connect_info_args = [{
-	       dbh_maker => sub { DBI->connect (...) },
+	       dbh_maker =&gt sub { DBI-&gtconnect (...) },
 	       %dbi_attributes,
 	       %extra_attributes,
 	     }];
@@ -77,15 +79,15 @@ METHODS
 	   This is particularly useful for Catalyst based applications,
 	   allowing the following config (Config::General style):
 
-	     <Model::DB>
+	     &ltModel::DB&gt
 	       schema_class   App::DB
-	       <connect_info>
+	       &ltconnect_info&gt
 		 dsn	      dbi:mysql:database=test
 		 user	      testuser
 		 password     TestPass
 		 AutoCommit   1
-	       </connect_info>
-	     </Model::DB>
+	       &lt/connect_info&gt
+	     &lt/Model::DB&gt
 
 	   The "dsn"/"user"/"password" combination can be substituted by the
 	   "dbh_maker" key whose value is a coderef that returns a connected
@@ -135,11 +137,11 @@ METHODS
 	   A more generalized form of "on_connect_do" that calls the specified
 	   "connect_call_METHOD" methods in your storage driver.
 
-	     on_connect_do => 'select 1'
+	     on_connect_do =&gt 'select 1'
 
 	   is equivalent to:
 
-	     on_connect_call => [ [ do_sql => 'select 1' ] ]
+	     on_connect_call =&gt [ [ do_sql =&gt 'select 1' ] ]
 
 	   Its values may contain:
 
@@ -147,7 +149,7 @@ METHODS
 	       Will call the "connect_call_METHOD" method.
 
 	   a code reference
-	       Will execute "$code->($storage)"
+	       Will execute "$code-&gt($storage)"
 
 	   an array reference
 	       Each value can be a method name or code reference.
@@ -175,7 +177,7 @@ METHODS
 		   values.
 
 	       a code reference
-		   Will execute "$code->($storage)" and execute the return
+		   Will execute "$code-&gt($storage)" and execute the return
 		   array refs as above.
 
 	   datetime_setup
@@ -219,8 +221,8 @@ METHODS
 	   of length 2 in which case the table/column name is placed between
 	   the elements.
 
-	   For example under MySQL you should use "quote_char => '`'", and for
-	   SQL Server you should use "quote_char => [qw/[ ]/]".
+	   For example under MySQL you should use "quote_char =&gt '`'", and for
+	   SQL Server you should use "quote_char =&gt [qw/[ ]/]".
 
        name_sep
 	   This parameter is only useful in conjunction with "quote_char", and
@@ -258,60 +260,60 @@ METHODS
        DBIx::Class::Schema
 
 	 # Simple SQLite connection
-	 ->connect_info([ 'dbi:SQLite:./foo.db' ]);
+	 -&gtconnect_info([ 'dbi:SQLite:./foo.db' ]);
 
 	 # Connect via subref
-	 ->connect_info([ sub { DBI->connect(...) } ]);
+	 -&gtconnect_info([ sub { DBI-&gtconnect(...) } ]);
 
 	 # Connect via subref in hashref
-	 ->connect_info([{
-	   dbh_maker => sub { DBI->connect(...) },
-	   on_connect_do => 'alter session ...',
+	 -&gtconnect_info([{
+	   dbh_maker =&gt sub { DBI-&gtconnect(...) },
+	   on_connect_do =&gt 'alter session ...',
 	 }]);
 
 	 # A bit more complicated
-	 ->connect_info(
+	 -&gtconnect_info(
 	   [
 	     'dbi:Pg:dbname=foo',
 	     'postgres',
 	     'my_pg_password',
-	     { AutoCommit => 1 },
-	     { quote_char => q{"} },
+	     { AutoCommit =&gt 1 },
+	     { quote_char =&gt q{"} },
 	   ]
 	 );
 
 	 # Equivalent to the previous example
-	 ->connect_info(
+	 -&gtconnect_info(
 	   [
 	     'dbi:Pg:dbname=foo',
 	     'postgres',
 	     'my_pg_password',
-	     { AutoCommit => 1, quote_char => q{"}, name_sep => q{.} },
+	     { AutoCommit =&gt 1, quote_char =&gt q{"}, name_sep =&gt q{.} },
 	   ]
 	 );
 
 	 # Same, but with hashref as argument
 	 # See parse_connect_info for explanation
-	 ->connect_info(
+	 -&gtconnect_info(
 	   [{
-	     dsn	 => 'dbi:Pg:dbname=foo',
-	     user	 => 'postgres',
-	     password	 => 'my_pg_password',
-	     AutoCommit  => 1,
-	     quote_char  => q{"},
-	     name_sep	 => q{.},
+	     dsn	 =&gt 'dbi:Pg:dbname=foo',
+	     user	 =&gt 'postgres',
+	     password	 =&gt 'my_pg_password',
+	     AutoCommit  =&gt 1,
+	     quote_char  =&gt q{"},
+	     name_sep	 =&gt q{.},
 	   }]
 	 );
 
 	 # Subref + DBIx::Class-specific connection options
-	 ->connect_info(
+	 -&gtconnect_info(
 	   [
-	     sub { DBI->connect(...) },
+	     sub { DBI-&gtconnect(...) },
 	     {
-		 quote_char => q{`},
-		 name_sep => q{@},
-		 on_connect_do => ['SET search_path TO myschema,otherschema,public'],
-		 disable_sth_caching => 1,
+		 quote_char =&gt q{`},
+		 name_sep =&gt q{@},
+		 on_connect_do =&gt ['SET search_path TO myschema,otherschema,public'],
+		 disable_sth_caching =&gt 1,
 	     },
 	   ]
 	 );
@@ -332,7 +334,7 @@ METHODS
        called on and a database handle to use.	Any additional arguments will
        be passed verbatim to the called subref as arguments 2 and onwards.
 
-       Using this (instead of $self->_dbh or $self->dbh) ensures correct
+       Using this (instead of $self-&gt_dbh or $self-&gtdbh) ensures correct
        exception handling and reconnection (or failover in future subclasses).
 
        Your subref should have no side-effects outside of the database, as
@@ -341,11 +343,11 @@ METHODS
 
        Example:
 
-	 my @stuff = $schema->storage->dbh_do(
+	 my @stuff = $schema-&gtstorage-&gtdbh_do(
 	   sub {
 	     my ($storage, $dbh, @cols) = @_;
 	     my $cols = join(q{, }, @cols);
-	     $dbh->selectrow_array("SELECT $cols FROM foo");
+	     $dbh-&gtselectrow_array("SELECT $cols FROM foo");
 	   },
 	   @column_list
 	 );
@@ -418,7 +420,7 @@ METHODS
 
    bind_attribute_by_data_type
        Given a datatype from column info, returns a database specific bind
-       attribute for "$dbh->bind_param($val,$attribute)" or nothing if we will
+       attribute for "$dbh-&gtbind_param($val,$attribute)" or nothing if we will
        let the database planner just handle it.
 
        Generally only needed for special case column types, like bytea in
@@ -451,7 +453,7 @@ METHODS
 
        See "METHODS" in SQL::Translator for a list of values for
        "\%sqlt_args".  The most common value for this would be "{
-       add_drop_table => 1 }" to have the SQL produced include a "DROP TABLE"
+       add_drop_table =&gt 1 }" to have the SQL produced include a "DROP TABLE"
        statement for each table created. For quoting purposes supply
        "quote_table_names" and "quote_field_names".
 
@@ -459,18 +461,18 @@ METHODS
        assumed:
 
        databases  - ['MySQL', 'SQLite', 'PostgreSQL']
-       version	  - $schema->schema_version
+       version	  - $schema-&gtschema_version
        directory  - './'
-       preversion - <none>
+       preversion - &ltnone&gt
 
        By default, "\%sqlt_args" will have
 
-	{ add_drop_table => 1, ignore_constraint_names => 1, ignore_index_names => 1 }
+	{ add_drop_table =&gt 1, ignore_constraint_names =&gt 1, ignore_index_names =&gt 1 }
 
        merged with the hash passed in. To disable any of those features, pass
        in a hashref like the following
 
-	{ ignore_constraint_names => 0, # ... other options }
+	{ ignore_constraint_names =&gt 0, # ... other options }
 
        WARNING: You are strongly advised to check all SQL files created,
        before applying them.
@@ -525,28 +527,28 @@ METHODS
        This hook is to allow specific DBIx::Class::Storage drivers to change
        the way these aliases are named.
 
-       The default behavior is ""$relname_$join_count" if $join_count > 1",
+       The default behavior is ""$relname_$join_count" if $join_count &gt 1",
        otherwise "$relname".
 
 USAGE NOTES
    DBIx::Class and AutoCommit
        DBIx::Class can do some wonderful magic with handling exceptions,
-       disconnections, and transactions when you use "AutoCommit => 1" (the
+       disconnections, and transactions when you use "AutoCommit =&gt 1" (the
        default) combined with txn_do for transaction support.
 
-       If you set "AutoCommit => 0" in your connect info, then you are always
+       If you set "AutoCommit =&gt 0" in your connect info, then you are always
        in an assumed transaction between commits, and you're telling us you'd
        like to manage that manually.  A lot of the magic protections offered
        by this module will go away.  We can't protect you from exceptions due
        to database disconnects because we don't know anything about how to
        restart your transactions.  You're on your own for handling all sorts
-       of exceptional cases if you choose the "AutoCommit => 0" path, just as
+       of exceptional cases if you choose the "AutoCommit =&gt 0" path, just as
        you would be with raw DBI.
 
 AUTHORS
-       Matt S. Trout <mst@shadowcatsystems.co.uk>
+       Matt S. Trout &ltmst@shadowcatsystems.co.uk&gt
 
-       Andy Grundman <andy@hybridized.org>
+       Andy Grundman &ltandy@hybridized.org&gt
 
 LICENSE
        You may distribute this code under the same terms as Perl itself.
@@ -554,6 +556,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-07-27	  DBIx::Class::Storage::DBI(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

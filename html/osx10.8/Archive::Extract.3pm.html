@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Archive::Extract is a generic archive extraction mechanism...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Archive::Extract - A generic archive extracting mechanism</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Archive::Extract(3pm)  Perl Programmers Reference Guide  Archive::Extract(3pm)
 
 
@@ -19,42 +21,42 @@ SYNOPSIS
 	   use Archive::Extract;
 
 	   ### build an Archive::Extract object ###
-	   my $ae = Archive::Extract->new( archive => 'foo.tgz' );
+	   my $ae = Archive::Extract-&gtnew( archive =&gt 'foo.tgz' );
 
 	   ### extract to cwd() ###
-	   my $ok = $ae->extract;
+	   my $ok = $ae-&gtextract;
 
 	   ### extract to /tmp ###
-	   my $ok = $ae->extract( to => '/tmp' );
+	   my $ok = $ae-&gtextract( to =&gt '/tmp' );
 
 	   ### what if something went wrong?
-	   my $ok = $ae->extract or die $ae->error;
+	   my $ok = $ae-&gtextract or die $ae-&gterror;
 
 	   ### files from the archive ###
-	   my $files   = $ae->files;
+	   my $files   = $ae-&gtfiles;
 
 	   ### dir that was extracted to ###
-	   my $outdir  = $ae->extract_path;
+	   my $outdir  = $ae-&gtextract_path;
 
 
 	   ### quick check methods ###
-	   $ae->is_tar	   # is it a .tar file?
-	   $ae->is_tgz	   # is it a .tar.gz or .tgz file?
-	   $ae->is_gz;	   # is it a .gz file?
-	   $ae->is_zip;    # is it a .zip file?
-	   $ae->is_bz2;    # is it a .bz2 file?
-	   $ae->is_tbz;    # is it a .tar.bz2 or .tbz file?
-	   $ae->is_lzma;   # is it a .lzma file?
+	   $ae-&gtis_tar	   # is it a .tar file?
+	   $ae-&gtis_tgz	   # is it a .tar.gz or .tgz file?
+	   $ae-&gtis_gz;	   # is it a .gz file?
+	   $ae-&gtis_zip;    # is it a .zip file?
+	   $ae-&gtis_bz2;    # is it a .bz2 file?
+	   $ae-&gtis_tbz;    # is it a .tar.bz2 or .tbz file?
+	   $ae-&gtis_lzma;   # is it a .lzma file?
 
 	   ### absolute path to the archive you provided ###
-	   $ae->archive;
+	   $ae-&gtarchive;
 
 	   ### commandline tools, if found ###
-	   $ae->bin_tar     # path to /bin/tar, if found
-	   $ae->bin_gzip    # path to /bin/gzip, if found
-	   $ae->bin_unzip   # path to /bin/unzip, if found
-	   $ae->bin_bunzip2 # path to /bin/bunzip2 if found
-	   $ae->bin_unlzma  # path to /bin/unlzma if found
+	   $ae-&gtbin_tar     # path to /bin/tar, if found
+	   $ae-&gtbin_gzip    # path to /bin/gzip, if found
+	   $ae-&gtbin_unzip   # path to /bin/unzip, if found
+	   $ae-&gtbin_bunzip2 # path to /bin/bunzip2 if found
+	   $ae-&gtbin_unlzma  # path to /bin/unlzma if found
 
 DESCRIPTION
        Archive::Extract is a generic archive extraction mechanism.
@@ -67,7 +69,7 @@ DESCRIPTION
        See the "HOW IT WORKS" section further down for details.
 
 METHODS
-   $ae = Archive::Extract->new(archive => '/path/to/archive',[type => TYPE])
+   $ae = Archive::Extract-&gtnew(archive =&gt '/path/to/archive',[type =&gt TYPE])
        Creates a new "Archive::Extract" object based on the archive file you
        passed it. Automatically determines the type of archive based on the
        extension, but you can override that by explicitly providing the "type"
@@ -102,7 +104,7 @@ METHODS
 
        Returns a "Archive::Extract" object on success, or false on failure.
 
-   $ae->extract( [to => '/output/path'] )
+   $ae-&gtextract( [to =&gt '/output/path'] )
        Extracts the archive represented by the "Archive::Extract" object to
        the path of your choice as specified by the "to" argument. Defaults to
        "cwd()".
@@ -123,82 +125,82 @@ METHODS
 
        On success, it will also set the follow attributes in the object:
 
-       $ae->extract_path
+       $ae-&gtextract_path
 	   This is the directory that the files where extracted to.
 
-       $ae->files
+       $ae-&gtfiles
 	   This is an array ref with the paths of all the files in the
 	   archive, relative to the "to" argument you specified.  To get the
 	   full path to an extracted file, you would use:
 
-	       File::Spec->catfile( $to, $ae->files->[0] );
+	       File::Spec-&gtcatfile( $to, $ae-&gtfiles-&gt[0] );
 
 	   Note that all files from a tar archive will be in unix format, as
 	   per the tar specification.
 
 ACCESSORS
-   $ae->error([BOOL])
+   $ae-&gterror([BOOL])
        Returns the last encountered error as string.  Pass it a true value to
        get the "Carp::longmess()" output instead.
 
-   $ae->extract_path
+   $ae-&gtextract_path
        This is the directory the archive got extracted to.  See "extract()"
        for details.
 
-   $ae->files
+   $ae-&gtfiles
        This is an array ref holding all the paths from the archive.  See
        "extract()" for details.
 
-   $ae->archive
+   $ae-&gtarchive
        This is the full path to the archive file represented by this
        "Archive::Extract" object.
 
-   $ae->type
+   $ae-&gttype
        This is the type of archive represented by this "Archive::Extract"
        object. See accessors below for an easier way to use this.  See the
        "new()" method for details.
 
-   $ae->types
+   $ae-&gttypes
        Returns a list of all known "types" for "Archive::Extract"'s "new"
        method.
 
-   $ae->is_tgz
+   $ae-&gtis_tgz
        Returns true if the file is of type ".tar.gz".  See the "new()" method
        for details.
 
-   $ae->is_tar
+   $ae-&gtis_tar
        Returns true if the file is of type ".tar".  See the "new()" method for
        details.
 
-   $ae->is_gz
+   $ae-&gtis_gz
        Returns true if the file is of type ".gz".  See the "new()" method for
        details.
 
-   $ae->is_Z
+   $ae-&gtis_Z
        Returns true if the file is of type ".Z".  See the "new()" method for
        details.
 
-   $ae->is_zip
+   $ae-&gtis_zip
        Returns true if the file is of type ".zip".  See the "new()" method for
        details.
 
-   $ae->is_lzma
+   $ae-&gtis_lzma
        Returns true if the file is of type ".lzma".  See the "new()" method
        for details.
 
-   $ae->bin_tar
+   $ae-&gtbin_tar
        Returns the full path to your tar binary, if found.
 
-   $ae->bin_gzip
+   $ae-&gtbin_gzip
        Returns the full path to your gzip binary, if found
 
-   $ae->bin_unzip
+   $ae-&gtbin_unzip
        Returns the full path to your unzip binary, if found
 
-   $ae->bin_unlzma
+   $ae-&gtbin_unlzma
        Returns the full path to your unlzma binary, if found
 
-   $bool = $ae->have_old_bunzip2
+   $bool = $ae-&gthave_old_bunzip2
        Older versions of "/bin/bunzip2", from before the "bunzip2 1.0"
        release, require all archive names to end in ".bz2" or it will not
        extract them. This method checks if you have a recent version of
@@ -281,10 +283,10 @@ TODO / CAVEATS
 
 BUG REPORTS
        Please report bugs or other issues to
-       <bug-archive-extract@rt.cpan.org<gt>.
+       &ltbug-archive-extract@rt.cpan.org&ltgt&gt.
 
 AUTHOR
-       This module by Jos Boumans <kane@cpan.org>.
+       This module by Jos Boumans &ltkane@cpan.org&gt.
 
 COPYRIGHT
        This library is free software; you may redistribute and/or modify it
@@ -293,6 +295,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-06-07		 Archive::Extract(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

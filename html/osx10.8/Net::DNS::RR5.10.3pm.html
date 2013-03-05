@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Net::DNS::RR" is the base class for DNS Resource Record (RR) objects...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::DNS::RR - DNS Resource Record class</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::DNS::RR(3)       User Contributed Perl Documentation      Net::DNS::RR(3)
 
 
@@ -29,15 +31,15 @@ METHODS
        warning message and "Net::DNS::RR" will return "undef" to the caller.
 
    new (from string)
-	$a     = Net::DNS::RR->new("foo.example.com. 86400 A 10.1.2.3");
-	$mx    = Net::DNS::RR->new("example.com. 7200 MX 10 mailhost.example.com.");
-	$cname = Net::DNS::RR->new("www.example.com 300 IN CNAME www1.example.com");
-	$txt   = Net::DNS::RR->new('baz.example.com 3600 HS TXT "text record"');
+	$a     = Net::DNS::RR-&gtnew("foo.example.com. 86400 A 10.1.2.3");
+	$mx    = Net::DNS::RR-&gtnew("example.com. 7200 MX 10 mailhost.example.com.");
+	$cname = Net::DNS::RR-&gtnew("www.example.com 300 IN CNAME www1.example.com");
+	$txt   = Net::DNS::RR-&gtnew('baz.example.com 3600 HS TXT "text record"');
 
        Returns a "Net::DNS::RR" object of the appropriate type and initialized
        from the string passed by the user.  The format of the string is that
        used in zone files, and is compatible with the string returned by
-       "Net::DNS::RR->string".
+       "Net::DNS::RR-&gtstring".
 
        The name and RR type are required; all other information is optional.
        If omitted, the TTL defaults to 0 and the RR class defaults to IN.
@@ -48,17 +50,17 @@ METHODS
        All names must be fully qualified.  The trailing dot (.) is optional.
 
    new (from hash)
-	$rr = Net::DNS::RR->new(
-		name	=> "foo.example.com",
-		ttl	=> 86400,
-		class	=> "IN",
-		type	=> "A",
-		address => "10.1.2.3",
+	$rr = Net::DNS::RR-&gtnew(
+		name	=&gt "foo.example.com",
+		ttl	=&gt 86400,
+		class	=&gt "IN",
+		type	=&gt "A",
+		address =&gt "10.1.2.3",
 	);
 
-	$rr = Net::DNS::RR->new(
-		name => "foo.example.com",
-		type => "A",
+	$rr = Net::DNS::RR-&gtnew(
+		name =&gt "foo.example.com",
+		type =&gt "A",
 	);
 
        Returns an RR object of the appropriate type, or a "Net::DNS::RR"
@@ -74,7 +76,7 @@ METHODS
        recommended.
 
    parse
-	   ($rrobj, $offset) = Net::DNS::RR->parse(\$data, $offset);
+	   ($rrobj, $offset) = Net::DNS::RR-&gtparse(\$data, $offset);
 
        Parses a DNS resource record at the specified location within a DNS
        packet.	The first argument is a reference to the packet data.  The
@@ -88,13 +90,13 @@ METHODS
        insufficient data).
 
    print
-	   $rr->print;
+	   $rr-&gtprint;
 
        Prints the record to the standard output.  Calls the string method to
        get the RR's string representation.
 
    string
-	   print $rr->string, "\n";
+	   print $rr-&gtstring, "\n";
 
        Returns a string representation of the RR.  Calls the rdatastr method
        to get the RR-specific data. Domain names arereturned in RFC1035
@@ -105,38 +107,38 @@ METHODS
        will not return the trailing dot.
 
    rdatastr
-	   $s = $rr->rdatastr;
+	   $s = $rr-&gtrdatastr;
 
        Returns a string containing RR-specific data.  Subclasses will need to
        implement this method.
 
    name
-	   $name = $rr->name;
+	   $name = $rr-&gtname;
 
        Returns the record's domain name.
 
    type
-	   $type = $rr->type;
+	   $type = $rr-&gttype;
 
        Returns the record's type.
 
    class
-	   $class = $rr->class;
+	   $class = $rr-&gtclass;
 
        Returns the record's class.
 
    ttl
-	   $ttl = $rr->ttl;
+	   $ttl = $rr-&gtttl;
 
        Returns the record's time-to-live (TTL).
 
    rdlength
-	   $rdlength = $rr->rdlength;
+	   $rdlength = $rr-&gtrdlength;
 
        Returns the length of the record's data section.
 
    rdata
-	   $rdata = $rr->rdata
+	   $rdata = $rr-&gtrdata
 
        Returns the record's data section as binary data.
 
@@ -147,18 +149,18 @@ Sorting of RR arrays
        functions used for a particular RR based on a particular attribute.
 
    set_rrsort_func
-       Net::DNS::RR::SRV->set_rrsort_func("priority",
+       Net::DNS::RR::SRV-&gtset_rrsort_func("priority",
        sub {			    my ($a,$b)=($Net::DNS::a,$Net::DNS::b);
-			      $a->priority <=> $b->priority
-			      ||			$b->weight <=>
-       $a->weight
+			      $a-&gtpriority &lt=&gt $b-&gtpriority
+			      ||			$b-&gtweight &lt=&gt
+       $a-&gtweight
 			    }
 
-       Net::DNS::RR::SRV->set_rrsort_func("default_sort",
+       Net::DNS::RR::SRV-&gtset_rrsort_func("default_sort",
        sub {			    my ($a,$b)=($Net::DNS::a,$Net::DNS::b);
-			      $a->priority <=> $b->priority
-			      ||			$b->weight <=>
-       $a->weight
+			      $a-&gtpriority &lt=&gt $b-&gtpriority
+			      ||			$b-&gtweight &lt=&gt
+       $a-&gtweight
 			    }
 
        set_rrsort_func needs to be called as a class method. The first
@@ -203,6 +205,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-12-30		       Net::DNS::RR(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

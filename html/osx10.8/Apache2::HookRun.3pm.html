@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Apache2::HookRun" exposes parts of the Apache HTTP protocol..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Apache2::HookRun - Perl API for Invoking Apache HTTP phases</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apache_apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::HookRun(3)
 
 
@@ -27,61 +29,61 @@ Synopsis
 	 use Apache2::RequestUtil ();
 	 use Apache2::RequestRec ();
 
-	 use Apache2::Const -compile => qw(OK DECLINED DONE SERVER_ERROR);
+	 use Apache2::Const -compile =&gt qw(OK DECLINED DONE SERVER_ERROR);
 
 	 # implement the HTTP protocol cycle in protocol handler
 	 sub handler {
 	     my $c = shift;
-	     my $r = Apache2::RequestRec->new($c);
+	     my $r = Apache2::RequestRec-&gtnew($c);
 
 	     # register any custom callbacks here, e.g.:
-	     # $r->push_handlers(PerlAccessHandler => \&my_access);
+	     # $r-&gtpush_handlers(PerlAccessHandler =&gt \&my_access);
 
-	     $rc = $r->run_post_read_request();
+	     $rc = $r-&gtrun_post_read_request();
 	     return $rc unless $rc == Apache2::Const::OK or $rc == Apache2::Const::DECLINED;
 
-	     $rc = $r->run_translate_name;
+	     $rc = $r-&gtrun_translate_name;
 	     return $rc unless $rc == Apache2::Const::OK or $rc == Apache2::Const::DECLINED;
 
-	     $rc = $r->run_map_to_storage;
+	     $rc = $r-&gtrun_map_to_storage;
 	     return $rc unless $rc == Apache2::Const::OK or $rc == Apache2::Const::DECLINED;
 
 	     # this must be run all a big havoc will happen in the following
 	     # phases
-	     $r->location_merge($path);
+	     $r-&gtlocation_merge($path);
 
-	     $rc = $r->run_header_parser;
+	     $rc = $r-&gtrun_header_parser;
 	     return $rc unless $rc == Apache2::Const::OK or $rc == Apache2::Const::DECLINED;
 
-	     my $args = $r->args || '';
+	     my $args = $r-&gtargs || '';
 	     if ($args eq 'die') {
-		 $r->die(Apache2::Const::SERVER_ERROR);
+		 $r-&gtdie(Apache2::Const::SERVER_ERROR);
 		 return Apache2::Const::DONE;
 	     }
 
-	     $rc = $r->run_access_checker;
+	     $rc = $r-&gtrun_access_checker;
 	     return $rc unless $rc == Apache2::Const::OK or $rc == Apache2::Const::DECLINED;
 
-	     $rc = $r->run_auth_checker;
+	     $rc = $r-&gtrun_auth_checker;
 	     return $rc unless $rc == Apache2::Const::OK or $rc == Apache2::Const::DECLINED;
 
-	     $rc = $r->run_check_user_id;
+	     $rc = $r-&gtrun_check_user_id;
 	     return $rc unless $rc == Apache2::Const::OK or $rc == Apache2::Const::DECLINED;
 
-	     $rc = $r->run_type_checker;
+	     $rc = $r-&gtrun_type_checker;
 	     return $rc unless $rc == Apache2::Const::OK or $rc == Apache2::Const::DECLINED;
 
-	     $rc = $r->run_fixups;
+	     $rc = $r-&gtrun_fixups;
 	     return $rc unless $rc == Apache2::Const::OK or $rc == Apache2::Const::DECLINED;
 
-	     # $r->run_handler is called internally by $r->invoke_handler,
+	     # $r-&gtrun_handler is called internally by $r-&gtinvoke_handler,
 	     # invoke_handler sets all kind of filters, and does a few other
-	     # things but it's possible to call $r->run_handler, bypassing
+	     # things but it's possible to call $r-&gtrun_handler, bypassing
 	     # invoke_handler
-	     $rc = $r->invoke_handler;
+	     $rc = $r-&gtinvoke_handler;
 	     return $rc unless $rc == Apache2::Const::OK or $rc == Apache2::Const::DECLINED;
 
-	     $rc = $r->run_log_transaction;
+	     $rc = $r-&gtrun_log_transaction;
 	     return $rc unless $rc == Apache2::Const::OK or $rc == Apache2::Const::DECLINED;
 
 	     return Apache2::Const::OK;
@@ -114,7 +116,7 @@ API
    "die"
        Kill the current request
 
-	 $r->die($type);
+	 $r-&gtdie($type);
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -133,7 +135,7 @@ API
    "invoke_handler"
        Run the response phase.
 
-	 $rc = $r->invoke_handler();
+	 $rc = $r-&gtinvoke_handler();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -153,7 +155,7 @@ API
    "run_access_checker"
        Run the resource access control phase.
 
-	 $rc = $r->run_access_checker();
+	 $rc = $r-&gtrun_access_checker();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   the current request
@@ -171,7 +173,7 @@ API
    "run_auth_checker"
        Run the authentication phase.
 
-	 $rc = $r->run_auth_checker();
+	 $rc = $r-&gtrun_auth_checker();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   the current request
@@ -183,8 +185,8 @@ API
        since: 2.0.00
 
        This phase is used to check to see if the resource being requested is
-       available for the authenticated user ("$r->user" and
-       "$r->ap_auth_type").
+       available for the authenticated user ("$r-&gtuser" and
+       "$r-&gtap_auth_type").
 
        It runs after the access_checker and check_user_id hooks.
 
@@ -195,7 +197,7 @@ API
    "run_check_user_id"
        Run the authorization phase.
 
-	 $rc = $r->run_check_user_id();
+	 $rc = $r-&gtrun_check_user_id();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -207,8 +209,8 @@ API
        since: 2.0.00
 
        This hook is used to analyze the request headers, authenticate the
-       user, and set the user information in the request record ("$r->user"
-       and "$r->ap_auth_type").
+       user, and set the user information in the request record ("$r-&gtuser"
+       and "$r-&gtap_auth_type").
 
        This hook is only run when Apache determines that
        authentication/authorization is required for this resource (as
@@ -220,7 +222,7 @@ API
    "run_fixups"
        Run the fixup phase.
 
-	 $rc = $r->run_fixups();
+	 $rc = $r-&gtrun_fixups();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -237,7 +239,7 @@ API
    "run_handler"
        Run the response phase.
 
-	 $rc = $r->run_handler();
+	 $rc = $r-&gtrun_handler();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The request_rec
@@ -255,7 +257,7 @@ API
    "run_header_parser"
        Run the header parser phase.
 
-	 $rc = $r->run_header_parser();
+	 $rc = $r-&gtrun_header_parser();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -268,7 +270,7 @@ API
    "run_log_transaction"
        Run the logging phase.
 
-	 $rc = $r->run_log_transaction();
+	 $rc = $r-&gtrun_log_transaction();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -285,7 +287,7 @@ API
    "run_map_to_storage"
        Run the map_to_storage phase.
 
-	 $rc = $r->run_map_to_storage();
+	 $rc = $r-&gtrun_map_to_storage();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -295,20 +297,20 @@ API
 	   request was just fulfilled (such as "TRACE"), "Apache2::Const::OK"
 	   if this is not a file, and "Apache2::Const::DECLINED" if this is a
 	   file.  The core map_to_storage ("Apache2::HOOK_RUN_LAST") will
-	   "directory_walk()" and "file_walk()" the "$r->filename" (all
+	   "directory_walk()" and "file_walk()" the "$r-&gtfilename" (all
 	   internal C functions).
 
        since: 2.0.00
 
        This phase allows modules to set the per_dir_config based on their own
-       context (such as "<Proxy>" sections) and responds to contextless
+       context (such as "&ltProxy&gt" sections) and responds to contextless
        requests such as "TRACE" that need no security or filesystem mapping
        based on the filesystem.
 
    "run_post_read_request"
        Run the post_read_request phase.
 
-	 $rc = $r->run_post_read_request();
+	 $rc = $r-&gtrun_post_read_request();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -328,7 +330,7 @@ API
    "run_translate_name"
        Run the translate phase.
 
-	 $rc = $r->run_translate_name();
+	 $rc = $r-&gtrun_translate_name();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -346,7 +348,7 @@ API
    "run_type_checker"
        Run the type_checker phase.
 
-	 $rc = $r->run_type_checker();
+	 $rc = $r-&gtrun_type_checker();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   the current request
@@ -358,7 +360,7 @@ API
        since: 2.0.00
 
        This phase is used to determine and/or set the various document type
-       information bits, like "Content-type" (via "$r->content_type"),
+       information bits, like "Content-type" (via "$r-&gtcontent_type"),
        language, etc.
 
 See Also
@@ -374,6 +376,6 @@ Authors
 
 
 perl v5apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::HookRun(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

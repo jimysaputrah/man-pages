@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="An "HTTP::Message" object contains some headers and a content body...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>HTTP::Message - HTTP style message (base class)</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 HTTP::Message(3)      User Contributed Perl Documentation     HTTP::Message(3)
 
 
@@ -22,9 +24,9 @@ DESCRIPTION
        An "HTTP::Message" object contains some headers and a content body.
        The following methods are available:
 
-       $mess = HTTP::Message->new
-       $mess = HTTP::Message->new( $headers )
-       $mess = HTTP::Message->new( $headers, $content )
+       $mess = HTTP::Message-&gtnew
+       $mess = HTTP::Message-&gtnew( $headers )
+       $mess = HTTP::Message-&gtnew( $headers, $content )
 	   This constructs a new message object.  Normally you would want
 	   construct "HTTP::Request" or "HTTP::Response" objects instead.
 
@@ -36,23 +38,23 @@ DESCRIPTION
 
 	   The optional $content argument should be a string of bytes.
 
-       $mess = HTTP::Message->parse( $str )
+       $mess = HTTP::Message-&gtparse( $str )
 	   This constructs a new message object by parsing the given string.
 
-       $mess->headers
+       $mess-&gtheaders
 	   Returns the embedded "HTTP::Headers" object.
 
-       $mess->headers_as_string
-       $mess->headers_as_string( $eol )
+       $mess-&gtheaders_as_string
+       $mess-&gtheaders_as_string( $eol )
 	   Call the as_string() method for the headers in the message.	This
 	   will be the same as
 
-	       $mess->headers->as_string
+	       $mess-&gtheaders-&gtas_string
 
 	   but it will make your program a whole character shorter :-)
 
-       $mess->content
-       $mess->content( $bytes )
+       $mess-&gtcontent
+       $mess-&gtcontent( $bytes )
 	   The content() method sets the raw content if an argument is given.
 	   If no argument is given the content is not touched.	In either case
 	   the original raw content is returned.
@@ -61,22 +63,22 @@ DESCRIPTION
 	   can contain characters outside the range of a byte.	The "Encode"
 	   module can be used to turn such strings into a string of bytes.
 
-       $mess->add_content( $bytes )
+       $mess-&gtadd_content( $bytes )
 	   The add_content() methods appends more data bytes to the end of the
 	   current content buffer.
 
-       $mess->add_content_utf8( $string )
+       $mess-&gtadd_content_utf8( $string )
 	   The add_content_utf8() method appends the UTF-8 bytes representing
 	   the string to the end of the current content buffer.
 
-       $mess->content_ref
-       $mess->content_ref( \$bytes )
+       $mess-&gtcontent_ref
+       $mess-&gtcontent_ref( \$bytes )
 	   The content_ref() method will return a reference to content buffer
 	   string.  It can be more efficient to access the content this way if
 	   the content is huge, and it can even be used for direct
 	   manipulation of the content, for instance:
 
-	     ${$res->content_ref} =~ s/\bfoo\b/bar/g;
+	     ${$res-&gtcontent_ref} =~ s/\bfoo\b/bar/g;
 
 	   This example would modify the content buffer in-place.
 
@@ -86,16 +88,16 @@ DESCRIPTION
 	   other references content() will return the reference itself and
 	   add_content() will refuse to do anything.
 
-       $mess->content_charset
+       $mess-&gtcontent_charset
 	   This returns the charset used by the content in the message.  The
 	   charset is either found as the charset attribute of the
 	   "Content-Type" header or by guessing.
 
 	   See
-	   <http://www.w3.org/TR/REC-html40/charset.html#spec-char-encoding>
+	   &lthttp://www.w3.org/TR/REC-html40/charset.html#spec-char-encoding&gt
 	   for details about how charset is determined.
 
-       $mess->decoded_content( %options )
+       $mess-&gtdecoded_content( %options )
 	   Returns the content with any "Content-Encoding" undone and the raw
 	   content encoded to perl's Unicode strings.  If the
 	   "Content-Encoding" or "charset" of the message is unknown this
@@ -136,7 +138,7 @@ DESCRIPTION
 	       identical to the raw content as no data copying is required in
 	       this case.
 
-       $mess->decodable
+       $mess-&gtdecodable
        HTTP::Message::decodable()
 	   This returns the encoding identifiers that decoded_content() can
 	   process.  In scalar context returns a comma separated string of
@@ -145,7 +147,7 @@ DESCRIPTION
 	   This value is suitable for initializing the "Accept-Encoding"
 	   request header field.
 
-       $mess->decode
+       $mess-&gtdecode
 	   This method tries to replace the content of the message with the
 	   decoded version and removes the "Content-Encoding" header.  Returns
 	   TRUE if successful and FALSE if not.
@@ -157,7 +159,7 @@ DESCRIPTION
 	   method has been called and you still need to call decoded_content()
 	   if you want to process its content as a string.
 
-       $mess->encode( $encoding, ... )
+       $mess-&gtencode( $encoding, ... )
 	   Apply the given encodings to the content of the message.  Returns
 	   TRUE if successful. The "identity" (non-)encoding is always
 	   supported; other currently supported encodings, subject to
@@ -170,9 +172,9 @@ DESCRIPTION
 	   Note that "multipart/*" or "message/*" messages can't be encoded
 	   and this method will croak if you try.
 
-       $mess->parts
-       $mess->parts( @parts )
-       $mess->parts( \@parts )
+       $mess-&gtparts
+       $mess-&gtparts( @parts )
+       $mess-&gtparts( \@parts )
 	   Messages can be composite, i.e. contain other messages.  The
 	   composite messages have a content type of "multipart/*" or
 	   "message/*".  This method give access to the contained messages.
@@ -206,7 +208,7 @@ DESCRIPTION
 	   This method will croak if the content type is "message/*" and more
 	   than one part is provided.
 
-       $mess->add_part( $part )
+       $mess-&gtadd_part( $part )
 	   This will add a part to a message.  The $part argument should be
 	   another "HTTP::Message" object.  If the previous content type of
 	   $mess is not "multipart/*" then the old content (together with all
@@ -217,20 +219,20 @@ DESCRIPTION
 
 	   There is no return value.
 
-       $mess->clear
+       $mess-&gtclear
 	   Will clear the headers and set the content to the empty string.
 	   There is no return value
 
-       $mess->protocol
-       $mess->protocol( $proto )
+       $mess-&gtprotocol
+       $mess-&gtprotocol( $proto )
 	   Sets the HTTP protocol used for the message.  The protocol() is a
 	   string like "HTTP/1.0" or "HTTP/1.1".
 
-       $mess->clone
+       $mess-&gtclone
 	   Returns a copy of the message object.
 
-       $mess->as_string
-       $mess->as_string( $eol )
+       $mess-&gtas_string
+       $mess-&gtas_string( $eol )
 	   Returns the message formatted as a single string.
 
 	   The optional $eol parameter specifies the line ending sequence to
@@ -239,11 +241,11 @@ DESCRIPTION
 	   the message content is not).  No extra newline is appended if an
 	   explicit $eol is passed.
 
-       $mess->dump( %opt )
+       $mess-&gtdump( %opt )
 	   Returns the message formatted as a string.  In void context print
 	   the string.
 
-	   This differs from "$mess->as_string" in that it escapes the bytes
+	   This differs from "$mess-&gtas_string" in that it escapes the bytes
 	   of the content so that it's safe to print them and it limits how
 	   much content to print.  The escapes syntax used is the same as for
 	   Perl's double quoted strings.  If there is no content the string
@@ -252,7 +254,7 @@ DESCRIPTION
 	   Options to influence the output can be passed as key/value pairs.
 	   The following options are recognized:
 
-	   maxlength => $num
+	   maxlength =&gt $num
 	       How much of the content to show.  The default is 512.  Set this
 	       to 0 for unlimited.
 
@@ -260,7 +262,7 @@ DESCRIPTION
 	       limit and the string "...\n(### more bytes not shown)"
 	       appended.
 
-	   prefix => $str
+	   prefix =&gt $str
 	       A string that will be prefixed to each line of the dump.
 
        All methods unknown to "HTTP::Message" itself are delegated to the
@@ -268,33 +270,33 @@ DESCRIPTION
        convenient access to these methods.  Refer to HTTP::Headers for details
        of these methods:
 
-	   $mess->header( $field => $val )
-	   $mess->push_header( $field => $val )
-	   $mess->init_header( $field => $val )
-	   $mess->remove_header( $field )
-	   $mess->remove_content_headers
-	   $mess->header_field_names
-	   $mess->scan( \&doit )
+	   $mess-&gtheader( $field =&gt $val )
+	   $mess-&gtpush_header( $field =&gt $val )
+	   $mess-&gtinit_header( $field =&gt $val )
+	   $mess-&gtremove_header( $field )
+	   $mess-&gtremove_content_headers
+	   $mess-&gtheader_field_names
+	   $mess-&gtscan( \&doit )
 
-	   $mess->date
-	   $mess->expires
-	   $mess->if_modified_since
-	   $mess->if_unmodified_since
-	   $mess->last_modified
-	   $mess->content_type
-	   $mess->content_encoding
-	   $mess->content_length
-	   $mess->content_language
-	   $mess->title
-	   $mess->user_agent
-	   $mess->server
-	   $mess->from
-	   $mess->referer
-	   $mess->www_authenticate
-	   $mess->authorization
-	   $mess->proxy_authorization
-	   $mess->authorization_basic
-	   $mess->proxy_authorization_basic
+	   $mess-&gtdate
+	   $mess-&gtexpires
+	   $mess-&gtif_modified_since
+	   $mess-&gtif_unmodified_since
+	   $mess-&gtlast_modified
+	   $mess-&gtcontent_type
+	   $mess-&gtcontent_encoding
+	   $mess-&gtcontent_length
+	   $mess-&gtcontent_language
+	   $mess-&gttitle
+	   $mess-&gtuser_agent
+	   $mess-&gtserver
+	   $mess-&gtfrom
+	   $mess-&gtreferer
+	   $mess-&gtwww_authenticate
+	   $mess-&gtauthorization
+	   $mess-&gtproxy_authorization
+	   $mess-&gtauthorization_basic
+	   $mess-&gtproxy_authorization_basic
 
 COPYRIGHT
        Copyright 1995-2004 Gisle Aas.
@@ -305,6 +307,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2010-09-20		      HTTP::Message(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

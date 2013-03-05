@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Provides a simple but, hopefully, extensible way of having 'plugins'..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Module::Pluggable - automatically give your module the ability to have</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Module::Pluggable(3pm) Perl Programmers Reference Guide Module::Pluggable(3pm)
 
 
@@ -25,9 +27,9 @@ SYNOPSIS
        and then later ...
 
 	   use MyClass;
-	   my $mc = MyClass->new();
+	   my $mc = MyClass-&gtnew();
 	   # returns the names of all plugins installed under MyClass::Plugin::*
-	   my @plugins = $mc->plugins();
+	   my @plugins = $mc-&gtplugins();
 
 EXAMPLE
        Why would you want to do this? Say you have something that wants to
@@ -42,14 +44,14 @@ EXAMPLE
 
 	   use strict;
 	   use Email::Simple;
-	   use Module::Pluggable require => 1;
+	   use Module::Pluggable require =&gt 1;
 
 	   sub handle_email {
 	       my $self  = shift;
 	       my $email = shift;
 
-	       foreach my $plugin ($self->plugins) {
-		   $plugin->examine($email);
+	       foreach my $plugin ($self-&gtplugins) {
+		   $plugin-&gtexamine($email);
 	       }
 
 	       return 1;
@@ -63,9 +65,9 @@ EXAMPLE
        somewhere. You might also wnat to be paranoid and check to see if the
        plugin has an "examine" method.
 
-	       foreach my $plugin ($self->plugins) {
-		   next unless $plugin->can('examine');
-		   last if     $plugin->examine($email);
+	       foreach my $plugin ($self-&gtplugins) {
+		   next unless $plugin-&gtcan('examine');
+		   last if     $plugin-&gtexamine($email);
 	       }
 
        And so on. The sky's the limit.
@@ -85,72 +87,72 @@ ADVANCED USAGE
        Alternatively, if you don't want to use 'plugins' as the method ...
 
 	   package MyClass;
-	   use Module::Pluggable sub_name => 'foo';
+	   use Module::Pluggable sub_name =&gt 'foo';
 
        and then later ...
 
-	   my @plugins = $mc->foo();
+	   my @plugins = $mc-&gtfoo();
 
        Or if you want to look in another namespace
 
 	   package MyClass;
-	   use Module::Pluggable search_path => ['Acme::MyClass::Plugin', 'MyClass::Extend'];
+	   use Module::Pluggable search_path =&gt ['Acme::MyClass::Plugin', 'MyClass::Extend'];
 
        or directory
 
-	   use Module::Pluggable search_dirs => ['mylibs/Foo'];
+	   use Module::Pluggable search_dirs =&gt ['mylibs/Foo'];
 
        Or if you want to instantiate each plugin rather than just return the
        name
 
 	   package MyClass;
-	   use Module::Pluggable instantiate => 'new';
+	   use Module::Pluggable instantiate =&gt 'new';
 
        and then
 
 	   # whatever is passed to 'plugins' will be passed
 	   # to 'new' for each plugin
-	   my @plugins = $mc->plugins(@options);
+	   my @plugins = $mc-&gtplugins(@options);
 
        alternatively you can just require the module without instantiating it
 
 	   package MyClass;
-	   use Module::Pluggable require => 1;
+	   use Module::Pluggable require =&gt 1;
 
        since requiring automatically searches inner packages, which may not be
        desirable, you can turn this off
 
 	   package MyClass;
-	   use Module::Pluggable require => 1, inner => 0;
+	   use Module::Pluggable require =&gt 1, inner =&gt 0;
 
        You can limit the plugins loaded using the except option, either as a
        string, array ref or regex
 
 	   package MyClass;
-	   use Module::Pluggable except => 'MyClass::Plugin::Foo';
+	   use Module::Pluggable except =&gt 'MyClass::Plugin::Foo';
 
        or
 
 	   package MyClass;
-	   use Module::Pluggable except => ['MyClass::Plugin::Foo', 'MyClass::Plugin::Bar'];
+	   use Module::Pluggable except =&gt ['MyClass::Plugin::Foo', 'MyClass::Plugin::Bar'];
 
        or
 
 	   package MyClass;
-	   use Module::Pluggable except => qr/^MyClass::Plugin::(Foo|Bar)$/;
+	   use Module::Pluggable except =&gt qr/^MyClass::Plugin::(Foo|Bar)$/;
 
        and similarly for only which will only load plugins which match.
 
        Remember you can use the module more than once
 
 	   package MyClass;
-	   use Module::Pluggable search_path => 'MyClass::Filters' sub_name => 'filters';
-	   use Module::Pluggable search_path => 'MyClass::Plugins' sub_name => 'plugins';
+	   use Module::Pluggable search_path =&gt 'MyClass::Filters' sub_name =&gt 'filters';
+	   use Module::Pluggable search_path =&gt 'MyClass::Plugins' sub_name =&gt 'plugins';
 
        and then later ...
 
-	   my @filters = $self->filters;
-	   my @plugins = $self->plugins;
+	   my @filters = $self-&gtfilters;
+	   my @plugins = $self-&gtplugins;
 
 INNER PACKAGES
        If you have, for example, a file lib/Something/Plugin/Foo.pm that
@@ -208,7 +210,7 @@ OPTIONS
 
        By supplying a new "file_regex" then you can change this behaviour e.g
 
-	   file_regex => qr/\.plugin$/
+	   file_regex =&gt qr/\.plugin$/
 
    include_editor_junk
        By default "Module::Pluggable" ignores files that look like they were
@@ -223,8 +225,8 @@ METHODs
        The method "search_path" is exported into you namespace as well.  You
        can call that at any time to change or replace the search_path.
 
-	   $self->search_path( add => "New::Path" ); # add
-	   $self->search_path( new => "New::Path" ); # replace
+	   $self-&gtsearch_path( add =&gt "New::Path" ); # add
+	   $self-&gtsearch_path( new =&gt "New::Path" ); # replace
 
 FUTURE PLANS
        This does everything I need and I can't really think of any other
@@ -236,7 +238,7 @@ FUTURE PLANS
        However suggestions (and patches) are welcome.
 
 AUTHOR
-       Simon Wistow <simon@thegestalt.org>
+       Simon Wistow &ltsimon@thegestalt.org&gt
 
 COPYING
        Copyright, 2006 Simon Wistow
@@ -253,6 +255,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-07-03		Module::Pluggable(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

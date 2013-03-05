@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Operator Precedence and Associativity..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlop - Perl operators and precedence</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLOP(1)	       Perl Programmers Reference Guide 	     PERLOP(1)
 
 
@@ -40,17 +42,17 @@ DESCRIPTION
        array values.
 
 	   left        terms and list operators (leftward)
-	   left        ->
+	   left        -&gt
 	   nonassoc    ++ --
 	   right       **
 	   right       ! ~ \ and unary + and -
 	   left        =~ !~
 	   left        * / % x
 	   left        + - .
-	   left        << >>
+	   left        &lt&lt &gt&gt
 	   nonassoc    named unary operators
-	   nonassoc    < > <= >= lt gt le ge
-	   nonassoc    == != <=> eq ne cmp ~~
+	   nonassoc    &lt &gt &lt= &gt= lt gt le ge
+	   nonassoc    == != &lt=&gt eq ne cmp ~~
 	   left        &
 	   left        | ^
 	   left        &&
@@ -58,7 +60,7 @@ DESCRIPTION
 	   nonassoc    ..  ...
 	   right       ?:
 	   right       = += -= *= etc.
-	   left        , =>
+	   left        , =&gt
 	   nonassoc    list operators (rightward)
 	   right       not
 	   left        and
@@ -130,7 +132,7 @@ DESCRIPTION
        section, as well as "I/O Operators".
 
    The Arrow Operator
-       ""->"" is an infix dereference operator, just as it is in C and C++.
+       ""-&gt"" is an infix dereference operator, just as it is in C and C++.
        If the right side is either a "[...]", "{...}", or a "(...)" subscript,
        then the left side must be either a hard or symbolic reference to an
        array, a hash, or a subroutine respectively.  (Or technically speaking,
@@ -294,16 +296,16 @@ DESCRIPTION
        Binary "." concatenates two strings.
 
    Shift Operators
-       Binary "<<" returns the value of its left argument shifted left by the
+       Binary "&lt&lt" returns the value of its left argument shifted left by the
        number of bits specified by the right argument.	Arguments should be
        integers.  (See also "Integer Arithmetic".)
 
-       Binary ">>" returns the value of its left argument shifted right by the
+       Binary "&gt&gt" returns the value of its left argument shifted right by the
        number of bits specified by the right argument.	Arguments should be
        integers.  (See also "Integer Arithmetic".)
 
-       Note that both "<<" and ">>" in Perl are implemented directly using
-       "<<" and ">>" in C.  If "use integer" (see "Integer Arithmetic") is in
+       Note that both "&lt&lt" and "&gt&gt" in Perl are implemented directly using
+       "&lt&lt" and "&gt&gt" in C.  If "use integer" (see "Integer Arithmetic") is in
        force then signed C integers are used, else unsigned C integers are
        used.  Either way, the implementation isn't going to generate results
        larger than the size of the integer type Perl was built with (32 bits
@@ -311,7 +313,7 @@ DESCRIPTION
 
        The result of overflowing the range of the integers is undefined
        because it is undefined also in C.  In other words, using 32-bit
-       integers, "1 << 32" is undefined.  Shifting by a negative number of
+       integers, "1 &lt&lt 32" is undefined.  Shifting by a negative number of
        bits is also undefined.
 
    Named Unary Operators
@@ -349,16 +351,16 @@ DESCRIPTION
        See also "Terms and List Operators (Leftward)".
 
    Relational Operators
-       Binary "<" returns true if the left argument is numerically less than
+       Binary "&lt" returns true if the left argument is numerically less than
        the right argument.
 
-       Binary ">" returns true if the left argument is numerically greater
+       Binary "&gt" returns true if the left argument is numerically greater
        than the right argument.
 
-       Binary "<=" returns true if the left argument is numerically less than
+       Binary "&lt=" returns true if the left argument is numerically less than
        or equal to the right argument.
 
-       Binary ">=" returns true if the left argument is numerically greater
+       Binary "&gt=" returns true if the left argument is numerically greater
        than or equal to the right argument.
 
        Binary "lt" returns true if the left argument is stringwise less than
@@ -380,10 +382,10 @@ DESCRIPTION
        Binary "!=" returns true if the left argument is numerically not equal
        to the right argument.
 
-       Binary "<=>" returns -1, 0, or 1 depending on whether the left argument
+       Binary "&lt=&gt" returns -1, 0, or 1 depending on whether the left argument
        is numerically less than, equal to, or greater than the right argument.
        If your platform supports NaNs (not-a-numbers) as numeric values, using
-       them with "<=>" returns undef.  NaN is not "<", "==", ">", "<=" or ">="
+       them with "&lt=&gt" returns undef.  NaN is not "&lt", "==", "&gt", "&lt=" or "&gt="
        anything (even NaN), so those 5 return false. NaN != NaN returns true,
        as does NaN != anything else. If your platform doesn't support NaNs
        then NaN is just a string with numeric value 0.
@@ -455,7 +457,7 @@ DESCRIPTION
        portable way to find out the home directory might be:
 
 	   $home = $ENV{'HOME'} // $ENV{'LOGDIR'} //
-	       (getpwuid($<))[7] // die "You're homeless!\n";
+	       (getpwuid($&lt))[7] // die "You're homeless!\n";
 
        In particular, this means that you shouldn't use this for selecting
        between two aggregates for assignment:
@@ -547,10 +549,10 @@ DESCRIPTION
 				      #   next LINE if ($. == 1 .. /^$/);
 				      # (typically in a loop labeled LINE)
 
-	   s/^/> / if (/^$/ .. eof());	# quote body
+	   s/^/&gt / if (/^$/ .. eof());	# quote body
 
 	   # parse mail messages
-	   while (<>) {
+	   while (&lt&gt) {
 	       $in_header =   1  .. /^$/;
 	       $in_body   = /^$/ .. eof;
 	       if ($in_header) {
@@ -674,8 +676,8 @@ DESCRIPTION
        lvalue might trigger, such as from tie().  Other assignment operators
        work similarly.	The following are recognized:
 
-	   **=	  +=	*=    &=    <<=    &&=
-		  -=	/=    |=    >>=    ||=
+	   **=	  +=	*=    &=    &lt&lt=    &&=
+		  -=	/=    |=    &gt&gt=    ||=
 		  .=	%=    ^=	   //=
 			x=
 
@@ -712,21 +714,21 @@ DESCRIPTION
        both its arguments into the list.  These arguments are also evaluated
        from left to right.
 
-       The "=>" operator is a synonym for the comma except that it causes its
+       The "=&gt" operator is a synonym for the comma except that it causes its
        left operand to be interpreted as a string if it begins with a letter
        or underscore and is composed only of letters, digits and underscores.
        This includes operands that might otherwise be interpreted as
        operators, constants, single number v-strings or function calls. If in
        doubt about this behaviour, the left operand can be quoted explicitly.
 
-       Otherwise, the "=>" operator behaves exactly as the comma operator or
+       Otherwise, the "=&gt" operator behaves exactly as the comma operator or
        list argument separator, according to context.
 
        For example:
 
-	   use constant FOO => "something";
+	   use constant FOO =&gt "something";
 
-	   my %h = ( FOO => 23 );
+	   my %h = ( FOO =&gt 23 );
 
        is equivalent to:
 
@@ -736,11 +738,11 @@ DESCRIPTION
 
 	   my %h = ("something", 23);
 
-       The "=>" operator is helpful in documenting the correspondence between
+       The "=&gt" operator is helpful in documenting the correspondence between
        keys and values in hashes, and other paired elements in lists.
 
-	       %hash = ( $key => $value );
-	       login( $username => $password );
+	       %hash = ( $key =&gt $value );
+	       login( $username =&gt $password );
 
    List Operators (Rightward)
        On the right side of a list operator, it has very low precedence, such
@@ -821,7 +823,7 @@ DESCRIPTION
 		       qr{}	     Pattern		 yes*
 			s{}{}	   Substitution 	 yes*
 		       tr{}{}	 Transliteration	 no (but see below)
-	       <<EOF		     here-doc		 yes*
+	       &lt&ltEOF		     here-doc		 yes*
 
 	       * unless the delimiter is ''.
 
@@ -911,8 +913,8 @@ DESCRIPTION
 
        For constructs that do interpolate, variables beginning with ""$"" or
        ""@"" are interpolated.	Subscripted variables such as $a[3] or
-       "$href->{key}[0]" are also interpolated, as are array and hash slices.
-       But method calls such as "$obj->meth" are not.
+       "$href-&gt{key}[0]" are also interpolated, as are array and hash slices.
+       But method calls such as "$obj-&gtmeth" are not.
 
        Interpolating an array or slice interpolates the elements in order,
        separated by the value of $", so is equivalent to interpolating "join
@@ -1078,7 +1080,7 @@ DESCRIPTION
 	       Examples:
 
 		   open(TTY, '/dev/tty');
-		   <TTY> =~ /^y/i && foo();    # do foo if desired
+		   &ltTTY&gt =~ /^y/i && foo();    # do foo if desired
 
 		   if (/Version: *([0-9.]*)/) { $version = $1; }
 
@@ -1086,7 +1088,7 @@ DESCRIPTION
 
 		   # poor man's grep
 		   $arg = shift;
-		   while (<>) {
+		   while (&lt&gt) {
 		       print if /$arg/o;       # compile only once
 		   }
 
@@ -1133,7 +1135,7 @@ DESCRIPTION
 
 		   # scalar context
 		   $/ = "";
-		   while (defined($paragraph = <>)) {
+		   while (defined($paragraph = &lt&gt)) {
 		       while ($paragraph =~ /[a-z]['")]*[.!?]+['")]*\s/g) {
 			   $sentences++;
 		       }
@@ -1142,7 +1144,7 @@ DESCRIPTION
 
 		   # using m//gc with \G
 		   $_ = "ppooqppqq";
-		   while ($i++ < 2) {
+		   while ($i++ &lt 2) {
 		       print "1: '";
 		       print $1 while /(o)/gc; print "', pos=", pos, "\n";
 		       print "2: '";
@@ -1174,8 +1176,8 @@ DESCRIPTION
 	       matched.  Each regexp tries to match where the previous one
 	       leaves off.
 
-		$_ = <<'EOL';
-		     $url = URI::URL->new( "http://www/" );   die if $url eq "xXx";
+		$_ = &lt&lt'EOL';
+		     $url = URI::URL-&gtnew( "http://www/" );   die if $url eq "xXx";
 		EOL
 		LOOP:
 		   {
@@ -1204,7 +1206,7 @@ DESCRIPTION
 	       instance.  Only "??"  patterns local to the current package are
 	       reset.
 
-		   while (<>) {
+		   while (&lt&gt) {
 		       if (?^$?) {
 					   # blank line between header and body
 		       }
@@ -1252,7 +1254,7 @@ DESCRIPTION
 	       delimiters; the replacement text is not evaluated as a command.
 	       If the PATTERN is delimited by bracketing quotes, the
 	       REPLACEMENT has its own pair of quotes, which may or may not be
-	       bracketing quotes, e.g., "s(foo)(bar)" or "s<foo>/bar/".  A
+	       bracketing quotes, e.g., "s(foo)(bar)" or "s&ltfoo&gt/bar/".  A
 	       "/e" will cause the replacement portion to be treated as a
 	       full-fledged Perl expression and evaluated right then and
 	       there.  It is, however, syntax checked at compile-time. A
@@ -1309,8 +1311,8 @@ DESCRIPTION
 		   s/([^ ]*) *([^ ]*)/$2 $1/;  # reverse 1st two fields
 
 	       Note the use of $ instead of \ in the last example.  Unlike
-	       sed, we use the \<digit> form in only the left hand side.
-	       Anywhere else it's $<digit>.
+	       sed, we use the \&ltdigit&gt form in only the left hand side.
+	       Anywhere else it's $&ltdigit&gt.
 
 	       Occasionally, you can't use just a "/g" to get all the changes
 	       to occur that you might want.  Here are two common cases:
@@ -1356,33 +1358,33 @@ DESCRIPTION
 	   descriptor syntax (assuming the shell supports this) if you care to
 	   address this.  To capture a command's STDERR and STDOUT together:
 
-	       $output = `cmd 2>&1`;
+	       $output = `cmd 2&gt&1`;
 
 	   To capture a command's STDOUT but discard its STDERR:
 
-	       $output = `cmd 2>/dev/null`;
+	       $output = `cmd 2&gt/dev/null`;
 
 	   To capture a command's STDERR but discard its STDOUT (ordering is
 	   important here):
 
-	       $output = `cmd 2>&1 1>/dev/null`;
+	       $output = `cmd 2&gt&1 1&gt/dev/null`;
 
 	   To exchange a command's STDOUT and STDERR in order to capture the
 	   STDERR but leave its STDOUT to come out the old STDERR:
 
-	       $output = `cmd 3>&1 1>&2 2>&3 3>&-`;
+	       $output = `cmd 3&gt&1 1&gt&2 2&gt&3 3&gt&-`;
 
 	   To read both a command's STDOUT and its STDERR separately, it's
 	   easiest to redirect them separately to files, and then read from
 	   those files when the program is done:
 
-	       system("program args 1>program.stdout 2>program.stderr");
+	       system("program args 1&gtprogram.stdout 2&gtprogram.stderr");
 
 	   The STDIN filehandle used by the command is inherited from Perl's
 	   STDIN.  For example:
 
 	       open BLAM, "blam" || die "Can't open: $!";
-	       open STDIN, "<&BLAM";
+	       open STDIN, "&lt&BLAM";
 	       print `sort`;
 
 	   will print the sorted contents of the file "blam".
@@ -1523,7 +1525,7 @@ DESCRIPTION
 
 	       $cnt = tr/0-9//; 	   # count the digits in $_
 
-	       tr/a-zA-Z//s;		   # bookkeeper -> bokeper
+	       tr/a-zA-Z//s;		   # bookkeeper -&gt bokeper
 
 	       ($HOST = $host) =~ tr/a-z/A-Z/;
 
@@ -1549,15 +1551,15 @@ DESCRIPTION
 
 	       eval "tr/$oldlist/$newlist/, 1" or die $@;
 
-       <<EOF
+       &lt&ltEOF
 	   A line-oriented form of quoting is based on the shell "here-
-	   document" syntax.  Following a "<<" you specify a string to
+	   document" syntax.  Following a "&lt&lt" you specify a string to
 	   terminate the quoted material, and all lines following the current
 	   line down to the terminating string are the value of the item.
 
 	   The terminating string may be either an identifier (a word), or
 	   some quoted text.  An unquoted identifier works like double quotes.
-	   There may not be a space between the "<<" and the identifier,
+	   There may not be a space between the "&lt&lt" and the identifier,
 	   unless the identifier is explicitly quoted.	(If you put a space it
 	   will be treated as a null identifier, which is valid, and matches
 	   the first empty line.)  The terminating string must appear by
@@ -1571,11 +1573,11 @@ DESCRIPTION
 	       Double quotes indicate that the text will be interpolated using
 	       exactly the same rules as normal double quoted strings.
 
-		      print <<EOF;
+		      print &lt&ltEOF;
 		   The price is $Price.
 		   EOF
 
-		      print << "EOF"; # same as above
+		      print &lt&lt "EOF"; # same as above
 		   The price is $Price.
 		   EOF
 
@@ -1596,19 +1598,19 @@ DESCRIPTION
 	       interpolated as though it were double quoted and then executed
 	       via the shell, with the results of the execution returned.
 
-		      print << `EOC`; # execute command and get results
+		      print &lt&lt `EOC`; # execute command and get results
 		   echo hi there
 		   EOC
 
 	   It is possible to stack multiple here-docs in a row:
 
-		  print <<"foo", <<"bar"; # you can stack them
+		  print &lt&lt"foo", &lt&lt"bar"; # you can stack them
 	       I said foo.
 	       foo
 	       I said bar.
 	       bar
 
-		  myfunc(<< "THIS", 23, <<'THAT');
+		  myfunc(&lt&lt "THIS", 23, &lt&lt'THAT');
 	       Here's a line
 	       or two.
 	       THIS
@@ -1619,7 +1621,7 @@ DESCRIPTION
 	   finish the statement, as Perl doesn't know you're not going to try
 	   to do this:
 
-		  print <<ABC
+		  print &lt&ltABC
 	       179231
 	       ABC
 		  + 20;
@@ -1627,7 +1629,7 @@ DESCRIPTION
 	   If you want to remove the line terminator from your here-docs, use
 	   "chomp()".
 
-	       chomp($string = <<'END');
+	       chomp($string = &lt&lt'END');
 	       This is a string.
 	       END
 
@@ -1635,7 +1637,7 @@ DESCRIPTION
 	   code, you'll need to remove leading whitespace from each line
 	   manually:
 
-	       ($quote = <<'FINIS') =~ s/^\s+//gm;
+	       ($quote = &lt&lt'FINIS') =~ s/^\s+//gm;
 		  The Road goes ever on and on,
 		  down from the door where it began.
 	       FINIS
@@ -1644,14 +1646,14 @@ DESCRIPTION
 	   "s///eg", the quoted material must come on the lines following the
 	   final delimiter.  So instead of
 
-	       s/this/<<E . 'that'
+	       s/this/&lt&ltE . 'that'
 	       the other
 	       E
 		. 'more '/eg;
 
 	   you have to write
 
-	       s/this/<<E . 'that'
+	       s/this/&lt&ltE . 'that'
 		. 'more '/eg;
 	       the other
 	       E
@@ -1666,7 +1668,7 @@ DESCRIPTION
 	   like are not supported in place of '' and "", and the only
 	   interpolation is for backslashing the quoting character:
 
-	       print << "abc\"def";
+	       print &lt&lt "abc\"def";
 	       testing...
 	       abc"def
 
@@ -1709,7 +1711,7 @@ DESCRIPTION
 	   independent.
 
 	   If the construct is a here-doc, the ending delimiter is a line that
-	   has a terminating string as the content. Therefore "<<EOF" is
+	   has a terminating string as the content. Therefore "&lt&ltEOF" is
 	   terminated by "EOF" immediately followed by "\n" and starting from
 	   the first column of the terminating line.  When searching for the
 	   terminating line of a here-doc, nothing is skipped. In other words,
@@ -1718,9 +1720,9 @@ DESCRIPTION
 
 	   For the constructs except here-docs, single characters are used as
 	   starting and ending delimiters. If the starting delimiter is an
-	   opening punctuation (that is "(", "[", "{", or "<"), the ending
+	   opening punctuation (that is "(", "[", "{", or "&lt"), the ending
 	   delimiter is the corresponding closing punctuation (that is ")",
-	   "]", "}", or ">").  If the starting delimiter is an unpaired
+	   "]", "}", or "&gt").  If the starting delimiter is an unpaired
 	   character like "/" or a closing punctuation, the ending delimiter
 	   is same as the starting delimiter.  Therefore a "/" terminates a
 	   "qq//" construct, while a "]" terminates "qq[]" and "qq]]"
@@ -1744,7 +1746,7 @@ DESCRIPTION
 	   as "s!!!" and "tr)))", in which case the second delimiter
 	   terminates the left part and starts the right part at once.	If the
 	   left part is delimited by bracketing punctuations (that is "()",
-	   "[]", "{}", or "<>"), the right part needs another pair of
+	   "[]", "{}", or "&lt&gt"), the right part needs another pair of
 	   delimiters such as "s(){}" and "tr[]//".  In these cases,
 	   whitespaces and comments are allowed between both parts, though the
 	   comment must follow at least one whitespace; otherwise a character
@@ -1778,7 +1780,7 @@ DESCRIPTION
 	   The next step is interpolation in the text obtained, which is now
 	   delimiter-independent.  There are multiple cases.
 
-	   "<<'EOF'"
+	   "&lt&lt'EOF'"
 	       No interpolation is performed.  Note that the combination "\\"
 	       is left intact, since escaped delimiters are not available for
 	       here-docs.
@@ -1803,7 +1805,7 @@ DESCRIPTION
 	       treated specially and therefore "\-" is treated as a literal
 	       "-".
 
-	   "", "``", "qq//", "qx//", "<file*glob>", "<<"EOF""
+	   "", "``", "qq//", "qx//", "&ltfile*glob&gt", "&lt&lt"EOF""
 	       "\Q", "\U", "\u", "\L", "\l" (possibly paired with "\E") are
 	       converted to corresponding Perl constructs.  Thus,
 	       "$foo\Qbaz$bar" is converted to "$foo . (quotemeta("baz" .
@@ -1843,13 +1845,13 @@ DESCRIPTION
 
 	       Note also that the interpolation code needs to make a decision
 	       on where the interpolated scalar ends.  For instance, whether
-	       "a $b -> {c}" really means:
+	       "a $b -&gt {c}" really means:
 
-		 "a " . $b . " -> {c}";
+		 "a " . $b . " -&gt {c}";
 
 	       or:
 
-		 "a " . $b -> {c};
+		 "a " . $b -&gt {c};
 
 	       Most of the time, the longest possible text that does not
 	       include spaces between components and which contains matching
@@ -2000,17 +2002,17 @@ DESCRIPTION
 
        The following lines are equivalent:
 
-	   while (defined($_ = <STDIN>)) { print; }
-	   while ($_ = <STDIN>) { print; }
-	   while (<STDIN>) { print; }
-	   for (;<STDIN>;) { print; }
-	   print while defined($_ = <STDIN>);
-	   print while ($_ = <STDIN>);
-	   print while <STDIN>;
+	   while (defined($_ = &ltSTDIN&gt)) { print; }
+	   while ($_ = &ltSTDIN&gt) { print; }
+	   while (&ltSTDIN&gt) { print; }
+	   for (;&ltSTDIN&gt;) { print; }
+	   print while defined($_ = &ltSTDIN&gt);
+	   print while ($_ = &ltSTDIN&gt);
+	   print while &ltSTDIN&gt;
 
        This also behaves similarly, but avoids $_ :
 
-	   while (my $line = <STDIN>) { print $line }
+	   while (my $line = &ltSTDIN&gt) { print $line }
 
        In these loop constructs, the assigned value (whether assignment is
        automatic or explicit) is then tested to see whether it is defined.
@@ -2019,10 +2021,10 @@ DESCRIPTION
        trailing newline.  If you really mean for such values to terminate the
        loop, they should be tested for explicitly:
 
-	   while (($_ = <STDIN>) ne '0') { ... }
-	   while (<STDIN>) { last unless $_; ... }
+	   while (($_ = &ltSTDIN&gt) ne '0') { ... }
+	   while (&ltSTDIN&gt) { last unless $_; ... }
 
-       In other boolean contexts, "<filehandle>" without an explicit "defined"
+       In other boolean contexts, "&ltfilehandle&gt" without an explicit "defined"
        test or comparison elicit a warning if the "use warnings" pragma or the
        -w command-line switch (the $^W variable) is in effect.
 
@@ -2033,23 +2035,23 @@ DESCRIPTION
        function, amongst others.  See perlopentut and "open" in perlfunc for
        details on this.
 
-       If a <FILEHANDLE> is used in a context that is looking for a list, a
+       If a &ltFILEHANDLE&gt is used in a context that is looking for a list, a
        list comprising all input lines is returned, one line per list element.
        It's easy to grow to a rather large data space this way, so use with
        care.
 
-       <FILEHANDLE> may also be spelled "readline(*FILEHANDLE)".  See
+       &ltFILEHANDLE&gt may also be spelled "readline(*FILEHANDLE)".  See
        "readline" in perlfunc.
 
-       The null filehandle <> is special: it can be used to emulate the
-       behavior of sed and awk.  Input from <> comes either from standard
+       The null filehandle &lt&gt is special: it can be used to emulate the
+       behavior of sed and awk.  Input from &lt&gt comes either from standard
        input, or from each file listed on the command line.  Here's how it
-       works: the first time <> is evaluated, the @ARGV array is checked, and
+       works: the first time &lt&gt is evaluated, the @ARGV array is checked, and
        if it is empty, $ARGV[0] is set to "-", which when opened gives you
        standard input.	The @ARGV array is then processed as a list of
        filenames.  The loop
 
-	   while (<>) {
+	   while (&lt&gt) {
 	       ...		       # code for each line
 	   }
 
@@ -2058,22 +2060,22 @@ DESCRIPTION
 	   unshift(@ARGV, '-') unless @ARGV;
 	   while ($ARGV = shift) {
 	       open(ARGV, $ARGV);
-	       while (<ARGV>) {
+	       while (&ltARGV&gt) {
 		   ...	       # code for each line
 	       }
 	   }
 
        except that it isn't so cumbersome to say, and will actually work.  It
        really does shift the @ARGV array and put the current filename into the
-       $ARGV variable.	It also uses filehandle ARGV internally--<> is just a
-       synonym for <ARGV>, which is magical.  (The pseudo code above doesn't
-       work because it treats <ARGV> as non-magical.)
+       $ARGV variable.	It also uses filehandle ARGV internally--&lt&gt is just a
+       synonym for &ltARGV&gt, which is magical.  (The pseudo code above doesn't
+       work because it treats &ltARGV&gt as non-magical.)
 
        Since the null filehandle uses the two argument form of "open" in
        perlfunc it interprets special characters, so if you have a script like
        this:
 
-	   while (<>) {
+	   while (&lt&gt) {
 	       print;
 	   }
 
@@ -2082,7 +2084,7 @@ DESCRIPTION
        If you want all items in @ARGV to be interpreted as file names, you can
        use the module "ARGV::readonly" from CPAN.
 
-       You can modify @ARGV before the first <> as long as the array ends up
+       You can modify @ARGV before the first &lt&gt as long as the array ends up
        containing the list of filenames you really want.  Line numbers ($.)
        continue as though the input were one big happy file.  See the example
        in "eof" in perlfunc for how to reset line numbers on each file.
@@ -2095,7 +2097,7 @@ DESCRIPTION
        You can even set them to pipe commands.	For example, this
        automatically filters compressed arguments through gzip:
 
-	   @ARGV = map { /\.(gz|Z)$/ ? "gzip -dc < $_ |" : $_ } @ARGV;
+	   @ARGV = map { /\.(gz|Z)$/ ? "gzip -dc &lt $_ |" : $_ } @ARGV;
 
        If you want to pass switches into your script, you can use one of the
        Getopts modules or put a loop on the front like this:
@@ -2108,48 +2110,48 @@ DESCRIPTION
 	       # ...	       # other switches
 	   }
 
-	   while (<>) {
+	   while (&lt&gt) {
 	       # ...	       # code for each line
 	   }
 
-       The <> symbol will return "undef" for end-of-file only once.  If you
+       The &lt&gt symbol will return "undef" for end-of-file only once.  If you
        call it again after this, it will assume you are processing another
        @ARGV list, and if you haven't set @ARGV, will read input from STDIN.
 
        If what the angle brackets contain is a simple scalar variable (e.g.,
-       <$foo>), then that variable contains the name of the filehandle to
+       &lt$foo&gt), then that variable contains the name of the filehandle to
        input from, or its typeglob, or a reference to the same.  For example:
 
 	   $fh = \*STDIN;
-	   $line = <$fh>;
+	   $line = &lt$fh&gt;
 
        If what's within the angle brackets is neither a filehandle nor a
        simple scalar variable containing a filehandle name, typeglob, or
        typeglob reference, it is interpreted as a filename pattern to be
        globbed, and either a list of filenames or the next filename in the
        list is returned, depending on context.	This distinction is determined
-       on syntactic grounds alone.  That means "<$x>" is always a readline()
-       from an indirect handle, but "<$hash{key}>" is always a glob().	That's
+       on syntactic grounds alone.  That means "&lt$x&gt" is always a readline()
+       from an indirect handle, but "&lt$hash{key}&gt" is always a glob().	That's
        because $x is a simple scalar variable, but $hash{key} is not--it's a
-       hash element.  Even "<$x >" (note the extra space) is treated as
+       hash element.  Even "&lt$x &gt" (note the extra space) is treated as
        "glob("$x ")", not "readline($x)".
 
        One level of double-quote interpretation is done first, but you can't
-       say "<$foo>" because that's an indirect filehandle as explained in the
+       say "&lt$foo&gt" because that's an indirect filehandle as explained in the
        previous paragraph.  (In older versions of Perl, programmers would
        insert curly brackets to force interpretation as a filename glob:
-       "<${foo}>".  These days, it's considered cleaner to call the internal
+       "&lt${foo}&gt".  These days, it's considered cleaner to call the internal
        function directly as "glob($foo)", which is probably the right way to
        have done it in the first place.)  For example:
 
-	   while (<*.c>) {
+	   while (&lt*.c&gt) {
 	       chmod 0644, $_;
 	   }
 
        is roughly equivalent to:
 
 	   open(FOO, "echo *.c | tr -s ' \t\r\f' '\\012\\012\\012\\012'|");
-	   while (<FOO>) {
+	   while (&ltFOO&gt) {
 	       chomp;
 	       chmod 0644, $_;
 	   }
@@ -2158,7 +2160,7 @@ DESCRIPTION
        "File::Glob" extension.	Of course, the shortest way to do the above
        is:
 
-	   chmod 0644, <*.c>;
+	   chmod 0644, &lt*.c&gt;
 
        A (file)glob evaluates its (embedded) argument only when it is starting
        a new list.  All values must be read before it will start over.	In
@@ -2171,11 +2173,11 @@ DESCRIPTION
        "undef" is returned only once.  So if you're expecting a single value
        from a glob, it is much better to say
 
-	   ($file) = <blurch*>;
+	   ($file) = &ltblurch*&gt;
 
        than
 
-	   $file = <blurch*>;
+	   $file = &ltblurch*&gt;
 
        because the latter will alternate between returning a filename and
        returning false.
@@ -2201,7 +2203,7 @@ DESCRIPTION
        and this all reduces to one string internally.  Likewise, if you say
 
 	   foreach $file (@filenames) {
-	       if (-s $file > 5 + 100 * 2**16) {  }
+	       if (-s $file &gt 5 + 100 * 2**16) {  }
 	   }
 
        the compiler will precompute the number which that expression
@@ -2228,7 +2230,7 @@ DESCRIPTION
 	   print "j p \n" ^ " a h";	       # prints "JAPH\n"
 	   print "JA" | "  ph\n";	       # prints "japh\n"
 	   print "japh\nJunk" & '_____';       # prints "JAPH\n";
-	   print 'p N$' ^ " E<H\n";	       # prints "Perl\n";
+	   print 'p N$' ^ " E&ltH\n";	       # prints "Perl\n";
 
        If you are intending to manipulate bitstrings, be certain that you're
        supplying bitstrings: If an operand is a number, that will imply a
@@ -2264,8 +2266,8 @@ DESCRIPTION
        integer", if you take the sqrt(2), you'll still get 1.4142135623731 or
        so.
 
-       Used on numbers, the bitwise operators ("&", "|", "^", "~", "<<", and
-       ">>") always produce integral results.  (But see also "Bitwise String
+       Used on numbers, the bitwise operators ("&", "|", "^", "~", "&lt&lt", and
+       "&gt&gt") always produce integral results.  (But see also "Bitwise String
        Operators".)  However, "use integer" still has meaning for them.  By
        default, their results are interpreted as unsigned integers, but if
        "use integer" is in effect, their results are interpreted as signed
@@ -2322,7 +2324,7 @@ DESCRIPTION
        representations.
 
 	   use Math::BigInt;
-	   $x = Math::BigInt->new('123456789123456789');
+	   $x = Math::BigInt-&gtnew('123456789123456789');
 	   print $x * $x;
 
 	   # prints +15241578780673678515622620750190521
@@ -2351,6 +2353,6 @@ DESCRIPTION
 
 
 perl v5.10.1			  2009-08-11			     PERLOP(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

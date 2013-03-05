@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The purpose of this document is to show you how to call Perl..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlcall - Perl calling conventions from C</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLCALL(1)	       Perl Programmers Reference Guide 	   PERLCALL(1)
 
 
@@ -334,7 +336,7 @@ EXAMPLES
 
 	   sub PrintUID
 	   {
-	       print "UID is $<\n";
+	       print "UID is $&lt\n";
 	   }
 
        and here is a C function to call it
@@ -668,7 +670,7 @@ EXAMPLES
 
 	       printf ("Items Returned = %d\n", count);
 
-	       for (i = 1; i <= count; ++i)
+	       for (i = 1; i &lt= count; ++i)
 		   printf ("Value %d = %d\n", i, POPi);
 
 	       PUTBACK;
@@ -758,7 +760,7 @@ EXAMPLES
 	   {
 	       my ($a, $b) = @_;
 
-	       die "death can be fatal\n" if $a < $b;
+	       die "death can be fatal\n" if $a &lt $b;
 
 	       $a - $b;
 	   }
@@ -851,14 +853,14 @@ EXAMPLES
 	   sub new { bless {}, $_[0] }
 	   sub Subtract {
 	       my($a,$b) = @_;
-	       die "death can be fatal" if $a < $b;
+	       die "death can be fatal" if $a &lt $b;
 	       $a - $b;
 	   }
 	   sub DESTROY { call_Subtract(5, 4); }
 	   sub foo { die "foo dies"; }
 
 	   package main;
-	   eval { Foo->new->foo };
+	   eval { Foo-&gtnew-&gtfoo };
 	   print "Saw: $@" if $@;	      # should be, but isn't
 
        This example will fail to recognize that an error occurred inside the
@@ -1085,9 +1087,9 @@ EXAMPLES
        and a version number. The virtual method, "Display", prints out a
        single element of the array.  Here is an all Perl example of using it.
 
-	   $a = Mine->new('red', 'green', 'blue');
-	   $a->Display(1);
-	   Mine->PrintID;
+	   $a = Mine-&gtnew('red', 'green', 'blue');
+	   $a-&gtDisplay(1);
+	   Mine-&gtPrintID;
 
        will print
 
@@ -1133,7 +1135,7 @@ EXAMPLES
 
        So the methods "PrintID" and "Display" can be invoked like this
 
-	   $a = Mine->new('red', 'green', 'blue');
+	   $a = Mine-&gtnew('red', 'green', 'blue');
 	   call_Method($a, 'Display', 1);
 	   call_PrintID('Mine', 'PrintID');
 
@@ -1205,7 +1207,7 @@ EXAMPLES
        follows.  You have created an interface to an external library.
        Control can reach the external library like this
 
-	   perl --> XSUB --> external library
+	   perl --&gt XSUB --&gt external library
 
        Whilst control is in the library, an error condition occurs. You have
        previously set up a Perl callback to handle this situation, so it will
@@ -1213,13 +1215,13 @@ EXAMPLES
        Perl again.  Here is what the flow of control will be like in that
        situation
 
-	   perl --> XSUB --> external library
+	   perl --&gt XSUB --&gt external library
 			     ...
 			     error occurs
 			     ...
-			     external library --> call_* --> perl
+			     external library --&gt call_* --&gt perl
 								 |
-	   perl <-- XSUB <-- external library <-- call_* <----+
+	   perl &lt-- XSUB &lt-- external library &lt-- call_* &lt----+
 
        After processing of the error using call_* is completed, control
        reverts back to Perl more or less immediately.
@@ -1232,24 +1234,24 @@ EXAMPLES
        In the second example, an event driven program, the flow of control
        will be more like this
 
-	   perl --> XSUB --> event handler
+	   perl --&gt XSUB --&gt event handler
 			     ...
-			     event handler --> call_* --> perl
+			     event handler --&gt call_* --&gt perl
 							      |
-			     event handler <-- call_* <----+
+			     event handler &lt-- call_* &lt----+
 			     ...
-			     event handler --> call_* --> perl
+			     event handler --&gt call_* --&gt perl
 							      |
-			     event handler <-- call_* <----+
+			     event handler &lt-- call_* &lt----+
 			     ...
-			     event handler --> call_* --> perl
+			     event handler --&gt call_* --&gt perl
 							      |
-			     event handler <-- call_* <----+
+			     event handler &lt-- call_* &lt----+
 
        In this case the flow of control can consist of only the repeated
        sequence
 
-	   event handler --> call_* --> perl
+	   event handler --&gt call_* --&gt perl
 
        for practically the complete duration of the program.  This means that
        control may never drop back to the surrounding scope in Perl at the
@@ -1385,7 +1387,7 @@ EXAMPLES
 	       if (Mapping == (HV*)NULL)
 		   Mapping = newHV();
 
-	       /* Save the fh -> callback mapping */
+	       /* Save the fh -&gt callback mapping */
 	       hv_store(Mapping, (char*)&fh, sizeof(fh), newSVsv(callback), 0);
 
 	       /* Register with the C Library */
@@ -1528,7 +1530,7 @@ EXAMPLES
 	       int null_index = MAX_CB;
 
 	       /* Find the same handle or an empty entry */
-	       for (index = 0; index < MAX_CB; ++index)
+	       for (index = 0; index &lt MAX_CB; ++index)
 	       {
 		   if (Map[index].Handle == fh)
 		       break;
@@ -1561,7 +1563,7 @@ EXAMPLES
 	       int index;
 
 	       /* Find the file handle */
-	       for (index = 0; index < MAX_CB; ++ index)
+	       for (index = 0; index &lt MAX_CB; ++ index)
 		   if (Map[index].Handle == fh)
 		       break;
 
@@ -1754,6 +1756,6 @@ DATE
 
 
 perl v5.10.1			  2009-04-12			   PERLCALL(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

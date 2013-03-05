@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Treereg" translates a tree grammar specification file (default..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>treereg - Compiler for Tree Regular Expressions</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 TREEREG(1)	      User Contributed Perl Documentation	    TREEREG(1)
 
 
@@ -57,16 +59,16 @@ OPTIONS
 	   programmer may prefix the class names with a given prefix when
 	   calling the parser; for example:
 
-	     $self->YYParse( yylex => \&_Lexer, yyerror => \&_Error, yyprefix => __PACKAGE__."::")
+	     $self-&gtYYParse( yylex =&gt \&_Lexer, yyerror =&gt \&_Error, yyprefix =&gt __PACKAGE__."::")
 
 	   The "-prefix treeprefix" option simplifies the process of writing
 	   the tree grammar so that instead of writing with the full names
 
-	    CLASS::TIMES(CLASS::NUM, $x) and { $NUM->{VAL} == 0) => { $NUM }
+	    CLASS::TIMES(CLASS::NUM, $x) and { $NUM-&gt{VAL} == 0) =&gt { $NUM }
 
 	   it can be written:
 
-	    TIMES(NUM, $x) and { $NUM->{VAL} == 0) => { $NUM }
+	    TIMES(NUM, $x) and { $NUM-&gt{VAL} == 0) =&gt { $NUM }
 
        o   "-n[umbers]"
 
@@ -109,7 +111,7 @@ DESCRIPTION
        extension ".trg" describing a set of tree patterns and the actions to
        modify them using tree-terms like:
 
-	 TIMES(NUM, $x) and { $NUM->{VAL} == 0) => { $NUM }
+	 TIMES(NUM, $x) and { $NUM-&gt{VAL} == 0) =&gt { $NUM }
 
        which says that wherever an abstract syntax tree representing the
        product of a numeric expression with value 0 times any other kind of
@@ -123,7 +125,7 @@ EXAMPLE
        documentation to know more about "Parse::Eyapp" grammars):
 
 	 ----------------------------------------------------------
-	 nereida:~/LEyapp/examples> cat Rule6.yp
+	 nereida:~/LEyapp/examples&gt cat Rule6.yp
 	 %{
 	 use Data::Dumper;
 	 %}
@@ -165,13 +167,13 @@ EXAMPLE
 	 sub _Lexer {
 	     my($parser)=shift;
 
-		 $parser->YYData->{INPUT}
-	     or  $parser->YYData->{INPUT} = <STDIN>
+		 $parser-&gtYYData-&gt{INPUT}
+	     or  $parser-&gtYYData-&gt{INPUT} = &ltSTDIN&gt
 	     or  return('',undef);
 
-	     $parser->YYData->{INPUT}=~s/^\s+//;
+	     $parser-&gtYYData-&gt{INPUT}=~s/^\s+//;
 
-	     for ($parser->YYData->{INPUT}) {
+	     for ($parser-&gtYYData-&gt{INPUT}) {
 		 s/^([0-9]+(?:\.[0-9]+)?)// and return('NUM',$1);
 		 s/^([A-Za-z][A-Za-z0-9_]*)// and return('VAR',$1);
 		 s/^(.)//s and return($1,$1);
@@ -180,34 +182,34 @@ EXAMPLE
 
 	 sub Run {
 	     my($self)=shift;
-	     $self->YYParse( yylex => \&_Lexer, yyerror => \&_Error );
+	     $self-&gtYYParse( yylex =&gt \&_Lexer, yyerror =&gt \&_Error );
 	 }
 	 ----------------------------------------------------------
 
        Compile it using "eyapp":
 
 	 ----------------------------------------------------------
-	 nereida:~/LEyapp/examples> eyapp Rule6.yp
-	 nereida:~/LEyapp/examples> ls -ltr | tail -1
+	 nereida:~/LEyapp/examples&gt eyapp Rule6.yp
+	 nereida:~/LEyapp/examples&gt ls -ltr | tail -1
 	 -rw-rw----  1 pl users  4976 2006-09-15 19:56 Rule6.pm
 	 ----------------------------------------------------------
 
        Now consider this tree grammar:
 
 	 ----------------------------------------------------------
-	 nereida:~/LEyapp/examples> cat Transform2.trg
+	 nereida:~/LEyapp/examples&gt cat Transform2.trg
 	 %{
-	 my %Op = (PLUS=>'+', MINUS => '-', TIMES=>'*', DIV => '/');
+	 my %Op = (PLUS=&gt'+', MINUS =&gt '-', TIMES=&gt'*', DIV =&gt '/');
 	 %}
 
 	 fold: 'TIMES|PLUS|DIV|MINUS':bin(NUM($n), NUM($m))
-	   => {
+	   =&gt {
 	     my $op = $Op{ref($bin)};
-	     $n->{attr} = eval	"$n->{attr} $op $m->{attr}";
+	     $n-&gt{attr} = eval	"$n-&gt{attr} $op $m-&gt{attr}";
 	     $_[0] = $NUM[0];
 	   }
-	 zero_times_whatever: TIMES(NUM($x), .) and { $x->{attr} == 0 } => { $_[0] = $NUM }
-	 whatever_times_zero: TIMES(., NUM($x)) and { $x->{attr} == 0 } => { $_[0] = $NUM }
+	 zero_times_whatever: TIMES(NUM($x), .) and { $x-&gt{attr} == 0 } =&gt { $_[0] = $NUM }
+	 whatever_times_zero: TIMES(., NUM($x)) and { $x-&gt{attr} == 0 } =&gt { $_[0] = $NUM }
 
 	 /* rules related with times */
 	 times_zero = zero_times_whatever whatever_times_zero;
@@ -216,8 +218,8 @@ EXAMPLE
        Compile it with "treereg":
 
 	 ----------------------------------------------------------
-	 nereida:~/LEyapp/examples> treereg Transform2.trg
-	 nereida:~/LEyapp/examples> ls -ltr | tail -1
+	 nereida:~/LEyapp/examples&gt treereg Transform2.trg
+	 nereida:~/LEyapp/examples&gt ls -ltr | tail -1
 	 -rw-rw----  1 pl users  1948 2006-09-15 19:57 Transform2.pm
 	 ----------------------------------------------------------
 
@@ -225,7 +227,7 @@ EXAMPLE
        "Transform2.pm":
 
 	 ----------------------------------------------------------
-	 nereida:~/LEyapp/examples> cat foldand0rule6_3.pl
+	 nereida:~/LEyapp/examples&gt cat foldand0rule6_3.pl
 	 #!/usr/bin/perl -w
 	 use strict;
 	 use Rule6;
@@ -235,10 +237,10 @@ EXAMPLE
 
 	 $Data::Dumper::Indent = 1;
 	 my $parser = new Rule6();
-	 my $t = $parser->Run;
+	 my $t = $parser-&gtRun;
 	 print "\n***** Before ******\n";
 	 print Dumper($t);
-	 $t->s(@Transform2::all);
+	 $t-&gts(@Transform2::all);
 	 print "\n***** After ******\n";
 	 print Dumper($t);
 	 ----------------------------------------------------------
@@ -247,26 +249,26 @@ EXAMPLE
        output:
 
 	 ----------------------------------------------------------
-	 nereida:~/LEyapp/examples> foldand0rule6_3.pl
+	 nereida:~/LEyapp/examples&gt foldand0rule6_3.pl
 	 b*(2-2)
 
 	 ***** Before ******
 	 $VAR1 = bless( {
-	   'children' => [
+	   'children' =&gt [
 	     bless( {
-	       'children' => [
-		 bless( { 'children' => [], 'attr' => 'b', 'token' => 'VAR' }, 'TERMINAL' )
+	       'children' =&gt [
+		 bless( { 'children' =&gt [], 'attr' =&gt 'b', 'token' =&gt 'VAR' }, 'TERMINAL' )
 	       ]
 	     }, 'VAR' ),
 	     bless( {
-	       'children' => [
-		 bless( { 'children' => [
-		     bless( { 'children' => [], 'attr' => '2', 'token' => 'NUM' }, 'TERMINAL' )
+	       'children' =&gt [
+		 bless( { 'children' =&gt [
+		     bless( { 'children' =&gt [], 'attr' =&gt '2', 'token' =&gt 'NUM' }, 'TERMINAL' )
 		   ]
 		 }, 'NUM' ),
 		 bless( {
-		   'children' => [
-		     bless( { 'children' => [], 'attr' => '2', 'token' => 'NUM' }, 'TERMINAL' )
+		   'children' =&gt [
+		     bless( { 'children' =&gt [], 'attr' =&gt '2', 'token' =&gt 'NUM' }, 'TERMINAL' )
 		   ]
 		 }, 'NUM' )
 	       ]
@@ -276,8 +278,8 @@ EXAMPLE
 
 	 ***** After ******
 	 $VAR1 = bless( {
-	   'children' => [
-	     bless( { 'children' => [], 'attr' => 0, 'token' => 'NUM' }, 'TERMINAL' )
+	   'children' =&gt [
+	     bless( { 'children' =&gt [], 'attr' =&gt 0, 'token' =&gt 'NUM' }, 'TERMINAL' )
 	   ]
 	 }, 'NUM' );
 	 ----------------------------------------------------------
@@ -291,9 +293,9 @@ SEE ALSO
        o   eyapptut
 
        o   The pdf file in
-	   <http://nereida.deioc.ull.es/~pl/perlexamples/Eyapp.pdf>
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/Eyapp.pdf&gt
 
-       o   <http://nereida.deioc.ull.es/~pl/perlexamples/section_eyappts.html>
+       o   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/section_eyappts.html&gt
 	   (Spanish),
 
        o   eyapp,
@@ -326,6 +328,6 @@ LICENSE AND COPYRIGHT
 
 
 perl v5.12.4			  2011-01-30			    TREEREG(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

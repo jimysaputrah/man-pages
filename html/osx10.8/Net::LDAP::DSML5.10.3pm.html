@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Directory Service Markup Language (DSML) is the XML standard for..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>NET::LDAP::DSML -- A DSML Writer for Net::LDAP</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::LDAP::DSML(3)    User Contributed Perl Documentation   Net::LDAP::DSML(3)
 
 
@@ -25,9 +27,9 @@ SYNOPSIS
 
 	my $server = "localhost";
 	my $file = "testdsml.xml";
-	my $ldap = Net::LDAP->new($server);
+	my $ldap = Net::LDAP-&gtnew($server);
 
-	$ldap->bind();
+	$ldap-&gtbind();
 
 
 	#
@@ -35,18 +37,18 @@ SYNOPSIS
 	#
 	my $file = "testdsml.xml";
 
-	my $io = IO::File->new($file,"w") or die ("failed to open $file as filehandle.$!\n");
+	my $io = IO::File-&gtnew($file,"w") or die ("failed to open $file as filehandle.$!\n");
 
-	my $dsml = Net::LDAP::DSML->new(output => $io, pretty_print => 1 )
+	my $dsml = Net::LDAP::DSML-&gtnew(output =&gt $io, pretty_print =&gt 1 )
 	     or die ("DSML object creation problem using an output file.\n");
 	#      OR
 	#
 	# For file i/o
 	#
 
-	open (IO,">$file") or die("failed to open $file.$!");
+	open (IO,"&gt$file") or die("failed to open $file.$!");
 
-	my $dsml = Net::LDAP::DSML->new(output => *IO, pretty_print => 1)
+	my $dsml = Net::LDAP::DSML-&gtnew(output =&gt *IO, pretty_print =&gt 1)
 	    or die ("DSML object creation problem using an output file.\n");
 
 	#      OR
@@ -56,34 +58,34 @@ SYNOPSIS
 	#
 
 	my @data = ();
-	$dsml = Net::LDAP::DSML->new(output => \@data, pretty_print => 1)
+	$dsml = Net::LDAP::DSML-&gtnew(output =&gt \@data, pretty_print =&gt 1)
 	    or die ("DSML object cration problem using an output array.\n");
 
 
-	 my $mesg = $ldap->search(
-				  base	   => 'o=airius.com',
-				  scope    => 'sub',
-				  filter   => 'ou=accounting',
-				  callback => sub {
+	 my $mesg = $ldap-&gtsearch(
+				  base	   =&gt 'o=airius.com',
+				  scope    =&gt 'sub',
+				  filter   =&gt 'ou=accounting',
+				  callback =&gt sub {
 						my ($mesg,$entry) =@_;
-						$dsml->write_entry($entry)
+						$dsml-&gtwrite_entry($entry)
 						 if (ref $entry eq 'Net::LDAP::Entry');
 					      }
 				   );
 
-	die ("search failed with ",$mesg->code(),"\n") if $mesg->code();
+	die ("search failed with ",$mesg-&gtcode(),"\n") if $mesg-&gtcode();
 
 	For directory schema;
 
 	A file or array can be used for output, in the following example
 	only an array will be used.
 
-	my $schema = $ldap->schema();
+	my $schema = $ldap-&gtschema();
 	my @data = ();
-	my $dsml = Net::LDAP::DSML->new(output => \@data, pretty_print => 1 )
+	my $dsml = Net::LDAP::DSML-&gtnew(output =&gt \@data, pretty_print =&gt 1 )
 	     or die ("DSML object creation problem using an output array.\n");
 
-	$dsml->write_schema($schema);
+	$dsml-&gtwrite_schema($schema);
 
 	print "Finished printing DSML\n";
 
@@ -139,15 +141,15 @@ CONSTRUCTOR
 
 	   Example
 
-	     my $dsml = Net::LDAP::DSML->new();
+	     my $dsml = Net::LDAP::DSML-&gtnew();
 	     Prints xml data to standard out.
 
-	     my $dsml = Net::LDAP::DSML->new(output => \@array);
-	     my $dsml = Net::LDAP::DSML->new(output => *FILE);
+	     my $dsml = Net::LDAP::DSML-&gtnew(output =&gt \@array);
+	     my $dsml = Net::LDAP::DSML-&gtnew(output =&gt *FILE);
 	     Prints xml data to a file or array.
 
-	     my $dsml = Net::LDAP::DSML->new(output => \@array, pretty_print => 1);
-	     my $dsml = Net::LDAP::DSML->new(output => *FILE, pretty_print => 1);
+	     my $dsml = Net::LDAP::DSML-&gtnew(output =&gt \@array, pretty_print =&gt 1);
+	     my $dsml = Net::LDAP::DSML-&gtnew(output =&gt *FILE, pretty_print =&gt 1);
 	     Prints xml data to a file or array in pretty print style.
 
 METHODS
@@ -163,8 +165,8 @@ METHODS
 
 	   Example
 
-	     my $entry = $mesg->entry();
-	     $dsml->write_entry($entry);
+	     my $entry = $mesg-&gtentry();
+	     $dsml-&gtwrite_entry($entry);
 
        write_schema ( SCHEMA )
 	   Schema is a Net::LDAP::Schema object. The write_schema method will
@@ -173,8 +175,8 @@ METHODS
 
 	   Example
 
-	     my $schema = $ldap->schema();
-	     $dsml->write_schema($schema);
+	     my $schema = $ldap-&gtschema();
+	     $dsml-&gtwrite_schema($schema);
 
 AUTHOR
        Graham Barr   gbarr@pobox.com
@@ -190,6 +192,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2010-03-11		    Net::LDAP::DSML(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

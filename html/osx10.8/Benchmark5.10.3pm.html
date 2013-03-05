@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Benchmark module encapsulates a number of routines to help you..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Benchmark - benchmark running times of Perl code</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Benchmark(3pm)	       Perl Programmers Reference Guide 	Benchmark(3pm)
 
 
@@ -22,32 +24,32 @@ SYNOPSIS
 
 	   # Use Perl code in strings...
 	   timethese($count, {
-	       'Name1' => '...code1...',
-	       'Name2' => '...code2...',
+	       'Name1' =&gt '...code1...',
+	       'Name2' =&gt '...code2...',
 	   });
 
 	   # ... or use subroutine references.
 	   timethese($count, {
-	       'Name1' => sub { ...code1... },
-	       'Name2' => sub { ...code2... },
+	       'Name1' =&gt sub { ...code1... },
+	       'Name2' =&gt sub { ...code2... },
 	   });
 
 	   # cmpthese can be used both ways as well
 	   cmpthese($count, {
-	       'Name1' => '...code1...',
-	       'Name2' => '...code2...',
+	       'Name1' =&gt '...code1...',
+	       'Name2' =&gt '...code2...',
 	   });
 
 	   cmpthese($count, {
-	       'Name1' => sub { ...code1... },
-	       'Name2' => sub { ...code2... },
+	       'Name1' =&gt sub { ...code1... },
+	       'Name2' =&gt sub { ...code2... },
 	   });
 
 	   # ...or in two stages
 	   $results = timethese($count,
 	       {
-		   'Name1' => sub { ...code1... },
-		   'Name2' => sub { ...code2... },
+		   'Name1' =&gt sub { ...code1... },
+		   'Name2' =&gt sub { ...code2... },
 	       },
 	       'none'
 	   );
@@ -57,7 +59,7 @@ SYNOPSIS
 	   print "$count loops of other code took:",timestr($t),"\n";
 
 	   $t = countit($time, '...other code...')
-	   $count = $t->iters ;
+	   $count = $t-&gtiters ;
 	   print "$count loops of other code took:",timestr($t),"\n";
 
 	   # enable hires wallclock timing if possible
@@ -81,18 +83,18 @@ DESCRIPTION
        new	 Returns the current time.   Example:
 
 		     use Benchmark;
-		     $t0 = Benchmark->new;
+		     $t0 = Benchmark-&gtnew;
 		     # ... your code here ...
-		     $t1 = Benchmark->new;
+		     $t1 = Benchmark-&gtnew;
 		     $td = timediff($t1, $t0);
 		     print "the code took:",timestr($td),"\n";
 
        debug	 Enables or disable debugging by setting the $Benchmark::Debug
 		 flag:
 
-		     Benchmark->debug(1);
+		     Benchmark-&gtdebug(1);
 		     $t = timeit(10, ' 5 ** $Global ');
-		     Benchmark->debug(0);
+		     Benchmark-&gtdebug(0);
 
        iters	 Returns the number of iterations.
 
@@ -124,7 +126,7 @@ DESCRIPTION
 
 		 or to run two pieces of code tests for at least 3 seconds:
 
-			 timethese(0, { test1 => '...', test2 => '...'})
+			 timethese(0, { test1 =&gt '...', test2 =&gt '...'})
 
 		 CPU seconds is, in UNIX terms, the user time plus the system
 		 time of the process itself, as opposed to the real
@@ -192,7 +194,7 @@ DESCRIPTION
 		 Optionally calls timethese(), then outputs comparison chart.
 		 This:
 
-		     cmpthese( -1, { a => "++\$i", b => "\$i *= 2" } ) ;
+		     cmpthese( -1, { a =&gt "++\$i", b =&gt "\$i *= 2" } ) ;
 
 		 outputs a chart like:
 
@@ -206,7 +208,7 @@ DESCRIPTION
 		 "cmpthese" can also be passed the data structure that
 		 timethese() returns:
 
-		     $results = timethese( -1, { a => "++\$i", b => "\$i *= 2" } ) ;
+		     $results = timethese( -1, { a =&gt "++\$i", b =&gt "\$i *= 2" } ) ;
 		     cmpthese( $results );
 
 		 in case you want to see both sets of results.	If the first
@@ -216,7 +218,7 @@ DESCRIPTION
 		 Returns a reference to an ARRAY of rows, each row is an ARRAY
 		 of cells from the above chart, including labels. This:
 
-		     my $rows = cmpthese( -1, { a => '++$i', b => '$i *= 2' }, "none" );
+		     my $rows = cmpthese( -1, { a =&gt '++$i', b =&gt '$i *= 2' }, "none" );
 
 		 returns a data structure like:
 
@@ -306,8 +308,8 @@ EXAMPLES
 	   use Benchmark qw( cmpthese ) ;
 	   $x = 3;
 	   cmpthese( -5, {
-	       a => sub{$x*$x},
-	       b => sub{$x**2},
+	       a =&gt sub{$x*$x},
+	       b =&gt sub{$x**2},
 	   } );
 
        outputs something like this:
@@ -322,8 +324,8 @@ EXAMPLES
 	   use Benchmark qw( timethese cmpthese ) ;
 	   $x = 3;
 	   $r = timethese( -5, {
-	       a => sub{$x*$x},
-	       b => sub{$x**2},
+	       a =&gt sub{$x*$x},
+	       b =&gt sub{$x**2},
 	   } );
 	   cmpthese $r;
 
@@ -354,13 +356,13 @@ CAVEATS
 
        The system time of the null loop might be slightly more than the system
        time of the loop with the actual code and therefore the difference
-       might end up being < 0.
+       might end up being &lt 0.
 
 SEE ALSO
        Devel::DProf - a Perl code profiler
 
 AUTHORS
-       Jarkko Hietaniemi <jhi@iki.fi>, Tim Bunce <Tim.Bunce@ig.co.uk>
+       Jarkko Hietaniemi &ltjhi@iki.fi&gt, Tim Bunce &ltTim.Bunce@ig.co.uk&gt
 
 MODIFICATION HISTORY
        September 8th, 1994; by Tim Bunce.
@@ -395,6 +397,6 @@ MODIFICATION HISTORY
 
 
 perl v5.10.1			  2009-07-03			Benchmark(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

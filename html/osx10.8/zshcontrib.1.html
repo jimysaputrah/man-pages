@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The  Zsh  source distribution includes a number of items contributed by..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>zshcontrib - user contributions to zsh</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 ZSHCONTRIB(1)							 ZSHCONTRIB(1)
 
 
@@ -134,7 +136,7 @@ UTILITIES
        tion digests for all functions in your fpath, assuming  that  you  have
        write permission to the directories:
 
-	      for ((i=1; i <= $#fpath; ++i)); do
+	      for ((i=1; i &lt= $#fpath; ++i)); do
 		dir=$fpath[i]
 		zwc=${dir:t}.zwc
 		if [[ $dir == (.|..) || $dir == (.|..)/* ]]; then
@@ -215,7 +217,7 @@ UTILITIES
        To use reporter, read the script into your shell with the  `.'  command
        and redirect the output into a file:
 
-	      . ~/zsh-4.3.11/Util/reporter > zsh.report
+	      . ~/zsh-4.3.11/Util/reporter &gt zsh.report
 
        You should check the zsh.report file for any sensitive information such
        as passwords and delete them by hand before sending the script  to  the
@@ -509,7 +511,7 @@ REMEMBERING RECENT DIRECTORIES
        on.  This also includes completion.
 
 	      if [[ $1 = n ]]; then
-		if [[ $2 = <-> ]]; then
+		if [[ $2 = &lt-&gt ]]; then
 		  # Recent directory
 		  typeset -ga reply
 		  autoload -Uz cdr
@@ -523,7 +525,7 @@ REMEMBERING RECENT DIRECTORIES
 		  fi
 		fi
 	      elif [[ $1 = c ]]; then
-		if [[ $PREFIX = <-> || -z $PREFIX ]]; then
+		if [[ $PREFIX = &lt-&gt || -z $PREFIX ]]; then
 		  typeset -a keys values
 		  values=(${${(f)"$(cdr -l)"}/ ##/:})
 		  keys=(${values%%:*})
@@ -635,7 +637,7 @@ GATHERING INFORMATION FROM VERSION CONTROL SYSTEMS
 	      svn
 	      tla
 	      ## flavours (cannot be used in the enable or disable styles; they
-	      ## are enabled and disabled with their master [git-svn -> git])
+	      ## are enabled and disabled with their master [git-svn -&gt git])
 	      ## they *can* be used in contexts: ':vcs_info:git-svn:*'.
 	      git-p4
 	      git-svn
@@ -664,38 +666,38 @@ GATHERING INFORMATION FROM VERSION CONTROL SYSTEMS
        The vcs_info feature can be configured via zstyle.
 
        First, the context in which we are working:
-	      :vcs_info:<vcs-string>:<user-context>:<repo-root-name>
+	      :vcs_info:&ltvcs-string&gt:&ltuser-context&gt:&ltrepo-root-name&gt
 
-       <vcs-string>
+       &ltvcs-string&gt
 	      is  one  of:  git, git-svn, git-p4, hg, hg-git, hg-hgsubversion,
 	      hg-hgsvn, darcs, bzr, cdv, mtn, svn, cvs, svk, tla or  p4.  When
 	      hooks are active the hooks name is added after a `+'. (See Hooks
 	      in vcs_info below.)
 
-       <user-context>
+       &ltuser-context&gt
 	      is a freely configurable string, assignable by the user  as  the
 	      first argument to vcs_info (see its description below).
 
-       <repo-root-name>
+       &ltrepo-root-name&gt
 	      is  the name of a repository in which you want a style to match.
 	      So, if you want a setting specific to  /usr/src/zsh,  with  that
-	      being  a	CVS  checkout,	you can set <repo-root-name> to zsh to
+	      being  a	CVS  checkout,	you can set &ltrepo-root-name&gt to zsh to
 	      make it so.
 
-       There are three special values for <vcs-string>:  The  first  is  named
+       There are three special values for &ltvcs-string&gt:  The  first  is  named
        -init-,	that  is  in  effect as long as there was no decision what VCS
        backend to use. The second is -preinit-; it is used before vcs_info  is
        run,  when initializing the data exporting variables. The third special
        value is formats and is used by the vcs_info_lastmsg for looking up its
        styles.
 
-       The  initial value of <repo-root-name> is -all- and it is replaced with
+       The  initial value of &ltrepo-root-name&gt is -all- and it is replaced with
        the actual name, as soon as it is known. Only use this part of the con-
        text for defining the formats, actionformats or branchformat styles, as
-       it is guaranteed that <repo-root-name> is set up  correctly  for  these
+       it is guaranteed that &ltrepo-root-name&gt is set up  correctly  for  these
        only. For all other styles, just use '*' instead.
 
-       There are two pre-defined values for <user-context>:
+       There are two pre-defined values for &ltuser-context&gt:
        default
 	      the one used if none is specified
        command
@@ -1107,7 +1109,7 @@ GATHERING INFORMATION FROM VERSION CONTROL SYSTEMS
        the system's behaviour.
 
        For configuration, hooks change the style context:
-	      :vcs_info:<vcs-string>+<hook-name>:<user-context>:<repo-root-name>
+	      :vcs_info:&ltvcs-string&gt+&lthook-name&gt:&ltuser-context&gt:&ltrepo-root-name&gt
 
        To  register  functions	to  a hook, you need to list them in the hooks
        style in the appropriate context.
@@ -1863,7 +1865,7 @@ ZLE FUNCTIONS
 	      accent.
 	      !      Grave.
 	      '      Acute.
-	      >      Circumflex.
+	      &gt      Circumflex.
 	      ?      Tilde.   (This  is not ~ as RFC 1345 does not assume that
 		     character is present on the keyboard.)
 	      -      Macron.  (A horizontal bar over the base character.)
@@ -1878,7 +1880,7 @@ ZLE FUNCTIONS
 	      "      Double acute (only supported on a few letters).
 	      ;      Ogonek.  (A little forward  facing  hook  at  the	bottom
 		     right of the character.)
-	      <      Caron.  (A little v over the letter.)
+	      &lt      Caron.  (A little v over the letter.)
 	      0      Circle over the base character.
 	      2      Hook over the base character.
 	      9      Horn over the base character.
@@ -1895,9 +1897,9 @@ ZLE FUNCTIONS
 
 	      ASCII characters
 		     These are already present on most keyboards:
-	      <(     Left square bracket
+	      &lt(     Left square bracket
 	      //     Backslash (solidus)
-	      )>     Right square bracket
+	      )&gt     Right square bracket
 	      (!     Left brace (curly bracket)
 	      !!     Vertical bar (pipe symbol)
 	      !)     Right brace (curly bracket)
@@ -1933,12 +1935,12 @@ ZLE FUNCTIONS
 	      SE     Section
 	      Co     Copyright
 	      -a     Spanish feminine ordinal indicator
-	      <<     Left guillemet
+	      &lt&lt     Left guillemet
 	      --     Soft hyphen
 	      Rg     Registered trade mark
 	      PI     Pilcrow (paragraph)
 	      -o     Spanish masculine ordinal indicator
-	      >>     Right guillemet
+	      &gt&gt     Right guillemet
 	      ?I     Inverted question mark
 	      -1     Hyphen
 	      -N     En dash
@@ -1995,7 +1997,7 @@ ZLE FUNCTIONS
 	      Fm, Ml Female, male
 
 	      Accents on their own
-	      '>     Circumflex (same as caret, ^)
+	      '&gt     Circumflex (same as caret, ^)
 	      '!     Grave (same as backtick, `)
 	      ',     Cedilla
 	      ':     Diaeresis (Umlaut)
@@ -2404,7 +2406,7 @@ ZLE FUNCTIONS
 
 		     zstyle :insert-last-word match '*([[:digit:]]?|[[:alpha:]/\\])*'
 
-	      The  above example causes redirections like "2>" to be included.
+	      The  above example causes redirections like "2&gt" to be included.
 
        prompt The incremental-complete-word widget shows  the  value  of  this
 	      style  in  the  status  line during incremental completion.  The
@@ -2877,7 +2879,7 @@ MATHEMATICAL FUNCTIONS
 	      Each line typed is evaluated as an expression.  The prompt shows
 	      a number, which corresponds to a positional parameter where  the
 	      result  of  that calculation is stored.  For example, the result
-	      of the calculation on the line preceded by `4> ' is available as
+	      of the calculation on the line preceded by `4&gt ' is available as
 	      $4.   The  last value calculated is available as ans.  Full com-
 	      mand line editing, including the history	of  previous  calcula-
 	      tions,   is   available;	the  history  is  saved  in  the  file
@@ -2900,7 +2902,7 @@ MATHEMATICAL FUNCTIONS
 	      undergoes standard prompt expansion.  The index of  the  current
 	      entry is stored locally in the first element of the array psvar,
 	      which can be referred to in ZCALCPROMPT as `%1v'.   The  default
-	      prompt is `%1v> '.
+	      prompt is `%1v&gt '.
 
 	      A  few special commands are available; these are introduced by a
 	      colon.  For backward compatibility, the colon may be omitted for
@@ -3422,6 +3424,6 @@ OTHER FUNCTIONS
 
 
 zsh 4.3.11		       December 20, 2010		 ZSHCONTRIB(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

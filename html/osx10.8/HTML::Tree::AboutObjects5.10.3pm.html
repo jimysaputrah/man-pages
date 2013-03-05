@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The following article by Sean M. Burke first appeared in The Perl..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>HTML::Tree::AboutObjects -- article: "User's View of Object-Oriented</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 HTML::Tree::AboutObjecUser)Contributed Perl DocumenHTML::Tree::AboutObjects(3)
 
 
@@ -136,9 +138,9 @@ A User's View of Object-Oriented Modules
        name (same as the module name) as a special argument.  Class methods
        look like this:
 
-	 ClassName->methodname(parameter1, parameter2, ...)
-	 ClassName->methodname()   # if no parameters
-	 ClassName->methodname	   # same as above
+	 ClassName-&gtmethodname(parameter1, parameter2, ...)
+	 ClassName-&gtmethodname()   # if no parameters
+	 ClassName-&gtmethodname	   # same as above
 
        which you will sometimes see written:
 
@@ -155,7 +157,7 @@ A User's View of Object-Oriented Modules
        The object that a constructor method returns is typically captured in a
        scalar variable:
 
-	 $object = ClassName->new(param1, param2...);
+	 $object = ClassName-&gtnew(param1, param2...);
 
        Once you have an object (more later on exactly what that is), you can
        use the other kind of method call syntax, the syntax for object method
@@ -165,9 +167,9 @@ A User's View of Object-Oriented Modules
        you earlier captured the output of the constructor in.  Object method
        calls look like this:
 
-	 $object->methodname(parameter1, parameter2, ...);
-	 $object->methodname()	 # if no parameters
-	 $object->methodname	 # same as above
+	 $object-&gtmethodname(parameter1, parameter2, ...);
+	 $object-&gtmethodname()	 # if no parameters
+	 $object-&gtmethodname	 # same as above
 
        which is occasionally written as:
 
@@ -176,31 +178,31 @@ A User's View of Object-Oriented Modules
 
        Examples of method calls are:
 
-	 my $session1 = Net::FTP->new("ftp.myhost.com");
+	 my $session1 = Net::FTP-&gtnew("ftp.myhost.com");
 	   # Calls a class method "new", from class Net::FTP,
 	   #  with the single parameter "ftp.myhost.com",
 	   #  and saves the return value (which is, as usual,
 	   #  an object), in $session1.
 	   # Could also be written:
 	   #  new Net::FTP('ftp.myhost.com')
-	 $session1->login("sburke","aoeuaoeu")
+	 $session1-&gtlogin("sburke","aoeuaoeu")
 	   || die "failed to login!\n";
 	    # calling the object method "login"
-	 print "Dir:\n", $session1->dir(), "\n";
-	 $session1->quit;
-	   # same as $session1->quit()
+	 print "Dir:\n", $session1-&gtdir(), "\n";
+	 $session1-&gtquit;
+	   # same as $session1-&gtquit()
 	 print "Done\n";
 	 exit;
 
        Incidentally, I suggest always using the syntaxes with parentheses and
-       "->" in them,
+       "-&gt" in them,
 
-	   Footnote: the character-pair "->" is supposed to look like an
+	   Footnote: the character-pair "-&gt" is supposed to look like an
 	   arrow, not "negative greater-than"!
 
        and avoiding the syntaxes that start out "methodname $object" or
        "methodname ModuleName".  When everything's going right, they all mean
-       the same thing as the "->" variants, but the syntax with "->" is more
+       the same thing as the "-&gt" variants, but the syntax with "-&gt" is more
        visually distinct from function calls, as well as being immune to some
        kinds of rare but puzzling ambiguities that can arise when you're
        trying to call methods that have the same name as subroutines you've
@@ -223,13 +225,13 @@ A User's View of Object-Oriented Modules
        whatever you'd need to do across an FTP connection.  You make the
        session and log in:
 
-	 my $session = Net::FTP->new('ftp.aol.com');
+	 my $session = Net::FTP-&gtnew('ftp.aol.com');
 	 die "Couldn't connect!" unless defined $session;
 	   # The class method call to "new" will return
 	   # the new object if it goes OK, otherwise it
 	   # will return undef.
 
-	 $session->login('sburke', 'p@ssw3rD')
+	 $session-&gtlogin('sburke', 'p@ssw3rD')
 	  || die "Did I change my password again?";
 	   # The object method "login" will give a true
 	   # return value if actually logs in, otherwise
@@ -237,7 +239,7 @@ A User's View of Object-Oriented Modules
 
        You can use the session object to change directory on that session:
 
-	 $session->cwd("/home/sburke/public_html")
+	 $session-&gtcwd("/home/sburke/public_html")
 	    || die "Hey, that was REALLY supposed to work!";
 	  # if the cwd fails, it'll return false
 
@@ -246,12 +248,12 @@ A User's View of Object-Oriented Modules
 	 foreach my $f ('log_report_ua.txt', 'log_report_dom.txt',
 			'log_report_browsers.txt')
 	 {
-	   $session->get($f) || warn "Getting $f failed!"
+	   $session-&gtget($f) || warn "Getting $f failed!"
 	 };
 
        ...and plenty else, ending finally with closing the connection:
 
-	 $session->quit();
+	 $session-&gtquit();
 
        In short, object methods are for doing things related to (or with)
        whatever the object represents.	For FTP sessions, it's about sending
@@ -299,24 +301,24 @@ A User's View of Object-Oriented Modules
        results:
 
 	 use Business::US_Amort;
-	 my $loan = Business::US_Amort->new;
+	 my $loan = Business::US_Amort-&gtnew;
 	 # Set the necessary attributes:
-	 $loan->principal(123654);
-	 $loan->interest_rate(9.25);
-	 $loan->term(20); # twenty years
+	 $loan-&gtprincipal(123654);
+	 $loan-&gtinterest_rate(9.25);
+	 $loan-&gtterm(20); # twenty years
 
 	 # NOW we know enough to calculate:
-	 $loan->run;
+	 $loan-&gtrun;
 
 	 # And see what came of that:
 	 print
 	   "Total paid toward interest: A WHOPPING ",
-	   $loan->total_paid_interest, "!!\n";
+	   $loan-&gttotal_paid_interest, "!!\n";
 
        This illustrates a convention that's common with accessors: calling the
-       accessor with no arguments (as with $loan->total_paid_interest) usually
+       accessor with no arguments (as with $loan-&gttotal_paid_interest) usually
        means to read the value of that attribute, but providing a value (as
-       with $loan->term(20)) means you want that attribute to be set to that
+       with $loan-&gtterm(20)) means you want that attribute to be set to that
        value.  This stands to reason: why would you be providing a value, if
        not to set the attribute to that value?
 
@@ -338,7 +340,7 @@ A User's View of Object-Oriented Modules
        tracks, which then contain data.
 
    What is an Object Value?
-       When you call a constructor like Net::FTP->new(hostname), you get back
+       When you call a constructor like Net::FTP-&gtnew(hostname), you get back
        an object value, a value you can later use, in combination with a
        method name, to call object methods.
 
@@ -372,7 +374,7 @@ A User's View of Object-Oriented Modules
        value that points to a data structure somewhere in memory, which is
        where all the attributes for this object are stored.  That data
        structure as a whole belongs to a class (probably the one you named in
-       the constructor method, like ClassName->new), so that the object value
+       the constructor method, like ClassName-&gtnew), so that the object value
        can be used as part of object method calls.
 
        If you want to actually see what an object value is, you might try just
@@ -421,7 +423,7 @@ A User's View of Object-Oriented Modules
        explicable:
 
        * An object value does nothing in and of itself, but it's useful when
-       you use it in the context of an $object->method call, the same way that
+       you use it in the context of an $object-&gtmethod call, the same way that
        a card number is useful in the context of some operation dealing with a
        card account.
 
@@ -433,15 +435,15 @@ A User's View of Object-Oriented Modules
        trouble of forging exact replicas of your own plastic credit card).
        That's why this:
 
-	 $x = Net::FTP->new("ftp.aol.com");
-	 $x->login("sburke", "aoeuaoeu");
+	 $x = Net::FTP-&gtnew("ftp.aol.com");
+	 $x-&gtlogin("sburke", "aoeuaoeu");
 
        does the same thing as this:
 
-	 $x = Net::FTP->new("ftp.aol.com");
+	 $x = Net::FTP-&gtnew("ftp.aol.com");
 	 $y = $x;
 	 $z = $y;
-	 $z->login("sburke", "aoeuaoeu");
+	 $z-&gtlogin("sburke", "aoeuaoeu");
 
        That is, $z and $y and $x are three different slots for values, but
        what's in those slots are all object values pointing to the same object
@@ -483,15 +485,15 @@ A User's View of Object-Oriented Modules
        can't go from a string representation of an object value, back to an
        object value.  And that's why this doesn't work:
 
-	  $x = Net::FTP->new('ftp.aol.com');
-	  $y = Net::FTP->new('ftp.netcom.com');
-	  $z = Net::FTP->new('ftp.qualcomm.com');
+	  $x = Net::FTP-&gtnew('ftp.aol.com');
+	  $y = Net::FTP-&gtnew('ftp.netcom.com');
+	  $z = Net::FTP-&gtnew('ftp.qualcomm.com');
 	  $all = join(' ', $x,$y,$z);		# !!!
 	 ...later...
 	  ($aol, $netcom, $qualcomm) = split(' ', $all);  # !!!
-	  $aol->login("sburke", "aoeuaoeu");
-	  $netcom->login("sburke", "qjkxqjkx");
-	  $qualcomm->login("smb", "dhtndhtn");
+	  $aol-&gtlogin("sburke", "aoeuaoeu");
+	  $netcom-&gtlogin("sburke", "qjkxqjkx");
+	  $qualcomm-&gtlogin("smb", "dhtndhtn");
 
        This fails because $aol ends up holding merely the string
        representation of the object value from $x, not the object value itself
@@ -627,7 +629,7 @@ A User's View of Object-Oriented Modules
 
        * Every example I gave of a constructor was a class method.  But object
        methods can be constructors, too, if the class was written to work that
-       way: $new = $old->copy, $node_y = $node_x->new_subnode, or the like.
+       way: $new = $old-&gtcopy, $node_y = $node_x-&gtnew_subnode, or the like.
 
        * I've given the impression that there's two kinds of methods: object
        methods and class methods.  In fact, the same method can be both,
@@ -649,11 +651,11 @@ A User's View of Object-Oriented Modules
        modules won't require the user to know about destructors.
 
        * I said that class method syntax has to have the class name, as in
-       $session = Net::FTP->new($host).  Actually, you can instead use any
+       $session = Net::FTP-&gtnew($host).  Actually, you can instead use any
        expression that returns a class name: $ftp_class = 'Net::FTP'; $session
-       = $ftp_class->new($host).  Moreover, instead of the method name for
+       = $ftp_class-&gtnew($host).  Moreover, instead of the method name for
        object- or class-method calls, you can use a scalar holding the method
-       name: $foo->$method($host).  But, in practice, these syntaxes are
+       name: $foo-&gt$method($host).  But, in practice, these syntaxes are
        rarely useful.
 
        And finally, to learn about objects from the perspective of writing
@@ -667,6 +669,6 @@ BACK
 
 
 perl v5.10.1			  2006-08-03	   HTML::Tree::AboutObjects(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

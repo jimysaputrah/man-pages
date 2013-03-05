@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="It is a common feature of applications (whether run directly, or via..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Locale::Maketext - framework for localization</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Locale::Maketext(3pm)  Perl Programmers Reference Guide  Locale::Maketext(3pm)
 
 
@@ -20,10 +22,10 @@ SYNOPSIS
 	 use strict;
 	 use MyProgram::L10N;
 	  # ...which inherits from Locale::Maketext
-	 my $lh = MyProgram::L10N->get_handle() || die "What language?";
+	 my $lh = MyProgram::L10N-&gtget_handle() || die "What language?";
 	 ...
 	 # And then any messages your program emits, like:
-	 warn $lh->maketext( "Can't open file [_1]: [_2]\n", $f, $! );
+	 warn $lh-&gtmaketext( "Can't open file [_1]: [_2]\n", $f, $! );
 	 ...
 
 DESCRIPTION
@@ -64,7 +66,7 @@ QUICK OVERVIEW
        The normal course of action is to call:
 
 	 use TkBocciBall::Localize;  # the localization project class
-	 $lh = TkBocciBall::Localize->get_handle();
+	 $lh = TkBocciBall::Localize-&gtget_handle();
 	  # Depending on the user's locale, etc., this will
 	  # make a language handle from among the classes available,
 	  # and any defaults that you declare.
@@ -73,11 +75,11 @@ QUICK OVERVIEW
        From then on, you use the "maketext" function to access entries in
        whatever lexicon(s) belong to the language handle you got.  So, this:
 
-	 print $lh->maketext("You won!"), "\n";
+	 print $lh-&gtmaketext("You won!"), "\n";
 
        ...emits the right text for this language.  If the object in $lh
        belongs to class "TkBocciBall::Localize::fr" and
-       %TkBocciBall::Localize::fr::Lexicon contains "("You won!"  => "Tu as
+       %TkBocciBall::Localize::fr::Lexicon contains "("You won!"  =&gt "Tu as
        gagne!")", then the above code happily tells the user "Tu as gagne!".
 
 METHODS
@@ -97,13 +99,13 @@ METHODS
    Construction Methods
        These are to do with constructing a language handle:
 
-       o   $lh = YourProjClass->get_handle( ...langtags... ) || die "lg-
+       o   $lh = YourProjClass-&gtget_handle( ...langtags... ) || die "lg-
 	   handle?";
 
 	   This tries loading classes based on the language-tags you give
 	   (like "("en-US", "sk", "kon", "es-MX", "ja", "i-klingon")", and for
 	   the first class that succeeds, returns
-	   YourProjClass::language->new().
+	   YourProjClass::language-&gtnew().
 
 	   If it runs thru the entire given list of language-tags, and finds
 	   no classes for those exact terms, it then tries "superordinate"
@@ -115,12 +117,12 @@ METHODS
 	   happen to have no superordinates.)
 
 	   If none of those language-tags leads to loadable classes, we then
-	   try classes derived from YourProjClass->fallback_languages() and
+	   try classes derived from YourProjClass-&gtfallback_languages() and
 	   then if nothing comes of that, we use classes named by
-	   YourProjClass->fallback_language_classes().	Then in the (probably
+	   YourProjClass-&gtfallback_language_classes().	Then in the (probably
 	   quite unlikely) event that that fails, we just return undef.
 
-       o   $lh = YourProjClass->get_handle() || die "lg-handle?";
+       o   $lh = YourProjClass-&gtget_handle() || die "lg-handle?";
 
 	   When "get_handle" is called with an empty parameter list, magic
 	   happens:
@@ -152,31 +154,31 @@ METHODS
 	       my $chosen_language = $Config_settings{'language'};
 	       my $lh;
 	       if($chosen_language) {
-		 $lh = $class->get_handle($chosen_language)
+		 $lh = $class-&gtget_handle($chosen_language)
 		  || die "No language handle for \"$chosen_language\" or the like";
 	       } else {
 		 # Config file missing, maybe?
-		 $lh = $class->get_handle()
+		 $lh = $class-&gtget_handle()
 		  || die "Can't get a language handle";
 	       }
 	       return $lh;
 	     }
 
-       o   $lh = YourProjClass::langname->new();
+       o   $lh = YourProjClass::langname-&gtnew();
 
 	   This constructs a language handle.  You usually don't call this
 	   directly, but instead let "get_handle" find a language class to
-	   "use" and to then call ->new on.
+	   "use" and to then call -&gtnew on.
 
-       o   $lh->init();
+       o   $lh-&gtinit();
 
-	   This is called by ->new to initialize newly-constructed language
+	   This is called by -&gtnew to initialize newly-constructed language
 	   handles.  If you define an init method in your class, remember that
-	   it's usually considered a good idea to call $lh->SUPER::init in it
+	   it's usually considered a good idea to call $lh-&gtSUPER::init in it
 	   (presumably at the beginning), so that all classes get a chance to
 	   initialize a new object however they see fit.
 
-       o   YourProjClass->fallback_languages()
+       o   YourProjClass-&gtfallback_languages()
 
 	   "get_handle" appends the return value of this to the end of
 	   whatever list of languages you pass "get_handle".  Unless you
@@ -191,7 +193,7 @@ METHODS
 	   (assuming your language classes are in an appropriate @INC
 	   directory).	Or you can use the next method:
 
-       o   YourProjClass->fallback_language_classes()
+       o   YourProjClass-&gtfallback_language_classes()
 
 	   "get_handle" appends the return value of this to the end of the
 	   list of classes it will try using.  Unless you override this
@@ -204,7 +206,7 @@ METHODS
    The "maketext" Method
        This is the most important method in Locale::Maketext:
 
-	   $text = $lh->maketext(I<key>, ...parameters for this phrase...);
+	   $text = $lh-&gtmaketext(I&ltkey&gt, ...parameters for this phrase...);
 
        This looks in the %Lexicon of the language handle $lh and all its
        superclasses, looking for an entry whose key is the string key.
@@ -234,7 +236,7 @@ METHODS
        very common exception occurs when you have Bracket Notation text that
        says to call a method "foo", but there is no such method.  (E.g., "You
        have [quatn,_1,ball]." will throw an exception on trying to call
-       $lh->quatn($_[1],'ball') -- you presumably meant "quant".)  "maketext"
+       $lh-&gtquatn($_[1],'ball') -- you presumably meant "quant".)  "maketext"
        catches these exceptions, but only to make the error message more
        readable, at which point it rethrows the exception.
 
@@ -250,7 +252,7 @@ METHODS
 	   use base ('YrProj::zh_tw');	# Taiwan-style
 	   sub maketext {
 	     my $self = shift(@_);
-	     my $value = $self->maketext(@_);
+	     my $value = $self-&gtmaketext(@_);
 	     return Chineeze::taiwan2mainland($value);
 	   }
 
@@ -260,7 +262,7 @@ METHODS
 	 sub maketext {
 	   my($lh, @stuff) = @_;
 	   my $out;
-	   eval { $out = $lh->SUPER::maketext(@stuff) };
+	   eval { $out = $lh-&gtSUPER::maketext(@stuff) };
 	   return $out unless $@;
 	   ...otherwise deal with the exception...
 	 }
@@ -269,8 +271,8 @@ METHODS
        override the "maketext" method.	(If you run into a situation where it
        is useful, I'd be interested in hearing about it.)
 
-       $lh->fail_with or $lh->fail_with(PARAM)
-       $lh->failure_handler_auto
+       $lh-&gtfail_with or $lh-&gtfail_with(PARAM)
+       $lh-&gtfailure_handler_auto
 	   These two methods are discussed in the section "Controlling Lookup
 	   Failure".
 
@@ -279,9 +281,9 @@ METHODS
        %Lexicon routines of yours (whether expressed as Bracket Notation or
        not).
 
-       $language->quant($number, $singular)
-       $language->quant($number, $singular, $plural)
-       $language->quant($number, $singular, $plural, $negative)
+       $language-&gtquant($number, $singular)
+       $language-&gtquant($number, $singular, $plural)
+       $language-&gtquant($number, $singular, $plural, $negative)
 	   This is generally meant to be called from inside Bracket Notation
 	   (which is discussed later), as in
 
@@ -327,13 +329,13 @@ METHODS
 
 		"[quant,_1,document was, documents were] matched.\n"
 
-       $language->numf($number)
+       $language-&gtnumf($number)
 	   This returns the given number formatted nicely according to this
 	   language's conventions.  Maketext's default method is mostly to
 	   just take the normal string form of the number (applying sprintf
 	   "%G" for only very large numbers), and then to add commas as
 	   necessary.  (Except that we apply "tr/,./.,/" if
-	   $language->{'numf_comma'} is true; that's a bit of a hack that's
+	   $language-&gt{'numf_comma'} is true; that's a bit of a hack that's
 	   useful for languages that express two million as "2.000.000" and
 	   not as "2,000,000").
 
@@ -344,7 +346,7 @@ METHODS
 	   Note that numf is called by quant for stringifying all quantifying
 	   numbers.
 
-       $language->sprintf($format, @items)
+       $language-&gtsprintf($format, @items)
 	   This is just a wrapper around Perl's normal "sprintf" function.
 	   It's provided so that you can use "sprintf" in Bracket Notation:
 
@@ -354,10 +356,10 @@ METHODS
 
 		Couldn't access datanode      Stuff=[thangamabob]!
 
-       $language->language_tag()
+       $language-&gtlanguage_tag()
 	   Currently this just takes the last bit of "ref($language)", turns
 	   underscores to dashes, and returns it.  So if $language is an
-	   object of class Hee::HOO::Haw::en_us, $language->language_tag()
+	   object of class Hee::HOO::Haw::en_us, $language-&gtlanguage_tag()
 	   returns "en-us".  (Yes, the usual representation for that language
 	   tag is "en-US", but case is never considered meaningful in
 	   language-tag comparison.)
@@ -365,9 +367,9 @@ METHODS
 	   You may override this as you like; Maketext doesn't use it for
 	   anything.
 
-       $language->encoding()
+       $language-&gtencoding()
 	   Currently this isn't used for anything, but it's provided (with
-	   default value of "(ref($language) && $language->{'encoding'})) or
+	   default value of "(ref($language) && $language-&gt{'encoding'})) or
 	   "iso-8859-1"" ) as a sort of suggestion that it may be
 	   useful/necessary to associate encodings with your language handles
 	   (whether on a per-class or even per-handle basis.)
@@ -392,7 +394,7 @@ LANGUAGE CLASS HIERARCHIES
 
        o   You must have a project base class, which you load, and which you
 	   then use as the first argument in the call to
-	   YourProjClass->get_handle(...).  It should derive (whether directly
+	   YourProjClass-&gtget_handle(...).  It should derive (whether directly
 	   or indirectly) from Locale::Maketext.  It doesn't matter how you
 	   name this class, although assuming this is the localization
 	   component of your Super Mega Program, good names for your project
@@ -401,13 +403,13 @@ LANGUAGE CLASS HIERARCHIES
 	   SuperMegaProgram::International, or even
 	   SuperMegaProgram::Languages or SuperMegaProgram::Messages.
 
-       o   Language classes are what YourProjClass->get_handle will try to
+       o   Language classes are what YourProjClass-&gtget_handle will try to
 	   load.  It will look for them by taking each language-tag (skipping
 	   it if it doesn't look like a language-tag or locale-tag!), turning
 	   it to all lowercase, turning dashes to underscores, and appending
 	   it to YourProjClass . "::".	So this:
 
-	     $lh = YourProjClass->get_handle(
+	     $lh = YourProjClass-&gtget_handle(
 	       'en-US', 'fr', 'kon', 'i-klingon', 'i-klingon-romanized'
 	     );
 
@@ -435,7 +437,7 @@ LANGUAGE CLASS HIERARCHIES
 ENTRIES IN EACH LEXICON
        A typical %Lexicon entry is meant to signify a phrase, taking some
        number (0 or more) of parameters.  An entry is meant to be accessed by
-       via a string key in $lh->maketext(key, ...parameters...), which should
+       via a string key in $lh-&gtmaketext(key, ...parameters...), which should
        return a string that is generally meant for be used for "output" to the
        user -- regardless of whether this actually means printing to STDOUT,
        writing to a file, or putting into a GUI widget.
@@ -454,15 +456,15 @@ ENTRIES IN EACH LEXICON
 
        Compare this code that uses an arbitrary ID...
 
-	 die $lh->maketext( "_min_larger_max_error", $min, $max )
-	  if $min > $max;
+	 die $lh-&gtmaketext( "_min_larger_max_error", $min, $max )
+	  if $min &gt $max;
 
        ...to this code that uses a key-as-value:
 
-	 die $lh->maketext(
+	 die $lh-&gtmaketext(
 	  "Minimum ([_1]) is larger than maximum ([_2])!\n",
 	  $min, $max
-	 ) if $min > $max;
+	 ) if $min &gt $max;
 
        The second is, in short, more readable.	In particular, it's obvious
        that the number of parameters you're feeding to that phrase (two) is
@@ -475,18 +477,18 @@ ENTRIES IN EACH LEXICON
        he's presented is this:
 
 	"Minimum ([_1]) is larger than maximum ([_2])!\n",
-	 => "",   # fill in something here, Jacques!
+	 =&gt "",   # fill in something here, Jacques!
 
        rather than this more cryptic mess:
 
 	"_min_larger_max_error"
-	 => "",   # fill in something here, Jacques
+	 =&gt "",   # fill in something here, Jacques
 
        I think that keys as lexicon values makes the completed lexicon entries
        more readable:
 
 	"Minimum ([_1]) is larger than maximum ([_2])!\n",
-	 => "Le minimum ([_1]) est plus grand que le maximum ([_2])!\n",
+	 =&gt "Le minimum ([_1]) est plus grand que le maximum ([_2])!\n",
 
        Also, having valid values as keys becomes very useful if you set up an
        _AUTO lexicon.  _AUTO lexicons are discussed in a later section.
@@ -499,13 +501,13 @@ ENTRIES IN EACH LEXICON
        define that lexicon entry in the ProjectClass::L10N::en lexicon (since
        English is always my "project language"):
 
-	 '_USAGE_MESSAGE' => <<'EOSTUFF',
+	 '_USAGE_MESSAGE' =&gt &lt&lt'EOSTUFF',
 	 ...long long message...
 	 EOSTUFF
 
        and then I can use it as:
 
-	 getopt('oDI', \%opts) or die $lh->maketext('_USAGE_MESSAGE');
+	 getopt('oDI', \%opts) or die $lh-&gtmaketext('_USAGE_MESSAGE');
 
        Incidentally, note that each class's %Lexicon inherits-and-extends the
        lexicons in its superclasses.  This is not because these are special
@@ -545,28 +547,28 @@ ENTRIES IN EACH LEXICON
 
 	 my $response;
 	 until(defined $response) {
-	   print $lh->maketext("Open the pod bay door (y/n)? ");
-	   $response = $lh->y_or_n( get_input_from_keyboard_somehow() );
+	   print $lh-&gtmaketext("Open the pod bay door (y/n)? ");
+	   $response = $lh-&gty_or_n( get_input_from_keyboard_somehow() );
 	 }
-	 if($response) { $pod_bay_door->open()	       }
-	 else	       { $pod_bay_door->leave_closed() }
+	 if($response) { $pod_bay_door-&gtopen()	       }
+	 else	       { $pod_bay_door-&gtleave_closed() }
 
        Other data worth storing in a lexicon might be things like filenames
        for language-targetted resources:
 
 	 ...
 	 "_main_splash_png"
-	   => "/styles/en_us/main_splash.png",
+	   =&gt "/styles/en_us/main_splash.png",
 	 "_main_splash_imagemap"
-	   => "/styles/en_us/main_splash.incl",
+	   =&gt "/styles/en_us/main_splash.incl",
 	 "_general_graphics_path"
-	   => "/styles/en_us/",
+	   =&gt "/styles/en_us/",
 	 "_alert_sound"
-	   => "/styles/en_us/hey_there.wav",
+	   =&gt "/styles/en_us/hey_there.wav",
 	 "_forward_icon"
-	  => "left_arrow.png",
+	  =&gt "left_arrow.png",
 	 "_backward_icon"
-	  => "right_arrow.png",
+	  =&gt "right_arrow.png",
 	 # In some other languages, left equals
 	 #  BACKwards, and right is FOREwards.
 	 ...
@@ -609,7 +611,7 @@ BRACKET NOTATION
 	     ...some code here...
 	     ")!\n",
 	 }
-	 # to be called by $lh->maketext(KEY, params...)
+	 # to be called by $lh-&gtmaketext(KEY, params...)
 
        In other words, text outside bracket groups is turned into string
        literals.  Text in brackets is rather more complex, and currently
@@ -630,7 +632,7 @@ BRACKET NOTATION
 
        o   An item "_*" is interpreted to mean "all of @_ except $_[0]".
 	   I.e., @_[1..$#_].  Note that this is an empty list in the case of
-	   calls like $lh->maketext(key) where there are no parameters (except
+	   calls like $lh-&gtmaketext(key) where there are no parameters (except
 	   $_[0], the language handle).
 
        o   Otherwise, each item is interpreted as a string literal.
@@ -640,7 +642,7 @@ BRACKET NOTATION
        o   If the first item in a bracket group looks like a method name, then
 	   that group is interpreted like this:
 
-	     $lh->that_method_name(
+	     $lh-&gtthat_method_name(
 	       ...rest of items in this group...
 	     ),
 
@@ -679,7 +681,7 @@ BRACKET NOTATION
 	   my $lh = $_[0];
 	   return join '',
 	     "Hoohah ",
-	     $lh->foo( $_[1], "bar", "baz"),
+	     $lh-&gtfoo( $_[1], "bar", "baz"),
 	     "!",
 	 }
 
@@ -689,7 +691,7 @@ BRACKET NOTATION
 	   my $lh = $_[0];
 	   return join '',
 	     "Hoohah ",
-	     $lh->foo(" _1 ", " bar ", "baz"),	# note the <space> in " bar "
+	     $lh-&gtfoo(" _1 ", " bar ", "baz"),	# note the &ltspace&gt in " bar "
 	     "!",
 	 }
 
@@ -735,11 +737,11 @@ BRACKET NOTATION
 
 	 %Lexicon = (
 	   ...
-	   "some_key" => sub {
+	   "some_key" =&gt sub {
 	     my $lh = $_[0];
 	     join '',
 	       "Foo ",
-	       $lh->bar('baz', $lh->quux('quuux')),
+	       $lh-&gtbar('baz', $lh-&gtquux('quuux')),
 	       "\n",
 	   },
 	   ...
@@ -755,7 +757,7 @@ BRACKET NOTATION
 AUTO LEXICONS
        If maketext goes to look in an individual %Lexicon for an entry for key
        (where key does not start with an underscore), and sees none, but does
-       see an entry of "_AUTO" => some_true_value, then we actually define
+       see an entry of "_AUTO" =&gt some_true_value, then we actually define
        $Lexicon{key} = key right then and there, and then use that value as if
        it had been there all along.  This happens before we even look in any
        superclass %Lexicons!
@@ -782,7 +784,7 @@ AUTO LEXICONS
        but since you anticipate localizing this, you write:
 
 	 use ThisProject::I18N;
-	 my $lh = ThisProject::I18N->get_handle();
+	 my $lh = ThisProject::I18N-&gtget_handle();
 	  # For the moment, assume that things are set up so
 	  # that we load class ThisProject::I18N::en
 	  # and that that's the class that $lh belongs to.
@@ -790,7 +792,7 @@ AUTO LEXICONS
 	 if(-e $filename) {
 	   go_process_file($filename)
 	 } else {
-	   print $lh->maketext(
+	   print $lh-&gtmaketext(
 	     qq{Couldn't find file "[_1]"!\n}, $filename
 	   );
 	 }
@@ -800,7 +802,7 @@ AUTO LEXICONS
        entry:
 
 	 "Couldn't find file \"[_1]\"!\n"
-	 => "Couldn't find file \"[_1]\"!\n",
+	 =&gt "Couldn't find file \"[_1]\"!\n",
 
        But I consider that somewhat of a distraction from the work of getting
        the main code working -- to say nothing of the fact that I often have
@@ -809,13 +811,13 @@ AUTO LEXICONS
        go changing three lines of code: the call to maketext with that key,
        and then the two lines in ThisProject/I18N/en.pm).
 
-       However, if you set "_AUTO => 1" in the %Lexicon in,
+       However, if you set "_AUTO =&gt 1" in the %Lexicon in,
        ThisProject/I18N/en.pm (assuming that English (en) is the language that
        all your programmers will be using for this project's internal message
        keys), then you don't ever have to go adding lines like this
 
 	 "Couldn't find file \"[_1]\"!\n"
-	 => "Couldn't find file \"[_1]\"!\n",
+	 =&gt "Couldn't find file \"[_1]\"!\n",
 
        to ThisProject/I18N/en.pm, because if _AUTO is true there, then just
        looking for an entry with the key "Couldn't find file \"[_1]\"!\n" in
@@ -828,41 +830,41 @@ AUTO LEXICONS
        as a signal to distinguish those few.
 
 CONTROLLING LOOKUP FAILURE
-       If you call $lh->maketext(key, ...parameters...), and there's no entry
+       If you call $lh-&gtmaketext(key, ...parameters...), and there's no entry
        key in $lh's class's %Lexicon, nor in the superclass %Lexicon hash, and
        if we can't auto-make key (because either it starts with a "_", or
-       because none of its lexicons have "_AUTO => 1,"), then we have failed
+       because none of its lexicons have "_AUTO =&gt 1,"), then we have failed
        to find a normal way to maketext key.  What then happens in these
        failure conditions, depends on the $lh object's "fail" attribute.
 
        If the language handle has no "fail" attribute, maketext will simply
        throw an exception (i.e., it calls "die", mentioning the key whose
        lookup failed, and naming the line number where the calling
-       $lh->maketext(key,...) was.
+       $lh-&gtmaketext(key,...) was.
 
        If the language handle has a "fail" attribute whose value is a coderef,
-       then $lh->maketext(key,...params...) gives up and calls:
+       then $lh-&gtmaketext(key,...params...) gives up and calls:
 
-	 return $that_subref->($lh, $key, @params);
+	 return $that_subref-&gt($lh, $key, @params);
 
        Otherwise, the "fail" attribute's value should be a string denoting a
-       method name, so that $lh->maketext(key,...params...) can give up with:
+       method name, so that $lh-&gtmaketext(key,...params...) can give up with:
 
-	 return $lh->$that_method_name($phrase, @params);
+	 return $lh-&gt$that_method_name($phrase, @params);
 
        The "fail" attribute can be accessed with the "fail_with" method:
 
 	 # Set to a coderef:
-	 $lh->fail_with( \&failure_handler );
+	 $lh-&gtfail_with( \&failure_handler );
 
 	 # Set to a method name:
-	 $lh->fail_with( 'failure_method' );
+	 $lh-&gtfail_with( 'failure_method' );
 
 	 # Set to nothing (i.e., so failure throws a plain exception)
-	 $lh->fail_with( undef );
+	 $lh-&gtfail_with( undef );
 
 	 # Get the current value
-	 $handler = $lh->fail_with();
+	 $handler = $lh-&gtfail_with();
 
        Now, as to what you may want to do with these handlers:	Maybe you'd
        want to log what key failed for what class, and then die.  Maybe you
@@ -874,13 +876,13 @@ CONTROLLING LOOKUP FAILURE
 
 	 # Make all lookups fall back onto an English value,
 	 #  but only after we log it for later fingerpointing.
-	 my $lh_backup = ThisProject->get_handle('en');
-	 open(LEX_FAIL_LOG, ">>wherever/lex.log") || die "GNAARGH $!";
+	 my $lh_backup = ThisProject-&gtget_handle('en');
+	 open(LEX_FAIL_LOG, "&gt&gtwherever/lex.log") || die "GNAARGH $!";
 	 sub lex_fail {
 	   my($failing_lh, $key, $params) = @_;
 	   print LEX_FAIL_LOG scalar(localtime), "\t",
 	      ref($failing_lh), "\t", $key, "\n";
-	   return $lh_backup->maketext($key,@params);
+	   return $lh_backup-&gtmaketext($key,@params);
 	 }
 
        Some users have expressed that they think this whole mechanism of
@@ -890,7 +892,7 @@ CONTROLLING LOOKUP FAILURE
        different ideas of what the right thing is to do in failure conditions.
        I could simply say that failure always throws an exception, and that if
        you want to be careful, you'll just have to wrap every call to
-       $lh->maketext in an eval { }.  However, I want programmers to reserve
+       $lh-&gtmaketext in an eval { }.  However, I want programmers to reserve
        the right (via the "fail" attribute) to treat lookup failure as
        something other than an exception of the same level of severity as a
        config file being unreadable, or some essential resource being
@@ -900,17 +902,17 @@ CONTROLLING LOOKUP FAILURE
        "failure_handler_auto".	This is a method defined in the class
        Locale::Maketext itself.  You set it with:
 
-	 $lh->fail_with('failure_handler_auto');
+	 $lh-&gtfail_with('failure_handler_auto');
 
-       Then when you call $lh->maketext(key, ...parameters...) and there's no
+       Then when you call $lh-&gtmaketext(key, ...parameters...) and there's no
        key in any of those lexicons, maketext gives up with
 
-	 return $lh->failure_handler_auto($key, @params);
+	 return $lh-&gtfailure_handler_auto($key, @params);
 
        But failure_handler_auto, instead of dying or anything, compiles $key,
        caching it in
 
-	   $lh->{'failure_lex'}{$key} = $complied
+	   $lh-&gt{'failure_lex'}{$key} = $complied
 
        and then calls the compiled value, and returns that.  (I.e., if $key
        looks like bracket notation, $compiled is a sub, and we return
@@ -919,7 +921,7 @@ CONTROLLING LOOKUP FAILURE
 
        The effect of using "failure_auto_handler" is like an AUTO lexicon,
        except that it 1) compiles $key even if it starts with "_", and 2) you
-       have a record in the new hashref $lh->{'failure_lex'} of all the keys
+       have a record in the new hashref $lh-&gt{'failure_lex'} of all the keys
        that have failed for this object.  This should avoid your program dying
        -- as long as your keys aren't actually invalid as bracket code, and as
        long as they don't try calling methods that don't exist.
@@ -933,8 +935,8 @@ CONTROLLING LOOKUP FAILURE
 
 	 sub init {
 	   my $lh = $_[0];  # a newborn handle
-	   $lh->SUPER::init();
-	   $lh->fail_with('my_clever_failure_handler');
+	   $lh-&gtSUPER::init();
+	   $lh-&gtfail_with('my_clever_failure_handler');
 	   return;
 	 }
 	 sub my_clever_failure_handler {
@@ -958,7 +960,7 @@ HOW TO USE MAKETEXT
 	   the class that you'll use in the idiom:
 
 	     use Projname::L10N;
-	     my $lh = Projname::L10N->get_handle(...) || die "Language?";
+	     my $lh = Projname::L10N-&gtget_handle(...) || die "Language?";
 
 	   Assuming you call your class Projname::L10N, create a class
 	   consisting minimally of:
@@ -981,7 +983,7 @@ HOW TO USE MAKETEXT
 	     package Projname::L10N::en_us;
 	     use base qw(Projname::L10N);
 	     %Lexicon = (
-	       '_AUTO' => 1,
+	       '_AUTO' =&gt 1,
 	     );
 	     1;
 
@@ -996,15 +998,15 @@ HOW TO USE MAKETEXT
 	   instead do it thru maketext, using no variable interpolation in the
 	   key:
 
-	     print $lh->maketext("Foobar [_1] stuff\n", $thing);
+	     print $lh-&gtmaketext("Foobar [_1] stuff\n", $thing);
 
-	   If you get tired of constantly saying "print $lh->maketext",
+	   If you get tired of constantly saying "print $lh-&gtmaketext",
 	   consider making a functional wrapper for it, like so:
 
 	     use Projname::L10N;
 	     use vars qw($lh);
-	     $lh = Projname::L10N->get_handle(...) || die "Language?";
-	     sub pmt (@) { print( $lh->maketext(@_)) }
+	     $lh = Projname::L10N-&gtget_handle(...) || die "Language?";
+	     sub pmt (@) { print( $lh-&gtmaketext(@_)) }
 	      # "pmt" is short for "Print MakeText"
 	     $Carp::Verbose = 1;
 	      # so if maketext fails, we see made the call to pmt
@@ -1020,7 +1022,7 @@ HOW TO USE MAKETEXT
 	   translation.  If your first language lexicon isn't an _AUTO
 	   lexicon, then you already have all the messages explicitly in the
 	   lexicon (or else you'd be getting exceptions thrown when you call
-	   $lh->maketext to get messages that aren't in there).  But if you
+	   $lh-&gtmaketext to get messages that aren't in there).  But if you
 	   were (advisedly) lazy and are using an _AUTO lexicon, then you've
 	   got to make a list of all the phrases that you've so far been
 	   letting _AUTO generate for you.  There are very many ways to
@@ -1184,6 +1186,6 @@ AUTHOR
 
 
 perl v5.10.1			  2009-02-12		 Locale::Maketext(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

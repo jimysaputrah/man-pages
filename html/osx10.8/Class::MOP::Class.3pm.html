@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Class Protocol is the largest and most complex part of the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Class::MOP::Class - Class Meta Object</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Class::MOP::Class(3)  User Contributed Perl Documentation Class::MOP::Class(3)
 
 
@@ -25,28 +27,28 @@ SYNOPSIS
 	 # use this for introspection ...
 
 	 # add a method to Foo ...
-	 Foo->meta->add_method( 'bar' => sub {...} )
+	 Foo-&gtmeta-&gtadd_method( 'bar' =&gt sub {...} )
 
 	 # get a list of all the classes searched
 	 # the method dispatcher in the correct order
-	 Foo->meta->class_precedence_list()
+	 Foo-&gtmeta-&gtclass_precedence_list()
 
 	 # remove a method from Foo
-	 Foo->meta->remove_method('bar');
+	 Foo-&gtmeta-&gtremove_method('bar');
 
 	 # or use this to actually create classes ...
 
-	 Class::MOP::Class->create(
-	     'Bar' => (
-		 version      => '0.01',
-		 superclasses => ['Foo'],
-		 attributes   => [
-		     Class::MOP::Attribute->new('$bar'),
-		     Class::MOP::Attribute->new('$baz'),
+	 Class::MOP::Class-&gtcreate(
+	     'Bar' =&gt (
+		 version      =&gt '0.01',
+		 superclasses =&gt ['Foo'],
+		 attributes   =&gt [
+		     Class::MOP::Attribute-&gtnew('$bar'),
+		     Class::MOP::Attribute-&gtnew('$baz'),
 		 ],
-		 methods => {
-		     calculate_bar => sub {...},
-		     construct_baz => sub {...}
+		 methods =&gt {
+		     calculate_bar =&gt sub {...},
+		     construct_baz =&gt sub {...}
 		 }
 	     )
 	 );
@@ -71,7 +73,7 @@ METHODS
        to create a metaclass for the same class twice, you will just get the
        existing object.
 
-       Class::MOP::Class->create($package_name, %options)
+       Class::MOP::Class-&gtcreate($package_name, %options)
 	   This method creates a new "Class::MOP::Class" object with the given
 	   package name. It accepts a number of options:
 
@@ -122,18 +124,18 @@ METHODS
 		   This only works if the instance is based on a hash
 		   reference, however.
 
-       Class::MOP::Class->create_anon_class(%options)
-	   This method works just like "Class::MOP::Class->create" but it
+       Class::MOP::Class-&gtcreate_anon_class(%options)
+	   This method works just like "Class::MOP::Class-&gtcreate" but it
 	   creates an "anonymous" class. In fact, the class does have a name,
 	   but that name is a unique name generated internally by this module.
 
 	   It accepts the same "superclasses", "methods", and "attributes"
 	   parameters that "create" accepts.
 
-	   Anonymous classes default to "weaken => 1", although this can be
+	   Anonymous classes default to "weaken =&gt 1", although this can be
 	   overridden.
 
-       Class::MOP::Class->initialize($package_name, %options)
+       Class::MOP::Class-&gtinitialize($package_name, %options)
 	   This method will initialize a "Class::MOP::Class" object for the
 	   named package. Unlike "create", this method will not create a new
 	   class.
@@ -157,7 +159,7 @@ METHODS
        These methods are all related to creating and/or cloning object
        instances.
 
-       $metaclass->clone_object($instance, %params)
+       $metaclass-&gtclone_object($instance, %params)
 	   This method clones an existing object instance. Any parameters you
 	   provide are will override existing attribute values in the object.
 
@@ -169,10 +171,10 @@ METHODS
 
 	     sub clone {
 		 my ($self, %params) = @_;
-		 $self->meta->clone_object($self, %params);
+		 $self-&gtmeta-&gtclone_object($self, %params);
 	     }
 
-       $metaclass->rebless_instance($instance, %params)
+       $metaclass-&gtrebless_instance($instance, %params)
 	   This method changes the class of $instance to the metaclass's
 	   class.
 
@@ -188,7 +190,7 @@ METHODS
 	   parameters specified to "rebless_instance". By default,
 	   "rebless_instance_away" does nothing; it is merely a hook.
 
-       $metaclass->rebless_instance_back($instance)
+       $metaclass-&gtrebless_instance_back($instance)
 	   Does the same thing as "rebless_instance", except that you can only
 	   rebless an instance into one of its superclasses. Any attributes
 	   that do not exist in the superclass will be deinitialized.
@@ -197,7 +199,7 @@ METHODS
 	   especially when multiple inheritance is involved, so use this
 	   carefully!
 
-       $metaclass->new_object(%params)
+       $metaclass-&gtnew_object(%params)
 	   This method is used to create a new object of the metaclass's
 	   class. Any parameters you provide are used to initialize the
 	   instance's attributes. A special "__INSTANCE__" key can be passed
@@ -206,12 +208,12 @@ METHODS
 	   Class::MOP with foreign classes which generate instances using
 	   their own constructors.
 
-       $metaclass->instance_metaclass
+       $metaclass-&gtinstance_metaclass
 	   Returns the class name of the instance metaclass. See
 	   Class::MOP::Instance for more information on the instance
 	   metaclass.
 
-       $metaclass->get_meta_instance
+       $metaclass-&gtget_meta_instance
 	   Returns an instance of the "instance_metaclass" to be used in the
 	   construction of a new instance of the class.
 
@@ -219,40 +221,40 @@ METHODS
        These are a few predicate methods for asking information about the
        class itself.
 
-       $metaclass->is_anon_class
+       $metaclass-&gtis_anon_class
 	   This returns true if the class was created by calling
-	   "Class::MOP::Class->create_anon_class".
+	   "Class::MOP::Class-&gtcreate_anon_class".
 
-       $metaclass->is_mutable
+       $metaclass-&gtis_mutable
 	   This returns true if the class is still mutable.
 
-       $metaclass->is_immutable
+       $metaclass-&gtis_immutable
 	   This returns true if the class has been made immutable.
 
-       $metaclass->is_pristine
+       $metaclass-&gtis_pristine
 	   A class is not pristine if it has non-inherited attributes or if it
 	   has any generated methods.
 
    Inheritance Relationships
-       $metaclass->superclasses(@superclasses)
+       $metaclass-&gtsuperclasses(@superclasses)
 	   This is a read-write accessor which represents the superclass
 	   relationships of the metaclass's class.
 
 	   This is basically sugar around getting and setting @ISA.
 
-       $metaclass->class_precedence_list
+       $metaclass-&gtclass_precedence_list
 	   This returns a list of all of the class's ancestor classes. The
 	   classes are returned in method dispatch order.
 
-       $metaclass->linearized_isa
+       $metaclass-&gtlinearized_isa
 	   This returns a list based on "class_precedence_list" but with all
 	   duplicates removed.
 
-       $metaclass->subclasses
+       $metaclass-&gtsubclasses
 	   This returns a list of all subclasses for this class, even indirect
 	   subclasses.
 
-       $metaclass->direct_subclasses
+       $metaclass-&gtdirect_subclasses
 	   This returns a list of immediate subclasses for this class, which
 	   does not include indirect subclasses.
 
@@ -273,21 +275,21 @@ METHODS
        in a class, and these heuristics may get the wrong answer in some edge
        cases. However, for most "normal" cases the heuristics work correctly.
 
-       $metaclass->get_method($method_name)
+       $metaclass-&gtget_method($method_name)
 	   This will return a Class::MOP::Method for the specified
 	   $method_name. If the class does not have the specified method, it
 	   returns "undef"
 
-       $metaclass->has_method($method_name)
+       $metaclass-&gthas_method($method_name)
 	   Returns a boolean indicating whether or not the class defines the
 	   named method. It does not include methods inherited from parent
 	   classes.
 
-       $metaclass->get_method_list
+       $metaclass-&gtget_method_list
 	   This will return a list of method names for all methods defined in
 	   this class.
 
-       $metaclass->add_method($method_name, $method)
+       $metaclass-&gtadd_method($method_name, $method)
 	   This method takes a method name and a subroutine reference, and
 	   adds the method to the class.
 
@@ -302,24 +304,24 @@ METHODS
 	   lets us track the original source of any methods added from other
 	   classes (notably Moose roles).
 
-       $metaclass->remove_method($method_name)
+       $metaclass-&gtremove_method($method_name)
 	   Remove the named method from the class. This method returns the
 	   Class::MOP::Method object for the method.
 
-       $metaclass->method_metaclass
+       $metaclass-&gtmethod_metaclass
 	   Returns the class name of the method metaclass, see
 	   Class::MOP::Method for more information on the method metaclass.
 
-       $metaclass->wrapped_method_metaclass
+       $metaclass-&gtwrapped_method_metaclass
 	   Returns the class name of the wrapped method metaclass, see
 	   Class::MOP::Method::Wrapped for more information on the wrapped
 	   method metaclass.
 
-       $metaclass->get_all_methods
+       $metaclass-&gtget_all_methods
 	   This will traverse the inheritance hierarchy and return a list of
 	   all the Class::MOP::Method objects for this class and its parents.
 
-       $metaclass->find_method_by_name($method_name)
+       $metaclass-&gtfind_method_by_name($method_name)
 	   This will return a Class::MOP::Method for the specified
 	   $method_name. If the class does not have the specified method, it
 	   returns "undef"
@@ -327,11 +329,11 @@ METHODS
 	   Unlike "get_method", this method will look for the named method in
 	   superclasses.
 
-       $metaclass->get_all_method_names
+       $metaclass-&gtget_all_method_names
 	   This will return a list of method names for all of this class's
 	   methods, including inherited methods.
 
-       $metaclass->find_all_methods_by_name($method_name)
+       $metaclass-&gtfind_all_methods_by_name($method_name)
 	   This method looks for the named method in the class and all of its
 	   parents. It returns every matching method it finds in the
 	   inheritance tree, so it returns a list of methods.
@@ -342,7 +344,7 @@ METHODS
 
 	   The list of methods is distinct.
 
-       $metaclass->find_next_method_by_name($method_name)
+       $metaclass-&gtfind_next_method_by_name($method_name)
 	   This method returns the first method in any superclass matching the
 	   given name. It is effectively the method that "SUPER::$method_name"
 	   would dispatch to.
@@ -353,7 +355,7 @@ METHODS
        via this class's methods. We cannot discover information about
        attributes which are defined in terms of "regular" Perl 5 methods.
 
-       $metaclass->get_attribute($attribute_name)
+       $metaclass-&gtget_attribute($attribute_name)
 	   This will return a Class::MOP::Attribute for the specified
 	   $attribute_name. If the class does not have the specified
 	   attribute, it returns "undef".
@@ -361,22 +363,22 @@ METHODS
 	   NOTE that get_attribute does not search superclasses, for that you
 	   need to use "find_attribute_by_name".
 
-       $metaclass->has_attribute($attribute_name)
+       $metaclass-&gthas_attribute($attribute_name)
 	   Returns a boolean indicating whether or not the class defines the
 	   named attribute. It does not include attributes inherited from
 	   parent classes.
 
-       $metaclass->get_attribute_list
+       $metaclass-&gtget_attribute_list
 	   This will return a list of attributes names for all attributes
 	   defined in this class.  Note that this operates on the current
 	   class only, it does not traverse the inheritance hierarchy.
 
-       $metaclass->get_all_attributes
+       $metaclass-&gtget_all_attributes
 	   This will traverse the inheritance hierarchy and return a list of
 	   all the Class::MOP::Attribute objects for this class and its
 	   parents.
 
-       $metaclass->find_attribute_by_name($attribute_name)
+       $metaclass-&gtfind_attribute_by_name($attribute_name)
 	   This will return a Class::MOP::Attribute for the specified
 	   $attribute_name. If the class does not have the specified
 	   attribute, it returns "undef".
@@ -384,7 +386,7 @@ METHODS
 	   Unlike "get_attribute", this attribute will look for the named
 	   attribute in superclasses.
 
-       $metaclass->add_attribute(...)
+       $metaclass-&gtadd_attribute(...)
 	   This method accepts either an existing Class::MOP::Attribute object
 	   or parameters suitable for passing to that class's "new" method.
 
@@ -396,7 +398,7 @@ METHODS
 	   If an attribute of the same name already exists, the old attribute
 	   will be removed first.
 
-       $metaclass->remove_attribute($attribute_name)
+       $metaclass-&gtremove_attribute($attribute_name)
 	   This will remove the named attribute from the class, and
 	   Class::MOP::Attribute object.
 
@@ -406,7 +408,7 @@ METHODS
 	   However, note that removing an attribute will only affect future
 	   object instances created for this class, not existing instances.
 
-       $metaclass->attribute_metaclass
+       $metaclass-&gtattribute_metaclass
 	   Returns the class name of the attribute metaclass for this class.
 	   By default, this is Class::MOP::Attribute.
 
@@ -428,7 +430,7 @@ METHODS
        The immutabilization system in Moose takes much greater advantage of
        the inlining features than Class::MOP itself does.
 
-       $metaclass->make_immutable(%options)
+       $metaclass-&gtmake_immutable(%options)
 	   This method will create an immutable transformer and use it to make
 	   the class and its metaclass object immutable.
 
@@ -484,14 +486,14 @@ METHODS
 		   should be replaced when inlining a destructor. This
 		   defaults to false.
 
-       $metaclass->immutable_options
+       $metaclass-&gtimmutable_options
 	   Returns a hash of the options used when making the class immutable,
 	   including both defaults and anything supplied by the user in the
-	   call to "$metaclass->make_immutable". This is useful if you need to
+	   call to "$metaclass-&gtmake_immutable". This is useful if you need to
 	   temporarily make a class mutable and then restore immutability as
 	   it was before.
 
-       $metaclass->make_mutable
+       $metaclass-&gtmake_mutable
 	   Calling this method reverse the immutabilization transformation.
 
    Method Modifiers
@@ -559,7 +561,7 @@ METHODS
        "AUTOLOAD" which does nothing but extract the name of the method called
        and return it costs about 400% over a normal method call.
 
-       $metaclass->add_before_method_modifier($method_name, $code)
+       $metaclass-&gtadd_before_method_modifier($method_name, $code)
 	   This wraps the specified method with the supplied subroutine
 	   reference. The modifier will be called as a method itself, and will
 	   receive the same arguments as are passed to the method.
@@ -568,7 +570,7 @@ METHODS
 
 	   The return value of the modifier will be ignored.
 
-       $metaclass->add_after_method_modifier($method_name, $code)
+       $metaclass-&gtadd_after_method_modifier($method_name, $code)
 	   This wraps the specified method with the supplied subroutine
 	   reference. The modifier will be called as a method itself, and will
 	   receive the same arguments as are passed to the method.
@@ -577,7 +579,7 @@ METHODS
 
 	   The return value of the modifier will be ignored.
 
-       $metaclass->add_around_method_modifier($method_name, $code)
+       $metaclass-&gtadd_around_method_modifier($method_name, $code)
 	   This wraps the specified method with the supplied subroutine
 	   reference.
 
@@ -592,7 +594,7 @@ METHODS
 	   caller.
 
    Introspection
-       Class::MOP::Class->meta
+       Class::MOP::Class-&gtmeta
 	   This will return a Class::MOP::Class instance for this class.
 
 	   It should also be noted that Class::MOP will actually bootstrap
@@ -600,7 +602,7 @@ METHODS
 	   its metaclass.
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -611,6 +613,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-06		  Class::MOP::Class(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The following article by Sean M. Burke and Jordan Lachler first..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Locale::Maketext::TPJ13 -- article about software localization</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Locale::Maketext::TPJ13Perl)Programmers Reference Locale::Maketext::TPJ13(3pm)
 
 
@@ -366,7 +368,7 @@ Localization and Perl: gettext breaks, Maketext fixes
        entirely abstracted inside (and encapsulated within) the Maketext
        module for that interface.  When you call:
 
-	 print $lang->maketext("You have [quant,_1,piece] of new mail.",
+	 print $lang-&gtmaketext("You have [quant,_1,piece] of new mail.",
 			      scalar(@messages));
 
        you don't know (and in fact can't easily find out) whether this will
@@ -498,13 +500,13 @@ Localization and Perl: gettext breaks, Maketext fixes
 
 	%Lexicon = (
 	  "I found %g files in %g directories"
-	  => sub {
+	  =&gt sub {
 	     my( $files, $dirs ) = @_[0,1];
 	     $files = quant($files, "fichier");
 	     $dirs =  quant($dirs,  "r\xE9pertoire");
 	     return "J'ai trouv\xE9 $files dans $dirs.";
 	   },
-	 ... and so on with other phrase => sub mappings ...
+	 ... and so on with other phrase =&gt sub mappings ...
 	);
 
        but I immediately went looking for some more concise way to basically
@@ -530,7 +532,7 @@ Localization and Perl: gettext breaks, Maketext fixes
 
        So, this:
 
-	 $lang->maketext("You have [quant,_1,piece] of new mail.",
+	 $lang-&gtmaketext("You have [quant,_1,piece] of new mail.",
 			scalar(@messages));
 
        basically means this: look in the lexicon for $lang (which may inherit
@@ -557,7 +559,7 @@ Localization and Perl: gettext breaks, Maketext fixes
 	   my(@params) = @_;
 	   return join '',
 	     "You have ",
-	     $handle->quant($params[1], 'piece'),
+	     $handle-&gtquant($params[1], 'piece'),
 	     "of new mail.";
 	 }
 
@@ -585,9 +587,9 @@ Localization and Perl: gettext breaks, Maketext fixes
 	   return "I didn't find any files" unless $files;
 	   return join '',
 	     "I found ",
-	     $handle->quant($files, 'file'),
+	     $handle-&gtquant($files, 'file'),
 	     " in ",
-	     $handle->quant($dirs,  'directory'),
+	     $handle-&gtquant($dirs,  'directory'),
 	     ".";
 	 }
 
@@ -742,6 +744,6 @@ Localization and Perl: gettext breaks, Maketext fixes
 
 
 perl v5.12.4			  2011-06-07	  Locale::Maketext::TPJ13(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

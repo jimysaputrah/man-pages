@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Apache2::Response" provides the Apache request object utilities API..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Apache2::Response - Perl API for Apache HTTP request response methods</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apacheapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::Response(3)
 
 
@@ -18,21 +20,21 @@ NAME
 Synopsis
 	 use Apache2::Response ();
 
-	 $r->custom_response(Apache2::Const::FORBIDDEN, "No Entry today");
+	 $r-&gtcustom_response(Apache2::Const::FORBIDDEN, "No Entry today");
 
-	 $etag = $r->make_etag($force_weak);
-	 $r->set_etag();
-	 $status = $r->meets_conditions();
+	 $etag = $r-&gtmake_etag($force_weak);
+	 $r-&gtset_etag();
+	 $status = $r-&gtmeets_conditions();
 
-	 $mtime_rat = $r->rationalize_mtime($mtime);
-	 $r->set_last_modified($mtime);
-	 $r->update_mtime($mtime);
+	 $mtime_rat = $r-&gtrationalize_mtime($mtime);
+	 $r-&gtset_last_modified($mtime);
+	 $r-&gtupdate_mtime($mtime);
 
-	 $r->send_cgi_header($buffer);
+	 $r-&gtsend_cgi_header($buffer);
 
-	 $r->set_content_length($length);
+	 $r-&gtset_content_length($length);
 
-	 $ret = $r->set_keepalive();
+	 $ret = $r-&gtset_keepalive();
 
 Description
        "Apache2::Response" provides the Apache request object utilities API
@@ -44,7 +46,7 @@ API
    "custom_response"
        Install a custom response handler for a given status
 
-	 $r->custom_response($status, $string);
+	 $r-&gtcustom_response($status, $string);
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -66,12 +68,12 @@ API
 
 	 package MyApache2::MyShop;
 	 use Apache2::Response ();
-	 use Apache2::Const -compile => qw(FORBIDDEN OK);
+	 use Apache2::Const -compile =&gt qw(FORBIDDEN OK);
 	 sub access {
 	     my $r = shift;
 
 	     if (MyApache2::MyShop::tired_squirrels()) {
-		 $r->custom_response(Apache2::Const::FORBIDDEN,
+		 $r-&gtcustom_response(Apache2::Const::FORBIDDEN,
 		     "It's siesta time, please try later");
 		 return Apache2::Const::FORBIDDEN;
 	     }
@@ -82,12 +84,12 @@ API
 
 	 # httpd.conf
 	 PerlModule MyApache2::MyShop
-	 <Location /TestAPI__custom_response>
+	 &ltLocation /TestAPI__custom_response&gt
 	     AuthName dummy
 	     AuthType none
 	     PerlAccessHandler	 MyApache2::MyShop::access
 	     PerlResponseHandler MyApache2::MyShop::response
-	 </Location>
+	 &lt/Location&gt
 
        When squirrels can't run any more, the handler will return 403, with
        the custom message:
@@ -98,7 +100,7 @@ API
        Construct an entity tag from the resource information.  If it's a real
        file, build in some of the file characteristics.
 
-	 $etag = $r->make_etag($force_weak);
+	 $etag = $r-&gtmake_etag($force_weak);
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -117,7 +119,7 @@ API
        function inspects the client headers and determines if the response
        fulfills the specified requirements.
 
-	 $status = $r->meets_conditions();
+	 $status = $r-&gtmeets_conditions();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -135,7 +137,7 @@ API
    "rationalize_mtime"
        Return the latest rational time from a request/mtime pair.
 
-	 $mtime_rat = $r->rationalize_mtime($mtime);
+	 $mtime_rat = $r-&gtrationalize_mtime($mtime);
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -153,7 +155,7 @@ API
    "send_cgi_header"
        Parse the header
 
-	 $r->send_cgi_header($buffer);
+	 $r-&gtsend_cgi_header($buffer);
 
        obj: $r ( "Apache2::RequestRec object" )
        arg1: $buffer (string)
@@ -176,7 +178,7 @@ API
    "set_content_length"
        Set the content length for this request.
 
-	 $r->set_content_length($length);
+	 $r-&gtset_content_length($length);
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -190,7 +192,7 @@ API
    "set_etag"
        Set the E-tag outgoing header
 
-	 $r->set_etag();
+	 $r-&gtset_etag();
 
        obj: $r ( "Apache2::RequestRec object" )
        ret: no return value
@@ -199,7 +201,7 @@ API
    "set_keepalive"
        Set the keepalive status for this request
 
-	 $ret = $r->set_keepalive();
+	 $ret = $r-&gtset_keepalive();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -217,21 +219,21 @@ API
        mtime field in the request structure -- rationalized to keep it from
        being in the future.
 
-	 $r->set_last_modified($mtime);
+	 $r-&gtset_last_modified($mtime);
 
        obj: $r ( "Apache2::RequestRec object" )
        opt arg1: $mtime ( time in seconds )
-	   if the $mtime argument is passed, $r->update_mtime will be first
+	   if the $mtime argument is passed, $r-&gtupdate_mtime will be first
 	   run with that argument.
 
        ret: no return value
        since: 2.0.00
 
    "update_mtime"
-       Set the "$r->mtime" field to the specified value if it's later than
+       Set the "$r-&gtmtime" field to the specified value if it's later than
        what's already there.
 
-	 $r->update_mtime($mtime);
+	 $r-&gtupdate_mtime($mtime);
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -240,7 +242,7 @@ API
        ret: no return value
        since: 2.0.00
 
-       See also: $r->set_last_modified.
+       See also: $r-&gtset_last_modified.
 
 Unsupported API
        "Apache2::Response" also provides auto-generated Perl interface for a
@@ -258,7 +260,7 @@ Unsupported API
        5xx (server error) messages that have not been redirected to another
        handler via the ErrorDocument feature.
 
-	 $r->send_error_response($recursive_error);
+	 $r-&gtsend_error_response($recursive_error);
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -281,7 +283,7 @@ Unsupported API
 
        Send an MMAP'ed file to the client
 
-	 $ret = $r->send_mmap($mm, $offset, $length);
+	 $ret = $r-&gtsend_mmap($mm, $offset, $length);
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -316,6 +318,6 @@ Authors
 
 
 perl vapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::Response(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

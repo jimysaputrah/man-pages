@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module simplifies the task of writing test files for Perl modules,..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Test - provides a simple framework for writing test scripts</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Test(3pm)	       Perl Programmers Reference Guide 	     Test(3pm)
 
 
@@ -20,7 +22,7 @@ SYNOPSIS
 	 use Test;
 
 	 # use a BEGIN block so we print our plan before MyModule is loaded
-	 BEGIN { plan tests => 14, todo => [3,4] }
+	 BEGIN { plan tests =&gt 14, todo =&gt [3,4] }
 
 	 # load your module...
 	 use MyModule;
@@ -81,27 +83,27 @@ QUICK START GUIDE
 	   Typical usage is just:
 
 		use Test;
-		BEGIN { plan tests => 23 }
+		BEGIN { plan tests =&gt 23 }
 
 	   These are the things that you can put in the parameters to plan:
 
-	   "tests => number"
+	   "tests =&gt number"
 	       The number of tests in your script.  This means all ok() and
 	       skip() calls.
 
-	   "todo => [1,5,14]"
+	   "todo =&gt [1,5,14]"
 	       A reference to a list of tests which are allowed to fail.  See
 	       "TODO TESTS".
 
-	   "onfail => sub { ... }"
-	   "onfail => \&some_sub"
+	   "onfail =&gt sub { ... }"
+	   "onfail =&gt \&some_sub"
 	       A subroutine reference to be run at the end of the test script,
 	       if any of the tests fail.  See "ONFAIL".
 
 	   You must call "plan(...)" once and only once.  You should call it
 	   in a "BEGIN {...}" block, like so:
 
-		BEGIN { plan tests => 23 }
+		BEGIN { plan tests =&gt 23 }
 
        "ok(...)"
 	     ok(1 + 1 == 2);
@@ -139,7 +141,7 @@ QUICK START GUIDE
 	       ok( sub {   # See whether sleep works at least passably
 		 my $start_time = time;
 		 sleep 5;
-		 time() - $start_time  >= 4
+		 time() - $start_time  &gt= 4
 	       });
 
 	   In its two-argument form, "ok(arg1, arg2)" compares the two scalar
@@ -171,7 +173,7 @@ QUICK START GUIDE
 	   as the value for comparing.	For example:
 
 	       ok sub {
-		   open(OUT, ">x.dat") || die $!;
+		   open(OUT, "&gtx.dat") || die $!;
 		   print OUT "\x{e000}";
 		   close OUT;
 		   my $bytecount = -s 'x.dat';
@@ -308,7 +310,7 @@ TEST TYPES
 	   the release notes or in the change log.
 
 ONFAIL
-	 BEGIN { plan test => 4, onfail => sub { warn "CALL 911!" } }
+	 BEGIN { plan test =&gt 4, onfail =&gt sub { warn "CALL 911!" } }
 
        Although test failures should be enough, extra diagnostics can be
        triggered at the end of a test run.  "onfail" is passed an array ref of
@@ -361,22 +363,22 @@ BUGS and CAVEATS
 
        o   This almost definitely doesn't do what you expect:
 
-		ok $thingy->can('some_method');
+		ok $thingy-&gtcan('some_method');
 
 	   Why?  Because "can" returns a coderef to mean "yes it can (and the
 	   method is this...)", and then "ok" sees a coderef and thinks you're
 	   passing a function that you want it to call and consider the truth
 	   of the result of!  I.e., just like:
 
-		ok $thingy->can('some_method')->();
+		ok $thingy-&gtcan('some_method')-&gt();
 
 	   What you probably want instead is this:
 
-		ok $thingy->can('some_method') && 1;
+		ok $thingy-&gtcan('some_method') && 1;
 
 	   If the "can" returns false, then that is passed to "ok".  If it
 	   returns true, then the larger expression
-	   "$thingy->can('some_method') && 1" returns 1, which "ok" sees as a
+	   "$thingy-&gtcan('some_method') && 1" returns 1, which "ok" sees as a
 	   simple signal of success, as you would expect.
 
        o   The syntax for "skip" is about the only way it can be, but it's
@@ -452,7 +454,7 @@ AUTHOR
 
        Copyright (c) 2002-2004 Sean M. Burke.
 
-       Current maintainer: Jesse Vincent. <jesse@bestpractical.com>
+       Current maintainer: Jesse Vincent. &ltjesse@bestpractical.com&gt
 
        This package is free software and is provided "as is" without express
        or implied warranty.  It may be used, redistributed and/or modified
@@ -461,6 +463,6 @@ AUTHOR
 
 
 perl v5.10.1			  2009-06-12			     Test(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module provides an object-oriented abstraction on top of IP..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>NetAddr::IP - Manages IPv4 and IPv6 addresses and subnets</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 IP(3)		      User Contributed Perl Documentation		 IP(3)
 
 
@@ -45,9 +47,9 @@ SYNOPSIS
 	       or from an octal filtered IPv4 address
 	 my $ip = new_no NetAddr::IP::Lite '127.012.0.0';
 
-	 print "The address is ", $ip->addr, " with mask ", $ip->mask, "\n" ;
+	 print "The address is ", $ip-&gtaddr, " with mask ", $ip-&gtmask, "\n" ;
 
-	 if ($ip->within(new NetAddr::IP "127.0.0.0", "255.0.0.0")) {
+	 if ($ip-&gtwithin(new NetAddr::IP "127.0.0.0", "255.0.0.0")) {
 	     print "Is a loopback address\n";
 	 }
 
@@ -76,7 +78,7 @@ SYNOPSIS
 	 use NetAddr::IP qw(:old_storable);
 
        * To compact many smaller subnets (see:
-       "$me->compact($addr1,$addr2,...)"
+       "$me-&gtcompact($addr1,$addr2,...)"
 
 	 @compacted_object_list = Compact(@object_list)
 
@@ -144,12 +146,12 @@ DESCRIPTION
 	   Has been optimized to copy one NetAddr::IP object to another very
 	   quickly.
 
-       "->copy()"
+       "-&gtcopy()"
 	   The assignment ("=") operation is only put in to operation when the
 	   copied object is further mutated by another overloaded operation.
 	   See overload SPECIAL SYMBOLS FOR "use overload" for details.
 
-	   "->copy()" actually creates a new object when called.
+	   "-&gtcopy()" actually creates a new object when called.
 
        Stringification
 	   An object can be used just as a string. For instance, the following
@@ -165,7 +167,7 @@ DESCRIPTION
 	   comparison with arbitrary strings as well as NetAddr::IP objects.
 	   The following example:
 
-	       if (NetAddr::IP->new('127.0.0.1','255.0.0.0') eq '127.0.0.1/8')
+	       if (NetAddr::IP-&gtnew('127.0.0.1','255.0.0.0') eq '127.0.0.1/8')
 		  { print "Yes\n"; }
 
 	   Will print out "Yes".
@@ -176,7 +178,7 @@ DESCRIPTION
 	   In both cases, a true value is returned if the CIDR representation
 	   of the operands is equal.
 
-       Comparison via >, <, >=, <=, <=> and "cmp"
+       Comparison via &gt, &lt, &gt=, &lt=, &lt=&gt and "cmp"
 	   Internally, all network objects are represented in 128 bit format.
 	   The numeric representation of the network is compared through the
 	   corresponding operation. Comparisons are tried first on the address
@@ -184,14 +186,14 @@ DESCRIPTION
 	   portion of the masks are compared. This leads to the
 	   counterintuitive result that
 
-		   /24 > /16
+		   /24 &gt /16
 
 	   Comparison should not be done on netaddr objects with different
 	   CIDR as this may produce indeterminate - unexpected results, rather
 	   the determination of which netblock is larger or smaller should be
 	   done by comparing
 
-		   $ip1->masklen <=> $ip2->masklen
+		   $ip1-&gtmasklen &lt=&gt $ip2-&gtmasklen
 
        Addition of a constant ("+")
 	   Add a 32 bit signed constant to the address part of a NetAddr
@@ -199,19 +201,19 @@ DESCRIPTION
 	   hosts above the current objects start address. For instance, this
 	   code:
 
-	       print NetAddr::IP::Lite->new('127.0.0.1') + 5;
+	       print NetAddr::IP::Lite-&gtnew('127.0.0.1') + 5;
 
 	   will output 127.0.0.6/8. The address will wrap around at the
 	   broadcast back to the network address. This code:
 
-	       print NetAddr::IP::Lite->new('10.0.0.1/24') + 255;
+	       print NetAddr::IP::Lite-&gtnew('10.0.0.1/24') + 255;
 
 	       outputs 10.0.0.0/24.
 
 	   Returns the the unchanged object when the constant is missing or
 	   out of range.
 
-	       2147483647 <= constant >= -2147483648
+	       2147483647 &lt= constant &gt= -2147483648
 
        Subtraction of a constant ("-")
 	   The complement of the addition of a constant.
@@ -245,10 +247,10 @@ DESCRIPTION
        objects stored using the Storable module.
 
    Methods
-       "->new([$addr, [ $mask|IPv6 ]])"
-       "->new6([$addr, [ $mask]])"
-       "->new_no([$addr, [ $mask]])"
-       "->new_from_aton($netaddr)"
+       "-&gtnew([$addr, [ $mask|IPv6 ]])"
+       "-&gtnew6([$addr, [ $mask]])"
+       "-&gtnew_no([$addr, [ $mask]])"
+       "-&gtnew_from_aton($netaddr)"
 	   The first two methods create a new address with the supplied
 	   address in $addr and an optional netmask $mask, which can be
 	   omitted to get a /32 or /128 netmask for IPv4 / IPv6 addresses
@@ -263,14 +265,14 @@ DESCRIPTION
 	   would normally be interpreted as octal format by NetAddr per the
 	   specifications for inet_aton.
 
-	   "->new6" marks the address as being in ipV6 address space even if
+	   "-&gtnew6" marks the address as being in ipV6 address space even if
 	   the format would suggest otherwise.
 
-	     i.e.  ->new6('1.2.3.4') will result in ::102:304
+	     i.e.  -&gtnew6('1.2.3.4') will result in ::102:304
 
-	     addresses submitted to ->new in ipV6 notation will
+	     addresses submitted to -&gtnew in ipV6 notation will
 	     remain in that notation permanently. i.e.
-		   ->new('::1.2.3.4') will result in ::102:304
+		   -&gtnew('::1.2.3.4') will result in ::102:304
 	     whereas new('1.2.3.4') would print out as 1.2.3.4
 
 	     See "STRINGIFICATION" below.
@@ -325,67 +327,67 @@ DESCRIPTION
 
 	   If called with no arguments, 'default' is assumed.
 
-       "->broadcast()"
+       "-&gtbroadcast()"
 	   Returns a new object referring to the broadcast address of a given
 	   subnet. The broadcast address has all ones in all the bit positions
 	   where the netmask has zero bits. This is normally used to address
 	   all the hosts in a given subnet.
 
-       "->network()"
+       "-&gtnetwork()"
 	   Returns a new object referring to the network address of a given
 	   subnet. A network address has all zero bits where the bits of the
 	   netmask are zero. Normally this is used to refer to a subnet.
 
-       "->addr()"
+       "-&gtaddr()"
 	   Returns a scalar with the address part of the object as an IPv4 or
 	   IPv6 text string as appropriate. This is useful for printing or for
 	   passing the address part of the NetAddr::IP object to other
 	   components that expect an IP address. If the object is an ipV6
-	   address or was created using ->new6($ip) it will be reported in
+	   address or was created using -&gtnew6($ip) it will be reported in
 	   ipV6 hex format otherwise it will be reported in dot quad format
 	   only if it resides in ipV4 address space.
 
-       "->mask()"
+       "-&gtmask()"
 	   Returns a scalar with the mask as an IPv4 or IPv6 text string as
 	   described above.
 
-       "->masklen()"
+       "-&gtmasklen()"
 	   Returns a scalar the number of one bits in the mask.
 
-       "->bits()"
+       "-&gtbits()"
 	   Returns the width of the address in bits. Normally 32 for v4 and
 	   128 for v6.
 
-       "->version()"
+       "-&gtversion()"
 	   Returns the version of the address or subnet. Currently this can be
 	   either 4 or 6.
 
-       "->cidr()"
+       "-&gtcidr()"
 	   Returns a scalar with the address and mask in CIDR notation. A
 	   NetAddr::IP object stringifies to the result of this function.
-	   (see comments about ->new6() and ->addr() for output formats)
+	   (see comments about -&gtnew6() and -&gtaddr() for output formats)
 
-       "->aton()"
+       "-&gtaton()"
 	   Returns the address part of the NetAddr::IP object in the same
 	   format as the "inet_aton()" or "ipv6_aton" function respectively.
-	   If the object was created using ->new6($ip), the address returned
+	   If the object was created using -&gtnew6($ip), the address returned
 	   will always be in ipV6 format, even for addresses in ipV4 address
 	   space.
 
-       "->range()"
+       "-&gtrange()"
 	   Returns a scalar with the base address and the broadcast address
 	   separated by a dash and spaces. This is called range notation.
 
-       "->prefix()"
+       "-&gtprefix()"
 	   Returns a scalar with the address and mask in ipV4 prefix
 	   representation. This is useful for some programs, which expect its
 	   input to be in this format. This method will include the broadcast
 	   address in the encoding.
 
-       "->nprefix()"
-	   Just as "->prefix()", but does not include the broadcast address.
+       "-&gtnprefix()"
+	   Just as "-&gtprefix()", but does not include the broadcast address.
 
-       "->numeric()"
+       "-&gtnumeric()"
 	   When called in a scalar context, will return a numeric
 	   representation of the address part of the IP address. When called
 	   in an array contest, it returns a list of two elements. The first
@@ -395,7 +397,7 @@ DESCRIPTION
 	   This method is essential for serializing the representation of a
 	   subnet.
 
-       "->wildcard()"
+       "-&gtwildcard()"
 	   When called in a scalar context, returns the wildcard bits
 	   corresponding to the mask, in dotted-quad or ipV6 format as
 	   applicable.
@@ -404,14 +406,14 @@ DESCRIPTION
 	   first element, is the address part. The second element, is the
 	   wildcard translation of the mask.
 
-       "->short()"
+       "-&gtshort()"
 	   Returns the address part in a short or compact notation.
 
 	     (ie, 127.0.0.1 becomes 127.1).
 
 	   Works with both, V4 and V6.
 
-       "->full()"
+       "-&gtfull()"
 	   Returns the address part in FULL notation for ipV4 and ipV6
 	   respectively.
 
@@ -423,21 +425,21 @@ DESCRIPTION
 
 	   To force ipV4 addresses into full ipV6 format use:
 
-       "->full6()"
+       "-&gtfull6()"
 	   Returns the address part in FULL ipV6 notation
 
-       "$me->contains($other)"
+       "$me-&gtcontains($other)"
 	   Returns true when $me completely contains $other. False is returned
 	   otherwise and "undef" is returned if $me and $other are not both
 	   "NetAddr::IP" objects.
 
-       "$me->within($other)"
-	   The complement of "->contains()". Returns true when $me is
+       "$me-&gtwithin($other)"
+	   The complement of "-&gtcontains()". Returns true when $me is
 	   completely contained within $other.
 
 	   Note that $me and $other must be "NetAddr::IP" objects.
 
-       "->splitref($bits,[optional $bits1,$bits2,...])"
+       "-&gtsplitref($bits,[optional $bits1,$bits2,...])"
 	   Returns a reference to a list of objects, representing subnets of
 	   "bits" mask produced by splitting the original object, which is
 	   left unchanged. Note that $bits must be longer than the original
@@ -445,14 +447,14 @@ DESCRIPTION
 
 	   ERROR conditions:
 
-	     ->splitref will DIE with the message 'netlimit exceeded'
+	     -&gtsplitref will DIE with the message 'netlimit exceeded'
 	       if the number of return objects exceeds 'netlimit'.
 	       See function 'netlimit' above (default 2**16 or 65536 nets).
 
-	     ->splitref returns undef when C<bits> or the (bits list)
+	     -&gtsplitref returns undef when C&ltbits&gt or the (bits list)
 	       will not fit within the original object.
 
-	     ->splitref returns undef if a supplied ipV4, ipV6, or NetAddr
+	     -&gtsplitref returns undef if a supplied ipV4, ipV6, or NetAddr
 	       mask in inappropriately formatted,
 
 	   bits may be a CIDR mask, a dot quad or ipV6 string or a NetAddr::IP
@@ -468,7 +470,7 @@ DESCRIPTION
 	   based on an increasing sort of the CIDR values of the "bits" list.
 
 	     i.e.  my $ip = new NetAddr::IP('192.168.0.0');
-		   my $objptr = $ip->split(28, 29, 28, 29, 26);
+		   my $objptr = $ip-&gtsplit(28, 29, 28, 29, 26);
 
 	      has split plan 28 29 28 29 26 26 26 28
 	      and returns this list of objects
@@ -485,12 +487,12 @@ DESCRIPTION
 	   NOTE: that /26 replicates twice beyond the original request and /28
 	   fills the remaining return object requirement.
 
-       "->rsplitref($bits,[optional $bits1,$bits2,...])"
-	   "->rsplitref" is the same as "->splitref" above except that the
+       "-&gtrsplitref($bits,[optional $bits1,$bits2,...])"
+	   "-&gtrsplitref" is the same as "-&gtsplitref" above except that the
 	   split plan is applied to the original object in reverse order.
 
 	     i.e.  my $ip = new NetAddr::IP('192.168.0.0');
-		   my @objects = $ip->split(28, 29, 28, 29, 26);
+		   my @objects = $ip-&gtsplit(28, 29, 28, 29, 26);
 
 	      has split plan 28 26 26 26 29 28 29 28
 	      and returns this list of objects
@@ -504,29 +506,29 @@ DESCRIPTION
 		   192.168.0.232/29
 		   192.168.0.240/28
 
-       "->split($bits,[optional $bits1,$bits2,...])"
-	   Similar to "->splitref" above but returns the list rather than a
+       "-&gtsplit($bits,[optional $bits1,$bits2,...])"
+	   Similar to "-&gtsplitref" above but returns the list rather than a
 	   list reference. You may not want to use this if a large number of
 	   objects is expected.
 
-       "->rsplit($bits,[optional $bits1,$bits2,...])"
-	   Similar to "->rsplitref" above but returns the list rather than a
+       "-&gtrsplit($bits,[optional $bits1,$bits2,...])"
+	   Similar to "-&gtrsplitref" above but returns the list rather than a
 	   list reference. You may not want to use this if a large number of
 	   objects is expected.
 
-       "->hostenum()"
+       "-&gthostenum()"
 	   Returns the list of hosts within a subnet.
 
 	   ERROR conditions:
 
-	     ->hostenum will DIE with the message 'netlimit exceeded'
+	     -&gthostenum will DIE with the message 'netlimit exceeded'
 	       if the number of return objects exceeds 'netlimit'.
 	       See function 'netlimit' above (default 2**16 or 65536 nets).
 
-       "->hostenumref()"
-	   Faster version of "->hostenum()", returning a reference to a list.
+       "-&gthostenumref()"
+	   Faster version of "-&gthostenum()", returning a reference to a list.
 
-       "$me->compact($addr1, $addr2, ...)"
+       "$me-&gtcompact($addr1, $addr2, ...)"
        "@compacted_object_list = Compact(@object_list)"
 	   Given a list of objects (including $me), this method will compact
 	   all the addresses and subnets into the largest (ie, least specific)
@@ -539,14 +541,14 @@ DESCRIPTION
 
 	   Note that $me and all $addr's must be "NetAddr::IP" objects.
 
-       "$me->compactref(\@list)"
-	   As usual, a faster version of =item "->compact()" that returns a
+       "$me-&gtcompactref(\@list)"
+	   As usual, a faster version of =item "-&gtcompact()" that returns a
 	   reference to a list. Note that this method takes a reference to a
 	   list instead.
 
 	   Note that $me must be a "NetAddr::IP" object.
 
-       "$me->coalesce($masklen, $number, @list_of_subnets)"
+       "$me-&gtcoalesce($masklen, $number, @list_of_subnets)"
        "$arrayref = Coalesce($masklen,$number,@list_of_subnets)"
 	   Will return a reference to list of "NetAddr::IP" subnets of
 	   $masklen mask length, when $number or more addresses from
@@ -563,47 +565,47 @@ DESCRIPTION
 
 	   WARNING: the list of subnet must be the same type. i.e ipV4 or ipV6
 
-       "->first()"
+       "-&gtfirst()"
 	   Returns a new object representing the first usable IP address
 	   within the subnet (ie, the first host address).
 
-       "->last()"
+       "-&gtlast()"
 	   Returns a new object representing the last usable IP address within
 	   the subnet (ie, one less than the broadcast address).
 
-       "->nth($index)"
+       "-&gtnth($index)"
 	   Returns a new object representing the n-th usable IP address within
 	   the subnet (ie, the n-th host address).  If no address is available
 	   (for example, when the network is too small for $index hosts),
 	   "undef" is returned.
 
 	   Version 4.00 of NetAddr::IP and version 1.00 of NetAddr::IP::Lite
-	   implements "->nth($index)" and "->num()" exactly as the
+	   implements "-&gtnth($index)" and "-&gtnum()" exactly as the
 	   documentation states.  Previous versions behaved slightly
 	   differently and not in a consistent manner. See the README file for
 	   details.
 
-	   To use the old behavior for "->nth($index)" and "->num()":
+	   To use the old behavior for "-&gtnth($index)" and "-&gtnum()":
 
 	     use NetAddr::IP::Lite qw(:old_nth);
 
-       "->num()"
+       "-&gtnum()"
 	   Version 4.00 of NetAddr::IP and version 1.00 of NetAddr::IP::Lite
 	   Returns the number of usable addresses IP addresses within the
 	   subnet, not counting the broadcast or network address. Previous
 	   versions returned th number of IP addresses not counting the
 	   broadcast address.
 
-	   To use the old behavior for "->nth($index)" and "->num()":
+	   To use the old behavior for "-&gtnth($index)" and "-&gtnum()":
 
 	     use NetAddr::IP::Lite qw(:old_nth);
 
-       "->re()"
+       "-&gtre()"
 	   Returns a Perl regular expression that will match an IP address
 	   within the given subnet. Defaults to ipV4 notation. Will return an
 	   ipV6 regex if the address in not in ipV4 space.
 
-       "->re6()"
+       "-&gtre6()"
 	   Returns a Perl regular expression that will match an IP address
 	   within the given subnet. Always returns an ipV6 regex.
 
@@ -654,7 +656,7 @@ HISTORY
 
 		 Inherited methods from Lite.pm updated as follows:
 
-		   comparisons of the form <, >, <=, >=
+		   comparisons of the form &lt, &gt, &lt=, &gt=
 
 			   10.0.0.0/24 {operator} 10.0.0.0/16
 
@@ -664,25 +666,25 @@ HISTORY
 
 		   ... and leading us to discover that this next fix is required
 
-		   comparisons of the form <=>, cmp
+		   comparisons of the form &lt=&gt, cmp
 		   now return the correct value 1, or -1
 		   when the address portion is equal and the CIDR value is not
-		   i.e.    where /16 is > /24, etc...
+		   i.e.    where /16 is &gt /24, etc...
 
 		   This is the OPPOSITE of the previous return values for
 		   comparison of the CIDR portion of the address object
 
        4.08
-		   added method ->new_from_aton to supplement broken
+		   added method -&gtnew_from_aton to supplement broken
 		   :aton functionality which is now DEPRECATED and
 		   will eventually go away.
 
        4.13
-		   added 'no octal' method ->new_no
+		   added 'no octal' method -&gtnew_no
 
        4.17
 		   add support for PTHREADS in the event that perl is
-		   built with <pthreads.h>. This must be invoked at build
+		   built with &ltpthreads.h&gt. This must be invoked at build
 		   time with the switch --with-threads
 
 		   WARNING: --with-threads is not tested in a threads
@@ -693,9 +695,9 @@ HISTORY
 		   ....and
 		   added minus (-) overloading to allow the subtraction
 		   of two NetAddr::IP objects to get the difference between
-		   the object->{addr}'s as a numeric value
+		   the object-&gt{addr}'s as a numeric value
 
-		   Thanks to Rob Riepel <riepel@networking.Stanford.EDU> for
+		   Thanks to Rob Riepel &ltriepel@networking.Stanford.EDU&gt for
 		   the _compV6 code and the inspiration for (-) overloading.
 
 		   Extended the capability of 'splitref' to allow splitting of
@@ -705,7 +707,7 @@ HISTORY
 
 			   split, rsplit, splitref, rsplitref
 
-		   Thanks to kashmish <kashmish@gmail.com> for the idea on
+		   Thanks to kashmish &ltkashmish@gmail.com&gt for the idea on
 		   improving functionality of 'split'.
 
        4.018
@@ -728,8 +730,8 @@ HISTORY
 		   for reporting this bug.
 
 AUTHORS
-       Luis E. MuA~Xoz <luismunoz@cpan.org>, Michael Robinton
-       <michael@bizsystems.com>
+       Luis E. MuA~Xoz &ltluismunoz@cpan.org&gt, Michael Robinton
+       &ltmichael@bizsystems.com&gt
 
 WARRANTY
        This software comes with the same warranty as perl itself (ie, none),
@@ -748,6 +750,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2010-05-12				 IP(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Meta::Recipe3 - Labels implemented via attribute</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::Meta:UseriContributed Perl DMoose::Cookbook::Meta::Recipe3(3)
 
 
@@ -20,10 +22,10 @@ SYNOPSIS
 	 package MyApp::Meta::Attribute::Trait::Labeled;
 	 use Moose::Role;
 
-	 has label => (
-	     is        => 'rw',
-	     isa       => 'Str',
-	     predicate => 'has_label',
+	 has label =&gt (
+	     is        =&gt 'rw',
+	     isa       =&gt 'Str',
+	     predicate =&gt 'has_label',
 	 );
 
 	 package Moose::Meta::Attribute::Custom::Trait::Labeled;
@@ -32,38 +34,38 @@ SYNOPSIS
 	 package MyApp::Website;
 	 use Moose;
 
-	 has url => (
-	     traits => [qw/Labeled/],
-	     is     => 'rw',
-	     isa    => 'Str',
-	     label  => "The site's URL",
+	 has url =&gt (
+	     traits =&gt [qw/Labeled/],
+	     is     =&gt 'rw',
+	     isa    =&gt 'Str',
+	     label  =&gt "The site's URL",
 	 );
 
-	 has name => (
-	     is  => 'rw',
-	     isa => 'Str',
+	 has name =&gt (
+	     is  =&gt 'rw',
+	     isa =&gt 'Str',
 	 );
 
 	 sub dump {
 	     my $self = shift;
 
-	     my $meta = $self->meta;
+	     my $meta = $self-&gtmeta;
 
 	     my $dump = '';
 
-	     for my $attribute ( map { $meta->get_attribute($_) }
-		 sort $meta->get_attribute_list ) {
+	     for my $attribute ( map { $meta-&gtget_attribute($_) }
+		 sort $meta-&gtget_attribute_list ) {
 
-		 if (	$attribute->does('MyApp::Meta::Attribute::Trait::Labeled')
-		     && $attribute->has_label ) {
-		     $dump .= $attribute->label;
+		 if (	$attribute-&gtdoes('MyApp::Meta::Attribute::Trait::Labeled')
+		     && $attribute-&gthas_label ) {
+		     $dump .= $attribute-&gtlabel;
 		 }
 		 else {
-		     $dump .= $attribute->name;
+		     $dump .= $attribute-&gtname;
 		 }
 
-		 my $reader = $attribute->get_read_method;
-		 $dump .= ": " . $self->$reader . "\n";
+		 my $reader = $attribute-&gtget_read_method;
+		 $dump .= ": " . $self-&gt$reader . "\n";
 	     }
 
 	     return $dump;
@@ -71,7 +73,7 @@ SYNOPSIS
 
 	 package main;
 
-	 my $app = MyApp::Website->new( url => "http://google.com", name => "Google" );
+	 my $app = MyApp::Website-&gtnew( url =&gt "http://google.com", name =&gt "Google" );
 
 BUT FIRST
        This recipe is a variation on Moose::Cookbook::Meta::Recipe2. Please
@@ -117,10 +119,10 @@ DISSECTION
 	 package MyApp::Meta::Attribute::Trait::Labeled;
 	 use Moose::Role;
 
-	 has label => (
-	     is        => 'rw',
-	     isa       => 'Str',
-	     predicate => 'has_label',
+	 has label =&gt (
+	     is        =&gt 'rw',
+	     isa       =&gt 'Str',
+	     predicate =&gt 'has_label',
 	 );
 
        Instead of subclassing Moose::Meta::Attribute, we define a role. As
@@ -137,11 +139,11 @@ DISSECTION
        For the rest of the code, we will only cover what is different from
        recipe 2.
 
-	 has url => (
-	     traits => [qw/Labeled/],
-	     is     => 'rw',
-	     isa    => 'Str',
-	     label  => "The site's URL",
+	 has url =&gt (
+	     traits =&gt [qw/Labeled/],
+	     is     =&gt 'rw',
+	     isa    =&gt 'Str',
+	     label  =&gt "The site's URL",
 	 );
 
        Instead of passing a "metaclass" parameter, this time we pass "traits".
@@ -150,12 +152,12 @@ DISSECTION
        Passing a "label" parameter works just as it did with the metaclass
        example.
 
-		 if (	$attribute->does('MyApp::Meta::Attribute::Trait::Labeled')
-		     && $attribute->has_label ) {
-		     $dump .= $attribute->label;
+		 if (	$attribute-&gtdoes('MyApp::Meta::Attribute::Trait::Labeled')
+		     && $attribute-&gthas_label ) {
+		     $dump .= $attribute-&gtlabel;
 		 }
 
-       In the metaclass example, we used "$attribute->isa". With a role, we
+       In the metaclass example, we used "$attribute-&gtisa". With a role, we
        instead ask if the meta-attribute object "does" the required role. If
        it does not do this role, the attribute meta object won't have the
        "has_label" method.
@@ -189,14 +191,14 @@ CONCLUSION
        providing a list of trait names to "has" in Moose.
 
 AUTHOR
-       Shawn M Moore <sartak@gmail.com>
+       Shawn M Moore &ltsartak@gmail.com&gt
 
-       Dave Rolsky <autarch@urth.org<gt>
+       Dave Rolsky &ltautarch@urth.org&ltgt&gt
 
 COPYRIGHT AND LICENSE
        Copyright 2006-2010 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -204,6 +206,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2010-02-27 Moose::Cookbook::Meta::Recipe3(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

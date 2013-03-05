@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This section deals with general Perl language issues that don't clearly..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlfaq7 - General Perl Language Issues</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLFAQ7(1)	       Perl Programmers Reference Guide 	   PERLFAQ7(1)
 
 
@@ -43,14 +45,14 @@ DESCRIPTION
        There are couple of other symbols that you're likely to encounter that
        aren't really type specifiers:
 
-	       <> are used for inputting a record from a filehandle.
+	       &lt&gt are used for inputting a record from a filehandle.
 	       \  takes a reference to something.
 
-       Note that <FILE> is neither the type specifier for files nor the name
-       of the handle.  It is the "<>" operator applied to the handle FILE.  It
+       Note that &ltFILE&gt is neither the type specifier for files nor the name
+       of the handle.  It is the "&lt&gt" operator applied to the handle FILE.  It
        reads one line (well, record--see "$/" in perlvar) from the handle FILE
        in scalar context, or all lines in list context.  When performing open,
-       close, or any other operation besides "<>" on files, or even when
+       close, or any other operation besides "&lt&gt" on files, or even when
        talking about the handle, do not use the brackets.  These are correct:
        "eof(FH)", "seek(FH, 0, 2)" and "copying from STDIN to FILE".
 
@@ -58,13 +60,13 @@ DESCRIPTION
        Normally, a bareword doesn't need to be quoted, but in most cases
        probably should be (and must be under "use strict").  But a hash key
        consisting of a simple word (that isn't the name of a defined
-       subroutine) and the left-hand operand to the "=>" operator both count
+       subroutine) and the left-hand operand to the "=&gt" operator both count
        as though they were quoted:
 
 	       This		       is like this
 	       ------------	       ---------------
 	       $foo{line}	       $foo{'line'}
-	       bar => stuff	       'bar' => stuff
+	       bar =&gt stuff	       'bar' =&gt stuff
 
        The final semicolon in a block is optional, as is the final comma in a
        list.  Good style (see perlstyle) says to put them in except for one-
@@ -174,8 +176,8 @@ DESCRIPTION
        Here's an example:
 
 	       $person = {};		       # new anonymous hash
-	       $person->{AGE}  = 24;	       # set field AGE to 24
-	       $person->{NAME} = "Nat";        # set field NAME to "Nat"
+	       $person-&gt{AGE}  = 24;	       # set field AGE to 24
+	       $person-&gt{NAME} = "Nat";        # set field NAME to "Nat"
 
        If you're looking for something a bit more rigorous, try perltoot.
 
@@ -269,7 +271,7 @@ DESCRIPTION
 		       }
 
 	       $add_sub = add_function_generator();
-	       $sum = $add_sub->(4,5);		      # $sum is 9 now.
+	       $sum = $add_sub-&gt(4,5);		      # $sum is 9 now.
 
        The anonymous subroutine returned by add_function_generator() isn't
        technically a closure because it refers to no lexicals outside its own
@@ -298,10 +300,10 @@ DESCRIPTION
        you want to pass in a bit of code into a function:
 
 	       my $line;
-	       timeout( 30, sub { $line = <STDIN> } );
+	       timeout( 30, sub { $line = &ltSTDIN&gt } );
 
        If the code to execute had been passed in as a string, '$line =
-       <STDIN>', there would have been no way for the hypothetical timeout()
+       &ltSTDIN&gt', there would have been no way for the hypothetical timeout()
        function to access the lexical variable $line back in its caller's
        scope.
 
@@ -332,14 +334,14 @@ DESCRIPTION
 
 	       my $f = 'foo';
 	       sub T {
-		       while ($i++ < 3) { my $f = $f; $f .= "bar"; print $f, "\n" }
+		       while ($i++ &lt 3) { my $f = $f; $f .= "bar"; print $f, "\n" }
 		       }
 
 	       T;
 	       print "Finally $f\n";
 
        If you are experiencing variable suicide, that "my $f" in the
-       subroutine doesn't pick up a fresh copy of the $f whose value is <foo>.
+       subroutine doesn't pick up a fresh copy of the $f whose value is &ltfoo&gt.
        The output shows that inside the subroutine the value of $f leaks
        through when it shouldn't, as in this output:
 
@@ -375,7 +377,7 @@ DESCRIPTION
 		   func( [ 1 .. 10 ]   );
 
 		   func( \%some_hash   );
-		   func( { this => 10, that => 20 }   );
+		   func( { this =&gt 10, that =&gt 20 }   );
 
 		   func( \&some_func   );
 		   func( sub { $_[0] ** $_[1] }   );
@@ -390,7 +392,7 @@ DESCRIPTION
 		   sub func {
 			   my $passed_fh = shift;
 
-			   my $line = <$passed_fh>;
+			   my $line = &lt$passed_fh&gt;
 			   }
 
 	   Before Perl 5.6, you had to use the *FH or "\*FH" notations.  These
@@ -452,15 +454,15 @@ DESCRIPTION
 		   call_a_lot(10, $some_obj, "methname")
 		   sub call_a_lot {
 			   my ($count, $widget, $trick) = @_;
-			   for (my $i = 0; $i < $count; $i++) {
-				   $widget->$trick();
+			   for (my $i = 0; $i &lt $count; $i++) {
+				   $widget-&gt$trick();
 			   }
 		   }
 
 	   Or, you can use a closure to bundle up the object, its method call,
 	   and arguments:
 
-		   my $whatnot =  sub { $some_obj->obfuscate(@args) };
+		   my $whatnot =  sub { $some_obj-&gtobfuscate(@args) };
 		   func($whatnot);
 		   sub func {
 			   my $code = shift;
@@ -615,9 +617,9 @@ DESCRIPTION
        are effectively shallowly bound.  Consider this just one more reason
        not to use them.  See the answer to "What's a closure?".
 
-   Why doesn't "my($foo) = <FILE>;" work right?
+   Why doesn't "my($foo) = &ltFILE&gt;" work right?
        "my()" and "local()" give list context to the right hand side of "=".
-       The <FH> read operation, like so many of Perl's functions and
+       The &ltFH&gt read operation, like so many of Perl's functions and
        operators, can tell which context it was called in and behaves
        appropriately.  In general, the scalar() function can help.  This
        function does nothing to the data itself (contrary to popular myth) but
@@ -628,15 +630,15 @@ DESCRIPTION
        To enforce scalar context in this particular case, however, you need
        merely omit the parentheses:
 
-	       local($foo) = <FILE>;	   # WRONG
-	       local($foo) = scalar(<FILE>);   # ok
-	       local $foo  = <FILE>;	   # right
+	       local($foo) = &ltFILE&gt;	   # WRONG
+	       local($foo) = scalar(&ltFILE&gt);   # ok
+	       local $foo  = &ltFILE&gt;	   # right
 
        You should probably be using lexical variables anyway, although the
        issue is the same here:
 
-	       my($foo) = <FILE>;      # WRONG
-	       my $foo	= <FILE>;      # right
+	       my($foo) = &ltFILE&gt;      # WRONG
+	       my $foo	= &ltFILE&gt;      # right
 
    How do I redefine a builtin function, operator, or method?
        Why do you want to do that? :-)
@@ -756,7 +758,7 @@ DESCRIPTION
        so that one takes precedence over another, as "SEND" has precedence
        over "STOP" here:
 
-	       chomp($answer = <>);
+	       chomp($answer = &lt&gt);
 	       if    ("SEND"  =~ /^\Q$answer/i) { print "Action is send\n"  }
 	       elsif ("STOP"  =~ /^\Q$answer/i) { print "Action is stop\n"  }
 	       elsif ("ABORT" =~ /^\Q$answer/i) { print "Action is abort\n" }
@@ -767,16 +769,16 @@ DESCRIPTION
        references.
 
 	       my %commands = (
-		       "happy" => \&joy,
-		       "sad",  => \&sullen,
-		       "done"  => sub { die "See ya!" },
-		       "mad"   => \&angry,
+		       "happy" =&gt \&joy,
+		       "sad",  =&gt \&sullen,
+		       "done"  =&gt sub { die "See ya!" },
+		       "mad"   =&gt \&angry,
 	       );
 
 	       print "How are you? ";
-	       chomp($string = <STDIN>);
+	       chomp($string = &ltSTDIN&gt);
 	       if ($commands{$string}) {
-		       $commands{$string}->();
+		       $commands{$string}-&gt();
 	       } else {
 		       print "No such command: $string\n";
 	       }
@@ -795,7 +797,7 @@ DESCRIPTION
        When it comes to undefined variables that would trigger a warning under
        "use warnings", you can promote the warning to an error.
 
-	       use warnings FATAL => qw(uninitialized);
+	       use warnings FATAL =&gt qw(uninitialized);
 
    Why can't a method included in this same file be found?
        Some possible reasons: your inheritance is getting confused, you've
@@ -809,7 +811,7 @@ DESCRIPTION
        Perl has seen that such a package exists.  It's wisest to make sure
        your packages are all defined before you start using them, which will
        be taken care of if you use the "use" statement instead of "require".
-       If not, make sure to use arrow notation (eg., "Guru->find("Samy")")
+       If not, make sure to use arrow notation (eg., "Guru-&gtfind("Samy")")
        instead.  Object notation is explained in perlobj.
 
        Make sure to read about creating modules in perlmod and the perils of
@@ -836,7 +838,7 @@ DESCRIPTION
        Most of the time, you shouldn't care what package an object is blessed
        into, however, as long as it claims to inherit from that class:
 
-	       my $is_right_class = eval { $object->isa( $package ) }; # true or false
+	       my $is_right_class = eval { $object-&gtisa( $package ) }; # true or false
 
        If you want to find the package calling your code, perhaps to give
        better diagnostics as "Carp" does, use the "caller" built-in:
@@ -864,7 +866,7 @@ DESCRIPTION
 
 	       =pod
 
-	       my $object = NotGonnaHappen->new();
+	       my $object = NotGonnaHappen-&gtnew();
 
 	       ignored_sub();
 
@@ -885,7 +887,7 @@ DESCRIPTION
 
 	       =begin comment
 
-	       my $object = NotGonnaHappen->new();
+	       my $object = NotGonnaHappen-&gtnew();
 
 	       ignored_sub();
 
@@ -1008,7 +1010,7 @@ DESCRIPTION
 	       @colors = qw(red blue green yellow orange purple violet);
 	       for my $name (@colors) {
 		       no strict 'refs';  # renege for the block
-		       *$name = sub { "<FONT COLOR='$name'>@_</FONT>" };
+		       *$name = sub { "&ltFONT COLOR='$name'&gt@_&lt/FONT&gt" };
 	       }
 
        All those functions (red(), blue(), green(), etc.) appear to be
@@ -1035,7 +1037,7 @@ DESCRIPTION
        another and each machine has a different path to perl--/usr/bin/perl
        versus /usr/local/bin/perl for instance. It may also indicate that the
        source machine has CRLF line terminators and the destination machine
-       has LF only: the shell tries to find /usr/bin/perl<CR>, but can't.
+       has LF only: the shell tries to find /usr/bin/perl&ltCR&gt, but can't.
 
        If you see "bad interpreter: Permission denied", you need to make your
        script executable.
@@ -1072,6 +1074,6 @@ AUTHOR AND COPYRIGHT
 
 
 perl v5.10.1			  2009-08-15			   PERLFAQ7(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

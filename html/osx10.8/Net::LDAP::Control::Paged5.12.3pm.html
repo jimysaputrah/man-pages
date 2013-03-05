@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Net::LDAP::Control::Paged" provides an interface for the creation and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::LDAP::Control::Paged - LDAPv3 Paged results control object</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::LDAP::Control::PaUser3Contributed Perl DocumeNet::LDAP::Control::Paged(3)
 
 
@@ -20,38 +22,38 @@ SYNOPSIS
 	use Net::LDAP::Control::Paged;
 	use Net::LDAP::Constant qw( LDAP_CONTROL_PAGED );
 
-	$ldap = Net::LDAP->new( "ldap.mydomain.eg" );
+	$ldap = Net::LDAP-&gtnew( "ldap.mydomain.eg" );
 
-	$page = Net::LDAP::Control::Paged->new( size => 100 );
+	$page = Net::LDAP::Control::Paged-&gtnew( size =&gt 100 );
 
-	@args = ( base	   => "cn=subnets,cn=sites,cn=configuration,$BASE_DN",
-		  scope    => "subtree",
-		  filter   => "(objectClass=subnet)",
-		  callback => \&process_entry, # Call this sub for each entry
-		  control  => [ $page ],
+	@args = ( base	   =&gt "cn=subnets,cn=sites,cn=configuration,$BASE_DN",
+		  scope    =&gt "subtree",
+		  filter   =&gt "(objectClass=subnet)",
+		  callback =&gt \&process_entry, # Call this sub for each entry
+		  control  =&gt [ $page ],
 	);
 
 	my $cookie;
 	while(1) {
 	  # Perform search
-	  my $mesg = $ldap->search( @args );
+	  my $mesg = $ldap-&gtsearch( @args );
 
 	  # Only continue on LDAP_SUCCESS
-	  $mesg->code and last;
+	  $mesg-&gtcode and last;
 
 	  # Get cookie from paged control
-	  my($resp)  = $mesg->control( LDAP_CONTROL_PAGED ) or last;
-	  $cookie    = $resp->cookie or last;
+	  my($resp)  = $mesg-&gtcontrol( LDAP_CONTROL_PAGED ) or last;
+	  $cookie    = $resp-&gtcookie or last;
 
 	  # Set cookie in paged control
-	  $page->cookie($cookie);
+	  $page-&gtcookie($cookie);
 	}
 
 	if ($cookie) {
 	  # We had an abnormal exit, so let the server know we do not want any more
-	  $page->cookie($cookie);
-	  $page->size(0);
-	  $ldap->search( @args );
+	  $page-&gtcookie($cookie);
+	  $page-&gtsize(0);
+	  $ldap-&gtsearch( @args );
 	}
 
 DESCRIPTION
@@ -84,10 +86,10 @@ SEE ALSO
        Net::LDAP, Net::LDAP::Control, http://www.ietf.org/rfc/rfc2696.txt
 
 AUTHOR
-       Graham Barr <gbarr@pobox.com>
+       Graham Barr &ltgbarr@pobox.com&gt
 
        Please report any bugs, or post any suggestions, to the perl-ldap
-       mailing list <perl-ldap@perl.org>
+       mailing list &ltperl-ldap@perl.org&gt
 
 COPYRIGHT
        Copyright (c) 2000-2004 Graham Barr. All rights reserved. This program
@@ -97,6 +99,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2010-03-11	  Net::LDAP::Control::Paged(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document is intended as an anti-map of the documentation. If you..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Manual::FAQ - Frequently Asked Questions (in theory)</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::Manual::FUser)Contributed Perl DocumenDBIx::Class::Manual::FAQ(3)
 
 
@@ -33,12 +35,12 @@ FAQs
 
 	   Next, spend some time defining which data you need to store, and
 	   how it relates to the other data you have. For some help on
-	   normalisation, go to <http://b62.tripod.com/doc/dbbase.htm>.
+	   normalisation, go to &lthttp://b62.tripod.com/doc/dbbase.htm&gt.
 
 	   Now, decide whether you want to have the database itself be the
 	   definitive source of information about the data layout, or your
 	   DBIx::Class schema. If it's the former, look up the documentation
-	   for your database, eg. <http://sqlite.org/lang_createtable.html>,
+	   for your database, eg. &lthttp://sqlite.org/lang_createtable.html&gt,
 	   on how to create tables, and start creating them. For a nice
 	   universal interface to your database, you can try DBI::Shell. If
 	   you decided on the latter choice, read the FAQ on setting up your
@@ -82,7 +84,7 @@ FAQs
 	   make sure you write the database name as part of the "table" in
 	   DBIx::Class::ResultSource call. Eg:
 
-	     __PACKAGE__->table('mydb.mytablename');
+	     __PACKAGE__-&gttable('mydb.mytablename');
 
 	   And load all the Result classes for both / all databases using one
 	   "load_namespaces" in DBIx::Class::Schema call.
@@ -138,7 +140,7 @@ FAQs
 	   By default, DBIx::Class cascades deletes and updates across
 	   "has_many" and "might_have" relationships. You can disable this
 	   behaviour on a per-relationship basis by supplying "cascade_delete
-	   => 0" in the relationship attributes.
+	   =&gt 0" in the relationship attributes.
 
 	   The cascaded operations are performed after the requested delete or
 	   update, so if your database has a constraint on the relationship,
@@ -156,20 +158,20 @@ FAQs
        .. search for data?
 	   Create a $schema object, as mentioned above in ".. connect to my
 	   database?". Find the ResultSet that you want to search in, by
-	   calling "$schema->resultset('MySource')" and call "search" on it.
+	   calling "$schema-&gtresultset('MySource')" and call "search" on it.
 	   See "search" in DBIx::Class::ResultSet.
 
        .. search using database functions?
 	   Supplying something like:
 
-	    ->search({'mydatefield' => 'now()'})
+	    -&gtsearch({'mydatefield' =&gt 'now()'})
 
 	   to search, will probably not do what you expect. It will quote the
 	   text "now()", instead of trying to call the function. To provide
 	   literal, unquoted text you need to pass in a scalar reference, like
 	   so:
 
-	    ->search({'mydatefield' => \'now()'})
+	    -&gtsearch({'mydatefield' =&gt \'now()'})
 
        .. sort the results of my search?
 	   Supply a list of columns you want to sort by to the "order_by"
@@ -190,12 +192,12 @@ FAQs
 	   The first argument to "search" is a hashref of accessor names and
 	   values to filter them by, for example:
 
-	    ->search({'created_time' => { '>=', '2006-06-01 00:00:00' } })
+	    -&gtsearch({'created_time' =&gt { '&gt=', '2006-06-01 00:00:00' } })
 
 	   Note that to use a function here you need to make it a scalar
 	   reference:
 
-	    ->search({'created_time' => { '>=', \'yesterday()' } })
+	    -&gtsearch({'created_time' =&gt { '&gt=', \'yesterday()' } })
 
        .. search in several tables simultaneously?
 	   To search in two related tables, you first need to set up
@@ -204,7 +206,7 @@ FAQs
 	   "join" attribute in your search, for example when searching in the
 	   Books table for all the books by the author "Fred Bloggs":
 
-	    ->search({'authors.name' => 'Fred Bloggs'}, { join => 'authors' })
+	    -&gtsearch({'authors.name' =&gt 'Fred Bloggs'}, { join =&gt 'authors' })
 
 	   The type of join created in your SQL depends on the type of
 	   relationship between the two tables, see DBIx::Class::Relationship
@@ -221,9 +223,9 @@ FAQs
 	   To use an SQL function on the left hand side of a comparison you
 	   currently need to resort to literal SQL:
 
-	    ->search( \[ 'YEAR(date_of_birth) = ?', [ plain_value => 1979 ] ] );
+	    -&gtsearch( \[ 'YEAR(date_of_birth) = ?', [ plain_value =&gt 1979 ] ] );
 
-	   Note: the "plain_value" string in the "[ plain_value => 1979 ]"
+	   Note: the "plain_value" string in the "[ plain_value =&gt 1979 ]"
 	   part should be either the same as the name of the column (do this
 	   if the type of the return value of the function is the same as the
 	   type of the column) or in the case of a function it's currently
@@ -242,11 +244,11 @@ FAQs
 	   To make Oracle behave like most RDBMS use on_connect_do to issue
 	   alter session statements on database connection establishment:
 
-	    ->on_connect_do("ALTER SESSION SET NLS_COMP = 'LINGUISTIC'");
-	    ->on_connect_do("ALTER SESSION SET NLS_SORT = '<NLS>_CI'");
+	    -&gton_connect_do("ALTER SESSION SET NLS_COMP = 'LINGUISTIC'");
+	    -&gton_connect_do("ALTER SESSION SET NLS_SORT = '&ltNLS&gt_CI'");
 	    e.g.
-	    ->on_connect_do("ALTER SESSION SET NLS_SORT = 'BINARY_CI'");
-	    ->on_connect_do("ALTER SESSION SET NLS_SORT = 'GERMAN_CI'");
+	    -&gton_connect_do("ALTER SESSION SET NLS_SORT = 'BINARY_CI'");
+	    -&gton_connect_do("ALTER SESSION SET NLS_SORT = 'GERMAN_CI'");
 
    Fetching data
        .. fetch as much data as possible in as few select calls as possible?
@@ -261,7 +263,7 @@ FAQs
 	   In your table schema class, create a "private" column accessor
 	   with:
 
-	     __PACKAGE__->add_columns(my_column => { accessor => '_hidden_my_column' });
+	     __PACKAGE__-&gtadd_columns(my_column =&gt { accessor =&gt '_hidden_my_column' });
 
 	   Then, in the same class, implement a subroutine called "my_column"
 	   that fetches the real value and does the formatting you want.
@@ -279,7 +281,7 @@ FAQs
 	   A less readable way is to ask a regular search to return 1 row,
 	   using "slice" in DBIx::Class::ResultSet:
 
-	     ->search->(undef, { order_by => "id DESC" })->slice(0)
+	     -&gtsearch-&gt(undef, { order_by =&gt "id DESC" })-&gtslice(0)
 
 	   which (if supported by the database) will use LIMIT/OFFSET to hint
 	   to the database that we really only need one row. This can result
@@ -290,7 +292,7 @@ FAQs
        .. refresh a row from storage?
 	   Use "discard_changes" in DBIx::Class::Row.
 
-	     $row->discard_changes
+	     $row-&gtdiscard_changes
 
 	   Discarding changes and refreshing from storage are two sides fo the
 	   same coin.  When you want to discard your local changes, just re-
@@ -302,7 +304,7 @@ FAQs
        .. fetch my data a "page" at a time?
 	   Pass the "rows" and "page" attributes to your search, eg:
 
-	     ->search({}, { rows => 10, page => 1});
+	     -&gtsearch({}, { rows =&gt 10, page =&gt 1});
 
        .. get a count of all rows even when paging?
 	   Call "pager" on the paged resultset, it will return a Data::Page
@@ -325,7 +327,7 @@ FAQs
 	   key value, you can tell it the name of the sequence in the
 	   "column_info" supplied with "add_columns".
 
-	    ->add_columns({ id => { sequence => 'mysequence', auto_nextval => 1 } });
+	    -&gtadd_columns({ id =&gt { sequence =&gt 'mysequence', auto_nextval =&gt 1 } });
 
        .. insert many rows of data efficiently?
 	   The "populate" method in DBIx::Class::ResultSet provides efficient
@@ -344,24 +346,24 @@ FAQs
 	   that the right hand side is an SQL identifier (it will be quoted
 	   properly if you have quoting enabled):
 
-	    ->update({ somecolumn => { -ident => 'othercolumn' } })
+	    -&gtupdate({ somecolumn =&gt { -ident =&gt 'othercolumn' } })
 
 	   This method will not retrieve the new value and put it in your Row
 	   object. To fetch the new value, use the "discard_changes" method on
 	   the Row.
 
 	     # will return the scalar reference:
-	     $row->somecolumn()
+	     $row-&gtsomecolumn()
 
 	     # issue a select using the PK to re-fetch the row data:
-	     $row->discard_changes();
+	     $row-&gtdiscard_changes();
 
 	     # Now returns the correct new value:
-	     $row->somecolumn()
+	     $row-&gtsomecolumn()
 
 	   To update and refresh at once, chain your calls:
 
-	     $row->update({ 'somecolumn' => { -ident => 'othercolumn' } })->discard_changes;
+	     $row-&gtupdate({ 'somecolumn' =&gt { -ident =&gt 'othercolumn' } })-&gtdiscard_changes;
 
        .. store JSON/YAML in a column and have it deflate/inflate
        automatically?
@@ -373,20 +375,20 @@ FAQs
 
 	    use JSON;
 
-	    __PACKAGE__->add_columns(qw/ ... my_column ../)
-	    __PACKAGE__->inflate_column('my_column', {
-		inflate => sub { jsonToObj(shift) },
-		deflate => sub { objToJson(shift) },
+	    __PACKAGE__-&gtadd_columns(qw/ ... my_column ../)
+	    __PACKAGE__-&gtinflate_column('my_column', {
+		inflate =&gt sub { jsonToObj(shift) },
+		deflate =&gt sub { objToJson(shift) },
 	    });
 
 	   For YAML, in your table schema class, do the following:
 
 	    use YAML;
 
-	    __PACKAGE__->add_columns(qw/ ... my_column ../)
-	    __PACKAGE__->inflate_column('my_column', {
-		inflate => sub { YAML::Load(shift) },
-		deflate => sub { YAML::Dump(shift) },
+	    __PACKAGE__-&gtadd_columns(qw/ ... my_column ../)
+	    __PACKAGE__-&gtinflate_column('my_column', {
+		inflate =&gt sub { YAML::Load(shift) },
+		deflate =&gt sub { YAML::Dump(shift) },
 	    });
 
 	   This technique is an easy way to store supplemental unstructured
@@ -397,34 +399,34 @@ FAQs
 
    Custom methods in Result classes
        You can add custom methods that do arbitrary things, even to unrelated
-       tables.	For example, to provide a "$book->foo()" method which searches
+       tables.	For example, to provide a "$book-&gtfoo()" method which searches
        the cd table, you'd could add this to Book.pm:
 
 	 sub foo {
 	   my ($self, $col_data) = @_;
-	   return $self->result_source->schema->resultset('cd')->search($col_data);
+	   return $self-&gtresult_source-&gtschema-&gtresultset('cd')-&gtsearch($col_data);
 	 }
 
        And invoke that on any Book Result object like so:
 
-	 my $rs = $book->foo({ title => 'Down to Earth' });
+	 my $rs = $book-&gtfoo({ title =&gt 'Down to Earth' });
 
        When two tables ARE related, DBIx::Class::Relationship::Base provides
        many methods to find or create data in related tables for you. But if
        you want to write your own methods, you can.
 
-       For example, to provide a "$book->foo()" method to manually implement
+       For example, to provide a "$book-&gtfoo()" method to manually implement
        what create_related() from DBIx::Class::Relationship::Base does, you
        could add this to Book.pm:
 
 	 sub foo {
 	   my ($self, $relname, $col_data) = @_;
-	   return $self->related_resultset($relname)->create($col_data);
+	   return $self-&gtrelated_resultset($relname)-&gtcreate($col_data);
 	 }
 
        Invoked like this:
 
-	 my $author = $book->foo('author', { name => 'Fred' });
+	 my $author = $book-&gtfoo('author', { name =&gt 'Fred' });
 
    Misc
        How do I store my own (non-db) data in my DBIx::Class objects?
@@ -437,8 +439,8 @@ FAQs
 
 		   use parent 'DBIx::Class::Core';
 
-		   __PACKAGE__->table('foo'); #etc
-		   __PACKAGE__->mk_group_accessors('simple' => qw/non_column_data/); # must use simple group
+		   __PACKAGE__-&gttable('foo'); #etc
+		   __PACKAGE__-&gtmk_group_accessors('simple' =&gt qw/non_column_data/); # must use simple group
 
 	   An another method is to use Moose with your DBIx::Class package.
 
@@ -449,9 +451,9 @@ FAQs
 
 		   extends 'DBIx::Class::Core'; # Moose changes the way we define our parent (base) package
 
-		   has 'non_column_data' => ( is => 'rw', isa => 'Str' ); # define a simple attribute
+		   has 'non_column_data' =&gt ( is =&gt 'rw', isa =&gt 'Str' ); # define a simple attribute
 
-		   __PACKAGE__->table('foo'); # etc
+		   __PACKAGE__-&gttable('foo'); # etc
 
 	   With either of these methods the resulting use of the accesssor
 	   would be
@@ -460,11 +462,11 @@ FAQs
 
 		   # assume that somewhere in here $row will get assigned to a MyTable row
 
-		   $row->non_column_data('some string'); # would set the non_column_data accessor
+		   $row-&gtnon_column_data('some string'); # would set the non_column_data accessor
 
 		   # some other stuff happens here
 
-		   $row->update(); # would not inline the non_column_data accessor into the update
+		   $row-&gtupdate(); # would not inline the non_column_data accessor into the update
 
        How do I use DBIx::Class objects in my TT templates?
 	   Like normal objects, mostly. However you need to watch out for TT
@@ -500,7 +502,7 @@ FAQs
 	   DBIx::Class::ResultSource these columns act as a primary key, even
 	   if they don't from the database's point of view:
 
-	    $resultset->set_primary_key(@column);
+	    $resultset-&gtset_primary_key(@column);
 
        How do I make my program start faster?
 	   Look at the tips in "STARTUP SPEED" in
@@ -523,17 +525,17 @@ FAQs
 
 	       # ... declare columns ...
 
-	       __PACKAGE__->has_many('group_servers', 'Your::Schema::GroupServer', 'group_id');
-	       __PACKAGE__->many_to_many('servers', 'group_servers', 'server');
+	       __PACKAGE__-&gthas_many('group_servers', 'Your::Schema::GroupServer', 'group_id');
+	       __PACKAGE__-&gtmany_to_many('servers', 'group_servers', 'server');
 
 	       # if the server group is a "super group", then return all servers
 	       # otherwise return only servers that belongs to the given group
-	       around 'servers' => sub {
+	       around 'servers' =&gt sub {
 		   my $orig = shift;
 		   my $self = shift;
 
-		   return $self->$orig(@_) unless $self->is_super_group;
-		   return $self->result_source->schema->resultset('Server')->all;
+		   return $self-&gt$orig(@_) unless $self-&gtis_super_group;
+		   return $self-&gtresult_source-&gtschema-&gtresultset('Server')-&gtall;
 	       };
 
 	   If you just want to override the original method, and don't care
@@ -548,12 +550,12 @@ FAQs
 
 	       # ... declare columns ...
 
-	       __PACKAGE__->has_many('group_servers', 'Your::Schema::GroupServer', 'group_id');
-	       __PACKAGE__->many_to_many('servers', 'group_servers', 'server');
+	       __PACKAGE__-&gthas_many('group_servers', 'Your::Schema::GroupServer', 'group_id');
+	       __PACKAGE__-&gtmany_to_many('servers', 'group_servers', 'server');
 
 	       # The method keyword automatically injects the annoying my $self = shift; for you.
 	       method servers {
-		   return $self->result_source->schema->resultset('Server')->search({ ... });
+		   return $self-&gtresult_source-&gtschema-&gtresultset('Server')-&gtsearch({ ... });
 	       }
 
 	   The dirty way:
@@ -563,12 +565,12 @@ FAQs
 
 	       # ... declare columns ...
 
-	       __PACKAGE__->has_many('group_servers', 'Your::Schema::GroupServer', 'group_id');
-	       __PACKAGE__->many_to_many('servers', 'group_servers', 'server');
+	       __PACKAGE__-&gthas_many('group_servers', 'Your::Schema::GroupServer', 'group_id');
+	       __PACKAGE__-&gtmany_to_many('servers', 'group_servers', 'server');
 
-	       *servers = subname servers => sub {
+	       *servers = subname servers =&gt sub {
 		   my $self = shift;
-		   return $self->result_source->schema->resultset('Server')->search({ ... });
+		   return $self-&gtresult_source-&gtschema-&gtresultset('Server')-&gtsearch({ ... });
 	       };
 
    Notes for CDBI users
@@ -604,12 +606,12 @@ FAQs
 	   Taken from:
 
 	   http://dev.mysql.com/doc/refman/5.1/en/resetting-permissions.html
-	   <http://dev.mysql.com/doc/refman/5.1/en/resetting-
-	   permissions.html>.
+	   &lthttp://dev.mysql.com/doc/refman/5.1/en/resetting-
+	   permissions.html&gt.
 
 
 
 perl v5.12.4			  2011-07-26	   DBIx::Class::Manual::FAQ(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

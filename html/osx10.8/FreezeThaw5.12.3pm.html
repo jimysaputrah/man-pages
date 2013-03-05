@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Converts data to/from stringified form, appropriate for..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>FreezeThaw - converting Perl structures to strings and back.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 FreezeThaw(3)	      User Contributed Perl Documentation	 FreezeThaw(3)
 
 
@@ -70,16 +72,16 @@ Developer API
        methods will fail (for example, for a lot of data the "content" of an
        object is an address of some C data). The methods are called like
 
-	 $newcooky = $obj->Freeze($cooky);
-	 $obj = Package->Thaw($content,$cooky);
+	 $newcooky = $obj-&gtFreeze($cooky);
+	 $obj = Package-&gtThaw($content,$cooky);
 
        To save and restore the data the following method are applicable:
 
-	 $cooky->FreezeScalar($data,$ignorePackage,$noduplicate);
+	 $cooky-&gtFreezeScalar($data,$ignorePackage,$noduplicate);
 
        during Freeze()ing, and
 
-	 $data = $cooky->ThawScalar;
+	 $data = $cooky-&gtThawScalar;
 
        Two optional arguments $ignorePackage and $noduplicate regulate whether
        the freezing should not call the methods even if $data is a reference
@@ -88,26 +90,26 @@ Developer API
 
 	 sub UNIVERSAL::Freeze {
 	   my ($obj, $cooky) = (shift, shift);
-	   $cooky->FreezeScalar($obj,1,1);
+	   $cooky-&gtFreezeScalar($obj,1,1);
 	 }
 
 	 sub UNIVERSAL::Thaw {
 	   my ($package, $cooky) = (shift, shift);
-	   my $obj = $cooky->ThawScalar;
+	   my $obj = $cooky-&gtThawScalar;
 	   bless $obj, $package;
 	 }
 
        call the "FreezeScalar" method of the $cooky since the freezing engine
        will see the data the second time during this call. Indeed, it is the
        freezing engine who calls UNIVERSAL::Freeze(), and it calls it because
-       it needs to freeze $obj. The above call to $cooky->FreezeScalar()
+       it needs to freeze $obj. The above call to $cooky-&gtFreezeScalar()
        handles the same data back to engine, but because flags are different,
        the code does not cycle.
 
        Freezing and thawing $cooky also allows the following additional
        methods:
 
-	 $cooky->isSafe;
+	 $cooky-&gtisSafe;
 
        to find out whether the current freeze was initiated by "freeze" or
        "safeFreeze" command. Analogous method for thaw $cooky returns whether
@@ -115,22 +117,22 @@ Developer API
        contain cached elsewhere data, or comes from the same application). You
        can use
 
-	 $cooky->makeSafe;
+	 $cooky-&gtmakeSafe;
 
        to prohibit cached data for the duration of the rest of freezing or
        thawing of current object.
 
        Two methods
 
-	 $value = $cooky->repeatedOK;
-	 $cooky->noRepeated;	       # Now repeated are prohibited
+	 $value = $cooky-&gtrepeatedOK;
+	 $cooky-&gtnoRepeated;	       # Now repeated are prohibited
 
        allow to find out/change the current setting for allowing repeated
        references.
 
        If you want to flush the cache of saved objects you can use
 
-	 FreezeThaw->flushCache;
+	 FreezeThaw-&gtflushCache;
 
        this can invalidate some frozen string, so that thawing them will
        result in fatal error.
@@ -152,15 +154,15 @@ Developer API
 
        The methods are called like this:
 
-	 $pre_object_ref = Package->Allocate($pre_pre_object_ref);
+	 $pre_object_ref = Package-&gtAllocate($pre_pre_object_ref);
 	       # Returns reference
-	 Package->Instantiate($pre_object_ref,$cooky);
+	 Package-&gtInstantiate($pre_object_ref,$cooky);
 	       # Converts into reference to blessed object
 
        The reverse operations are
 
-	 $object_ref->FreezeEmpty($cooky);
-	 $object_ref->FreezeInstance($cooky);
+	 $object_ref-&gtFreezeEmpty($cooky);
+	 $object_ref-&gtFreezeInstance($cooky);
 
        during these calls object can "freezeScalar" some information (in a
        usual way) that will be used during "Allocate" and "Instantiate" calls
@@ -171,12 +173,12 @@ Developer API
        the frozen values of the different objects will not share the same
        references. Example of bad result:
 
-	 $o1->FreezeEmpty($cooky)
+	 $o1-&gtFreezeEmpty($cooky)
 
-       freezes "{}", and "$o2->FreezeEmpty($cooky)" makes the same. Now nobody
+       freezes "{}", and "$o2-&gtFreezeEmpty($cooky)" makes the same. Now nobody
        guaranties that that these two copies of "{}" are different, unless a
        reference to the first one is preserved during the call to
-       "$o2->FreezeEmpty($cooky)". If "$o1->FreezeEmpty($cooky)" returns the
+       "$o2-&gtFreezeEmpty($cooky)". If "$o1-&gtFreezeEmpty($cooky)" returns the
        value of "{}" it uses, it will be preserved by the engine.
 
        The helper function "FreezeThaw::copyContents" is provided for
@@ -210,21 +212,21 @@ BUGS and LIMITATIONS
        The objects which can survive freeze()/thaw() cycle must also survive a
        change of a "member" to an equal member.  Say, after
 
-	 $a = [a => 3];
-	 $a->{b} = \ $a->{a};
+	 $a = [a =&gt 3];
+	 $a-&gt{b} = \ $a-&gt{a};
 
        $a satisfies
 
-	 $a->{b} == \ $a->{a}
+	 $a-&gt{b} == \ $a-&gt{a}
 
        This property will be broken by freeze()/thaw(), but it is also broken
        by
 
-	 $a->{a} = delete $a->{a};
+	 $a-&gt{a} = delete $a-&gt{a};
 
 
 
 perl v5.12.4			  2010-04-03			 FreezeThaw(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

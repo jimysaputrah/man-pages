@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="So you think Inline C is pretty cool, but what you really need is for..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Inline-API - How to bind a programming language to Perl using Inline.pm</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Inline-API(3)	      User Contributed Perl Documentation	 Inline-API(3)
 
 
@@ -74,10 +76,10 @@ A Skeleton
 	   #===========================================================
 	   sub register {
 	       return {
-		   language => 'Foo',
-		   aliases => ['foo'],
-		   type => 'interpreted',
-		   suffix => 'foo',
+		   language =&gt 'Foo',
+		   aliases =&gt ['foo'],
+		   type =&gt 'interpreted',
+		   suffix =&gt 'foo',
 		  };
 	   }
 
@@ -98,18 +100,18 @@ A Skeleton
 	   #===========================================================
 	   sub validate {
 	       my $o = shift;
-	       $o->{ILSM}{PATTERN} ||= 'foo-';
-	       $o->{ILSM}{BAR} ||= 0;
+	       $o-&gt{ILSM}{PATTERN} ||= 'foo-';
+	       $o-&gt{ILSM}{BAR} ||= 0;
 	       while (@_) {
 	       my ($key, $value) = splice @_, 0, 2;
 	       if ($key eq 'PATTERN') {
-		   $o->{ILSM}{PATTERN} = $value;
+		   $o-&gt{ILSM}{PATTERN} = $value;
 		   next;
 	       }
 	       if ($key eq 'BAR') {
 		   croak usage_config_bar
 		     unless $value =~ /^[01]$/;
-		   $o->{ILSM}{BAR} = $value;
+		   $o-&gt{ILSM}{BAR} = $value;
 		   next;
 	       }
 	       croak usage_config($key);
@@ -121,20 +123,20 @@ A Skeleton
 	   #===========================================================
 	   sub build {
 	       my $o = shift;
-	       my $code = $o->{API}{code};
-	       my $pattern = $o->{ILSM}{PATTERN};
+	       my $code = $o-&gt{API}{code};
+	       my $pattern = $o-&gt{ILSM}{PATTERN};
 	       $code =~ s/$pattern//g;
-	       $code =~ s/bar-//g if $o->{ILSM}{BAR};
+	       $code =~ s/bar-//g if $o-&gt{ILSM}{BAR};
 	       sleep 1; 	    # imitate compile delay
 	       {
 		   package Foo::Tester;
 		   eval $code;
 	       }
 	       croak "Foo build failed:\n$@" if $@;
-	       my $path = "$o->{API}{install_lib}/auto/$o->{API}{modpname}";
-	       my $obj = $o->{API}{location};
-	       $o->mkpath($path) unless -d $path;
-	       open FOO_OBJ, "> $obj"
+	       my $path = "$o-&gt{API}{install_lib}/auto/$o-&gt{API}{modpname}";
+	       my $obj = $o-&gt{API}{location};
+	       $o-&gtmkpath($path) unless -d $path;
+	       open FOO_OBJ, "&gt $obj"
 		 or croak "Can't open $obj for output\n$!";
 	       print FOO_OBJ $code;
 	       close \*FOO_OBJ;
@@ -145,12 +147,12 @@ A Skeleton
 	   #===========================================================
 	   sub load {
 	       my $o = shift;
-	       my $obj = $o->{API}{location};
-	       open FOO_OBJ, "< $obj"
+	       my $obj = $o-&gt{API}{location};
+	       open FOO_OBJ, "&lt $obj"
 		 or croak "Can't open $obj for output\n$!";
-	       my $code = join '', <FOO_OBJ>;
+	       my $code = join '', &ltFOO_OBJ&gt;
 	       close \*FOO_OBJ;
-	       eval "package $o->{API}{pkg};\n$code";
+	       eval "package $o-&gt{API}{pkg};\n$code";
 	       croak "Unable to load Foo module $obj:\n$@" if $@;
 	   }
 
@@ -159,7 +161,7 @@ A Skeleton
 	   #===========================================================
 	   sub info {
 	       my $o = shift;
-	       my $text = <<'END';
+	       my $text = &lt&lt'END';
 	   This is a small report about the Foo code. Perhaps it contains
 	   information about the functions the parser found which will be
 	   bound to Perl. It will get included in the text produced by the
@@ -215,10 +217,10 @@ The Inline API
        an example of the has ref you would return for Foo:
 
 	   {
-	    language => 'Foo',
-	    aliases => ['foo'],
-	    type => 'interpreted',
-	    suffix => 'foo',
+	    language =&gt 'Foo',
+	    aliases =&gt ['foo'],
+	    type =&gt 'interpreted',
+	    suffix =&gt 'foo',
 	   };
 
        The meta-data items have the following meanings:
@@ -282,8 +284,8 @@ The Inline Object
        options used.
 
        This object is a hash that is broken into several subhashes. The only
-       two subhashes that an ILSM should use at all are $o->{API} and
-       $o->{ILSM}. The first one contains all of the information that Inline
+       two subhashes that an ILSM should use at all are $o-&gt{API} and
+       $o-&gt{ILSM}. The first one contains all of the information that Inline
        has gather for you in order for you to create/load a cached object of
        your design. The second one is a repository where your ILSM can freely
        store data that it might need later on.
@@ -367,7 +369,7 @@ SEE ALSO
        To subscribe, send email to inline-subscribe@perl.org
 
 AUTHOR
-       Brian Ingerson <INGY@cpan.org>
+       Brian Ingerson &ltINGY@cpan.org&gt
 
 COPYRIGHT
        Copyright (c) 2000-2002. Brian Ingerson.
@@ -382,6 +384,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-01-29			 Inline-API(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

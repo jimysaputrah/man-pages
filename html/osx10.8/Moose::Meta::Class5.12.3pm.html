@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This class is a subclass of Class::MOP::Class that provides additional..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Meta::Class - The Moose metaclass</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Meta::Class(3) User Contributed Perl DocumentationMoose::Meta::Class(3)
 
 
@@ -31,22 +33,22 @@ INHERITANCE
        "Moose::Meta::Class" is a subclass of Class::MOP::Class.
 
 METHODS
-       Moose::Meta::Class->initialize($package_name, %options)
+       Moose::Meta::Class-&gtinitialize($package_name, %options)
 	   This overrides the parent's method in order to provide its own
 	   defaults for the "attribute_metaclass", "instance_metaclass", and
 	   "method_metaclass" options.
 
 	   These all default to the appropriate Moose class.
 
-       Moose::Meta::Class->create($package_name, %options)
+       Moose::Meta::Class-&gtcreate($package_name, %options)
 	   This overrides the parent's method in order to accept a "roles"
 	   option. This should be an array reference containing roles that the
 	   class does, each optionally followed by a hashref of options
 	   ("-excludes" and "-alias").
 
-	     my $metaclass = Moose::Meta::Class->create( 'New::Class', roles => [...] );
+	     my $metaclass = Moose::Meta::Class-&gtcreate( 'New::Class', roles =&gt [...] );
 
-       Moose::Meta::Class->create_anon_class
+       Moose::Meta::Class-&gtcreate_anon_class
 	   This overrides the parent's method to accept a "roles" option, just
 	   as "create" does.
 
@@ -55,10 +57,10 @@ METHODS
 	   If an existing anonymous class in the cache has the same
 	   superclasses and roles, it will be reused.
 
-	     my $metaclass = Moose::Meta::Class->create_anon_class(
-		 superclasses => ['Foo'],
-		 roles	      => [qw/Some Roles Go Here/],
-		 cache	      => 1,
+	     my $metaclass = Moose::Meta::Class-&gtcreate_anon_class(
+		 superclasses =&gt ['Foo'],
+		 roles	      =&gt [qw/Some Roles Go Here/],
+		 cache	      =&gt 1,
 	     );
 
 	   Each entry in both the "superclasses" and the "roles" option can be
@@ -69,7 +71,7 @@ METHODS
 	   reference can also contain any other role relevant values like
 	   exclusions or parameterized role arguments.
 
-       $metaclass->make_immutable(%options)
+       $metaclass-&gtmake_immutable(%options)
 	   This overrides the parent's method to add a few options.
 	   Specifically, it uses the Moose-specific constructor and destructor
 	   classes, and enables inlining the destructor.
@@ -77,11 +79,11 @@ METHODS
 	   Since Moose always inlines attributes, it sets the
 	   "inline_accessors" option to false.
 
-       $metaclass->new_object(%params)
+       $metaclass-&gtnew_object(%params)
 	   This overrides the parent's method in order to add support for
 	   attribute triggers.
 
-       $metaclass->superclasses(@superclasses)
+       $metaclass-&gtsuperclasses(@superclasses)
 	   This is the accessor allowing you to read or change the parents of
 	   the class.
 
@@ -89,69 +91,69 @@ METHODS
 	   -version value. If the version requirement is not satisfied an
 	   error will be thrown.
 
-       $metaclass->add_override_method_modifier($name, $sub)
+       $metaclass-&gtadd_override_method_modifier($name, $sub)
 	   This adds an "override" method modifier to the package.
 
-       $metaclass->add_augment_method_modifier($name, $sub)
+       $metaclass-&gtadd_augment_method_modifier($name, $sub)
 	   This adds an "augment" method modifier to the package.
 
-       $metaclass->calculate_all_roles
+       $metaclass-&gtcalculate_all_roles
 	   This will return a unique array of "Moose::Meta::Role" instances
 	   which are attached to this class.
 
-       $metaclass->calculate_all_roles_with_inheritance
+       $metaclass-&gtcalculate_all_roles_with_inheritance
 	   This will return a unique array of "Moose::Meta::Role" instances
 	   which are attached to this class, and each of this class's
 	   ancestors.
 
-       $metaclass->add_role($role)
+       $metaclass-&gtadd_role($role)
 	   This takes a Moose::Meta::Role object, and adds it to the class's
 	   list of roles. This does not actually apply the role to the class.
 
-       $metaclass->role_applications
+       $metaclass-&gtrole_applications
 	   Returns a list of Moose::Meta::Role::Application::ToClass objects,
 	   which contain the arguments to role application.
 
-       $metaclass->add_role_application($application)
+       $metaclass-&gtadd_role_application($application)
 	   This takes a Moose::Meta::Role::Application::ToClass object, and
 	   adds it to the class's list of role applications. This does not
 	   actually apply any role to the class; it is only for tracking role
 	   applications.
 
-       $metaclass->does_role($role)
+       $metaclass-&gtdoes_role($role)
 	   This returns a boolean indicating whether or not the class does the
 	   specified role. The role provided can be either a role name or a
 	   Moose::Meta::Role object. This tests both the class and its
 	   parents.
 
-       $metaclass->excludes_role($role_name)
+       $metaclass-&gtexcludes_role($role_name)
 	   A class excludes a role if it has already composed a role which
 	   excludes the named role. This tests both the class and its parents.
 
-       $metaclass->add_attribute($attr_name, %params|$params)
+       $metaclass-&gtadd_attribute($attr_name, %params|$params)
 	   This overrides the parent's method in order to allow the parameters
 	   to be provided as a hash reference.
 
-       $metaclass->constructor_class($class_name)
-       $metaclass->destructor_class($class_name)
+       $metaclass-&gtconstructor_class($class_name)
+       $metaclass-&gtdestructor_class($class_name)
 	   These are the names of classes used when making a class immutable.
 	   These default to Moose::Meta::Method::Constructor and
 	   Moose::Meta::Method::Destructor respectively. These accessors are
 	   read-write, so you can use them to change the class name.
 
-       $metaclass->error_class($class_name)
+       $metaclass-&gterror_class($class_name)
 	   The name of the class used to throw errors. This defaults to
 	   Moose::Error::Default, which generates an error with a stacktrace
 	   just like "Carp::confess".
 
-       $metaclass->throw_error($message, %extra)
+       $metaclass-&gtthrow_error($message, %extra)
 	   Throws the error created by "create_error" using "raise_error"
 
 BUGS
        See "BUGS" in Moose for details on reporting bugs.
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -162,6 +164,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-06		 Moose::Meta::Class(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

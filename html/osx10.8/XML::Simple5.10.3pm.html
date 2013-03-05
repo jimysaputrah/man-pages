@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The XML::Simple module provides a simple API layer on top of an..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>XML::Simple - Easy API to maintain XML (esp config files)</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 XML::Simple(3)	      User Contributed Perl Documentation	XML::Simple(3)
 
 
@@ -18,19 +20,19 @@ NAME
 SYNOPSIS
 	   use XML::Simple;
 
-	   my $ref = XMLin([<xml file or string>] [, <options>]);
+	   my $ref = XMLin([&ltxml file or string&gt] [, &ltoptions&gt]);
 
-	   my $xml = XMLout($hashref [, <options>]);
+	   my $xml = XMLout($hashref [, &ltoptions&gt]);
 
        Or the object oriented way:
 
 	   require XML::Simple;
 
-	   my $xs = XML::Simple->new(options);
+	   my $xs = XML::Simple-&gtnew(options);
 
-	   my $ref = $xs->XMLin([<xml file or string>] [, <options>]);
+	   my $ref = $xs-&gtXMLin([&ltxml file or string&gt] [, &ltoptions&gt]);
 
-	   my $xml = $xs->XMLout($hashref [, <options>]);
+	   my $xml = $xs-&gtXMLout($hashref [, &ltoptions&gt]);
 
        (or see "SAX SUPPORT" for 'the SAX way').
 
@@ -44,19 +46,19 @@ QUICK START
        Say you have a script called foo and a file of configuration options
        called foo.xml containing this:
 
-	 <config logdir="/var/log/foo/" debugfile="/tmp/foo.debug">
-	   <server name="sahara" osname="solaris" osversion="2.6">
-	     <address>10.0.0.101</address>
-	     <address>10.0.1.101</address>
-	   </server>
-	   <server name="gobi" osname="irix" osversion="6.5">
-	     <address>10.0.0.102</address>
-	   </server>
-	   <server name="kalahari" osname="linux" osversion="2.0.34">
-	     <address>10.0.0.103</address>
-	     <address>10.0.1.103</address>
-	   </server>
-	 </config>
+	 &ltconfig logdir="/var/log/foo/" debugfile="/tmp/foo.debug"&gt
+	   &ltserver name="sahara" osname="solaris" osversion="2.6"&gt
+	     &ltaddress&gt10.0.0.101&lt/address&gt
+	     &ltaddress&gt10.0.1.101&lt/address&gt
+	   &lt/server&gt
+	   &ltserver name="gobi" osname="irix" osversion="6.5"&gt
+	     &ltaddress&gt10.0.0.102&lt/address&gt
+	   &lt/server&gt
+	   &ltserver name="kalahari" osname="linux" osversion="2.0.34"&gt
+	     &ltaddress&gt10.0.0.103&lt/address&gt
+	     &ltaddress&gt10.0.1.103&lt/address&gt
+	   &lt/server&gt
+	 &lt/config&gt
 
        The following lines of code in foo:
 
@@ -77,35 +79,35 @@ QUICK START
        for brevity):
 
 	 {
-	     'logdir'	     => '/var/log/foo/',
-	     'debugfile'     => '/tmp/foo.debug',
-	     'server'	     => {
-		 'sahara'	 => {
-		     'osversion'     => '2.6',
-		     'osname'	     => 'solaris',
-		     'address'	     => [ '10.0.0.101', '10.0.1.101' ]
+	     'logdir'	     =&gt '/var/log/foo/',
+	     'debugfile'     =&gt '/tmp/foo.debug',
+	     'server'	     =&gt {
+		 'sahara'	 =&gt {
+		     'osversion'     =&gt '2.6',
+		     'osname'	     =&gt 'solaris',
+		     'address'	     =&gt [ '10.0.0.101', '10.0.1.101' ]
 		 },
-		 'gobi' 	 => {
-		     'osversion'     => '6.5',
-		     'osname'	     => 'irix',
-		     'address'	     => '10.0.0.102'
+		 'gobi' 	 =&gt {
+		     'osversion'     =&gt '6.5',
+		     'osname'	     =&gt 'irix',
+		     'address'	     =&gt '10.0.0.102'
 		 },
-		 'kalahari'	 => {
-		     'osversion'     => '2.0.34',
-		     'osname'	     => 'linux',
-		     'address'	     => [ '10.0.0.103', '10.0.1.103' ]
+		 'kalahari'	 =&gt {
+		     'osversion'     =&gt '2.0.34',
+		     'osname'	     =&gt 'linux',
+		     'address'	     =&gt [ '10.0.0.103', '10.0.1.103' ]
 		 }
 	     }
 	 }
 
        Your script could then access the name of the log directory like this:
 
-	 print $config->{logdir};
+	 print $config-&gt{logdir};
 
        similarly, the second address on the server 'kalahari' could be
        referenced as:
 
-	 print $config->{server}->{kalahari}->{address}->[1];
+	 print $config-&gt{server}-&gt{kalahari}-&gt{address}-&gt[1];
 
        What could be simpler?  (Rhetorical).
 
@@ -114,7 +116,7 @@ QUICK START
        string or even pass it in via some derivative of an IO::Handle, you'll
        need to check out "OPTIONS".  If you want to turn off or tweak the
        array folding feature (that neat little transformation that produced
-       $config->{server}) you'll find options for that as well.
+       $config-&gt{server}) you'll find options for that as well.
 
        If you want to generate XML (for example to write a modified version of
        $config back out as XML), check out "XMLout()".
@@ -140,7 +142,7 @@ DESCRIPTION
        (Skip down to "EXAMPLES" below, for more sample code).
 
        "XMLin()" accepts an optional XML specifier followed by zero or more
-       'name => value' option pairs.  The XML specifier can be one of the
+       'name =&gt value' option pairs.  The XML specifier can be one of the
        following:
 
        A filename
@@ -160,19 +162,19 @@ DESCRIPTION
 	   if you wish to specify options, you must specify the value 'undef'.
 	   eg:
 
-	     $ref = XMLin(undef, ForceArray => 1);
+	     $ref = XMLin(undef, ForceArray =&gt 1);
 
        A string of XML
-	   A string containing XML (recognised by the presence of '<' and '>'
+	   A string containing XML (recognised by the presence of '&lt' and '&gt'
 	   characters) will be parsed directly.  eg:
 
-	     $ref = XMLin('<opt username="bob" password="flurp" />');
+	     $ref = XMLin('&ltopt username="bob" password="flurp" /&gt');
 
        An IO::Handle object
 	   An IO::Handle object will be read to EOF and its contents parsed.
 	   eg:
 
-	     $fh = IO::File->new('/etc/params.xml');
+	     $fh = IO::File-&gtnew('/etc/params.xml');
 	     $ref = XMLin($fh);
 
    XMLout()
@@ -267,12 +269,12 @@ OPTIONS
        2.03 and earlier; or you can add underscores between the words (eg:
        key_attr).
 
-   AttrIndent => 1 # out - handy
+   AttrIndent =&gt 1 # out - handy
        When you are using "XMLout()", enable this option to have attributes
        printed one-per-line with sensible indentation rather than all on one
        line.
 
-   Cache => [ cache schemes ] # in - advanced
+   Cache =&gt [ cache schemes ] # in - advanced
        Because loading the XML::Parser module and parsing an XML file can
        consume a significant number of CPU cycles, it is often desirable to
        cache the output of "XMLin()" for later reuse.
@@ -316,20 +318,20 @@ OPTIONS
        server is not exactly synchronised with the clock where your script is
        run, updates to the source XML file may appear to be ignored.
 
-   ContentKey => 'keyname' # in+out - seldom used
+   ContentKey =&gt 'keyname' # in+out - seldom used
        When text content is parsed to a hash value, this option let's you
        specify a name for the hash key to override the default 'content'.  So
        for example:
 
-	 XMLin('<opt one="1">Text</opt>', ContentKey => 'text')
+	 XMLin('&ltopt one="1"&gtText&lt/opt&gt', ContentKey =&gt 'text')
 
        will parse to:
 
-	 { 'one' => 1, 'text' => 'Text' }
+	 { 'one' =&gt 1, 'text' =&gt 'Text' }
 
        instead of:
 
-	 { 'one' => 1, 'content' => 'Text' }
+	 { 'one' =&gt 1, 'content' =&gt 'Text' }
 
        "XMLout()" will also honour the value of this option when converting a
        hashref to XML.
@@ -339,31 +341,31 @@ OPTIONS
        after array folding.  For example:
 
 	 XMLin(
-	   '<opt><item name="one">First</item><item name="two">Second</item></opt>',
-	   KeyAttr => {item => 'name'},
-	   ForceArray => [ 'item' ],
-	   ContentKey => '-content'
+	   '&ltopt&gt&ltitem name="one"&gtFirst&lt/item&gt&ltitem name="two"&gtSecond&lt/item&gt&lt/opt&gt',
+	   KeyAttr =&gt {item =&gt 'name'},
+	   ForceArray =&gt [ 'item' ],
+	   ContentKey =&gt '-content'
 	 )
 
        will parse to:
 
 	 {
-	   'item' => {
-	     'one' =>  'First'
-	     'two' =>  'Second'
+	   'item' =&gt {
+	     'one' =&gt  'First'
+	     'two' =&gt  'Second'
 	   }
 	 }
 
        rather than this (without the '-'):
 
 	 {
-	   'item' => {
-	     'one' => { 'content' => 'First' }
-	     'two' => { 'content' => 'Second' }
+	   'item' =&gt {
+	     'one' =&gt { 'content' =&gt 'First' }
+	     'two' =&gt { 'content' =&gt 'Second' }
 	   }
 	 }
 
-   DataHandler => code_ref # in - SAX only
+   DataHandler =&gt code_ref # in - SAX only
        When you use an XML::Simple object as a SAX handler, it will return a
        'simple tree' data structure in the same format as "XMLin()" would
        return.	If this option is set (to a subroutine reference), then when
@@ -372,19 +374,19 @@ OPTIONS
        data tree.  The return value from the subroutine will be returned to
        the SAX driver.	(See "SAX SUPPORT" for more details).
 
-   ForceArray => 1 # in - important
+   ForceArray =&gt 1 # in - important
        This option should be set to '1' to force nested elements to be
        represented as arrays even when there is only one.  Eg, with ForceArray
        enabled, this XML:
 
-	   <opt>
-	     <name>value</name>
-	   </opt>
+	   &ltopt&gt
+	     &ltname&gtvalue&lt/name&gt
+	   &lt/opt&gt
 
        would parse to this:
 
 	   {
-	     'name' => [
+	     'name' =&gt [
 			 'value'
 		       ]
 	   }
@@ -392,7 +394,7 @@ OPTIONS
        instead of this (the default):
 
 	   {
-	     'name' => 'value'
+	     'name' =&gt 'value'
 	   }
 
        This option is especially useful if the data structure is likely to be
@@ -406,7 +408,7 @@ OPTIONS
        folding, the default value of this option should probably also have
        been enabled too - sorry).
 
-   ForceArray => [ names ] # in - important
+   ForceArray =&gt [ names ] # in - important
        This alternative (and preferred) form of the 'ForceArray' option allows
        you to specify a list of element names which should always be forced
        into an array representation, rather than the 'all or nothing' approach
@@ -417,62 +419,62 @@ OPTIONS
        will be forced to arrays.  If the list contains only a single regex,
        then it is not necessary to enclose it in an arrayref.  Eg:
 
-	 ForceArray => qr/_list$/
+	 ForceArray =&gt qr/_list$/
 
-   ForceContent => 1 # in - seldom used
+   ForceContent =&gt 1 # in - seldom used
        When "XMLin()" parses elements which have text content as well as
        attributes, the text content must be represented as a hash value rather
        than a simple scalar.  This option allows you to force text content to
        always parse to a hash value even when there are no attributes.	So for
        example:
 
-	 XMLin('<opt><x>text1</x><y a="2">text2</y></opt>', ForceContent => 1)
+	 XMLin('&ltopt&gt&ltx&gttext1&lt/x&gt&lty a="2"&gttext2&lt/y&gt&lt/opt&gt', ForceContent =&gt 1)
 
        will parse to:
 
 	 {
-	   'x' => {	      'content' => 'text1' },
-	   'y' => { 'a' => 2, 'content' => 'text2' }
+	   'x' =&gt {	      'content' =&gt 'text1' },
+	   'y' =&gt { 'a' =&gt 2, 'content' =&gt 'text2' }
 	 }
 
        instead of:
 
 	 {
-	   'x' => 'text1',
-	   'y' => { 'a' => 2, 'content' => 'text2' }
+	   'x' =&gt 'text1',
+	   'y' =&gt { 'a' =&gt 2, 'content' =&gt 'text2' }
 	 }
 
-   GroupTags => { grouping tag => grouped tag } # in+out - handy
+   GroupTags =&gt { grouping tag =&gt grouped tag } # in+out - handy
        You can use this option to eliminate extra levels of indirection in
        your Perl data structure.  For example this XML:
 
-	 <opt>
-	  <searchpath>
-	    <dir>/usr/bin</dir>
-	    <dir>/usr/local/bin</dir>
-	    <dir>/usr/X11/bin</dir>
-	  </searchpath>
-	</opt>
+	 &ltopt&gt
+	  &ltsearchpath&gt
+	    &ltdir&gt/usr/bin&lt/dir&gt
+	    &ltdir&gt/usr/local/bin&lt/dir&gt
+	    &ltdir&gt/usr/X11/bin&lt/dir&gt
+	  &lt/searchpath&gt
+	&lt/opt&gt
 
        Would normally be read into a structure like this:
 
 	 {
-	   searchpath => {
-			   dir => [ '/usr/bin', '/usr/local/bin', '/usr/X11/bin' ]
+	   searchpath =&gt {
+			   dir =&gt [ '/usr/bin', '/usr/local/bin', '/usr/X11/bin' ]
 			 }
 	 }
 
        But when read in with the appropriate value for 'GroupTags':
 
-	 my $opt = XMLin($xml, GroupTags => { searchpath => 'dir' });
+	 my $opt = XMLin($xml, GroupTags =&gt { searchpath =&gt 'dir' });
 
        It will return this simpler structure:
 
 	 {
-	   searchpath => [ '/usr/bin', '/usr/local/bin', '/usr/X11/bin' ]
+	   searchpath =&gt [ '/usr/bin', '/usr/local/bin', '/usr/X11/bin' ]
 	 }
 
-       The grouping element ("<searchpath>" in the example) must not contain
+       The grouping element ("&ltsearchpath&gt" in the example) must not contain
        any attributes or elements other than the grouped element.
 
        You can specify multiple 'grouping element' to 'grouped element'
@@ -485,7 +487,7 @@ OPTIONS
        places that the 'grouping tag' name occurs - you probably don't want to
        use the same name for elements as well as attributes.
 
-   Handler => object_ref # out - SAX only
+   Handler =&gt object_ref # out - SAX only
        Use the 'Handler' option to have "XMLout()" generate SAX events rather
        than returning a string of XML.	For more details see "SAX SUPPORT"
        below.
@@ -498,59 +500,59 @@ OPTIONS
        regardless of the encoding you supply.  A future implementation of this
        option may generate the events directly.
 
-   KeepRoot => 1 # in+out - handy
+   KeepRoot =&gt 1 # in+out - handy
        In its attempt to return a data structure free of superfluous detail
        and unnecessary levels of indirection, "XMLin()" normally discards the
        root element name.  Setting the 'KeepRoot' option to '1' will cause the
        root element name to be retained.  So after executing this code:
 
-	 $config = XMLin('<config tempdir="/tmp" />', KeepRoot => 1)
+	 $config = XMLin('&ltconfig tempdir="/tmp" /&gt', KeepRoot =&gt 1)
 
        You'll be able to reference the tempdir as
-       "$config->{config}->{tempdir}" instead of the default
-       "$config->{tempdir}".
+       "$config-&gt{config}-&gt{tempdir}" instead of the default
+       "$config-&gt{tempdir}".
 
        Similarly, setting the 'KeepRoot' option to '1' will tell "XMLout()"
        that the data structure already contains a root element name and it is
        not necessary to add another.
 
-   KeyAttr => [ list ] # in+out - important
+   KeyAttr =&gt [ list ] # in+out - important
        This option controls the 'array folding' feature which translates
        nested elements from an array to a hash.  It also controls the
        'unfolding' of hashes to arrays.
 
        For example, this XML:
 
-	   <opt>
-	     <user login="grep" fullname="Gary R Epstein" />
-	     <user login="stty" fullname="Simon T Tyson" />
-	   </opt>
+	   &ltopt&gt
+	     &ltuser login="grep" fullname="Gary R Epstein" /&gt
+	     &ltuser login="stty" fullname="Simon T Tyson" /&gt
+	   &lt/opt&gt
 
        would, by default, parse to this:
 
 	   {
-	     'user' => [
+	     'user' =&gt [
 			 {
-			   'login' => 'grep',
-			   'fullname' => 'Gary R Epstein'
+			   'login' =&gt 'grep',
+			   'fullname' =&gt 'Gary R Epstein'
 			 },
 			 {
-			   'login' => 'stty',
-			   'fullname' => 'Simon T Tyson'
+			   'login' =&gt 'stty',
+			   'fullname' =&gt 'Simon T Tyson'
 			 }
 		       ]
 	   }
 
-       If the option 'KeyAttr => "login"' were used to specify that the
+       If the option 'KeyAttr =&gt "login"' were used to specify that the
        'login' attribute is a key, the same XML would parse to:
 
 	   {
-	     'user' => {
-			 'stty' => {
-				     'fullname' => 'Simon T Tyson'
+	     'user' =&gt {
+			 'stty' =&gt {
+				     'fullname' =&gt 'Simon T Tyson'
 				   },
-			 'grep' => {
-				     'fullname' => 'Gary R Epstein'
+			 'grep' =&gt {
+				     'fullname' =&gt 'Gary R Epstein'
 				   }
 		       }
 	   }
@@ -569,11 +571,11 @@ OPTIONS
        will be rolled up into a scalar rather than an array and therefore will
        not be folded (since only arrays get folded).
 
-   KeyAttr => { list } # in+out - important
+   KeyAttr =&gt { list } # in+out - important
        This alternative (and preferred) method of specifiying the key
        attributes allows more fine grained control over which elements are
-       folded and on which attributes.	For example the option 'KeyAttr => {
-       package => 'id' } will cause any package elements to be folded on the
+       folded and on which attributes.	For example the option 'KeyAttr =&gt {
+       package =&gt 'id' } will cause any package elements to be folded on the
        'id' attribute.	No other elements which have an 'id' attribute will be
        folded at all.
 
@@ -586,24 +588,24 @@ OPTIONS
        Two further variations are made possible by prefixing a '+' or a '-'
        character to the attribute name:
 
-       The option 'KeyAttr => { user => "+login" }' will cause this XML:
+       The option 'KeyAttr =&gt { user =&gt "+login" }' will cause this XML:
 
-	   <opt>
-	     <user login="grep" fullname="Gary R Epstein" />
-	     <user login="stty" fullname="Simon T Tyson" />
-	   </opt>
+	   &ltopt&gt
+	     &ltuser login="grep" fullname="Gary R Epstein" /&gt
+	     &ltuser login="stty" fullname="Simon T Tyson" /&gt
+	   &lt/opt&gt
 
        to parse to this data structure:
 
 	   {
-	     'user' => {
-			 'stty' => {
-				     'fullname' => 'Simon T Tyson',
-				     'login'	=> 'stty'
+	     'user' =&gt {
+			 'stty' =&gt {
+				     'fullname' =&gt 'Simon T Tyson',
+				     'login'	=&gt 'stty'
 				   },
-			 'grep' => {
-				     'fullname' => 'Gary R Epstein',
-				     'login'	=> 'grep'
+			 'grep' =&gt {
+				     'fullname' =&gt 'Gary R Epstein',
+				     'login'	=&gt 'grep'
 				   }
 		       }
 	   }
@@ -614,14 +616,14 @@ OPTIONS
        A '-' prefix would produce this result:
 
 	   {
-	     'user' => {
-			 'stty' => {
-				     'fullname' => 'Simon T Tyson',
-				     '-login'	 => 'stty'
+	     'user' =&gt {
+			 'stty' =&gt {
+				     'fullname' =&gt 'Simon T Tyson',
+				     '-login'	 =&gt 'stty'
 				   },
-			 'grep' => {
-				     'fullname' => 'Gary R Epstein',
-				     '-login'	 => 'grep'
+			 'grep' =&gt {
+				     'fullname' =&gt 'Gary R Epstein',
+				     '-login'	 =&gt 'grep'
 				   }
 		       }
 	   }
@@ -629,26 +631,26 @@ OPTIONS
        As described earlier, "XMLout" will ignore hash keys starting with a
        '-'.
 
-   NoAttr => 1 # in+out - handy
+   NoAttr =&gt 1 # in+out - handy
        When used with "XMLout()", the generated XML will contain no
        attributes.  All hash key/values will be represented as nested elements
        instead.
 
        When used with "XMLin()", any attributes in the XML will be ignored.
 
-   NoEscape => 1 # out - seldom used
-       By default, "XMLout()" will translate the characters '<', '>', '&' and
+   NoEscape =&gt 1 # out - seldom used
+       By default, "XMLout()" will translate the characters '&lt', '&gt', '&' and
        '"' to '&lt;', '&gt;', '&amp;' and '&quot' respectively.  Use this
        option to suppress escaping (presumably because you've already escaped
        the data in some more sophisticated manner).
 
-   NoIndent => 1 # out - seldom used
+   NoIndent =&gt 1 # out - seldom used
        Set this option to 1 to disable "XMLout()"'s default 'pretty printing'
        mode.  With this option enabled, the XML output will all be on one line
        (unless there are newlines in the data) - this may be easier for
        downstream processing.
 
-   NoSort => 1 # out - seldom used
+   NoSort =&gt 1 # out - seldom used
        Newer versions of XML::Simple sort elements and attributes
        alphabetically (*), by default.	Enable this option to suppress the
        sorting - possibly for backwards compatibility.
@@ -658,7 +660,7 @@ OPTIONS
        'unfolded', the elements are sorted alphabetically by the value of the
        key field.
 
-   NormaliseSpace => 0 | 1 | 2 # in - handy
+   NormaliseSpace =&gt 0 | 1 | 2 # in - handy
        This option controls how whitespace in text content is handled.
        Recognised values for the option are:
 
@@ -675,7 +677,7 @@ OPTIONS
        Note: you can spell this option with a 'z' if that is more natural for
        you.
 
-   NSExpand => 1 # in+out handy - SAX only
+   NSExpand =&gt 1 # in+out handy - SAX only
        This option controls namespace expansion - the translation of element
        and attribute names of the form 'prefix:name' to '{uri}name'.  For
        example the element name 'xsl:template' might be expanded to:
@@ -697,7 +699,7 @@ OPTIONS
        Note: You must have the XML::NamespaceSupport module installed if you
        want "XMLout()" to translate URIs back to prefixes.
 
-   NumericEscape => 0 | 1 | 2 # out - handy
+   NumericEscape =&gt 0 | 1 | 2 # out - handy
        Use this option to have 'high' (non-ASCII) characters in your Perl data
        structure converted to numeric entities (eg: &#8364;) in the XML
        output.	Three levels are possible:
@@ -709,7 +711,7 @@ OPTIONS
 
        2 - all characters above 0x7F are escaped (good for plain ASCII output)
 
-   OutputFile => <file specifier> # out - handy
+   OutputFile =&gt &ltfile specifier&gt # out - handy
        The default behaviour of "XMLout()" is to return the XML as a string.
        If you wish to write the XML to a file, simply supply the filename
        using the 'OutputFile' option.
@@ -717,14 +719,14 @@ OPTIONS
        This option also accepts an IO handle object - especially useful in
        Perl 5.8.0 and later for output using an encoding other than UTF-8, eg:
 
-	 open my $fh, '>:encoding(iso-8859-1)', $path or die "open($path): $!";
-	 XMLout($ref, OutputFile => $fh);
+	 open my $fh, '&gt:encoding(iso-8859-1)', $path or die "open($path): $!";
+	 XMLout($ref, OutputFile =&gt $fh);
 
        Note, XML::Simple does not require that the object you pass in to the
        OutputFile option inherits from IO::Handle - it simply assumes the
        object supports a "print" method.
 
-   ParserOpts => [ XML::Parser Options ] # in - don't use this
+   ParserOpts =&gt [ XML::Parser Options ] # in - don't use this
        Note: This option is now officially deprecated.	If you find it useful,
        email the author with an example of what you use it for.  Do not use
        this option to set the ProtocolEncoding, that's just plain wrong - fix
@@ -734,7 +736,7 @@ OPTIONS
        underlying XML::Parser object (which of course assumes you're not using
        SAX).
 
-   RootName => 'string' # out - handy
+   RootName =&gt 'string' # out - handy
        By default, when "XMLout()" generates XML, the root element will be
        named 'opt'.  This option allows you to specify an alternative name.
 
@@ -744,7 +746,7 @@ OPTIONS
        back in by "XMLin()".  Nevertheless, the option has been found to be
        useful in certain circumstances.
 
-   SearchPath => [ list ] # in - handy
+   SearchPath =&gt [ list ] # in - handy
        If you pass "XMLin()" a filename, but the filename include no directory
        component, you can use this option to specify which directories should
        be searched to locate the file.	You might use this option to search
@@ -758,7 +760,7 @@ OPTIONS
        SearchPath will contain only the directory in which the script itself
        is located.  Otherwise the default SearchPath will be empty.
 
-   SuppressEmpty => 1 | '' | undef # in+out - handy
+   SuppressEmpty =&gt 1 | '' | undef # in+out - handy
        This option controls what "XMLin()" should do with empty elements (no
        attributes and no content).  The default behaviour is to represent them
        as empty hashes.  Setting this option to a true value (eg: 1) will
@@ -775,35 +777,35 @@ OPTIONS
        true value (eg: 1) causes undefined values to be skipped altogether on
        output.
 
-   ValueAttr => [ names ] # in - handy
+   ValueAttr =&gt [ names ] # in - handy
        Use this option to deal elements which always have a single attribute
        and no content.	Eg:
 
-	 <opt>
-	   <colour value="red" />
-	   <size   value="XXL" />
-	 </opt>
+	 &ltopt&gt
+	   &ltcolour value="red" /&gt
+	   &ltsize   value="XXL" /&gt
+	 &lt/opt&gt
 
-       Setting "ValueAttr => [ 'value' ]" will cause the above XML to parse
+       Setting "ValueAttr =&gt [ 'value' ]" will cause the above XML to parse
        to:
 
 	 {
-	   colour => 'red',
-	   size   => 'XXL'
+	   colour =&gt 'red',
+	   size   =&gt 'XXL'
 	 }
 
        instead of this (the default):
 
 	 {
-	   colour => { value => 'red' },
-	   size   => { value => 'XXL' }
+	   colour =&gt { value =&gt 'red' },
+	   size   =&gt { value =&gt 'XXL' }
 	 }
 
        Note: This form of the ValueAttr option is not compatible with
        "XMLout()" - since the attribute name is discarded at parse time, the
        original XML cannot be reconstructed.
 
-   ValueAttr => { element => attribute, ... } # in+out - handy
+   ValueAttr =&gt { element =&gt attribute, ... } # in+out - handy
        This (preferred) form of the ValueAttr option requires you to specify
        both the element and the attribute names.  This is not only safer, it
        also allows the original XML to be reconstructed by "XMLout()".
@@ -811,7 +813,7 @@ OPTIONS
        Note: You probably don't want to use this option and the NoAttr option
        at the same time.
 
-   Variables => { name => value } # in - handy
+   Variables =&gt { name =&gt value } # in - handy
        This option allows variables in the XML to be expanded when the file is
        read.  (there is no facility for putting the variable names back if you
        regenerate XML using "XMLout").
@@ -823,7 +825,7 @@ OPTIONS
        the variable will not be replaced.  Names must match the regex:
        "[\w.]+" (ie: only 'word' characters and dots are allowed).
 
-   VarAttr => 'attr_name' # in - handy
+   VarAttr =&gt 'attr_name' # in - handy
        In addition to the variables defined using "Variables", this option
        allows variables to be defined in the XML.  A variable definition
        consists of an element with an attribute called 'attr_name' (the value
@@ -832,30 +834,30 @@ OPTIONS
        the value.  A variable defined in this way will override a variable
        defined using the "Variables" option.  For example:
 
-	 XMLin( '<opt>
-		   <dir name="prefix">/usr/local/apache</dir>
-		   <dir name="exec_prefix">${prefix}</dir>
-		   <dir name="bindir">${exec_prefix}/bin</dir>
-		 </opt>',
-		VarAttr => 'name', ContentKey => '-content'
+	 XMLin( '&ltopt&gt
+		   &ltdir name="prefix"&gt/usr/local/apache&lt/dir&gt
+		   &ltdir name="exec_prefix"&gt${prefix}&lt/dir&gt
+		   &ltdir name="bindir"&gt${exec_prefix}/bin&lt/dir&gt
+		 &lt/opt&gt',
+		VarAttr =&gt 'name', ContentKey =&gt '-content'
 	       );
 
        produces the following data structure:
 
 	 {
-	   dir => {
-		    prefix	=> '/usr/local/apache',
-		    exec_prefix => '/usr/local/apache',
-		    bindir	=> '/usr/local/apache/bin',
+	   dir =&gt {
+		    prefix	=&gt '/usr/local/apache',
+		    exec_prefix =&gt '/usr/local/apache',
+		    bindir	=&gt '/usr/local/apache/bin',
 		  }
 	 }
 
-   XMLDecl => 1  or  XMLDecl => 'string'  # out - handy
+   XMLDecl =&gt 1  or  XMLDecl =&gt 'string'  # out - handy
        If you want the output from "XMLout()" to start with the optional XML
        declaration, simply set the option to '1'.  The default XML declaration
        is:
 
-	       <?xml version='1.0' standalone='yes'?>
+	       &lt?xml version='1.0' standalone='yes'?&gt
 
        If you want some other string (for example to declare an encoding
        value), set the value of this option to the complete string you
@@ -877,12 +879,12 @@ OPTIONAL OO INTERFACE
 
        First create an XML::Simple parser object with your preferred defaults:
 
-	 my $xs = XML::Simple->new(ForceArray => 1, KeepRoot => 1);
+	 my $xs = XML::Simple-&gtnew(ForceArray =&gt 1, KeepRoot =&gt 1);
 
        then call "XMLin()" or "XMLout()" as a method of that object:
 
-	 my $ref = $xs->XMLin($xml);
-	 my $xml = $xs->XMLout($ref);
+	 my $ref = $xs-&gtXMLin($xml);
+	 my $xml = $xs-&gtXMLout($ref);
 
        You can also specify options when you make the method calls and these
        values will be merged with the values specified when the object was
@@ -917,7 +919,7 @@ OPTIONAL OO INTERFACE
        undocumented methods by examining the source, but those may be subject
        to change in future releases.
 
-       handle_options(direction, name => value ...)
+       handle_options(direction, name =&gt value ...)
 	   This method will be called when one of the parsing methods or the
 	   "XMLout()" method is called.  The initial argument will be a string
 	   (either 'in' or 'out') and the remaining arguments will be name
@@ -951,7 +953,7 @@ OPTIONAL OO INTERFACE
 	   Called from "escape_value()", to handle non-ASCII characters
 	   (depending on the value of the NumericEscape option).
 
-       copy_hash(hashref, extra_key => value, ...)
+       copy_hash(hashref, extra_key =&gt value, ...)
 	   Called from "XMLout()", when 'unfolding' a hash of hashes into an
 	   array of hashes.  You might wish to override this method if you're
 	   using tied hashes and don't want them to get untied.
@@ -971,7 +973,7 @@ OPTIONAL OO INTERFACE
 
        You would use this caching scheme by specifying the option:
 
-	 Cache => [ 'dbm' ]
+	 Cache =&gt [ 'dbm' ]
 
 STRICT MODE
        If you import the XML::Simple routines like this:
@@ -982,23 +984,23 @@ STRICT MODE
        errors
 
        o   Failing to explicitly set the "KeyAttr" option - if you can't be
-	   bothered reading about this option, turn it off with: KeyAttr => [
+	   bothered reading about this option, turn it off with: KeyAttr =&gt [
 	   ]
 
        o   Failing to explicitly set the "ForceArray" option - if you can't be
 	   bothered reading about this option, set it to the safest mode with:
-	   ForceArray => 1
+	   ForceArray =&gt 1
 
        o   Setting ForceArray to an array, but failing to list all the
 	   elements from the KeyAttr hash.
 
-       o   Data error - KeyAttr is set to say { part => 'partnum' } but the
-	   XML contains one or more <part> elements without a 'partnum'
+       o   Data error - KeyAttr is set to say { part =&gt 'partnum' } but the
+	   XML contains one or more &ltpart&gt elements without a 'partnum'
 	   attribute (or nested element).  Note: if strict mode is not set but
 	   -w is, this condition triggers a warning.
 
        o   Data error - as above, but non-unique values are present in the key
-	   attribute (eg: more than one <part> element with the same partnum).
+	   attribute (eg: more than one &ltpart&gt element with the same partnum).
 	   This will also trigger a warning if strict mode is not enabled.
 
        o   Data error - as above, but value of key attribute (eg: partnum) is
@@ -1048,10 +1050,10 @@ SAX SUPPORT
 		      ....   # your data here
 		   };
 
-	 my $writer = XML::SAX::Writer->new();
-	 my $filter = Some::SAX::Filter->new(Handler => $writer);
-	 my $simple = XML::Simple->new(Handler => $filter);
-	 $simple->XMLout($ref);
+	 my $writer = XML::SAX::Writer-&gtnew();
+	 my $filter = Some::SAX::Filter-&gtnew(Handler =&gt $writer);
+	 my $simple = XML::Simple-&gtnew(Handler =&gt $filter);
+	 $simple-&gtXMLout($ref);
 
        You can also put XML::Simple at the opposite end of the pipeline to
        take advantage of the simple 'tree' data structure once the relevant
@@ -1061,33 +1063,33 @@ SAX SUPPORT
 	 use Some::SAX::Filter;
 	 use XML::Simple;
 
-	 my $simple = XML::Simple->new(ForceArray => 1, KeyAttr => ['partnum']);
-	 my $filter = Some::SAX::Filter->new(Handler => $simple);
-	 my $parser = XML::SAX::ParserFactory->parser(Handler => $filter);
+	 my $simple = XML::Simple-&gtnew(ForceArray =&gt 1, KeyAttr =&gt ['partnum']);
+	 my $filter = Some::SAX::Filter-&gtnew(Handler =&gt $simple);
+	 my $parser = XML::SAX::ParserFactory-&gtparser(Handler =&gt $filter);
 
-	 my $ref = $parser->parse_uri('some_huge_file.xml');
+	 my $ref = $parser-&gtparse_uri('some_huge_file.xml');
 
-	 print $ref->{part}->{'555-1234'};
+	 print $ref-&gt{part}-&gt{'555-1234'};
 
        You can build a filter by using an XML::Simple object as a handler and
        setting its DataHandler option to point to a routine which takes the
        resulting tree, modifies it and sends it off as SAX events to a
        downstream handler:
 
-	 my $writer = XML::SAX::Writer->new();
-	 my $filter = XML::Simple->new(
-			DataHandler => sub {
+	 my $writer = XML::SAX::Writer-&gtnew();
+	 my $filter = XML::Simple-&gtnew(
+			DataHandler =&gt sub {
 					 my $simple = shift;
 					 my $data = shift;
 
 					 # Modify $data here
 
-					 $simple->XMLout($data, Handler => $writer);
+					 $simple-&gtXMLout($data, Handler =&gt $writer);
 				       }
 		      );
-	 my $parser = XML::SAX::ParserFactory->parser(Handler => $filter);
+	 my $parser = XML::SAX::ParserFactory-&gtparser(Handler =&gt $filter);
 
-	 $parser->parse_uri($filename);
+	 $parser-&gtparse_uri($filename);
 
        Note: In this last example, the 'Handler' option was specified in the
        call to "XMLout()" but it could also have been specified in the
@@ -1154,53 +1156,53 @@ ERROR HANDLING
 EXAMPLES
        When "XMLin()" reads the following very simple piece of XML:
 
-	   <opt username="testuser" password="frodo"></opt>
+	   &ltopt username="testuser" password="frodo"&gt&lt/opt&gt
 
        it returns the following data structure:
 
 	   {
-	     'username' => 'testuser',
-	     'password' => 'frodo'
+	     'username' =&gt 'testuser',
+	     'password' =&gt 'frodo'
 	   }
 
        The identical result could have been produced with this alternative
        XML:
 
-	   <opt username="testuser" password="frodo" />
+	   &ltopt username="testuser" password="frodo" /&gt
 
        Or this (although see 'ForceArray' option for variations):
 
-	   <opt>
-	     <username>testuser</username>
-	     <password>frodo</password>
-	   </opt>
+	   &ltopt&gt
+	     &ltusername&gttestuser&lt/username&gt
+	     &ltpassword&gtfrodo&lt/password&gt
+	   &lt/opt&gt
 
        Repeated nested elements are represented as anonymous arrays:
 
-	   <opt>
-	     <person firstname="Joe" lastname="Smith">
-	       <email>joe@smith.com</email>
-	       <email>jsmith@yahoo.com</email>
-	     </person>
-	     <person firstname="Bob" lastname="Smith">
-	       <email>bob@smith.com</email>
-	     </person>
-	   </opt>
+	   &ltopt&gt
+	     &ltperson firstname="Joe" lastname="Smith"&gt
+	       &ltemail&gtjoe@smith.com&lt/email&gt
+	       &ltemail&gtjsmith@yahoo.com&lt/email&gt
+	     &lt/person&gt
+	     &ltperson firstname="Bob" lastname="Smith"&gt
+	       &ltemail&gtbob@smith.com&lt/email&gt
+	     &lt/person&gt
+	   &lt/opt&gt
 
 	   {
-	     'person' => [
+	     'person' =&gt [
 			   {
-			     'email' => [
+			     'email' =&gt [
 					  'joe@smith.com',
 					  'jsmith@yahoo.com'
 					],
-			     'firstname' => 'Joe',
-			     'lastname' => 'Smith'
+			     'firstname' =&gt 'Joe',
+			     'lastname' =&gt 'Smith'
 			   },
 			   {
-			     'email' => 'bob@smith.com',
-			     'firstname' => 'Bob',
-			     'lastname' => 'Smith'
+			     'email' =&gt 'bob@smith.com',
+			     'firstname' =&gt 'Bob',
+			     'lastname' =&gt 'Smith'
 			   }
 			 ]
 	   }
@@ -1209,43 +1211,43 @@ EXAMPLES
        (folded) from an array into a hash keyed on the value of that attribute
        (see the "KeyAttr" option):
 
-	   <opt>
-	     <person key="jsmith" firstname="Joe" lastname="Smith" />
-	     <person key="tsmith" firstname="Tom" lastname="Smith" />
-	     <person key="jbloggs" firstname="Joe" lastname="Bloggs" />
-	   </opt>
+	   &ltopt&gt
+	     &ltperson key="jsmith" firstname="Joe" lastname="Smith" /&gt
+	     &ltperson key="tsmith" firstname="Tom" lastname="Smith" /&gt
+	     &ltperson key="jbloggs" firstname="Joe" lastname="Bloggs" /&gt
+	   &lt/opt&gt
 
 	   {
-	     'person' => {
-			   'jbloggs' => {
-					  'firstname' => 'Joe',
-					  'lastname' => 'Bloggs'
+	     'person' =&gt {
+			   'jbloggs' =&gt {
+					  'firstname' =&gt 'Joe',
+					  'lastname' =&gt 'Bloggs'
 					},
-			   'tsmith' => {
-					 'firstname' => 'Tom',
-					 'lastname' => 'Smith'
+			   'tsmith' =&gt {
+					 'firstname' =&gt 'Tom',
+					 'lastname' =&gt 'Smith'
 				       },
-			   'jsmith' => {
-					 'firstname' => 'Joe',
-					 'lastname' => 'Smith'
+			   'jsmith' =&gt {
+					 'firstname' =&gt 'Joe',
+					 'lastname' =&gt 'Smith'
 				       }
 			 }
 	   }
 
-       The <anon> tag can be used to form anonymous arrays:
+       The &ltanon&gt tag can be used to form anonymous arrays:
 
-	   <opt>
-	     <head><anon>Col 1</anon><anon>Col 2</anon><anon>Col 3</anon></head>
-	     <data><anon>R1C1</anon><anon>R1C2</anon><anon>R1C3</anon></data>
-	     <data><anon>R2C1</anon><anon>R2C2</anon><anon>R2C3</anon></data>
-	     <data><anon>R3C1</anon><anon>R3C2</anon><anon>R3C3</anon></data>
-	   </opt>
+	   &ltopt&gt
+	     &lthead&gt&ltanon&gtCol 1&lt/anon&gt&ltanon&gtCol 2&lt/anon&gt&ltanon&gtCol 3&lt/anon&gt&lt/head&gt
+	     &ltdata&gt&ltanon&gtR1C1&lt/anon&gt&ltanon&gtR1C2&lt/anon&gt&ltanon&gtR1C3&lt/anon&gt&lt/data&gt
+	     &ltdata&gt&ltanon&gtR2C1&lt/anon&gt&ltanon&gtR2C2&lt/anon&gt&ltanon&gtR2C3&lt/anon&gt&lt/data&gt
+	     &ltdata&gt&ltanon&gtR3C1&lt/anon&gt&ltanon&gtR3C2&lt/anon&gt&ltanon&gtR3C3&lt/anon&gt&lt/data&gt
+	   &lt/opt&gt
 
 	   {
-	     'head' => [
+	     'head' =&gt [
 			 [ 'Col 1', 'Col 2', 'Col 3' ]
 		       ],
-	     'data' => [
+	     'data' =&gt [
 			 [ 'R1C1', 'R1C2', 'R1C3' ],
 			 [ 'R2C1', 'R2C2', 'R2C3' ],
 			 [ 'R3C1', 'R3C2', 'R3C3' ]
@@ -1257,11 +1259,11 @@ EXAMPLES
        anonymous array the arrayref will be returned directly rather than the
        usual hashref:
 
-	   <opt>
-	     <anon><anon>Col 1</anon><anon>Col 2</anon></anon>
-	     <anon><anon>R1C1</anon><anon>R1C2</anon></anon>
-	     <anon><anon>R2C1</anon><anon>R2C2</anon></anon>
-	   </opt>
+	   &ltopt&gt
+	     &ltanon&gt&ltanon&gtCol 1&lt/anon&gt&ltanon&gtCol 2&lt/anon&gt&lt/anon&gt
+	     &ltanon&gt&ltanon&gtR1C1&lt/anon&gt&ltanon&gtR1C2&lt/anon&gt&lt/anon&gt
+	     &ltanon&gt&ltanon&gtR2C1&lt/anon&gt&ltanon&gtR2C2&lt/anon&gt&lt/anon&gt
+	   &lt/opt&gt
 
 	   [
 	     [ 'Col 1', 'Col 2' ],
@@ -1274,14 +1276,14 @@ EXAMPLES
        element will be represented as a hashref with the text content in the
        'content' key (see the "ContentKey" option):
 
-	 <opt>
-	   <one>first</one>
-	   <two attr="value">second</two>
-	 </opt>
+	 &ltopt&gt
+	   &ltone&gtfirst&lt/one&gt
+	   &lttwo attr="value"&gtsecond&lt/two&gt
+	 &lt/opt&gt
 
 	 {
-	   'one' => 'first',
-	   'two' => { 'attr' => 'value', 'content' => 'second' }
+	   'one' =&gt 'first',
+	   'two' =&gt { 'attr' =&gt 'value', 'content' =&gt 'second' }
 	 }
 
        Mixed content (elements which contain both text content and nested
@@ -1311,7 +1313,7 @@ WHERE TO FROM HERE?
        fairly quickly.	This section of the document used to offer some advice
        on chosing a more powerful option.  That advice has now grown into the
        'Perl-XML FAQ' document which you can find at:
-       <http://perl-xml.sourceforge.net/faq/>
+       &lthttp://perl-xml.sourceforge.net/faq/&gt
 
        The advice in the FAQ boils down to a quick explanation of tree versus
        event based parsers and then recommends:
@@ -1335,7 +1337,7 @@ SEE ALSO
        with this distribution as: XML::Simple::FAQ
 
 COPYRIGHT
-       Copyright 1999-2004 Grant McLean <grantm@cpan.org>
+       Copyright 1999-2004 Grant McLean &ltgrantm@cpan.org&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -1343,6 +1345,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2007-08-15			XML::Simple(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

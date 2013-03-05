@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Pod::Parser is a base class for creating POD filters and translators...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Pod::Parser - base class for creating POD filters and translators</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Pod::Parser(3pm)       Perl Programmers Reference Guide       Pod::Parser(3pm)
 
 
@@ -27,23 +29,23 @@ SYNOPSIS
 	       if ($command eq 'head1') { ... }
 	       elsif ($command eq 'head2') { ... }
 	       ## ... other commands and their actions
-	       my $out_fh = $parser->output_handle();
-	       my $expansion = $parser->interpolate($paragraph, $line_num);
+	       my $out_fh = $parser-&gtoutput_handle();
+	       my $expansion = $parser-&gtinterpolate($paragraph, $line_num);
 	       print $out_fh $expansion;
 	   }
 
 	   sub verbatim {
 	       my ($parser, $paragraph, $line_num) = @_;
 	       ## Format verbatim paragraph; sample actions might be:
-	       my $out_fh = $parser->output_handle();
+	       my $out_fh = $parser-&gtoutput_handle();
 	       print $out_fh $paragraph;
 	   }
 
 	   sub textblock {
 	       my ($parser, $paragraph, $line_num) = @_;
 	       ## Translate/Format this block of text; sample actions might be:
-	       my $out_fh = $parser->output_handle();
-	       my $expansion = $parser->interpolate($paragraph, $line_num);
+	       my $out_fh = $parser-&gtoutput_handle();
+	       my $expansion = $parser-&gtinterpolate($paragraph, $line_num);
 	       print $out_fh $expansion;
 	   }
 
@@ -61,8 +63,8 @@ SYNOPSIS
 	   ## Create a parser object and have it parse file whose name was
 	   ## given on the command-line (use STDIN if no files were given).
 	   $parser = new MyParser();
-	   $parser->parse_from_filehandle(\*STDIN)  if (@ARGV == 0);
-	   for (@ARGV) { $parser->parse_from_file($_); }
+	   $parser-&gtparse_from_filehandle(\*STDIN)  if (@ARGV == 0);
+	   for (@ARGV) { $parser-&gtparse_from_file($_); }
 
 REQUIRES
        perl5.005, Pod::InputObjects, Exporter, Symbol, Carp
@@ -173,7 +175,7 @@ RECOMMENDED SUBROUTINE/METHOD OVERRIDES
        probably want to override. These methods are as follows:
 
 command()
-		   $parser->command($cmd,$text,$line_num,$pod_para);
+		   $parser-&gtcommand($cmd,$text,$line_num,$pod_para);
 
        This method should be overridden by subclasses to take the appropriate
        action when a POD command paragraph (denoted by a line beginning with
@@ -201,7 +203,7 @@ command()
        method with the command paragraph).
 
 verbatim()
-		   $parser->verbatim($text,$line_num,$pod_para);
+		   $parser-&gtverbatim($text,$line_num,$pod_para);
 
        This method may be overridden by subclasses to take the appropriate
        action when a block of verbatim text is encountered. It is passed the
@@ -221,7 +223,7 @@ verbatim()
        textblock (unmodified) to the output filehandle.
 
 textblock()
-		   $parser->textblock($text,$line_num,$pod_para);
+		   $parser-&gttextblock($text,$line_num,$pod_para);
 
        This method may be overridden by subclasses to take the appropriate
        action when a normal block of POD text is encountered (although the
@@ -248,7 +250,7 @@ textblock()
        block as it occurred in the input stream).
 
 interior_sequence()
-		   $parser->interior_sequence($seq_cmd,$seq_arg,$pod_seq);
+		   $parser-&gtinterior_sequence($seq_cmd,$seq_arg,$pod_seq);
 
        This method should be overridden by subclasses to take the appropriate
        action when an interior sequence is encountered. An interior sequence
@@ -279,16 +281,16 @@ OPTIONAL SUBROUTINE/METHOD OVERRIDES
        advantage of them.
 
 new()
-		   my $parser = Pod::Parser->new();
+		   my $parser = Pod::Parser-&gtnew();
 
        This is the constructor for Pod::Parser and its subclasses. You do not
        need to override this method! It is capable of constructing subclass
        objects as well as base class objects, provided you use any of the
        following constructor invocation styles:
 
-	   my $parser1 = MyParser->new();
+	   my $parser1 = MyParser-&gtnew();
 	   my $parser2 = new MyParser();
-	   my $parser3 = $parser2->new();
+	   my $parser3 = $parser2-&gtnew();
 
        where "MyParser" is some subclass of Pod::Parser.
 
@@ -304,8 +306,8 @@ new()
        associative array (or hash-table) my be passed to the new()
        constructor, as in:
 
-	   my $parser1 = MyParser->new( MYDATA => $value1, MOREDATA => $value2 );
-	   my $parser2 = new MyParser( -myflag => 1 );
+	   my $parser1 = MyParser-&gtnew( MYDATA =&gt $value1, MOREDATA =&gt $value2 );
+	   my $parser2 = new MyParser( -myflag =&gt 1 );
 
        All arguments passed to the new() constructor will be treated as
        key/value pairs in a hash-table. The newly constructed object will be
@@ -315,22 +317,22 @@ new()
        table).
 
 initialize()
-		   $parser->initialize();
+		   $parser-&gtinitialize();
 
        This method performs any necessary object initialization. It takes no
        arguments (other than the object instance of course, which is typically
        copied to a local variable named $self). If subclasses override this
-       method then they must be sure to invoke "$self->SUPER::initialize()".
+       method then they must be sure to invoke "$self-&gtSUPER::initialize()".
 
 begin_pod()
-		   $parser->begin_pod();
+		   $parser-&gtbegin_pod();
 
        This method is invoked at the beginning of processing for each POD
        document that is encountered in the input. Subclasses should override
        this method to perform any per-document initialization.
 
 begin_input()
-		   $parser->begin_input();
+		   $parser-&gtbegin_input();
 
        This method is invoked by parse_from_filehandle() immediately before
        processing input from a filehandle. The base class implementation does
@@ -343,7 +345,7 @@ begin_input()
        initializations once per document, then you should use begin_pod().
 
 end_input()
-		   $parser->end_input();
+		   $parser-&gtend_input();
 
        This method is invoked by parse_from_filehandle() immediately after
        processing input from a filehandle. The base class implementation does
@@ -357,14 +359,14 @@ end_input()
        end_pod().
 
 end_pod()
-		   $parser->end_pod();
+		   $parser-&gtend_pod();
 
        This method is invoked at the end of processing for each POD document
        that is encountered in the input. Subclasses should override this
        method to perform any per-document finalization.
 
 preprocess_line()
-		 $textline = $parser->preprocess_line($text, $line_num);
+		 $textline = $parser-&gtpreprocess_line($text, $line_num);
 
        This method should be overridden by subclasses that wish to perform any
        kind of preprocessing for each line of input (before it has been
@@ -385,7 +387,7 @@ preprocess_line()
        The base class implementation of this method returns the given text.
 
 preprocess_paragraph()
-		   $textblock = $parser->preprocess_paragraph($text, $line_num);
+		   $textblock = $parser-&gtpreprocess_paragraph($text, $line_num);
 
        This method should be overridden by subclasses that wish to perform any
        kind of preprocessing for each block (paragraph) of POD documentation
@@ -401,7 +403,7 @@ preprocess_paragraph()
        and after determining the cutting state of the paragraph, but before
        trying to further parse or interpret them. After preprocess_paragraph()
        returns, the current cutting state (which is returned by
-       "$self->cutting()") is examined. If it evaluates to true then input
+       "$self-&gtcutting()") is examined. If it evaluates to true then input
        text (including the given $text) is cut (not processed) until the next
        POD directive is encountered.
 
@@ -421,9 +423,9 @@ METHODS FOR PARSING AND PROCESSING
        their functionality.
 
 parse_text()
-		   $ptree1 = $parser->parse_text($text, $line_num);
-		   $ptree2 = $parser->parse_text({%opts}, $text, $line_num);
-		   $ptree3 = $parser->parse_text(\%opts, $text, $line_num);
+		   $ptree1 = $parser-&gtparse_text($text, $line_num);
+		   $ptree2 = $parser-&gtparse_text({%opts}, $text, $line_num);
+		   $ptree3 = $parser-&gtparse_text(\%opts, $text, $line_num);
 
        This method is useful if you need to perform your own interpolation of
        interior sequences and can't rely upon interpolate to expand them in
@@ -443,7 +445,7 @@ parse_text()
        to customize certain aspects of the parse-tree that is created and
        returned. The set of recognized option keywords are:
 
-       -expand_seq => code-ref|method-name
+       -expand_seq =&gt code-ref|method-name
 	  Normally, the parse-tree returned by parse_text() will contain an
 	  unexpanded "Pod::InteriorSequence" object for each interior-sequence
 	  encountered. Specifying -expand_seq tells parse_text() to "expand"
@@ -457,14 +459,14 @@ parse_text()
 
 	  and if a method-name was given, it is invoked as:
 
-	    $parser->method_name( $sequence )
+	    $parser-&gtmethod_name( $sequence )
 
 	  where $parser is a reference to the parser object, and $sequence is
 	  a reference to the interior-sequence object.	[NOTE: If the
 	  interior_sequence() method is specified, then it is invoked
 	  according to the interface specified in "interior_sequence()"].
 
-       -expand_text => code-ref|method-name
+       -expand_text =&gt code-ref|method-name
 	  Normally, the parse-tree returned by parse_text() will contain a
 	  text-string for each contiguous sequence of characters outside of an
 	  interior-sequence. Specifying -expand_text tells parse_text() to
@@ -481,14 +483,14 @@ parse_text()
 
 	  and if a method-name was given, it is invoked as:
 
-	    $parser->method_name( $text, $ptree_node )
+	    $parser-&gtmethod_name( $text, $ptree_node )
 
 	  where $parser is a reference to the parser object, $text is the
 	  text-string encountered, and $ptree_node is a reference to the
 	  current node in the parse-tree (usually an interior-sequence object
 	  or else the top-level node of the parse-tree).
 
-       -expand_ptree => code-ref|method-name
+       -expand_ptree =&gt code-ref|method-name
 	  Rather than returning a "Pod::ParseTree", pass the parse-tree as an
 	  argument to the referenced subroutine (or named method of the parser
 	  object) and return the result instead of the parse-tree object.
@@ -499,13 +501,13 @@ parse_text()
 
 	  and if a method-name was given, it is invoked as:
 
-	    $parser->method_name( $ptree )
+	    $parser-&gtmethod_name( $ptree )
 
 	  where $parser is a reference to the parser object, and $ptree is a
 	  reference to the parse-tree object.
 
 interpolate()
-		   $textblock = $parser->interpolate($text, $line_num);
+		   $textblock = $parser-&gtinterpolate($text, $line_num);
 
        This method translates all text (including any embedded interior
        sequences) in the given text string $text and returns the interpolated
@@ -518,7 +520,7 @@ interpolate()
        alternate order, use parse_text instead.
 
 parse_from_filehandle()
-		   $parser->parse_from_filehandle($in_fh,$out_fh);
+		   $parser-&gtparse_from_filehandle($in_fh,$out_fh);
 
        This method takes an input filehandle (which is assumed to already be
        opened for reading) and reads the entire input stream looking for
@@ -530,7 +532,7 @@ parse_from_filehandle()
        object could be used to parse PODs from a single string or an array of
        strings).
 
-       Using "$in_fh->getline()", input is read line-by-line and assembled
+       Using "$in_fh-&gtgetline()", input is read line-by-line and assembled
        into paragraphs or "blocks" (which are separated by lines containing
        nothing but whitespace). For each block of POD documentation
        encountered it will invoke a method to parse the given paragraph.
@@ -548,7 +550,7 @@ parse_from_filehandle()
        This method does not usually need to be overridden by subclasses.
 
 parse_from_file()
-		   $parser->parse_from_file($filename,$outfile);
+		   $parser-&gtparse_from_file($filename,$outfile);
 
        This method takes a filename and does the following:
 
@@ -560,17 +562,17 @@ parse_from_file()
 
        o closes the input and output files.
 
-       If the special input filename "-" or "<&STDIN" is given then the STDIN
+       If the special input filename "-" or "&lt&STDIN" is given then the STDIN
        filehandle is used for input (and no open or close is performed). If no
        input filename is specified then "-" is implied. Filehandle references,
-       or objects that support the regular IO operations (like "<$fh>" or
-       "$fh-<Egt"getline>) are also accepted; the handles must already be
+       or objects that support the regular IO operations (like "&lt$fh&gt" or
+       "$fh-&ltEgt"getline&gt) are also accepted; the handles must already be
        opened.
 
        If a second argument is given then it should be the name of the desired
-       output file. If the special output filename "-" or ">&STDOUT" is given
+       output file. If the special output filename "-" or "&gt&STDOUT" is given
        then the STDOUT filehandle is used for output (and no open or close is
-       performed). If the special output filename ">&STDERR" is given then the
+       performed). If the special output filename "&gt&STDERR" is given then the
        STDERR filehandle is used for output (and no open or close is
        performed). If no output filehandle is currently in use and no output
        filename is specified, then "-" is implied.  Alternatively, filehandle
@@ -585,19 +587,19 @@ ACCESSOR METHODS
        instance data fields:
 
 errorsub()
-		   $parser->errorsub("method_name");
-		   $parser->errorsub(\&warn_user);
-		   $parser->errorsub(sub { print STDERR, @_ });
+		   $parser-&gterrorsub("method_name");
+		   $parser-&gterrorsub(\&warn_user);
+		   $parser-&gterrorsub(sub { print STDERR, @_ });
 
        Specifies the method or subroutine to use when printing error messages
        about POD syntax. The supplied method/subroutine must return TRUE upon
        successful printing of the message. If "undef" is given, then the carp
        builtin is used to issue error messages (this is the default behavior).
 
-		   my $errorsub = $parser->errorsub()
+		   my $errorsub = $parser-&gterrorsub()
 		   my $errmsg = "This is an error message!\n"
 		   (ref $errorsub) and &{$errorsub}($errmsg)
-		       or (defined $errorsub) and $parser->$errorsub($errmsg)
+		       or (defined $errorsub) and $parser-&gt$errorsub($errmsg)
 			   or  carp($errmsg);
 
        Returns a method name, or else a reference to the user-supplied
@@ -605,13 +607,13 @@ errorsub()
        builtin is used to issue error messages (this is the default behavior).
 
 cutting()
-		   $boolean = $parser->cutting();
+		   $boolean = $parser-&gtcutting();
 
        Returns the current "cutting" state: a boolean-valued scalar which
        evaluates to true if text from the input file is currently being "cut"
        (meaning it is not considered part of the POD document).
 
-		   $parser->cutting($boolean);
+		   $parser-&gtcutting($boolean);
 
        Sets the current "cutting" state to the given value and returns the
        result.
@@ -621,7 +623,7 @@ parseopts()
        hashtable of all the current parsing options.
 
 		   ## See if we are parsing non-POD sections as well as POD ones
-		   my %opts = $parser->parseopts();
+		   my %opts = $parser-&gtparseopts();
 		   $opts{'-want_nonPODs}' and print "-want_nonPODs\n";
 
        When invoked using a single string, parseopts treats the string as the
@@ -629,7 +631,7 @@ parseopts()
        (returns "undef" if it doesn't).
 
 		   ## Did we ask to see '=cut' paragraphs?
-		   my $want_cut = $parser->parseopts('-process_cut_cmd');
+		   my $want_cut = $parser-&gtparseopts('-process_cut_cmd');
 		   $want_cut and print "-process_cut_cmd\n";
 
        When invoked with multiple arguments, parseopts treats them as
@@ -637,35 +639,35 @@ parseopts()
        given values. Any unspecified parse-options are unaffected.
 
 		   ## Set them back to the default
-		   $parser->parseopts(-warnings => 0);
+		   $parser-&gtparseopts(-warnings =&gt 0);
 
        When passed a single hash-ref, parseopts uses that hash to completely
        reset the existing parse-options, all previous parse-option values are
        lost.
 
 		   ## Reset all options to default
-		   $parser->parseopts( { } );
+		   $parser-&gtparseopts( { } );
 
        See "PARSING OPTIONS" for more information on the name and meaning of
        each parse-option currently recognized.
 
 output_file()
-		   $fname = $parser->output_file();
+		   $fname = $parser-&gtoutput_file();
 
        Returns the name of the output file being written.
 
 output_handle()
-		   $fhandle = $parser->output_handle();
+		   $fhandle = $parser-&gtoutput_handle();
 
        Returns the output filehandle object.
 
 input_file()
-		   $fname = $parser->input_file();
+		   $fname = $parser-&gtinput_file();
 
        Returns the name of the input file being read.
 
 input_handle()
-		   $fhandle = $parser->input_handle();
+		   $fhandle = $parser-&gtinput_handle();
 
        Returns the current input filehandle object.
 
@@ -739,26 +741,26 @@ TREE-BASED PARSING
 
 	   sub begin_pod {
 	       my $self = shift;
-	       $self->{'-paragraphs'} = [];  ## initialize paragraph list
+	       $self-&gt{'-paragraphs'} = [];  ## initialize paragraph list
 	   }
 
 	   sub command {
 	       my ($parser, $command, $paragraph, $line_num, $pod_para) = @_;
-	       my $ptree = $parser->parse_text({%options}, $paragraph, ...);
-	       $pod_para->parse_tree( $ptree );
-	       push @{ $self->{'-paragraphs'} }, $pod_para;
+	       my $ptree = $parser-&gtparse_text({%options}, $paragraph, ...);
+	       $pod_para-&gtparse_tree( $ptree );
+	       push @{ $self-&gt{'-paragraphs'} }, $pod_para;
 	   }
 
 	   sub verbatim {
 	       my ($parser, $paragraph, $line_num, $pod_para) = @_;
-	       push @{ $self->{'-paragraphs'} }, $pod_para;
+	       push @{ $self-&gt{'-paragraphs'} }, $pod_para;
 	   }
 
 	   sub textblock {
 	       my ($parser, $paragraph, $line_num, $pod_para) = @_;
-	       my $ptree = $parser->parse_text({%options}, $paragraph, ...);
-	       $pod_para->parse_tree( $ptree );
-	       push @{ $self->{'-paragraphs'} }, $pod_para;
+	       my $ptree = $parser-&gtparse_text({%options}, $paragraph, ...);
+	       $pod_para-&gtparse_tree( $ptree );
+	       push @{ $self-&gt{'-paragraphs'} }, $pod_para;
 	   }
 
 	   ...
@@ -766,8 +768,8 @@ TREE-BASED PARSING
 	   package main;
 	   ...
 	   my $parser = new MyPodParserTree(...);
-	   $parser->parse_from_file(...);
-	   my $paragraphs_ref = $parser->{'-paragraphs'};
+	   $parser-&gtparse_from_file(...);
+	   my $paragraphs_ref = $parser-&gt{'-paragraphs'};
 
        Of course, in this module-author's humble opinion, I'd be more inclined
        to use the existing Pod::ParseTree object than a simple array. That way
@@ -781,32 +783,32 @@ TREE-BASED PARSING
 
 	   sub begin_pod {
 	       my $self = shift;
-	       $self->{'-ptree'} = new Pod::ParseTree;	## initialize parse-tree
+	       $self-&gt{'-ptree'} = new Pod::ParseTree;	## initialize parse-tree
 	   }
 
 	   sub parse_tree {
 	       ## convenience method to get/set the parse-tree for the entire POD
-	       (@_ > 1)  and  $_[0]->{'-ptree'} = $_[1];
-	       return $_[0]->{'-ptree'};
+	       (@_ &gt 1)  and  $_[0]-&gt{'-ptree'} = $_[1];
+	       return $_[0]-&gt{'-ptree'};
 	   }
 
 	   sub command {
 	       my ($parser, $command, $paragraph, $line_num, $pod_para) = @_;
-	       my $ptree = $parser->parse_text({<<options>>}, $paragraph, ...);
-	       $pod_para->parse_tree( $ptree );
-	       $parser->parse_tree()->append( $pod_para );
+	       my $ptree = $parser-&gtparse_text({&lt&ltoptions&gt&gt}, $paragraph, ...);
+	       $pod_para-&gtparse_tree( $ptree );
+	       $parser-&gtparse_tree()-&gtappend( $pod_para );
 	   }
 
 	   sub verbatim {
 	       my ($parser, $paragraph, $line_num, $pod_para) = @_;
-	       $parser->parse_tree()->append( $pod_para );
+	       $parser-&gtparse_tree()-&gtappend( $pod_para );
 	   }
 
 	   sub textblock {
 	       my ($parser, $paragraph, $line_num, $pod_para) = @_;
-	       my $ptree = $parser->parse_text({<<options>>}, $paragraph, ...);
-	       $pod_para->parse_tree( $ptree );
-	       $parser->parse_tree()->append( $pod_para );
+	       my $ptree = $parser-&gtparse_text({&lt&ltoptions&gt&gt}, $paragraph, ...);
+	       $pod_para-&gtparse_tree( $ptree );
+	       $parser-&gtparse_tree()-&gtappend( $pod_para );
 	   }
 
 	   ...
@@ -814,8 +816,8 @@ TREE-BASED PARSING
 	   package main;
 	   ...
 	   my $parser = new MyPodParserTree2(...);
-	   $parser->parse_from_file(...);
-	   my $ptree = $parser->parse_tree;
+	   $parser-&gtparse_from_file(...);
+	   my $ptree = $parser-&gtparse_tree;
 	   ...
 
        Now you have the entire POD document as one great big parse-tree. You
@@ -853,12 +855,12 @@ SEE ALSO
        subsubheading, etc.
 
 AUTHOR
-       Please report bugs using <http://rt.cpan.org>.
+       Please report bugs using &lthttp://rt.cpan.org&gt.
 
-       Brad Appleton <bradapp@enteract.com>
+       Brad Appleton &ltbradapp@enteract.com&gt
 
        Based on code for Pod::Text written by Tom Christiansen
-       <tchrist@mox.perl.com>
+       &lttchrist@mox.perl.com&gt
 
 LICENSE
        Pod-Parser is free software; you can redistribute it and/or modify it
@@ -872,6 +874,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-06-01		      Pod::Parser(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

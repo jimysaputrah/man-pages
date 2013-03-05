@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="If you don't know anything about automated testing in Perl then you..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Test::Deep - Extremely flexible deep comparison</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Test::Deep(3)	      User Contributed Perl Documentation	 Test::Deep(3)
 
 
@@ -16,7 +18,7 @@ NAME
        Test::Deep - Extremely flexible deep comparison
 
 SYNOPSIS
-	 use Test::More tests => $Num_Tests;
+	 use Test::More tests =&gt $Num_Tests;
 	 use Test::Deep;
 
 	 cmp_deeply(
@@ -27,7 +29,7 @@ SYNOPSIS
 
 	 cmp_deeply(
 	   $object,
-	   methods(name => "John", phone => "55378008"),
+	   methods(name =&gt "John", phone =&gt "55378008"),
 	   "object methods ok"
 	 );
 
@@ -39,13 +41,13 @@ SYNOPSIS
 
 	 cmp_deeply(
 	   $object,
-	   noclass({value => 5}),
+	   noclass({value =&gt 5}),
 	   "object looks ok, not checking it's class"
 	 );
 
 	 cmp_deeply(
 	   \@result,
-	   bag('a', 'b', {key => [1, 2]}),
+	   bag('a', 'b', {key =&gt [1, 2]}),
 	   "array has the 3 things we wanted in some order"
 	 );
 
@@ -92,8 +94,8 @@ EXAMPLES
        number. You could do:
 
 	 $hash = make_person();
-	 like($hash->{Name}, '/^(Mr|Mrs|Miss) \w+ \w+$/', "name ok");
-	 like($hash->{Phone}, '/^0d{6}$/', "phone ok");
+	 like($hash-&gt{Name}, '/^(Mr|Mrs|Miss) \w+ \w+$/', "name ok");
+	 like($hash-&gt{Phone}, '/^0d{6}$/', "phone ok");
 	 is(scalar keys %$hash, 2, "correct number of keys");
 
        But that's not quite right, what if make_person has a serious problem
@@ -101,8 +103,8 @@ EXAMPLES
 
 	 if (ref($hash) eq "HASH")
 	 {
-	   like($hash->{Name}, '/^(Mr|Mrs|Miss) \w+ \w+$/', "name ok");
-	   like($hash->{Phone}, '/^0d{6}$/', "phone ok");
+	   like($hash-&gt{Name}, '/^(Mr|Mrs|Miss) \w+ \w+$/', "name ok");
+	   like($hash-&gt{Phone}, '/^0d{6}$/', "phone ok");
 	   is(scalar keys %$hash, 2, "correct number of keys");
 	 }
 	 else
@@ -117,9 +119,9 @@ EXAMPLES
 
 	 if (ref($hash) eq "HASH")
 	 {
-	   like($hash->{Name}, $name_pat, "name ok");
-	   like($hash->{Phone}, '/^0d{6}$/', "phone ok");
-	   my $cn = $hash->{ChildNames};
+	   like($hash-&gt{Name}, $name_pat, "name ok");
+	   like($hash-&gt{Phone}, '/^0d{6}$/', "phone ok");
+	   my $cn = $hash-&gt{ChildNames};
 	   if (ref($cn) eq "ARRAY")
 	   {
 	     foreach my $child (@$cn)
@@ -149,9 +151,9 @@ EXAMPLES
 	 cmp_deeply(
 	   $person,
 	   {
-	     Name => $name_re,
-	     Phone => re('^0d{6}$'),
-	     ChildNames => array_each($name_re)
+	     Name =&gt $name_re,
+	     Phone =&gt re('^0d{6}$'),
+	     ChildNames =&gt array_each($name_re)
 	   },
 	   "person ok"
 	 );
@@ -174,11 +176,11 @@ EXAMPLES
        of data matches the regex in $regex. "array_each($struct)" means that
        Test::Deep should expect the current piece of data to be an array and
        it should check that every element of that array matches $struct.  In
-       this case, every element of "$person->{ChildNames}" should look like a
+       this case, every element of "$person-&gt{ChildNames}" should look like a
        name. If say the 3rd one didn't you would get an error message
        something like
 
-	 Using Regexp on $data->{ChildNames}[3]
+	 Using Regexp on $data-&gt{ChildNames}[3]
 	    got    : 'Queen John Paul Sartre'
 	    expect : /^(Mr|Mrs|Miss) \w+ \w+$/
 
@@ -190,9 +192,9 @@ EXAMPLES
 
 	 my $name_re = re('^(Mr|Mrs|Miss) \w+ \w+$');
 	 my $person_cmp = {
-	   Name => $name_re,
-	   Phone => re('^0d{6}$'),
-	   ChildNames => array_each($name_re)
+	   Name =&gt $name_re,
+	   Phone =&gt re('^0d{6}$'),
+	   ChildNames =&gt array_each($name_re)
 	 };
 
 	 cmp_deeply($person1, $person_cmp, "person ok");
@@ -211,16 +213,16 @@ EXAMPLES
 
 	 my $name_re = re('^(Mr|Mrs|Miss) \w+ \w+$');
 	 my $person_cmp = {
-	   Name => $name_re,
-	   Phone => re('^0d{6}$'),
+	   Name =&gt $name_re,
+	   Phone =&gt re('^0d{6}$'),
 	   # note no mention of Children here
 	 };
 
-	 $person_cmp->{Children} = each_array($person_cmp);
+	 $person_cmp-&gt{Children} = each_array($person_cmp);
 
 	 cmp_deeply($person, $person_cmp, "person ok");
 
-       This will now check that $person->{Children} is an array and that every
+       This will now check that $person-&gt{Children} is an array and that every
        element of that array also matches $person_cmp, this includes checking
        that it's children also match the same pattern and so on.
 
@@ -242,18 +244,18 @@ EXAMPLES
 
 	 my $name_re = re('^(Mr|Mrs|Miss) \w+ \w+$');
 	 my $person_cmp = {
-	   Name => $name_re,
-	   Phone => re('^0d{6}$'),
+	   Name =&gt $name_re,
+	   Phone =&gt re('^0d{6}$'),
 	   # note no mention of Children here
 	 };
 
-	 $person_cmp->{Children} = each_array($person_cmp);
-	 $person_cmp->{Parents} = each_array($person_cmp);
+	 $person_cmp-&gt{Children} = each_array($person_cmp);
+	 $person_cmp-&gt{Parents} = each_array($person_cmp);
 
 	 cmp_deeply($person, $person_cmp, "person ok");
 
-       So this will check that for each child $child in "$person->{Children}"
-       that the "$child->{Parents}" matches $person_cmp however it is smart
+       So this will check that for each child $child in "$person-&gt{Children}"
+       that the "$child-&gt{Parents}" matches $person_cmp however it is smart
        enough not to get caught in an infinite loop where it keeps bouncing
        between the same Parent and Child.
 
@@ -331,20 +333,20 @@ SPECIAL COMPARISONS PROVIDED
        the structure you are testing is very complicated and already tested
        elsewhere, or is unpredictable.
 
-	 cmp_deeply($got, { name => 'John', random => ignore(), address => ['5 A
+	 cmp_deeply($got, { name =&gt 'John', random =&gt ignore(), address =&gt ['5 A
 	   street', 'a town', 'a country'],
 	 })
 
        is the equivalent of checking
 
-	 $got->{name} eq 'John';
-	 exists $got->{random};
-	 cmp_deeply($got->{address};
+	 $got-&gt{name} eq 'John';
+	 exists $got-&gt{random};
+	 cmp_deeply($got-&gt{address};
 	 ['5 A street', 'a town', 'a country']);
 
        methods(%hash)
 
-       %hash is a hash of method call => expected value pairs.
+       %hash is a hash of method call =&gt expected value pairs.
 
        This lets you call methods on an object and check the result of each
        call.  The methods will be called in the order supplied. If you want to
@@ -353,13 +355,13 @@ SPECIAL COMPARISONS PROVIDED
 
 	 cmp_deeply(
 	   $obj,
-	   methods(name => "John", ["favourite", "food"] => "taco")
+	   methods(name =&gt "John", ["favourite", "food"] =&gt "taco")
 	 );
 
        is roughly the equivalent of checking that
 
-	 $obj->name eq "John"
-	 $obj->favourite("food") eq "taco"
+	 $obj-&gtname eq "John"
+	 $obj-&gtfavourite("food") eq "taco"
 
        The methods will be called in the order you supply them and will be
        called in scalar context. If you need to test methods called in list
@@ -371,8 +373,8 @@ SPECIAL COMPARISONS PROVIDED
        the order of some other tests is not so if $expected is
 
 	 {
-	   manager => methods(@manager_methods),
-	   coder => methods(@coder_methods)
+	   manager =&gt methods(@manager_methods),
+	   coder =&gt methods(@coder_methods)
 	 }
 
        there is no way to know which if manager and coder will be tested
@@ -382,7 +384,7 @@ SPECIAL COMPARISONS PROVIDED
 
        listmethods(%hash)
 
-       %hash is a hash of method call => expected value pairs.
+       %hash is a hash of method call =&gt expected value pairs.
 
        This is almost identical to methods() except the methods are called in
        list context instead of scalar context. This means that the expected
@@ -391,15 +393,15 @@ SPECIAL COMPARISONS PROVIDED
 	 cmp_deeply(
 	   $obj,
 	   listmethods(
-	     name => "John",
-	     ["favourites", "food"] => ["Mapo tofu", "Gongbao chicken"]
+	     name =&gt "John",
+	     ["favourites", "food"] =&gt ["Mapo tofu", "Gongbao chicken"]
 	   )
 	 );
 
        is the equivalent of checking that
 
-	 $obj->name eq "John"
-	 cmp_deeply([$obj->favourites("food")], ["Mapo tofu", "Gongbao chicken"]);
+	 $obj-&gtname eq "John"
+	 cmp_deeply([$obj-&gtfavourites("food")], ["Mapo tofu", "Gongbao chicken"]);
 
        The methods will be called in the order you supply them.
 
@@ -437,15 +439,15 @@ SPECIAL COMPARISONS PROVIDED
        \@people is an array of Person objects then
 
 	 cmp_deeply(\@people, noclass([
-	   bless {name => 'John', phone => '555-5555'}, "Person",
-	   bless {name => 'Anne', phone => '444-4444'}, "Person",
+	   bless {name =&gt 'John', phone =&gt '555-5555'}, "Person",
+	   bless {name =&gt 'Anne', phone =&gt '444-4444'}, "Person",
 	 ]));
 
        can be replaced with
 
 	 cmp_deeply(\@people, noclass([
-	   {name => 'John', phone => '555-5555'},
-	   {name => 'Anne', phone => '444-4444'}
+	   {name =&gt 'John', phone =&gt '555-5555'},
+	   {name =&gt 'Anne', phone =&gt '444-4444'}
 	 ]));
 
        However, this is testing so you should also check that the objects are
@@ -491,7 +493,7 @@ SPECIAL COMPARISONS PROVIDED
 
        is the equivalent of
 
-	 $got->[0] =~ /ferg/
+	 $got-&gt[0] =~ /ferg/
 
        With $capture_data
 
@@ -499,7 +501,7 @@ SPECIAL COMPARISONS PROVIDED
 
        is the equivalent of
 
-	 my @data = $got->[0] =~ /$regex/;
+	 my @data = $got-&gt[0] =~ /$regex/;
 	 cmp_deeply(\@data, $capture_data);
 
        So you can do something simple like
@@ -524,11 +526,11 @@ SPECIAL COMPARISONS PROVIDED
 
        For example
 
-	 cmp_deeply({a => 1, b => 2}, superhashof({a => 1}))
+	 cmp_deeply({a =&gt 1, b =&gt 2}, superhashof({a =&gt 1}))
 
        will pass but
 
-	 cmp_deeply({a => 1, b => 2}, superhashof({a => 1, c => 3}))
+	 cmp_deeply({a =&gt 1, b =&gt 2}, superhashof({a =&gt 1, c =&gt 3}))
 
        will fail.
 
@@ -539,11 +541,11 @@ SPECIAL COMPARISONS PROVIDED
 
        For example
 
-	 cmp_deeply({a => 1}, subhashof({a => 1, b => 2}))
+	 cmp_deeply({a =&gt 1}, subhashof({a =&gt 1, b =&gt 2}))
 
        will pass but
 
-	 cmp_deeply({a => 1, c => 3}, subhashof({a => 1, b => 2}))
+	 cmp_deeply({a =&gt 1, c =&gt 3}, subhashof({a =&gt 1, b =&gt 2}))
 
        will fail.
 
@@ -561,7 +563,7 @@ SPECIAL COMPARISONS PROVIDED
        The object returned by bag() has an add() method.
 
 	 my $bag = bag(1, 2, 3);
-	 $bag->add(2, 3, 4);
+	 $bag-&gtadd(2, 3, 4);
 
        will result in a bag containing 1, 2, 2, 3, 3, 4.
 
@@ -577,7 +579,7 @@ SPECIAL COMPARISONS PROVIDED
        everything is fine but it could happen that "re("^fur")" is paired with
        "furball" and then "re("^furb")" cannot find a match and so the test
        fails. Examples of other competing comparisons are "bag(1, 2, 2)" vs
-       "set(1, 2)" and "methods(m1 => "v1", m2 => "v2")" vs "methods(m1 =>
+       "set(1, 2)" and "methods(m1 =&gt "v1", m2 =&gt "v2")" vs "methods(m1 =&gt
        "v1")"
 
        This problem is could be solved by using a slower and more complicated
@@ -597,7 +599,7 @@ SPECIAL COMPARISONS PROVIDED
        The object returned by set() has an add() method.
 
 	 my $set = set(1, 2, 3);
-	 $set->add(4, 5, 6);
+	 $set-&gtadd(4, 5, 6);
 
        will result in a set containing 1, 2, 3, 4, 5, 5.
 
@@ -631,12 +633,12 @@ SPECIAL COMPARISONS PROVIDED
        This allows you to compare data against multiple expected results and
        make sure each of them matches.
 
-	 cmp_deeply($got, all(isa("Person"), methods(name => 'John')))
+	 cmp_deeply($got, all(isa("Person"), methods(name =&gt 'John')))
 
        is equivalent to
 
-	 $got->isa("Person")
-	 $got->name eq 'John'
+	 $got-&gtisa("Person")
+	 $got-&gtname eq 'John'
 
        If either test fails then the whole thing is considered a fail. This is
        a short-circuit test, the testing is stopped after the first failure,
@@ -646,11 +648,11 @@ SPECIAL COMPARISONS PROVIDED
 
        Thanks to the magic of overloading, you can write
 
-	 all(isa("Person"), methods(name => 'John'), re("^wi"))
+	 all(isa("Person"), methods(name =&gt 'John'), re("^wi"))
 
        as
 
-	 isa("Person") & methods(name => 'John') | re("^wi")
+	 isa("Person") & methods(name =&gt 'John') | re("^wi")
 
        Note single | not double as || cannot be overloaded. This will only
        work when there is a special comparison involved. If you write
@@ -688,14 +690,14 @@ SPECIAL COMPARISONS PROVIDED
        Isa(). If isa() called with 2 arguments, it falls through to
        UNIVERAL::isa. This is to prevent breakage when you import isa() into a
        package that is used as a class. Without this, anyone calling
-       "Class->isa($other_class)" would get the wrong answer. This is a hack
+       "Class-&gtisa($other_class)" would get the wrong answer. This is a hack
        to patch over the fact that isa is exported by default.
 
        array_each($thing)
 
        $thing is a structure to be compared against.
 
-       <$got_v> must be an array reference. Each element of it will be
+       &lt$got_v&gt must be an array reference. Each element of it will be
        compared to $thing. This is useful when you have an array of similar
        things, for example objects of a known type and you don't want to have
        to repeat the same test for each one.
@@ -703,8 +705,8 @@ SPECIAL COMPARISONS PROVIDED
 	 my $common_tests = all(
 	    isa("MyFile"),
 	    methods(
-	      handle => isa("IO::Handle")
-	      filename => re("^/home/ted/tmp"),
+	      handle =&gt isa("IO::Handle")
+	      filename =&gt re("^/home/ted/tmp"),
 	   )
 	 );
 
@@ -728,9 +730,9 @@ SPECIAL COMPARISONS PROVIDED
 	   all(
 	     array_each($common_tests),
 	     [
-	       methods(size => 1000),
-	       methods(size => 200),
-	       methods(size => 20)
+	       methods(size =&gt 1000),
+	       methods(size =&gt 200),
+	       methods(size =&gt 20)
 	     ]
 	   )
 	 )
@@ -755,14 +757,14 @@ SPECIAL COMPARISONS PROVIDED
        apart. This is useful when comparing floating point numbers as rounding
        errors can make it hard or impossible for $got_v to be exactly equal to
        $exp_v. When $tolerance is supplied, the test passes if "abs($got_v -
-       $exp_v) <= $tolerance".
+       $exp_v) &lt= $tolerance".
 
        Note in Perl, ""12blah" == 12" because Perl will be smart and convert
        "12blah" into 12. You may not want this. There was a strict mode but
        that is now gone. A "lookslike s number" test will replace it soon.
        Until then you can usually just use the string() comparison to be more
        strict. This will work fine for almost all situations, however it will
-       not work when <$got_v> is an overloaded value who's string and
+       not work when &lt$got_v&gt is an overloaded value who's string and
        numerical values differ.
 
        bool($value)
@@ -785,7 +787,7 @@ SPECIAL COMPARISONS PROVIDED
 	 sub check_name
 	 {
 	   my $name = shift;
-	   if ($boss->likes($name))
+	   if ($boss-&gtlikes($name))
 	   {
 	     return 1;
 	   }
@@ -815,9 +817,9 @@ ANOTHER EXAMPLE
 	 cmp_deeply(
 	   $result,
 	   [
-	     {Name => 'Anne', Age => 26},
-	     {Name => "Bill", Age => 47}
-	     {Name => 'John', Age => 25},
+	     {Name =&gt 'Anne', Age =&gt 26},
+	     {Name =&gt "Bill", Age =&gt 47}
+	     {Name =&gt 'John', Age =&gt 25},
 	   ]
 	 );
 
@@ -830,9 +832,9 @@ ANOTHER EXAMPLE
 	 cmp_deeply(
 	   $result,
 	   [
-	     {Name => 'John', Age => 25, ID => ignore()},
-	     {Name => 'Anne', Age => 26, ID => ignore()},
-	     {Name => "Bill", Age => 47, ID => ignore()}
+	     {Name =&gt 'John', Age =&gt 25, ID =&gt ignore()},
+	     {Name =&gt 'Anne', Age =&gt 26, ID =&gt ignore()},
+	     {Name =&gt "Bill", Age =&gt 47, ID =&gt ignore()}
 	   ]
 	 );
 
@@ -845,9 +847,9 @@ ANOTHER EXAMPLE
 	 cmp_deeply(
 	   $result,
 	   bag(
-	     {Name => 'John', Age => 25, ID => ignore()},
-	     {Name => 'Anne', Age => 26, ID => ignore()},
-	     {Name => "Bill", Age => 47, ID => ignore()}
+	     {Name =&gt 'John', Age =&gt 25, ID =&gt ignore()},
+	     {Name =&gt 'Anne', Age =&gt 26, ID =&gt ignore()},
+	     {Name =&gt "Bill", Age =&gt 47, ID =&gt ignore()}
 	   )
 	 );
 
@@ -859,9 +861,9 @@ ANOTHER EXAMPLE
 	 cmp_deeply(
 	 $result,
 	   bag(
-	     {Name => 'John', Age => 25, ID => ignore(), Movies => bag(...)},
-	     {Name => 'Anne', Age => 26, ID => ignore(), Movies => bag(...)},
-	     {Name => "Bill", Age => 47, ID => ignore(), Movies => bag(...)}
+	     {Name =&gt 'John', Age =&gt 25, ID =&gt ignore(), Movies =&gt bag(...)},
+	     {Name =&gt 'Anne', Age =&gt 26, ID =&gt ignore(), Movies =&gt bag(...)},
+	     {Name =&gt "Bill", Age =&gt 47, ID =&gt ignore(), Movies =&gt bag(...)}
 	   )
 	 );
 
@@ -880,9 +882,9 @@ USING TEST::DEEP WITH TEST::BUILDER
 	   my $got = do_the_important_work_here();
 
 	   my ($ok, $stack) = cmp_details($got, $expected);
-	   unless ($Test->ok($ok, $test_name)) {
+	   unless ($Test-&gtok($ok, $test_name)) {
 	     my $diag = deep_diag($stack);
-	     $Test->diag($diag);
+	     $Test-&gtdiag($diag);
 	   }
 	 }
 
@@ -915,7 +917,7 @@ WHAT ARE SPECIAL COMPARISONS?
        will check 'a' eq 'a', 'b' eq 'b' but when it comes to comparing 'hello
        world' and "re("^hello")" it will see that $expected_v is an SC and so
        will pass control to the Test::Deep::Regexp class by do something like
-       "$expected_v->descend($got_v)". The "descend()" method should just
+       "$expected_v-&gtdescend($got_v)". The "descend()" method should just
        return true or false.
 
        This gives you enough to write your own SCs but I haven't documented
@@ -925,18 +927,18 @@ SEE ALSO
        Test::More
 
 MAINTAINER
-	 Ricardo Signes <rjbs@cpan.org>
+	 Ricardo Signes &ltrjbs@cpan.org&gt
 
 AUTHOR
-       Fergal Daly <fergal@esatclear.ie>, with thanks to Michael G Schwern for
+       Fergal Daly &ltfergal@esatclear.ie&gt, with thanks to Michael G Schwern for
        Test::More's is_deeply function which inspired this.
 
        Please do not bother Fergal Daly with bug reports.  Send them to the
        maintainer (above) or submit them at the request tracker
-       <https://rt.cpan.org/Dist/Display.html?Queue=Test-Deep>.
+       &lthttps://rt.cpan.org/Dist/Display.html?Queue=Test-Deep&gt.
 
 COPYRIGHT
-       Copyright 2003, 2004 by Fergal Daly <fergal@esatclear.ie>.
+       Copyright 2003, 2004 by Fergal Daly &ltfergal@esatclear.ie&gt.
 
        This program is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -946,6 +948,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2010-09-29			 Test::Deep(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

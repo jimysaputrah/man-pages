@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The  rwm overlay to slapd(8) performs basic DN/data rewrite and object-..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>slapo-rwm - rewrite/remap overlay to slapd</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 SLAPO-RWM(5)							  SLAPO-RWM(5)
 
 
@@ -33,7 +35,7 @@ MAPPING
        to a foreign set, and vice versa.  This is accomplished by means of the
        rwm-map directive.
 
-       rwm-map {attribute | objectclass} [<local name> | *] {<foreign name>  |
+       rwm-map {attribute | objectclass} [&ltlocal name&gt | *] {&ltforeign name&gt  |
        *}
 	      Map attributeTypes and objectClasses from the foreign server  to
 	      different  values  on  the local slapd.  The reason is that some
@@ -98,7 +100,7 @@ SUFFIX MASSAGING
        Subentry DN (usually "cn=subschema"), would prevent clients from  read-
        ing the root DSE or the DSA's schema.
 
-       rwm-suffixmassage [<virtual naming context>] <real naming context>
+       rwm-suffixmassage [&ltvirtual naming context&gt] &ltreal naming context&gt
 	      Shortcut	to  implement  naming  context rewriting; the trailing
 	      part of the DN is rewritten from the virtual to the real	naming
 	      context  in the bindDN, searchDN, searchFilterAttrDN, compareDN,
@@ -107,7 +109,7 @@ SUFFIX MASSAGING
 	      virtual naming context in the  searchEntryDN,  searchAttrDN  and
 	      matchedDN  rewrite contexts.  By default no rewriting occurs for
 	      the searchFilter and for the referralAttrDN and  referralDN  re-
-	      write  contexts.	 If  no <virtual naming context> is given, the
+	      write  contexts.	 If  no &ltvirtual naming context&gt is given, the
 	      first suffix of the database is used; this requires the rwm-suf-
 	      fixmassage directive be defined after the database suffix direc-
 	      tive.  The rwm-suffixmassage directive  automatically  sets  the
@@ -123,8 +125,8 @@ REWRITING
        following.   The  behavior  of  pattern	matching/substitution  can  be
        altered by a set of flags.
 
-	      <rewrite context> ::= <rewrite rule> [...]
-	      <rewrite rule> ::= <pattern> <action> [<flags>]
+	      &ltrewrite context&gt ::= &ltrewrite rule&gt [...]
+	      &ltrewrite rule&gt ::= &ltpattern&gt &ltaction&gt [&ltflags&gt]
 
        The underlying concept is to build a lightweight rewrite module for the
        slapd server (initially dedicated to the LDAP backend):
@@ -199,44 +201,44 @@ Substitution Pattern Syntax
 
        the only obvious exception is `$$', which is turned into a single `$';
 
-       the  basic  substitution is `$<d>', where `<d>' is a digit; 0 means the
+       the  basic  substitution is `$&ltd&gt', where `&ltd&gt' is a digit; 0 means the
        whole string, while 1-9 is a submatch, as discussed in regex(7)	and/or
        re_format(7).
 
        a  `$' followed by a `{' invokes an advanced substitution.  The pattern
        is:
 
-	      `$' `{' [ <operator> ] <name> `(' <substitution> `)' `}'
+	      `$' `{' [ &ltoperator&gt ] &ltname&gt `(' &ltsubstitution&gt `)' `}'
 
-       where <name> must be a legal name for the map, i.e.
+       where &ltname&gt must be a legal name for the map, i.e.
 
-	      <name> ::= [a-z][a-z0-9]* (case insensitive)
-	      <operator> ::= `>' `|' `&' `&&' `*' `**' `$'
+	      &ltname&gt ::= [a-z][a-z0-9]* (case insensitive)
+	      &ltoperator&gt ::= `&gt' `|' `&' `&&' `*' `**' `$'
 
-       and <substitution> must be a legal substitution pattern, with no limits
+       and &ltsubstitution&gt must be a legal substitution pattern, with no limits
        on the nesting level.
 
        The operators are:
 
-       >      sub-context  invocation; <name> must be a legal, already defined
+       &gt      sub-context  invocation; &ltname&gt must be a legal, already defined
 	      rewrite context name
 
-       |      external command invocation;  <name>  must  refer  to  a	legal,
+       |      external command invocation;  &ltname&gt  must  refer  to  a	legal,
 	      already defined command name (NOT IMPLEMENTED YET)
 
-       &      variable	assignment;  <name>  defines a variable in the running
+       &      variable	assignment;  &ltname&gt  defines a variable in the running
 	      operation structure which can be dereferenced later; operator  &
 	      assigns  a  variable  in	the rewrite context scope; operator &&
 	      assigns a variable that scopes  the  entire  session,  e.g.  its
 	      value can be dereferenced later by other rewrite contexts
 
-       *      variable	dereferencing; <name> must refer to a variable that is
+       *      variable	dereferencing; &ltname&gt must refer to a variable that is
 	      defined and assigned  for  the  running  operation;  operator  *
 	      dereferences a variable scoping the rewrite context; operator **
 	      dereferences a variable scoping  the  whole  session,  e.g.  the
 	      value is passed across rewrite contexts
 
-       $      parameter dereferencing; <name> must refer to an existing param-
+       $      parameter dereferencing; &ltname&gt must refer to an existing param-
 	      eter; the idea is to make some run-time parameters  set  by  the
 	      system available to the rewrite engine, as the client host name,
 	      the bind DN if any, constant parameters  initialized  at	config
@@ -259,10 +261,10 @@ Rewrite Context
        errors occur.
 
        Each basic server operation is associated to a  rewrite	context;  they
-       are  divided  in two main groups: client -> server and server -> client
+       are  divided  in two main groups: client -&gt server and server -&gt client
        rewriting.
 
-       client -> server:
+       client -&gt server:
 
 	      (default) 	   if defined and no specific context
 				   is available
@@ -284,7 +286,7 @@ Rewrite Context
 	      deleteDN		   delete
 	      exopPasswdDN	   password modify extended operation DN
 
-       server -> client:
+       server -&gt client:
 
 	      searchEntryDN	   search (only if defined; no default;
 				   acts on DN of search entries)
@@ -308,30 +310,30 @@ Basic Configuration Syntax
 	      rewriting takes place (an easy way  to  stop  rewriting  without
 	      altering too much the configuration file).
 
-       rwm-rewriteContext <context name> [ alias <aliased context name> ]
-	      <Context name> is the name that identifies the context, i.e. the
+       rwm-rewriteContext &ltcontext name&gt [ alias &ltaliased context name&gt ]
+	      &ltContext name&gt is the name that identifies the context, i.e. the
 	      name used by the application to refer to the  set  of  rules  it
 	      contains.   It  is used also to reference sub contexts in string
 	      rewriting.  A context may alias another one.  In this  case  the
 	      alias  context  contains	no  rule, and any reference to it will
 	      result in accessing the aliased one.
 
-       rwm-rewriteRule <regex match pattern> <substitution pattern> [  <flags>
+       rwm-rewriteRule &ltregex match pattern&gt &ltsubstitution pattern&gt [  &ltflags&gt
        ]
 	      Determines how a	string	can  be  rewritten  if	a  pattern  is
 	      matched.	Examples are reported below.
 
 Additional Configuration Syntax
-       rwm-rewriteMap <map type> <map name> [ <map attrs> ]
+       rwm-rewriteMap &ltmap type&gt &ltmap name&gt [ &ltmap attrs&gt ]
 	      Allows  to define a map that transforms substring rewriting into
 	      something else.  The map is referenced inside  the  substitution
 	      pattern of a rule.
 
-       rwm-rewriteParam <param name> <param value>
+       rwm-rewriteParam &ltparam name&gt &ltparam value&gt
 	      Sets  a value with global scope, that can be dereferenced by the
 	      command `${$paramName}'.
 
-       rwm-rewriteMaxPasses <number of passes> [<number of passes per rule>]
+       rwm-rewriteMaxPasses &ltnumber of passes&gt [&ltnumber of passes per rule&gt]
 	      Sets the maximum number of total rewriting passes  that  can  be
 	      performed  in  a	single	rewrite operation (to avoid loops).  A
 	      safe default is set to 100; note that  reaching  this  limit  is
@@ -348,8 +350,8 @@ MAPS
 
        Supported maps are:
 
-       LDAP <URI> [bindwhen=<when>] [version=<version>] [binddn=<DN>] [creden-
-       tials=<cred>]
+       LDAP &ltURI&gt [bindwhen=&ltwhen&gt] [version=&ltversion&gt] [binddn=&ltDN&gt] [creden-
+       tials=&ltcred&gt]
 	      The LDAP map expands a value by performing a simple LDAP search.
 	      Its  configuration is based on a mandatory URI, whose attrs por-
 	      tion must contain exactly one attribute (use  entryDN  to  fetch
@@ -372,7 +374,7 @@ MAPS
 	      version that must be used.  The default is 3.
 
 
-       slapd <URI>
+       slapd &ltURI&gt
 	      The  slapd  map  expands	a value by performing an internal LDAP
 	      search.  Its configuration is based on a	mandatory  URI,  which
 	      must  begin  with  ldap:/// (i.e., it must be an LDAP URI and it
@@ -389,12 +391,12 @@ REWRITE CONFIGURATION EXAMPLES
        rwm-rewriteEngine on
        # all dataflow from client to server referring to DNs
        rwm-rewriteContext default
-       rwm-rewriteRule "(.+,)?<virtualnamingcontext>$" "$1<realnamingcontext>" ":"
+       rwm-rewriteRule "(.+,)?&ltvirtualnamingcontext&gt$" "$1&ltrealnamingcontext&gt" ":"
        # empty filter rule
        rwm-rewriteContext searchFilter
        # all dataflow from server to client
        rwm-rewriteContext searchEntryDN
-       rwm-rewriteRule "(.+,)?<realnamingcontext>$" "$1<virtualnamingcontext>" ":"
+       rwm-rewriteRule "(.+,)?&ltrealnamingcontext&gt$" "$1&ltvirtualnamingcontext&gt" ":"
        rwm-rewriteContext searchAttrDN alias searchEntryDN
        rwm-rewriteContext matchedDN alias searchEntryDN
        # misc empty rules
@@ -427,7 +429,7 @@ REWRITE CONFIGURATION EXAMPLES
        # context; rules are appended to the existing ones.
        # anything that gets here is piped into rule `addBlanks'
        rwm-rewriteContext  default
-       rwm-rewriteRule	   ".*" "${>addBlanks($0)}" ":"
+       rwm-rewriteRule	   ".*" "${&gtaddBlanks($0)}" ":"
 
        # Rewrite the search base according to `default' rules.
        rwm-rewriteContext  searchDN alias default
@@ -436,7 +438,7 @@ REWRITE CONFIGURATION EXAMPLES
        # `dc=home,dc=net' naming context, with spaces eaten.
        rwm-rewriteContext  searchEntryDN
        rwm-rewriteRule	   "(.*[^ ],)?[ ]?dc=OpenLDAP,[ ]?dc=org$"
-		       "${>eatBlanks($1)}dc=home,dc=net"    ":"
+		       "${&gteatBlanks($1)}dc=home,dc=net"    ":"
 
        # Bind with email instead of full DN: we first need
        # an ldap map that turns attributes into a DN (the
@@ -467,22 +469,22 @@ REWRITE CONFIGURATION EXAMPLES
        # if an appropriate DN is bound.
        # To do this, in the first rule the bound DN is
        # dereferenced, while the filter is decomposed in a
-       # prefix, in the value of the `uid=<arg>' AVA, and
-       # in a suffix. A tag `<>' is appended to the DN.
+       # prefix, in the value of the `uid=&ltarg&gt' AVA, and
+       # in a suffix. A tag `&lt&gt' is appended to the DN.
        # If the DN refers to an entry in the `ou=admin' subtree,
-       # the filter is rewritten OR-ing the `uid=<arg>' with
-       # `cn=<arg>'; otherwise it is left as is. This could be
+       # the filter is rewritten OR-ing the `uid=&ltarg&gt' with
+       # `cn=&ltarg&gt'; otherwise it is left as is. This could be
        # useful, for instance, to allow apache's auth_ldap-1.4
        # module to authenticate users with both `uid' and
        # `cn', but only if the request comes from a possible
        # `cn=Web auth,ou=admin,dc=home,dc=net' user.
        rwm-rewriteContext searchFilter
        rwm-rewriteRule "(.*\\()uid=([a-z0-9_]+)(\\).*)"
-	 "${**binddn}<>${&prefix($1)}${&arg($2)}${&suffix($3)}"
+	 "${**binddn}&lt&gt${&prefix($1)}${&arg($2)}${&suffix($3)}"
 	 ":I"
        rwm-rewriteRule "^[^,]+,ou=admin,dc=home,dc=net$"
 	 "${*prefix}|(uid=${*arg})(cn=${*arg})${*suffix}" ":@I"
-       rwm-rewriteRule ".*<>$" "${*prefix}uid=${*arg}${*suffix}" ":"
+       rwm-rewriteRule ".*&lt&gt$" "${*prefix}uid=${*arg}${*suffix}" ":"
 
        # This example shows how to strip unwanted DN-valued
        # attribute values from a search result; the first rule
@@ -530,6 +532,6 @@ AUTHOR
 
 
 OpenLDAP 2.4.28 		  2011/11/24			  SLAPO-RWM(5)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

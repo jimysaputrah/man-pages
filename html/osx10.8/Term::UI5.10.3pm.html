@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Term::UI" is a transparent way of eliminating the overhead of having..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Term::UI - Term::ReadLine UI made easy</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Term::UI(3pm)	       Perl Programmers Reference Guide 	 Term::UI(3pm)
 
 
@@ -19,23 +21,23 @@ SYNOPSIS
 	   use Term::UI;
 	   use Term::ReadLine;
 
-	   my $term = Term::ReadLine->new('brand');
+	   my $term = Term::ReadLine-&gtnew('brand');
 
-	   my $reply = $term->get_reply(
-			   prompt => 'What is your favourite colour?',
-			   choices => [qw|blue red green|],
-			   default => blue,
+	   my $reply = $term-&gtget_reply(
+			   prompt =&gt 'What is your favourite colour?',
+			   choices =&gt [qw|blue red green|],
+			   default =&gt blue,
 	   );
 
-	   my $bool = $term->ask_yn(
-			       prompt => 'Do you like cookies?',
-			       default => 'y',
+	   my $bool = $term-&gtask_yn(
+			       prompt =&gt 'Do you like cookies?',
+			       default =&gt 'y',
 		       );
 
 
 	   my $string = q[some_command -option --no-foo --quux='this thing'];
 
-	   my ($options,$munged_input) = $term->parse_options($string);
+	   my ($options,$munged_input) = $term-&gtparse_options($string);
 
 
 	   ### don't have Term::UI issue warnings -- default is '1'
@@ -46,8 +48,8 @@ SYNOPSIS
 	   $Term::UI::AUTOREPLY = 1;
 
 	   ### Retrieve the entire session as a printable string:
-	   $hist = Term::UI::History->history_as_string;
-	   $hist = $term->history_as_string;
+	   $hist = Term::UI::History-&gthistory_as_string;
+	   $hist = $term-&gthistory_as_string;
 
 DESCRIPTION
        "Term::UI" is a transparent way of eliminating the overhead of having
@@ -69,9 +71,9 @@ HOW IT WORKS
        "SYNOPSIS" for details.
 
 METHODS
-   $reply = $term->get_reply( prompt => 'question?', [choices => \@list,
-       default => $list[0], multi => BOOL, print_me => "extra text to print &
-       record", allow => $ref] );
+   $reply = $term-&gtget_reply( prompt =&gt 'question?', [choices =&gt \@list,
+       default =&gt $list[0], multi =&gt BOOL, print_me =&gt "extra text to print &
+       record", allow =&gt $ref] );
        "get_reply" asks a user a question, and then returns the reply to the
        caller. If the answer is invalid (more on that below), the question
        will be reposed, until a satisfactory answer has been entered.
@@ -96,12 +98,12 @@ METHODS
        simply printed before the prompt. It's printed to the same file handle
        as the rest of the questions, so you can use this to keep track of a
        full session of Q&A with the user, and retrieve it later using the
-       "Term::UI->history_as_string" function.
+       "Term::UI-&gthistory_as_string" function.
 
        See the "EXAMPLES" section for samples of how to use this function.
 
-   $bool = $term->ask_yn( prompt => "your question", [default => (y|1,n|0),
-       print_me => "extra text to print & record"] )
+   $bool = $term-&gtask_yn( prompt =&gt "your question", [default =&gt (y|1,n|0),
+       print_me =&gt "extra text to print & record"] )
        Asks a simple "yes" or "no" question to the user, returning a boolean
        indicating "true" or "false" to the caller.
 
@@ -113,11 +115,11 @@ METHODS
        simply printed before the prompt. It's printed to the same file handle
        as the rest of the questions, so you can use this to keep track of a
        full session of Q&A with the user, and retrieve it later using the
-       "Term::UI->history_as_string" function.
+       "Term::UI-&gthistory_as_string" function.
 
        See the "EXAMPLES" section for samples of how to use this function.
 
-   ($opts, $munged) = $term->parse_options( STRING );
+   ($opts, $munged) = $term-&gtparse_options( STRING );
        "parse_options" will convert all options given from an input string to
        a hash reference. If called in list context it will also return the
        part of the input string that it found no options in.
@@ -127,17 +129,17 @@ METHODS
 	   my $str =   q[command --no-foo --baz --bar=0 --quux=bleh ] .
 		       q[--option="some'thing" -one-dash -single=blah' arg];
 
-	   my ($options,$munged) =  $term->parse_options($str);
+	   my ($options,$munged) =  $term-&gtparse_options($str);
 
 	   ### $options would contain: ###
 	   $options = {
-		       'foo'	   => 0,
-		       'bar'	   => 0,
-		       'one-dash'  => 1,
-		       'baz'	   => 1,
-		       'quux'	   => 'bleh',
-		       'single'    => 'blah\'',
-		       'option'    => 'some\'thing'
+		       'foo'	   =&gt 0,
+		       'bar'	   =&gt 0,
+		       'one-dash'  =&gt 1,
+		       'baz'	   =&gt 1,
+		       'quux'	   =&gt 'bleh',
+		       'single'    =&gt 'blah\'',
+		       'option'    =&gt 'some\'thing'
 	   };
 
 	   ### and this is the munged version of the input string,
@@ -150,8 +152,8 @@ METHODS
        be set to 1.  Otherwise, it will be set to its value. Note also that it
        can deal fine with single/double quoting issues.
 
-   $str = $term->history_as_string
-       Convenience wrapper around "Term::UI::History->history_as_string".
+   $str = $term-&gthistory_as_string
+       Convenience wrapper around "Term::UI::History-&gthistory_as_string".
 
        Consult the "Term::UI::History" man page for details.
 
@@ -185,7 +187,7 @@ GLOBAL VARIABLES
 EXAMPLES
    Basic get_reply sample
 	   ### ask a user (with an open question) for their favourite colour
-	   $reply = $term->get_reply( prompt => 'Your favourite colour? );
+	   $reply = $term-&gtget_reply( prompt =&gt 'Your favourite colour? );
 
        which would look like:
 
@@ -195,15 +197,15 @@ EXAMPLES
 
    get_reply with choices
 	   ### now provide a list of choices, so the user has to pick one
-	   $reply = $term->get_reply(
-		       prompt  => 'Your favourite colour?',
-		       choices => [qw|red green blue|] );
+	   $reply = $term-&gtget_reply(
+		       prompt  =&gt 'Your favourite colour?',
+		       choices =&gt [qw|red green blue|] );
 
        which would look like:
 
-	     1> red
-	     2> green
-	     3> blue
+	     1&gt red
+	     2&gt green
+	     3&gt blue
 
 	   Your favourite colour?
 
@@ -214,16 +216,16 @@ EXAMPLES
 
    get_reply with choices and default
 	   ### provide a sensible default option -- everyone loves blue!
-	   $reply = $term->get_reply(
-		       prompt  => 'Your favourite colour?',
-		       choices => [qw|red green blue|],
-		       default => 'blue' );
+	   $reply = $term-&gtget_reply(
+		       prompt  =&gt 'Your favourite colour?',
+		       choices =&gt [qw|red green blue|],
+		       default =&gt 'blue' );
 
        which would look like:
 
-	     1> red
-	     2> green
-	     3> blue
+	     1&gt red
+	     2&gt green
+	     3&gt blue
 
 	   Your favourite colour? [3]:
 
@@ -234,18 +236,18 @@ EXAMPLES
    get_reply using print_me & multi
 	   ### allow the user to pick more than one colour and add an
 	   ### introduction text
-	   @reply = $term->get_reply(
-		       print_me    => 'Tell us what colours you like',
-		       prompt	   => 'Your favourite colours?',
-		       choices	   => [qw|red green blue|],
-		       multi	   => 1 );
+	   @reply = $term-&gtget_reply(
+		       print_me    =&gt 'Tell us what colours you like',
+		       prompt	   =&gt 'Your favourite colours?',
+		       choices	   =&gt [qw|red green blue|],
+		       multi	   =&gt 1 );
 
        which would look like:
 
 	   Tell us what colours you like
-	     1> red
-	     2> green
-	     3> blue
+	     1&gt red
+	     2&gt green
+	     3&gt blue
 
 	   Your favourite colours?
 
@@ -255,9 +257,9 @@ EXAMPLES
 	   ### pose an open question, but do a custom verification on
 	   ### the answer, which will only exit the question loop, if
 	   ### the answer matches the allow handler.
-	   $reply = $term->get_reply(
-		       prompt  => "What is the magic number?",
-		       allow   => 42 );
+	   $reply = $term-&gtget_reply(
+		       prompt  =&gt "What is the magic number?",
+		       allow   =&gt 42 );
 
        Unless the user now enters 42, the question will be reposed over and
        over again. You can use more sophisticated "allow" handlers (even
@@ -267,9 +269,9 @@ EXAMPLES
    an elaborate ask_yn sample
 	   ### ask a user if he likes cookies. Default to a sensible 'yes'
 	   ### and inform him first what cookies are.
-	   $bool = $term->ask_yn( prompt   => 'Do you like cookies?',
-				  default  => 'y',
-				  print_me => 'Cookies are LOVELY!!!' );
+	   $bool = $term-&gtask_yn( prompt   =&gt 'Do you like cookies?',
+				  default  =&gt 'y',
+				  print_me =&gt 'Cookies are LOVELY!!!' );
 
        would print:
 
@@ -283,7 +285,7 @@ EXAMPLES
        We could later retrieve this interaction by printing out the Q&A
        history as follows:
 
-	   print $term->history_as_string;
+	   print $term-&gthistory_as_string;
 
        which would then print:
 
@@ -302,10 +304,10 @@ See Also
        "Params::Check", "Term::ReadLine", "Term::UI::History"
 
 BUG REPORTS
-       Please report bugs or other issues to <bug-term-ui@rt.cpan.org<gt>.
+       Please report bugs or other issues to &ltbug-term-ui@rt.cpan.org&ltgt&gt.
 
 AUTHOR
-       This module by Jos Boumans <kane@cpan.org>.
+       This module by Jos Boumans &ltkane@cpan.org&gt.
 
 COPYRIGHT
        This library is free software; you may redistribute and/or modify it
@@ -314,6 +316,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-05-03			 Term::UI(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This recipe introduces type coercions, which are defined with the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Basics::Recipe5 - More subtypes, coercion in a Request</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::BasicUsereContributed PerlMoose::Cookbook::Basics::Recipe5(3)
 
 
@@ -25,37 +27,37 @@ SYNOPSIS
 	 use Params::Coerce ();
 	 use URI	    ();
 
-	 subtype 'My::Types::HTTP::Headers' => as class_type('HTTP::Headers');
+	 subtype 'My::Types::HTTP::Headers' =&gt as class_type('HTTP::Headers');
 
 	 coerce 'My::Types::HTTP::Headers'
-	     => from 'ArrayRef'
-		 => via { HTTP::Headers->new( @{$_} ) }
-	     => from 'HashRef'
-		 => via { HTTP::Headers->new( %{$_} ) };
+	     =&gt from 'ArrayRef'
+		 =&gt via { HTTP::Headers-&gtnew( @{$_} ) }
+	     =&gt from 'HashRef'
+		 =&gt via { HTTP::Headers-&gtnew( %{$_} ) };
 
-	 subtype 'My::Types::URI' => as class_type('URI');
+	 subtype 'My::Types::URI' =&gt as class_type('URI');
 
 	 coerce 'My::Types::URI'
-	     => from 'Object'
-		 => via { $_->isa('URI')
+	     =&gt from 'Object'
+		 =&gt via { $_-&gtisa('URI')
 			  ? $_
 			  : Params::Coerce::coerce( 'URI', $_ ); }
-	     => from 'Str'
-		 => via { URI->new( $_, 'http' ) };
+	     =&gt from 'Str'
+		 =&gt via { URI-&gtnew( $_, 'http' ) };
 
 	 subtype 'Protocol'
-	     => as 'Str'
-	     => where { /^HTTP\/[0-9]\.[0-9]$/ };
+	     =&gt as 'Str'
+	     =&gt where { /^HTTP\/[0-9]\.[0-9]$/ };
 
-	 has 'base' => ( is => 'rw', isa => 'My::Types::URI', coerce => 1 );
-	 has 'uri'  => ( is => 'rw', isa => 'My::Types::URI', coerce => 1 );
-	 has 'method'	=> ( is => 'rw', isa => 'Str' );
-	 has 'protocol' => ( is => 'rw', isa => 'Protocol' );
-	 has 'headers'	=> (
-	     is      => 'rw',
-	     isa     => 'My::Types::HTTP::Headers',
-	     coerce  => 1,
-	     default => sub { HTTP::Headers->new }
+	 has 'base' =&gt ( is =&gt 'rw', isa =&gt 'My::Types::URI', coerce =&gt 1 );
+	 has 'uri'  =&gt ( is =&gt 'rw', isa =&gt 'My::Types::URI', coerce =&gt 1 );
+	 has 'method'	=&gt ( is =&gt 'rw', isa =&gt 'Str' );
+	 has 'protocol' =&gt ( is =&gt 'rw', isa =&gt 'Protocol' );
+	 has 'headers'	=&gt (
+	     is      =&gt 'rw',
+	     isa     =&gt 'My::Types::HTTP::Headers',
+	     coerce  =&gt 1,
+	     default =&gt sub { HTTP::Headers-&gtnew }
 	 );
 
 DESCRIPTION
@@ -70,7 +72,7 @@ DESCRIPTION
 
        First, we create the subtype to which we will coerce the other types:
 
-	 subtype 'My::Types::HTTP::Headers' => as class_type('HTTP::Headers');
+	 subtype 'My::Types::HTTP::Headers' =&gt as class_type('HTTP::Headers');
 
        We are creating a subtype rather than using "HTTP::Headers" as a type
        directly. The reason we do this is coercions are global, and a coercion
@@ -81,18 +83,18 @@ DESCRIPTION
        The "class_type" sugar function is simply a shortcut for this:
 
 	 subtype 'HTTP::Headers'
-	     => as 'Object'
-	     => where { $_->isa('HTTP::Headers') };
+	     =&gt as 'Object'
+	     =&gt where { $_-&gtisa('HTTP::Headers') };
 
        Internally, Moose creates a type constraint for each Moose-using class,
        but for non-Moose classes, the type must be declared explicitly.
 
        We could go ahead and use this new type directly:
 
-	 has 'headers' => (
-	     is      => 'rw',
-	     isa     => 'HTTP::Headers',
-	     default => sub { HTTP::Headers->new }
+	 has 'headers' =&gt (
+	     is      =&gt 'rw',
+	     isa     =&gt 'HTTP::Headers',
+	     default =&gt sub { HTTP::Headers-&gtnew }
 	 );
 
        This creates a simple attribute which defaults to an empty instance of
@@ -105,10 +107,10 @@ DESCRIPTION
        and just do the right thing. This is exactly what coercion is for:
 
 	 coerce 'My::Types::HTTP::Headers'
-	     => from 'ArrayRef'
-		 => via { HTTP::Headers->new( @{$_} ) }
-	     => from 'HashRef'
-		 => via { HTTP::Headers->new( %{$_} ) };
+	     =&gt from 'ArrayRef'
+		 =&gt via { HTTP::Headers-&gtnew( @{$_} ) }
+	     =&gt from 'HashRef'
+		 =&gt via { HTTP::Headers-&gtnew( %{$_} ) };
 
        The first argument to "coerce" is the type to which we are coercing.
        Then we give it a set of "from"/"via" clauses. The "from" function
@@ -118,20 +120,20 @@ DESCRIPTION
        However, defining the coercion doesn't do anything until we tell Moose
        we want a particular attribute to be coerced:
 
-	 has 'headers' => (
-	     is      => 'rw',
-	     isa     => 'My::Types::HTTP::Headers',
-	     coerce  => 1,
-	     default => sub { HTTP::Headers->new }
+	 has 'headers' =&gt (
+	     is      =&gt 'rw',
+	     isa     =&gt 'My::Types::HTTP::Headers',
+	     coerce  =&gt 1,
+	     default =&gt sub { HTTP::Headers-&gtnew }
 	 );
 
        Now, if we use an "ArrayRef" or "HashRef" to populate "headers", it
        will be coerced into a new HTTP::Headers instance. With the coercion in
        place, the following lines of code are all equivalent:
 
-	 $foo->headers( HTTP::Headers->new( bar => 1, baz => 2 ) );
-	 $foo->headers( [ 'bar', 1, 'baz', 2 ] );
-	 $foo->headers( { bar => 1, baz => 2 } );
+	 $foo-&gtheaders( HTTP::Headers-&gtnew( bar =&gt 1, baz =&gt 2 ) );
+	 $foo-&gtheaders( [ 'bar', 1, 'baz', 2 ] );
+	 $foo-&gtheaders( { bar =&gt 1, baz =&gt 2 } );
 
        As you can see, careful use of coercions can produce a very open
        interface for your class, while still retaining the "safety" of your
@@ -143,17 +145,17 @@ DESCRIPTION
        Once again, we need to declare a class type for our non-Moose URI
        class:
 
-	 subtype 'My::Types::URI' => as class_type('URI');
+	 subtype 'My::Types::URI' =&gt as class_type('URI');
 
        Then we define the coercion:
 
 	 coerce 'My::Types::URI'
-	     => from 'Object'
-		 => via { $_->isa('URI')
+	     =&gt from 'Object'
+		 =&gt via { $_-&gtisa('URI')
 			  ? $_
 			  : Params::Coerce::coerce( 'URI', $_ ); }
-	     => from 'Str'
-		 => via { URI->new( $_, 'http' ) };
+	     =&gt from 'Str'
+		 =&gt via { URI-&gtnew( $_, 'http' ) };
 
        The first coercion takes any object and makes it a "URI" object. The
        coercion system isn't that smart, and does not check if the object is
@@ -170,8 +172,8 @@ DESCRIPTION
 
        Finally, we need to make sure our attributes enable coercion.
 
-	 has 'base' => ( is => 'rw', isa => 'My::Types::URI', coerce => 1 );
-	 has 'uri'  => ( is => 'rw', isa => 'My::Types::URI', coerce => 1 );
+	 has 'base' =&gt ( is =&gt 'rw', isa =&gt 'My::Types::URI', coerce =&gt 1 );
+	 has 'uri'  =&gt ( is =&gt 'rw', isa =&gt 'My::Types::URI', coerce =&gt 1 );
 
        Re-using the coercion lets us enforce a consistent API across multiple
        attributes.
@@ -191,14 +193,14 @@ FOOTNOTES
 	   opposed to from a plain "ArrayRef"
 
 AUTHORS
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
-       Dave Rolsky <autarch@urth.org>
+       Dave Rolsky &ltautarch@urth.org&gt
 
 COPYRIGHT AND LICENSE
        Copyright 2006-2010 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -206,6 +208,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2010-02-2Moose::Cookbook::Basics::Recipe5(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

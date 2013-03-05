@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Provides a proper method keyword, like "sub" but specifically for..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MooseX::Method::Signatures - Method declarations with type constraints</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MooseX::Method::SignatUser(Contributed Perl DocumMooseX::Method::Signatures(3)
 
 
@@ -23,35 +25,35 @@ SYNOPSIS
 	   use MooseX::Method::Signatures;
 
 	   method morning (Str $name) {
-	       $self->say("Good morning ${name}!");
+	       $self-&gtsay("Good morning ${name}!");
 	   }
 
-	   method hello (Str :$who, Int :$age where { $_ > 0 }) {
-	       $self->say("Hello ${who}, I am ${age} years old!");
+	   method hello (Str :$who, Int :$age where { $_ &gt 0 }) {
+	       $self-&gtsay("Hello ${who}, I am ${age} years old!");
 	   }
 
 	   method greet (Str $name, Bool :$excited = 0) {
 	       if ($excited) {
-		   $self->say("GREETINGS ${name}!");
+		   $self-&gtsay("GREETINGS ${name}!");
 	       }
 	       else {
-		   $self->say("Hi ${name}!");
+		   $self-&gtsay("Hi ${name}!");
 	       }
 	   }
 
-	   $foo->morning('Resi');			   # This works.
+	   $foo-&gtmorning('Resi');			   # This works.
 
-	   $foo->hello(who => 'world', age => 42);	   # This too.
+	   $foo-&gthello(who =&gt 'world', age =&gt 42);	   # This too.
 
-	   $foo->greet('Resi', excited => 1);		   # And this as well.
+	   $foo-&gtgreet('Resi', excited =&gt 1);		   # And this as well.
 
-	   $foo->hello(who => 'world', age => 'fortytwo'); # This doesn't.
+	   $foo-&gthello(who =&gt 'world', age =&gt 'fortytwo'); # This doesn't.
 
-	   $foo->hello(who => 'world', age => -23);	   # This neither.
+	   $foo-&gthello(who =&gt 'world', age =&gt -23);	   # This neither.
 
-	   $foo->morning;				   # Won't work.
+	   $foo-&gtmorning;				   # Won't work.
 
-	   $foo->greet; 				   # Will fail.
+	   $foo-&gtgreet; 				   # Will fail.
 
 DESCRIPTION
        Provides a proper method keyword, like "sub" but specifically for
@@ -64,8 +66,8 @@ SIGNATURE SYNTAX
 
    Type Constraints
 	   method foo ( 	    $affe) # no type checking
-	   method bar (Animal	    $affe) # $affe->isa('Animal')
-	   method baz (Animal|Human $affe) # $affe->isa('Animal') || $affe->isa('Human')
+	   method bar (Animal	    $affe) # $affe-&gtisa('Animal')
+	   method baz (Animal|Human $affe) # $affe-&gtisa('Animal') || $affe-&gtisa('Human')
 
    Positional vs. Named
 	   method foo ( $a,  $b,  $c) # positional
@@ -88,8 +90,8 @@ SIGNATURE SYNTAX
 	   method baz ($class: $moo) # invocant is called $class
 
    Labels
-	   method foo (:     $affe ) # called as $obj->foo(affe => $value)
-	   method bar (:apan($affe)) # called as $obj->foo(apan => $value)
+	   method foo (:     $affe ) # called as $obj-&gtfoo(affe =&gt $value)
+	   method bar (:apan($affe)) # called as $obj-&gtfoo(apan =&gt $value)
 
    Traits
 	   method foo (Affe $bar does trait)
@@ -107,9 +109,9 @@ SIGNATURE SYNTAX
        signature to avoid an extra lexical variable to be created.
 
    Complex Example
-	   method foo ( SomeClass $thing where { $_->can('stuff') }:
+	   method foo ( SomeClass $thing where { $_-&gtcan('stuff') }:
 			Str  $bar  = "apan",
-			Int :$baz! = 42 where { $_ % 2 == 0 } where { $_ > 10 } )
+			Int :$baz! = 42 where { $_ % 2 == 0 } where { $_ &gt 10 } )
 
 	   # the invocant is called $thing, must be an instance of SomeClass and
 		  has to implement a 'stuff' method
@@ -187,7 +189,7 @@ BUGS, CAVEATS AND NOTES
 	       my $self = shift;
 	       my $intruder = shift;
 
-	       $self->bark until $intruder->gone;
+	       $self-&gtbark until $intruder-&gtgone;
 	   }
 
 	   1;
@@ -229,7 +231,7 @@ BUGS, CAVEATS AND NOTES
 	       requires 'bark';
 
 	       method warn_intruder ( $intruder ) {
-		   $self->bark until $intruder->gone;
+		   $self-&gtbark until $intruder-&gtgone;
 	       }
 	   }
 
@@ -262,37 +264,37 @@ SEE ALSO
        Moose
 
 AUTHORS
-       o   Florian Ragwitz <rafl@debian.org>
+       o   Florian Ragwitz &ltrafl@debian.org&gt
 
-       o   Ash Berlin <ash@cpan.org>
+       o   Ash Berlin &ltash@cpan.org&gt
 
-       o   Cory Watson <gphat@cpan.org>
+       o   Cory Watson &ltgphat@cpan.org&gt
 
-       o   Daniel Ruoso <daniel@ruoso.com>
+       o   Daniel Ruoso &ltdaniel@ruoso.com&gt
 
-       o   Dave Rolsky <autarch@urth.org>
+       o   Dave Rolsky &ltautarch@urth.org&gt
 
-       o   Hakim Cassimally <hakim.cassimally@gmail.com>
+       o   Hakim Cassimally &lthakim.cassimally@gmail.com&gt
 
-       o   Jonathan Scott Duff <duff@pobox.com>
+       o   Jonathan Scott Duff &ltduff@pobox.com&gt
 
-       o   Justin Hunter <justin.d.hunter@gmail.com>
+       o   Justin Hunter &ltjustin.d.hunter@gmail.com&gt
 
-       o   Kent Fredric <kentfredric@gmail.com>
+       o   Kent Fredric &ltkentfredric@gmail.com&gt
 
-       o   Maik Hentsche <maik.hentsche@amd.com>
+       o   Maik Hentsche &ltmaik.hentsche@amd.com&gt
 
-       o   Matt Kraai <kraai@ftbfs.org>
+       o   Matt Kraai &ltkraai@ftbfs.org&gt
 
-       o   Rhesa Rozendaal <rhesa@cpan.org>
+       o   Rhesa Rozendaal &ltrhesa@cpan.org&gt
 
-       o   Ricardo SIGNES <rjbs@cpan.org>
+       o   Ricardo SIGNES &ltrjbs@cpan.org&gt
 
-       o   Steffen Schwigon <ss5@renormalist.net>
+       o   Steffen Schwigon &ltss5@renormalist.net&gt
 
-       o   Yanick Champoux <yanick@babyl.dyndns.org>
+       o   Yanick Champoux &ltyanick@babyl.dyndns.org&gt
 
-       o   Nicholas Perez <nperez@cpan.org>
+       o   Nicholas Perez &ltnperez@cpan.org&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Florian Ragwitz.
@@ -303,6 +305,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-12	 MooseX::Method::Signatures(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The hcreate(), hdestroy(), and hsearch() functions manage hash search..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>hcreate, hdestroy, hsearch -- manage hash search table</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 
 HCREATE(3)		 BSD Library Functions Manual		    HCREATE(3)
 
@@ -18,7 +20,7 @@ LIBRARY
      Standard C Library (libc, -lc)
 
 SYNOPSIS
-     #include <search.h>
+     #include &ltsearch.h&gt
 
      int
      hcreate(size_t nel);
@@ -48,7 +50,7 @@ DESCRIPTION
      The hsearch() function is a hash-table search routine.  It returns a
      pointer into a hash table indicating the location at which an entry can
      be found.	The item argument is a structure of type ENTRY (defined in the
-     <search.h> header) containing two pointers: item.key points to the com-
+     &ltsearch.h&gt header) containing two pointers: item.key points to the com-
      parison key (a char *), and item.data (a void *) points to any other data
      to be associated with that key.  The comparison function used by
      hsearch() is strcmp(3).  The action argument is a member of an enumera-
@@ -77,10 +79,10 @@ EXAMPLES
      them in a hash table, discarding duplicates.  It then reads in strings
      and finds the matching entry in the hash table and prints it out.
 
-     #include <stdio.h>
-     #include <search.h>
-     #include <string.h>
-     #include <stdlib.h>
+     #include &ltstdio.h&gt
+     #include &ltsearch.h&gt
+     #include &ltstring.h&gt
+     #include &ltstdlib.h&gt
 
      struct info {		     /* This is the info stored in the table */
 	     int age, room;	     /* other than the key. */
@@ -102,8 +104,8 @@ EXAMPLES
 	     /* Create table; no error checking is performed. */
 	     (void) hcreate(NUM_EMPL);
 
-	     while (scanf("%s%d%d", str, &info_ptr->age,
-		 &info_ptr->room) != EOF && i++ < NUM_EMPL) {
+	     while (scanf("%s%d%d", str, &info_ptr-&gtage,
+		 &info_ptr-&gtroom) != EOF && i++ &lt NUM_EMPL) {
 		     /* Put information in structure, and structure in item. */
 		     item.key = strdup(str);
 		     item.data = info_ptr;
@@ -118,9 +120,9 @@ EXAMPLES
 		     if ((found_item = hsearch(item, FIND)) != NULL) {
 			     /* If item is in the table. */
 			     (void)printf("found %s, age = %d, room = %d\n",
-				 found_item->key,
-				 ((struct info *)found_item->data)->age,
-				 ((struct info *)found_item->data)->room);
+				 found_item-&gtkey,
+				 ((struct info *)found_item-&gtdata)-&gtage,
+				 ((struct info *)found_item-&gtdata)-&gtroom);
 		     } else
 			     (void)printf("no such employee %s\n", name_to_find);
 	     }
@@ -150,6 +152,6 @@ BUGS
      The interface permits the use of only one hash table at a time.
 
 BSD				 July 6, 2008				   BSD
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

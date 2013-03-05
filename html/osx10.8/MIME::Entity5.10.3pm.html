@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="A subclass of Mail::Internet...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MIME::Entity - class for parsed-and-decoded MIME message</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MIME::Entity(3)       User Contributed Perl Documentation      MIME::Entity(3)
 
 
@@ -23,21 +25,21 @@ SYNOPSIS
        Ready?  Ok...
 
 	   ### Create an entity:
-	   $top = MIME::Entity->build(From    => 'me@myhost.com',
-				      To      => 'you@yourhost.com',
-				      Subject => "Hello, nurse!",
-				      Data    => \@my_message);
+	   $top = MIME::Entity-&gtbuild(From    =&gt 'me@myhost.com',
+				      To      =&gt 'you@yourhost.com',
+				      Subject =&gt "Hello, nurse!",
+				      Data    =&gt \@my_message);
 
 	   ### Attach stuff to it:
-	   $top->attach(Path	 => $gif_path,
-			Type	 => "image/gif",
-			Encoding => "base64");
+	   $top-&gtattach(Path	 =&gt $gif_path,
+			Type	 =&gt "image/gif",
+			Encoding =&gt "base64");
 
 	   ### Sign it:
-	   $top->sign;
+	   $top-&gtsign;
 
 	   ### Output it:
-	   $top->print(\*STDOUT);
+	   $top-&gtprint(\*STDOUT);
 
 DESCRIPTION
        A subclass of Mail::Internet.
@@ -50,161 +52,161 @@ EXAMPLES
        Create a document for an ordinary 7-bit ASCII text file (lots of stuff
        is defaulted for us):
 
-	   $ent = MIME::Entity->build(Path=>"english-msg.txt");
+	   $ent = MIME::Entity-&gtbuild(Path=&gt"english-msg.txt");
 
        Create a document for a text file with 8-bit (Latin-1) characters:
 
-	   $ent = MIME::Entity->build(Path     =>"french-msg.txt",
-				      Encoding =>"quoted-printable",
-				      From     =>'jean.luc@inria.fr',
-				      Subject  =>"C'est bon!");
+	   $ent = MIME::Entity-&gtbuild(Path     =&gt"french-msg.txt",
+				      Encoding =&gt"quoted-printable",
+				      From     =&gt'jean.luc@inria.fr',
+				      Subject  =&gt"C'est bon!");
 
        Create a document for a GIF file (the description is completely
        optional; note that we have to specify content-type and encoding since
        they're not the default values):
 
-	   $ent = MIME::Entity->build(Description => "A pretty picture",
-				      Path	  => "./docs/mime-sm.gif",
-				      Type	  => "image/gif",
-				      Encoding	  => "base64");
+	   $ent = MIME::Entity-&gtbuild(Description =&gt "A pretty picture",
+				      Path	  =&gt "./docs/mime-sm.gif",
+				      Type	  =&gt "image/gif",
+				      Encoding	  =&gt "base64");
 
        Create a document that you already have the text for, using "Data":
 
-	   $ent = MIME::Entity->build(Type	  => "text/plain",
-				      Encoding	  => "quoted-printable",
-				      Data	  => ["First line.\n",
+	   $ent = MIME::Entity-&gtbuild(Type	  =&gt "text/plain",
+				      Encoding	  =&gt "quoted-printable",
+				      Data	  =&gt ["First line.\n",
 						     "Second line.\n",
 						     "Last line.\n"]);
 
        Create a multipart message, with the entire structure given explicitly:
 
 	   ### Create the top-level, and set up the mail headers:
-	   $top = MIME::Entity->build(Type     => "multipart/mixed",
-				      From     => 'me@myhost.com',
-				      To       => 'you@yourhost.com',
-				      Subject  => "Hello, nurse!");
+	   $top = MIME::Entity-&gtbuild(Type     =&gt "multipart/mixed",
+				      From     =&gt 'me@myhost.com',
+				      To       =&gt 'you@yourhost.com',
+				      Subject  =&gt "Hello, nurse!");
 
 	   ### Attachment #1: a simple text document:
-	   $top->attach(Path=>"./testin/short.txt");
+	   $top-&gtattach(Path=&gt"./testin/short.txt");
 
 	   ### Attachment #2: a GIF file:
-	   $top->attach(Path	    => "./docs/mime-sm.gif",
-			Type	    => "image/gif",
-			Encoding    => "base64");
+	   $top-&gtattach(Path	    =&gt "./docs/mime-sm.gif",
+			Type	    =&gt "image/gif",
+			Encoding    =&gt "base64");
 
 	   ### Attachment #3: text we'll create with text we have on-hand:
-	   $top->attach(Data => $contents);
+	   $top-&gtattach(Data =&gt $contents);
 
        Suppose you don't know ahead of time that you'll have attachments?  No
        problem: you can "attach" to singleparts as well:
 
-	   $top = MIME::Entity->build(From    => 'me@myhost.com',
-				      To      => 'you@yourhost.com',
-				      Subject => "Hello, nurse!",
-				      Data    => \@my_message);
+	   $top = MIME::Entity-&gtbuild(From    =&gt 'me@myhost.com',
+				      To      =&gt 'you@yourhost.com',
+				      Subject =&gt "Hello, nurse!",
+				      Data    =&gt \@my_message);
 	   if ($GIF_path) {
-	       $top->attach(Path     => $GIF_path,
-			    Type     => 'image/gif');
+	       $top-&gtattach(Path     =&gt $GIF_path,
+			    Type     =&gt 'image/gif');
 	   }
 
        Copy an entity (headers, parts... everything but external body data):
 
-	   my $deepcopy = $top->dup;
+	   my $deepcopy = $top-&gtdup;
 
    Access examples
 	   ### Get the head, a MIME::Head:
-	   $head = $ent->head;
+	   $head = $ent-&gthead;
 
 	   ### Get the body, as a MIME::Body;
-	   $bodyh = $ent->bodyhandle;
+	   $bodyh = $ent-&gtbodyhandle;
 
 	   ### Get the intended MIME type (as declared in the header):
-	   $type = $ent->mime_type;
+	   $type = $ent-&gtmime_type;
 
 	   ### Get the effective MIME type (in case decoding failed):
-	   $eff_type = $ent->effective_type;
+	   $eff_type = $ent-&gteffective_type;
 
 	   ### Get preamble, parts, and epilogue:
-	   $preamble   = $ent->preamble;	  ### ref to array of lines
-	   $num_parts  = $ent->parts;
-	   $first_part = $ent->parts(0);	  ### an entity
-	   $epilogue   = $ent->epilogue;	  ### ref to array of lines
+	   $preamble   = $ent-&gtpreamble;	  ### ref to array of lines
+	   $num_parts  = $ent-&gtparts;
+	   $first_part = $ent-&gtparts(0);	  ### an entity
+	   $epilogue   = $ent-&gtepilogue;	  ### ref to array of lines
 
    Manipulation examples
        Muck about with the body data:
 
 	   ### Read the (unencoded) body data:
-	   if ($io = $ent->open("r")) {
-	       while (defined($_ = $io->getline)) { print $_ }
-	       $io->close;
+	   if ($io = $ent-&gtopen("r")) {
+	       while (defined($_ = $io-&gtgetline)) { print $_ }
+	       $io-&gtclose;
 	   }
 
 	   ### Write the (unencoded) body data:
-	   if ($io = $ent->open("w")) {
-	       foreach (@lines) { $io->print($_) }
-	       $io->close;
+	   if ($io = $ent-&gtopen("w")) {
+	       foreach (@lines) { $io-&gtprint($_) }
+	       $io-&gtclose;
 	   }
 
 	   ### Delete the files for any external (on-disk) data:
-	   $ent->purge;
+	   $ent-&gtpurge;
 
        Muck about with the signature:
 
 	   ### Sign it (automatically removes any existing signature):
-	   $top->sign(File=>"$ENV{HOME}/.signature");
+	   $top-&gtsign(File=&gt"$ENV{HOME}/.signature");
 
 	   ### Remove any signature within 15 lines of the end:
-	   $top->remove_sig(15);
+	   $top-&gtremove_sig(15);
 
        Muck about with the headers:
 
 	   ### Compute content-lengths for singleparts based on bodies:
 	   ###	 (Do this right before you print!)
-	   $entity->sync_headers(Length=>'COMPUTE');
+	   $entity-&gtsync_headers(Length=&gt'COMPUTE');
 
        Muck about with the structure:
 
 	   ### If a 0- or 1-part multipart, collapse to a singlepart:
-	   $top->make_singlepart;
+	   $top-&gtmake_singlepart;
 
 	   ### If a singlepart, inflate to a multipart with 1 part:
-	   $top->make_multipart;
+	   $top-&gtmake_multipart;
 
        Delete parts:
 
 	   ### Delete some parts of a multipart message:
-	   my @keep = grep { keep_part($_) } $msg->parts;
-	   $msg->parts(\@keep);
+	   my @keep = grep { keep_part($_) } $msg-&gtparts;
+	   $msg-&gtparts(\@keep);
 
    Output examples
        Print to filehandles:
 
 	   ### Print the entire message:
-	   $top->print(\*STDOUT);
+	   $top-&gtprint(\*STDOUT);
 
 	   ### Print just the header:
-	   $top->print_header(\*STDOUT);
+	   $top-&gtprint_header(\*STDOUT);
 
 	   ### Print just the (encoded) body... includes parts as well!
-	   $top->print_body(\*STDOUT);
+	   $top-&gtprint_body(\*STDOUT);
 
        Stringify... note that "stringify_xx" can also be written
        "xx_as_string"; the methods are synonymous, and neither form will be
        deprecated:
 
 	   ### Stringify the entire message:
-	   print $top->stringify;	       ### or $top->as_string
+	   print $top-&gtstringify;	       ### or $top-&gtas_string
 
 	   ### Stringify just the header:
-	   print $top->stringify_header;       ### or $top->header_as_string
+	   print $top-&gtstringify_header;       ### or $top-&gtheader_as_string
 
 	   ### Stringify just the (encoded) body... includes parts as well!
-	   print $top->stringify_body;	       ### or $top->body_as_string
+	   print $top-&gtstringify_body;	       ### or $top-&gtbody_as_string
 
        Debug:
 
 	   ### Output debugging info:
-	   $entity->dump_skeleton(\*STDERR);
+	   $entity-&gtdump_skeleton(\*STDERR);
 
 PUBLIC INTERFACE
    Construction
@@ -241,7 +243,7 @@ PUBLIC INTERFACE
 	   messages.  The PARAMHASH is used to "build" a new entity; this
 	   method is basically equivalent to:
 
-	       $entity->add_part(ref($entity)->build(PARAMHASH, Top=>0));
+	       $entity-&gtadd_part(ref($entity)-&gtbuild(PARAMHASH, Top=&gt0));
 
 	   Note: normally, you attach to multipart entities; however, if you
 	   attach something to a singlepart (like attaching a GIF to a text
@@ -252,26 +254,26 @@ PUBLIC INTERFACE
 	   Class/instance method.  A quick-and-easy catch-all way to create an
 	   entity.  Use it like this to build a "normal" single-part entity:
 
-	      $ent = MIME::Entity->build(Type	  => "image/gif",
-					 Encoding => "base64",
-					 Path	  => "/path/to/xyz12345.gif",
-					 Filename => "saveme.gif",
-					 Disposition => "attachment");
+	      $ent = MIME::Entity-&gtbuild(Type	  =&gt "image/gif",
+					 Encoding =&gt "base64",
+					 Path	  =&gt "/path/to/xyz12345.gif",
+					 Filename =&gt "saveme.gif",
+					 Disposition =&gt "attachment");
 
 	   And like this to build a "multipart" entity:
 
-	      $ent = MIME::Entity->build(Type	  => "multipart/mixed",
-					 Boundary => "---1234567");
+	      $ent = MIME::Entity-&gtbuild(Type	  =&gt "multipart/mixed",
+					 Boundary =&gt "---1234567");
 
 	   A minimal MIME header will be created.  If you want to add or
 	   modify any header fields afterwards, you can of course do so via
 	   the underlying head object... but hey, there's now a prettier
 	   syntax!
 
-	      $ent = MIME::Entity->build(Type	       =>"multipart/mixed",
-					 From	       => $myaddr,
-					 Subject       => "Hi!",
-					 'X-Certified' => ['SINED',
+	      $ent = MIME::Entity-&gtbuild(Type	       =&gt"multipart/mixed",
+					 From	       =&gt $myaddr,
+					 Subject       =&gt "Hi!",
+					 'X-Certified' =&gt ['SINED',
 							   'SEELED',
 							   'DELIVERED']);
 
@@ -280,13 +282,13 @@ PUBLIC INTERFACE
 	   will allow any bad MIME we generate to be traced back to us.  You
 	   can of course overwrite that header with your own:
 
-	      $ent = MIME::Entity->build(Type	     => "multipart/mixed",
-					 'X-Mailer'  => "myprog 1.1");
+	      $ent = MIME::Entity-&gtbuild(Type	     =&gt "multipart/mixed",
+					 'X-Mailer'  =&gt "myprog 1.1");
 
 	   Or remove it entirely:
 
-	      $ent = MIME::Entity->build(Type	    => "multipart/mixed",
-					 'X-Mailer' => undef);
+	      $ent = MIME::Entity-&gtbuild(Type	    =&gt "multipart/mixed",
+					 'X-Mailer' =&gt undef);
 
 	   OK, enough hype.  The parameters are:
 
@@ -513,7 +515,7 @@ PUBLIC INTERFACE
 	   be used to delete parts, as follows:
 
 	       ### Delete some parts of a multipart message:
-	       $msg->parts([ grep { keep_part($_) } $msg->parts ]);
+	       $msg-&gtparts([ grep { keep_part($_) } $msg-&gtparts ]);
 
 	   Note: for multipart messages, the preamble and epilogue are not
 	   considered parts.  If you need them, use the "preamble()" and
@@ -583,7 +585,7 @@ PUBLIC INTERFACE
 	   multipart.  Returns 'ALREADY' (and does nothing) if entity is
 	   already multipart and Force was not chosen.
 
-	   If OPTSHASH contains Force=>1, then we always bump the top-level's
+	   If OPTSHASH contains Force=&gt1, then we always bump the top-level's
 	   content and content-headers down to a subpart of this entity, even
 	   if this entity is already a multipart.  This is apparently of use
 	   to people who are tweaking messages after parsing them.
@@ -615,7 +617,7 @@ PUBLIC INTERFACE
 	   "MIME::Parser::file_under()", and then do this before parsing your
 	   next message:
 
-	       $parser->filer->purge();
+	       $parser-&gtfiler-&gtpurge();
 
 	   I wouldn't attempt to read those body files after you do this, for
 	   obvious reasons.  As of MIME-tools 4.x, each body's path is
@@ -855,7 +857,7 @@ PUBLIC INTERFACE
 	   its head.  If you want the raw body data to be output, you can
 	   either read it from the bodyhandle yourself, or use:
 
-	       $ent->bodyhandle->print($outstream);
+	       $ent-&gtbodyhandle-&gtprint($outstream);
 
 	   which uses read() calls to extract the information, and thus will
 	   work with both text and binary bodies.
@@ -882,8 +884,8 @@ PUBLIC INTERFACE
 	   singlepart message (like a "text/plain"), use "bodyhandle()"
 	   instead:
 
-	       if ($ent->bodyhandle) {
-		   $unencoded_data = $ent->bodyhandle->as_string;
+	       if ($ent-&gtbodyhandle) {
+		   $unencoded_data = $ent-&gtbodyhandle-&gtas_string;
 	       }
 	       else {
 		   ### this message has no body data (but it might have parts!)
@@ -957,7 +959,7 @@ NOTES
 	       audio/*		 MIME::Body	empty
 	       image/*		 MIME::Body	empty
 	       message/*	 undef		MIME::Entity list (usually 1)
-	       multipart/*	 undef		MIME::Entity list (usually >0)
+	       multipart/*	 undef		MIME::Entity list (usually &gt0)
 	       text/*		 MIME::Body	empty
 	       video/*		 MIME::Body	empty
 	       x-*/*		 MIME::Body	empty
@@ -982,8 +984,8 @@ NOTES
 
 	   MIME::Entity: Use the body() method.  You can also use:
 
-	       $entity->print_body()
-	       $entity->stringify_body()   ### a.k.a. $entity->body_as_string()
+	       $entity-&gtprint_body()
+	       $entity-&gtstringify_body()   ### a.k.a. $entity-&gtbody_as_string()
 
        How do I get the "unencoded" body data?
 	   Mail::Internet: Use the body() method.
@@ -996,10 +998,10 @@ NOTES
 	   "multipart" message): in this case, you should access the
 	   components via the parts() method.  Like this:
 
-	       if ($bh = $entity->bodyhandle) {
-		   $io = $bh->open;
-		   ...access unencoded data via $io->getline or $io->read...
-		   $io->close;
+	       if ($bh = $entity-&gtbodyhandle) {
+		   $io = $bh-&gtopen;
+		   ...access unencoded data via $io-&gtgetline or $io-&gtread...
+		   $io-&gtclose;
 	       }
 	       else {
 		   foreach my $part (@parts) {
@@ -1009,8 +1011,8 @@ NOTES
 
 	   You can also use:
 
-	       if ($bh = $entity->bodyhandle) {
-		   $unencoded_data = $bh->as_string;
+	       if ($bh = $entity-&gtbodyhandle) {
+		   $unencoded_data = $bh-&gtas_string;
 	       }
 	       else {
 		   ...do stuff with the parts...
@@ -1103,6 +1105,6 @@ AUTHOR
 
 
 perl v5.10.1			  2008-06-30		       MIME::Entity(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

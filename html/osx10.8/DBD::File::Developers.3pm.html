@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document describes how DBD developers can write DBD::File based..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBD::File::Developers - Developers documentation for DBD::File</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBD::File::Developers(User Contributed Perl DocumentatDBD::File::Developers(3)
 
 
@@ -23,9 +25,9 @@ SYNOPSIS
 	   sub driver
 	   {
 	       ...
-	       my $drh = $proto->SUPER::driver($attr);
+	       my $drh = $proto-&gtSUPER::driver($attr);
 	       ...
-	       return $drh->{class};
+	       return $drh-&gt{class};
 	       }
 
 	   sub CLONE { ... }
@@ -64,15 +66,15 @@ SYNOPSIS
 	   @ISA = qw(DBD::File::Table);
 
 	   my %reset_on_modify = (
-				   myd_abc => "myd_foo",
-				   myd_mno => "myd_bar",
+				   myd_abc =&gt "myd_foo",
+				   myd_mno =&gt "myd_bar",
 				 );
-	   __PACKAGE__->register_reset_on_modify( \%reset_on_modify );
+	   __PACKAGE__-&gtregister_reset_on_modify( \%reset_on_modify );
 	   my %compat_map = (
-			      abc => 'foo_abc',
-			      xyz => 'foo_xyz',
+			      abc =&gt 'foo_abc',
+			      xyz =&gt 'foo_xyz',
 			    );
-	   __PACKAGE__->register_compat_map( \%compat_map );
+	   __PACKAGE__-&gtregister_compat_map( \%compat_map );
 
 	   sub bootstrap_table_meta { ... }
 	   sub init_table_meta { ... }
@@ -109,7 +111,7 @@ CLASSES
 	   Driver package, contains the methods DBI calls indirectly via DBI
 	   interface:
 
-	     DBI->connect ('DBI:DBM:', undef, undef, {})
+	     DBI-&gtconnect ('DBI:DBM:', undef, undef, {})
 
 	     # invokes
 	     package DBD::DBM::dr;
@@ -131,9 +133,9 @@ CLASSES
 	   Contains the methods which are called through DBI database handles
 	   ($dbh). e.g.,
 
-	     $sth = $dbh->prepare ("select * from foo");
+	     $sth = $dbh-&gtprepare ("select * from foo");
 	     # returns the f_encoding setting for table foo
-	     $dbh->csv_get_meta ("foo", "f_encoding");
+	     $dbh-&gtcsv_get_meta ("foo", "f_encoding");
 
 	   DBD::File provides the typical methods required here. Developers
 	   who write DBI drivers based on DBD::File need to override the
@@ -142,7 +144,7 @@ CLASSES
        DBD::File::st
 	   Contains the methods to deal with prepared statement handles. e.g.,
 
-	     $sth->execute () or die $sth->errstr;
+	     $sth-&gtexecute () or die $sth-&gterrstr;
 
    DBD::File
        This is the main package containing the routines to initialize
@@ -158,7 +160,7 @@ CLASSES
 	 {
 	     my ( $class, $attr ) = @_;
 	     ...
-	     my $drh = $class->SUPER::driver( $attr );
+	     my $drh = $class-&gtSUPER::driver( $attr );
 	     ...
 	     return $drh;
 	 }
@@ -204,10 +206,10 @@ CLASSES
 	   prefix, the driver prefix (written as $drv_prefix) is added.
 
 	   The driver prefix is extracted from the attribute name and verified
-	   against "$dbh->{ $drv_prefix . "valid_attrs" }" (when it exists).
+	   against "$dbh-&gt{ $drv_prefix . "valid_attrs" }" (when it exists).
 	   If the requested attribute value is not listed as a valid
 	   attribute, this method croaks. If the attribute is valid and
-	   readonly (listed in "$dbh->{ $drv_prefix . "readonly_attrs" }" when
+	   readonly (listed in "$dbh-&gt{ $drv_prefix . "readonly_attrs" }" when
 	   it exists), a real copy of the attribute value is returned. So it's
 	   not possible to modify "f_valid_attrs" from outside of
 	   DBD::File::db or a derived class.
@@ -249,11 +251,11 @@ CLASSES
 	   instantiate the map tie:
 
 	       # for DBD::CSV
-	       $dbh->{csv_meta} = "csv_tables";
+	       $dbh-&gt{csv_meta} = "csv_tables";
 	       # for DBD::DBM
-	       $dbh->{dbm_meta} = "dbm_tables";
+	       $dbh-&gt{dbm_meta} = "dbm_tables";
 	       # for DBD::AnyData
-	       $dbh->{ad_meta}	= "ad_tables";
+	       $dbh-&gt{ad_meta}	= "ad_tables";
 
        init_default_attributes
 	   This method is called after the database handle is instantiated to
@@ -263,9 +265,9 @@ CLASSES
 	   "f_dir", "f_meta", "f_meta_map", "f_version".
 
 	   When the derived implementor class provides the attribute to
-	   validate attributes (e.g. "$dbh->{dbm_valid_attrs} = {...};") or
+	   validate attributes (e.g. "$dbh-&gt{dbm_valid_attrs} = {...};") or
 	   the attribute containing the immutable attributes (e.g.
-	   "$dbh->{dbm_readonly_attrs} = {...};"), the attributes
+	   "$dbh-&gt{dbm_readonly_attrs} = {...};"), the attributes
 	   "drv_valid_attrs", "drv_readonly_attrs", "drv_version" and
 	   "drv_meta" are added (when available) to the list of valid and
 	   immutable attributes (where "drv_" is interpreted as the driver
@@ -294,7 +296,7 @@ CLASSES
 	   table name and only one attribute name. A table name of '.' (single
 	   dot) is interpreted as the default table and this will retrieve the
 	   appropriate attribute globally from the dbh. This has the same
-	   restrictions as "$dbh->{$attrib}".
+	   restrictions as "$dbh-&gt{$attrib}".
 
 	   get_file_meta allows '+' and '*' as wildcards for table names and
 	   $table being a regular expression matching against the table names
@@ -363,12 +365,12 @@ CLASSES
 		 $class =~ s/::Statement/::Table/;
 
 		 my $flags = {
-		     createMode    => $createMode,
-		     lockMode	   => $lockMode,
+		     createMode    =&gt $createMode,
+		     lockMode	   =&gt $lockMode,
 		     };
-		 $self->{command} eq "DROP" and $flags->{dropMode} = 1;
+		 $self-&gt{command} eq "DROP" and $flags-&gt{dropMode} = 1;
 
-		 return $class->new ($data, { table => $table }, $flags);
+		 return $class-&gtnew ($data, { table =&gt $table }, $flags);
 		 } # open_table
 
    DBD::File::Table
@@ -439,16 +441,16 @@ CLASSES
 	   If your DBD has calculated values in the meta data area, then call
 	   "register_reset_on_modify":
 
-	       my %reset_on_modify = ( "xxx_foo" => "xxx_bar" );
-	       __PACKAGE__->register_reset_on_modify( \%reset_on_modify );
+	       my %reset_on_modify = ( "xxx_foo" =&gt "xxx_bar" );
+	       __PACKAGE__-&gtregister_reset_on_modify( \%reset_on_modify );
 
        register_compat_map
 	   Allows "get_table_meta_attr" and "set_table_meta_attr" to update
 	   the attribute name to the current favored one:
 
 	       # from DBD::DBM
-	       my %compat_map = ( "dbm_ext" => "f_ext" );
-	       __PACKAGE__->register_compat_map( \%compat_map );
+	       my %compat_map = ( "dbm_ext" =&gt "f_ext" );
+	       __PACKAGE__-&gtregister_compat_map( \%compat_map );
 
        open_file
 	   Called to open the table's data file.
@@ -457,8 +459,8 @@ CLASSES
 	   following steps are performed. Unless "f_dontopen" is set to a true
 	   value, "f_fqfn" must contain the full qualified file name for the
 	   table to work on (file2table ensures this). The encoding in
-	   "f_encoding" is applied if set and the file is opened. If "<f_fqln
-	   "> (full qualified lock name) is set, this file is opened, too.
+	   "f_encoding" is applied if set and the file is opened. If "&ltf_fqln
+	   "&gt (full qualified lock name) is set, this file is opened, too.
 	   Depending on the value in "f_lock", the appropriate lock is set on
 	   the opened data file or lock file.
 
@@ -500,8 +502,8 @@ CLASSES
 AUTHOR
        The module DBD::File is currently maintained by
 
-       H.Merijn Brand < h.m.brand at xs4all.nl > and Jens Rehsack  < rehsack
-       at googlemail.com >
+       H.Merijn Brand &lt h.m.brand at xs4all.nl &gt and Jens Rehsack  &lt rehsack
+       at googlemail.com &gt
 
        The original author is Jochen Wiedmann.
 
@@ -517,6 +519,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2010-09-16	      DBD::File::Developers(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

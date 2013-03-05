@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""HTML::Filter" is an HTML parser that by default prints the original..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>HTML::Filter - Filter HTML text through the parser</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 HTML::Filter(3)       User Contributed Perl Documentation      HTML::Filter(3)
 
 
@@ -22,7 +24,7 @@ NOTE
 
 SYNOPSIS
 	require HTML::Filter;
-	$p = HTML::Filter->new->parse_file("index.html");
+	$p = HTML::Filter-&gtnew-&gtparse_file("index.html");
 
 DESCRIPTION
        "HTML::Filter" is an HTML parser that by default prints the original
@@ -32,8 +34,8 @@ DESCRIPTION
        print the HTML text.
 
        "HTML::Filter" is a subclass of "HTML::Parser". This means that the
-       document should be given to the parser by calling the $p->parse() or
-       $p->parse_file() methods.
+       document should be given to the parser by calling the $p-&gtparse() or
+       $p-&gtparse_file() methods.
 
 EXAMPLES
        The first example is a filter that will remove all comments from an
@@ -45,7 +47,7 @@ EXAMPLES
 	 @ISA=qw(HTML::Filter);
 	 sub comment { }  # ignore comments
 
-       The second example shows a filter that will remove any <TABLE>s found
+       The second example shows a filter that will remove any &ltTABLE&gts found
        in the HTML file.  We specialize the start() and end() methods to count
        table tags and then make output not happen when inside a table.
 
@@ -55,22 +57,22 @@ EXAMPLES
 	 sub start
 	 {
 	    my $self = shift;
-	    $self->{table_seen}++ if $_[0] eq "table";
-	    $self->SUPER::start(@_);
+	    $self-&gt{table_seen}++ if $_[0] eq "table";
+	    $self-&gtSUPER::start(@_);
 	 }
 
 	 sub end
 	 {
 	    my $self = shift;
-	    $self->SUPER::end(@_);
-	    $self->{table_seen}-- if $_[0] eq "table";
+	    $self-&gtSUPER::end(@_);
+	    $self-&gt{table_seen}-- if $_[0] eq "table";
 	 }
 
 	 sub output
 	 {
 	     my $self = shift;
-	     unless ($self->{table_seen}) {
-		 $self->SUPER::output(@_);
+	     unless ($self-&gt{table_seen}) {
+		 $self-&gtSUPER::output(@_);
 	     }
 	 }
 
@@ -80,8 +82,8 @@ EXAMPLES
 	 package FilterIntoString;
 	 require HTML::Filter;
 	 @ISA=qw(HTML::Filter);
-	 sub output { push(@{$_[0]->{fhtml}}, $_[1]) }
-	 sub filtered_html { join("", @{$_[0]->{fhtml}}) }
+	 sub output { push(@{$_[0]-&gt{fhtml}}, $_[1]) }
+	 sub filtered_html { join("", @{$_[0]-&gt{fhtml}}) }
 
 SEE ALSO
        HTML::Parser
@@ -95,6 +97,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2008-04-04		       HTML::Filter(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

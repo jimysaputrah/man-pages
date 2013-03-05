@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Params::Validate module allows you to validate method or function..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Params::Validate - Validate method/function parameters</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Params::Validate(3)   User Contributed Perl Documentation  Params::Validate(3)
 
 
@@ -25,8 +27,8 @@ SYNOPSIS
 	   sub foo {
 	       validate(
 		   @_, {
-		       foo => 1,    # mandatory
-		       bar => 0,    # optional
+		       foo =&gt 1,    # mandatory
+		       bar =&gt 0,    # optional
 		   }
 	       );
 	   }
@@ -40,18 +42,18 @@ SYNOPSIS
 	   sub foo2 {
 	       validate(
 		   @_, {
-		       foo =>
+		       foo =&gt
 			   # specify a type
-			   { type => ARRAYREF },
-		       bar =>
+			   { type =&gt ARRAYREF },
+		       bar =&gt
 			   # specify an interface
-			   { can => [ 'print', 'flush', 'frobnicate' ] },
-		       baz => {
-			   type      => SCALAR,     # a scalar ...
+			   { can =&gt [ 'print', 'flush', 'frobnicate' ] },
+		       baz =&gt {
+			   type      =&gt SCALAR,     # a scalar ...
 						    # ... that is a plain integer ...
-			   regex     => qr/^\d+$/,
-			   callbacks => {	    # ... and smaller than 90
-			       'less than 90' => sub { shift() < 90 },
+			   regex     =&gt qr/^\d+$/,
+			   callbacks =&gt {	    # ... and smaller than 90
+			       'less than 90' =&gt sub { shift() &lt 90 },
 			   },
 		       }
 		   }
@@ -62,23 +64,23 @@ SYNOPSIS
 	       my %p = validate(
 		   @_, {
 		       # required
-		       foo => 1,
+		       foo =&gt 1,
 		       # $p{bar} will be 99 if bar is not given.  bar is now
 		       # optional.
-		       bar => { default => 99 }
+		       bar =&gt { default =&gt 99 }
 		   }
 	       );
 	   }
 
 	   sub pos_with_defaults {
-	       my @p = validate_pos( @_, 1, { default => 99 } );
+	       my @p = validate_pos( @_, 1, { default =&gt 99 } );
 	   }
 
 	   sub sets_options_on_call {
 	       my %p = validate_with(
-		   params => \@_,
-		   spec   => { foo => { type => SCALAR, default => 2 } },
-		   normalize_keys => sub { $_[0] =~ s/^-//; lc $_[0] },
+		   params =&gt \@_,
+		   spec   =&gt { foo =&gt { type =&gt SCALAR, default =&gt 2 } },
+		   normalize_keys =&gt sub { $_[0] =~ s/^-//; lc $_[0] },
 	       );
 	   }
 
@@ -127,8 +129,8 @@ PARAMETER VALIDATION
 
 	   validate(
 	       @_, {
-		   parameter1 => validation spec,
-		   parameter2 => validation spec,
+		   parameter1 =&gt validation spec,
+		   parameter2 =&gt validation spec,
 		   ...
 	       }
 	   );
@@ -144,7 +146,7 @@ PARAMETER VALIDATION
 
        For a subroutine expecting named parameters, you would do this:
 
-	   validate( @_, { foo => 1, bar => 1, baz => 0 } );
+	   validate( @_, { foo =&gt 1, bar =&gt 1, baz =&gt 0 } );
 
        This says that the "foo" and "bar" parameters are mandatory and that
        the "baz" parameter is optional.  The presence of any other parameters
@@ -191,7 +193,7 @@ PARAMETER VALIDATION
 
        o   HASHREF
 
-	   A hash reference such as "{ a => 1, b => 2 }" or "\%bar".
+	   A hash reference such as "{ a =&gt 1, b =&gt 2 }" or "\%bar".
 
        o   CODEREF
 
@@ -245,19 +247,19 @@ PARAMETER VALIDATION
 
 	   validate(
 	       @_, {
-		   foo => { type => SCALAR },
-		   bar => { type => HASHREF }
+		   foo =&gt { type =&gt SCALAR },
+		   bar =&gt { type =&gt HASHREF }
 	       }
 	   );
 
        If a parameter can be of more than one type, just use the bitwise or
        ("|") operator to combine them.
 
-	   validate( @_, { foo => { type => GLOB | GLOBREF } );
+	   validate( @_, { foo =&gt { type =&gt GLOB | GLOBREF } );
 
        For positional parameters, this can be specified as follows:
 
-	   validate_pos( @_, { type => SCALAR | ARRAYREF }, { type => CODEREF } );
+	   validate_pos( @_, { type =&gt SCALAR | ARRAYREF }, { type =&gt CODEREF } );
 
    Interface Validation
        To specify that a parameter is expected to have a certain set of
@@ -265,9 +267,9 @@ PARAMETER VALIDATION
 
 	   validate(
 	       @_, {
-		   foo =>
-		       # just has to be able to ->bar
-		       { can => 'bar' }
+		   foo =&gt
+		       # just has to be able to -&gtbar
+		       { can =&gt 'bar' }
 	       }
 	   );
 
@@ -275,9 +277,9 @@ PARAMETER VALIDATION
 
 	   validate(
 	       @_, {
-		   foo =>
-		       # must be able to ->bar and ->print
-		       { can => [qw( bar print )] }
+		   foo =&gt
+		       # must be able to -&gtbar and -&gtprint
+		       { can =&gt [qw( bar print )] }
 	       }
 	   );
 
@@ -292,7 +294,7 @@ PARAMETER VALIDATION
 
 	   validate(
 	       @_,
-	       { foo => { isa => 'My::Frobnicator' } }
+	       { foo =&gt { isa =&gt 'My::Frobnicator' } }
 	   );
 
 	... or ...
@@ -300,7 +302,7 @@ PARAMETER VALIDATION
 	   validate(
 	       @_,
 	       # must be both, not either!
-	       { foo => { isa => [qw( My::Frobnicator IO::Handle )] } }
+	       { foo =&gt { isa =&gt [qw( My::Frobnicator IO::Handle )] } }
 	   );
 
    Regex Validation
@@ -310,7 +312,7 @@ PARAMETER VALIDATION
 
 	   validate(
 	       @_,
-	       { foo => { regex => qr/^\d+$/ } }
+	       { foo =&gt { regex =&gt qr/^\d+$/ } }
 	   );
 
        The value of the "regex" key may be either a string or a pre-compiled
@@ -334,10 +336,10 @@ PARAMETER VALIDATION
 
 	   validate(
 	       @_, {
-		   foo => {
-		       callbacks => {
-			   'smaller than a breadbox' => sub { shift() < $breadbox },
-			   'green or blue' =>
+		   foo =&gt {
+		       callbacks =&gt {
+			   'smaller than a breadbox' =&gt sub { shift() &lt $breadbox },
+			   'green or blue' =&gt
 			       sub { $_[0] eq 'green' || $_[0] eq 'blue' }
 		       }
 		   }
@@ -345,9 +347,9 @@ PARAMETER VALIDATION
 
 	   validate(
 	       @_, {
-		   foo => {
-		       callbacks => {
-			   'bigger than baz' => sub { $_[0] > $_[1]->{baz} }
+		   foo =&gt {
+		       callbacks =&gt {
+			   'bigger than baz' =&gt sub { $_[0] &gt $_[1]-&gt{baz} }
 		       }
 		   }
 	       }
@@ -359,8 +361,8 @@ PARAMETER VALIDATION
 
 	   my %p = validate(
 	       @_, {
-		   foo => { type => SCALAR, untaint => 1 },
-		   bar => { type => ARRAYREF }
+		   foo =&gt { type =&gt SCALAR, untaint =&gt 1 },
+		   bar =&gt { type =&gt ARRAYREF }
 	       }
 	   );
 
@@ -379,8 +381,8 @@ PARAMETER VALIDATION
 
 	   validate(
 	       @_, {
-		   foo => { type => SCALAR },
-		   bar => { type => ARRAYREF, optional => 1 }
+		   foo =&gt { type =&gt SCALAR },
+		   bar =&gt { type =&gt ARRAYREF, optional =&gt 1 }
 	       }
 	   );
 
@@ -388,8 +390,8 @@ PARAMETER VALIDATION
 
 	   validate_pos(
 	       @_,
-	       { type => SCALAR },
-	       { type => ARRAYREF, optional => 1 }
+	       { type =&gt SCALAR },
+	       { type =&gt ARRAYREF, optional =&gt 1 }
 	   );
 
        By default, parameters are assumed to be mandatory unless specified as
@@ -401,13 +403,13 @@ PARAMETER VALIDATION
 
 	   validate(
 	       @_, {
-		   cc_number => {
-		       type	=> SCALAR,
-		       optional => 1,
-		       depends	=> [ 'cc_expiration', 'cc_holder_name' ],
+		   cc_number =&gt {
+		       type	=&gt SCALAR,
+		       optional =&gt 1,
+		       depends	=&gt [ 'cc_expiration', 'cc_holder_name' ],
 		   },
-		   cc_expiration  { type => SCALAR, optional => 1 },
-		   cc_holder_name { type => SCALAR, optional => 1 },
+		   cc_expiration  { type =&gt SCALAR, optional =&gt 1 },
+		   cc_holder_name { type =&gt SCALAR, optional =&gt 1 },
 	       }
 	   );
 
@@ -442,9 +444,9 @@ PARAMETER VALIDATION
 
        Simple examples of defaults would be:
 
-	   my %p = validate( @_, { foo => 1, bar => { default => 99 } } );
+	   my %p = validate( @_, { foo =&gt 1, bar =&gt { default =&gt 99 } } );
 
-	   my @p = validate_pos( @_, 1, { default => 99 } );
+	   my @p = validate_pos( @_, 1, { default =&gt 99 } );
 
        In scalar context, a hash reference or array reference will be
        returned, as appropriate.
@@ -472,8 +474,8 @@ USAGE NOTES
 
 	       my %params = validate(
 		   @_, {
-		       foo => 1,
-		       bar => { type => ARRAYREF },
+		       foo =&gt 1,
+		       bar =&gt { type =&gt ARRAYREF },
 		   }
 	       );
 	   }
@@ -527,7 +529,7 @@ USAGE NOTES
        trickery to do this when imported.
 
    Options
-       o   normalize_keys => $callback
+       o   normalize_keys =&gt $callback
 
 	   This option is only relevant when dealing with named parameters.
 
@@ -541,19 +543,19 @@ USAGE NOTES
 
 	       sub foo {
 		   return validate_with(
-		       params => \@_,
-		       spec   => { foo => { type => SCALAR } },
-		       normalize_keys =>
+		       params =&gt \@_,
+		       spec   =&gt { foo =&gt { type =&gt SCALAR } },
+		       normalize_keys =&gt
 			   sub { my $k = shift; $k =~ s/^-//; return uc $k },
 		   );
 
 	       }
 
-	       %p = foo( foo => 20 );
+	       %p = foo( foo =&gt 20 );
 
 	       # $p{FOO} is now 20
 
-	       %p = foo( -fOo => 50 );
+	       %p = foo( -fOo =&gt 50 );
 
 	       # $p{FOO} is now 50
 
@@ -562,14 +564,14 @@ USAGE NOTES
 	   If a callback is given then the deprecated "ignore_case" and
 	   "strip_leading" options are ignored.
 
-       o   allow_extra => $boolean
+       o   allow_extra =&gt $boolean
 
 	   If true, then the validation routine will allow extra parameters
 	   not named in the validation specification.  In the case of
 	   positional parameters, this allows an unlimited number of maximum
 	   parameters (though a minimum may still be set).  Defaults to false.
 
-       o   on_fail => $callback
+       o   on_fail =&gt $callback
 
 	   If given, this callback will be called whenever a validation check
 	   fails.  It will be called with a single parameter, which will be a
@@ -583,7 +585,7 @@ USAGE NOTES
 	   The default is to simply use the Carp module's "confess()"
 	   function.
 
-       o   stack_skip => $number
+       o   stack_skip =&gt $number
 
 	   This tells Params::Validate how many stack frames to skip when
 	   finding a subroutine name to use in error messages.	By default, it
@@ -591,7 +593,7 @@ USAGE NOTES
 	   "validate_pos()".  If this option is set, then the given number of
 	   frames are skipped instead.
 
-       o   ignore_case => $boolean
+       o   ignore_case =&gt $boolean
 
 	   DEPRECATED
 
@@ -599,7 +601,7 @@ USAGE NOTES
 	   true, then the validation code will ignore the case of parameter
 	   names.  Defaults to false.
 
-       o   strip_leading => $characters
+       o   strip_leading =&gt $characters
 
 	   DEPRECATED
 
@@ -614,12 +616,12 @@ PER-INVOCATION OPTIONS
        above on a per-invocation basis.  For example:
 
 	   my %p = validate_with(
-	       params => \@_,
-	       spec   => {
-		   foo => { type    => SCALAR },
-		   bar => { default => 10 }
+	       params =&gt \@_,
+	       spec   =&gt {
+		   foo =&gt { type    =&gt SCALAR },
+		   bar =&gt { default =&gt 10 }
 	       },
-	       allow_extra => 1,
+	       allow_extra =&gt 1,
 	   );
 
        In addition to the options listed above, it is also possible to set the
@@ -631,23 +633,23 @@ PER-INVOCATION OPTIONS
        parameters are assumed to be positional.
 
 	   my %p = validate_with(
-	       params => \@_,
-	       spec   => {
-		   foo => { type    => SCALAR },
-		   bar => { default => 10 }
+	       params =&gt \@_,
+	       spec   =&gt {
+		   foo =&gt { type    =&gt SCALAR },
+		   bar =&gt { default =&gt 10 }
 	       },
-	       allow_extra => 1,
-	       called	   => 'The Quux::Baz class constructor',
+	       allow_extra =&gt 1,
+	       called	   =&gt 'The Quux::Baz class constructor',
 	   );
 
 	   my @p = validate_with(
-	       params => \@_,
-	       spec   => [
-		   { type    => SCALAR },
-		   { default => 10 }
+	       params =&gt \@_,
+	       spec   =&gt [
+		   { type    =&gt SCALAR },
+		   { default =&gt 10 }
 	       ],
-	       allow_extra => 1,
-	       called	   => 'The Quux::Baz class constructor',
+	       allow_extra =&gt 1,
+	       called	   =&gt 'The Quux::Baz class constructor',
 	   );
 
 DISABLING VALIDATION
@@ -669,14 +671,14 @@ DISABLING VALIDATION
 	       local $Params::Validate::NO_VALIDATION = 1;
 
 	       # no error
-	       foo( bar => 2 );
+	       foo( bar =&gt 2 );
 	   }
 
 	   # error
-	   foo( bar => 2 );
+	   foo( bar =&gt 2 );
 
 	   sub foo {
-	       my %p = validate( @_, { foo => 1 } );
+	       my %p = validate( @_, { foo =&gt 1 } );
 	       ...;
 	   }
 
@@ -718,10 +720,10 @@ DONATIONS
 
        To donate, log into PayPal and send money to autarch@urth.org or use
        the button on this page: http://www.urth.org/~autarch/fs-donation.html
-       <http://www.urth.org/~autarch/fs-donation.html>
+       &lthttp://www.urth.org/~autarch/fs-donation.html&gt
 
 AUTHOR
-       Dave Rolsky, <autarch@urth.org> and Ilya Martynov <ilya@martynov.org>
+       Dave Rolsky, &ltautarch@urth.org&gt and Ilya Martynov &ltilya@martynov.org&gt
 
 COPYRIGHT AND LICENSE
        This software is Copyright (c) 2011 by Dave Rolsky and Ilya Martynov.
@@ -733,6 +735,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2012-06-20		   Params::Validate(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

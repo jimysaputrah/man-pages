@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Net::Server" is an extensible, generic Perl server engine...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::Server - Extensible, general Perl server engine</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::Server(3)	      User Contributed Perl Documentation	Net::Server(3)
 
 
@@ -23,14 +25,14 @@ SYNOPSIS
 
 	   sub process_request {
 	       my $self = shift;
-	       while (<STDIN>) {
+	       while (&ltSTDIN&gt) {
 		   s/\r?\n$//;
 		   print "You said '$_'\r\n"; # basic echo
 		   last if /quit/i;
 	       }
 	   }
 
-	   MyPackage->run(port => 160);
+	   MyPackage-&gtrun(port =&gt 160);
 
 FEATURES
 	* Single Server Mode
@@ -172,15 +174,15 @@ SOCKET ACCESS
        Once started, the Net::Server will take care of binding to port and
        waiting for connections.  Once a connection is received, the
        Net::Server will accept on the socket and will store the result (the
-       client connection) in $self->{server}->{client}.  This property is a
+       client connection) in $self-&gt{server}-&gt{client}.  This property is a
        Socket blessed into the the IO::Socket classes.	UDP servers are
        slightly different in that they will perform a recv instead of an
        accept.
 
        To make programming easier, during the post_accept phase, STDIN and
        STDOUT are opened to the client connection.  This allows for programs
-       to be written using <STDIN> and print "out\n" to print to the client
-       connection.  UDP will require using a ->send call.
+       to be written using &ltSTDIN&gt and print "out\n" to print to the client
+       connection.  UDP will require using a -&gtsend call.
 
 SAMPLE CODE
        The following is a very simple server.  The main functionality occurs
@@ -196,7 +198,7 @@ SAMPLE CODE
 	   use strict;
 	   use base qw(Net::Server::PreFork); # any personality will do
 
-	   MyPackage->run;
+	   MyPackage-&gtrun;
 
 	   ### over-ridden subs below
 
@@ -208,7 +210,7 @@ SAMPLE CODE
 		   my $timeout = 30; # give the user 30 seconds to type some lines
 
 		   my $previous_alarm = alarm($timeout);
-		   while (<STDIN>) {
+		   while (&ltSTDIN&gt) {
 		       s/\r?\n$//;
 		       print "You said '$_'\r\n";
 		       alarm($timeout);
@@ -253,7 +255,7 @@ ARGUMENTS
        "key=value".  In the conf file the parameter passing can best be shown
        by the following regular expression:
        ($key,$val)=~/^(\w+)\s+(\S+?)\s+$/.  Passing arguments to the run
-       method is done as follows: "Net::Server-"run(key1 => 'val1')>.  Passing
+       method is done as follows: "Net::Server-"run(key1 =&gt 'val1')&gt.  Passing
        arguments via a prebuilt object can best be shown in the following
        code:
 
@@ -263,22 +265,22 @@ ARGUMENTS
 	   use strict;
 	   use base qw(Net::Server);
 
-	   my $server = MyPackage->new({
-	       key1 => 'val1',
+	   my $server = MyPackage-&gtnew({
+	       key1 =&gt 'val1',
 	   });
 
-	   $server->run;
+	   $server-&gtrun;
 
        All five methods for passing arguments may be used at the same time.
        Once an argument has been set, it is not over written if another method
        passes the same argument.  "Net::Server" will look for arguments in the
        following order:
 
-	 1) Arguments passed to the C<new> method.
+	 1) Arguments passed to the C&ltnew&gt method.
 	 2) Arguments passed on command line.
-	 3) Arguments passed to the C<run> method.
+	 3) Arguments passed to the C&ltrun&gt method.
 	 4) Arguments passed via a conf file.
-	 5) Arguments set in the C<default_values> method.
+	 5) Arguments set in the C&ltdefault_values&gt method.
 
        Additionally the following hooks are available:
 
@@ -305,19 +307,19 @@ ADDING CUSTOM ARGUMENTS
 
 	   sub options {
 	       my $self     = shift;
-	       my $prop     = $self->{'server'};
+	       my $prop     = $self-&gt{'server'};
 	       my $template = shift;
 
 	       ### setup options in the parent classes
-	       $self->SUPER::options($template);
+	       $self-&gtSUPER::options($template);
 
 	       ### add a single value option
-	       $prop->{'my_option'} ||= undef;
-	       $template->{'my_option'} = \ $prop->{'my_option'};
+	       $prop-&gt{'my_option'} ||= undef;
+	       $template-&gt{'my_option'} = \ $prop-&gt{'my_option'};
 
 	       ### add a multi value option
-	       $prop->{'an_arrayref_item'} ||= [];
-	       $template->{'an_arrayref_item'} = $prop->{'an_arrayref_item'};
+	       $prop-&gt{'an_arrayref_item'} ||= [];
+	       $template-&gt{'an_arrayref_item'} = $prop-&gt{'an_arrayref_item'};
 	   }
 
        Overriding the "options" method allows for adding your own custom
@@ -343,34 +345,34 @@ ADDING CUSTOM ARGUMENTS
 
        For example, a basic structure might look like this:
 
-	  $prop = $self->{'server'}
+	  $prop = $self-&gt{'server'}
 
-	  $prop->{'my_custom_option'} ||= undef;
-	  $prop->{'my_custom_array'}  ||= [];
+	  $prop-&gt{'my_custom_option'} ||= undef;
+	  $prop-&gt{'my_custom_array'}  ||= [];
 
 	  $template = {
-	     my_custom_option => \ $prop->{'my_custom_option'},
-	     mco	      => \ $prop->{'my_custom_option'}, # alias
-	     my_custom_array  => $prop->{'my_custom_array'},
-	     mca	      => $prop->{'my_custom_array'}, # an alias
+	     my_custom_option =&gt \ $prop-&gt{'my_custom_option'},
+	     mco	      =&gt \ $prop-&gt{'my_custom_option'}, # alias
+	     my_custom_array  =&gt $prop-&gt{'my_custom_array'},
+	     mca	      =&gt $prop-&gt{'my_custom_array'}, # an alias
 	  };
 
-	  $template->{'mco2'} = $template->{'mco'}; # another way to alias
+	  $template-&gt{'mco2'} = $template-&gt{'mco'}; # another way to alias
 
        But you could also have more complex data:
 
-	  $prop = $self->{'server'};
+	  $prop = $self-&gt{'server'};
 
-	  $prop->{'one_layer'} = {
-	      two_layer => [
+	  $prop-&gt{'one_layer'} = {
+	      two_layer =&gt [
 		  undef,
 		  undef,
 	      ],
 	  };
 
 	  $template = {
-	       param1 => \ $prop->{'one_layer'}->{'two_layer'}->[0],
-	       param2 => \ $prop->{'one_layer'}->{'two_layer'}->[1],
+	       param1 =&gt \ $prop-&gt{'one_layer'}-&gt{'two_layer'}-&gt[0],
+	       param2 =&gt \ $prop-&gt{'one_layer'}-&gt{'two_layer'}-&gt[1],
 	  };
 
        This is of course a contrived example - but it does show that you can
@@ -390,7 +392,7 @@ DEFAULT ARGUMENTS FOR Net::Server
 
 	 ## syslog parameters
 	 syslog_logsock    (native|unix|inet|udp
-			    |tcp|stream|console)    unix (on Sys::Syslog < 0.15)
+			    |tcp|stream|console)    unix (on Sys::Syslog &lt 0.15)
 	 syslog_ident	   "identity"		    "net_server"
 	 syslog_logopt	   (cons|ndelay|nowait|pid) pid
 	 syslog_facility   \w+			    daemon
@@ -427,8 +429,8 @@ DEFAULT ARGUMENTS FOR Net::Server
 	   conf_file.  The first is to pass the default value to the run
 	   method as in:
 
-	       MyServer->run({
-		  conf_file => '/etc/my_server.conf',
+	       MyServer-&gtrun({
+		  conf_file =&gt '/etc/my_server.conf',
 	       });
 
 	   If the end user passes in --conf_file=/etc/their_server.conf then
@@ -439,7 +441,7 @@ DEFAULT ARGUMENTS FOR Net::Server
 
 	       sub default_values {
 		   return {
-		       conf_file => '/etc/my_server.conf',
+		       conf_file =&gt '/etc/my_server.conf',
 		   }
 	       }
 
@@ -450,9 +452,9 @@ DEFAULT ARGUMENTS FOR Net::Server
 	   all, you can pass conf_file to the new method when creating your
 	   object:
 
-	       MyServer->new({
-		  conf_file => '/etc/my_server.conf',
-	       })->run;
+	       MyServer-&gtnew({
+		  conf_file =&gt '/etc/my_server.conf',
+	       })-&gtrun;
 
 	   If passed this way, the value passed to new will "win" over any of
 	   the other passed in values.
@@ -462,8 +464,8 @@ DEFAULT ARGUMENTS FOR Net::Server
 	   logged.  "O" means logging is off.  "4" means very verbose.	These
 	   levels should be able to correlate to syslog levels.  Default is 2.
 	   These levels correlate to syslog levels as defined by the following
-	   key/value pairs: 0=>'err', 1=>'warning', 2=>'notice', 3=>'info',
-	   4=>'debug'.
+	   key/value pairs: 0=&gt'err', 1=&gt'warning', 2=&gt'notice', 3=&gt'info',
+	   4=&gt'debug'.
 
        log_file
 	   Name of log file to be written to.  If no name is given and hook is
@@ -484,7 +486,7 @@ DEFAULT ARGUMENTS FOR Net::Server
 	   Only available if "log_file" is equal to "Sys::Syslog".  May be
 	   either unix, inet, native, console, stream, udp, or tcp, or an
 	   arrayref of the types to try.  Default is "unix" if the version of
-	   Sys::Syslog < 0.15 - otherwise the default is to not call
+	   Sys::Syslog &lt 0.15 - otherwise the default is to not call
 	   setlogsock.
 
 	   See Sys::Syslog.
@@ -542,7 +544,7 @@ DEFAULT ARGUMENTS FOR Net::Server
 	   the protos arrary to the size of the ports array.
 
        listen
-	     See L<IO::Socket>.  Not used with udp protocol (or UNIX SOCK_DGRAM).
+	     See L&ltIO::Socket&gt.  Not used with udp protocol (or UNIX SOCK_DGRAM).
 
        reverse_lookups
 	   Specify whether to lookup the hostname of the connected IP.
@@ -635,8 +637,8 @@ PROPERTIES
        The structure of a Net::Server object is shown below:
 
 	 $self = bless( {
-			  'server' => {
-					'key1' => 'val1',
+			  'server' =&gt {
+					'key1' =&gt 'val1',
 					# more key/vals
 				      }
 			}, 'Net::Server' );
@@ -649,15 +651,15 @@ PROPERTIES
        You may get and set properties in two ways.  The suggested way is to
        access properties directly via
 
-	 my $val = $self->{server}->{key1};
+	 my $val = $self-&gt{server}-&gt{key1};
 
        Accessing the properties directly will speed the server process -
        though some would deem this as bad style.  A second way has been
        provided for object oriented types who believe in methods.  The second
        way consists of the following methods:
 
-	 my $val = $self->get_property( 'key1' );
-	 my $self->set_property( key1 => 'val1' );
+	 my $val = $self-&gtget_property( 'key1' );
+	 my $self-&gtset_property( key1 =&gt 'val1' );
 
        Properties are allowed to be changed at any time with caution (please
        do not undef the sock property or you will close the client
@@ -712,126 +714,126 @@ CONFIGURATION FILE
 PROCESS FLOW
        The process flow is written in an open, easy to override, easy to hook,
        fashion.  The basic flow is shown below.  This is the flow of the
-       "$self->run" method.
+       "$self-&gtrun" method.
 
-	 $self->configure_hook;
+	 $self-&gtconfigure_hook;
 
-	 $self->configure(@_);
+	 $self-&gtconfigure(@_);
 
-	 $self->post_configure;
+	 $self-&gtpost_configure;
 
-	 $self->post_configure_hook;
+	 $self-&gtpost_configure_hook;
 
-	 $self->pre_bind;
+	 $self-&gtpre_bind;
 
-	 $self->bind;
+	 $self-&gtbind;
 
-	 $self->post_bind_hook;
+	 $self-&gtpost_bind_hook;
 
-	 $self->post_bind;
+	 $self-&gtpost_bind;
 
-	 $self->pre_loop_hook;
+	 $self-&gtpre_loop_hook;
 
-	 $self->loop;
+	 $self-&gtloop;
 
-	 ### routines inside a standard $self->loop
-	 # $self->accept;
-	 # $self->run_client_connection;
-	 # $self->done;
+	 ### routines inside a standard $self-&gtloop
+	 # $self-&gtaccept;
+	 # $self-&gtrun_client_connection;
+	 # $self-&gtdone;
 
-	 $self->pre_server_close_hook;
+	 $self-&gtpre_server_close_hook;
 
-	 $self->server_close;
+	 $self-&gtserver_close;
 
        The server then exits.
 
-       During the client processing phase ("$self->run_client_connection"),
+       During the client processing phase ("$self-&gtrun_client_connection"),
        the following represents the program flow:
 
-	 $self->post_accept;
+	 $self-&gtpost_accept;
 
-	 $self->get_client_info;
+	 $self-&gtget_client_info;
 
-	 $self->post_accept_hook;
+	 $self-&gtpost_accept_hook;
 
-	 if( $self->allow_deny
+	 if( $self-&gtallow_deny
 
-	     && $self->allow_deny_hook ){
+	     && $self-&gtallow_deny_hook ){
 
-	   $self->process_request;
+	   $self-&gtprocess_request;
 
 	 }else{
 
-	   $self->request_denied_hook;
+	   $self-&gtrequest_denied_hook;
 
 	 }
 
-	 $self->post_process_request_hook;
+	 $self-&gtpost_process_request_hook;
 
-	 $self->post_process_request;
+	 $self-&gtpost_process_request;
 
-	 $self->post_client_connection_hook;
+	 $self-&gtpost_client_connection_hook;
 
        The process then loops and waits for the next connection.  For a more
        in depth discussion, please read the code.
 
-       During the server shutdown phase ("$self->server_close"), the following
+       During the server shutdown phase ("$self-&gtserver_close"), the following
        represents the program flow:
 
-	 $self->close_children;  # if any
+	 $self-&gtclose_children;  # if any
 
-	 $self->post_child_cleanup_hook;
+	 $self-&gtpost_child_cleanup_hook;
 
 	 if( Restarting server ){
-	    $self->restart_close_hook();
-	    $self->hup_server;
+	    $self-&gtrestart_close_hook();
+	    $self-&gthup_server;
 	 }
 
-	 $self->shutdown_sockets;
+	 $self-&gtshutdown_sockets;
 
-	 $self->server_exit;
+	 $self-&gtserver_exit;
 
 MAIN SERVER METHODS
-       "$self->run"
+       "$self-&gtrun"
 	   This method incorporates the main process flow.  This flow is
 	   listed above.
 
 	   The method run may be called in any of the following ways.
 
-	      MyPackage->run(port => 20201);
+	      MyPackage-&gtrun(port =&gt 20201);
 
-	      MyPackage->new({port => 20201})->run;
+	      MyPackage-&gtnew({port =&gt 20201})-&gtrun;
 
-	      my $obj = bless {server=>{port => 20201}}, 'MyPackage';
-	      $obj->run;
+	      my $obj = bless {server=&gt{port =&gt 20201}}, 'MyPackage';
+	      $obj-&gtrun;
 
-	   The ->run method should typically be the last method called in a
-	   server start script (the server will exit at the end of the ->run
+	   The -&gtrun method should typically be the last method called in a
+	   server start script (the server will exit at the end of the -&gtrun
 	   method).
 
-       "$self->configure"
+       "$self-&gtconfigure"
 	   This method attempts to read configurations from the commandline,
 	   from the run method call, or from a specified conf_file (the
 	   conf_file may be specified by passed in parameters, or in the
 	   default_values).  All of the configured parameters are then stored
 	   in the {"server"} property of the Server object.
 
-       "$self->post_configure"
+       "$self-&gtpost_configure"
 	   The post_configure hook begins the startup of the server.  During
 	   this method running server instances are checked for, pid_files are
 	   created, log_files are created, Sys::Syslog is initialized (as
 	   needed), process backgrounding occurs and the server closes STDIN
 	   and STDOUT (as needed).
 
-       "$self->pre_bind"
+       "$self-&gtpre_bind"
 	   This method is used to initialize all of the socket objects used by
 	   the server.
 
-       "$self->bind"
+       "$self-&gtbind"
 	   This method actually binds to the inialized sockets (or rebinds if
 	   the server has been HUPed).
 
-       "$self->post_bind"
+       "$self-&gtpost_bind"
 	   During this method priveleges are dropped.  The INT, TERM, and QUIT
 	   signals are set to run server_close.  Sig PIPE is set to IGNORE.
 	   Sig CHLD is set to sig_chld.  And sig HUP is set to call sig_hup.
@@ -840,7 +842,7 @@ MAIN SERVER METHODS
 	   signals are registered using Net::Server::SIG to allow for safe
 	   signal handling.
 
-       "$self->loop"
+       "$self-&gtloop"
 	   During this phase, the server accepts incoming connections.	The
 	   behavior of how the accepting occurs and if a child process handles
 	   the connection is controlled by what type of Net::Server
@@ -870,7 +872,7 @@ MAIN SERVER METHODS
 
 	   Read the documentation for each of the types for more information.
 
-       "$self->server_close"
+       "$self-&gtserver_close"
 	   This method is called once the server has been signaled to end, or
 	   signaled for the server to restart (via HUP),  or the loop method
 	   has been exited.
@@ -879,33 +881,33 @@ MAIN SERVER METHODS
 	   processes, setting appropriate flags on sockets (for HUPing),
 	   closing up logging, and then closing open sockets.
 
-       "$self->server_exit"
+       "$self-&gtserver_exit"
 	   This method is called at the end of server_close.  It calls exit,
 	   but may be overridden to do other items.  At this point all
 	   services should be shut down.
 
 MAIN CLIENT CONNECTION METHODS
-       "$self->run_client_connection"
+       "$self-&gtrun_client_connection"
 	   This method is run after the server has accepted and received a
 	   client connection.  The full process flow is listed above under
 	   PROCESS FLOWS.  This method takes care of handling each client
 	   connection.
 
-       "$self->post_accept"
+       "$self-&gtpost_accept"
 	   This method opens STDIN and STDOUT to the client socket.  This
 	   allows any of the methods during the run_client_connection phase to
 	   print directly to and read directly from the client socket.
 
-       "$self->get_client_info"
+       "$self-&gtget_client_info"
 	   This method looks up information about the client connection such
 	   as ip address, socket type, and hostname (as needed).
 
-       "$self->allow_deny"
+       "$self-&gtallow_deny"
 	   This method uses the rules defined in the allow and deny
 	   configuration parameters to determine if the ip address should be
 	   accepted.
 
-       "$self->process_request"
+       "$self-&gtprocess_request"
 	   This method is intended to handle all of the client communication.
 	   At this point STDIN and STDOUT are opened to the client, the ip
 	   address has been verified.  The server can then interact with the
@@ -919,7 +921,7 @@ MAIN CLIENT CONNECTION METHODS
 	   whatever is sent.  It will quit the child if "quit" is sent, and
 	   will exit the server if "exit" is sent.
 
-       "$self->post_process_request"
+       "$self-&gtpost_process_request"
 	   This method is used to clean up the client connection and to handle
 	   any parent/child accounting for the forking servers.
 
@@ -938,7 +940,7 @@ HOOKS
 
 	   sub post_configure_hook {
 	       my $self = shift;
-	       my $prop = $self->{'server'};
+	       my $prop = $self-&gt{'server'};
 
 	       # do some validation here
 	   }
@@ -946,29 +948,29 @@ HOOKS
        The following describes the hooks available in the plain Net::Server
        class (other flavors such as Fork or PreFork have additional hooks).
 
-       "$self->configure_hook()"
-	   This hook takes place immediately after the "->run()" method is
+       "$self-&gtconfigure_hook()"
+	   This hook takes place immediately after the "-&gtrun()" method is
 	   called.  This hook allows for setting up the object before any
 	   built in configuration takes place.	This allows for custom
 	   configurability.
 
-       "$self->post_configure_hook()"
+       "$self-&gtpost_configure_hook()"
 	   This hook occurs just after the reading of configuration parameters
 	   and initiation of logging and pid_file creation.  It also occurs
-	   before the "->pre_bind()" and "->bind()" methods are called.  This
+	   before the "-&gtpre_bind()" and "-&gtbind()" methods are called.  This
 	   hook allows for verifying configuration parameters.
 
-       "$self->post_bind_hook()"
+       "$self-&gtpost_bind_hook()"
 	   This hook occurs just after the bind process and just before any
 	   chrooting, change of user, or change of group occurs.  At this
 	   point the process will still be running as the user who started the
 	   server.
 
-       "$self->pre_loop_hook()"
+       "$self-&gtpre_loop_hook()"
 	   This hook occurs after chroot, change of user, and change of group
 	   has occured.  It allows for preparation before looping begins.
 
-       "$self->can_read_hook()"
+       "$self-&gtcan_read_hook()"
 	   This hook occurs after a socket becomes readible on an
 	   accept_multi_port request (accept_multi_port is used if there are
 	   multiple bound ports to accept on, or if the "multi_port"
@@ -986,35 +988,35 @@ HOOKS
 	   It is generally suggested that other avenues be pursued for sending
 	   messages via sockets not created by the Net::Server.
 
-       "$self->post_accept_hook()"
+       "$self-&gtpost_accept_hook()"
 	   This hook occurs after a client has connected to the server.  At
 	   this point STDIN and STDOUT are mapped to the client socket.  This
 	   hook occurs before the processing of the request.
 
-       "$self->allow_deny_hook()"
+       "$self-&gtallow_deny_hook()"
 	   This hook allows for the checking of ip and host information beyond
-	   the "$self->allow_deny()" routine.  If this hook returns 1, the
+	   the "$self-&gtallow_deny()" routine.  If this hook returns 1, the
 	   client request will be processed, otherwise, the request will be
 	   denied processing.
 
-       "$self->request_denied_hook()"
-	   This hook occurs if either the "$self->allow_deny()" or
-	   "$self->allow_deny_hook()" have taken place.
+       "$self-&gtrequest_denied_hook()"
+	   This hook occurs if either the "$self-&gtallow_deny()" or
+	   "$self-&gtallow_deny_hook()" have taken place.
 
-       "$self->post_process_request_hook()"
+       "$self-&gtpost_process_request_hook()"
 	   This hook occurs after the processing of the request, but before
 	   the client connection has been closed.
 
-       "$self->post_client_connection_hook"
+       "$self-&gtpost_client_connection_hook"
 	   This is one final hook that occurs at the very end of the
 	   run_client_connection method.  At this point all other methods and
 	   hooks that will run during the run_client_connection have finished
 	   and the client connection has already been closed.
 
-       "$self->pre_server_close_hook()"
+       "$self-&gtpre_server_close_hook()"
 	   This hook occurs before the server begins shutting down.
 
-       "$self->write_to_log_hook"
+       "$self-&gtwrite_to_log_hook"
 	   This hook handles writing to log files.  The default hook is to
 	   write to STDERR, or to the filename contained in the parameter
 	   "log_file".	The arguments passed are a log level of 0 to 4 (4
@@ -1022,30 +1024,30 @@ HOOKS
 	   "Sys::Syslog", then logging will go to Sys::Syslog and will bypass
 	   the write_to_log_hook.
 
-       "$self->fatal_hook"
+       "$self-&gtfatal_hook"
 	   This hook occurs when the server has encountered an unrecoverable
 	   error.  Arguments passed are the error message, the package, file,
 	   and line number.  The hook may close the server, but it is
 	   suggested that it simply return and use the built in shut down
 	   features.
 
-       "$self->post_child_cleanup_hook"
+       "$self-&gtpost_child_cleanup_hook"
 	   This hook occurs in the parent server process after all children
 	   have been shut down and just before the server either restarts or
 	   exits.  It is intended for additional cleanup of information.  At
 	   this point pid_files and lockfiles still exist.
 
-       "$self->restart_open_hook"
+       "$self-&gtrestart_open_hook"
 	   This hook occurs if a server has been HUPed (restarted via the HUP
 	   signal.  It occurs just before reopening to the filenos of the
 	   sockets that were already opened.
 
-       "$self->restart_close_hook"
+       "$self-&gtrestart_close_hook"
 	   This hook occurs if a server has been HUPed (restarted via the HUP
 	   signal.  It occurs just before restarting the server via exec.
 
 OTHER METHODS
-       "$self->default_values"
+       "$self-&gtdefault_values"
 	   Allow for returning configuration values that will be used if no
 	   other value could be found.
 
@@ -1053,17 +1055,17 @@ OTHER METHODS
 
 	       sub default_values {
 		 return {
-		   port => 20201,
+		   port =&gt 20201,
 		 };
 	       }
 
-       "$self->handle_syslog_error"
+       "$self-&gthandle_syslog_error"
 	   Called when log_file is set to 'Sys::Syslog' and an error occurs
 	   while writing to the syslog.  It is passed two arguments, the value
 	   of $@, and an arrayref containing the arguments that were passed to
 	   the log method when the error occured.
 
-       "$self->log"
+       "$self-&gtlog"
 	   Parameters are a log_level and a message.
 
 	   If log_level is set to 'Sys::Syslog', the parameters may
@@ -1076,10 +1078,10 @@ OTHER METHODS
 
 	       # assuming log_file = 'Sys::Syslog'
 
-	       $self->log(1, "My Message with %s in it");
+	       $self-&gtlog(1, "My Message with %s in it");
 	       # sends "%s", "My Message with %s in it" to syslog
 
-	       $self->log(1, "My Message with %s in it", "Foo");
+	       $self-&gtlog(1, "My Message with %s in it", "Foo");
 	       # sends "My Message with %s in it", "Foo" to syslog
 
 	   If log_file is set to a file (other than Sys::Syslog), the message
@@ -1098,10 +1100,10 @@ OTHER METHODS
 
 	       sub handle_syslog_error {
 		 my $self = shift;
-		 $self->open_syslog;
+		 $self-&gtopen_syslog;
 	       }
 
-       "$self->new"
+       "$self-&gtnew"
 	   As of Net::Server 0.91 there is finally a new method.  This method
 	   takes a class name and an argument hashref as parameters.  The
 	   argument hashref becomes the "server" property of the object.
@@ -1109,20 +1111,20 @@ OTHER METHODS
 	      package MyPackage;
 	      use base qw(Net::Server);
 
-	      my $obj = MyPackage->new({port => 20201});
+	      my $obj = MyPackage-&gtnew({port =&gt 20201});
 
 	      # same as
 
-	      my $obj = bless {server => {port => 20201}}, 'MyPackage';
+	      my $obj = bless {server =&gt {port =&gt 20201}}, 'MyPackage';
 
-       "$self->open_syslog"
+       "$self-&gtopen_syslog"
 	   Called during post_configure when the log_file option is set to
 	   'Sys::Syslog'.  By default it use the parsed configuration options
 	   listed in this document.  If more custom behavior is desired, the
 	   method could be overridden and Sys::Syslog::openlog should be
 	   called with the custom parameters.
 
-       "$self->shutdown_sockets"
+       "$self-&gtshutdown_sockets"
 	   This method will close any remaining open sockets.  This is called
 	   at the end of the server_close method.
 
@@ -1132,12 +1134,12 @@ RESTARTING
        will close children (if any), make sure that sockets are left open, and
        re-exec using the same commandline parameters that initially started
        the server.  (Note: for this reason it is important that @ARGV is not
-       modified until "->run" is called).
+       modified until "-&gtrun" is called).
 
        The Net::Server will attempt to find out the commandline used for
        starting the program.  The attempt is made before any configuration
        files or other arguments are processed.	The outcome of this attempt is
-       stored using the method "->commandline".  The stored commandline may
+       stored using the method "-&gtcommandline".  The stored commandline may
        also be retrieved using the same method name.  The stored contents will
        undoubtedly contain Tainted items that will cause the server to die
        during a restart when using the -T flag (Taint mode).  As it is
@@ -1149,14 +1151,14 @@ RESTARTING
 	   my $self = shift;
 
 	   ### see the contents
-	   my $ref  = $self->commandline;
+	   my $ref  = $self-&gtcommandline;
 	   use Data::Dumper;
 	   print Dumper $ref;
 
 	   ### arbitrary untainting - VERY dangerous
 	   my @untainted = map {/(.+)/;$1} @$ref;
 
-	   $self->commandline(\@untainted)
+	   $self-&gtcommandline(\@untainted)
 	 }
 
 FILES
@@ -1184,7 +1186,7 @@ INSTALL
 	   make install
 
 AUTHOR
-       Paul Seamons <paul at seamons.com>
+       Paul Seamons &ltpaul at seamons.com&gt
 
 THANKS
        Thanks to Rob Brown (bbb at cpan.org) for help with miscellaneous
@@ -1193,10 +1195,10 @@ THANKS
        possible.  And for researching into allowing sockets to remain open
        upon exec (making HUP possible).
 
-       Thanks to Jonathan J. Miner <miner at doit.wisc.edu> for patching a
+       Thanks to Jonathan J. Miner &ltminer at doit.wisc.edu&gt for patching a
        blatant problem in the reverse lookups.
 
-       Thanks to Bennett Todd <bet at rahul.net> for pointing out a problem in
+       Thanks to Bennett Todd &ltbet at rahul.net&gt for pointing out a problem in
        Solaris 2.5.1 which does not allow multiple children to accept on the
        same port at the same time.  Also for showing some sample code from
        Viktor Duchovni which now represents the semaphore option of the
@@ -1206,15 +1208,15 @@ THANKS
        in the right direction for determining the protocol used on a socket
        connection.
 
-       Thanks to Jeremy Howard <j+daemonize at howard.fm> for numerous
+       Thanks to Jeremy Howard &ltj+daemonize at howard.fm&gt for numerous
        suggestions and for work on Net::Server::Daemonize.
 
-       Thanks to Vadim <vadim at hardison.net> for patches to implement
+       Thanks to Vadim &ltvadim at hardison.net&gt for patches to implement
        parent/child communication on PreFork.pm.
 
        Thanks to Carl Lewis for suggesting "-" in user names.
 
-       Thanks to Slaven Rezic for suggesing Reuse => 1 in Proto::UDP.
+       Thanks to Slaven Rezic for suggesing Reuse =&gt 1 in Proto::UDP.
 
        Thanks to Tim Watt for adding udp_broadcast to Proto::UDP.
 
@@ -1275,7 +1277,7 @@ THANKS
        working with the Multiplex server.
 
        Thanks to Peter Beckman for suggesting allowing Sys::SysLog keyworks be
-       passed through the ->log method and for suggesting we allow more types
+       passed through the -&gtlog method and for suggesting we allow more types
        of characters through in syslog_ident.  Also to Peter Beckman for
        pointing out that a poorly setup localhost will cause tests to hang.
 
@@ -1286,7 +1288,7 @@ THANKS
        And just a general Thanks You to everybody who is using Net::Server or
        who has contributed fixes over the years.
 
-       Thanks to Paul Miller for some ->autoflush, FileHandle fixes.
+       Thanks to Paul Miller for some -&gtautoflush, FileHandle fixes.
 
        Thanks to Patrik Wallstrom for suggesting handling syslog errors
        better.
@@ -1295,7 +1297,7 @@ THANKS
        in PreFork server.
 
        Thanks to David Schweikert for suggesting handling setlogsock a little
-       better on newer versions of Sys::Syslog (>= 0.15).
+       better on newer versions of Sys::Syslog (&gt= 0.15).
 
        Thanks to Mihail Nasedkin for suggesting adding a hook that is now
        called post_client_connection_hook.
@@ -1311,10 +1313,10 @@ TODO
 	 would earn a big thank you :) (Sorry there isn't a whole lot more than that to give).
 
 AUTHOR
-	 Paul Seamons <paul at seamons.com>
+	 Paul Seamons &ltpaul at seamons.com&gt
 	 http://seamons.com/
 
-	 Rob Brown <bbb at cpan.org>
+	 Rob Brown &ltbbb at cpan.org&gt
 
 LICENSE
        This package may be distributed under the terms of either the
@@ -1328,6 +1330,6 @@ LICENSE
 
 
 perl v5.10.1			  2007-07-25			Net::Server(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

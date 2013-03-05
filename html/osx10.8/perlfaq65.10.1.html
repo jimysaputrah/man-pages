@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This section is surprisingly small because the rest of the FAQ is..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlfaq6 - Regular Expressions</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLFAQ6(1)	       Perl Programmers Reference Guide 	   PERLFAQ6(1)
 
 
@@ -45,19 +47,19 @@ DESCRIPTION
 
 	   "/x" lets you turn this:
 
-		   s{<(?:[^>'"]*|".*?"|'.*?')+>}{}gs;
+		   s{&lt(?:[^&gt'"]*|".*?"|'.*?')+&gt}{}gs;
 
 	   into this:
 
-		   s{ < 		   # opening angle bracket
+		   s{ &lt 		   # opening angle bracket
 			   (?:		       # Non-backreffing grouping paren
-				   [^>'"] *	   # 0 or more things that are neither > nor ' nor "
+				   [^&gt'"] *	   # 0 or more things that are neither &gt nor ' nor "
 					   |	       #    or else
 				   ".*?"	   # a section between double quotes (stingy match)
 					   |	       #    or else
 				   '.*?'	   # a section between single quotes (stingy match)
 			   ) +		       #   all occurring one or more times
-			   >		       # closing angle bracket
+			   &gt		       # closing angle bracket
 		   }{}gsx;		   # replace with nothing, i.e. delete
 
 	   It's still not quite so clear as prose, but it is very useful for
@@ -99,7 +101,7 @@ DESCRIPTION
        read in.
 
 	       $/ = ''; 	       # read in whole paragraph, not just one line
-	       while ( <> ) {
+	       while ( &lt&gt ) {
 		       while ( /\b([\w'-]+)(\s+\1)+\b/gi ) {   # word starts alpha
 			       print "Duplicate $1 at paragraph $.\n";
 		       }
@@ -109,7 +111,7 @@ DESCRIPTION
        be mangled by many mailers):
 
 	       $/ = ''; 	       # read in whole paragraph, not just one line
-	       while ( <> ) {
+	       while ( &lt&gt ) {
 		       while ( /^From /gm ) { # /m makes ^ match next to \n
 		       print "leading from in paragraph $.\n";
 		       }
@@ -118,7 +120,7 @@ DESCRIPTION
        Here's code that finds everything between START and END in a paragraph:
 
 	       undef $/;	       # read in whole file, not just one line or paragraph
-	       while ( <> ) {
+	       while ( &lt&gt ) {
 		       while ( /START(.*?)END/sgm ) { # /s makes . cross line boundaries
 			   print "$1\n";
 		       }
@@ -141,7 +143,7 @@ DESCRIPTION
 
        Here's another example of using "..":
 
-	       while (<>) {
+	       while (&lt&gt) {
 		       $in_header =   1  .. /^$/;
 		       $in_body   = /^$/ .. eof;
 	       # now choose between them
@@ -161,7 +163,7 @@ DESCRIPTION
 
        The problem with things such as XML is that they have balanced text
        containing multiple levels of balanced text, but sometimes it isn't
-       balanced text, as in an empty tag ("<br/>", for instance). Even then,
+       balanced text, as in an empty tag ("&ltbr/&gt", for instance). Even then,
        things can occur out-of-order. Just when you think you've got a pattern
        that matches your input, someone throws you a curveball.
 
@@ -192,12 +194,12 @@ DESCRIPTION
 
 	       use File::Stream;
 
-	       my $stream = File::Stream->new(
+	       my $stream = File::Stream-&gtnew(
 		       $filehandle,
-		       separator => qr/\s*,\s*/,
+		       separator =&gt qr/\s*,\s*/,
 		       );
 
-	       print "$_\n" while <$stream>;
+	       print "$_\n" while &lt$stream&gt;
 
        If you don't have File::Stream, you have to do a little more work.
 
@@ -268,7 +270,7 @@ DESCRIPTION
 		       my ($from, $to) = @_;
 		       my ($lf, $lt) = map length, @_;
 
-		       if ($lt < $lf) { $from = substr $from, 0, $lt }
+		       if ($lt &lt $lf) { $from = substr $from, 0, $lt }
 		       else { $from .= substr $to, $lf }
 
 		       return uc $to | ($from ^ uc $from);
@@ -291,9 +293,9 @@ DESCRIPTION
 		       my ($old, $new) = @_;
 		       my ($state) = 0; # 0 = no change; 1 = lc; 2 = uc
 		       my ($i, $oldlen, $newlen, $c) = (0, length($old), length($new));
-		       my ($len) = $oldlen < $newlen ? $oldlen : $newlen;
+		       my ($len) = $oldlen &lt $newlen ? $oldlen : $newlen;
 
-		       for ($i = 0; $i < $len; $i++) {
+		       for ($i = 0; $i &lt $len; $i++) {
 			       if ($c = substr($old, $i, 1), $c =~ /[\W\d_]/) {
 				       $state = 0;
 			       } elsif (lc $c eq $c) {
@@ -305,7 +307,7 @@ DESCRIPTION
 			       }
 		       }
 		       # finish up with any remaining new (for when new is longer than old)
-		       if ($newlen > $oldlen) {
+		       if ($newlen &gt $oldlen) {
 			       if ($state == 1) {
 				       substr($new, $oldlen) = lc(substr($new, $oldlen));
 			       } elsif ($state == 2) {
@@ -346,7 +348,7 @@ DESCRIPTION
 	       # $string is now "Polypacido P. Octopus"
 
        Because "." is special in regular expressions, and can match any single
-       character, the regex "P." here has matched the <Pl> in the original
+       character, the regex "P." here has matched the &ltPl&gt in the original
        string.
 
        To escape the special meaning of ".", we use "\Q":
@@ -357,7 +359,7 @@ DESCRIPTION
 	       $string =~ s/\Q$regex/Polyp/;
 	       # $string is now "Placido Polyp Octopus"
 
-       The use of "\Q" causes the <.> in the regex to be treated as a regular
+       The use of "\Q" causes the &lt.&gt in the regex to be treated as a regular
        character, so that "P." matches a "P" followed by a dot.
 
    What is "/o" really for?
@@ -379,7 +381,7 @@ DESCRIPTION
 
 	       my $pattern = shift @ARGV;
 
-	       while( <> ) {
+	       while( &lt&gt ) {
 		       print if m/$pattern/;
 		       }
 
@@ -390,8 +392,8 @@ DESCRIPTION
 
 	       my $pattern = shift @ARGV;
 
-	       while( <> ) {
-		       print if m/$pattern/o; # useful for Perl < 5.6
+	       while( &lt&gt ) {
+		       print if m/$pattern/o; # useful for Perl &lt 5.6
 		       }
 
        In versions 5.6 and later, Perl won't recompile the regular expression
@@ -429,7 +431,7 @@ DESCRIPTION
        this, created by Jeffrey Friedl and later modified by Fred Curtis.
 
 	       $/ = undef;
-	       $_ = <>;
+	       $_ = &lt&gt;
 	       s#/\*[^*]*\*+([^/*][^*]*\*+)*/|("(\\.|[^"\\])*"|'(\\.|[^'\\])*'|.[^/"'\\]*)#defined $2 ? $2 : ""#gse;
 	       print;
 
@@ -497,8 +499,8 @@ DESCRIPTION
        with one level of nesting and a group with two levels of nesting. There
        are five total groups in angle brackets:
 
-	       I have some <brackets in <nested brackets> > and
-	       <another group <nested once <nested twice> > >
+	       I have some &ltbrackets in &ltnested brackets&gt &gt and
+	       &ltanother group &ltnested once &ltnested twice&gt &gt &gt
 	       and that's it.
 
        The regular expression to match the balanced text  uses two new (to
@@ -508,7 +510,7 @@ DESCRIPTION
        First, adding the new possesive "+" to any quantifier finds the longest
        match and does not backtrack. That's important since you want to handle
        any angle brackets through the recursion, not backtracking.  The group
-       "[^<>]++" finds one or more non-angle brackets without backtracking.
+       "[^&lt&gt]++" finds one or more non-angle brackets without backtracking.
 
        Second, the new "(?PARNO)" refers to the sub-pattern in the particular
        capture buffer given by "PARNO". In the following regex, the first
@@ -521,21 +523,21 @@ DESCRIPTION
 
 	       #!/usr/local/bin/perl5.10.0
 
-	       my $string =<<"HERE";
-	       I have some <brackets in <nested brackets> > and
-	       <another group <nested once <nested twice> > >
+	       my $string =&lt&lt"HERE";
+	       I have some &ltbrackets in &ltnested brackets&gt &gt and
+	       &ltanother group &ltnested once &ltnested twice&gt &gt &gt
 	       and that's it.
 	       HERE
 
 	       my @groups = $string =~ m/
 			       (		   # start of capture buffer 1
-			       <		   # match an opening angle bracket
+			       &lt		   # match an opening angle bracket
 				       (?:
-					       [^<>]++	   # one or more non angle brackets, non backtracking
+					       [^&lt&gt]++	   # one or more non angle brackets, non backtracking
 						 |
-					       (?1)	   # found < or >, so recurse to capture buffer 1
+					       (?1)	   # found &lt or &gt, so recurse to capture buffer 1
 				       )*
-			       >		   # match a closing angle bracket
+			       &gt		   # match a closing angle bracket
 			       )		   # end of capture buffer 1
 			       /xg;
 
@@ -545,8 +547,8 @@ DESCRIPTION
        The output shows that Perl found the two major groups:
 
 	       Found:
-		       <brackets in <nested brackets> >
-		       <another group <nested once <nested twice> > >
+		       &ltbrackets in &ltnested brackets&gt &gt
+		       &ltanother group &ltnested once &ltnested twice&gt &gt &gt
 
        With a little extra work, you can get the all of the groups in angle
        brackets even if they are in other angle brackets too. Each time you
@@ -556,21 +558,21 @@ DESCRIPTION
 
 	       #!/usr/local/bin/perl5.10.0
 
-	       my @queue =<<"HERE";
-	       I have some <brackets in <nested brackets> > and
-	       <another group <nested once <nested twice> > >
+	       my @queue =&lt&lt"HERE";
+	       I have some &ltbrackets in &ltnested brackets&gt &gt and
+	       &ltanother group &ltnested once &ltnested twice&gt &gt &gt
 	       and that's it.
 	       HERE
 
 	       my $regex = qr/
 			       (		   # start of bracket 1
-			       <		   # match an opening angle bracket
+			       &lt		   # match an opening angle bracket
 				       (?:
-					       [^<>]++	   # one or more non angle brackets, non backtracking
+					       [^&lt&gt]++	   # one or more non angle brackets, non backtracking
 						 |
 					       (?1)	   # recurse to bracket 1
 				       )*
-			       >		   # match a closing angle bracket
+			       &gt		   # match a closing angle bracket
 			       )		   # end of bracket 1
 			       /x;
 
@@ -583,24 +585,24 @@ DESCRIPTION
 		       my @groups = $string =~ m/$regex/g;
 		       print "Found:\n\t@groups\n\n" if @groups;
 
-		       unshift @queue, map { s/^<//; s/>$//; $_ } @groups;
+		       unshift @queue, map { s/^&lt//; s/&gt$//; $_ } @groups;
 		       }
 
        The output shows all of the groups. The outermost matches show up first
        and the nested matches so up later:
 
 	       Found:
-		       <brackets in <nested brackets> >
-		       <another group <nested once <nested twice> > >
+		       &ltbrackets in &ltnested brackets&gt &gt
+		       &ltanother group &ltnested once &ltnested twice&gt &gt &gt
 
 	       Found:
-		       <nested brackets>
+		       &ltnested brackets&gt
 
 	       Found:
-		       <nested once <nested twice> >
+		       &ltnested once &ltnested twice&gt &gt
 
 	       Found:
-		       <nested twice>
+		       &ltnested twice&gt
 
    What does it mean that regexes are greedy?  How can I get around it?
        Most people mean that greedy regexes match as much as they can.
@@ -624,7 +626,7 @@ DESCRIPTION
    How do I process each word on each line?
        Use the split function:
 
-	       while (<>) {
+	       while (&lt&gt) {
 		       foreach $word ( split ) {
 			       # do something with $word here
 		       }
@@ -636,7 +638,7 @@ DESCRIPTION
        To work with only alphanumeric sequences (including underscores), you
        might consider
 
-	       while (<>) {
+	       while (&lt&gt) {
 		       foreach $word (m/(\w+)/g) {
 			       # do something with $word here
 		       }
@@ -648,7 +650,7 @@ DESCRIPTION
        apostrophes, rather than the non-whitespace chunk idea of a word given
        in the previous question:
 
-	       while (<>) {
+	       while (&lt&gt) {
 		       while ( /(\b[^\W_\d][\w'-]+\b)/g ) {   # misses "`sheep'"
 			       $seen{$1}++;
 		       }
@@ -661,7 +663,7 @@ DESCRIPTION
        If you wanted to do the same thing for lines, you wouldn't need a
        regular expression:
 
-	       while (<>) {
+	       while (&lt&gt) {
 		       $seen{$_}++;
 		       }
 
@@ -685,7 +687,7 @@ DESCRIPTION
 
 	       @patterns = qw( foo bar baz );
 
-	       LINE: while( <DATA> )
+	       LINE: while( &ltDATA&gt )
 		       {
 		       foreach $pattern ( @patterns )
 			       {
@@ -705,7 +707,7 @@ DESCRIPTION
 
 	       @patterns = map { qr/\b$_\b/i } qw( foo bar baz );
 
-	       LINE: while( <> )
+	       LINE: while( &lt&gt )
 		       {
 		       foreach $pattern ( @patterns )
 			       {
@@ -723,7 +725,7 @@ DESCRIPTION
 
 	       $regex = join '|', qw( foo bar baz );
 
-	       LINE: while( <> )
+	       LINE: while( &lt&gt )
 		       {
 		       print if /\b(?:$regex)\b/i;
 		       }
@@ -827,7 +829,7 @@ DESCRIPTION
 
        Suppose you want to match all of consecutive pairs of digits in a
        string like "1122a44" and stop matching when you encounter non-digits.
-       You want to match 11 and 22 but the letter <a> shows up between 22 and
+       You want to match 11 and 22 but the letter &lta&gt shows up between 22 and
        44 and you want to stop at "a". Simply matching pairs of digits skips
        over the "a" and still matches 44.
 
@@ -882,7 +884,7 @@ DESCRIPTION
        try a different match if one fails, such as in a tokenizer. Jeffrey
        Friedl offers this example which works in 5.004 or later.
 
-	       while (<>) {
+	       while (&lt&gt) {
 		       chomp;
 		       PARSER: {
 			       m/ \G( \d+\b    )/gcx   && do { print "number: $1\n";  redo; };
@@ -977,14 +979,14 @@ DESCRIPTION
        Goldberg, who uses a zero-width negative look-behind assertion.
 
 	       print "found GX!\n" if  $martian =~ m/
-		       (?<![A-Z])
+		       (?&lt![A-Z])
 		       (?:[A-Z][A-Z])*?
 		       GX
 		       /x;
 
        This succeeds if the "martian" character GX is in the string, and fails
-       otherwise.  If you don't like using (?<!), a zero-width negative look-
-       behind assertion, you can replace (?<![A-Z]) with (?:^|[^A-Z]).
+       otherwise.  If you don't like using (?&lt!), a zero-width negative look-
+       behind assertion, you can replace (?&lt![A-Z]) with (?:^|[^A-Z]).
 
        It does have the drawback of putting the wrong thing in $-[0] and
        $+[0], but this usually can be worked around.
@@ -1002,7 +1004,7 @@ DESCRIPTION
        have the pattern in $regex, you use that variable in the match
        operator.
 
-	       chomp( my $regex = <STDIN> );
+	       chomp( my $regex = &ltSTDIN&gt );
 
 	       if( $string =~ m/$regex/ ) { ... }
 
@@ -1018,14 +1020,14 @@ DESCRIPTION
        the start of a memory match. When it doesn't find the closing
        parenthesis, it complains:
 
-	       Unmatched ( in regex; marked by <-- HERE in m/Unmatched ( <-- HERE  paren/ at script line 3.
+	       Unmatched ( in regex; marked by &lt-- HERE in m/Unmatched ( &lt-- HERE  paren/ at script line 3.
 
        You can get around this in several ways depending on our situation.
        First, if you don't want any of the characters in the string to be
        special, you can escape them with "quotemeta" before you use the
        string.
 
-	       chomp( my $regex = <STDIN> );
+	       chomp( my $regex = &ltSTDIN&gt );
 	       $regex = quotemeta( $regex );
 
 	       if( $string =~ m/$regex/ ) { ... }
@@ -1035,7 +1037,7 @@ DESCRIPTION
        characters, and the "\E" tells it where to stop (see perlop for more
        details).
 
-	       chomp( my $regex = <STDIN> );
+	       chomp( my $regex = &ltSTDIN&gt );
 
 	       if( $string =~ m/\Q$regex\E/ ) { ... }
 
@@ -1043,7 +1045,7 @@ DESCRIPTION
        (see perlop for more details).  It quotes and perhaps compiles the
        pattern, and you can apply regular expression flags to the pattern.
 
-	       chomp( my $input = <STDIN> );
+	       chomp( my $input = &ltSTDIN&gt );
 
 	       my $regex = qr/$input/is;
 
@@ -1052,7 +1054,7 @@ DESCRIPTION
        You might also want to trap any errors by wrapping an "eval" block
        around the whole thing.
 
-	       chomp( my $input = <STDIN> );
+	       chomp( my $input = &ltSTDIN&gt );
 
 	       eval {
 		       if( $string =~ m/\Q$input\E/ ) { ... }
@@ -1092,6 +1094,6 @@ AUTHOR AND COPYRIGHT
 
 
 perl v5.10.1			  2009-08-15			   PERLFAQ6(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

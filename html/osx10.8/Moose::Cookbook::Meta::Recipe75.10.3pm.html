@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This recipe shows how to build your own meta-instance. The meta..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Meta::Recipe7 - Creating a glob reference</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::Meta:UseriContributed Perl DMoose::Cookbook::Meta::Recipe7(3)
 
 
@@ -28,7 +30,7 @@ SYNOPSIS
 	 sub create_instance {
 	     my $self = shift;
 	     my $sym = gensym();
-	     bless $sym, $self->_class_name;
+	     bless $sym, $self-&gt_class_name;
 	 }
 
 	 sub clone_instance {
@@ -37,32 +39,32 @@ SYNOPSIS
 	     my $new_sym = gensym();
 	     %{*$new_sym} = %{*$instance};
 
-	     bless $new_sym, $self->_class_name;
+	     bless $new_sym, $self-&gt_class_name;
 	 }
 
 	 sub get_slot_value {
 	     my ( $self, $instance, $slot_name ) = @_;
-	     return *$instance->{$slot_name};
+	     return *$instance-&gt{$slot_name};
 	 }
 
 	 sub set_slot_value {
 	     my ( $self, $instance, $slot_name, $value ) = @_;
-	     *$instance->{$slot_name} = $value;
+	     *$instance-&gt{$slot_name} = $value;
 	 }
 
 	 sub deinitialize_slot {
 	     my ( $self, $instance, $slot_name ) = @_;
-	     delete *$instance->{$slot_name};;
+	     delete *$instance-&gt{$slot_name};;
 	 }
 
 	 sub is_slot_initialized {
 	     my ( $self, $instance, $slot_name, $value ) = @_;
-	     exists *$instance->{$slot_name};;
+	     exists *$instance-&gt{$slot_name};;
 	 }
 
 	 sub weaken_slot_value {
 	     my ( $self, $instance, $slot_name ) = @_;
-	     weaken *$instance->{$slot_name};;
+	     weaken *$instance-&gt{$slot_name};;
 	 }
 
 	 sub inline_create_instance {
@@ -72,24 +74,24 @@ SYNOPSIS
 
 	 sub inline_slot_access {
 	     my ( $self, $instance, $slot_name ) = @_;
-	     return '*{' . $instance . '}->{' . $slot_name . '}';
+	     return '*{' . $instance . '}-&gt{' . $slot_name . '}';
 	 }
 
 	 package MyApp::User;
 
-	 use metaclass 'Moose::Meta::Class' =>
-	     ( instance_metaclass => 'My::Meta::Instance' );
+	 use metaclass 'Moose::Meta::Class' =&gt
+	     ( instance_metaclass =&gt 'My::Meta::Instance' );
 
 	 use Moose;
 
-	 has 'name' => (
-	     is  => 'rw',
-	     isa => 'Str',
+	 has 'name' =&gt (
+	     is  =&gt 'rw',
+	     isa =&gt 'Str',
 	 );
 
-	 has 'email' => (
-	     is  => 'rw',
-	     isa => 'Str',
+	 has 'email' =&gt (
+	     is  =&gt 'rw',
+	     isa =&gt 'Str',
 	 );
 
 DESCRIPTION
@@ -110,7 +112,7 @@ DESCRIPTION
 	 sub create_instance {
 	     my $self = shift;
 	     my $sym = gensym();
-	     bless $sym, $self->_class_name;
+	     bless $sym, $self-&gt_class_name;
 	 }
 
        This returns an glob reference which has been blessed into our meta-
@@ -124,7 +126,7 @@ DESCRIPTION
 	     my $new_sym = gensym();
 	     %{*$new_sym} = %{*$instance};
 
-	     bless $new_sym, $self->_class_name;
+	     bless $new_sym, $self-&gt_class_name;
 	 }
 
        After that, we have a series of methods which mediate access to the
@@ -134,7 +136,7 @@ DESCRIPTION
 
 	 sub get_slot_value {
 	     my ( $self, $instance, $slot_name ) = @_;
-	     *$instance->{$slot_name};;
+	     *$instance-&gt{$slot_name};;
 	 }
 
        This level of indirection probably makes our instance class slower than
@@ -151,8 +153,8 @@ DESCRIPTION
 
        Finally, we use this meta-instance in our "MyApp::User" class:
 
-	 use metaclass 'Moose::Meta::Class' =>
-	     ( instance_metaclass => 'My::Meta::Instance' );
+	 use metaclass 'Moose::Meta::Class' =&gt
+	     ( instance_metaclass =&gt 'My::Meta::Instance' );
 
        We actually don't recommend the use of metaclass in most cases.
        However, the other ways of using alternate metaclasses are more
@@ -178,12 +180,12 @@ SEE ALSO
 	   you use a handle as an object instance.
 
 AUTHOR
-       Dave Rolsky <autarch@urth.org>
+       Dave Rolsky &ltautarch@urth.org&gt
 
 COPYRIGHT AND LICENSE
        Copyright 2006-2010 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -191,6 +193,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2010-03-15 Moose::Cookbook::Meta::Recipe7(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

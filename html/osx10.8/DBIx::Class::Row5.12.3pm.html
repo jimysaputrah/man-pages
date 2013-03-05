@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This class is responsible for defining and doing basic operations on..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Row - Basic row methods</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::Row(3)   User Contributed Perl Documentation  DBIx::Class::Row(3)
 
 
@@ -27,9 +29,9 @@ DESCRIPTION
 
 METHODS
    new
-	 my $row = My::Class->new(\%attrs);
+	 my $row = My::Class-&gtnew(\%attrs);
 
-	 my $row = $schema->resultset('MySource')->new(\%colsandvalues);
+	 my $row = $schema-&gtresultset('MySource')-&gtnew(\%colsandvalues);
 
        Arguments: \%attrs or \%colsandvalues
        Returns: A Row object
@@ -73,7 +75,7 @@ METHODS
 	there is one).
 
    insert
-	 $row->insert;
+	 $row-&gtinsert;
 
        Arguments: none
        Returns: The Row object
@@ -89,8 +91,8 @@ METHODS
        one, see "create" in DBIx::Class::ResultSet for more details.
 
    in_storage
-	 $row->in_storage; # Get value
-	 $row->in_storage(1); # Set value
+	 $row-&gtin_storage; # Get value
+	 $row-&gtin_storage(1); # Set value
 
        Arguments: none or 1|0
        Returns: 1|0
@@ -103,7 +105,7 @@ METHODS
        "delete" on one, sets it to false.
 
    update
-	 $row->update(\%columns?)
+	 $row-&gtupdate(\%columns?)
 
        Arguments: none or a hashref
        Returns: The Row object
@@ -117,7 +119,7 @@ METHODS
        database row can not be constructed (see significance of primary keys
        for more details).
 
-       Also takes an optional hashref of "column_name => value" pairs to
+       Also takes an optional hashref of "column_name =&gt value" pairs to
        update on the object first. Be aware that the hashref will be passed to
        "set_inflated_columns", which might edit it in place, so don't rely on
        it being the same after a call to "update".  If you need to preserve
@@ -127,16 +129,16 @@ METHODS
        If the values passed or any of the column values set on the object
        contain scalar references, e.g.:
 
-	 $row->last_modified(\'NOW()');
+	 $row-&gtlast_modified(\'NOW()');
 	 # OR
-	 $row->update({ last_modified => \'NOW()' });
+	 $row-&gtupdate({ last_modified =&gt \'NOW()' });
 
        The update will pass the values verbatim into SQL. (See SQL::Abstract
        docs).  The values in your Row object will NOT change as a result of
        the update call, if you want the object to be updated with the actual
        values from the database, call "discard_changes" after the update.
 
-	 $row->update()->discard_changes();
+	 $row-&gtupdate()-&gtdiscard_changes();
 
        To determine before calling this method, which column values have
        changed and will be updated, call "get_dirty_columns".
@@ -147,7 +149,7 @@ METHODS
        method.
 
    delete
-	 $row->delete
+	 $row-&gtdelete
 
        Arguments: none
        Returns: The Row object
@@ -163,7 +165,7 @@ METHODS
 
        If you delete an object in a class with a "has_many" relationship, an
        attempt is made to delete all the related objects as well. To turn this
-       behaviour off, pass "cascade_delete => 0" in the $attr hashref of the
+       behaviour off, pass "cascade_delete =&gt 0" in the $attr hashref of the
        relationship, see DBIx::Class::Relationship. Any database-level cascade
        or restrict will take precedence over a DBIx-Class-based cascading
        delete, since DBIx-Class deletes the main row first and only then
@@ -173,14 +175,14 @@ METHODS
        DBIx::Class::Storage) and the transaction subsequently fails, the row
        object will remain marked as not being in storage. If you know for a
        fact that the object is still in storage (i.e. by inspecting the cause
-       of the transaction's failure), you can use "$obj->in_storage(1)" to
+       of the transaction's failure), you can use "$obj-&gtin_storage(1)" to
        restore consistency between the object and the database. This would
-       allow a subsequent "$obj->delete" to work as expected.
+       allow a subsequent "$obj-&gtdelete" to work as expected.
 
        See also "delete" in DBIx::Class::ResultSet.
 
    get_column
-	 my $val = $row->get_column($col);
+	 my $val = $row-&gtget_column($col);
 
        Arguments: $columnname
        Returns: The value of the column
@@ -201,7 +203,7 @@ METHODS
        To retrieve all loaded column values as a hash, use "get_columns".
 
    has_column_loaded
-	 if ( $row->has_column_loaded($col) ) {
+	 if ( $row-&gthas_column_loaded($col) ) {
 	    print "$col has been loaded from db";
 	 }
 
@@ -212,7 +214,7 @@ METHODS
        database (or set locally).
 
    get_columns
-	 my %data = $row->get_columns;
+	 my %data = $row-&gtget_columns;
 
        Arguments: none
        Returns: A hash of columnname, value pairs.
@@ -223,7 +225,7 @@ METHODS
        See "get_inflated_columns" to get the inflated values.
 
    get_dirty_columns
-	 my %data = $row->get_dirty_columns;
+	 my %data = $row-&gtget_dirty_columns;
 
        Arguments: none
        Returns: A hash of column, value pairs
@@ -234,7 +236,7 @@ METHODS
        See "get_columns" to fetch all column/value pairs.
 
    make_column_dirty
-	 $row->make_column_dirty($col)
+	 $row-&gtmake_column_dirty($col)
 
        Arguments: $columnname
        Returns: undefined
@@ -245,7 +247,7 @@ METHODS
        really changed.
 
    get_inflated_columns
-	 my %inflated_data = $obj->get_inflated_columns;
+	 my %inflated_data = $obj-&gtget_inflated_columns;
 
        Arguments: none
        Returns: A hash of column, object|value pairs
@@ -258,7 +260,7 @@ METHODS
        See DBIx::Class::InflateColumn for how to setup inflation.
 
    set_column
-	 $row->set_column($col => $val);
+	 $row-&gtset_column($col =&gt $val);
 
        Arguments: $columnname, $value
        Returns: $value
@@ -272,7 +274,7 @@ METHODS
        instead, see "set_inflated_columns".
 
    set_columns
-	 $row->set_columns({ $col => $val, ... });
+	 $row-&gtset_columns({ $col =&gt $val, ... });
 
        Arguments: \%columndata
        Returns: The Row object
@@ -282,7 +284,7 @@ METHODS
        Works as "set_column".
 
    set_inflated_columns
-	 $row->set_inflated_columns({ $col => $val, $relname => $obj, ... });
+	 $row-&gtset_inflated_columns({ $col =&gt $val, $relname =&gt $obj, ... });
 
        Arguments: \%columndata
        Returns: The Row object
@@ -307,7 +309,7 @@ METHODS
        See also "set_from_related" in DBIx::Class::Relationship::Base.
 
    copy
-	 my $copy = $orig->copy({ change => $to, ... });
+	 my $copy = $orig-&gtcopy({ change =&gt $to, ... });
 
        Arguments: \%replacementdata
        Returns: The Row object copy
@@ -315,7 +317,7 @@ METHODS
        Inserts a new row into the database, as a copy of the original object.
        If a hashref of replacement data is supplied, these will take
        precedence over data in the original. Also any columns which have the
-       column info attribute "is_auto_increment => 1" are explicitly removed
+       column info attribute "is_auto_increment =&gt 1" are explicitly removed
        before the copy, so that the database can insert its own
        autoincremented values into the new object.
 
@@ -325,7 +327,7 @@ METHODS
        on all others.
 
    store_column
-	 $row->store_column($col => $val);
+	 $row-&gtstore_column($col =&gt $val);
 
        Arguments: $columnname, $value
        Returns: The value sent to storage
@@ -337,7 +339,7 @@ METHODS
        this method to catch all data setting methods.
 
    inflate_result
-	 Class->inflate_result($result_source, \%me, \%prefetch?)
+	 Class-&gtinflate_result($result_source, \%me, \%prefetch?)
 
        Arguments: $result_source, \%columndata, \%prefetcheddata
        Returns: A Row object
@@ -355,7 +357,7 @@ METHODS
        DBIx::Class::ResultSet, see "result_class" in DBIx::Class::ResultSet.
 
    update_or_insert
-	 $row->update_or_insert
+	 $row-&gtupdate_or_insert
 
        Arguments: none
        Returns: Result of update or insert operation
@@ -364,13 +366,13 @@ METHODS
        "in_storage", else "insert"s it.
 
    insert_or_update
-	 $obj->insert_or_update
+	 $obj-&gtinsert_or_update
 
        Alias for "update_or_insert"
 
    is_changed
-	 my @changed_col_names = $row->is_changed();
-	 if ($row->is_changed()) { ... }
+	 my @changed_col_names = $row-&gtis_changed();
+	 if ($row-&gtis_changed()) { ... }
 
        Arguments: none
        Returns: 0|1 or @columnnames
@@ -380,7 +382,7 @@ METHODS
        changes.
 
    is_column_changed
-	 if ($row->is_column_changed('col')) { ... }
+	 if ($row-&gtis_column_changed('col')) { ... }
 
        Arguments: $columname
        Returns: 0|1
@@ -388,7 +390,7 @@ METHODS
        Returns a true value if the column has uncommitted changes.
 
    result_source
-	 my $resultsource = $row->result_source;
+	 my $resultsource = $row-&gtresult_source;
 
        Arguments: $result_source_instance
        Returns: a ResultSource instance
@@ -397,7 +399,7 @@ METHODS
 
    register_column
 	 $column_info = { .... };
-	 $class->register_column($column_name, $column_info);
+	 $class-&gtregister_column($column_name, $column_info);
 
        Arguments: $columnname, \%columninfo
        Returns: undefined
@@ -410,7 +412,7 @@ METHODS
        DBIx::Class::ResultSource
 
    get_from_storage
-	 my $copy = $row->get_from_storage($attrs)
+	 my $copy = $row-&gtget_from_storage($attrs)
 
        Arguments: \%attrs
        Returns: A Row object
@@ -433,7 +435,7 @@ METHODS
        DBIx::Class::ResultSet.
 
    discard_changes ($attrs?)
-	 $row->discard_changes
+	 $row-&gtdiscard_changes
 
        Arguments: none or $attrs
        Returns: self (updates object in-place)
@@ -447,7 +449,7 @@ METHODS
        changes made since the row was last read from storage.
 
        $attrs, if supplied, is expected to be a hashref of attributes suitable
-       for passing as the second argument to "$resultset->search($cond,
+       for passing as the second argument to "$resultset-&gtsearch($cond,
        $attrs)";
 
        Note: If you are using DBIx::Class::Storage::DBI::Replicated as your
@@ -461,7 +463,7 @@ METHODS
        See "throw_exception" in DBIx::Class::Schema.
 
    id
-	 my @pk = $row->id;
+	 my @pk = $row-&gtid;
 
        Arguments: none
        Returns: A list of primary key values
@@ -470,7 +472,7 @@ METHODS
        method.	Actually implemented in DBIx::Class::PK
 
 AUTHORS
-       Matt S. Trout <mst@shadowcatsystems.co.uk>
+       Matt S. Trout &ltmst@shadowcatsystems.co.uk&gt
 
 LICENSE
        You may distribute this code under the same terms as Perl itself.
@@ -478,6 +480,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-07-27		   DBIx::Class::Row(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

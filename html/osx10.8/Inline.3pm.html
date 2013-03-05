@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Inline module allows you to put source code from other programming..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Inline - Write Perl subroutines in other programming languages.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Inline(3)	      User Contributed Perl Documentation	     Inline(3)
 
 
@@ -137,7 +139,7 @@ Using the Inline.pm Module
    The Basics
        The most basic form for using Inline is:
 
-	   use Inline X => "X source code";
+	   use Inline X =&gt "X source code";
 
        where 'X' is one of the supported Inline programming languages. The
        second parameter identifies the source code that you want to bind to
@@ -145,7 +147,7 @@ Using the Inline.pm Module
        syntaxes:
 
        The DATA Keyword.
-	       use Inline Java => 'DATA';
+	       use Inline Java =&gt 'DATA';
 
 	       # Perl code goes here ...
 
@@ -180,7 +182,7 @@ Using the Inline.pm Module
 
        The FILE and BELOW keywords.
 	       use Inline::Files;
-	       use Inline Java => 'FILE';
+	       use Inline Java =&gt 'FILE';
 
 	       # Perl code goes here ...
 
@@ -197,7 +199,7 @@ Using the Inline.pm Module
 	   replaced by either '"FILE"' or '"BELOW"'. This allows for the bad
 	   pun idiom of:
 
-	       use Inline C => 'BELOW';
+	       use Inline C =&gt 'BELOW';
 
 	   You can omit the "__DATA__" tag now. Inline::Files is a source
 	   filter that will remove these sections from your program before
@@ -222,7 +224,7 @@ Using the Inline.pm Module
 	   distributed/CPAN code.
 
        Strings
-	       use Inline Java => <<'END';
+	       use Inline Java =&gt &lt&lt'END';
 
 	       /* Java code goes here ... */
 	       END
@@ -242,27 +244,27 @@ Using the Inline.pm Module
 
 	       my $code;
 	       BEGIN {
-		   $code = <<END;
+		   $code = &lt&ltEND;
 
 	       /* Java code goes here ... */
 	       END
 	       }
-	       use Inline Java => $code;
+	       use Inline Java =&gt $code;
 
 	       # Perl code goes here ...
 
        The bind() Function
 	   An alternative to using the BEGIN block method is to specify the
-	   source code at run time using the 'Inline->bind()' method. (This is
+	   source code at run time using the 'Inline-&gtbind()' method. (This is
 	   one of the interface exceptions mentioned above) The "bind()"
 	   method takes the same arguments as 'use Inline ...'.
 
-	       my $code = <<END;
+	       my $code = &lt&ltEND;
 
 	       /* Java code goes here ... */
 	       END
 
-	       Inline->bind(Java => $code);
+	       Inline-&gtbind(Java =&gt $code);
 
 	   You can think of "bind()" as a way to "eval()" code in other
 	   programming languages.
@@ -319,7 +321,7 @@ Using the Inline.pm Module
 	   use AutoLoader;
 
 	   use Inline C;
-	   use Inline C => DATA => FILTERS => 'Strip_POD';
+	   use Inline C =&gt DATA =&gt FILTERS =&gt 'Strip_POD';
 	   use Inline Python;
 
 	   1;
@@ -349,7 +351,7 @@ Using the Inline.pm Module
 	   """A Python Section"""
 
        An important thing to remember is that you need to have one "use Inline
-       Foo => 'DATA'" for each "__Foo__" marker, and they must be in the same
+       Foo =&gt 'DATA'" for each "__Foo__" marker, and they must be in the same
        order. This allows you to apply different configuration options to each
        section.
 
@@ -360,25 +362,25 @@ Using the Inline.pm Module
        parameters. All congiguration options are specified as (key, value)
        pairs.
 
-	   use Inline (C => 'DATA',
-		       DIRECTORY => './inline_dir',
-		       LIBS => '-lfoo',
-		       INC => '-I/foo/include',
-		       PREFIX => 'XXX_',
-		       WARNINGS => 0,
+	   use Inline (C =&gt 'DATA',
+		       DIRECTORY =&gt './inline_dir',
+		       LIBS =&gt '-lfoo',
+		       INC =&gt '-I/foo/include',
+		       PREFIX =&gt 'XXX_',
+		       WARNINGS =&gt 0,
 		      );
 
        You can also specify the configuration options on a separate Inline
        call like this:
 
-	   use Inline (C => Config =>
-		       DIRECTORY => './inline_dir',
-		       LIBS => '-lfoo',
-		       INC => '-I/foo/include',
-		       PREFIX => 'XXX_',
-		       WARNINGS => 0,
+	   use Inline (C =&gt Config =&gt
+		       DIRECTORY =&gt './inline_dir',
+		       LIBS =&gt '-lfoo',
+		       INC =&gt '-I/foo/include',
+		       PREFIX =&gt 'XXX_',
+		       WARNINGS =&gt 0,
 		      );
-	   use Inline C => <<'END_OF_C_CODE';
+	   use Inline C =&gt &lt&lt'END_OF_C_CODE';
 
        The special keyword 'Config' tells Inline that this is a configuration-
        only call. No source code will be compiled or bound to Perl.
@@ -387,7 +389,7 @@ Using the Inline.pm Module
        a particular language, just leave the language out of the call.	Like
        this:
 
-	   use Inline Config => WARNINGS => 0;
+	   use Inline Config =&gt WARNINGS =&gt 0;
 
        The Config options are inherited and additive. You can use as many
        Config calls as you want. And you can apply different options to
@@ -395,23 +397,23 @@ Using the Inline.pm Module
        Inline will apply whichever options have been specified up to that
        point. Here is a complex configuration example:
 
-	   use Inline (Config =>
-		       DIRECTORY => './inline_dir',
+	   use Inline (Config =&gt
+		       DIRECTORY =&gt './inline_dir',
 		      );
-	   use Inline (C => Config =>
-		       LIBS => '-lglobal',
+	   use Inline (C =&gt Config =&gt
+		       LIBS =&gt '-lglobal',
 		      );
-	   use Inline (C => 'DATA',	    # First C Section
-		       LIBS => ['-llocal1', '-llocal2'],
+	   use Inline (C =&gt 'DATA',	    # First C Section
+		       LIBS =&gt ['-llocal1', '-llocal2'],
 		      );
-	   use Inline (Config =>
-		       WARNINGS => 0,
+	   use Inline (Config =&gt
+		       WARNINGS =&gt 0,
 		      );
-	   use Inline (Python => 'DATA',    # First Python Section
-		       LIBS => '-lmypython1',
+	   use Inline (Python =&gt 'DATA',    # First Python Section
+		       LIBS =&gt '-lmypython1',
 		      );
-	   use Inline (C => 'DATA',	    # Second C Section
-		       LIBS => [undef, '-llocal3'],
+	   use Inline (C =&gt 'DATA',	    # Second C Section
+		       LIBS =&gt [undef, '-llocal3'],
 		      );
 
        The first "Config" applies to all subsequent calls. The second "Config"
@@ -431,21 +433,21 @@ Using the Inline.pm Module
        If a particular config option has value options of 1 and 0, you can use
        the ENABLE and DISABLE modifiers. In other words, this:
 
-	   use Inline Config =>
-		      FORCE_BUILD => 1,
-		      CLEAN_AFTER_BUILD => 0;
+	   use Inline Config =&gt
+		      FORCE_BUILD =&gt 1,
+		      CLEAN_AFTER_BUILD =&gt 0;
 
        could be reworded as:
 
-	   use Inline Config =>
-		      ENABLE => FORCE_BUILD,
-		      DISABLE => CLEAN_AFTER_BUILD;
+	   use Inline Config =&gt
+		      ENABLE =&gt FORCE_BUILD,
+		      DISABLE =&gt CLEAN_AFTER_BUILD;
 
    Playing 'with' Others
        Inline has a special configuration syntax that tells it to get more
        configuration options from other Perl modules. Here is an example:
 
-	   use Inline with => 'Event';
+	   use Inline with =&gt 'Event';
 
        This tells Inline to load the module "Event.pm" and ask it for
        configuration information. Since "Event" has a C API of its own, it can
@@ -458,7 +460,7 @@ Using the Inline.pm Module
 
        You can specify a single module or a list of them. Like:
 
-	   use Inline with => qw(Event Foo Bar);
+	   use Inline with =&gt qw(Event Foo Bar);
 
        Currently, "Event" is the only module that works with Inline.
 
@@ -508,7 +510,7 @@ Using the Inline.pm Module
 
        It is probably best to have a separate '.Inline/' directory for each
        project that you are working on. You may want to keep stable code in
-       the <.Inline/> in your home directory. On multi-user systems, each user
+       the &lt.Inline/&gt in your home directory. On multi-user systems, each user
        should have their own '.Inline/' directories. It could be a security
        risk to put the directory in a shared place like "/tmp/".
 
@@ -564,8 +566,8 @@ Configuration Options
        You can use this option to set the name of your Inline extension object
        module. For example:
 
-	   use Inline C => 'DATA',
-		      NAME => 'Foo::Bar';
+	   use Inline C =&gt 'DATA',
+		      NAME =&gt 'Foo::Bar';
 
        would cause your C code to be compiled in to the object:
 
@@ -584,8 +586,8 @@ Configuration Options
        This option is enabled whenever the NAME parameter is not specified. To
        disable it say:
 
-	   use Inline C => 'DATA',
-		      DISABLE => 'AUTONAME';
+	   use Inline C =&gt 'DATA',
+		      DISABLE =&gt 'AUTONAME';
 
        AUTONAME mangles in enough of the MD5 fingerprint to make your module
        name unique. Objects created with AUTONAME will never get replaced.
@@ -615,7 +617,7 @@ Configuration Options
        Inline code with different modules. (Probably a very rare usage)
 
 	   use Event;
-	   use Inline C => DATA => WITH => 'Event';
+	   use Inline C =&gt DATA =&gt WITH =&gt 'Event';
 
        Modules specified using the config form of "WITH" will not be
        automatically required. You must "use" them yourself.
@@ -636,7 +638,7 @@ Configuration Options
        SAFEMODE by default. See the "UNTAINT" shortcut below.  You will see
        warnings about blindly untainting fields in both %ENV and Inline
        objects. If you want to silence these warnings, set the Config option
-       NO_UNTAINT_WARN => 1.  There can be some problems untainting Inline
+       NO_UNTAINT_WARN =&gt 1.  There can be some problems untainting Inline
        scripts where older versions of Cwd, such as those that shipped with
        early versions of perl-5.8 (and earlier), are installed. Updating Cwd
        will probably solve these problems.
@@ -801,9 +803,9 @@ Writing Modules with Inline
 	   @EXPORT_OK = qw(add subtract);
 	   use strict;
 
-	   use Inline C => 'DATA',
-		      VERSION => '1.23',
-		      NAME => 'Math::Simple';
+	   use Inline C =&gt 'DATA',
+		      VERSION =&gt '1.23',
+		      NAME =&gt 'Math::Simple';
 
 	   1;
 
@@ -877,12 +879,12 @@ How Inline Works
 	   Inline gets the source code from your script or module with a
 	   statements like the following:
 
-	       use Inline C => "Source-Code";
+	       use Inline C =&gt "Source-Code";
 
 	   or
 
 	       use Inline;
-	       bind Inline C => "Source-Code";
+	       bind Inline C =&gt "Source-Code";
 
 	   where "C" is the programming language of the source code, and
 	   "Source-Code" is a string, a file name, an array reference, or the
@@ -1006,14 +1008,14 @@ BUGS AND DEFICIENCIES
 	- Follow the printed directions.
 
 AUTHOR
-       Brian Ingerson <INGY@cpan.org>
+       Brian Ingerson &ltINGY@cpan.org&gt
 
-       Neil Watkiss <NEILW@cpan.org> is the author of "Inline::CPP",
+       Neil Watkiss &ltNEILW@cpan.org&gt is the author of "Inline::CPP",
        "Inline::Python", "Inline::Ruby", "Inline::ASM", "Inline::Struct" and
        "Inline::Filters". He is known in the innermost Inline circles as the
        "Boy Wonder".
 
-       Sisyphus <sisyphus@cpan.org> fixed some bugs and is current co-
+       Sisyphus &ltsisyphus@cpan.org&gt fixed some bugs and is current co-
        maintainer.
 
 COPYRIGHT
@@ -1029,6 +1031,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-01-29			     Inline(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

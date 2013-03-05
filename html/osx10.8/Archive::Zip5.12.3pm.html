@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Archive::Zip module allows a Perl program to create, manipulate,..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Archive::Zip - Provide an interface to ZIP archive files.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Archive::Zip(3)       User Contributed Perl Documentation      Archive::Zip(3)
 
 
@@ -18,33 +20,33 @@ NAME
 SYNOPSIS
 	  # Create a Zip file
 	  use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
-	  my $zip = Archive::Zip->new();
+	  my $zip = Archive::Zip-&gtnew();
 
 	  # Add a directory
-	  my $dir_member = $zip->addDirectory( 'dirname/' );
+	  my $dir_member = $zip-&gtaddDirectory( 'dirname/' );
 
 	  # Add a file from a string with compression
-	  my $string_member = $zip->addString( 'This is a test', 'stringMember.txt' );
-	  $string_member->desiredCompressionMethod( COMPRESSION_DEFLATED );
+	  my $string_member = $zip-&gtaddString( 'This is a test', 'stringMember.txt' );
+	  $string_member-&gtdesiredCompressionMethod( COMPRESSION_DEFLATED );
 
 	  # Add a file from disk
-	  my $file_member = $zip->addFile( 'xyz.pl', 'AnotherName.pl' );
+	  my $file_member = $zip-&gtaddFile( 'xyz.pl', 'AnotherName.pl' );
 
 	  # Save the Zip file
-	  unless ( $zip->writeToFileNamed('someZip.zip') == AZ_OK ) {
+	  unless ( $zip-&gtwriteToFileNamed('someZip.zip') == AZ_OK ) {
 	      die 'write error';
 	  }
 
 	  # Read a Zip file
-	  my $somezip = Archive::Zip->new();
-	  unless ( $somezip->read( 'someZip.zip' ) == AZ_OK ) {
+	  my $somezip = Archive::Zip-&gtnew();
+	  unless ( $somezip-&gtread( 'someZip.zip' ) == AZ_OK ) {
 	      die 'read error';
 	  }
 
 	  # Change the compression type for a file in the Zip
-	  my $member = $somezip->memberNamed( 'stringMember.txt' );
-	  $member->desiredCompressionMethod( COMPRESSION_STORED );
-	  unless ( $zip->writeToFileNamed( 'someOtherZip.zip' ) == AZ_OK ) {
+	  my $member = $somezip-&gtmemberNamed( 'stringMember.txt' );
+	  $member-&gtdesiredCompressionMethod( COMPRESSION_STORED );
+	  unless ( $zip-&gtwriteToFileNamed( 'someOtherZip.zip' ) == AZ_OK ) {
 	      die 'write error';
 	  }
 
@@ -155,7 +157,7 @@ ERROR CODES
 
 	 ...
 
-	 unless ( $zip->read( 'myfile.zip' ) == AZ_OK ) {
+	 unless ( $zip-&gtread( 'myfile.zip' ) == AZ_OK ) {
 	     die "whoops!";
 	 }
 
@@ -190,14 +192,14 @@ ERROR CODES
        You can inquire about the current compression and set the desired
        compression method:
 
-	 my $member = $zip->memberNamed( 'xyz.txt' );
-	 $member->compressionMethod();	  # return current compression
+	 my $member = $zip-&gtmemberNamed( 'xyz.txt' );
+	 $member-&gtcompressionMethod();	  # return current compression
 
 	 # set to read uncompressed
-	 $member->desiredCompressionMethod( COMPRESSION_STORED );
+	 $member-&gtdesiredCompressionMethod( COMPRESSION_STORED );
 
 	 # set to read compressed
-	 $member->desiredCompressionMethod( COMPRESSION_DEFLATED );
+	 $member-&gtdesiredCompressionMethod( COMPRESSION_DEFLATED );
 
        There are two different compression methods:
 
@@ -213,14 +215,14 @@ ERROR CODES
        of compression and decompression, as well as the size of the compressed
        member data.
 
-	 $member->desiredCompressionLevel( 9 );
+	 $member-&gtdesiredCompressionLevel( 9 );
 
        The levels given can be:
 
        0 or COMPRESSION_LEVEL_NONE
 	   This is the same as saying
 
-	     $member->desiredCompressionMethod( COMPRESSION_STORED );
+	     $member-&gtdesiredCompressionMethod( COMPRESSION_STORED );
 
        1 .. 9
 	   1 gives the best speed and worst compression, and 9 gives the best
@@ -248,12 +250,12 @@ Archive::Zip Methods
        new( [$fileName] )
 	   Make a new, empty zip archive.
 
-	       my $zip = Archive::Zip->new();
+	       my $zip = Archive::Zip-&gtnew();
 
 	   If an additional argument is passed, new() will call read() to read
 	   the contents of an archive:
 
-	       my $zip = Archive::Zip->new( 'xyz.zip' );
+	       my $zip = Archive::Zip-&gtnew( 'xyz.zip' );
 
 	   If a filename argument is passed and the read fails for any reason,
 	   new will return undef. For this reason, it may be better to call
@@ -263,10 +265,10 @@ Archive::Zip Methods
        These Archive::Zip methods may be called as functions or as object
        methods. Do not call them as class methods:
 
-	   $zip = Archive::Zip->new();
+	   $zip = Archive::Zip-&gtnew();
 	   $crc = Archive::Zip::computeCRC32( 'ghijkl' );    # OK
-	   $crc = $zip->computeCRC32( 'ghijkl' );	     # also OK
-	   $crc = Archive::Zip->computeCRC32( 'ghijkl' );    # NOT OK
+	   $crc = $zip-&gtcomputeCRC32( 'ghijkl' );	     # also OK
+	   $crc = Archive::Zip-&gtcomputeCRC32( 'ghijkl' );    # NOT OK
 
        Archive::Zip::computeCRC32( $string [, $crc] )
 	   This is a utility function that uses the Compress::Raw::Zlib CRC
@@ -335,7 +337,7 @@ Archive::Zip Methods
        members()
 	   Return a copy of the members array
 
-	       my @members = $zip->members();
+	       my @members = $zip-&gtmembers();
 
        numberOfMembers()
 	   Return the number of members I have
@@ -352,9 +354,9 @@ Archive::Zip Methods
 	   expression in list context. Returns number of matching members in
 	   scalar context.
 
-	       my @textFileMembers = $zip->membersMatching( '.*\.txt' );
+	       my @textFileMembers = $zip-&gtmembersMatching( '.*\.txt' );
 	       # or
-	       my $numberOfTextFiles = $zip->membersMatching( '.*\.txt' );
+	       my $numberOfTextFiles = $zip-&gtmembersMatching( '.*\.txt' );
 
        diskNumber()
 	   Return the disk that I start on. Not used for writing zips, but
@@ -389,8 +391,8 @@ Archive::Zip Methods
        zipfileComment( [$string] )
 	   Get or set the zipfile comment. Returns the old comment.
 
-	       print $zip->zipfileComment();
-	       $zip->zipfileComment( 'New Comment' );
+	       print $zip-&gtzipfileComment();
+	       $zip-&gtzipfileComment( 'New Comment' );
 
        eocdOffset()
 	   Returns the (unexpected) number of bytes between where the EOCD was
@@ -400,10 +402,10 @@ Archive::Zip Methods
 	   interesting if you read a zip in. Here is an example of how you can
 	   diagnose this:
 
-	     my $zip = Archive::Zip->new('somefile.zip');
-	     if ($zip->eocdOffset())
+	     my $zip = Archive::Zip-&gtnew('somefile.zip');
+	     if ($zip-&gteocdOffset())
 	     {
-	       warn "A virus has added ", $zip->eocdOffset, " bytes of garbage\n";
+	       warn "A virus has added ", $zip-&gteocdOffset, " bytes of garbage\n";
 	     }
 
 	   The "eocdOffset()" is used to adjust the starting position of
@@ -433,8 +435,8 @@ Archive::Zip Methods
 	   It is an (undiagnosed) error to provide a $newMember that is a
 	   member of the zip being modified.
 
-	       my $member1 = $zip->removeMember( 'xyz' );
-	       my $member2 = $zip->replaceMember( 'abc', $member1 );
+	       my $member1 = $zip-&gtremoveMember( 'xyz' );
+	       my $member2 = $zip-&gtreplaceMember( 'abc', $member1 );
 	       # now, $member2 (named 'abc') is not in $zip,
 	       # and $member1 (named 'xyz') is, having taken $member2's place.
 
@@ -463,8 +465,8 @@ Archive::Zip Methods
 	   members.
 
 	       # Move member named 'abc' to end of zip:
-	       my $member = $zip->removeMember( 'abc' );
-	       $zip->addMember( $member );
+	       my $member = $zip-&gtremoveMember( 'abc' );
+	       $zip-&gtaddMember( $member );
 
        updateMember( $memberOrName, $fileName )
 	   Update a single member from the file or directory named $fileName.
@@ -514,21 +516,21 @@ Archive::Zip Methods
 	   The last modification time will be set to now, and the file
 	   attributes will be set to permissive defaults.
 
-	       my $member = $zip->addString( 'This is a test', 'test.txt' );
+	       my $member = $zip-&gtaddString( 'This is a test', 'test.txt' );
 
        contents( $memberOrMemberName [, $newContents ] )
 	   Returns the uncompressed data for a particular member, or undef.
 
-	       print "xyz.txt contains " . $zip->contents( 'xyz.txt' );
+	       print "xyz.txt contains " . $zip-&gtcontents( 'xyz.txt' );
 
 	   Also can change the contents of a member:
 
-	       $zip->contents( 'xyz.txt', 'This is the new contents' );
+	       $zip-&gtcontents( 'xyz.txt', 'This is the new contents' );
 
 	   If called expecting an array as the return value, it will include
 	   the status as the second value in the array.
 
-	       ($content, $status) = $zip->contents( 'xyz.txt');
+	       ($content, $status) = $zip-&gtcontents( 'xyz.txt');
 
    Zip Archive I/O operations
        A Zip archive can be written to a file or file handle, or read from
@@ -537,7 +539,7 @@ Archive::Zip Methods
        writeToFileNamed( $fileName )
 	   Write a zip archive to named file. Returns "AZ_OK" on success.
 
-	       my $status = $zip->writeToFileNamed( 'xx.zip' );
+	       my $status = $zip-&gtwriteToFileNamed( 'xx.zip' );
 	       die "error somewhere" if $status != AZ_OK;
 
 	   Note that if you use the same name as an existing zip file that you
@@ -554,16 +556,16 @@ Archive::Zip Methods
 	   test returns true. This could fail on some operating systems,
 	   though.
 
-	       my $fh = IO::File->new( 'someFile.zip', 'w' );
-	       unless ( $zip->writeToFileHandle( $fh ) == AZ_OK ) {
+	       my $fh = IO::File-&gtnew( 'someFile.zip', 'w' );
+	       unless ( $zip-&gtwriteToFileHandle( $fh ) == AZ_OK ) {
 		   # error handling
 	       }
 
 	   If you pass a file handle that is not seekable (like if you're
 	   writing to a pipe or a socket), pass a false second argument:
 
-	       my $fh = IO::File->new( '| cat > somefile.zip', 'w' );
-	       $zip->writeToFileHandle( $fh, 0 );   # fh is not seekable
+	       my $fh = IO::File-&gtnew( '| cat &gt somefile.zip', 'w' );
+	       $zip-&gtwriteToFileHandle( $fh, 0 );   # fh is not seekable
 
 	   If this method fails during the write of a member, that member and
 	   all following it will return false from "wasWritten()". See
@@ -587,14 +589,14 @@ Archive::Zip Methods
 	   You can truncate the zip by seeking backwards and then writing the
 	   directory:
 
-	       my $fh = IO::File->new( 'someFile.zip', 'w' );
-		   my $retval = $zip->writeToFileHandle( $fh );
+	       my $fh = IO::File-&gtnew( 'someFile.zip', 'w' );
+		   my $retval = $zip-&gtwriteToFileHandle( $fh );
 	       if ( $retval == AZ_IO_ERROR ) {
-		   my @unwritten = grep { not $_->wasWritten() } $zip->members();
+		   my @unwritten = grep { not $_-&gtwasWritten() } $zip-&gtmembers();
 		   if (@unwritten) {
-		       $zip->removeMember( $member ) foreach my $member ( @unwritten );
-		       $zip->writeCentralDirectory( $fh,
-		       $unwritten[0]->writeLocalHeaderRelativeOffset());
+		       $zip-&gtremoveMember( $member ) foreach my $member ( @unwritten );
+		       $zip-&gtwriteCentralDirectory( $fh,
+		       $unwritten[0]-&gtwriteLocalHeaderRelativeOffset());
 		   }
 	       }
 
@@ -612,8 +614,8 @@ Archive::Zip Methods
 	   Read zipfile headers from a zip file, appending new members.
 	   Returns "AZ_OK" or error code.
 
-	       my $zipFile = Archive::Zip->new();
-	       my $status = $zipFile->read( '/some/FileName.zip' );
+	       my $zipFile = Archive::Zip-&gtnew();
+	       my $status = $zipFile-&gtread( '/some/FileName.zip' );
 
        readFromFileHandle( $fileHandle, $filename )
 	   Read zipfile headers from an already-opened file handle, appending
@@ -621,11 +623,11 @@ Archive::Zip Methods
 	   error code. Note that this requires a seekable file handle; reading
 	   from a stream is not yet supported.
 
-	       my $fh = IO::File->new( '/some/FileName.zip', 'r' );
-	       my $zip1 = Archive::Zip->new();
-	       my $status = $zip1->readFromFileHandle( $fh );
-	       my $zip2 = Archive::Zip->new();
-	       $status = $zip2->readFromFileHandle( $fh );
+	       my $fh = IO::File-&gtnew( '/some/FileName.zip', 'r' );
+	       my $zip1 = Archive::Zip-&gtnew();
+	       my $status = $zip1-&gtreadFromFileHandle( $fh );
+	       my $zip2 = Archive::Zip-&gtnew();
+	       $status = $zip2-&gtreadFromFileHandle( $fh );
 
    Zip Archive Tree operations
        These used to be in Archive::Zip::Tree but got moved into Archive::Zip.
@@ -633,30 +635,30 @@ Archive::Zip Methods
        example:
 
 	 use Archive::Zip;
-	 my $zip = Archive::Zip->new();
+	 my $zip = Archive::Zip-&gtnew();
 
 	 # add all readable files and directories below . as xyz/*
-	 $zip->addTree( '.', 'xyz' );
+	 $zip-&gtaddTree( '.', 'xyz' );
 
 	 # add all readable plain files below /abc as def/*
-	 $zip->addTree( '/abc', 'def', sub { -f && -r } );
+	 $zip-&gtaddTree( '/abc', 'def', sub { -f && -r } );
 
 	 # add all .c files below /tmp as stuff/*
-	 $zip->addTreeMatching( '/tmp', 'stuff', '\.c$' );
+	 $zip-&gtaddTreeMatching( '/tmp', 'stuff', '\.c$' );
 
 	 # add all .o files below /tmp as stuff/* if they aren't writable
-	 $zip->addTreeMatching( '/tmp', 'stuff', '\.o$', sub { ! -w } );
+	 $zip-&gtaddTreeMatching( '/tmp', 'stuff', '\.o$', sub { ! -w } );
 
 	 # add all .so files below /tmp that are smaller than 200 bytes as stuff/*
-	 $zip->addTreeMatching( '/tmp', 'stuff', '\.o$', sub { -s < 200 } );
+	 $zip-&gtaddTreeMatching( '/tmp', 'stuff', '\.o$', sub { -s &lt 200 } );
 
 	 # and write them into a file
-	 $zip->writeToFileNamed('xxx.zip');
+	 $zip-&gtwriteToFileNamed('xxx.zip');
 
 	 # now extract the same files into /tmpx
-	 $zip->extractTree( 'stuff', '/tmpx' );
+	 $zip-&gtextractTree( 'stuff', '/tmpx' );
 
-       $zip->addTree( $root, $dest [,$pred] ) -- Add tree of files to a zip
+       $zip-&gtaddTree( $root, $dest [,$pred] ) -- Add tree of files to a zip
 	   $root is the root of the tree of files and directories to be added.
 	   It is a valid directory name on your system. $dest is the name for
 	   the root in the zip file (undef or blank means to use relative
@@ -668,7 +670,7 @@ Archive::Zip Methods
 	   is to add all readable files and directories. For instance, using
 
 	     my $pred = sub { /\.txt/ };
-	     $zip->addTree( '.', '', $pred );
+	     $zip-&gtaddTree( '.', '', $pred );
 
 	   will add all the .txt files in and below the current directory,
 	   using relative names, and making the names identical in the
@@ -680,7 +682,7 @@ Archive::Zip Methods
 	     ./a/b		     a/b
 
 	   To translate absolute to relative pathnames, just pass them in:
-	   $zip->addTree( '/c/d', 'a' );
+	   $zip-&gtaddTree( '/c/d', 'a' );
 
 	     original name	     zip member name
 	     /c/d/xyz		     a/xyz
@@ -694,7 +696,7 @@ Archive::Zip Methods
 	   Note that you generally don't want to make zip archive member names
 	   absolute.
 
-       $zip->addTreeMatching( $root, $dest, $pattern [,$pred] )
+       $zip-&gtaddTreeMatching( $root, $dest, $pattern [,$pred] )
 	   $root is the root of the tree of files and directories to be added
 	   $dest is the name for the root in the zip file (undef means to use
 	   relative pathnames) $pattern is a (non-anchored) regular expression
@@ -706,18 +708,18 @@ Archive::Zip Methods
 	   whose names end in ".pl", and make them extract into a subdirectory
 	   named "xyz", do this:
 
-	     $zip->addTreeMatching( '.', 'xyz', '\.pl$' )
+	     $zip-&gtaddTreeMatching( '.', 'xyz', '\.pl$' )
 
 	   To add all writable files in and below the dirctory named "/abc"
 	   whose names end in ".pl", and make them extract into a subdirectory
 	   named "xyz", do this:
 
-	     $zip->addTreeMatching( '/abc', 'xyz', '\.pl$', sub { -w } )
+	     $zip-&gtaddTreeMatching( '/abc', 'xyz', '\.pl$', sub { -w } )
 
 	   Returns AZ_OK on success. Note that this will not follow symbolic
 	   links to directories.
 
-       $zip->updateTree( $root, [ $dest, [ $pred [, $mirror]]] );
+       $zip-&gtupdateTree( $root, [ $dest, [ $pred [, $mirror]]] );
 	   Update a zip file from a directory tree.
 
 	   "updateTree()" takes the same arguments as "addTree()", but first
@@ -729,10 +731,10 @@ Archive::Zip Methods
 
 	   Returns an error code or AZ_OK if all is well.
 
-       $zip->extractTree()
-       $zip->extractTree( $root )
-       $zip->extractTree( $root, $dest )
-       $zip->extractTree( $root, $dest, $volume )
+       $zip-&gtextractTree()
+       $zip-&gtextractTree( $root )
+       $zip-&gtextractTree( $root, $dest )
+       $zip-&gtextractTree( $root, $dest, $volume )
 	   If you don't give any arguments at all, will extract all the files
 	   in the zip with their original names.
 
@@ -741,7 +743,7 @@ Archive::Zip Methods
 	   directory, stripping off $root first.  $root is in Zip (Unix)
 	   format.  For instance,
 
-	     $zip->extractTree( 'a' );
+	     $zip-&gtextractTree( 'a' );
 
 	   when applied to a zip containing the files: a/x a/b/c ax/d/e d/e
 	   will extract:
@@ -755,7 +757,7 @@ Archive::Zip Methods
 	   construct the destination file name.  $root and $dest are in Zip
 	   (Unix) format.  For instance,
 
-	      $zip->extractTree( 'a', 'd/e' );
+	      $zip-&gtextractTree( 'a', 'd/e' );
 
 	   when applied to a zip containing the files: a/x a/b/c ax/d/e d/e
 	   will extract:
@@ -776,7 +778,7 @@ Archive::Zip Methods
 
 	   For instance, under Windows,
 
-	      $zip->extractTree( 'a', 'd/e', 'f:' );
+	      $zip-&gtextractTree( 'a', 'd/e', 'f:' );
 
 	   when applied to a zip containing the files: a/x a/b/c ax/d/e d/e
 	   will extract:
@@ -789,7 +791,7 @@ Archive::Zip Methods
 	   to the current directory on the destination volume, you can specify
 	   these in $dest:
 
-	      $zip->extractTree( 'a', '/d/e', 'f:' );
+	      $zip-&gtextractTree( 'a', '/d/e', 'f:' );
 
 	   when applied to a zip containing the files: a/x a/b/c ax/d/e d/e
 	   will extract:
@@ -807,17 +809,17 @@ MEMBER OPERATIONS
        and addString() zip instance methods described above, but they don't
        add the new members to a zip.
 
-       Archive::Zip::Member->newFromString( $stringOrStringRef [, $fileName] )
+       Archive::Zip::Member-&gtnewFromString( $stringOrStringRef [, $fileName] )
 	   Construct a new member from the given string. Returns undef on
 	   error.
 
-	       my $member = Archive::Zip::Member->newFromString( 'This is a test',
+	       my $member = Archive::Zip::Member-&gtnewFromString( 'This is a test',
 							    'xyz.txt' );
 
        newFromFile( $fileName )
 	   Construct a new member from the given file. Returns undef on error.
 
-	       my $member = Archive::Zip::Member->newFromFile( 'xyz.txt' );
+	       my $member = Archive::Zip::Member-&gtnewFromFile( 'xyz.txt' );
 
        newDirectoryNamed( $directoryName [, $zipname ] )
 	   Construct a new member from the given directory.  $directoryName
@@ -829,7 +831,7 @@ MEMBER OPERATIONS
 
 	   Returns undef on error.
 
-	       my $member = Archive::Zip::Member->newDirectoryNamed( 'CVS/' );
+	       my $member = Archive::Zip::Member-&gtnewDirectoryNamed( 'CVS/' );
 
    Member Simple accessors
        These methods get (and/or set) member attribute values.
@@ -892,12 +894,12 @@ MEMBER OPERATIONS
 	   Return the member's last modification date/time stamp, converted to
 	   unix localtime format.
 
-	       print "Mod Time: " . scalar( localtime( $member->lastModTime() ) );
+	       print "Mod Time: " . scalar( localtime( $member-&gtlastModTime() ) );
 
        setLastModFileDateTimeFromUnix()
 	   Set the member's lastModFileDateTime from the given unix time.
 
-	       $member->setLastModFileDateTimeFromUnix( time() );
+	       $member-&gtsetLastModFileDateTimeFromUnix( time() );
 
        internalFileAttributes()
 	   Return the internal file attributes field from the zip header. This
@@ -911,7 +913,7 @@ MEMBER OPERATIONS
 	   Get or set the member's file attributes using UNIX file attributes.
 	   Returns old attributes.
 
-	       my $oldAttribs = $member->unixFileAttributes( 0666 );
+	       my $oldAttribs = $member-&gtunixFileAttributes( 0666 );
 
 	   Note that the return value has more than just the file permissions,
 	   so you will have to mask off the lowest bits for comparisions.
@@ -997,19 +999,19 @@ MEMBER OPERATIONS
        using these methods:
 
 	   my ( $member, $status, $bufferRef );
-	   $member = $zip->memberNamed( 'xyz.txt' );
-	   $member->desiredCompressionMethod( COMPRESSION_STORED );
-	   $status = $member->rewindData();
+	   $member = $zip-&gtmemberNamed( 'xyz.txt' );
+	   $member-&gtdesiredCompressionMethod( COMPRESSION_STORED );
+	   $status = $member-&gtrewindData();
 	   die "error $status" unless $status == AZ_OK;
-	   while ( ! $member->readIsDone() )
+	   while ( ! $member-&gtreadIsDone() )
 	   {
-	   ( $bufferRef, $status ) = $member->readChunk();
+	   ( $bufferRef, $status ) = $member-&gtreadChunk();
 	   die "error $status"
 		       if $status != AZ_OK && $status != AZ_STREAM_END;
 	   # do something with $bufferRef:
 	   print $$bufferRef;
 	   }
-	   $member->endRead();
+	   $member-&gtendRead();
 
        readChunk( [$chunkSize] )
 	   This reads the next chunk of given size from the member's data
@@ -1019,7 +1021,7 @@ MEMBER OPERATIONS
 	   is AZ_OK on success until the last chunk, where it returns
 	   AZ_STREAM_END. Returns "( \$bytes, $status)".
 
-	       my ( $outRef, $status ) = $self->readChunk();
+	       my ( $outRef, $status ) = $self-&gtreadChunk();
 	       print $$outRef if $status != AZ_OK && $status != AZ_STREAM_END;
 
        rewindData()
@@ -1040,15 +1042,15 @@ MEMBER OPERATIONS
 	   context. When called in array context, returns "( $string, $status
 	   )"; status will be AZ_OK on success:
 
-	       my $string = $member->contents();
+	       my $string = $member-&gtcontents();
 	       # or
-	       my ( $string, $status ) = $member->contents();
+	       my ( $string, $status ) = $member-&gtcontents();
 	       die "error $status" unless $status == AZ_OK;
 
 	   Can also be used to set the contents of a member (this may change
 	   the class of the member):
 
-	       $member->contents( "this is my new contents" );
+	       $member-&gtcontents( "this is my new contents" );
 
        extractToFileHandle( $fh )
 	   Extract (and uncompress, if necessary) the member's contents to the
@@ -1153,18 +1155,18 @@ SUPPORT
        Bugs should be reported via the CPAN bug tracker
 
        http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Archive-Zip
-       <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Archive-Zip>
+       &lthttp://rt.cpan.org/NoAuth/ReportBug.html?Queue=Archive-Zip&gt
 
        For other issues contact the maintainer
 
 AUTHOR
-       Adam Kennedy <adamk@cpan.org>
+       Adam Kennedy &ltadamk@cpan.org&gt
 
-       Previously maintained by Steve Peters <steve@fisharerojo.org>.
+       Previously maintained by Steve Peters &ltsteve@fisharerojo.org&gt.
 
-       File attributes code by Maurice Aubrey <maurice@lovelyfilth.com>.
+       File attributes code by Maurice Aubrey &ltmaurice@lovelyfilth.com&gt.
 
-       Originally by Ned Konz <nedkonz@cpan.org>.
+       Originally by Ned Konz &ltnedkonz@cpan.org&gt.
 
 COPYRIGHT
        Some parts copyright 2006 - 2009 Adam Kennedy.
@@ -1184,12 +1186,12 @@ SEE ALSO
 
        There is a Japanese translation of this document at
        http://www.memb.jp/~deq/perl/doc-ja/Archive-Zip.html
-       <http://www.memb.jp/~deq/perl/doc-ja/Archive-Zip.html> that was done by
-       DEQ <deq@oct.zaq.ne.jp> . Thanks!
+       &lthttp://www.memb.jp/~deq/perl/doc-ja/Archive-Zip.html&gt that was done by
+       DEQ &ltdeq@oct.zaq.ne.jp&gt . Thanks!
 
 
 
 perl v5.12.4			  2009-06-30		       Archive::Zip(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

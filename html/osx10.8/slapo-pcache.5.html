@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The  pcache  overlay to slapd(8) allows caching of LDAP search requests..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>slapo-pcache - proxy cache overlay to slapd</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 SLAPO-PCACHE(5) 					       SLAPO-PCACHE(5)
 
 
@@ -50,29 +52,29 @@ DESCRIPTION
 	      intended for use with the ldap, meta, and sql  backends.	Please
 	      note  that the underlying backend must have a configured rootdn.
 
-       pcache <database> <max_entries> <numattrsets> <entry_limit> <cc_period>
+       pcache &ltdatabase&gt &ltmax_entries&gt &ltnumattrsets&gt &ltentry_limit&gt &ltcc_period&gt
 	      The directive enables proxy caching in the current  backend  and
-	      sets general cache parameters. A <database> backend will be used
+	      sets general cache parameters. A &ltdatabase&gt backend will be used
 	      internally to maintain the cached entries. The  chosen  database
 	      will  need  to  be  configured  as  well,  as shown below. Cache
 	      replacement  is  invoked	when   the   cache   size   grows   to
-	      <max_entries>  entries  and  continues till the cache size drops
-	      below this size.	<numattrsets> should be equal to the number of
+	      &ltmax_entries&gt  entries  and  continues till the cache size drops
+	      below this size.	&ltnumattrsets&gt should be equal to the number of
 	      following  pcacheAttrset	directives. Queries are cached only if
 	      they correspond to a cacheable template (specified by  the  pca-
 	      cheTemplate  directive)  and  the  number of entries returned is
-	      less than <entry_limit>. Consistency check  is  performed  every
-	      <cc_period>  duration (specified in secs). In each cycle queries
+	      less than &ltentry_limit&gt. Consistency check  is  performed  every
+	      &ltcc_period&gt  duration (specified in secs). In each cycle queries
 	      with expired "time to live(TTL)" are  removed.  A  sample  cache
 	      configuration is:
 
 	      pcache bdb 10000 1 50 100
 
 
-       pcacheAttrset <index> <attrs...>
-	      Used to associate a set of attributes <attrs..> with an <index>.
+       pcacheAttrset &ltindex&gt &ltattrs...&gt
+	      Used to associate a set of attributes &ltattrs..&gt with an &ltindex&gt.
 	      Each attribute set is associated	with  an  integer  from  0  to
-	      <numattrsets>-1.	These  indices	are used by the pcacheTemplate
+	      &ltnumattrsets&gt-1.	These  indices	are used by the pcacheTemplate
 	      directive to define cacheable templates.	A  set	of  attributes
 	      cannot  be  empty.   A set of attributes can contain the special
 	      attributes "*"  (all  user  attributes),	"+"  (all  operational
@@ -83,7 +85,7 @@ DESCRIPTION
 	      prefixed by "undef:" need not be present in the schema.
 
 
-       pcacheMaxQueries <queries>
+       pcacheMaxQueries &ltqueries&gt
 	      Specify  the  maximum number of queries to cache. The default is
 	      10000.
 
@@ -122,44 +124,44 @@ DESCRIPTION
 	      affected.
 
 
-       pcacheTemplate  <template_string>   <attrset_index>   <ttl>   [<negttl>
-       [<limitttl> [<ttr>]]]
-	      Specifies a cacheable template  and  "time  to  live"  <ttl>  of
-	      queries  belonging  to the template. An optional <negttl> can be
+       pcacheTemplate  &lttemplate_string&gt   &ltattrset_index&gt   &ltttl&gt   [&ltnegttl&gt
+       [&ltlimitttl&gt [&ltttr&gt]]]
+	      Specifies a cacheable template  and  "time  to  live"  &ltttl&gt  of
+	      queries  belonging  to the template. An optional &ltnegttl&gt can be
 	      used to  specify	that  negative	results  (i.e.,  queries  that
 	      returned	zero  entries) should also be cached for the specified
 	      amount of time. Negative	results  are  not  cached  by  default
-	      (<negttl>  set  to  0).	An  optional <limitttl> can be used to
+	      (&ltnegttl&gt  set  to  0).	An  optional &ltlimitttl&gt can be used to
 	      specify that results hitting a sizelimit should also  be	cached
 	      for  the	specified amount of time.  Results hitting a sizelimit
-	      are not cached by default (<limitttl> set to  0).   An  optional
-	      <ttr>  "time  to	refresh"  can  be  used to specify that cached
+	      are not cached by default (&ltlimitttl&gt set to  0).   An  optional
+	      &ltttr&gt  "time  to	refresh"  can  be  used to specify that cached
 	      entries should be automatically refreshed after a certain  time.
 	      Entries  will  only be refreshed while they have not expired, so
-	      the <ttl> should be larger than the <ttr> for this option to  be
-	      useful. Entries are not refreshed by default (<ttr> set to 0).
+	      the &ltttl&gt should be larger than the &ltttr&gt for this option to  be
+	      useful. Entries are not refreshed by default (&ltttr&gt set to 0).
 
 
-       pcacheBind <filter_template> <attrset_index> <ttr> <scope> <base>
+       pcacheBind &ltfilter_template&gt &ltattrset_index&gt &ltttr&gt &ltscope&gt &ltbase&gt
 	      Specifies  a  template for caching Simple Bind credentials based
-	      on an already defined pcacheTemplate. The  <filter_template>  is
-	      similar to a <template_string> except that it may have some val-
+	      on an already defined pcacheTemplate. The  &ltfilter_template&gt  is
+	      similar to a &lttemplate_string&gt except that it may have some val-
 	      ues present. Its purpose is to allow  the  overlay  to  generate
 	      filters  similar	to  what  other applications do when they do a
 	      Search immediately  before  a  Bind.  E.g.,  if  a  client  like
 	      nss_ldap	is  configured	to  search  for a user with the filter
-	      "(&(objectClass=posixAccount)(uid=<username>))" then the	corre-
+	      "(&(objectClass=posixAccount)(uid=&ltusername&gt))" then the	corre-
 	      sponding	template  "(&(objectClass=posixAccount)(uid=))" should
 	      be  used	here.  When  converted	to  a  regular	template  e.g.
-	      "(&(objectClass=)(uid=))"  this template and the <attrset_index>
+	      "(&(objectClass=)(uid=))"  this template and the &ltattrset_index&gt
 	      must match an already defined pcacheTemplate clause.  The  "time
-	      to  refresh"  <ttr> determines the time interval after which the
+	      to  refresh"  &ltttr&gt determines the time interval after which the
 	      cached credentials may be refreshed. The first Bind request that
 	      occurs  after  that  time  will  trigger	the  refresh  attempt.
 	      Refreshes are not performed when the overlay is  Offline.  There
 	      is  no  "time  to  live" parameter for the Bind credentials; the
 	      credentials will expire according to the pcacheTemplate ttl. The
-	      <scope>  and  <base> should match the search scope and base used
+	      &ltscope&gt  and  &ltbase&gt should match the search scope and base used
 	      by the authentication clients. The cached  credentials  are  not
 	      stored  in cleartext, they are hashed using the default password
 	      hash.  By default Bind caching is not enabled.
@@ -182,9 +184,9 @@ DESCRIPTION
 
 	      all values must be positive;
 
-	      <entry_limit> must be less than or equal to <max_entries>;
+	      &ltentry_limit&gt must be less than or equal to &ltmax_entries&gt;
 
-	      <numattrsets>  attribute	sets  SHOULD  be  defined by using the
+	      &ltnumattrsets&gt  attribute	sets  SHOULD  be  defined by using the
 	      directive pcacheAttrset;
 
 	      all attribute sets SHOULD be referenced by (at least)  one  pca-
@@ -303,6 +305,6 @@ AUTHOR
 
 
 OpenLDAP 2.4.28 		  2011/11/24		       SLAPO-PCACHE(5)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

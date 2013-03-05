@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This modules allows compilation of scripts, running under packages..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>ModPerl::RegistryLoader - Compile ModPerl::RegistryCooker scripts at</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::ModPerl::RegistryLoader(3)
 
 
@@ -21,29 +23,29 @@ Synopsis
 	 use ModPerl::RegistryLoader ();
 	 use File::Spec ();
 
-	 # explicit uri => filename mapping
-	 my $rlbb = ModPerl::RegistryLoader->new(
-	     package => 'ModPerl::RegistryBB',
-	     debug   => 1, # default 0
+	 # explicit uri =&gt filename mapping
+	 my $rlbb = ModPerl::RegistryLoader-&gtnew(
+	     package =&gt 'ModPerl::RegistryBB',
+	     debug   =&gt 1, # default 0
 	 );
 
-	 $rlbb->handler($uri, $filename);
+	 $rlbb-&gthandler($uri, $filename);
 
 	 ###
-	 # uri => filename mapping using a helper function
+	 # uri =&gt filename mapping using a helper function
 	 sub trans {
 	     my $uri = shift;
 	     $uri =~ s|^/registry/|cgi-bin/|;
-	     return File::Spec->catfile(Apache2::ServerUtil::server_root, $uri);
+	     return File::Spec-&gtcatfile(Apache2::ServerUtil::server_root, $uri);
 	 }
-	 my $rl = ModPerl::RegistryLoader->new(
-	     package => 'ModPerl::Registry',
-	     trans   => \&trans,
+	 my $rl = ModPerl::RegistryLoader-&gtnew(
+	     package =&gt 'ModPerl::Registry',
+	     trans   =&gt \&trans,
 	 );
-	 $rl->handler($uri);
+	 $rl-&gthandler($uri);
 
 	 ###
-	 $rlbb->handler($uri, $filename, $virtual_hostname);
+	 $rlbb-&gthandler($uri, $filename, $virtual_hostname);
 
 Description
        This modules allows compilation of scripts, running under packages
@@ -64,34 +66,34 @@ Methods
 	   use. For example if a script is going to run under
 	   "ModPerl::RegistryBB" the object is initialized as:
 
-	     my $rlbb = ModPerl::RegistryLoader->new(
-		 package => 'ModPerl::RegistryBB',
+	     my $rlbb = ModPerl::RegistryLoader-&gtnew(
+		 package =&gt 'ModPerl::RegistryBB',
 	     );
 
 	   If the package is not specified "ModPerl::Registry" is assumed:
 
-	     my $rlbb = ModPerl::RegistryLoader->new();
+	     my $rlbb = ModPerl::RegistryLoader-&gtnew();
 
 	   To turn the debugging on, set the debug attribute to a true value:
 
-	     my $rlbb = ModPerl::RegistryLoader->new(
-		 package => 'ModPerl::RegistryBB',
-		 debug	 => 1,
+	     my $rlbb = ModPerl::RegistryLoader-&gtnew(
+		 package =&gt 'ModPerl::RegistryBB',
+		 debug	 =&gt 1,
 	     );
 
 	   Instead of specifying explicitly a filename for each uri passed to
 	   handler(), a special attribute trans can be set to a subroutine to
 	   perform automatic remapping.
 
-	     my $rlbb = ModPerl::RegistryLoader->new(
-		 package => 'ModPerl::RegistryBB',
-		 trans	 => \&trans,
+	     my $rlbb = ModPerl::RegistryLoader-&gtnew(
+		 package =&gt 'ModPerl::RegistryBB',
+		 trans	 =&gt \&trans,
 	     );
 
 	   See the handler() item for an example of using the trans attribute.
 
        handler()
-	     $rl->handler($uri, [$filename, [$virtual_hostname]]);
+	     $rl-&gthandler($uri, [$filename, [$virtual_hostname]]);
 
 	   The handler() method takes argument of "uri" and optionally of
 	   "filename" and of "virtual_hostname".
@@ -112,13 +114,13 @@ Methods
 	     startup.pl:
 	     -----------
 	     use ModPerl::RegistryLoader ();
-	     my $rl = ModPerl::RegistryLoader->new(
-		 package => 'ModPerl::Registry',
+	     my $rl = ModPerl::RegistryLoader-&gtnew(
+		 package =&gt 'ModPerl::Registry',
 	     );
 	     # preload /usr/local/apache/cgi-bin/test.pl
-	     $rl->handler(/registry/test.pl);
+	     $rl-&gthandler(/registry/test.pl);
 
-	   To make the loader smarter about the URI->filename translation, you
+	   To make the loader smarter about the URI-&gtfilename translation, you
 	   may provide the "new()" method with a "trans()" function to
 	   translate the uri to filename.
 
@@ -139,25 +141,25 @@ Methods
 		 use DirHandle ();
 		 use strict;
 
-		 my $dir = File::Spec->catdir(Apache2::ServerUtil::server_root,
+		 my $dir = File::Spec-&gtcatdir(Apache2::ServerUtil::server_root,
 					     "cgi-bin");
 
 		 sub trans {
 		     my $uri = shift;
 		     $uri =~ s|^/registry/|cgi-bin/|;
-		     return File::Spec->catfile(Apache2::ServerUtil::server_root,
+		     return File::Spec-&gtcatfile(Apache2::ServerUtil::server_root,
 						$uri);
 		 }
 
-		 my $rl = ModPerl::RegistryLoader->new(
-		     package => "ModPerl::Registry",
-		     trans   => \&trans,
+		 my $rl = ModPerl::RegistryLoader-&gtnew(
+		     package =&gt "ModPerl::Registry",
+		     trans   =&gt \&trans,
 		 );
-		 my $dh = DirHandle->new($dir) or die $!;
+		 my $dh = DirHandle-&gtnew($dir) or die $!;
 
-		 for my $file ($dh->read) {
+		 for my $file ($dh-&gtread) {
 		     next unless $file =~ /\.pl$/;
-		     $rl->handler("/registry/$file");
+		     $rl-&gthandler("/registry/$file");
 		 }
 	     }
 
@@ -192,6 +194,6 @@ SEE ALSO
 
 
 apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::ModPerl::RegistryLoader(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

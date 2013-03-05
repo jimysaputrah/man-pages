@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This page provides a basic tutorial on understanding, creating and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlretut - Perl regular expressions tutorial</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLRETUT(1)	       Perl Programmers Reference Guide 	  PERLRETUT(1)
 
 
@@ -212,10 +214,10 @@ Part 1: The basics
        searches with just about any literal string regexp you can dream up.
        Here is a very simple emulation of the Unix grep program:
 
-	   % cat > simple_grep
+	   % cat &gt simple_grep
 	   #!/usr/bin/perl
 	   $regexp = shift;
-	   while (<>) {
+	   while (&lt&gt) {
 	       print if /$regexp/;
 	   }
 	   ^D
@@ -237,7 +239,7 @@ Part 1: The basics
        way to invoke a perl program from the shell.  "$regexp = shift;" saves
        the first command line argument as the regexp to be used, leaving the
        rest of the command line arguments to be treated as files.
-       "while (<>)" loops over all the lines in all the files.	For each line,
+       "while (&lt&gt)" loops over all the lines in all the files.	For each line,
        "print if /$regexp/;" prints the line if the regexp matches the line.
        In this line, both "print" and "/$regexp/" use the default variable $_
        implicitly.
@@ -743,7 +745,7 @@ Part 1: The basics
    Named backreferences
        Perl 5.10 also introduced named capture buffers and named
        backreferences.	To attach a name to a capturing group, you write
-       either "(?<name>...)" or "(?'name'...)".  The backreference may then be
+       either "(?&ltname&gt...)" or "(?'name'...)".  The backreference may then be
        written as "\g{name}".  It is permissible to attach the same name to
        more than one group, but then only the leftmost one of the eponymous
        set can be referenced.  Outside of the pattern a named capture buffer
@@ -755,9 +757,9 @@ Part 1: The basics
        the names of the buffers capturing the pertaining components of a date.
        The matching operation combines the three patterns as alternatives:
 
-	   $fmt1 = '(?<y>\d\d\d\d)-(?<m>\d\d)-(?<d>\d\d)';
-	   $fmt2 = '(?<m>\d\d)/(?<d>\d\d)/(?<y>\d\d\d\d)';
-	   $fmt3 = '(?<d>\d\d)\.(?<m>\d\d)\.(?<y>\d\d\d\d)';
+	   $fmt1 = '(?&lty&gt\d\d\d\d)-(?&ltm&gt\d\d)-(?&ltd&gt\d\d)';
+	   $fmt2 = '(?&ltm&gt\d\d)/(?&ltd&gt\d\d)/(?&lty&gt\d\d\d\d)';
+	   $fmt3 = '(?&ltd&gt\d\d)\.(?&ltm&gt\d\d)\.(?&lty&gt\d\d\d\d)';
 	   for my $d qw( 2006-10-21 15.01.2007 10/31/2005 ){
 	       if ( $d =~ m{$fmt1|$fmt2|$fmt3} ){
 		   print "day=$+{d} month=$+{m} year=$+{y}\n";
@@ -1334,7 +1336,7 @@ Part 1: The basics
        the regexp is evaluated:
 
 	   $pattern = 'Seuss';
-	   while (<>) {
+	   while (&lt&gt) {
 	       print if /$pattern/;
 	   }
 
@@ -1348,7 +1350,7 @@ Part 1: The basics
 	   #!/usr/bin/perl
 	   #	Improved simple_grep
 	   $regexp = shift;
-	   while (<>) {
+	   while (&lt&gt) {
 	       print if /$regexp/o;  # a good deal faster
 	   }
 
@@ -1359,7 +1361,7 @@ Part 1: The basics
        delimiter "m''":
 
 	   @pattern = ('Seuss');
-	   while (<>) {
+	   while (&lt&gt) {
 	       print if m'@pattern';  # matches literal '@pattern', not 'Seuss'
 	   }
 
@@ -1426,7 +1428,7 @@ Part 1: The basics
 
 	   $metric = 1;  # use metric units
 	   ...
-	   $x = <FILE>;  # read in measurement
+	   $x = &ltFILE&gt;  # read in measurement
 	   $x =~ /^([+-]?\d+)\s*/g;  # get magnitude
 	   $weight = $1;
 	   if ($metric) { # error checking
@@ -1525,11 +1527,11 @@ Part 1: The basics
        If you prefer 'regex' over 'regexp' in this tutorial, you could use the
        following program to replace it:
 
-	   % cat > simple_replace
+	   % cat &gt simple_replace
 	   #!/usr/bin/perl
 	   $regexp = shift;
 	   $replacement = shift;
-	   while (<>) {
+	   while (&lt&gt) {
 	       s/$regexp/$replacement/go;
 	       print;
 	   }
@@ -1552,7 +1554,7 @@ Part 1: The basics
 	   $x = "Bill the cat";
 	   $x =~ s/(.)/$chars{$1}++;$1/eg;  # final $1 replaces char with itself
 	   print "frequency of '$_' is $chars{$_}\n"
-	       foreach (sort {$chars{$b} <=> $chars{$a}} keys %chars);
+	       foreach (sort {$chars{$b} &lt=&gt $chars{$a}} keys %chars);
 
        This prints
 
@@ -1739,7 +1741,7 @@ Part 2: Power tools
 
 	   IsAlpha	    /^[LM]/
 	   IsAlnum	    /^[LMN]/
-	   IsASCII	    $code <= 127
+	   IsASCII	    $code &lt= 127
 	   IsCntrl	    /^C/
 	   IsBlank	    $code =~ /^(0020|0009)$/ || /^Z[^lp]/
 	   IsDigit	    Nd
@@ -1766,7 +1768,7 @@ Part 2: Power tools
        the script name, for example "\p{Latin}", "\p{Greek}", or
        "\P{Katakana}". Other sets are the Unicode blocks, the names of which
        begin with "In". One such block is dedicated to mathematical operators,
-       and its pattern formula is <C\p{InMathematicalOperators>}>.  For the
+       and its pattern formula is &ltC\p{InMathematicalOperators&gt}&gt.  For the
        full list see perluniprops.
 
        What we have described so far is the single form of the "\p{...}"
@@ -1791,7 +1793,7 @@ Part 2: Power tools
 
        For the full and latest information about Unicode see the latest
        Unicode standard, or the Unicode Consortium's website
-       <http://www.unicode.org>
+       &lthttp://www.unicode.org&gt
 
        As if all those classes weren't enough, Perl also defines POSIX style
        character classes.  These have the form "[:name:]", with "name" the
@@ -1848,15 +1850,15 @@ Part 2: Power tools
        sequence of patterns, advancing to the next pattern as soon as one has
        been satisfied.
 
-	   % cat > grep_step
+	   % cat &gt grep_step
 	   #!/usr/bin/perl
-	   # grep_step - match <number> regexps, one after the other
-	   # usage: multi_grep <number> regexp1 regexp2 ... file1 file2 ...
+	   # grep_step - match &ltnumber&gt regexps, one after the other
+	   # usage: multi_grep &ltnumber&gt regexp1 regexp2 ... file1 file2 ...
 
 	   $number = shift;
 	   $regexp[$_] = shift foreach (0..$number-1);
 	   @compiled = map qr/$_/, @regexp;
-	   while ($line = <>) {
+	   while ($line = &lt&gt) {
 	       if ($line =~ /$compiled[0]/) {
 		   print $line;
 		   shift @compiled;
@@ -1883,16 +1885,16 @@ Part 2: Power tools
        exploit this idea in an improved version of the "simple_grep" program:
        a program that matches multiple patterns:
 
-	   % cat > multi_grep
+	   % cat &gt multi_grep
 	   #!/usr/bin/perl
-	   # multi_grep - match any of <number> regexps
-	   # usage: multi_grep <number> regexp1 regexp2 ... file1 file2 ...
+	   # multi_grep - match any of &ltnumber&gt regexps
+	   # usage: multi_grep &ltnumber&gt regexp1 regexp2 ... file1 file2 ...
 
 	   $number = shift;
 	   $regexp[$_] = shift foreach (0..$number-1);
 	   $pattern = join '|', @regexp;
 
-	   while ($line = <>) {
+	   while ($line = &lt&gt) {
 	       print $line if $line =~ /$pattern/o;
 	   }
 	   ^D
@@ -1910,10 +1912,10 @@ Part 2: Power tools
        the given string is unique. The program below demonstrates the basic
        algorithm.
 
-	   % cat > keymatch
+	   % cat &gt keymatch
 	   #!/usr/bin/perl
 	   $kwds = 'copy compare list print';
-	   while( $command = <> ){
+	   while( $command = &lt&gt ){
 	       $command =~ s/^\s+|\s+$//g;  # trim leading and trailing spaces
 	       if( ( @matches = $kwds =~ /\b$command\w*/g ) == 1 ){
 		   print "command: '@matches'\n";
@@ -1980,7 +1982,7 @@ Part 2: Power tools
 	   $pattern[0] = '(?i)doctor';
 	   $pattern[1] = 'Johnson';
 	   ...
-	   while (<>) {
+	   while (&lt&gt) {
 	       foreach $patt (@pattern) {
 		   print if /$patt/;
 	       }
@@ -2035,32 +2037,32 @@ Part 2: Power tools
        anchor concept.	Lookahead and lookbehind are zero-width assertions
        that let us specify which characters we want to test for.  The
        lookahead assertion is denoted by "(?=regexp)" and the lookbehind
-       assertion is denoted by "(?<=fixed-regexp)".  Some examples are
+       assertion is denoted by "(?&lt=fixed-regexp)".  Some examples are
 
 	   $x = "I catch the housecat 'Tom-cat' with catnip";
 	   $x =~ /cat(?=\s)/;	# matches 'cat' in 'housecat'
-	   @catwords = ($x =~ /(?<=\s)cat\w+/g);  # matches,
+	   @catwords = ($x =~ /(?&lt=\s)cat\w+/g);  # matches,
 						  # $catwords[0] = 'catch'
 						  # $catwords[1] = 'catnip'
 	   $x =~ /\bcat\b/;  # matches 'cat' in 'Tom-cat'
-	   $x =~ /(?<=\s)cat(?=\s)/; # doesn't match; no isolated 'cat' in
+	   $x =~ /(?&lt=\s)cat(?=\s)/; # doesn't match; no isolated 'cat' in
 				     # middle of $x
 
-       Note that the parentheses in "(?=regexp)" and "(?<=regexp)" are non-
+       Note that the parentheses in "(?=regexp)" and "(?&lt=regexp)" are non-
        capturing, since these are zero-width assertions.  Thus in the second
        regexp, the substrings captured are those of the whole regexp itself.
        Lookahead "(?=regexp)" can match arbitrary regexps, but lookbehind
-       "(?<=fixed-regexp)" only works for regexps of fixed width, i.e., a
-       fixed number of characters long.  Thus "(?<=(ab|bc))" is fine, but
-       "(?<=(ab)*)" is not.  The negated versions of the lookahead and
+       "(?&lt=fixed-regexp)" only works for regexps of fixed width, i.e., a
+       fixed number of characters long.  Thus "(?&lt=(ab|bc))" is fine, but
+       "(?&lt=(ab)*)" is not.  The negated versions of the lookahead and
        lookbehind assertions are denoted by "(?!regexp)" and
-       "(?<!fixed-regexp)" respectively.  They evaluate true if the regexps do
+       "(?&lt!fixed-regexp)" respectively.  They evaluate true if the regexps do
        not match:
 
 	   $x = "foobar";
 	   $x =~ /foo(?!bar)/;	# doesn't match, 'bar' follows 'foo'
 	   $x =~ /foo(?!baz)/;	# matches, 'baz' doesn't follow 'foo'
-	   $x =~ /(?<!\s)foo/;	# matches, there is no \s before 'foo'
+	   $x =~ /(?&lt!\s)foo/;	# matches, there is no \s before 'foo'
 
        The "\C" is unsupported in lookbehind, because the already treacherous
        definition of "\C" would become even more so when going backwards.
@@ -2073,8 +2075,8 @@ Part 2: Power tools
 
 	   $str = "one two - --6-8";
 	   @toks = split / \s+		    # a run of spaces
-			 | (?<=\S) (?=-)    # any non-space followed by '-'
-			 | (?<=-)  (?=\S)   # a '-' followed by any non-space
+			 | (?&lt=\S) (?=-)    # any non-space followed by '-'
+			 | (?&lt=-)  (?=\S)   # a '-' followed by any non-space
 			 /x, $str;	    # @toks = qw(one two - - - 6 - 8)
 
    Using independent subexpressions to prevent backtracking
@@ -2082,7 +2084,7 @@ Part 2: Power tools
        larger regular expression, that function independently of the larger
        regular expression.  That is, they consume as much or as little of the
        string as they wish without regard for the ability of the larger regexp
-       to match.  Independent subexpressions are represented by "(?>regexp)".
+       to match.  Independent subexpressions are represented by "(?&gtregexp)".
        We can illustrate their behavior by first considering an ordinary
        regexp:
 
@@ -2097,11 +2099,11 @@ Part 2: Power tools
 
        Contrast that with an independent subexpression:
 
-	   $x =~ /(?>a*)ab/;  # doesn't match!
+	   $x =~ /(?&gta*)ab/;  # doesn't match!
 
-       The independent subexpression "(?>a*)" doesn't care about the rest of
+       The independent subexpression "(?&gta*)" doesn't care about the rest of
        the regexp, so it sees an "a" and grabs it.  Then the rest of the
-       regexp "ab" cannot match.  Because "(?>a*)" is independent, there is no
+       regexp "ab" cannot match.  Because "(?&gta*)" is independent, there is no
        backtracking and the independent subexpression does not give up its
        "a".  Thus the match of the regexp as a whole fails.  A similar
        behavior occurs with completely independent regexps:
@@ -2136,9 +2138,9 @@ Part 2: Power tools
        useless backtracking at some point.  This can be done by enclosing the
        inner quantifier as an independent subexpression:
 
-	   $x =~ /\( ( (?>[^()]+) | \([^()]*\) )+ \)/x;
+	   $x =~ /\( ( (?&gt[^()]+) | \([^()]*\) )+ \)/x;
 
-       Here, "(?>[^()]+)" breaks the degeneracy of string partitioning by
+       Here, "(?&gt[^()]+)" breaks the degeneracy of string partitioning by
        gobbling up as much of the string as possible and keeping it.   Then
        match failures fail much more quickly.
 
@@ -2159,7 +2161,7 @@ Part 2: Power tools
        integer in parentheses "(integer)".  It is true if the corresponding
        backreference "\integer" matched earlier in the regexp.	The same thing
        can be done with a name associated with a capture buffer, written as
-       "(<name>)" or "('name')".  The second form is a bare zero width
+       "(&ltname&gt)" or "('name')".  The second form is a bare zero width
        assertion "(?...)", either a lookahead, a lookbehind, or a code
        assertion (discussed in the next section).  The third set of forms
        provides tests that return true if the expression is executed within a
@@ -2185,11 +2187,11 @@ Part 2: Power tools
        earlier part of the match to influence a later part of the match.  For
        instance,
 
-	   /[ATGC]+(?(?<=AA)G|C)$/;
+	   /[ATGC]+(?(?&lt=AA)G|C)$/;
 
        matches a DNA sequence such that it either ends in "AAG", or some other
-       base pair combination and "C".  Note that the form is "(?(?<=AA)G|C)"
-       and not "(?((?<=AA))G|C)"; for the lookahead, lookbehind or code
+       base pair combination and "C".  Note that the form is "(?(?&lt=AA)G|C)"
+       and not "(?((?&lt=AA))G|C)"; for the lookahead, lookbehind or code
        assertions, the parentheses around the conditional are not needed.
 
    Defining named patterns
@@ -2197,7 +2199,7 @@ Part 2: Power tools
        Starting with Perl 5.10, it is possible to define named subpatterns in
        a section of the pattern so that they can be called up by name anywhere
        in the pattern.	This syntactic pattern for this definition group is
-       "(?(DEFINE)(?<name>pattern)...)".  An insertion of a named pattern is
+       "(?(DEFINE)(?&ltname&gtpattern)...)".  An insertion of a named pattern is
        written as "(?&name)".
 
        The example below illustrates this feature using the pattern for
@@ -2212,9 +2214,9 @@ Part 2: Power tools
 	     (?: [eE](?&osg)(?&int) )?
 	   $
 	   (?(DEFINE)
-	     (?<osg>[-+]?)	   # optional sign
-	     (?<int>\d++)	   # integer
-	     (?<dec>\.(?&int))	   # decimal fraction
+	     (?&ltosg&gt[-+]?)	   # optional sign
+	     (?&ltint&gt\d++)	   # integer
+	     (?&ltdec&gt\.(?&int))	   # decimal fraction
 	   )/x
 
    Recursive patterns
@@ -2403,7 +2405,7 @@ Part 2: Power tools
        programmers who write search engines often take user input and plug it
        directly into a regexp:
 
-	   $regexp = <>;       # read user-supplied regexp
+	   $regexp = &lt&gt;       # read user-supplied regexp
 	   $chomp $regexp;     # get rid of possible newline
 	   $text =~ /$regexp/; # search $text for the $regexp
 
@@ -2517,7 +2519,7 @@ Part 2: Power tools
        pragmas are
 
 	   use re 'taint';
-	   $tainted = <>;
+	   $tainted = &lt&gt;
 	   @parts = ($tainted =~ /(\w+)\s+(\w+)/; # @parts is now tainted
 
        The "taint" pragma causes any substrings from a match with a tainted
@@ -2544,10 +2546,10 @@ Part 2: Power tools
 	   Compiling REx `a*b+c'
 	   size 9 first at 1
 	      1: STAR(4)
-	      2:   EXACT <a>(0)
+	      2:   EXACT &lta&gt(0)
 	      4: PLUS(7)
-	      5:   EXACT <b>(0)
-	      7: EXACT <c>(9)
+	      5:   EXACT &ltb&gt(0)
+	      7: EXACT &ltc&gt(9)
 	      9: END(0)
 	   floating `bc' at 0..2147483647 (checking floating) minlen 2
 	   Guessing start of match, REx `a*b+c' against `abc'...
@@ -2555,14 +2557,14 @@ Part 2: Power tools
 	   Guessed: match at offset 0
 	   Matching REx `a*b+c' against `abc'
 	     Setting an EVAL scope, savestack=3
-	      0 <> <abc>	     |	1:  STAR
-				      EXACT <a> can match 1 times out of 32767...
+	      0 &lt&gt &ltabc&gt	     |	1:  STAR
+				      EXACT &lta&gt can match 1 times out of 32767...
 	     Setting an EVAL scope, savestack=3
-	      1 <a> <bc>	     |	4:    PLUS
-				      EXACT <b> can match 1 times out of 32767...
+	      1 &lta&gt &ltbc&gt	     |	4:    PLUS
+				      EXACT &ltb&gt can match 1 times out of 32767...
 	     Setting an EVAL scope, savestack=3
-	      2 <ab> <c>	     |	7:	EXACT <c>
-	      3 <abc> <>	     |	9:	END
+	      2 &ltab&gt &ltc&gt	     |	7:	EXACT &ltc&gt
+	      3 &ltabc&gt &lt&gt	     |	9:	END
 	   Match successful!
 	   Freeing REx: `a*b+c'
 
@@ -2573,10 +2575,10 @@ Part 2: Power tools
 	   Compiling REx `a*b+c'
 	   size 9 first at 1
 	      1: STAR(4)
-	      2:   EXACT <a>(0)
+	      2:   EXACT &lta&gt(0)
 	      4: PLUS(7)
-	      5:   EXACT <b>(0)
-	      7: EXACT <c>(9)
+	      5:   EXACT &ltb&gt(0)
+	      7: EXACT &ltc&gt(9)
 	      9: END(0)
 
        describes the compilation stage.  STAR(4) means that there is a starred
@@ -2594,19 +2596,19 @@ Part 2: Power tools
 
 	   Matching REx `a*b+c' against `abc'
 	     Setting an EVAL scope, savestack=3
-	      0 <> <abc>	     |	1:  STAR
-				      EXACT <a> can match 1 times out of 32767...
+	      0 &lt&gt &ltabc&gt	     |	1:  STAR
+				      EXACT &lta&gt can match 1 times out of 32767...
 	     Setting an EVAL scope, savestack=3
-	      1 <a> <bc>	     |	4:    PLUS
-				      EXACT <b> can match 1 times out of 32767...
+	      1 &lta&gt &ltbc&gt	     |	4:    PLUS
+				      EXACT &ltb&gt can match 1 times out of 32767...
 	     Setting an EVAL scope, savestack=3
-	      2 <ab> <c>	     |	7:	EXACT <c>
-	      3 <abc> <>	     |	9:	END
+	      2 &ltab&gt &ltc&gt	     |	7:	EXACT &ltc&gt
+	      3 &ltabc&gt &lt&gt	     |	9:	END
 	   Match successful!
 	   Freeing REx: `a*b+c'
 
-       Each step is of the form "n <x> <y>", with "<x>" the part of the string
-       matched and "<y>" the part not yet matched.  The "|  1:	STAR" says
+       Each step is of the form "n &ltx&gt &lty&gt", with "&ltx&gt" the part of the string
+       matched and "&lty&gt" the part not yet matched.  The "|  1:	STAR" says
        that Perl is at line number 1 n the compilation list above.  See
        "Debugging regular expressions" in perldebguts for much more detail.
 
@@ -2670,6 +2672,6 @@ AUTHOR AND COPYRIGHT
 
 
 perl v5.12.4			  2011-06-07			  PERLRETUT(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

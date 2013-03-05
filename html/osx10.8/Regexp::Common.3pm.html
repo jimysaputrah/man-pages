@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="By default, this module exports a single hash (%RE) that stores or..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Regexp::Common - Provide commonly requested regular expressions</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Regexp::Common(3)     User Contributed Perl Documentation    Regexp::Common(3)
 
 
@@ -20,11 +22,11 @@ SYNOPSIS
 
 	use Regexp::Common;
 
-	while (<>) {
+	while (&lt&gt) {
 	    /$RE{num}{real}/		   and print q{a number};
 	    /$RE{quoted}		   and print q{a ['"`] quoted string};
-	    /$RE{delimited}{-delim=>'/'}/  and print q{a /.../ sequence};
-	    /$RE{balanced}{-parens=>'()'}/ and print q{balanced parentheses};
+	    /$RE{delimited}{-delim=&gt'/'}/  and print q{a /.../ sequence};
+	    /$RE{balanced}{-parens=&gt'()'}/ and print q{balanced parentheses};
 	    /$RE{profanity}/		   and print q{a #*@%-ing word};
 	}
 
@@ -33,52 +35,52 @@ SYNOPSIS
 
 	use Regexp::Common 'RE_ALL';
 
-	while (<>) {
+	while (&lt&gt) {
 	    $_ =~ RE_num_real() 	     and print q{a number};
 	    $_ =~ RE_quoted()		     and print q{a ['"`] quoted string};
-	    $_ =~ RE_delimited(-delim=>'/')  and print q{a /.../ sequence};
-	    $_ =~ RE_balanced(-parens=>'()'} and print q{balanced parentheses};
+	    $_ =~ RE_delimited(-delim=&gt'/')  and print q{a /.../ sequence};
+	    $_ =~ RE_balanced(-parens=&gt'()'} and print q{balanced parentheses};
 	    $_ =~ RE_profanity()	     and print q{a #*@%-ing word};
 	}
 
 
 	# IN-LINE MATCHING...
 
-	if ( $RE{num}{int}->matches($text) ) {...}
+	if ( $RE{num}{int}-&gtmatches($text) ) {...}
 
 
 	# ...AND SUBSTITUTION
 
-	my $cropped = $RE{ws}{crop}->subs($uncropped);
+	my $cropped = $RE{ws}{crop}-&gtsubs($uncropped);
 
 
 	# ROLL-YOUR-OWN PATTERNS
 
 	use Regexp::Common 'pattern';
 
-	pattern name   => ['name', 'mine'],
-		create => '(?i:J[.]?\s+A[.]?\s+Perl-Hacker)',
+	pattern name   =&gt ['name', 'mine'],
+		create =&gt '(?i:J[.]?\s+A[.]?\s+Perl-Hacker)',
 		;
 
 	my $name_matcher = $RE{name}{mine};
 
-	pattern name	=> [ 'lineof', '-char=_' ],
-		create	=> sub {
+	pattern name	=&gt [ 'lineof', '-char=_' ],
+		create	=&gt sub {
 			       my $flags = shift;
-			       my $char = quotemeta $flags->{-char};
+			       my $char = quotemeta $flags-&gt{-char};
 			       return '(?:^$char+$)';
 			   },
-		match	=> sub {
+		match	=&gt sub {
 			       my ($self, $str) = @_;
-			       return $str !~ /[^$self->{flags}{-char}]/;
+			       return $str !~ /[^$self-&gt{flags}{-char}]/;
 			   },
-		subs   => sub {
+		subs   =&gt sub {
 			       my ($self, $str, $replacement) = @_;
-			       $_[1] =~ s/^$self->{flags}{-char}+$//g;
+			       $_[1] =~ s/^$self-&gt{flags}{-char}+$//g;
 			  },
 		;
 
-	my $asterisks = $RE{lineof}{-char=>'*'};
+	my $asterisks = $RE{lineof}{-char=&gt'*'};
 
 	# DECIDING WHICH PATTERNS TO LOAD.
 
@@ -113,21 +115,21 @@ DESCRIPTION
        access the pattern that matches base-2 real numbers with embedded
        commas separating groups of three digits (e.g. 10,101,110.110101101):
 
-	       $RE{num}{real}{-base => 2}{-sep => ','}{-group => 3}
+	       $RE{num}{real}{-base =&gt 2}{-sep =&gt ','}{-group =&gt 3}
 
        Through the magic of Perl, these flag layers may be specified in any
        order (and even interspersed through the identifier keys!)  so you
        could get the same pattern with:
 
-	       $RE{num}{real}{-sep => ','}{-group => 3}{-base => 2}
+	       $RE{num}{real}{-sep =&gt ','}{-group =&gt 3}{-base =&gt 2}
 
        or:
 
-	       $RE{num}{-base => 2}{real}{-group => 3}{-sep => ','}
+	       $RE{num}{-base =&gt 2}{real}{-group =&gt 3}{-sep =&gt ','}
 
        or even:
 
-	       $RE{-base => 2}{-group => 3}{-sep => ','}{num}{real}
+	       $RE{-base =&gt 2}{-group =&gt 3}{-sep =&gt ','}{num}{real}
 
        etc.
 
@@ -143,7 +145,7 @@ DESCRIPTION
    Flag syntax
        In versions prior to 2.113, flags could also be written as
        "{"-flag=value"}". This no longer works, although "{"-flag$;value"}"
-       still does. However, "{-flag => 'value'}" is the preferred syntax.
+       still does. However, "{-flag =&gt 'value'}" is the preferred syntax.
 
    Universal flags
        Normally, flags are specific to a single pattern.  However, there is
@@ -185,7 +187,7 @@ DESCRIPTION
 
        you can write:
 
-	       if ( $RE{some}{pattern}->matches($str) ) {...}
+	       if ( $RE{some}{pattern}-&gtmatches($str) ) {...}
 
        For matching this would seem to have no great advantage apart from
        readability (but see below).
@@ -203,7 +205,7 @@ DESCRIPTION
 
        Regexp::Common allows you do write this:
 
-	       $changed = $RE{some}{pattern}->subs($original=>$replacement);
+	       $changed = $RE{some}{pattern}-&gtsubs($original=&gt$replacement);
 
        Apart from reducing precedence-angst, this approach has the added
        advantages that the substitution behaviour can be optimized from the
@@ -212,7 +214,7 @@ DESCRIPTION
 
        For example, in the implementation of this substitution:
 
-	       $cropped = $RE{ws}{crop}->subs($uncropped);
+	       $cropped = $RE{ws}{crop}-&gtsubs($uncropped);
 
        the default empty string is provided automatically, and the
        substitution is optimized to use:
@@ -231,8 +233,8 @@ DESCRIPTION
 
 	       my $num = $RE{num}{int};
 
-	       my $commad     = $num->{-sep=>','}{-group=>3};
-	       my $duodecimal = $num->{-base=>12};
+	       my $commad     = $num-&gt{-sep=&gt','}{-group=&gt3};
+	       my $duodecimal = $num-&gt{-base=&gt12};
 
        However, the use of tied hashes does make the access to Regexp::Common
        patterns slower than it might otherwise be. In contexts where
@@ -249,10 +251,10 @@ DESCRIPTION
 
 	       $str =~ RE_ws_crop() and die "Surrounded by whitespace";
 
-	       $str =~ RE_num_real(-base=>8, -sep=>" ") or next;
+	       $str =~ RE_num_real(-base=&gt8, -sep=&gt" ") or next;
 
 	       $offensive = RE_profanity(-keep);
-	       $str =~ s/$offensive/$bad{$1}++; "<expletive deleted>"/ge;
+	       $str =~ s/$offensive/$bad{$1}++; "&ltexpletive deleted&gt"/ge;
 
        Note that, unlike the hash-based interface (which returns objects),
        these subroutines return ordinary "qr"'d regular expressions. Hence
@@ -279,12 +281,12 @@ DESCRIPTION
        of key/value pairs that specify the behaviour of the pattern. The
        various possible argument pairs are:
 
-       "name => [ @list ]"
+       "name =&gt [ @list ]"
 	   A required argument that specifies the name of the pattern, and any
 	   flags it may take, via a reference to a list of strings. For
 	   example:
 
-		    pattern name => [qw( line of -char )],
+		    pattern name =&gt [qw( line of -char )],
 			    # other args here
 			    ;
 
@@ -295,26 +297,26 @@ DESCRIPTION
 	   used whenever the flag is specified without an explicit value (but
 	   not when the flag is omitted). For example:
 
-		    pattern name => [qw( line of -char=_ )],
+		    pattern name =&gt [qw( line of -char=_ )],
 			    # default char is '_'
 			    # other args here
 			    ;
 
-       "create => $sub_ref_or_string"
+       "create =&gt $sub_ref_or_string"
 	   A required argument that specifies either a string that is to be
 	   returned as the pattern:
 
-		   pattern name    => [qw( line of underscores )],
-			   create  => q/(?:^_+$)/
+		   pattern name    =&gt [qw( line of underscores )],
+			   create  =&gt q/(?:^_+$)/
 			   ;
 
 	   or a reference to a subroutine that will be called to create the
 	   pattern:
 
-		   pattern name    => [qw( line of -char=_ )],
-			   create  => sub {
+		   pattern name    =&gt [qw( line of -char=_ )],
+			   create  =&gt sub {
 					   my ($self, $flags) = @_;
-					   my $char = quotemeta $flags->{-char};
+					   my $char = quotemeta $flags-&gt{-char};
 					   return '(?:^$char+$)';
 				       },
 			   ;
@@ -336,9 +338,9 @@ DESCRIPTION
 	   Regexp::Common convention that the outermost capturing parentheses
 	   always capture the entire pattern, but this is not enforced.
 
-       "match => $sub_ref"
+       "match =&gt $sub_ref"
 	   An optional argument that specifies a subroutine that is to be
-	   called when the "$RE{...}->matches(...)" method of this pattern is
+	   called when the "$RE{...}-&gtmatches(...)" method of this pattern is
 	   invoked.
 
 	   The subroutine should expect two arguments: a reference to the
@@ -346,17 +348,17 @@ DESCRIPTION
 
 	   It should return the same types of values as a "m/.../" does.
 
-		pattern name	=> [qw( line of -char )],
-			create	=> sub {...},
-			match	=> sub {
+		pattern name	=&gt [qw( line of -char )],
+			create	=&gt sub {...},
+			match	=&gt sub {
 					my ($self, $str) = @_;
-					$str !~ /[^$self->{flags}{-char}]/;
+					$str !~ /[^$self-&gt{flags}{-char}]/;
 				   },
 			;
 
-       "subs => $sub_ref"
+       "subs =&gt $sub_ref"
 	   An optional argument that specifies a subroutine that is to be
-	   called when the "$RE{...}->subs(...)" method of this pattern is
+	   called when the "$RE{...}-&gtsubs(...)" method of this pattern is
 	   invoked.
 
 	   The subroutine should expect three arguments: a reference to the
@@ -369,18 +371,18 @@ DESCRIPTION
 
 	   For example:
 
-		pattern name	=> [ 'lineof', '-char=_' ],
-			create	=> sub {...},
-			subs	=> sub {
+		pattern name	=&gt [ 'lineof', '-char=_' ],
+			create	=&gt sub {...},
+			subs	=&gt sub {
 				     my ($self, $str, $ignore_replacement) = @_;
-				     $_[1] =~ s/^$self->{flags}{-char}+$//g;
+				     $_[1] =~ s/^$self-&gt{flags}{-char}+$//g;
 				   },
 			;
 
 	   Note that such a subroutine will almost always need to modify $_[1]
 	   directly.
 
-       "version => $minimum_perl_version"
+       "version =&gt $minimum_perl_version"
 	   If this argument is given, it specifies the minimum version of perl
 	   required to use the new pattern. Attempts to use the pattern with
 	   earlier versions of perl will generate a fatal diagnostic.
@@ -486,22 +488,22 @@ DIAGNOSTICS
 	   recursion) that not available in your version of Perl. Time to
 	   upgrade.
 
-       "pattern() requires argument: name => [ @list ]"
+       "pattern() requires argument: name =&gt [ @list ]"
 	   Every user-defined pattern specification must have a name.
 
-       "pattern() requires argument: create => $sub_ref_or_string"
+       "pattern() requires argument: create =&gt $sub_ref_or_string"
 	   Every user-defined pattern specification must provide a pattern
 	   creation mechanism: either a pattern string or a reference to a
 	   subroutine that returns the pattern string.
 
        "Base must be between 1 and 36"
-	   The $RE{num}{real}{-base=>'N'} pattern uses the characters [0-9A-Z]
+	   The $RE{num}{real}{-base=&gt'N'} pattern uses the characters [0-9A-Z]
 	   to represent the digits of various bases. Hence it only produces
 	   regular expressions for bases up to hexatricensimal.
 
        "Must specify delimiter in $RE{delimited}"
 	   The pattern has no default delimiter.  You need to write:
-	   $RE{delimited}{-delim=>X'} for some character X
+	   $RE{delimited}{-delim=&gtX'} for some character X
 
 ACKNOWLEDGEMENTS
        Deepest thanks to the many people who have encouraged and contributed
@@ -544,6 +546,6 @@ LICENSE and COPYRIGHT
 
 
 perl v5.12.4			  2011-04-17		     Regexp::Common(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

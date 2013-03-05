@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="(This class is part of the HTML::Tree dist.)..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>HTML::TreeBuilder - Parser that builds a HTML syntax tree</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 HTML::TreeBuilder(3)  User Contributed Perl Documentation HTML::TreeBuilder(3)
 
 
@@ -17,15 +19,15 @@ NAME
 
 SYNOPSIS
 	 foreach my $file_name (@ARGV) {
-	   my $tree = HTML::TreeBuilder->new; # empty tree
-	   $tree->parse_file($file_name);
+	   my $tree = HTML::TreeBuilder-&gtnew; # empty tree
+	   $tree-&gtparse_file($file_name);
 	   print "Hey, here's a dump of the parse tree of $file_name:\n";
-	   $tree->dump; # a method we inherit from HTML::Element
+	   $tree-&gtdump; # a method we inherit from HTML::Element
 	   print "And here it is, bizarrely rerendered as HTML:\n",
-	     $tree->as_HTML, "\n";
+	     $tree-&gtas_HTML, "\n";
 
 	   # Now that we're done with it, we must destroy it.
-	   $tree = $tree->delete;
+	   $tree = $tree-&gtdelete;
 	 }
 
 DESCRIPTION
@@ -37,19 +39,19 @@ DESCRIPTION
        1. start a new (empty) HTML::TreeBuilder object,
 
        2. then use one of the methods from HTML::Parser (presumably with
-       $tree->parse_file($filename) for files, or with
-       $tree->parse($document_content) and $tree->eof if you've got the
+       $tree-&gtparse_file($filename) for files, or with
+       $tree-&gtparse($document_content) and $tree-&gteof if you've got the
        content in a string) to parse the HTML document into the tree $tree.
 
        (You can combine steps 1 and 2 with the "new_from_file" or
        "new_from_content" methods.)
 
-       2b. call $root->elementify() if you want.
+       2b. call $root-&gtelementify() if you want.
 
        3. do whatever you need to do with the syntax tree, presumably
        involving traversing it looking for some bit of information in it,
 
-       4. and finally, when you're done with the tree, call $tree->delete() to
+       4. and finally, when you're done with the tree, call $tree-&gtdelete() to
        erase the contents of the tree from memory.  This kind of thing usually
        isn't necessary with most Perl objects, but it's necessary for
        TreeBuilder objects.  See HTML::Element for a more verbose explanation
@@ -68,61 +70,61 @@ METHODS AND ATTRIBUTES
        Most of the following methods native to HTML::TreeBuilder control how
        parsing takes place; they should be set before you try parsing into the
        given object.  You can set the attributes by passing a TRUE or FALSE
-       value as argument.  E.g., $root->implicit_tags returns the current
-       setting for the implicit_tags option, $root->implicit_tags(1) turns
-       that option on, and $root->implicit_tags(0) turns it off.
+       value as argument.  E.g., $root-&gtimplicit_tags returns the current
+       setting for the implicit_tags option, $root-&gtimplicit_tags(1) turns
+       that option on, and $root-&gtimplicit_tags(0) turns it off.
 
-       $root = HTML::TreeBuilder->new_from_file(...)
+       $root = HTML::TreeBuilder-&gtnew_from_file(...)
 	   This "shortcut" constructor merely combines constructing a new
 	   object (with the "new" method, below), and calling
-	   $new->parse_file(...) on it.  Returns the new object.  Note that
+	   $new-&gtparse_file(...) on it.  Returns the new object.  Note that
 	   this provides no way of setting any parse options like
 	   store_comments (for that, call new, and then set options, before
 	   calling parse_file).  See the notes (below) on parameters to
 	   parse_file.
 
-       $root = HTML::TreeBuilder->new_from_content(...)
+       $root = HTML::TreeBuilder-&gtnew_from_content(...)
 	   This "shortcut" constructor merely combines constructing a new
 	   object (with the "new" method, below), and calling
-	   for(...){$new->parse($_)} and $new->eof on it.  Returns the new
+	   for(...){$new-&gtparse($_)} and $new-&gteof on it.  Returns the new
 	   object.  Note that this provides no way of setting any parse
 	   options like store_comments (for that, call new, and then set
 	   options, before calling parse_file).  Example usages:
-	   HTML::TreeBuilder->new_from_content(@lines), or
-	   HTML::TreeBuilder->new_from_content($content)
+	   HTML::TreeBuilder-&gtnew_from_content(@lines), or
+	   HTML::TreeBuilder-&gtnew_from_content($content)
 
-       $root = HTML::TreeBuilder->new()
+       $root = HTML::TreeBuilder-&gtnew()
 	   This creates a new HTML::TreeBuilder object.  This method takes no
 	   attributes.
 
-       $root->parse_file(...)
+       $root-&gtparse_file(...)
 	   [An important method inherited from HTML::Parser, which see.
 	   Current versions of HTML::Parser can take a filespec, or a
 	   filehandle object, like *FOO, or some object from class IO::Handle,
 	   IO::File, IO::Socket) or the like.  I think you should check that a
-	   given file exists before calling $root->parse_file($filespec).]
+	   given file exists before calling $root-&gtparse_file($filespec).]
 
-       $root->parse(...)
+       $root-&gtparse(...)
 	   [A important method inherited from HTML::Parser, which see.	See
-	   the note below for $root->eof().]
+	   the note below for $root-&gteof().]
 
-       $root->eof()
+       $root-&gteof()
 	   This signals that you're finished parsing content into this tree;
 	   this runs various kinds of crucial cleanup on the tree.  This is
-	   called for you when you call $root->parse_file(...), but not when
-	   you call $root->parse(...).	So if you call $root->parse(...), then
-	   you must call $root->eof() once you've finished feeding all the
+	   called for you when you call $root-&gtparse_file(...), but not when
+	   you call $root-&gtparse(...).	So if you call $root-&gtparse(...), then
+	   you must call $root-&gteof() once you've finished feeding all the
 	   chunks to parse(...), and before you actually start doing anything
 	   else with the tree in $root.
 
-       "$root->parse_content(...)"
-	   Basically a happly alias for "$root->parse(...); $root->eof".
-	   Takes the exact same arguments as "$root->parse()".
+       "$root-&gtparse_content(...)"
+	   Basically a happly alias for "$root-&gtparse(...); $root-&gteof".
+	   Takes the exact same arguments as "$root-&gtparse()".
 
-       $root->delete()
+       $root-&gtdelete()
 	   [An important method inherited from HTML::Element, which see.]
 
-       $root->elementify()
+       $root-&gtelementify()
 	   This changes the class of the object in $root from
 	   HTML::TreeBuilder to the class used for all the rest of the
 	   elements in that tree (generally HTML::Element).  Returns $root.
@@ -130,7 +132,7 @@ METHODS AND ATTRIBUTES
 	   For most purposes, this is unnecessary, but if you call this after
 	   (after!!)  you've finished building a tree, then it keeps you from
 	   accidentally trying to call anything but HTML::Element methods on
-	   it.	(I.e., if you accidentally call "$root->parse_file(...)" on
+	   it.	(I.e., if you accidentally call "$root-&gtparse_file(...)" on
 	   the already-complete and elementified tree, then instead of
 	   charging ahead and wreaking havoc, it'll throw a fatal error --
 	   since $root is now an object just of class HTML::Element which has
@@ -141,30 +143,30 @@ METHODS AND ATTRIBUTES
 	   "_implicit".  If anyone requests that I change this to leave in yet
 	   more private attributes, I might do so, in future versions.
 
-       @nodes = $root->guts()
-       $parent_for_nodes = $root->guts()
+       @nodes = $root-&gtguts()
+       $parent_for_nodes = $root-&gtguts()
 	   In list context (as in the first case), this method returns the
 	   topmost non-implicit nodes in a tree.  This is useful when you're
 	   parsing HTML code that you know doesn't expect an HTML document,
 	   but instead just a fragment of an HTML document.  For example, if
 	   you wanted the parse tree for a file consisting of just this:
 
-	     <li>I like pie!
+	     &ltli&gtI like pie!
 
-	   Then you would get that with "@nodes = $root->guts();".  It so
+	   Then you would get that with "@nodes = $root-&gtguts();".  It so
 	   happens that in this case, @nodes will contain just one element
 	   object, representing the "li" node (with "I like pie!" being its
 	   text child node).  However, consider if you were parsing this:
 
-	     <hr>Hooboy!<hr>
+	     &lthr&gtHooboy!&lthr&gt
 
-	   In that case, "$root->guts()" would return three items: an element
+	   In that case, "$root-&gtguts()" would return three items: an element
 	   object for the first "hr", a text string "Hooboy!", and another
 	   "hr" element object.
 
 	   For cases where you want definitely one element (so you can treat
 	   it as a "document fragment", roughly speaking), call "guts()" in
-	   scalar context, as in "$parent_for_nodes = $root->guts()". That
+	   scalar context, as in "$parent_for_nodes = $root-&gtguts()". That
 	   works like "guts()" in list context; in fact, "guts()" in list
 	   context would have returned exactly one value, and if it would have
 	   been an object (as opposed to a text string), then that's what
@@ -176,8 +178,8 @@ METHODS AND ATTRIBUTES
 	   would have returned.  Note that that may detach those nodes from
 	   $root's tree.
 
-       @nodes = $root->disembowel()
-       $parent_for_nodes = $root->disembowel()
+       @nodes = $root-&gtdisembowel()
+       $parent_for_nodes = $root-&gtdisembowel()
 	   The "disembowel()" method works just like the "guts()" method,
 	   except that disembowel definitively destroys the tree above the
 	   nodes that are returned.  Usually when you want the guts from a
@@ -185,7 +187,7 @@ METHODS AND ATTRIBUTES
 	   this saves you the bother.  (Remember, "disembowel" means "remove
 	   the guts from".)
 
-       $root->implicit_tags(value)
+       $root-&gtimplicit_tags(value)
 	   Setting this attribute to true will instruct the parser to try to
 	   deduce implicit elements and implicit end tags.  If it is false you
 	   get a parse tree that just reflects the text as it stands, which is
@@ -195,34 +197,34 @@ METHODS AND ATTRIBUTES
 
 	   Implicit elements have the implicit() attribute set.
 
-       $root->implicit_body_p_tag(value)
+       $root-&gtimplicit_body_p_tag(value)
 	   This controls an aspect of implicit element behavior, if
 	   implicit_tags is on:  If a text element (PCDATA) or a phrasal
-	   element (such as "<em>") is to be inserted under "<body>", two
+	   element (such as "&ltem&gt") is to be inserted under "&ltbody&gt", two
 	   things can happen: if implicit_body_p_tag is true, it's placed
-	   under a new, implicit "<p>" tag.  (Past DTDs suggested this was the
+	   under a new, implicit "&ltp&gt" tag.  (Past DTDs suggested this was the
 	   only correct behavior, and this is how past versions of this module
 	   behaved.)  But if implicit_body_p_tag is false, nothing is
 	   implicated -- the PCDATA or phrasal element is simply placed under
-	   "<body>".  Default is false.
+	   "&ltbody&gt".  Default is false.
 
-       $root->ignore_unknown(value)
+       $root-&gtignore_unknown(value)
 	   This attribute controls whether unknown tags should be represented
 	   as elements in the parse tree, or whether they should be ignored.
 	   Default is true (to ignore unknown tags.)
 
-       $root->ignore_text(value)
+       $root-&gtignore_text(value)
 	   Do not represent the text content of elements.  This saves space if
 	   all you want is to examine the structure of the document.  Default
 	   is false.
 
-       $root->ignore_ignorable_whitespace(value)
+       $root-&gtignore_ignorable_whitespace(value)
 	   If set to true, TreeBuilder will try to avoid creating ignorable
 	   whitespace text nodes in the tree.  Default is true.  (In fact, I'd
 	   be interested in hearing if there's ever a case where you need this
 	   off, or where leaving it on leads to incorrect behavior.)
 
-       $root->no_space_compacting(value)
+       $root-&gtno_space_compacting(value)
 	   This determines whether TreeBuilder compacts all whitespace strings
 	   in the document (well, outside of PRE or TEXTAREA elements), or
 	   leaves them alone.  Normally (default, value of 0), each string of
@@ -236,7 +238,7 @@ METHODS AND ATTRIBUTES
 	   This method is experimental.  If you use it, be sure to report any
 	   problems you might have with it.
 
-       $root->p_strict(value)
+       $root-&gtp_strict(value)
 	   If set to true (and it defaults to false), TreeBuilder will take a
 	   narrower than normal view of what can be under a "p" element; if it
 	   sees a non-phrasal element about to be inserted under a "p", it
@@ -246,8 +248,8 @@ METHODS AND ATTRIBUTES
 
 	   For example, when going thru this snippet of code,
 
-	     <p>stuff
-	     <ul>
+	     &ltp&gtstuff
+	     &ltul&gt
 
 	   TreeBuilder will normally (with "p_strict" false) put the "ul"
 	   element under the "p" element.  However, with "p_strict" set to
@@ -266,17 +268,17 @@ METHODS AND ATTRIBUTES
 	   is content-model checking as a stage after TreeBuilder has finished
 	   parsing.
 
-       $root->store_comments(value)
+       $root-&gtstore_comments(value)
 	   This determines whether TreeBuilder will normally store comments
 	   found while parsing content into $root.  Currently, this is off by
 	   default.
 
-       $root->store_declarations(value)
+       $root-&gtstore_declarations(value)
 	   This determines whether TreeBuilder will normally store markup
 	   declarations found while parsing content into $root.  This is on by
 	   default.
 
-       $root->store_pis(value)
+       $root-&gtstore_pis(value)
 	   This determines whether TreeBuilder will normally store processing
 	   instructions found while parsing content into $root -- assuming a
 	   recent version of HTML::Parser (old versions won't parse PIs
@@ -286,7 +288,7 @@ METHODS AND ATTRIBUTES
 	   anyone needs it?) that PIs in the preamble (before the "html"
 	   start-tag) end up actually under the "html" element.
 
-       $root->warn(value)
+       $root-&gtwarn(value)
 	   This determines whether syntax errors during parsing should
 	   generate warnings, emitted via Perl's "warn" function.
 
@@ -346,10 +348,10 @@ TRANSLATIONS?
        always something".
 
        Users looking to compare several HTML parsers should look at the source
-       for Raggett's Tidy ("<http://www.w3.org/People/Raggett/tidy/>"),
-       Mozilla ("<http://www.mozilla.org/>"), and possibly root around the
+       for Raggett's Tidy ("&lthttp://www.w3.org/People/Raggett/tidy/&gt"),
+       Mozilla ("&lthttp://www.mozilla.org/&gt"), and possibly root around the
        browsers section of Yahoo to find the various open-source ones
-       ("<http://dir.yahoo.com/Computers_and_Internet/Software/Internet/World_Wide_Web/Browsers/>").
+       ("&lthttp://dir.yahoo.com/Computers_and_Internet/Software/Internet/World_Wide_Web/Browsers/&gt").
 
 BUGS
        * Framesets seem to work correctly now.	Email me if you get a strange
@@ -359,7 +361,7 @@ BUGS
        objectionable parse tree.  Regrettable, but unavoidably true.
 
        * If you're running with implicit_tags off (God help you!), consider
-       that $tree->content_list probably contains the tree or grove from the
+       that $tree-&gtcontent_list probably contains the tree or grove from the
        parse, and not $tree itself (which will, oddly enough, be an implicit
        'html' element).  This seems counter-intuitive and problematic; but
        seeing as how almost no HTML ever parses correctly with implicit_tags
@@ -374,7 +376,7 @@ BUG REPORTS
        "bug-html-tree at rt.cpan.org".
 
        Include a note as to how it parses (presumably including its
-       $tree->dump output), and then a careful and clear explanation of where
+       $tree-&gtdump output), and then a careful and clear explanation of where
        you think the parser is going astray, and how you would prefer that it
        work instead.
 
@@ -395,13 +397,13 @@ COPYRIGHT
        merchantability or fitness for a particular purpose.
 
 AUTHOR
-       Currently maintained by Pete Krawczyk "<petek@cpan.org>"
+       Currently maintained by Pete Krawczyk "&ltpetek@cpan.org&gt"
 
        Original authors: Gisle Aas, Sean Burke and Andy Lester.
 
 
 
 perl v5.10.1			  2006-11-12		  HTML::TreeBuilder(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

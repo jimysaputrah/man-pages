@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="MIME-tools is a collection of Perl5 MIME:: modules for parsing,..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MIME-tools - modules for parsing (and creating!) MIME entities</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MIME::Tools(3)	      User Contributed Perl Documentation	MIME::Tools(3)
 
 
@@ -23,13 +25,13 @@ SYNOPSIS
 
 	   ### Create parser, and set some parsing options:
 	   my $parser = new MIME::Parser;
-	   $parser->output_under("$ENV{HOME}/mimemail");
+	   $parser-&gtoutput_under("$ENV{HOME}/mimemail");
 
 	   ### Parse input:
-	   $entity = $parser->parse(\*STDIN) or die "parse failed\n";
+	   $entity = $parser-&gtparse(\*STDIN) or die "parse failed\n";
 
 	   ### Take a look at the top-level entity (and any parts it has):
-	   $entity->dump_skeleton;
+	   $entity-&gtdump_skeleton;
 
        Here's some code which composes and sends a MIME message containing
        three parts: a text file, an attached GIF, and some more text:
@@ -37,25 +39,25 @@ SYNOPSIS
 	   use MIME::Entity;
 
 	   ### Create the top-level, and set up the mail headers:
-	   $top = MIME::Entity->build(Type    =>"multipart/mixed",
-				      From    => "me\@myhost.com",
-				      To      => "you\@yourhost.com",
-				      Subject => "Hello, nurse!");
+	   $top = MIME::Entity-&gtbuild(Type    =&gt"multipart/mixed",
+				      From    =&gt "me\@myhost.com",
+				      To      =&gt "you\@yourhost.com",
+				      Subject =&gt "Hello, nurse!");
 
 	   ### Part #1: a simple text document:
-	   $top->attach(Path=>"./testin/short.txt");
+	   $top-&gtattach(Path=&gt"./testin/short.txt");
 
 	   ### Part #2: a GIF file:
-	   $top->attach(Path	    => "./docs/mime-sm.gif",
-			Type	    => "image/gif",
-			Encoding    => "base64");
+	   $top-&gtattach(Path	    =&gt "./docs/mime-sm.gif",
+			Type	    =&gt "image/gif",
+			Encoding    =&gt "base64");
 
 	   ### Part #3: some literal text:
-	   $top->attach(Data=>$message);
+	   $top-&gtattach(Data=&gt$message);
 
 	   ### Send it:
 	   open MAIL, "| /usr/lib/sendmail -t -oi -oem" or die "open: $!";
-	   $top->print(\*MAIL);
+	   $top-&gtprint(\*MAIL);
 	   close MAIL;
 
        For more examples, look at the scripts in the examples directory of the
@@ -86,24 +88,24 @@ A QUICK TOUR
        Here are the classes you'll generally be dealing with directly:
 
 	   (START HERE) 	   results() .-----------------.
-		 \		   .-------->| MIME::	       |
+		 \		   .--------&gt| MIME::	       |
 		  .-----------.   /	     | Parser::Results |
 		  | MIME::    |--'	     `-----------------'
 		  | Parser    |--.	     .-----------------.
 		  `-----------'   \ filer()  | MIME::	       |
-		     | parse()	   `-------->| Parser::Filer   |
+		     | parse()	   `--------&gt| Parser::Filer   |
 		     | gives you	     `-----------------'
 		     | a...				     | output_path()
 		     |					     | determines
 		     |					     | path() of...
 		     |	  head()       .--------.	     |
 		     |	  returns...   | MIME:: | get()      |
-		     V	     .-------->| Head	| etc...     |
+		     V	     .--------&gt| Head	| etc...     |
 		  .--------./	       `--------'	     |
-	    .---> | MIME:: |				     |
+	    .---&gt | MIME:: |				     |
 	    `-----| Entity |	       .--------.	     |
 	  parts() `--------'\	       | MIME:: |	    /
-	  returns	     `-------->| Body	|<---------'
+	  returns	     `--------&gt| Body	|&lt---------'
 	  sub-entities	  bodyhandle() `--------'
 	  (if any)	  returns...	   | open()
 					   | returns...
@@ -219,7 +221,7 @@ A QUICK TOUR
        Since MIME::Entity inherits directly from Mail::Internet, you can use
        the normal Mail::Internet mechanisms to send email.  For example,
 
-	   $entity->smtpsend;
+	   $entity-&gtsmtpsend;
 
    Encoding/decoding support
        The MIME::Decoder class can be used to encode as well; this is done
@@ -299,18 +301,18 @@ A QUICK TOUR
        debugging
 	   Turn debugging on or off.  Default is false (off).
 
-		MIME::Tools->debugging(1);
+		MIME::Tools-&gtdebugging(1);
 
        quiet
 	   Turn the reporting of warning/error messages on or off.  Default is
 	   true, meaning that these message are silenced.
 
-		MIME::Tools->quiet(1);
+		MIME::Tools-&gtquiet(1);
 
        version
 	   Return the toolkit version.
 
-		print MIME::Tools->version, "\n";
+		print MIME::Tools-&gtversion, "\n";
 
 THINGS YOU SHOULD DO
    Take a look at the examples
@@ -332,7 +334,7 @@ THINGS YOU SHOULD DO
        For example, if your mail-handling code absolutely must not die, then
        perform mail parsing like this:
 
-	   $entity = eval { $parser->parse(\*INPUT) };
+	   $entity = eval { $parser-&gtparse(\*INPUT) };
 
        Parsing is a complex process, and some components may throw exceptions
        if seriously-bad things happen.	Since "seriously-bad" is in the eye of
@@ -353,8 +355,8 @@ THINGS YOU SHOULD DO
        ambiguities in base64-encoding, the following is not going to spit out
        its input unchanged in all cases:
 
-	   $entity = $parser->parse(\*STDIN);
-	   $entity->print(\*STDOUT);
+	   $entity = $parser-&gtparse(\*STDIN);
+	   $entity-&gtprint(\*STDOUT);
 
        If you're using MIME::Tools to process email, remember to save the data
        you parse if you want to send it on unchanged.  This is vital for
@@ -389,7 +391,7 @@ THINGS YOU SHOULD DO
 
 	   use MIME::WordDecoder;
 	   ...
-	   $subject = unmime $entity->head->get('subject');
+	   $subject = unmime $entity-&gthead-&gtget('subject');
 
        One place this is done automatically is in extracting the recommended
        filename for a part while parsing.  That's why you should start by
@@ -434,7 +436,7 @@ THINGS I DO THAT YOU SHOULD KNOW ABOUT
        message:
 
 	   From - Wed Mar 22 02:13:18 2000
-	   Return-Path: <eryq@zeegee.com>
+	   Return-Path: &lteryq@zeegee.com&gt
 	   Subject: Hello
 
        The parser simply ignores such stuff quietly.  Perhaps it shouldn't,
@@ -699,6 +701,6 @@ ACKNOWLEDGMENTS
 
 
 perl v5.12.4			  2011-03-08			MIME::Tools(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="psql is a terminal-based front-end to PostgreSQL. It enables you to..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>psql - PostgreSQL interactive terminal</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PSQL(1) 		PostgreSQL 9.1.4 Documentation		       PSQL(1)
 
 
@@ -80,7 +82,7 @@ OPTIONS
 
 	   If filename is - (hyphen), then standard input is read.
 
-	   Using this option is subtly different from writing psql < filename.
+	   Using this option is subtly different from writing psql &lt filename.
 	   In general, both will do what you expect, but using -f enables some
 	   nice features such as error messages with line numbers. There is
 	   also a slight chance that using this option will reduce the
@@ -290,13 +292,13 @@ USAGE
    Entering SQL Commands
        In normal operation, psql provides a prompt with the name of the
        database to which psql is currently connected, followed by the string
-       =>. For example:
+       =&gt. For example:
 
 	   $ psql testdb
 	   psql (9.1.4)
 	   Type "help" for help.
 
-	   testdb=>
+	   testdb=&gt
 
        At the prompt, the user can type in SQL commands. Ordinarily, input
        lines are sent to the server when a command-terminating semicolon is
@@ -482,7 +484,7 @@ USAGE
 	   operators, types, relations (tables, views, indexes, sequences),
 	   large objects, rules, and triggers. For example:
 
-	       => \dd version
+	       =&gt \dd version
 				    Object descriptions
 		  Schema   |  Name   |	Object	|	 Description
 	       ------------+---------+----------+---------------------------
@@ -704,7 +706,7 @@ USAGE
 	   and followed by a newline. This can be useful to intersperse
 	   information in the output of scripts. For example:
 
-	       => \echo `date`
+	       =&gt \echo `date`
 	       Tue Oct 26 21:40:57 CEST 1999
 
 	   If the first argument is an unquoted -n the trailing newline is not
@@ -797,7 +799,7 @@ USAGE
 	   Stores the file into a PostgreSQL large object. Optionally, it
 	   associates the given comment with the object. Example:
 
-	       foo=> \lo_import '/home/peter/pictures/photo.xcf' 'a picture of me'
+	       foo=&gt \lo_import '/home/peter/pictures/photo.xcf' 'a picture of me'
 	       lo_import 152801
 
 	   The response indicates that the large object received object ID
@@ -1176,13 +1178,13 @@ USAGE
 	   value can be any string of any length. To set variables, use the
 	   psql meta-command \set:
 
-	       testdb=> \set foo bar
+	       testdb=&gt \set foo bar
 
 	   sets the variable foo to the value bar. To retrieve the content of
 	   the variable, precede the name with a colon and use it as the
 	   argument of any slash command:
 
-	       testdb=> \echo :foo
+	       testdb=&gt \echo :foo
 	       bar
 
 	       Note
@@ -1262,7 +1264,7 @@ USAGE
 	       The current client character set encoding.
 
 	   FETCH_COUNT
-	       If this variable is set to an integer value > 0, the results of
+	       If this variable is set to an integer value &gt 0, the results of
 	       SELECT queries are fetched and displayed in groups of that many
 	       rows, rather than the default behavior of collecting the entire
 	       result set before display. Therefore only a limited amount of
@@ -1389,8 +1391,8 @@ USAGE
 	   interpolating a value without any special escaping is again to
 	   prepend the variable name with a colon (:):
 
-	       testdb=> \set foo 'my_table'
-	       testdb=> SELECT * FROM :foo;
+	       testdb=&gt \set foo 'my_table'
+	       testdb=&gt SELECT * FROM :foo;
 
 	   would then query the table my_table. Note that this may be unsafe:
 	   the value of the variable is copied literally, so it can even
@@ -1404,8 +1406,8 @@ USAGE
 	   a colon followed by the variable name in double quotes. The
 	   previous example would be more safely written this way:
 
-	       testdb=> \set foo 'my_table'
-	       testdb=> SELECT * FROM :"foo";
+	       testdb=&gt \set foo 'my_table'
+	       testdb=&gt SELECT * FROM :"foo";
 
 	   Variable interpolation will not be performed into quoted SQL
 	   entities.
@@ -1414,8 +1416,8 @@ USAGE
 	   file into a table column. First load the file into a variable and
 	   then proceed as above:
 
-	       testdb=> \set content `cat my_file.txt`
-	       testdb=> INSERT INTO my_table VALUES (:'content');
+	       testdb=&gt \set content `cat my_file.txt`
+	       testdb=&gt INSERT INTO my_table VALUES (:'content');
 
 	   (Note that this still won't work if my_file.txt contains NUL bytes.
 	   psql does not support embedded NUL bytes in variable values.)
@@ -1456,7 +1458,7 @@ USAGE
 	       The host name of the database server, truncated at the first
 	       dot, or [local] if the connection is over a Unix domain socket.
 
-	   %>
+	   %&gt
 	       The port number at which the database server is listening.
 
 	   %n
@@ -1473,7 +1475,7 @@ USAGE
 
 	   %#
 	       If the session user is a database superuser, then a #,
-	       otherwise a >. (The expansion of this value might change during
+	       otherwise a &gt. (The expansion of this value might change during
 	       a database session as the result of the command SET SESSION
 	       AUTHORIZATION.)
 
@@ -1513,12 +1515,12 @@ USAGE
 	       by surrounding them with %[ and %]. Multiple pairs of these can
 	       occur within the prompt. For example:
 
-		   testdb=> \set PROMPT1 '%[%033[1;33;40m%]%n@%/%R%[%033[0m%]%# '
+		   testdb=&gt \set PROMPT1 '%[%033[1;33;40m%]%n@%/%R%[%033[0m%]%# '
 
 	       results in a boldfaced (1;) yellow-on-black (33;40) prompt on
 	       VT100-compatible, color-capable terminals.
 	   To insert a percent sign into your prompt, write %%. The default
-	   prompts are '%/%R%# ' for prompts 1 and 2, and '>> ' for prompt 3.
+	   prompts are '%/%R%# ' for prompts 1 and 2, and '&gt&gt ' for prompt 3.
 
 	       Note
 	       This feature was shamelessly plagiarized from tcsh.
@@ -1636,15 +1638,15 @@ EXAMPLES
        The first example shows how to spread a command over several lines of
        input. Notice the changing prompt:
 
-	   testdb=> CREATE TABLE my_table (
-	   testdb(>  first integer not null default 0,
-	   testdb(>  second text)
-	   testdb-> ;
+	   testdb=&gt CREATE TABLE my_table (
+	   testdb(&gt  first integer not null default 0,
+	   testdb(&gt  second text)
+	   testdb-&gt ;
 	   CREATE TABLE
 
        Now look at the table definition again:
 
-	   testdb=> \d my_table
+	   testdb=&gt \d my_table
 			Table "my_table"
 	    Attribute |  Type	|      Modifier
 	   -----------+---------+--------------------
@@ -1653,13 +1655,13 @@ EXAMPLES
 
        Now we change the prompt to something more interesting:
 
-	   testdb=> \set PROMPT1 '%n@%m %~%R%# '
-	   peter@localhost testdb=>
+	   testdb=&gt \set PROMPT1 '%n@%m %~%R%# '
+	   peter@localhost testdb=&gt
 
        Let's assume you have filled the table with data and want to take a
        look at it:
 
-	   peter@localhost testdb=> SELECT * FROM my_table;
+	   peter@localhost testdb=&gt SELECT * FROM my_table;
 	    first | second
 	   -------+--------
 		1 | one
@@ -1670,9 +1672,9 @@ EXAMPLES
 
        You can display tables in different ways by using the \pset command:
 
-	   peter@localhost testdb=> \pset border 2
+	   peter@localhost testdb=&gt \pset border 2
 	   Border style is 2.
-	   peter@localhost testdb=> SELECT * FROM my_table;
+	   peter@localhost testdb=&gt SELECT * FROM my_table;
 	   +-------+--------+
 	   | first | second |
 	   +-------+--------+
@@ -1683,9 +1685,9 @@ EXAMPLES
 	   +-------+--------+
 	   (4 rows)
 
-	   peter@localhost testdb=> \pset border 0
+	   peter@localhost testdb=&gt \pset border 0
 	   Border style is 0.
-	   peter@localhost testdb=> SELECT * FROM my_table;
+	   peter@localhost testdb=&gt SELECT * FROM my_table;
 	   first second
 	   ----- ------
 	       1 one
@@ -1694,15 +1696,15 @@ EXAMPLES
 	       4 four
 	   (4 rows)
 
-	   peter@localhost testdb=> \pset border 1
+	   peter@localhost testdb=&gt \pset border 1
 	   Border style is 1.
-	   peter@localhost testdb=> \pset format unaligned
+	   peter@localhost testdb=&gt \pset format unaligned
 	   Output format is unaligned.
-	   peter@localhost testdb=> \pset fieldsep ","
+	   peter@localhost testdb=&gt \pset fieldsep ","
 	   Field separator is ",".
-	   peter@localhost testdb=> \pset tuples_only
+	   peter@localhost testdb=&gt \pset tuples_only
 	   Showing only tuples.
-	   peter@localhost testdb=> SELECT second, first FROM my_table;
+	   peter@localhost testdb=&gt SELECT second, first FROM my_table;
 	   one,1
 	   two,2
 	   three,3
@@ -1710,11 +1712,11 @@ EXAMPLES
 
        Alternatively, use the short commands:
 
-	   peter@localhost testdb=> \a \t \x
+	   peter@localhost testdb=&gt \a \t \x
 	   Output format is aligned.
 	   Tuples only is off.
 	   Expanded display is on.
-	   peter@localhost testdb=> SELECT * FROM my_table;
+	   peter@localhost testdb=&gt SELECT * FROM my_table;
 	   -[ RECORD 1 ]-
 	   first  | 1
 	   second | one
@@ -1732,6 +1734,6 @@ EXAMPLES
 
 
 PostgreSQL 9.1.4		  2012-05-31			       PSQL(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

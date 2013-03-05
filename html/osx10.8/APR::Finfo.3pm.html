@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="APR fileinfo structure provides somewhat similar information to Perl's..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>APR::Finfo - Perl API for APR fileinfo structure</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apache_mod_peapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::APR::Finfo(3)
 
 
@@ -17,30 +19,30 @@ NAME
 
 Synopsis
 	 use APR::Finfo ();
-	 use APR::Const -compile => qw(FINFO_NORM);
+	 use APR::Const -compile =&gt qw(FINFO_NORM);
 	 my $finfo = APR::Finfo::stat("/tmp/test", APR::Const::FINFO_NORM, $pool);
 
-	 $device = $finfo->device;     # (stat $file)[0]
-	 $inode  = $finfo->inode;      # (stat $file)[1]
+	 $device = $finfo-&gtdevice;     # (stat $file)[0]
+	 $inode  = $finfo-&gtinode;      # (stat $file)[1]
 	 # stat returns an octal number while protection is hex
-	 $prot	 = $finfo->protection; # (stat $file)[2]
-	 $nlink  = $finfo->nlink;      # (stat $file)[3]
-	 $gid	 = $finfo->group;      # (stat $file)[4]
-	 $uid	 = $finfo->user;       # (stat $file)[5]
-	 $size	 = $finfo->size;       # (stat $file)[7]
-	 $atime  = $finfo->atime;      # (stat $file)[8]
-	 $mtime  = $finfo->mtime;      # (stat $file)[9]
-	 $ctime  = $finfo->ctime;      # (stat $file)[10]
+	 $prot	 = $finfo-&gtprotection; # (stat $file)[2]
+	 $nlink  = $finfo-&gtnlink;      # (stat $file)[3]
+	 $gid	 = $finfo-&gtgroup;      # (stat $file)[4]
+	 $uid	 = $finfo-&gtuser;       # (stat $file)[5]
+	 $size	 = $finfo-&gtsize;       # (stat $file)[7]
+	 $atime  = $finfo-&gtatime;      # (stat $file)[8]
+	 $mtime  = $finfo-&gtmtime;      # (stat $file)[9]
+	 $ctime  = $finfo-&gtctime;      # (stat $file)[10]
 
-	 $csize = $finfo->csize; # consumed size: not portable!
+	 $csize = $finfo-&gtcsize; # consumed size: not portable!
 
-	 $filetype = $finfo->filetype; # file/dir/socket/etc
+	 $filetype = $finfo-&gtfiletype; # file/dir/socket/etc
 
-	 $fname = $finfo->fname;
-	 $name	= $finfo->name;  # in filesystem case:
+	 $fname = $finfo-&gtfname;
+	 $name	= $finfo-&gtname;  # in filesystem case:
 
 	 # valid fields that can be queried
-	 $valid = $finfo->valid;
+	 $valid = $finfo-&gtvalid;
 
 Description
        APR fileinfo structure provides somewhat similar information to Perl's
@@ -49,11 +51,11 @@ Description
        query attributes specific to APR file handles.
 
        During the HTTP request handlers coming after
-       "PerlMapToStorageHandler", "$r->finfo" already contains the cached
+       "PerlMapToStorageHandler", "$r-&gtfinfo" already contains the cached
        values from the apr's "stat()" call. So you don't want to perform it
        again, but instead get the "ARP::Finfo" object via:
 
-	 my $finfo = $r->finfo;
+	 my $finfo = $r-&gtfinfo;
 
 API
        "APR::Finfo" provides the following functions and/or methods:
@@ -61,7 +63,7 @@ API
    "atime"
        Get the time the file was last accessed:
 
-	 $atime = $finfo->atime;
+	 $atime = $finfo-&gtatime;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $atime ( integer )
@@ -80,7 +82,7 @@ API
    "csize"
        Get the storage size consumed by the file
 
-	 $csize = $finfo->csize;
+	 $csize = $finfo-&gtcsize;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $csize ( integer )
@@ -93,7 +95,7 @@ API
    "ctime"
        Get the time the file was last changed
 
-	 $ctime = $finfo->ctime;
+	 $ctime = $finfo-&gtctime;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $ctime ( integer )
@@ -112,7 +114,7 @@ API
    "device"
        Get the id of the device the file is on.
 
-	 $device = $finfo->device;
+	 $device = $finfo-&gtdevice;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $device ( integer )
@@ -128,7 +130,7 @@ API
    "filetype"
        Get the type of file.
 
-	 $filetype = $finfo->filetype;
+	 $filetype = $finfo-&gtfiletype;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $filetype ( ":filetype constant" )
@@ -138,10 +140,10 @@ API
 
 	 use APR::Pool;
 	 use APR::Finfo;
-	 use APR::Const -compile => qw(FILETYPE_DIR FILETYPE_REG FINFO_NORM);
-	 my $pool  = APR::Pool->new();
+	 use APR::Const -compile =&gt qw(FILETYPE_DIR FILETYPE_REG FINFO_NORM);
+	 my $pool  = APR::Pool-&gtnew();
 	 my $finfo = APR::Finfo::stat("/tmp", APR::Const::FINFO_NORM, $pool);
-	 my $finfo = $finfo->filetype;
+	 my $finfo = $finfo-&gtfiletype;
 	 if ($finfo == APR::Const::FILETYPE_REG) {
 	     print "regular file";
 	 }
@@ -159,7 +161,7 @@ API
    "fname"
        Get the pathname of the file (possibly unrooted)
 
-	 $fname = $finfo->fname;
+	 $fname = $finfo-&gtfname;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $filetype ( string )
@@ -168,7 +170,7 @@ API
    "group"
        Get the group id that owns the file:
 
-	 $gid = $finfo->group;
+	 $gid = $finfo-&gtgroup;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $gid ( number )
@@ -185,7 +187,7 @@ API
    "inode"
        Get the inode of the file.
 
-	 $inode = $finfo->inode;
+	 $inode = $finfo-&gtinode;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $inode ( integer )
@@ -201,7 +203,7 @@ API
    "mtime"
        The time the file was last modified
 
-	 $mtime = $finfo->mtime;
+	 $mtime = $finfo-&gtmtime;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $mtime ( integer )
@@ -216,7 +218,7 @@ API
    "name"
        Get the file's name (no path) in filesystem case:
 
-	 $name = $finfo->name;
+	 $name = $finfo-&gtname;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $device ( string )
@@ -225,7 +227,7 @@ API
    "nlink"
        Get the number of hard links to the file.
 
-	 $nlink = $finfo->nlink;
+	 $nlink = $finfo-&gtnlink;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $nlink ( integer )
@@ -238,7 +240,7 @@ API
    "protection"
        Get the access permissions of the file.	Mimics Unix access rights.
 
-	 $prot = $finfo->protection;
+	 $prot = $finfo-&gtprotection;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $prot ( ":fprot constant" )
@@ -256,7 +258,7 @@ API
    "size"
        Get the size of the file
 
-	 $size = $finfo->size;
+	 $size = $finfo-&gtsize;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $size ( integer )
@@ -296,14 +298,14 @@ API
 
 	 use APR::Pool ();
 	 use APR::Finfo ();
-	 use APR::Const -compile => qw(FINFO_NORM);
-	 my $pool = APR::Pool->new();
+	 use APR::Const -compile =&gt qw(FINFO_NORM);
+	 my $pool = APR::Pool-&gtnew();
 	 my $finfo = APR::Finfo::stat("/tmp/test", APR::Const::FINFO_NORM, $pool);
 
    "user"
        Get the user id that owns the file:
 
-	 $uid = $finfo->user;
+	 $uid = $finfo-&gtuser;
 
        obj: $finfo ( "APR::Finfo object" )
        return: $uid ( number )
@@ -320,7 +322,7 @@ API
        The bitmask describing valid fields of this apr_finfo_t structure
        including all available 'wanted' fields and potentially more
 
-	 $valid = $finfo->valid;
+	 $valid = $finfo-&gtvalid;
 
        obj: $finfo ( "APR::Finfo object" )
        arg1: $valid ( bitmask )
@@ -342,6 +344,6 @@ Authors
 
 
 perl v5.12.4 apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::APR::Finfo(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

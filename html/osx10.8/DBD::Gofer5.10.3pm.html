@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="DBD::Gofer is a DBI database driver that forwards requests to another..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBD::Gofer - A stateless-proxy driver for communicating with a remote</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBD::Gofer(3)	      User Contributed Perl Documentation	 DBD::Gofer(3)
 
 
@@ -21,7 +23,7 @@ SYNOPSIS
 
 	 $original_dsn = "dbi:..."; # your original DBI Data Source Name
 
-	 $dbh = DBI->connect("dbi:Gofer:transport=$transport;...;dsn=$original_dsn",
+	 $dbh = DBI-&gtconnect("dbi:Gofer:transport=$transport;...;dsn=$original_dsn",
 			     $user, $passwd, \%attributes);
 
 	 ... use $dbh as if it was connected to $original_dsn ...
@@ -71,7 +73,7 @@ DESCRIPTION
        DBI::Gofer::Execute and related modules) and builds a response that
        contains all the rows of data, if the statement returned any, along
        with all the attributes that describe the results, such as
-       $sth->{NAME}. This response is sent back to DBD::Gofer which unpacks it
+       $sth-&gt{NAME}. This response is sent back to DBD::Gofer which unpacks it
        and presents it to the application as if it had executed the statement
        itself.
 
@@ -175,7 +177,7 @@ GENERAL CAVEATS
    Statement activity that also updates dbh attributes
        Some drivers may update one or more dbh attributes after performing
        activity on a child sth.  For example, DBD::mysql provides
-       $dbh->{mysql_insertid} in addition to $sth->{mysql_insertid}. Currently
+       $dbh-&gt{mysql_insertid} in addition to $sth-&gt{mysql_insertid}. Currently
        mysql_insertid is supported via a hack but a more general mechanism is
        needed for other drivers to use.
 
@@ -195,11 +197,11 @@ CAVEATS FOR SPECIFIC METHODS
        you'd like to use it.  You do that my adding a "go_last_insert_id_args"
        attribute to the do() or prepare() method calls. For example:
 
-	   $dbh->do($sql, { go_last_insert_id_args => [...] });
+	   $dbh-&gtdo($sql, { go_last_insert_id_args =&gt [...] });
 
        or
 
-	   $sth = $dbh->prepare($sql, { go_last_insert_id_args => [...] });
+	   $sth = $dbh-&gtprepare($sql, { go_last_insert_id_args =&gt [...] });
 
        The array reference should contains the args that you want passed to
        the last_insert_id() method.
@@ -223,8 +225,8 @@ TRANSPORTS
        DBD::Gofer driver to use and one for the remote 'server' end. They have
        very similar names:
 
-	   DBD::Gofer::Transport::<foo>
-	   DBI::Gofer::Transport::<foo>
+	   DBD::Gofer::Transport::&ltfoo&gt
+	   DBI::Gofer::Transport::&ltfoo&gt
 
        Sometimes the transports on the DBD and DBI sides may have different
        names. For example DBD::Gofer::Transport::http is typically used with
@@ -331,7 +333,7 @@ CONNECTING
        If the value does not include "::" then ""DBD::Gofer::Transport::"" is
        prefixed.
 
-       The transport object can be accessed via $h->{go_transport}.
+       The transport object can be accessed via $h-&gt{go_transport}.
 
        dsn
 
@@ -350,7 +352,7 @@ CONNECTING
        If the value does not include "::" then ""DBD::Gofer::Policy"" is
        prefixed.
 
-       The policy object can be accessed via $h->{go_policy}.
+       The policy object can be accessed via $h-&gt{go_policy}.
 
        timeout
 
@@ -367,8 +369,8 @@ CONNECTING
        Specifies a code reference to be called to decide if a failed request
        should be retried.  The code reference is called like this:
 
-	 $transport = $h->{go_transport};
-	 $retry = $transport->go_retry_hook->($request, $response, $transport);
+	 $transport = $h-&gt{go_transport};
+	 $retry = $transport-&gtgo_retry_hook-&gt($request, $response, $transport);
 
        If it returns true then the request will be retried, upto the
        "retry_limit".  If it returns a false but defined value then the
@@ -376,7 +378,7 @@ CONNECTING
        behaviour will be used, as if "retry_hook" had not been specified.
 
        The default behaviour is to retry requests where
-       $request->is_idempotent is true, or the error message matches "/induced
+       $request-&gtis_idempotent is true, or the error message matches "/induced
        by DBI_GOFER_RANDOM/".
 
        cache
@@ -392,15 +394,15 @@ CONNECTING
        ""cache=DBI::Util::CacheMemory"".  See DBI::Util::CacheMemory for a
        description of this simple fast default cache.
 
-       The cache object can be accessed via $h->go_cache. For example:
+       The cache object can be accessed via $h-&gtgo_cache. For example:
 
-	   $dbh->go_cache->clear; # free up memory being used by the cache
+	   $dbh-&gtgo_cache-&gtclear; # free up memory being used by the cache
 
        The cache keys are the frozen (serialized) requests, and the values are
        the frozen responses.
 
        The default behaviour is to only use the cache for requests where
-       $request->is_idempotent is true (i.e., the dbh has the ReadOnly
+       $request-&gtis_idempotent is true (i.e., the dbh has the ReadOnly
        attribute set or the SQL statement is obviously a SELECT without a FOR
        UPDATE clause.)
 
@@ -409,7 +411,7 @@ CONNECTING
        can also specify alternative caches via the "go_cache" attribute. For
        example, to specify no caching for a particular query, you could use
 
-	   $sth = $dbh->prepare( $sql, { go_cache => 0 } );
+	   $sth = $dbh-&gtprepare( $sql, { go_cache =&gt 0 } );
 
        This can be used to implement different caching policies for different
        statements.
@@ -447,7 +449,7 @@ CONFIGURING BEHAVIOUR POLICY
        policy, for final testing.
 
 AUTHOR
-       Tim Bunce, <http://www.tim.bunce.name>
+       Tim Bunce, &lthttp://www.tim.bunce.name&gt
 
 LICENCE AND COPYRIGHT
        Copyright (c) 2007, Tim Bunce, Ireland. All rights reserved.
@@ -457,7 +459,7 @@ LICENCE AND COPYRIGHT
 
 ACKNOWLEDGEMENTS
        The development of DBD::Gofer and related modules was sponsored by
-       Shopzilla.com (<http://Shopzilla.com>), where I currently work.
+       Shopzilla.com (&lthttp://Shopzilla.com&gt), where I currently work.
 
 SEE ALSO
        DBI::Gofer::Request, DBI::Gofer::Response, DBI::Gofer::Execute.
@@ -510,6 +512,6 @@ TODO
 
 
 perl v5.10.1			  2008-07-22			 DBD::Gofer(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Class::Struct" exports a single function, "struct".  Given a list of..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Class::Struct - declare struct-like datatypes as Perl classes</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Class::Struct(3pm)     Perl Programmers Reference Guide     Class::Struct(3pm)
 
 
@@ -18,48 +20,48 @@ NAME
 SYNOPSIS
 	   use Class::Struct;
 		   # declare struct, based on array:
-	   struct( CLASS_NAME => [ ELEMENT_NAME => ELEMENT_TYPE, ... ]);
+	   struct( CLASS_NAME =&gt [ ELEMENT_NAME =&gt ELEMENT_TYPE, ... ]);
 		   # declare struct, based on hash:
-	   struct( CLASS_NAME => { ELEMENT_NAME => ELEMENT_TYPE, ... });
+	   struct( CLASS_NAME =&gt { ELEMENT_NAME =&gt ELEMENT_TYPE, ... });
 
 	   package CLASS_NAME;
 	   use Class::Struct;
 		   # declare struct, based on array, implicit class name:
-	   struct( ELEMENT_NAME => ELEMENT_TYPE, ... );
+	   struct( ELEMENT_NAME =&gt ELEMENT_TYPE, ... );
 
 	   # Declare struct at compile time
-	   use Class::Struct CLASS_NAME => [ ELEMENT_NAME => ELEMENT_TYPE, ... ];
-	   use Class::Struct CLASS_NAME => { ELEMENT_NAME => ELEMENT_TYPE, ... };
+	   use Class::Struct CLASS_NAME =&gt [ ELEMENT_NAME =&gt ELEMENT_TYPE, ... ];
+	   use Class::Struct CLASS_NAME =&gt { ELEMENT_NAME =&gt ELEMENT_TYPE, ... };
 
 	   # declare struct at compile time, based on array, implicit class name:
 	   package CLASS_NAME;
-	   use Class::Struct ELEMENT_NAME => ELEMENT_TYPE, ... ;
+	   use Class::Struct ELEMENT_NAME =&gt ELEMENT_TYPE, ... ;
 
 	   package Myobj;
 	   use Class::Struct;
 		   # declare struct with four types of elements:
-	   struct( s => '$', a => '@', h => '%', c => 'My_Other_Class' );
+	   struct( s =&gt '$', a =&gt '@', h =&gt '%', c =&gt 'My_Other_Class' );
 
 	   $obj = new Myobj;		   # constructor
 
 					   # scalar type accessor:
-	   $element_value = $obj->s;	       # element value
-	   $obj->s('new value');	       # assign to element
+	   $element_value = $obj-&gts;	       # element value
+	   $obj-&gts('new value');	       # assign to element
 
 					   # array type accessor:
-	   $ary_ref = $obj->a;		       # reference to whole array
-	   $ary_element_value = $obj->a(2);    # array element value
-	   $obj->a(2, 'new value');	       # assign to array element
+	   $ary_ref = $obj-&gta;		       # reference to whole array
+	   $ary_element_value = $obj-&gta(2);    # array element value
+	   $obj-&gta(2, 'new value');	       # assign to array element
 
 					   # hash type accessor:
-	   $hash_ref = $obj->h; 	       # reference to whole hash
-	   $hash_element_value = $obj->h('x'); # hash element value
-	   $obj->h('x', 'new value');	       # assign to hash element
+	   $hash_ref = $obj-&gth; 	       # reference to whole hash
+	   $hash_element_value = $obj-&gth('x'); # hash element value
+	   $obj-&gth('x', 'new value');	       # assign to hash element
 
 					   # class type accessor:
-	   $element_value = $obj->c;	       # object reference
-	   $obj->c->method(...);	       # call method of object
-	   $obj->c(new My_Other_Class);        # assign a new object
+	   $element_value = $obj-&gtc;	       # object reference
+	   $obj-&gtc-&gtmethod(...);	       # call method of object
+	   $obj-&gtc(new My_Other_Class);        # assign a new object
 
 DESCRIPTION
        "Class::Struct" exports a single function, "struct".  Given a list of
@@ -79,8 +81,8 @@ DESCRIPTION
    The "struct()" function
        The "struct" function has three forms of parameter-list.
 
-	   struct( CLASS_NAME => [ ELEMENT_LIST ]);
-	   struct( CLASS_NAME => { ELEMENT_LIST });
+	   struct( CLASS_NAME =&gt [ ELEMENT_LIST ]);
+	   struct( CLASS_NAME =&gt { ELEMENT_LIST });
 	   struct( ELEMENT_LIST );
 
        The first and second forms explicitly identify the name of the class
@@ -106,7 +108,7 @@ DESCRIPTION
 
        The ELEMENT_LIST has the form
 
-	   NAME => TYPE, ...
+	   NAME =&gt TYPE, ...
 
        Each name-type pair declares one element of the struct. Each element
        name will be defined as an accessor method unless a method by that name
@@ -192,7 +194,7 @@ DESCRIPTION
        may take a list of initializers for the various elements of the new
        struct.
 
-       Each initializer is a pair of values: element name" => "value.  The
+       Each initializer is a pair of values: element name" =&gt "value.  The
        initializer value for a scalar element is just a scalar value. The
        initializer for an array element is an array reference. The initializer
        for a hash is a hash reference.
@@ -212,25 +214,25 @@ EXAMPLES
 
 	       use Class::Struct;
 
-	       struct( Rusage => {
-		   ru_utime => 'Timeval',  # user time used
-		   ru_stime => 'Timeval',  # system time used
+	       struct( Rusage =&gt {
+		   ru_utime =&gt 'Timeval',  # user time used
+		   ru_stime =&gt 'Timeval',  # system time used
 	       });
 
-	       struct( Timeval => [
-		   tv_secs  => '$',	   # seconds
-		   tv_usecs => '$',	   # microseconds
+	       struct( Timeval =&gt [
+		   tv_secs  =&gt '$',	   # seconds
+		   tv_usecs =&gt '$',	   # microseconds
 	       ]);
 
 		   # create an object:
-	       my $t = Rusage->new(ru_utime=>Timeval->new(), ru_stime=>Timeval->new());
+	       my $t = Rusage-&gtnew(ru_utime=&gtTimeval-&gtnew(), ru_stime=&gtTimeval-&gtnew());
 
-		   # $t->ru_utime and $t->ru_stime are objects of type Timeval.
-		   # set $t->ru_utime to 100.0 sec and $t->ru_stime to 5.0 sec.
-	       $t->ru_utime->tv_secs(100);
-	       $t->ru_utime->tv_usecs(0);
-	       $t->ru_stime->tv_secs(5);
-	       $t->ru_stime->tv_usecs(0);
+		   # $t-&gtru_utime and $t-&gtru_stime are objects of type Timeval.
+		   # set $t-&gtru_utime to 100.0 sec and $t-&gtru_stime to 5.0 sec.
+	       $t-&gtru_utime-&gttv_secs(100);
+	       $t-&gtru_utime-&gttv_usecs(0);
+	       $t-&gtru_stime-&gttv_secs(5);
+	       $t-&gtru_stime-&gttv_usecs(0);
 
        Example 2
 	   An accessor function can be redefined in order to provide
@@ -242,33 +244,33 @@ EXAMPLES
 	       use Class::Struct;
 
 	       # declare the struct
-	       struct ( 'MyObj', { count => '$', stuff => '%' } );
+	       struct ( 'MyObj', { count =&gt '$', stuff =&gt '%' } );
 
 	       # override the default accessor method for 'count'
 	       sub count {
 		   my $self = shift;
 		   if ( @_ ) {
-		       die 'count must be nonnegative' if $_[0] < 0;
-		       $self->{'MyObj::count'} = shift;
+		       die 'count must be nonnegative' if $_[0] &lt 0;
+		       $self-&gt{'MyObj::count'} = shift;
 		       warn "Too many args to count" if @_;
 		   }
-		   return $self->{'MyObj::count'};
+		   return $self-&gt{'MyObj::count'};
 	       }
 
 	       package main;
 	       $x = new MyObj;
-	       print "\$x->count(5) = ", $x->count(5), "\n";
-				       # prints '$x->count(5) = 5'
+	       print "\$x-&gtcount(5) = ", $x-&gtcount(5), "\n";
+				       # prints '$x-&gtcount(5) = 5'
 
-	       print "\$x->count = ", $x->count, "\n";
-				       # prints '$x->count = 5'
+	       print "\$x-&gtcount = ", $x-&gtcount, "\n";
+				       # prints '$x-&gtcount = 5'
 
-	       print "\$x->count(-5) = ", $x->count(-5), "\n";
+	       print "\$x-&gtcount(-5) = ", $x-&gtcount(-5), "\n";
 				       # dies due to negative argument!
 
        Example 3
 	   The constructor of a generated class can be passed a list of
-	   element=>value pairs, with which to initialize the struct.  If no
+	   element=&gtvalue pairs, with which to initialize the struct.  If no
 	   initializer is specified for a particular element, its default
 	   initialization is performed instead. Initializers for non-existent
 	   elements are silently ignored.
@@ -279,31 +281,31 @@ EXAMPLES
 
 	       use Class::Struct;
 
-	       struct Breed =>
+	       struct Breed =&gt
 	       {
-		   name  => '$',
-		   cross => '$',
+		   name  =&gt '$',
+		   cross =&gt '$',
 	       };
 
-	       struct Cat =>
+	       struct Cat =&gt
 	       [
-		   name     => '$',
-		   kittens  => '@',
-		   markings => '%',
-		   breed    => 'Breed',
+		   name     =&gt '$',
+		   kittens  =&gt '@',
+		   markings =&gt '%',
+		   breed    =&gt 'Breed',
 	       ];
 
 
-	       my $cat = Cat->new( name     => 'Socks',
-				   kittens  => ['Monica', 'Kenneth'],
-				   markings => { socks=>1, blaze=>"white" },
-				   breed    => Breed->new(name=>'short-hair', cross=>1),
-			      or:  breed    => {name=>'short-hair', cross=>1},
+	       my $cat = Cat-&gtnew( name     =&gt 'Socks',
+				   kittens  =&gt ['Monica', 'Kenneth'],
+				   markings =&gt { socks=&gt1, blaze=&gt"white" },
+				   breed    =&gt Breed-&gtnew(name=&gt'short-hair', cross=&gt1),
+			      or:  breed    =&gt {name=&gt'short-hair', cross=&gt1},
 				 );
 
-	       print "Once a cat called ", $cat->name, "\n";
-	       print "(which was a ", $cat->breed->name, ")\n";
-	       print "had two kittens: ", join(' and ', @{$cat->kittens}), "\n";
+	       print "Once a cat called ", $cat-&gtname, "\n";
+	       print "(which was a ", $cat-&gtbreed-&gtname, ")\n";
+	       print "had two kittens: ", join(' and ', @{$cat-&gtkittens}), "\n";
 
 Author and Modification History
        Modified by Damian Conway, 2001-09-10, v0.62.
@@ -318,7 +320,7 @@ Author and Modification History
 	      * the class might not have a no-argument constructor
 	      * "recursive" data structures didn't work well:
 			package Person;
-			struct { mother => 'Person', father => 'Person'};
+			struct { mother =&gt 'Person', father =&gt 'Person'};
 
        Modified by Casey West, 2000-11-08, v0.59.
 
@@ -376,6 +378,6 @@ Author and Modification History
 
 
 perl v5.10.1			  2009-02-12		    Class::Struct(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

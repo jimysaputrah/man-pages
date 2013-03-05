@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""APR::Socket" provides the Perl interface to APR sockets...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>APR::Socket - Perl API for APR sockets</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apache_mod_papache_mod_perl-106~237::mod_perl-2.0.5::docs::api::APR::Socket(3)
 
 
@@ -20,27 +22,27 @@ Synopsis
 
 	 ### set the socket to the blocking mode if it isn't already
 	 ### and read in the loop and echo it back
-	 use APR::Const -compile => qw(SO_NONBLOCK);
-	 if ($sock->opt_get(APR::Const::SO_NONBLOCK)) {
-	     $sock->opt_set(APR::Const::SO_NONBLOCK => 0);
+	 use APR::Const -compile =&gt qw(SO_NONBLOCK);
+	 if ($sock-&gtopt_get(APR::Const::SO_NONBLOCK)) {
+	     $sock-&gtopt_set(APR::Const::SO_NONBLOCK =&gt 0);
 	 }
 	 # read from/write to the socket (w/o handling possible failures)
 	 my $wanted = 1024;
-	 while ($sock->recv(my $buff, $wanted)) {
-	     $sock->send($buff);
+	 while ($sock-&gtrecv(my $buff, $wanted)) {
+	     $sock-&gtsend($buff);
 	 }
 
 	 ### get/set IO timeout and try to read some data
-	 use APR::Const -compile => qw(TIMEUP);
+	 use APR::Const -compile =&gt qw(TIMEUP);
 	 # timeout is in usecs!
-	 my $timeout = $sock->timeout_get();
-	 if ($timeout < 10_000_000) {
-	     $sock->timeout_set(20_000_000); # 20 secs
+	 my $timeout = $sock-&gttimeout_get();
+	 if ($timeout &lt 10_000_000) {
+	     $sock-&gttimeout_set(20_000_000); # 20 secs
 	 }
 	 # now read, while handling timeouts
 	 my $wanted = 1024;
 	 my $buff;
-	 my $rlen = eval { $sock->recv($buff, $wanted) };
+	 my $rlen = eval { $sock-&gtrecv($buff, $wanted) };
 	 if ($@ && ref $@ && $@ == APR::Const::TIMEUP) {
 	     # timeout, do something, e.g.
 	     warn "timed out, will try again later";
@@ -51,8 +53,8 @@ Synopsis
 	 }
 
 	 # non-blocking io poll
-	 $sock->opt_set(APR::Const::SO_NONBLOCK => 1);
-	 my $rc = $sock->poll($c->pool, 1_000_000, APR::Const::POLLIN);
+	 $sock-&gtopt_set(APR::Const::SO_NONBLOCK =&gt 1);
+	 my $rc = $sock-&gtpoll($c-&gtpool, 1_000_000, APR::Const::POLLIN);
 	 if ($rc == APR::Const::SUCCESS) {
 	     # read the data
 	 }
@@ -61,7 +63,7 @@ Synopsis
 	 }
 
 	 # fetch the operating level socket
-	 my $fd=$sock->fileno;
+	 my $fd=$sock-&gtfileno;
 
 Description
        "APR::Socket" provides the Perl interface to APR sockets.
@@ -72,7 +74,7 @@ API
    "fileno"
        Get the operating system socket, the file descriptor on UNIX.
 
-	 $fd = $sock->fileno;
+	 $fd = $sock-&gtfileno;
 
        obj: $sock ( "APR::Socket object" )
 	   The socket
@@ -85,7 +87,7 @@ API
    "opt_get"
        Query socket options for the specified socket
 
-	 $val = $sock->opt_get($opt);
+	 $val = $sock-&gtopt_get($opt);
 
        obj: $sock ( "APR::Socket object" )
 	   the socket object to query
@@ -106,7 +108,7 @@ API
    "opt_set"
        Setup socket options for the specified socket
 
-	 $sock->opt_set($opt, $val);
+	 $sock-&gtopt_set($opt, $val);
 
        obj: $sock ( "APR::Socket object" object )
 	   the socket object to set up.
@@ -129,13 +131,13 @@ API
    "poll"
        Poll the socket for events:
 
-	   $rc = $sock->poll($pool, $timeout, $events);
+	   $rc = $sock-&gtpoll($pool, $timeout, $events);
 
        obj: $sock ( "APR::Socket object" )
 	   The socket to poll
 
        arg1: $pool ( "APR::Pool object" )
-	   usually "$c->pool".
+	   usually "$c-&gtpool".
 
        arg2: $timeout ( integer )
 	   The amount of time to wait (in milliseconds) for the specified
@@ -163,14 +165,14 @@ API
 	 use APR::Connection ();
 	 use APR::Error ();
 
-	 use APR::Const -compile => qw(SO_NONBLOCK POLLIN SUCCESS TIMEUP);
+	 use APR::Const -compile =&gt qw(SO_NONBLOCK POLLIN SUCCESS TIMEUP);
 
-	 $sock->opt_set(APR::Const::SO_NONBLOCK => 1);
+	 $sock-&gtopt_set(APR::Const::SO_NONBLOCK =&gt 1);
 
-	 my $rc = $sock->poll($c->pool, 1_000_000, APR::Const::POLLIN);
+	 my $rc = $sock-&gtpoll($c-&gtpool, 1_000_000, APR::Const::POLLIN);
 	 if ($rc == APR::Const::SUCCESS) {
 	     # Data is waiting on the socket to be read.
-	     # $sock->recv(my $buf, BUFF_LEN)
+	     # $sock-&gtrecv(my $buf, BUFF_LEN)
 	 }
 	 elsif ($rc == APR::Const::TIMEUP) {
 	     # One second elapsed and still there is no data waiting to be
@@ -183,7 +185,7 @@ API
    "recv"
        Read incoming data from the socket
 
-	 $len = $sock->recv($buffer, $wanted);
+	 $len = $sock-&gtrecv($buffer, $wanted);
 
        obj: $sock ( "APR::SockAddr object" object )
 	   The socket to read from
@@ -213,14 +215,14 @@ API
 	   times after short delays:
 
 	     use APR::Status ();
-	     $sock->opt_set(APR::Const::SO_NONBLOCK, 1);
+	     $sock-&gtopt_set(APR::Const::SO_NONBLOCK, 1);
 	     # ....
 	     my $tries = 0;
 	     my $buffer;
-	     RETRY: my $rlen = eval { $socket->recv($buffer, SIZE) };
+	     RETRY: my $rlen = eval { $socket-&gtrecv($buffer, SIZE) };
 	     if ($@)
 		 die $@ unless ref $@ && APR::Status::is_EAGAIN($@);
-		 if ($tries++ < 3) {
+		 if ($tries++ &lt 3) {
 		     # sleep 250msec
 		     select undef, undef, undef, 0.25;
 		     goto RETRY;
@@ -234,10 +236,10 @@ API
 	   If timeout was set via "timeout_set|/C_timeout_set_", you may need
 	   to catch the "APR::Const::TIMEUP" exception. For example:
 
-	     use APR::Const -compile => qw(TIMEUP);
-	     $sock->timeout_set(1_000_000); # 1 sec
+	     use APR::Const -compile =&gt qw(TIMEUP);
+	     $sock-&gttimeout_set(1_000_000); # 1 sec
 	     my $buffer;
-	     eval { $sock->recv($buffer, $wanted) };
+	     eval { $sock-&gtrecv($buffer, $wanted) };
 	     if ($@ && $@ == APR::Const::TIMEUP) {
 		 # timeout, do something, e.g.
 	     }
@@ -250,9 +252,9 @@ API
 	   decide whether it's an error or not. This error usually happens
 	   when the client aborts the connection.
 
-	     use APR::Const -compile => qw(ECONNABORTED);
+	     use APR::Const -compile =&gt qw(ECONNABORTED);
 	     my $buffer;
-	     eval { $sock->recv($buffer, $wanted) };
+	     eval { $sock-&gtrecv($buffer, $wanted) };
 	     if ($@ == APR::Const::ECONNABORTED) {
 		 # ignore it or deal with it
 	     }
@@ -265,23 +267,23 @@ API
 	 use APR::Socket ();
 
 	 # set the socket to the blocking mode if it isn't already
-	 use APR::Const -compile => qw(SO_NONBLOCK);
-	 if ($sock->opt_get(APR::Const::SO_NONBLOCK)) {
-	     $sock->opt_set(APR::Const::SO_NONBLOCK => 0);
+	 use APR::Const -compile =&gt qw(SO_NONBLOCK);
+	 if ($sock-&gtopt_get(APR::Const::SO_NONBLOCK)) {
+	     $sock-&gtopt_set(APR::Const::SO_NONBLOCK =&gt 0);
 	 }
 	 # read from/write to the socket (w/o handling possible failures)
 	 my $wanted = 1024;
-	 while ($sock->recv(my $buffer, $wanted)) {
-	     $sock->send($buffer);
+	 while ($sock-&gtrecv(my $buffer, $wanted)) {
+	     $sock-&gtsend($buffer);
 	 }
 
        If you want to handle errors by yourself, the loop may look like:
 
-	 use APR::Const -compile => qw(ECONNABORTED);
+	 use APR::Const -compile =&gt qw(ECONNABORTED);
 	 # ...
 	 while (1) {
 	     my $buf;
-	     my $len = eval { $sock->recv($buf, $wanted) };
+	     my $len = eval { $sock-&gtrecv($buf, $wanted) };
 	     if ($@) {
 		 # handle the error, e.g. to ignore aborted connections but
 		 # rethrow any other errors:
@@ -295,7 +297,7 @@ API
 	     }
 
 	     if ($len) {
-		 $sock->send($buffer);
+		 $sock-&gtsend($buffer);
 	     }
 	     else {
 		 last;
@@ -305,7 +307,7 @@ API
    "send"
        Write data to the socket
 
-	 $wlen = $sock->send($buf, $opt_len);
+	 $wlen = $sock-&gtsend($buf, $opt_len);
 
        obj: $sock ( "APR::Socket object" )
 	   The socket to write to
@@ -327,7 +329,7 @@ API
    "timeout_get"
        Get socket timeout settings
 
-	 $usecs = $sock->timeout_get();
+	 $usecs = $sock-&gttimeout_get();
 
        obj: $sock ( "APR::Socket object" )
 	   The socket to set up.
@@ -343,7 +345,7 @@ API
    "timeout_set"
        Setup socket timeout.
 
-	 $sock->timeout_set($usecs);
+	 $sock-&gttimeout_set($usecs);
 
        obj: $sock ( "APR::Socket object" )
 	   The socket to set up.
@@ -354,7 +356,7 @@ API
 
 	   The possible values are:
 
-	   t > 0
+	   t &gt 0
 	       "send()" and "recv()" throw ("APR::Const::TIMEUP" exception) if
 	       specified time elapses with no data sent or received.
 
@@ -367,7 +369,7 @@ API
 	   t == 0
 	       "send()" and "recv()" calls never block.
 
-	   t < 0
+	   t &lt 0
 	       "send()" and "recv()" calls block.
 
 	       Usually just -1 is used for this case, but any negative value
@@ -393,7 +395,7 @@ Unsupported API
 
        Bind the socket to its associated port
 
-	 $ret = $sock->bind($sa);
+	 $ret = $sock-&gtbind($sa);
 
        obj: $sock ( "APR::Socket object" )
 	   The socket to bind
@@ -412,7 +414,7 @@ Unsupported API
 
        Close a socket.
 
-	 $ret = $sock->close();
+	 $ret = $sock-&gtclose();
 
        obj: $sock ( "APR::Socket object" )
 	   The socket to close
@@ -426,7 +428,7 @@ Unsupported API
        Issue a connection request to a socket either on the same machine or a
        different one.
 
-	 $ret = $sock->connect($sa);
+	 $ret = $sock-&gtconnect($sa);
 
        obj: $sock ( "APR::Socket object" )
 	   The socket we wish to use for our side of the connection
@@ -444,7 +446,7 @@ Unsupported API
 
        Listen to a bound socket for connections.
 
-	 $ret = $sock->listen($backlog);
+	 $ret = $sock-&gtlisten($backlog);
 
        obj: $sock ( "APR::Socket object" )
 	   The socket to listen on
@@ -460,7 +462,7 @@ Unsupported API
    "recvfrom"
        META: Autogenerated - needs to be reviewed/completed
 
-	 $ret = $from->recvfrom($sock, $flags, $buf, $len);
+	 $ret = $from-&gtrecvfrom($sock, $flags, $buf, $len);
 
        obj: $from ( "APR::SockAddr object" )
 	   The apr_sockaddr_t to fill in the recipient info
@@ -483,7 +485,7 @@ Unsupported API
    "sendto"
        META: Autogenerated - needs to be reviewed/completed
 
-	 $ret = $sock->sendto($where, $flags, $buf, $len);
+	 $ret = $sock-&gtsendto($where, $flags, $buf, $len);
 
        obj: $sock ( "APR::Socket object" )
 	   The socket to send from
@@ -516,6 +518,6 @@ Authors
 
 
 perl v5.12.4apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::APR::Socket(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

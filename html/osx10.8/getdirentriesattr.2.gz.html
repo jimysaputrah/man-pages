@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The getdirentriesattr() function reads directory entries and returns..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>getdirentriesattr -- get file system attributes for multiple directory</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 
 GETDIRENTRIESATTR(2)	    BSD System Calls Manual	  GETDIRENTRIESATTR(2)
 
@@ -16,8 +18,8 @@ NAME
      entries
 
 SYNOPSIS
-     #include <sys/attr.h>
-     #include <unistd.h>
+     #include &ltsys/attr.h&gt
+     #include &ltunistd.h&gt
 
      #if __LP64__
 
@@ -177,16 +179,16 @@ EXAMPLES
      getdirentriesattr().  The listing includes the file type and creator for
      files.
 
-     #include <assert.h>
-     #include <stdio.h>
-     #include <stddef.h>
-     #include <string.h>
-     #include <sys/attr.h>
-     #include <sys/errno.h>
-     #include <unistd.h>
-     #include <sys/vnode.h>
-     #include <stdbool.h>
-     #include <fcntl.h>
+     #include &ltassert.h&gt
+     #include &ltstdio.h&gt
+     #include &ltstddef.h&gt
+     #include &ltstring.h&gt
+     #include &ltsys/attr.h&gt
+     #include &ltsys/errno.h&gt
+     #include &ltunistd.h&gt
+     #include &ltsys/vnode.h&gt
+     #include &ltstdbool.h&gt
+     #include &ltfcntl.h&gt
 
      typedef struct attrlist attrlist_t;
 
@@ -239,7 +241,7 @@ EXAMPLES
 
 	 err = 0;
 	 dirFD = open(dirPath, O_RDONLY, 0);
-	 if (dirFD < 0) {
+	 if (dirFD &lt 0) {
 	     err = errno;
 	 }
 	 if (err == 0) {
@@ -258,7 +260,7 @@ EXAMPLES
 		     &newState,
 		     0
 		 );
-		 if (err < 0) {
+		 if (err &lt 0) {
 		     err = errno;
 		 } else {
 		     done = err;
@@ -278,17 +280,17 @@ EXAMPLES
 
 		     thisEntry = (FInfoAttrBuf *) attrBuf;
 
-		     for (index = 0; index < count; index++) {
-			 switch (thisEntry->objType) {
+		     for (index = 0; index &lt count; index++) {
+			 switch (thisEntry-&gtobjType) {
 			     case VREG:
 				 printf(
 				     "'%4.4s' '%4.4s' ",
-				     &thisEntry->finderInfo[0],
-				     &thisEntry->finderInfo[4]
+				     &thisEntry-&gtfinderInfo[0],
+				     &thisEntry-&gtfinderInfo[4]
 				 );
 				 break;
 			     case VDIR:
-				 if (thisEntry->dirStatus & DIR_MNTSTATUS_MNTPOINT)
+				 if (thisEntry-&gtdirStatus & DIR_MNTSTATUS_MNTPOINT)
 				     printf("mount-point   ");
 				 else
 				     printf("directory	   ");
@@ -296,19 +298,19 @@ EXAMPLES
 			     default:
 				 printf(
 				     "objType = %-2d  ",
-				     thisEntry->objType
+				     thisEntry-&gtobjType
 				 );
 				 break;
 			 }
 			 printf(
 			     "%s\n",
-			     ((char *) &thisEntry->name)
-				 + thisEntry->name.attr_dataoffset
+			     ((char *) &thisEntry-&gtname)
+				 + thisEntry-&gtname.attr_dataoffset
 			 );
 
 			 // Advance to the next entry.
 
-			 thisEntry = (FInfoAttrBuf*)((char*)thisEntry + thisEntry->length);
+			 thisEntry = (FInfoAttrBuf*)((char*)thisEntry + thisEntry-&gtlength);
 		     }
 		 }
 	     } while ( err == 0 && ! done );
@@ -330,6 +332,6 @@ HISTORY
      version 10.0).
 
 Darwin			       December 15, 2003			Darwin
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

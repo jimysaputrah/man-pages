@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This is the "Class::Singleton" module.  A Singleton describes an object..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Class::Singleton - Implementation of a "Singleton" class</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Class::Singleton(3)   User Contributed Perl Documentation  Class::Singleton(3)
 
 
@@ -18,8 +20,8 @@ NAME
 SYNOPSIS
 	   use Class::Singleton;
 
-	   my $one = Class::Singleton->instance();   # returns a new instance
-	   my $two = Class::Singleton->instance();   # returns same instance
+	   my $one = Class::Singleton-&gtinstance();   # returns a new instance
+	   my $two = Class::Singleton-&gtinstance();   # returns same instance
 
 DESCRIPTION
        This is the "Class::Singleton" module.  A Singleton describes an object
@@ -55,25 +57,25 @@ INSTALLATION
 
        The module is available in the following directories:
 
-	   /modules/by-module/Class/Class-Singleton-<version>.tar.gz
-	   /authors/id/ABW/Class-Singleton-<version>.tar.gz
+	   /modules/by-module/Class/Class-Singleton-&ltversion&gt.tar.gz
+	   /authors/id/ABW/Class-Singleton-&ltversion&gt.tar.gz
 
        "Class::Singleton" is distributed as a single gzipped tar archive file:
 
-	   Class-Singleton-<version>.tar.gz
+	   Class-Singleton-&ltversion&gt.tar.gz
 
-       Note that "<version>" represents the current version number, of the
+       Note that "&ltversion&gt" represents the current version number, of the
        form "1.23".  See VERSION below to determine the current version number
        for "Class::Singleton".
 
        Unpack the archive to create an installation directory:
 
-	   gunzip Class-Singleton-<version>.tar.gz
-	   tar xvf Class-Singleton-<version>.tar
+	   gunzip Class-Singleton-&ltversion&gt.tar.gz
+	   tar xvf Class-Singleton-&ltversion&gt.tar
 
        'cd' into that directory, make, test and install the module:
 
-	   cd Class-Singleton-<version>
+	   cd Class-Singleton-&ltversion&gt
 	   perl Makefile.PL
 	   make
 	   make test
@@ -100,14 +102,14 @@ USING THE CLASS::SINGLETON MODULE
        method, it is only possible to have a single instance of the class in
        any system.
 
-	   my $highlander = Class::Singleton->instance();
+	   my $highlander = Class::Singleton-&gtinstance();
 
        Assuming that no "Class::Singleton" object currently exists, this first
        call to instance() will create a new "Class::Singleton" and return a
        reference to it. Future invocations of instance() will return the same
        reference.
 
-	   my $macleod	  = Class::Singleton->instance();
+	   my $macleod	  = Class::Singleton-&gtinstance();
 
        In the above example, both $highlander and $macleod contain the same
        reference to a "Class::Singleton" instance.  There can be only one.
@@ -132,9 +134,9 @@ DERIVING SINGLETON CLASSES
 
 	   use PrintSpooler;
 
-	   my $spooler = PrintSpooler->instance();
+	   my $spooler = PrintSpooler-&gtinstance();
 
-	   $spooler->submit_job(...);
+	   $spooler-&gtsubmit_job(...);
 
        The instance() method calls the _new_instance() constructor method the
        first and only time a new instance is created. All parameters passed to
@@ -147,23 +149,23 @@ DERIVING SINGLETON CLASSES
 	   use base 'Class::Singleton';
 
 	   sub foo {
-	       shift->{ foo };
+	       shift-&gt{ foo };
 	   }
 
 	   sub bar {
-	       shift->{ bar };
+	       shift-&gt{ bar };
 	   }
 
 	   package main;
 
 	   # either: hash reference of named parameters
-	   my $config = MyConfig->instance({ foo => 10, bar => 20 });
+	   my $config = MyConfig-&gtinstance({ foo =&gt 10, bar =&gt 20 });
 
 	   # or: list of named parameters
-	   my $config = MyConfig->instance( foo => 10, bar => 20 );
+	   my $config = MyConfig-&gtinstance( foo =&gt 10, bar =&gt 20 );
 
-	   print $config->foo();   # 10
-	   print $config->bar();   # 20
+	   print $config-&gtfoo();   # 10
+	   print $config-&gtbar();   # 20
 
        Derived classes may redefine the _new_instance() method to provide more
        specific object initialisation or change the underlying object type (to
@@ -180,7 +182,7 @@ DERIVING SINGLETON CLASSES
 	       my $db	 = shift || "myappdb";
 	       my $host  = shift || "localhost";
 
-	       $self->{ DB } = DBI->connect("DBI:mSQL:$db:$host")
+	       $self-&gt{ DB } = DBI-&gtconnect("DBI:mSQL:$db:$host")
 		   || die "Cannot connect to database: $DBI::errstr";
 
 	       # any other initialisation...
@@ -193,7 +195,7 @@ DERIVING SINGLETON CLASSES
 	   use MyApp::Database;
 
 	   # first use - database gets initialised
-	   my $database = MyApp::Database->instance();
+	   my $database = MyApp::Database-&gtinstance();
 
        Some time later on in a module far, far away...
 
@@ -206,7 +208,7 @@ DERIVING SINGLETON CLASSES
 	   sub new {
 	       my $class = shift;
 	       bless {
-		   database => MyApp::Database->instance(),
+		   database =&gt MyApp::Database-&gtinstance(),
 	       }, $class;
 	   }
 
@@ -231,7 +233,7 @@ DERIVING SINGLETON CLASSES
        already has an instance defined.  A reference to the instance is
        returned or "undef" if none is currently defined.
 
-	   my $instance = MyApp::Database->has_instance()
+	   my $instance = MyApp::Database-&gthas_instance()
 	       || warn "No instance is defined yet";
 
 METHODS
@@ -243,7 +245,7 @@ METHODS
        This method returns a reference to any existing instance or "undef" if
        none is defined.
 
-	   my $testing = MySingleton1->has_instance()
+	   my $testing = MySingleton1-&gthas_instance()
 	       || warn "No instance defined for MySingleton1";
 
    _new_instance()
@@ -256,10 +258,10 @@ METHODS
        the method as either a hash reference or list of named parameters.
 
 	   # either: hash reference of named parameters
-	   my $example1 = MySingleton1->new({ pi => 3.14, e => 2.718 });
+	   my $example1 = MySingleton1-&gtnew({ pi =&gt 3.14, e =&gt 2.718 });
 
 	   # or: list of named parameters
-	   my $example2 = MySingleton2->new( pi => 3.14, e => 2.718 );
+	   my $example2 = MySingleton2-&gtnew( pi =&gt 3.14, e =&gt 2.718 );
 
        It is important to remember that the instance() method will only call
        the _new_instance() method once, so any arguments you pass may be
@@ -267,7 +269,7 @@ METHODS
        has_instance() method to determine if an instance is already defined.
 
 AUTHOR
-       Andy Wardley <abw@wardley.org> <http://wardley.org/>
+       Andy Wardley &ltabw@wardley.org&gt &lthttp://wardley.org/&gt
 
        Thanks to Andreas Koenig for providing some significant speedup patches
        and other ideas.
@@ -284,6 +286,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2007-09-28		   Class::Singleton(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Predefined Names..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlvar - Perl predefined variables</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLVAR(1)	       Perl Programmers Reference Guide 	    PERLVAR(1)
 
 
@@ -47,7 +49,7 @@ DESCRIPTION
 
        or more safely,
 
-	   HANDLE->method(EXPR)
+	   HANDLE-&gtmethod(EXPR)
 
        Each method returns the old value of the IO::Handle attribute.  The
        methods each take an optional EXPR, which, if supplied, specifies the
@@ -69,16 +71,16 @@ DESCRIPTION
        special variables that you have changed. This is one of the correct
        ways to read the whole file at once:
 
-	   open my $fh, "<", "foo" or die $!;
+	   open my $fh, "&lt", "foo" or die $!;
 	   local $/; # enable localized slurp mode
-	   my $content = <$fh>;
+	   my $content = &lt$fh&gt;
 	   close $fh;
 
        But the following code is quite bad:
 
-	   open my $fh, "<", "foo" or die $!;
+	   open my $fh, "&lt", "foo" or die $!;
 	   undef $/; # enable slurp mode
-	   my $content = <$fh>;
+	   my $content = &lt$fh&gt;
 	   close $fh;
 
        since some other module, may want to read data from some file in the
@@ -92,10 +94,10 @@ DESCRIPTION
        example:
 
 	   my $content = '';
-	   open my $fh, "<", "foo" or die $!;
+	   open my $fh, "&lt", "foo" or die $!;
 	   {
 	       local $/;
-	       $content = <$fh>;
+	       $content = &lt$fh&gt;
 	   }
 	   close $fh;
 
@@ -134,8 +136,8 @@ DESCRIPTION
        $_      The default input and pattern-searching space.  The following
 	       pairs are equivalent:
 
-		   while (<>) {...}    # equivalent only in while!
-		   while (defined($_ = <>)) {...}
+		   while (&lt&gt) {...}    # equivalent only in while!
+		   while (defined($_ = &lt&gt)) {...}
 
 		   /^Subject:/
 		   $_ =~ /^Subject:/
@@ -172,7 +174,7 @@ DESCRIPTION
 
 	       o  The implicit variable of given().
 
-	       o  The default place to put an input record when a "<FH>"
+	       o  The default place to put an input record when a "&ltFH&gt"
 		  operation's result is tested by itself as the sole criterion
 		  of a "while" test.  Outside a "while" test, this will not
 		  happen.
@@ -193,7 +195,7 @@ DESCRIPTION
 	       "my $b" if you want to be able to use them in the sort()
 	       comparison block or function.
 
-       $<digits>
+       $&ltdigits&gt
 	       Contains the subpattern from the corresponding set of capturing
 	       parentheses from the last pattern match, not counting patterns
 	       matched in nested blocks that have been exited already.
@@ -312,7 +314,7 @@ DESCRIPTION
 	       For example, $+{foo} is equivalent to $1 after the following
 	       match:
 
-		 'foo' =~ /(?<foo>foo)/;
+		 'foo' =~ /(?&ltfoo&gtfoo)/;
 
 	       The keys of the "%+" hash list only the names of buffers that
 	       have captured (and that are thus associated to defined values).
@@ -326,7 +328,7 @@ DESCRIPTION
 	       unpredictable results.  Likewise, if the last successful match
 	       changes, then the results may be surprising.
 
-       HANDLE->input_line_number(EXPR)
+       HANDLE-&gtinput_line_number(EXPR)
        $INPUT_LINE_NUMBER
        $NR
        $.      Current line number for the last filehandle accessed.
@@ -334,7 +336,7 @@ DESCRIPTION
 	       Each filehandle in Perl counts the number of lines that have
 	       been read from it.  (Depending on the value of $/, Perl's idea
 	       of what constitutes a line may not match yours.)  When a line
-	       is read from a filehandle (via readline() or "<>"), or when
+	       is read from a filehandle (via readline() or "&lt&gt"), or when
 	       tell() or seek() is called on it, $. becomes an alias to the
 	       line counter for that filehandle.
 
@@ -346,18 +348,18 @@ DESCRIPTION
 
 	       $. is reset when the filehandle is closed, but not when an open
 	       filehandle is reopened without an intervening close().  For
-	       more details, see "I/O Operators" in perlop.  Because "<>"
+	       more details, see "I/O Operators" in perlop.  Because "&lt&gt"
 	       never does an explicit close, line numbers increase across ARGV
 	       files (but see examples in "eof" in perlfunc).
 
-	       You can also use "HANDLE->input_line_number(EXPR)" to access
+	       You can also use "HANDLE-&gtinput_line_number(EXPR)" to access
 	       the line counter for a given filehandle without having to worry
 	       about which handle you last accessed.
 
 	       (Mnemonic: many programs use "." to mean the current line
 	       number.)
 
-       IO::Handle->input_record_separator(EXPR)
+       IO::Handle-&gtinput_record_separator(EXPR)
        $INPUT_RECORD_SEPARATOR
        $RS
        $/      The input record separator, newline by default.	This
@@ -375,7 +377,7 @@ DESCRIPTION
 	       (Mnemonic: / delimits line boundaries when quoting poetry.)
 
 		   local $/;	       # enable "slurp" mode
-		   local $_ = <FH>;    # whole file now here
+		   local $_ = &ltFH&gt;    # whole file now here
 		   s/\n[ \t]+/ /g;
 
 	       Remember: the value of $/ is a string, not a regex.  awk has to
@@ -387,8 +389,8 @@ DESCRIPTION
 	       record size being the referenced integer.  So this:
 
 		   local $/ = \32768; # or \"32768", or \$var_containing_32768
-		   open my $fh, "<", $myfile or die $!;
-		   local $_ = <$fh>;
+		   open my $fh, "&lt", $myfile or die $!;
+		   local $_ = &lt$fh&gt;
 
 	       will read a record of no more than 32768 bytes from FILE.  If
 	       you're not reading from a record-oriented file (or your OS
@@ -407,7 +409,7 @@ DESCRIPTION
 
 	       See also "Newlines" in perlport.  Also see $..
 
-       HANDLE->autoflush(EXPR)
+       HANDLE-&gtautoflush(EXPR)
        $OUTPUT_AUTOFLUSH
        $|      If set to nonzero, forces a flush right away and after every
 	       write or print on the currently selected output channel.
@@ -424,7 +426,7 @@ DESCRIPTION
 	       IO::Handle. (Mnemonic: when you want your pipes to be piping
 	       hot.)
 
-       IO::Handle->output_field_separator EXPR
+       IO::Handle-&gtoutput_field_separator EXPR
        $OUTPUT_FIELD_SEPARATOR
        $OFS
        $,      The output field separator for the print operator.  If defined,
@@ -432,7 +434,7 @@ DESCRIPTION
 	       Default is "undef".  (Mnemonic: what is printed when there is a
 	       "," in your print statement.)
 
-       IO::Handle->output_record_separator EXPR
+       IO::Handle-&gtoutput_record_separator EXPR
        $OUTPUT_RECORD_SEPARATOR
        $ORS
        $\      The output record separator for the print operator.  If
@@ -475,19 +477,19 @@ DESCRIPTION
 	       Consider using "real" multidimensional arrays as described in
 	       perllol.
 
-       HANDLE->format_page_number(EXPR)
+       HANDLE-&gtformat_page_number(EXPR)
        $FORMAT_PAGE_NUMBER
        $%      The current page number of the currently selected output
 	       channel.  Used with formats.  (Mnemonic: % is page number in
 	       nroff.)
 
-       HANDLE->format_lines_per_page(EXPR)
+       HANDLE-&gtformat_lines_per_page(EXPR)
        $FORMAT_LINES_PER_PAGE
        $=      The current page length (printable lines) of the currently
 	       selected output channel.  Default is 60.  Used with formats.
 	       (Mnemonic: = has horizontal lines.)
 
-       HANDLE->format_lines_left(EXPR)
+       HANDLE-&gtformat_lines_left(EXPR)
        $FORMAT_LINES_LEFT
        $-      The number of lines left on the page of the currently selected
 	       output channel.	Used with formats.  (Mnemonic: lines_on_page -
@@ -531,12 +533,12 @@ DESCRIPTION
 
 	       Here's an example:
 
-		   if ('1234' =~ /(?<A>1)(?<B>2)(?<A>3)(?<B>4)/) {
+		   if ('1234' =~ /(?&ltA&gt1)(?&ltB&gt2)(?&ltA&gt3)(?&ltB&gt4)/) {
 		       foreach my $bufname (sort keys %-) {
 			   my $ary = $-{$bufname};
 			   foreach my $idx (0..$#$ary) {
 			       print "\$-{$bufname}[$idx] : ",
-				     (defined($ary->[$idx]) ? "'$ary->[$idx]'" : "undef"),
+				     (defined($ary-&gt[$idx]) ? "'$ary-&gt[$idx]'" : "undef"),
 				     "\n";
 			   }
 		       }
@@ -561,26 +563,26 @@ DESCRIPTION
 	       unpredictable results.  Likewise, if the last successful match
 	       changes, then the results may be surprising.
 
-       HANDLE->format_name(EXPR)
+       HANDLE-&gtformat_name(EXPR)
        $FORMAT_NAME
        $~      The name of the current report format for the currently
 	       selected output channel.  Default is the name of the
 	       filehandle.  (Mnemonic: brother to $^.)
 
-       HANDLE->format_top_name(EXPR)
+       HANDLE-&gtformat_top_name(EXPR)
        $FORMAT_TOP_NAME
        $^      The name of the current top-of-page format for the currently
 	       selected output channel.  Default is the name of the filehandle
 	       with _TOP appended.  (Mnemonic: points to top of page.)
 
-       IO::Handle->format_line_break_characters EXPR
+       IO::Handle-&gtformat_line_break_characters EXPR
        $FORMAT_LINE_BREAK_CHARACTERS
        $:      The current set of characters after which a string may be
 	       broken to fill continuation fields (starting with ^) in a
 	       format.	Default is " \n-", to break on whitespace or hyphens.
 	       (Mnemonic: a "colon" in poetry is a part of a line.)
 
-       IO::Handle->format_formfeed EXPR
+       IO::Handle-&gtformat_formfeed EXPR
        $FORMAT_FORMFEED
        $^L     What formats output as a form feed.  Default is \f.
 
@@ -598,7 +600,7 @@ DESCRIPTION
 	       system() operator.  This is just the 16-bit status word
 	       returned by the traditional Unix wait() system call (or else is
 	       made up to look like it).  Thus, the exit value of the
-	       subprocess is really ("$? >> 8"), and "$? & 127" gives which
+	       subprocess is really ("$? &gt&gt 8"), and "$? & 127" gives which
 	       signal, if any, the process died from, and "$? & 128" reports
 	       whether there was a core dump.  (Mnemonic: similar to sh and
 	       ksh.)
@@ -650,7 +652,7 @@ DESCRIPTION
 	       it sets this variable.  This means that the value of $! is
 	       meaningful only immediately after a failure:
 
-		   if (open my $fh, "<", $filename) {
+		   if (open my $fh, "&lt", $filename) {
 		       # Here $! is meaningless.
 		       ...
 		   } else {
@@ -739,26 +741,26 @@ DESCRIPTION
 
        $REAL_USER_ID
        $UID
-       $<      The real uid of this process.  (Mnemonic: it's the uid you came
+       $&lt      The real uid of this process.  (Mnemonic: it's the uid you came
 	       from, if you're running setuid.)  You can change both the real
 	       uid and the effective uid at the same time by using
-	       POSIX::setuid().  Since changes to $< require a system call,
+	       POSIX::setuid().  Since changes to $&lt require a system call,
 	       check $! after a change attempt to detect any possible errors.
 
        $EFFECTIVE_USER_ID
        $EUID
-       $>      The effective uid of this process.  Example:
+       $&gt      The effective uid of this process.  Example:
 
-		   $< = $>;	       # set real to effective uid
-		   ($<,$>) = ($>,$<);  # swap real and effective uid
+		   $&lt = $&gt;	       # set real to effective uid
+		   ($&lt,$&gt) = ($&gt,$&lt);  # swap real and effective uid
 
 	       You can change both the effective uid and the real uid at the
-	       same time by using POSIX::setuid().  Changes to $> require a
+	       same time by using POSIX::setuid().  Changes to $&gt require a
 	       check to $!  to detect any possible errors after an attempted
 	       change.
 
 	       (Mnemonic: it's the uid you went to, if you're running setuid.)
-	       $< and $> can be swapped only on machines supporting
+	       $&lt and $&gt can be swapped only on machines supporting
 	       setreuid().
 
        $REAL_GROUP_ID
@@ -808,7 +810,7 @@ DESCRIPTION
 	       gid is the group that's right for you, if you're running
 	       setgid.)
 
-	       $<, $>, $( and $) can be set only on machines that support the
+	       $&lt, $&gt, $( and $) can be set only on machines that support the
 	       corresponding set[re][ug]id() routine.  $( and $) can be
 	       swapped only on machines supporting setregid().
 
@@ -871,7 +873,7 @@ DESCRIPTION
 	       (Mnemonic: Is this version of perl in the right bracket?)
 	       Example:
 
-		   warn "No checksumming!\n" if $] < 3.019;
+		   warn "No checksumming!\n" if $] &lt 3.019;
 
 	       See also the documentation of "use VERSION" and "require
 	       VERSION" for a convenient way to fail if the running Perl
@@ -949,7 +951,7 @@ DESCRIPTION
 
 		   sub foo {
 		       BEGIN { add_100() }
-		       bar->baz($boon);
+		       bar-&gtbaz($boon);
 		   }
 
 	       Consider what happens during execution of the BEGIN block.  At
@@ -960,12 +962,12 @@ DESCRIPTION
 
 	       Substitution of the above BEGIN block with:
 
-		   BEGIN { require strict; strict->import('vars') }
+		   BEGIN { require strict; strict-&gtimport('vars') }
 
 	       demonstrates how "use strict 'vars'" is implemented.  Here's a
 	       conditional version of the same lexical pragma:
 
-		   BEGIN { require strict; strict->import('vars') if $condition }
+		   BEGIN { require strict; strict-&gtimport('vars') if $condition }
 
        %^H     The %^H hash provides the same scoping semantic as $^H.	This
 	       makes it useful for implementation of lexically scoped pragmas.
@@ -981,7 +983,7 @@ DESCRIPTION
 	       that your Perl were compiled with "-DPERL_EMERGENCY_SBRK" and
 	       used Perl's malloc.  Then
 
-		   $^M = 'a' x (1 << 16);
+		   $^M = 'a' x (1 &lt&lt 16);
 
 	       would allocate a 64K buffer for use in an emergency.  See the
 	       INSTALL file in the Perl distribution for information on how to
@@ -1035,7 +1037,7 @@ DESCRIPTION
 	       0x200 Provide informative names to anonymous subroutines based
 		     on the place they were compiled.
 
-	       0x400 Save source code lines into "@{"_<$filename"}".
+	       0x400 Save source code lines into "@{"_&lt$filename"}".
 
 	       Some bits may be relevant at compile-time only, some at run-
 	       time only.  This is a new mechanism and the details may change.
@@ -1184,14 +1186,14 @@ DESCRIPTION
 
        ARGV    The special filehandle that iterates over command-line
 	       filenames in @ARGV. Usually written as the null filehandle in
-	       the angle operator "<>". Note that currently "ARGV" only has
-	       its magical effect within the "<>" operator; elsewhere it is
+	       the angle operator "&lt&gt". Note that currently "ARGV" only has
+	       its magical effect within the "&lt&gt" operator; elsewhere it is
 	       just a plain filehandle corresponding to the last file opened
-	       by "<>". In particular, passing "\*ARGV" as a parameter to a
+	       by "&lt&gt". In particular, passing "\*ARGV" as a parameter to a
 	       function that expects a filehandle may not cause your function
 	       to automatically read the contents of all the files in @ARGV.
 
-       $ARGV   contains the name of the current file when reading from <>.
+       $ARGV   contains the name of the current file when reading from &lt&gt.
 
        @ARGV   The array @ARGV contains the command-line arguments intended
 	       for the script.	$#ARGV is generally the number of arguments
@@ -1357,7 +1359,7 @@ DESCRIPTION
 
 	   eval q{
 	       open my $pipe, "/cdrom/install |" or die $!;
-	       my @res = <$pipe>;
+	       my @res = &lt$pipe&gt;
 	       close $pipe or die "bad pipe: $?, $!";
 	   };
 
@@ -1369,7 +1371,7 @@ DESCRIPTION
        of $@ is the compile error, or the argument to "die" (which will
        interpolate $! and $?).	(See also Fatal, though.)
 
-       When the eval() expression above is executed, open(), "<PIPE>", and
+       When the eval() expression above is executed, open(), "&ltPIPE&gt", and
        "close" are translated to calls in the C run-time library and thence to
        the operating system kernel.  $! is set to the C library's "errno" if
        one of these calls fails.
@@ -1454,6 +1456,6 @@ BUGS
 
 
 perl v5.10.1			  2009-04-18			    PERLVAR(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

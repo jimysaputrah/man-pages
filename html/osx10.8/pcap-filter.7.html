@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="pcap_compile()  is used to compile a string into a filter program.  The..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>pcap-filter - packet filter syntax</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PCAP-FILTER(7)							PCAP-FILTER(7)
 
 
@@ -193,12 +195,12 @@ DESCRIPTION
        less length
 	      True  if	the  packet has a length less than or equal to length.
 	      This is equivalent to:
-		   len <= length.
+		   len &lt= length.
 
        greater length
 	      True if the packet has a length greater than or equal to length.
 	      This is equivalent to:
-		   len >= length.
+		   len &gt= length.
 
        ip proto protocol
 	      True  if	the  packet is an IPv4 packet (see ip(4P)) of protocol
@@ -543,12 +545,12 @@ DESCRIPTION
 	      ceeding, Connect, Release, or Release Done message.
 
        expr relop expr
-	      True  if the relation holds, where relop is one of >, <, >=, <=,
+	      True  if the relation holds, where relop is one of &gt, &lt, &gt=, &lt=,
 	      =, !=, and expr is an arithmetic expression composed of  integer
 	      constants  (expressed  in  standard C syntax), the normal binary
-	      operators [+, -, *, /, &, |, <<, >>],  a	length	operator,  and
+	      operators [+, -, *, /, &, |, &lt&lt, &gt&gt],  a	length	operator,  and
 	      special  packet  data  accessors.  Note that all comparisons are
-	      unsigned, so that, for example, 0x80000000 and 0xffffffff are  >
+	      unsigned, so that, for example, 0x80000000 and 0xffffffff are  &gt
 	      0.  To access data inside the packet, use the following syntax:
 		   proto [ expr : size ]
 	      Proto is one of ether, fddi, tr, wlan, ppp, slip, link, ip, arp,
@@ -638,14 +640,14 @@ EXAMPLES
        To select all IPv4 HTTP packets to and from port 80,  i.e.  print  only
        packets	that  contain  data, not, for example, SYN and FIN packets and
        ACK-only packets.  (IPv6 is left as an exercise for the reader.)
-	      tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)
+	      tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)&lt&lt2)) - ((tcp[12]&0xf0)&gt&gt2)) != 0)
 
        To select IP packets longer than 576 bytes sent through gateway snup:
-	      gateway snup and ip[2:2] > 576
+	      gateway snup and ip[2:2] &gt 576
 
        To select IP broadcast or multicast packets that were not sent via Eth-
        ernet broadcast or multicast:
-	      ether[0] & 1 = 0 and ip[16] >= 224
+	      ether[0] & 1 = 0 and ip[16] &gt= 224
 
        To  select  all	ICMP packets that are not echo requests/replies (i.e.,
        not ping packets):
@@ -691,6 +693,6 @@ BUGS
 
 
 				6 January 2008			PCAP-FILTER(7)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

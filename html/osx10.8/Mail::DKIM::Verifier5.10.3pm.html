@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The verifier object allows an email message to be scanned for DKIM and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Mail::DKIM::Verifier - verifies a DKIM-signed message</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Mail::DKIM::Verifier(3User Contributed Perl DocumentatiMail::DKIM::Verifier(3)
 
 
@@ -19,37 +21,37 @@ SYNOPSIS
 	 use Mail::DKIM::Verifier;
 
 	 # create a verifier object
-	 my $dkim = Mail::DKIM::Verifier->new();
+	 my $dkim = Mail::DKIM::Verifier-&gtnew();
 
 	 # read an email from a file handle
-	 $dkim->load(*STDIN);
+	 $dkim-&gtload(*STDIN);
 
 	 # or read an email and pass it into the verifier, incrementally
-	 while (<STDIN>)
+	 while (&ltSTDIN&gt)
 	 {
 	     # remove local line terminators
 	     chomp;
 	     s/\015$//;
 
 	     # use SMTP line terminators
-	     $dkim->PRINT("$_\015\012");
+	     $dkim-&gtPRINT("$_\015\012");
 	 }
-	 $dkim->CLOSE;
+	 $dkim-&gtCLOSE;
 
 	 # what is the result of the verify?
-	 my $result = $dkim->result;
+	 my $result = $dkim-&gtresult;
 
 	 # there might be multiple signatures, what is the result per signature?
-	 foreach my $signature ($dkim->signatures)
+	 foreach my $signature ($dkim-&gtsignatures)
 	 {
-	     print "signature identity: " . $signature->identity . "\n";
-	     print "verify result: " . $signature->result_detail . "\n";
+	     print "signature identity: " . $signature-&gtidentity . "\n";
+	     print "verify result: " . $signature-&gtresult_detail . "\n";
 	 }
 
 	 # the alleged author of the email may specify how to handle email
-	 foreach my $policy ($dkim->policies)
+	 foreach my $policy ($dkim-&gtpolicies)
 	 {
-	     die "fraudulent message" if ($policy->apply($dkim) eq "reject");
+	     die "fraudulent message" if ($policy-&gtapply($dkim) eq "reject");
 	 }
 
 DESCRIPTION
@@ -82,9 +84,9 @@ CONSTRUCTOR
    new()
        Constructs an object-oriented verifier.
 
-	 my $dkim = Mail::DKIM::Verifier->new();
+	 my $dkim = Mail::DKIM::Verifier-&gtnew();
 
-	 my $dkim = Mail::DKIM::Verifier->new(%options);
+	 my $dkim = Mail::DKIM::Verifier-&gtnew(%options);
 
        The only option supported at this time is:
 
@@ -96,9 +98,9 @@ METHODS
    PRINT()
        Feeds part of the message to the verifier.
 
-	 $dkim->PRINT("a line of the message\015\012");
-	 $dkim->PRINT("more of");
-	 $dkim->PRINT(" the message\015\012bye\015\012");
+	 $dkim-&gtPRINT("a line of the message\015\012");
+	 $dkim-&gtPRINT("more of");
+	 $dkim-&gtPRINT(" the message\015\012bye\015\012");
 
        Feeds content of the message being verified into the verifier.  The API
        is designed this way so that the entire message does NOT need to be
@@ -107,12 +109,12 @@ METHODS
        Please note that although the PRINT() method expects you to use SMTP-
        style line termination characters, you should NOT use the SMTP-style
        dot-stuffing technique described in RFC 2821 section 4.5.2.  Nor should
-       you use a <CR><LF>.<CR><LF> sequence to terminate the message.
+       you use a &ltCR&gt&ltLF&gt.&ltCR&gt&ltLF&gt sequence to terminate the message.
 
    CLOSE()
        Call this when finished feeding in the message.
 
-	 $dkim->CLOSE;
+	 $dkim-&gtCLOSE;
 
        This method finishes the canonicalization process, computes a hash, and
        verifies the signature.
@@ -120,10 +122,10 @@ METHODS
    fetch_author_domain_policies()
        Retrieves ADSP records from DNS.
 
-	 my @policies = $dkim->fetch_author_domain_policies;
+	 my @policies = $dkim-&gtfetch_author_domain_policies;
 	 foreach my $policy (@policies)
 	 {
-	     my $policy_result = $policy->apply($dkim);
+	     my $policy_result = $policy-&gtapply($dkim);
 	 }
 
        This method will retrieve all applicable "author-domain-signing-
@@ -142,8 +144,8 @@ METHODS
    fetch_author_policy()
        Retrieves a signing policy from DNS.
 
-	 my $policy = $dkim->fetch_author_policy;
-	 my $policy_result = $policy->apply($dkim);
+	 my $policy = $dkim-&gtfetch_author_policy;
+	 my $policy_result = $policy-&gtapply($dkim);
 
        This method retrieves the DKIM Sender Signing Practices record as
        described in Internet Draft draft-ietf-dkim-ssp-00-01dc.  This Internet
@@ -155,8 +157,8 @@ METHODS
    fetch_sender_policy()
        Retrieves a signing policy from DNS.
 
-	 my $policy = $dkim->fetch_sender_policy;
-	 my $policy_result = $policy->apply($dkim);
+	 my $policy = $dkim-&gtfetch_sender_policy;
+	 my $policy_result = $policy-&gtapply($dkim);
 
        The "sender" policy is the sender signing policy as described by the
        DomainKeys specification, now available in RFC4870(historical).	I call
@@ -177,16 +179,16 @@ METHODS
    load()
        Load the entire message from a file handle.
 
-	 $dkim->load($file_handle);
+	 $dkim-&gtload($file_handle);
 
        Reads a complete message from the designated file handle, feeding it
-       into the verifier. The message must use <CRLF> line terminators (same
+       into the verifier. The message must use &ltCRLF&gt line terminators (same
        as the SMTP protocol).
 
    message_originator()
        Access the "From" header.
 
-	 my $address = $dkim->message_originator;
+	 my $address = $dkim-&gtmessage_originator;
 
        Returns the "originator address" found in the message, as a
        Mail::Address object.  This is typically the (first) name and email
@@ -195,14 +197,14 @@ METHODS
 
        To get just the email address part, do:
 
-	 my $email = $dkim->message_originator->address;
+	 my $email = $dkim-&gtmessage_originator-&gtaddress;
 
        See also "message_sender()".
 
    message_sender()
        Access the "From" or "Sender" header.
 
-	 my $address = $dkim->message_sender;
+	 my $address = $dkim-&gtmessage_sender;
 
        Returns the "sender" found in the message, as a Mail::Address object.
        This is typically the (first) name and email address found in the
@@ -212,7 +214,7 @@ METHODS
 
        To get just the email address part, do:
 
-	 my $email = $dkim->message_sender->address;
+	 my $email = $dkim-&gtmessage_sender-&gtaddress;
 
        The "sender" is the mailbox of the agent responsible for the actual
        transmission of the message. For example, if a secretary were to send a
@@ -222,10 +224,10 @@ METHODS
    policies()
        Retrieves applicable signing policies from DNS.
 
-	 my @policies = $dkim->policies;
+	 my @policies = $dkim-&gtpolicies;
 	 foreach my $policy (@policies)
 	 {
-	     $policy_result = $policy->apply($dkim);
+	     $policy_result = $policy-&gtapply($dkim);
 	     # $policy_result is one of "accept", "reject", "neutral"
 	 }
 
@@ -246,7 +248,7 @@ METHODS
    result()
        Access the result of the verification.
 
-	 my $result = $dkim->result;
+	 my $result = $dkim-&gtresult;
 
        Gives the result of the verification. The following values are
        possible:
@@ -283,7 +285,7 @@ METHODS
    result_detail()
        Access the result, plus details if available.
 
-	 my $detail = $dkim->result_detail;
+	 my $detail = $dkim-&gtresult_detail;
 
        The detail is constructed by taking the result (e.g. "pass", "fail",
        "invalid" or "none") and appending any details provided by the
@@ -325,7 +327,7 @@ METHODS
    signature()
        Access the message's DKIM signature.
 
-	 my $sig = $dkim->signature;
+	 my $sig = $dkim-&gtsignature;
 
        Accesses the signature found and verified in this message. The returned
        object is of type Mail::DKIM::Signature.
@@ -337,13 +339,13 @@ METHODS
    signatures()
        Access all of this message's signatures.
 
-	 my @all_signatures = $dkim->signatures;
+	 my @all_signatures = $dkim-&gtsignatures;
 
-       Use $signature->result or $signature->result_detail to access the
+       Use $signature-&gtresult or $signature-&gtresult_detail to access the
        verification results of each signature.
 
 AUTHOR
-       Jason Long, <jlong@messiah.edu>
+       Jason Long, &ltjlong@messiah.edu&gt
 
 COPYRIGHT AND LICENSE
        Copyright (C) 2006-2009 by Messiah College
@@ -355,6 +357,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2010-01-23	       Mail::DKIM::Verifier(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

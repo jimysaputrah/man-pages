@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title></title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 XML::Simple::FAQ(3)   User Contributed Perl Documentation  XML::Simple::FAQ(3)
 
 
@@ -69,24 +71,24 @@ Basics
    What is mixed content?
        Consider this example XML:
 
-	 <document>
-	   <para>This is <em>mixed</em> content.</para>
-	 </document>
+	 &ltdocument&gt
+	   &ltpara&gtThis is &ltem&gtmixed&lt/em&gt content.&lt/para&gt
+	 &lt/document&gt
 
-       This is said to be mixed content, because the <para> element contains
+       This is said to be mixed content, because the &ltpara&gt element contains
        both character data (text content) and nested elements.
 
        Here's some more XML:
 
-	 <person>
-	   <first_name>Joe</first_name>
-	   <last_name>Bloggs</last_name>
-	   <dob>25-April-1969</dob>
-	 </person>
+	 &ltperson&gt
+	   &ltfirst_name&gtJoe&lt/first_name&gt
+	   &ltlast_name&gtBloggs&lt/last_name&gt
+	   &ltdob&gt25-April-1969&lt/dob&gt
+	 &lt/person&gt
 
        This second example is not generally considered to be mixed content.
-       The <first_name>, <last_name> and <dob> elements contain only character
-       data and the  <person> element contains only nested elements.  (Note:
+       The &ltfirst_name&gt, &ltlast_name&gt and &ltdob&gt elements contain only character
+       data and the  &ltperson&gt element contains only nested elements.  (Note:
        Strictly speaking, the whitespace between the nested elements is
        character data, but it is ignored by XML::Simple).
 
@@ -221,13 +223,13 @@ Usage
    What is the forcearray option all about?
        Consider this XML in a file called ./person.xml:
 
-	 <person>
-	   <first_name>Joe</first_name>
-	   <last_name>Bloggs</last_name>
-	   <hobbie>bungy jumping</hobbie>
-	   <hobbie>sky diving</hobbie>
-	   <hobbie>knitting</hobbie>
-	 </person>
+	 &ltperson&gt
+	   &ltfirst_name&gtJoe&lt/first_name&gt
+	   &ltlast_name&gtBloggs&lt/last_name&gt
+	   &lthobbie&gtbungy jumping&lt/hobbie&gt
+	   &lthobbie&gtsky diving&lt/hobbie&gt
+	   &lthobbie&gtknitting&lt/hobbie&gt
+	 &lt/person&gt
 
        You could read it in with this line:
 
@@ -236,36 +238,36 @@ Usage
        Which would give you a data structure like this:
 
 	 $person = {
-	   'first_name' => 'Joe',
-	   'last_name'	=> 'Bloggs',
-	   'hobbie'	=> [ 'bungy jumping', 'sky diving', 'knitting' ]
+	   'first_name' =&gt 'Joe',
+	   'last_name'	=&gt 'Bloggs',
+	   'hobbie'	=&gt [ 'bungy jumping', 'sky diving', 'knitting' ]
 	 };
 
-       The <first_name> and <last_name> elements are represented as simple
+       The &ltfirst_name&gt and &ltlast_name&gt elements are represented as simple
        scalar values which you could refer to like this:
 
-	 print "$person->{first_name} $person->{last_name}\n";
+	 print "$person-&gt{first_name} $person-&gt{last_name}\n";
 
-       The <hobbie> elements are represented as an array - since there is more
+       The &lthobbie&gt elements are represented as an array - since there is more
        than one.  You could refer to the first one like this:
 
-	 print $person->{hobbie}->[0], "\n";
+	 print $person-&gt{hobbie}-&gt[0], "\n";
 
        Or the whole lot like this:
 
-	 print join(', ', @{$person->{hobbie}} ), "\n";
+	 print join(', ', @{$person-&gt{hobbie}} ), "\n";
 
        The catch is, that these last two lines of code will only work for
-       people who have more than one hobbie.  If there is only one <hobbie>
+       people who have more than one hobbie.  If there is only one &lthobbie&gt
        element, it will be represented as a simple scalar (just like
-       <first_name> and <last_name>).  Which might lead you to write code like
+       &ltfirst_name&gt and &ltlast_name&gt).  Which might lead you to write code like
        this:
 
-	 if(ref($person->{hobbie})) {
-	   print join(', ', @{$person->{hobbie}} ), "\n";
+	 if(ref($person-&gt{hobbie})) {
+	   print join(', ', @{$person-&gt{hobbie}} ), "\n";
 	 }
 	 else {
-	   print $person->{hobbie}, "\n";
+	   print $person-&gt{hobbie}, "\n";
 	 }
 
        Don't do that.
@@ -273,57 +275,57 @@ Usage
        One alternative approach is to set the forcearray option to a true
        value:
 
-	 my $person = XMLin('./person.xml', forcearray => 1);
+	 my $person = XMLin('./person.xml', forcearray =&gt 1);
 
        Which will give you a data structure like this:
 
 	 $person = {
-	   'first_name' => [ 'Joe' ],
-	   'last_name'	=> [ 'Bloggs' ],
-	   'hobbie'	=> [ 'bungy jumping', 'sky diving', 'knitting' ]
+	   'first_name' =&gt [ 'Joe' ],
+	   'last_name'	=&gt [ 'Bloggs' ],
+	   'hobbie'	=&gt [ 'bungy jumping', 'sky diving', 'knitting' ]
 	 };
 
        Then you can use this line to refer to all the list of hobbies even if
        there was only one:
 
-	 print join(', ', @{$person->{hobbie}} ), "\n";
+	 print join(', ', @{$person-&gt{hobbie}} ), "\n";
 
-       The downside of this approach is that the <first_name> and <last_name>
+       The downside of this approach is that the &ltfirst_name&gt and &ltlast_name&gt
        elements will also always be represented as arrays even though there
        will never be more than one:
 
-	 print "$person->{first_name}->[0] $person->{last_name}->[0]\n";
+	 print "$person-&gt{first_name}-&gt[0] $person-&gt{last_name}-&gt[0]\n";
 
        This might be OK if you change the XML to use attributes for things
        that will always be singular and nested elements for things that may be
        plural:
 
-	 <person first_name="Jane" last_name="Bloggs">
-	   <hobbie>motorcycle maintenance</hobbie>
-	 </person>
+	 &ltperson first_name="Jane" last_name="Bloggs"&gt
+	   &lthobbie&gtmotorcycle maintenance&lt/hobbie&gt
+	 &lt/person&gt
 
        On the other hand, if you prefer not to use attributes, then you could
-       specify that any <hobbie> elements should always be represented as
+       specify that any &lthobbie&gt elements should always be represented as
        arrays and all other nested elements should be simple scalar values
        unless there is more than one:
 
-	 my $person = XMLin('./person.xml', forcearray => [ 'hobbie' ]);
+	 my $person = XMLin('./person.xml', forcearray =&gt [ 'hobbie' ]);
 
        The forcearray option accepts a list of element names which should
        always be forced to an array representation:
 
-	 forcearray => [ qw(hobbie qualification childs_name) ]
+	 forcearray =&gt [ qw(hobbie qualification childs_name) ]
 
        See the XML::Simple manual page for more information.
 
    What is the keyattr option all about?
        Consider this sample XML:
 
-	 <catalog>
-	   <part partnum="1842334" desc="High pressure flange" price="24.50" />
-	   <part partnum="9344675" desc="Threaded gasket"      price="9.25" />
-	   <part partnum="5634896" desc="Low voltage washer"   price="12.00" />
-	 </catalog>
+	 &ltcatalog&gt
+	   &ltpart partnum="1842334" desc="High pressure flange" price="24.50" /&gt
+	   &ltpart partnum="9344675" desc="Threaded gasket"      price="9.25" /&gt
+	   &ltpart partnum="5634896" desc="Low voltage washer"   price="12.00" /&gt
+	 &lt/catalog&gt
 
        You could slurp it in with this code:
 
@@ -332,21 +334,21 @@ Usage
        Which would return a data structure like this:
 
 	 $catalog = {
-	     'part' => [
+	     'part' =&gt [
 		 {
-		   'partnum' => '1842334',
-		   'desc'    => 'High pressure flange',
-		   'price'   => '24.50'
+		   'partnum' =&gt '1842334',
+		   'desc'    =&gt 'High pressure flange',
+		   'price'   =&gt '24.50'
 		 },
 		 {
-		   'partnum' => '9344675',
-		   'desc'    => 'Threaded gasket',
-		   'price'   => '9.25'
+		   'partnum' =&gt '9344675',
+		   'desc'    =&gt 'Threaded gasket',
+		   'price'   =&gt '9.25'
 		 },
 		 {
-		   'partnum' => '5634896',
-		   'desc'    => 'Low voltage washer',
-		   'price'   => '12.00'
+		   'partnum' =&gt '5634896',
+		   'desc'    =&gt 'Low voltage washer',
+		   'price'   =&gt '12.00'
 		 }
 	     ]
 	 };
@@ -354,63 +356,63 @@ Usage
        Then you could access the description of the first part in the catalog
        with this code:
 
-	 print $catalog->{part}->[0]->{desc}, "\n";
+	 print $catalog-&gt{part}-&gt[0]-&gt{desc}, "\n";
 
        However, if you wanted to access the description of the part with the
        part number of "9344675" then you'd have to code a loop like this:
 
-	 foreach my $part (@{$catalog->{part}}) {
-	   if($part->{partnum} eq '9344675') {
-	     print $part->{desc}, "\n";
+	 foreach my $part (@{$catalog-&gt{part}}) {
+	   if($part-&gt{partnum} eq '9344675') {
+	     print $part-&gt{desc}, "\n";
 	     last;
 	   }
 	 }
 
-       The knowledge that each <part> element has a unique partnum attribute
+       The knowledge that each &ltpart&gt element has a unique partnum attribute
        allows you to eliminate this search.  You can pass this knowledge on to
        XML::Simple like this:
 
-	 my $catalog = XMLin($xml, keyattr => ['partnum']);
+	 my $catalog = XMLin($xml, keyattr =&gt ['partnum']);
 
        Which will return a data structure like this:
 
 	 $catalog = {
-	   'part' => {
-	     '5634896' => { 'desc' => 'Low voltage washer',   'price' => '12.00' },
-	     '1842334' => { 'desc' => 'High pressure flange', 'price' => '24.50' },
-	     '9344675' => { 'desc' => 'Threaded gasket',      'price' => '9.25'  }
+	   'part' =&gt {
+	     '5634896' =&gt { 'desc' =&gt 'Low voltage washer',   'price' =&gt '12.00' },
+	     '1842334' =&gt { 'desc' =&gt 'High pressure flange', 'price' =&gt '24.50' },
+	     '9344675' =&gt { 'desc' =&gt 'Threaded gasket',      'price' =&gt '9.25'  }
 	   }
 	 };
 
-       XML::Simple has been able to transform $catalog->{part} from an
+       XML::Simple has been able to transform $catalog-&gt{part} from an
        arrayref to a hashref (keyed on partnum).  This transformation is
        called 'array folding'.
 
        Through the use of array folding, you can now index directly to the
        description of the part you want:
 
-	 print $catalog->{part}->{9344675}->{desc}, "\n";
+	 print $catalog-&gt{part}-&gt{9344675}-&gt{desc}, "\n";
 
        The 'keyattr' option also enables array folding when the unique key is
        in a nested element rather than an attribute.  eg:
 
-	 <catalog>
-	   <part>
-	     <partnum>1842334</partnum>
-	     <desc>High pressure flange</desc>
-	     <price>24.50</price>
-	   </part>
-	   <part>
-	     <partnum>9344675</partnum>
-	     <desc>Threaded gasket</desc>
-	     <price>9.25</price>
-	   </part>
-	   <part>
-	     <partnum>5634896</partnum>
-	     <desc>Low voltage washer</desc>
-	     <price>12.00</price>
-	   </part>
-	 </catalog>
+	 &ltcatalog&gt
+	   &ltpart&gt
+	     &ltpartnum&gt1842334&lt/partnum&gt
+	     &ltdesc&gtHigh pressure flange&lt/desc&gt
+	     &ltprice&gt24.50&lt/price&gt
+	   &lt/part&gt
+	   &ltpart&gt
+	     &ltpartnum&gt9344675&lt/partnum&gt
+	     &ltdesc&gtThreaded gasket&lt/desc&gt
+	     &ltprice&gt9.25&lt/price&gt
+	   &lt/part&gt
+	   &ltpart&gt
+	     &ltpartnum&gt5634896&lt/partnum&gt
+	     &ltdesc&gtLow voltage washer&lt/desc&gt
+	     &ltprice&gt12.00&lt/price&gt
+	   &lt/part&gt
+	 &lt/catalog&gt
 
        See the XML::Simple manual page for more information.
 
@@ -428,7 +430,7 @@ Usage
        want array folding at all, you'll need to set 'key attr to an empty
        list:
 
-	 my $ref = XMLin($xml, keyattr => []);
+	 my $ref = XMLin($xml, keyattr =&gt []);
 
        A second 'gotcha' is that array folding only works on arrays.  That
        might seem obvious, but if there's only one record in your XML and you
@@ -438,17 +440,17 @@ Usage
        option.
 
        You probably want to be as specific as you can be too.  For instance,
-       the safest way to parse the <catalog> example above would be:
+       the safest way to parse the &ltcatalog&gt example above would be:
 
-	 my $catalog = XMLin($xml, keyattr => { part => 'partnum'},
-				   forcearray => ['part']);
+	 my $catalog = XMLin($xml, keyattr =&gt { part =&gt 'partnum'},
+				   forcearray =&gt ['part']);
 
-       By using the hashref for keyattr, you can specify that only <part>
+       By using the hashref for keyattr, you can specify that only &ltpart&gt
        elements should be folded on the 'partnum' attribute (and that the
-       <part> elements should not be folded on any other attribute).
+       &ltpart&gt elements should not be folded on any other attribute).
 
        By supplying a list of element names for forcearray, you're ensuring
-       that folding will work even if there's only one <part>.	You're also
+       that folding will work even if there's only one &ltpart&gt.	You're also
        ensuring that if the 'partnum' unique key is supplied in a nested
        element then that element won't get forced to an array too.
 
@@ -533,8 +535,8 @@ Usage
 
        o   don't use XML::Simple
 
-   Why does XMLout() insert <name> elements (or attributes)?
-       Try setting keyattr => [].
+   Why does XMLout() insert &ltname&gt elements (or attributes)?
+       Try setting keyattr =&gt [].
 
        When you call XMLin() to read XML, the 'keyattr' option controls
        whether arrays get 'folded' into hashes.  Similarly, when you call
@@ -568,6 +570,6 @@ Usage
 
 
 perl v5.12.4			  2004-11-19		   XML::Simple::FAQ(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

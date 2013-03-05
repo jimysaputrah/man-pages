@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module, when inherited by a package, allows that package's class..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Attribute::Handlers - Simpler definition of attribute handlers</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Attribute::Handlers(3pmPerl Programmers Reference GuidAttribute::Handlers(3pm)
 
 
@@ -74,7 +76,7 @@ SYNOPSIS
 	       }
 
 
-	       use Attribute::Handlers autotie => { Cycle => Tie::Cycle };
+	       use Attribute::Handlers autotie =&gt { Cycle =&gt Tie::Cycle };
 
 	       my $next : Cycle(['A'..'Z']);
 
@@ -169,7 +171,7 @@ DESCRIPTION
        succeed, the interpreted data is passed in an array reference; if they
        fail, the raw data is passed as a string.  For example, all of these:
 
-	   sub foo :Loud(till=>ears=>are=>bleeding) {...}
+	   sub foo :Loud(till=&gtears=&gtare=&gtbleeding) {...}
 	   sub foo :Loud(qw/till ears are bleeding/) {...}
 	   sub foo :Loud(qw/my, ears, are, bleeding/) {...}
 	   sub foo :Loud(till,ears,are,bleeding) {...}
@@ -312,7 +314,7 @@ DESCRIPTION
 
 	       my $next : Cycle('A'..'Z');     # $next is now a tied variable
 
-	       while (<>) {
+	       while (&lt&gt) {
 		       print $next;
 	       }
 
@@ -339,7 +341,7 @@ DESCRIPTION
        Attribute::Handlers" statement. So, the cycling example, could also be
        written:
 
-	       use Attribute::Handlers autotie => { Cycle => 'Tie::Cycle' };
+	       use Attribute::Handlers autotie =&gt { Cycle =&gt 'Tie::Cycle' };
 
 	       # and thereafter...
 
@@ -347,7 +349,7 @@ DESCRIPTION
 
 	       my $next : Cycle(['A'..'Z']);	 # $next is now a tied variable
 
-	       while (<>) {
+	       while (&lt&gt) {
 		       print $next;
 
        Note that we now have to pass the cycling values as an array reference,
@@ -365,17 +367,17 @@ DESCRIPTION
        to the class name. For example:
 
 	       use Attribute::Handlers
-		       autotie => { Dir => 'Tie::Dir qw(DIR_UNLINK)' };
+		       autotie =&gt { Dir =&gt 'Tie::Dir qw(DIR_UNLINK)' };
 
        If the attribute name is unqualified, the attribute is installed in the
        current package. Otherwise it is installed in the qualifier's package:
 
 	       package Here;
 
-	       use Attribute::Handlers autotie => {
-		       Other::Good => Tie::SecureHash, # tie attr installed in Other::
-			       Bad => Tie::Taxes,      # tie attr installed in Here::
-		   UNIVERSAL::Ugly => Software::Patent # tie attr installed everywhere
+	       use Attribute::Handlers autotie =&gt {
+		       Other::Good =&gt Tie::SecureHash, # tie attr installed in Other::
+			       Bad =&gt Tie::Taxes,      # tie attr installed in Here::
+		   UNIVERSAL::Ugly =&gt Software::Patent # tie attr installed everywhere
 	       };
 
        Autoties are most commonly used in the module to which they actually
@@ -386,7 +388,7 @@ DESCRIPTION
 
 	       package Tie::Me::Kangaroo:Down::Sport;
 
-	       use Attribute::Handlers autotie => { '__CALLER__::Roo' => __PACKAGE__ };
+	       use Attribute::Handlers autotie =&gt { '__CALLER__::Roo' =&gt __PACKAGE__ };
 
        This causes Attribute::Handlers to define the "Roo" attribute in the
        package that imports the Tie::Me::Kangaroo:Down::Sport module.
@@ -402,7 +404,7 @@ DESCRIPTION
 
        The "autotie" mechanism supports this too. The following code:
 
-	       use Attribute::Handlers autotieref => { Selfish => Tie::Selfish };
+	       use Attribute::Handlers autotieref =&gt { Selfish =&gt Tie::Selfish };
 	       my $var : Selfish(@args);
 
        has the same effect as:
@@ -411,7 +413,7 @@ DESCRIPTION
 
        But when "autotieref" is used instead of "autotie":
 
-	       use Attribute::Handlers autotieref => { Selfish => Tie::Selfish };
+	       use Attribute::Handlers autotieref =&gt { Selfish =&gt Tie::Selfish };
 	       my $var : Selfish(@args);
 
        the effect is to pass the "tie" call an extra reference to the variable
@@ -629,6 +631,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-06-07	      Attribute::Handlers(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

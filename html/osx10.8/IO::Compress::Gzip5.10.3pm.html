@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module provides a Perl interface that allows writing compressed..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>IO::Compress::Gzip - Write RFC 1952 files/buffers</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 IO::Compress::Gzip(3pm)Perl Programmers Reference GuideIO::Compress::Gzip(3pm)
 
 
@@ -18,30 +20,30 @@ NAME
 SYNOPSIS
 	   use IO::Compress::Gzip qw(gzip $GzipError) ;
 
-	   my $status = gzip $input => $output [,OPTS]
+	   my $status = gzip $input =&gt $output [,OPTS]
 	       or die "gzip failed: $GzipError\n";
 
 	   my $z = new IO::Compress::Gzip $output [,OPTS]
 	       or die "gzip failed: $GzipError\n";
 
-	   $z->print($string);
-	   $z->printf($format, $string);
-	   $z->write($string);
-	   $z->syswrite($string [, $length, $offset]);
-	   $z->flush();
-	   $z->tell();
-	   $z->eof();
-	   $z->seek($position, $whence);
-	   $z->binmode();
-	   $z->fileno();
-	   $z->opened();
-	   $z->autoflush();
-	   $z->input_line_number();
-	   $z->newStream( [OPTS] );
+	   $z-&gtprint($string);
+	   $z-&gtprintf($format, $string);
+	   $z-&gtwrite($string);
+	   $z-&gtsyswrite($string [, $length, $offset]);
+	   $z-&gtflush();
+	   $z-&gttell();
+	   $z-&gteof();
+	   $z-&gtseek($position, $whence);
+	   $z-&gtbinmode();
+	   $z-&gtfileno();
+	   $z-&gtopened();
+	   $z-&gtautoflush();
+	   $z-&gtinput_line_number();
+	   $z-&gtnewStream( [OPTS] );
 
-	   $z->deflateParams();
+	   $z-&gtdeflateParams();
 
-	   $z->close() ;
+	   $z-&gtclose() ;
 
 	   $GzipError ;
 
@@ -73,12 +75,12 @@ Functional Interface
 
 	   use IO::Compress::Gzip qw(gzip $GzipError) ;
 
-	   gzip $input => $output [,OPTS]
+	   gzip $input =&gt $output [,OPTS]
 	       or die "gzip failed: $GzipError\n";
 
        The functional interface needs Perl5.005 or better.
 
-   gzip $input => $output [, OPTS]
+   gzip $input =&gt $output [, OPTS]
        "gzip" expects at least two parameters, $input and $output.
 
        The $input parameter
@@ -112,8 +114,8 @@ Functional Interface
 	    valid filenames before any data is compressed.
 
        An Input FileGlob string
-	    If $input is a string that is delimited by the characters "<" and
-	    ">" "gzip" will assume that it is an input fileglob string. The
+	    If $input is a string that is delimited by the characters "&lt" and
+	    "&gt" "gzip" will assume that it is an input fileglob string. The
 	    input is the list of files that match the fileglob.
 
 	    If the fileglob does not match any files ...
@@ -153,8 +155,8 @@ Functional Interface
 	    pushed onto the array.
 
        An Output FileGlob
-	    If $output is a string that is delimited by the characters "<" and
-	    ">" "gzip" will assume that it is an output fileglob string. The
+	    If $output is a string that is delimited by the characters "&lt" and
+	    "&gt" "gzip" will assume that it is an output fileglob string. The
 	    output is the list of files that match the fileglob.
 
 	    When $output is an fileglob string, $input must also be a fileglob
@@ -172,7 +174,7 @@ Functional Interface
        the same as those used with the OO interface defined in the
        "Constructor Options" section below.
 
-       "AutoClose => 0|1"
+       "AutoClose =&gt 0|1"
 	    This option applies to any input or output data streams to "gzip"
 	    that are filehandles.
 
@@ -182,13 +184,13 @@ Functional Interface
 
 	    This parameter defaults to 0.
 
-       "BinModeIn => 0|1"
+       "BinModeIn =&gt 0|1"
 	    When reading from a file or filehandle, set "binmode" before
 	    reading.
 
 	    Defaults to 0.
 
-       "Append => 0|1"
+       "Append =&gt 0|1"
 	    TODO
 
    Examples
@@ -200,7 +202,7 @@ Functional Interface
 	   use IO::Compress::Gzip qw(gzip $GzipError) ;
 
 	   my $input = "file1.txt";
-	   gzip $input => "$input.gz"
+	   gzip $input =&gt "$input.gz"
 	       or die "gzip failed: $GzipError\n";
 
        To read from an existing Perl filehandle, $input, and write the
@@ -211,10 +213,10 @@ Functional Interface
 	   use IO::Compress::Gzip qw(gzip $GzipError) ;
 	   use IO::File ;
 
-	   my $input = new IO::File "<file1.txt"
+	   my $input = new IO::File "&ltfile1.txt"
 	       or die "Cannot open 'file1.txt': $!\n" ;
 	   my $buffer ;
-	   gzip $input => \$buffer
+	   gzip $input =&gt \$buffer
 	       or die "gzip failed: $GzipError\n";
 
        To compress all files in the directory "/my/home" that match "*.txt"
@@ -224,7 +226,7 @@ Functional Interface
 	   use warnings ;
 	   use IO::Compress::Gzip qw(gzip $GzipError) ;
 
-	   gzip '</my/home/*.txt>' => '<*.gz>'
+	   gzip '&lt/my/home/*.txt&gt' =&gt '&lt*.gz&gt'
 	       or die "gzip failed: $GzipError\n";
 
        and if you want to compress each file one at a time, this will do the
@@ -237,7 +239,7 @@ Functional Interface
 	   for my $input ( glob "/my/home/*.txt" )
 	   {
 	       my $output = "$input.gz" ;
-	       gzip $input => $output
+	       gzip $input =&gt $output
 		   or die "Error compressing '$input': $GzipError\n";
 	   }
 
@@ -258,7 +260,7 @@ OO Interface
        with $z.  For example, to write to a compressed file/buffer you can use
        either of these forms
 
-	   $z->print("hello world\n");
+	   $z-&gtprint("hello world\n");
 	   print $z "hello world\n";
 
        The mandatory parameter $output is used to control the destination of
@@ -284,7 +286,7 @@ OO Interface
    Constructor Options
        "OPTS" is any combination of the following options:
 
-       "AutoClose => 0|1"
+       "AutoClose =&gt 0|1"
 	    This option is only valid when the $output parameter is a
 	    filehandle. If specified, and the value is true, it will result in
 	    the $output being closed once either the "close" method is called
@@ -292,7 +294,7 @@ OO Interface
 
 	    This parameter defaults to 0.
 
-       "Append => 0|1"
+       "Append =&gt 0|1"
 	    Opens $output in append mode.
 
 	    The behaviour of this option is dependent on the type of $output.
@@ -320,7 +322,7 @@ OO Interface
 
 	    This parameter defaults to 0.
 
-       "Merge => 0|1"
+       "Merge =&gt 0|1"
 	    This option is used to compress input data and append it to an
 	    existing compressed data stream in $output. The end result is a
 	    single compressed data stream stored in $output.
@@ -370,7 +372,7 @@ OO Interface
 
 	    The default is Z_DEFAULT_STRATEGY.
 
-       "Minimal => 0|1"
+       "Minimal =&gt 0|1"
 	    If specified, this option will force the creation of the smallest
 	    possible compliant gzip header (which is exactly 10 bytes long) as
 	    defined in RFC 1952.
@@ -383,7 +385,7 @@ OO Interface
 
 	    This parameter defaults to 0.
 
-       "Comment => $comment"
+       "Comment =&gt $comment"
 	    Stores the contents of $comment in the COMMENT field in the gzip
 	    header.  By default, no comment field is written to the gzip file.
 
@@ -394,7 +396,7 @@ OO Interface
 	    any character except NULL. If any null characters are present, the
 	    field will be truncated at the first NULL.
 
-       "Name => $string"
+       "Name =&gt $string"
 	    Stores the contents of $string in the gzip NAME header field. If
 	    "Name" is not specified, no gzip NAME field will be created.
 
@@ -405,20 +407,20 @@ OO Interface
 	    except NULL. If any null characters are present, the field will be
 	    truncated at the first NULL.
 
-       "Time => $number"
+       "Time =&gt $number"
 	    Sets the MTIME field in the gzip header to $number.
 
 	    This field defaults to the time the "IO::Compress::Gzip" object
 	    was created if this option is not specified.
 
-       "TextFlag => 0|1"
+       "TextFlag =&gt 0|1"
 	    This parameter controls the setting of the FLG.FTEXT bit in the
 	    gzip header. It is used to signal that the data stored in the gzip
 	    file/buffer is probably text.
 
 	    The default is 0.
 
-       "HeaderCRC => 0|1"
+       "HeaderCRC =&gt 0|1"
 	    When true this parameter will set the FLG.FHCRC bit to 1 in the
 	    gzip header and set the CRC16 header field to the CRC of the
 	    complete gzip header except the CRC16 field itself.
@@ -431,7 +433,7 @@ OO Interface
 
 	    This parameter defaults to 0.
 
-       "OS_Code => $value"
+       "OS_Code =&gt $value"
 	    Stores $value in the gzip OS header field. A number between 0 and
 	    255 is valid.
 
@@ -439,7 +441,7 @@ OO Interface
 	    Operating System this module was built on. The value 3 is used as
 	    a catch-all for all Unix variants and unknown Operating Systems.
 
-       "ExtraField => $data"
+       "ExtraField =&gt $data"
 	    This parameter allows additional metadata to be stored in the
 	    ExtraField in the gzip header. An RFC 1952 compliant ExtraField
 	    consists of zero or more subfields. Each subfield consists of a
@@ -448,16 +450,16 @@ OO Interface
 	    The list of subfields can be supplied in any of the following
 	    formats
 
-		-ExtraField => [$id1, $data1,
+		-ExtraField =&gt [$id1, $data1,
 				$id2, $data2,
 				 ...
 			       ]
-		-ExtraField => [ [$id1 => $data1],
-				 [$id2 => $data2],
+		-ExtraField =&gt [ [$id1 =&gt $data1],
+				 [$id2 =&gt $data2],
 				 ...
 			       ]
-		-ExtraField => { $id1 => $data1,
-				 $id2 => $data2,
+		-ExtraField =&gt { $id1 =&gt $data1,
+				 $id2 =&gt $data2,
 				 ...
 			       }
 
@@ -471,7 +473,7 @@ OO Interface
 	    Alternatively the list of subfields can by supplied as a scalar,
 	    thus
 
-		-ExtraField => $rawdata
+		-ExtraField =&gt $rawdata
 
 	    If you use the raw format, and the "Strict" option is enabled,
 	    "IO::Compress::Gzip" will check that $rawdata consists of zero or
@@ -480,17 +482,17 @@ OO Interface
 
 	    The maximum size of the Extra Field 65535 bytes.
 
-       "ExtraFlags => $value"
+       "ExtraFlags =&gt $value"
 	    Sets the XFL byte in the gzip header to $value.
 
 	    If this option is not present, the value stored in XFL field will
 	    be determined by the setting of the "Level" option.
 
-	    If "Level => Z_BEST_SPEED" has been specified then XFL is set to
-	    2.	If "Level => Z_BEST_COMPRESSION" has been specified then XFL
+	    If "Level =&gt Z_BEST_SPEED" has been specified then XFL is set to
+	    2.	If "Level =&gt Z_BEST_COMPRESSION" has been specified then XFL
 	    is set to 4.  Otherwise XFL is set to 0.
 
-       "Strict => 0|1"
+       "Strict =&gt 0|1"
 	    "Strict" will optionally police the values supplied with other
 	    options to ensure they are compliant with RFC1952.
 
@@ -542,7 +544,7 @@ Methods
    print
        Usage is
 
-	   $z->print($data)
+	   $z-&gtprint($data)
 	   print $z $data
 
        Compresses and outputs the contents of the $data parameter. This has
@@ -553,7 +555,7 @@ Methods
    printf
        Usage is
 
-	   $z->printf($format, $data)
+	   $z-&gtprintf($format, $data)
 	   printf $z $format, $data
 
        Compresses and outputs the contents of the $data parameter.
@@ -563,9 +565,9 @@ Methods
    syswrite
        Usage is
 
-	   $z->syswrite $data
-	   $z->syswrite $data, $length
-	   $z->syswrite $data, $length, $offset
+	   $z-&gtsyswrite $data
+	   $z-&gtsyswrite $data, $length
+	   $z-&gtsyswrite $data, $length, $offset
 
        Compresses and outputs the contents of the $data parameter.
 
@@ -575,9 +577,9 @@ Methods
    write
        Usage is
 
-	   $z->write $data
-	   $z->write $data, $length
-	   $z->write $data, $length, $offset
+	   $z-&gtwrite $data
+	   $z-&gtwrite $data, $length
+	   $z-&gtwrite $data, $length, $offset
 
        Compresses and outputs the contents of the $data parameter.
 
@@ -587,8 +589,8 @@ Methods
    flush
        Usage is
 
-	   $z->flush;
-	   $z->flush($flush_type);
+	   $z-&gtflush;
+	   $z-&gtflush($flush_type);
 
        Flushes any pending compressed data to the output file/buffer.
 
@@ -606,7 +608,7 @@ Methods
    tell
        Usage is
 
-	   $z->tell()
+	   $z-&gttell()
 	   tell $z
 
        Returns the uncompressed file offset.
@@ -614,13 +616,13 @@ Methods
    eof
        Usage is
 
-	   $z->eof();
+	   $z-&gteof();
 	   eof($z);
 
        Returns true if the "close" method has been called.
 
    seek
-	   $z->seek($position, $whence);
+	   $z-&gtseek($position, $whence);
 	   seek($z, $position, $whence);
 
        Provides a sub-set of the "seek" functionality, with the restriction
@@ -638,19 +640,19 @@ Methods
    binmode
        Usage is
 
-	   $z->binmode
+	   $z-&gtbinmode
 	   binmode $z ;
 
        This is a noop provided for completeness.
 
    opened
-	   $z->opened()
+	   $z-&gtopened()
 
        Returns true if the object currently refers to a opened file/buffer.
 
    autoflush
-	   my $prev = $z->autoflush()
-	   my $prev = $z->autoflush(EXPR)
+	   my $prev = $z-&gtautoflush()
+	   my $prev = $z-&gtautoflush(EXPR)
 
        If the $z object is associated with a file or a filehandle, this method
        returns the current autoflush setting for the underlying filehandle. If
@@ -664,13 +666,13 @@ Methods
        autoflush setting.
 
    input_line_number
-	   $z->input_line_number()
-	   $z->input_line_number(EXPR)
+	   $z-&gtinput_line_number()
+	   $z-&gtinput_line_number(EXPR)
 
        This method always returns "undef" when compressing.
 
    fileno
-	   $z->fileno()
+	   $z-&gtfileno()
 	   fileno($z)
 
        If the $z object is associated with a file or a filehandle, "fileno"
@@ -681,7 +683,7 @@ Methods
        return "undef".
 
    close
-	   $z->close() ;
+	   $z-&gtclose() ;
 	   close $z ;
 
        Flushes any pending compressed data and then closes the output
@@ -707,7 +709,7 @@ Methods
    newStream([OPTS])
        Usage is
 
-	   $z->newStream( [OPTS] )
+	   $z-&gtnewStream( [OPTS] )
 
        Closes the current compressed data stream and starts a new one.
 
@@ -719,7 +721,7 @@ Methods
    deflateParams
        Usage is
 
-	   $z->deflateParams
+	   $z-&gtdeflateParams
 
        TODO
 
@@ -812,6 +814,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2009-06-10	       IO::Compress::Gzip(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

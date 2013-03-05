@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Object::Accessor" provides an interface to create per object accessors..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Object::Accessor</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Object::Accessor(3pm)  Perl Programmers Reference Guide  Object::Accessor(3pm)
 
 
@@ -17,39 +19,39 @@ NAME
 
 SYNOPSIS
 	   ### using the object
-	   $obj = Object::Accessor->new;	# create object
-	   $obj = Object::Accessor->new(@list); # create object with accessors
-	   $obj = Object::Accessor->new(\%h);	# create object with accessors
+	   $obj = Object::Accessor-&gtnew;	# create object
+	   $obj = Object::Accessor-&gtnew(@list); # create object with accessors
+	   $obj = Object::Accessor-&gtnew(\%h);	# create object with accessors
 						# and their allow handlers
 
-	   $bool   = $obj->mk_accessors('foo'); # create accessors
-	   $bool   = $obj->mk_accessors(	# create accessors with input
-		      {foo => ALLOW_HANDLER} ); # validation
+	   $bool   = $obj-&gtmk_accessors('foo'); # create accessors
+	   $bool   = $obj-&gtmk_accessors(	# create accessors with input
+		      {foo =&gt ALLOW_HANDLER} ); # validation
 
-	   $bool   = $obj->mk_aliases(		# create an alias to an existing
-		       alias_name => 'method'); # method name
+	   $bool   = $obj-&gtmk_aliases(		# create an alias to an existing
+		       alias_name =&gt 'method'); # method name
 
-	   $clone  = $obj->mk_clone;		# create a clone of original
+	   $clone  = $obj-&gtmk_clone;		# create a clone of original
 						# object without data
-	   $bool   = $obj->mk_flush;		# clean out all data
+	   $bool   = $obj-&gtmk_flush;		# clean out all data
 
-	   @list   = $obj->ls_accessors;	# retrieves a list of all
+	   @list   = $obj-&gtls_accessors;	# retrieves a list of all
 						# accessors for this object
 
-	   $bar    = $obj->foo('bar');		# set 'foo' to 'bar'
-	   $bar    = $obj->foo();		# retrieve 'bar' again
+	   $bar    = $obj-&gtfoo('bar');		# set 'foo' to 'bar'
+	   $bar    = $obj-&gtfoo();		# retrieve 'bar' again
 
-	   $sub    = $obj->can('foo');		# retrieve coderef for
+	   $sub    = $obj-&gtcan('foo');		# retrieve coderef for
 						# 'foo' accessor
-	   $bar    = $sub->('bar');		# set 'foo' via coderef
-	   $bar    = $sub->();			# retrieve 'bar' by coderef
+	   $bar    = $sub-&gt('bar');		# set 'foo' via coderef
+	   $bar    = $sub-&gt();			# retrieve 'bar' by coderef
 
 	   ### using the object as base class
 	   package My::Class;
 	   use base 'Object::Accessor';
 
-	   $obj    = My::Class->new;		   # create base object
-	   $bool   = $obj->mk_accessors('foo');    # create accessors, etc...
+	   $obj    = My::Class-&gtnew;		   # create base object
+	   $bool   = $obj-&gtmk_accessors('foo');    # create accessors, etc...
 
 	   ### make all attempted access to non-existant accessors fatal
 	   ### (defaults to false)
@@ -59,32 +61,32 @@ SYNOPSIS
 	   $Object::Accessor::DEBUG = 1;
 
 	   ### advanced usage -- callbacks
-	   {   my $obj = Object::Accessor->new('foo');
-	       $obj->register_callback( sub { ... } );
+	   {   my $obj = Object::Accessor-&gtnew('foo');
+	       $obj-&gtregister_callback( sub { ... } );
 
-	       $obj->foo( 1 ); # these calls invoke the callback you registered
-	       $obj->foo()     # which allows you to change the get/set
+	       $obj-&gtfoo( 1 ); # these calls invoke the callback you registered
+	       $obj-&gtfoo()     # which allows you to change the get/set
 			       # behaviour and what is returned to the caller.
 	   }
 
 	   ### advanced usage -- lvalue attributes
-	   {   my $obj = Object::Accessor::Lvalue->new('foo');
-	       print $obj->foo = 1;	       # will print 1
+	   {   my $obj = Object::Accessor::Lvalue-&gtnew('foo');
+	       print $obj-&gtfoo = 1;	       # will print 1
 	   }
 
 	   ### advanced usage -- scoped attribute values
-	   {   my $obj = Object::Accessor->new('foo');
+	   {   my $obj = Object::Accessor-&gtnew('foo');
 
-	       $obj->foo( 1 );
-	       print $obj->foo; 	       # will print 1
+	       $obj-&gtfoo( 1 );
+	       print $obj-&gtfoo; 	       # will print 1
 
 	       ### bind the scope of the value of attribute 'foo'
 	       ### to the scope of '$x' -- when $x goes out of
 	       ### scope, 'foo's previous value will be restored
-	       {   $obj->foo( 2 => \my $x );
-		   print $obj->foo, ' ', $x;   # will print '2 2'
+	       {   $obj-&gtfoo( 2 =&gt \my $x );
+		   print $obj-&gtfoo, ' ', $x;   # will print '2 2'
 	       }
-	       print $obj->foo; 	       # will print 1
+	       print $obj-&gtfoo; 	       # will print 1
 	   }
 
 DESCRIPTION
@@ -98,7 +100,7 @@ DESCRIPTION
        "SYNOPSIS" for examples.
 
 METHODS
-   $object = Object::Accessor->new( [ARGS] );
+   $object = Object::Accessor-&gtnew( [ARGS] );
        Creates a new (and empty) "Object::Accessor" object. This method is
        inheritable.
 
@@ -109,7 +111,7 @@ METHODS
        "Object::Acccessor::Lvalue" namespace instead. See the section on
        "LVALUE ACCESSORS" below.
 
-   $bool = $object->mk_accessors( @ACCESSORS | \%ACCESSOR_MAP );
+   $bool = $object-&gtmk_accessors( @ACCESSORS | \%ACCESSOR_MAP );
        Creates a list of accessors for this object (and "NOT" for other ones
        in the same class!).  Will not clobber existing data, so if an accessor
        already exists, requesting to create again is effectively a "no-op".
@@ -121,10 +123,10 @@ METHODS
 
        For example:
 
-	   $object->mk_accessors( {
-	       foo     => qr/^\d+$/,	   # digits only
-	       bar     => [0,1],	   # booleans
-	       zot     => \&my_sub	   # a custom verification sub
+	   $object-&gtmk_accessors( {
+	       foo     =&gt qr/^\d+$/,	   # digits only
+	       bar     =&gt [0,1],	   # booleans
+	       zot     =&gt \&my_sub	   # a custom verification sub
 	   } );
 
        Returns true on success, false on failure.
@@ -142,34 +144,34 @@ METHODS
        temporarily be set to 2, until the end of the scope of $x, at which
        point the original value of 1 will be restored.
 
-	   my $obj = Object::Accessor->new;
+	   my $obj = Object::Accessor-&gtnew;
 
-	   $obj->mk_accessors('foo');
-	   $obj->foo( 1 );
-	   print $obj->foo;		   # will print 1
+	   $obj-&gtmk_accessors('foo');
+	   $obj-&gtfoo( 1 );
+	   print $obj-&gtfoo;		   # will print 1
 
 	   ### bind the scope of the value of attribute 'foo'
 	   ### to the scope of '$x' -- when $x goes out of
 	   ### scope, 'foo' previous value will be restored
-	   {   $obj->foo( 2 => \my $x );
-	       print $obj->foo, ' ', $x;   # will print '2 2'
+	   {   $obj-&gtfoo( 2 =&gt \my $x );
+	       print $obj-&gtfoo, ' ', $x;   # will print '2 2'
 	   }
-	   print $obj->foo;		   # will print 1
+	   print $obj-&gtfoo;		   # will print 1
 
        Note that all accessors are read/write for everyone. See the "TODO"
        section for details.
 
-   @list = $self->ls_accessors;
+   @list = $self-&gtls_accessors;
        Returns a list of accessors that are supported by the current object.
        The corresponding coderefs can be retrieved by passing this list one by
        one to the "can" method.
 
-   $ref = $self->ls_allow(KEY)
+   $ref = $self-&gtls_allow(KEY)
        Returns the allow handler for the given key, which can be used with
        "Params::Check"'s "allow()" handler. If there was no allow handler
        specified, an allow handler that always returns true will be returned.
 
-   $bool = $self->mk_aliases( alias => method, [alias2 => method2, ...] );
+   $bool = $self-&gtmk_aliases( alias =&gt method, [alias2 =&gt method2, ...] );
        Creates an alias for a given method name. For all intents and purposes,
        these two accessors are now identical for this object. This is akin to
        doing the following on the symbol table level:
@@ -178,28 +180,28 @@ METHODS
 
        This allows you to do the following:
 
-	 $self->mk_accessors('foo');
-	 $self->mk_aliases( bar => 'foo' );
+	 $self-&gtmk_accessors('foo');
+	 $self-&gtmk_aliases( bar =&gt 'foo' );
 
-	 $self->bar( 42 );
-	 print $self->foo;     # will print 42
+	 $self-&gtbar( 42 );
+	 print $self-&gtfoo;     # will print 42
 
-   $clone = $self->mk_clone;
+   $clone = $self-&gtmk_clone;
        Makes a clone of the current object, which will have the exact same
        accessors as the current object, but without the data stored in them.
 
-   $bool = $self->mk_flush;
+   $bool = $self-&gtmk_flush;
        Flushes all the data from the current object; all accessors will be set
        back to their default state of "undef".
 
        Returns true on success and false on failure.
 
-   $bool = $self->mk_verify;
+   $bool = $self-&gtmk_verify;
        Checks if all values in the current object are in accordance with their
        own allow handler. Specifically useful to check if an empty initialised
        object has been filled with values satisfying their own allow criteria.
 
-   $bool = $self->register_callback( sub { ... } );
+   $bool = $self-&gtregister_callback( sub { ... } );
        This method allows you to register a callback, that is invoked every
        time an accessor is called. This allows you to munge input data, access
        external data stores, etc.
@@ -209,7 +211,7 @@ METHODS
 
        Below is an example of the use of a callback.
 
-	   $object->some_method( "some_value" );
+	   $object-&gtsome_method( "some_value" );
 
 	   my $callback = sub {
 	       my $self    = shift; # the object
@@ -227,7 +229,7 @@ METHODS
        structure, you should use the "___get" and "___set" methods documented
        further down.
 
-   $bool = $self->can( METHOD_NAME )
+   $bool = $self-&gtcan( METHOD_NAME )
        This method overrides "UNIVERAL::can" in order to provide coderefs to
        accessors which are loaded on demand. It will behave just like
        "UNIVERSAL::can" where it can -- returning a class method if it exists,
@@ -235,29 +237,29 @@ METHODS
 
        You can use it as follows:
 
-	   $sub = $object->can('some_accessor');   # retrieve the coderef
-	   $sub->('foo');			   # 'some_accessor' now set
+	   $sub = $object-&gtcan('some_accessor');   # retrieve the coderef
+	   $sub-&gt('foo');			   # 'some_accessor' now set
 						   # to 'foo' for $object
-	   $foo = $sub->();			   # retrieve the contents
+	   $foo = $sub-&gt();			   # retrieve the contents
 						   # of 'some_accessor'
 
        See the "SYNOPSIS" for more examples.
 
-   $val = $self->___get( METHOD_NAME );
+   $val = $self-&gt___get( METHOD_NAME );
        Method to directly access the value of the given accessor in the
        object. It circumvents all calls to allow checks, callbakcs, etc.
 
        Use only if you "Know What You Are Doing"! General usage for this
        functionality would be in your own custom callbacks.
 
-   $bool = $self->___set( METHOD_NAME => VALUE );
+   $bool = $self-&gt___set( METHOD_NAME =&gt VALUE );
        Method to directly set the value of the given accessor in the object.
        It circumvents all calls to allow checks, callbakcs, etc.
 
        Use only if you "Know What You Are Doing"! General usage for this
        functionality would be in your own custom callbacks.
 
-   $bool = $self->___alias( ALIAS => METHOD );
+   $bool = $self-&gt___alias( ALIAS =&gt METHOD );
        Method to directly alias one accessor to another for this object. It
        circumvents all sanity checks, etc.
 
@@ -268,19 +270,19 @@ LVALUE ACCESSORS
        these, you should create your objects in the designated namespace,
        "Object::Accessor::Lvalue". For example:
 
-	   my $obj = Object::Accessor::Lvalue->new('foo');
-	   $obj->foo += 1;
-	   print $obj->foo;
+	   my $obj = Object::Accessor::Lvalue-&gtnew('foo');
+	   $obj-&gtfoo += 1;
+	   print $obj-&gtfoo;
 
        will actually print 1 and work as expected. Since this is an optional
        feature, that's not desirable in all cases, we require you to
        explicitly use the "Object::Accessor::Lvalue" class.
 
-       Doing the same on the standard "Object">Accessor> class would generate
+       Doing the same on the standard "Object"&gtAccessor&gt class would generate
        the following code & errors:
 
-	   my $obj = Object::Accessor->new('foo');
-	   $obj->foo += 1;
+	   my $obj = Object::Accessor-&gtnew('foo');
+	   $obj-&gtfoo += 1;
 
 	   Can't modify non-lvalue subroutine call
 
@@ -336,10 +338,10 @@ CAVEATS
 
 BUG REPORTS
        Please report bugs or other issues to
-       <bug-object-accessor@rt.cpan.org>.
+       &ltbug-object-accessor@rt.cpan.org&gt.
 
 AUTHOR
-       This module by Jos Boumans <kane@cpan.org>.
+       This module by Jos Boumans &ltkane@cpan.org&gt.
 
 COPYRIGHT
        This library is free software; you may redistribute and/or modify it
@@ -348,6 +350,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-02-12		 Object::Accessor(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

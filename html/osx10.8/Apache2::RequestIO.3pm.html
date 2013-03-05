@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Apache2::RequestIO" provides the API to perform IO on the Apache..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Apache2::RequestIO - Perl API for Apache request record IO</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apachapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::RequestIO(3)
 
 
@@ -18,19 +20,19 @@ NAME
 Synopsis
 	 use Apache2::RequestIO ();
 
-	 $rc = $r->discard_request_body();
+	 $rc = $r-&gtdiscard_request_body();
 
-	 $r->print("foo", "bar");
-	 $r->puts("foo", "bar"); # same as print, but no flushing
-	 $r->printf("%s $d", "foo", 5);
+	 $r-&gtprint("foo", "bar");
+	 $r-&gtputs("foo", "bar"); # same as print, but no flushing
+	 $r-&gtprintf("%s $d", "foo", 5);
 
-	 $r->read($buffer, $len);
+	 $r-&gtread($buffer, $len);
 
-	 $r->rflush();
+	 $r-&gtrflush();
 
-	 $r->sendfile($filename);
+	 $r-&gtsendfile($filename);
 
-	 $r->write("foobartarcar", 3, 5);
+	 $r-&gtwrite("foobartarcar", 3, 5);
 
 Description
        "Apache2::RequestIO" provides the API to perform IO on the Apache
@@ -47,7 +49,7 @@ API
        because failing to read the request body would cause it to be
        interpreted as the next request on a persistent connection.
 
-	 $rc = $r->discard_request_body();
+	 $rc = $r-&gtdiscard_request_body();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request
@@ -61,14 +63,14 @@ API
        Since we return an error status if the request is malformed, this
        routine should be called at the beginning of a no-body handler, e.g.,
 
-	  use Apache2::Const -compile => qw(OK);
-	  $rc = $r->discard_request_body;
+	  use Apache2::Const -compile =&gt qw(OK);
+	  $rc = $r-&gtdiscard_request_body;
 	  return $rc if $rc != Apache2::Const::OK;
 
    "print"
        Send data to the client.
 
-	 $cnt = $r->print(@msg);
+	 $cnt = $r-&gtprint(@msg);
 
        obj: $r ( "Apache2::RequestRec object" )
        arg1: @msg ( ARRAY )
@@ -88,7 +90,7 @@ API
    "printf"
        Format and send data to the client (same as "printf").
 
-	 $cnt = $r->printf($format, @args);
+	 $cnt = $r-&gtprintf($format, @args);
 
        obj: $r ( "Apache2::RequestRec object" )
        arg1: $format ( string )
@@ -109,7 +111,7 @@ API
    "puts"
        Send data to the client
 
-	 $cnt = $r->puts(@msg);
+	 $cnt = $r-&gtputs(@msg);
 
        obj: $r ( "Apache2::RequestRec object" )
        arg1: @msg ( ARRAY )
@@ -129,8 +131,8 @@ API
    "read"
        Read data from the client.
 
-	 $cnt = $r->read($buffer, $len);
-	 $cnt = $r->read($buffer, $len, $offset);
+	 $cnt = $r-&gtread($buffer, $len);
+	 $cnt = $r-&gtread($buffer, $len, $offset);
 
        obj: $r ( "Apache2::RequestRec object" )
        arg1: $buffer ( SCALAR )
@@ -159,21 +161,21 @@ API
    "rflush"
        Flush any buffered data to the client.
 
-	 $r->rflush();
+	 $r-&gtrflush();
 
        obj: $r ( "Apache2::RequestRec object" )
        ret: no return value
        since: 2.0.00
 
-       Unless STDOUT stream's $| is false, data sent via "$r->print()" is
+       Unless STDOUT stream's $| is false, data sent via "$r-&gtprint()" is
        buffered. This method flushes that data to the client.
 
    "sendfile"
        Send a file or a part of it
 
-	 $rc = $r->sendfile($filename);
-	 $rc = $r->sendfile($filename, $offset);
-	 $rc = $r->sendfile($filename, $offset, $len);
+	 $rc = $r-&gtsendfile($filename);
+	 $rc = $r-&gtsendfile($filename, $offset);
+	 $rc = $r-&gtsendfile($filename, $offset, $len);
 
        obj: $r ( "Apache2::RequestRec object" )
        arg1: $filename ( string )
@@ -207,9 +209,9 @@ API
    "write"
        Send partial string to the client
 
-	 $cnt = $r->write($buffer);
-	 $cnt = $r->write($buffer, $len);
-	 $cnt = $r->write($buffer, $len, $offset);
+	 $cnt = $r-&gtwrite($buffer);
+	 $cnt = $r-&gtwrite($buffer, $len);
+	 $cnt = $r-&gtwrite($buffer, $len, $offset);
 
        obj: $r ( "Apache2::RequestRec object" )
        arg1: $buffer ( SCALAR )
@@ -236,7 +238,7 @@ API
 
        Then:
 
-	 $r->write($string);
+	 $r-&gtwrite($string);
 
        sends:
 
@@ -244,7 +246,7 @@ API
 
        Whereas:
 
-	 $r->write($string, 3);
+	 $r-&gtwrite($string, 3);
 
        sends:
 
@@ -252,7 +254,7 @@ API
 
        And:
 
-	 $r->write($string, 3, 5);
+	 $r-&gtwrite($string, 3, 5);
 
        sends:
 
@@ -260,7 +262,7 @@ API
 
        Finally:
 
-	 $r->write($string, -1, 5);
+	 $r-&gtwrite($string, -1, 5);
 
        sends:
 
@@ -340,13 +342,13 @@ Deprecated API
 
    "get_client_block"
        This method is deprecated since the C implementation is buggy and we
-       don't want you to use it at all. Instead use the plain "$r->read()".
+       don't want you to use it at all. Instead use the plain "$r-&gtread()".
 
    "setup_client_block"
-       This method is deprecated since "$r->get_client_block" is deprecated.
+       This method is deprecated since "$r-&gtget_client_block" is deprecated.
 
    "should_client_block"
-       This method is deprecated since "$r->get_client_block" is deprecated.
+       This method is deprecated since "$r-&gtget_client_block" is deprecated.
 
 See Also
        mod_perl 2.0 documentation.
@@ -361,6 +363,6 @@ Authors
 
 
 perl apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::RequestIO(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

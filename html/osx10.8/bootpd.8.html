@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="bootpd implements a DHCP/BOOTP server as defined in RFC951, RFC1542,..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>bootpd -- DHCP/BOOTP/NetBoot server</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 
 BOOTPD(8)		  BSD System Manager's Manual		     BOOTPD(8)
 
@@ -145,25 +147,25 @@ CONFIGURING BOOTPD
      For example, to enable DHCP on interfaces en0 and en1, disable BOOTP on
      all interfaces, enable NetBoot on en1, and enable relay agent on inter-
      face en1, /etc/bootpd.plist could contain:
-     <?xml version="1.0" encoding="UTF-8"?>
-     <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-     <plist version="1.0">
-     <dict>
-	     <key>bootp_enabled</key>
-	     <false/>
-	     <key>dhcp_enabled</key>
-	     <array>
-		     <string>en0</string>
-		     <string>en1</string>
-	     </array>
-	     <key>netboot_enabled</key>
-	     <string>en1</string>
-	     <key>relay_enabled</key>
-	     <array>
-		     <string>en1</string>
-	     </array>
-     </dict>
-     </plist>
+     &lt?xml version="1.0" encoding="UTF-8"?&gt
+     &lt!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt
+     &ltplist version="1.0"&gt
+     &ltdict&gt
+	     &ltkey&gtbootp_enabled&lt/key&gt
+	     &ltfalse/&gt
+	     &ltkey&gtdhcp_enabled&lt/key&gt
+	     &ltarray&gt
+		     &ltstring&gten0&lt/string&gt
+		     &ltstring&gten1&lt/string&gt
+	     &lt/array&gt
+	     &ltkey&gtnetboot_enabled&lt/key&gt
+	     &ltstring&gten1&lt/string&gt
+	     &ltkey&gtrelay_enabled&lt/key&gt
+	     &ltarray&gt
+		     &ltstring&gten1&lt/string&gt
+	     &lt/array&gt
+     &lt/dict&gt
+     &lt/plist&gt
 
      Some additional properties are:
 
@@ -252,10 +254,10 @@ CONFIGURING BOOTPD
      net_range	   (Array of String) The network address range stored as two
 		   values: the first IP address and the last IP address.  For
 		   example:
-			<array>
-			     <string>17.202.40.2</string>
-			     <string>17.202.43.254</string>
-			</array>
+			&ltarray&gt
+			     &ltstring&gt17.202.40.2&lt/string&gt
+			     &ltstring&gt17.202.43.254&lt/string&gt
+			&lt/array&gt
 		   This property is required.
 
      allocate	   (Boolean) Indicates whether the DHCP service should allo-
@@ -365,10 +367,10 @@ CONFIGURING BOOTPD
 
      Regardless of whether bootpd knows the type of the option or not, you can
      always specify the DHCP option using the data property list type  e.g.:
-	  <key>dhcp_option_128</key>
-	  <data>
+	  &ltkey&gtdhcp_option_128&lt/key&gt
+	  &ltdata&gt
 	  AAqV1Tzo
-	  </data>
+	  &lt/data&gt
 
    NetBoot Server Controls
      The "NetBoot" property in /etc/bootpd.plist is encoded as a dictionary,
@@ -656,8 +658,8 @@ NETBOOT SERVICE
 		       ing the NetBootSPx directory is exported via NFS.
 		       Indirect NFS paths are also supported using the syntax:
 
-			   <path> = <host>:<mount_path>[:<image_path>]
-			   <host> = <IP address> | <host_name>
+			   &ltpath&gt = &lthost&gt:&ltmount_path&gt[:&ltimage_path&gt]
+			   &lthost&gt = &ltIP address&gt | &lthost_name&gt
 
 		       For example, in the path:
 
@@ -672,14 +674,14 @@ NETBOOT SERVICE
 		       server assumes that the .nbi directory under NetBootSPx
 		       is exported via HTTP using the convention:
 
-			   http://<server_ip>/NetBoot/NetBootSPx/<image_dir>.nbi
+			   http://&ltserver_ip&gt/NetBoot/NetBootSPx/&ltimage_dir&gt.nbi
 
 		       Indirect HTTP paths are also supported using the HTTP
 		       URL syntax:
 
-			   <path> = http://[<user>@]<host>[:<port>]/<image_path>
-			   <user> = <user_name>:<password>
-			   <host> = <IP address> | <host_name>
+			   &ltpath&gt = http://[&ltuser&gt@]&lthost&gt[:&ltport&gt]/&ltimage_path&gt
+			   &ltuser&gt = &ltuser_name&gt:&ltpassword&gt
+			   &lthost&gt = &ltIP address&gt | &lthost_name&gt
 
 		       Examples:
 
@@ -730,7 +732,7 @@ NETBOOT SERVICE
 		       Architectures property and the BootFile property:
 
 		       bootfile = plist.BootFile.string
-		       for i = 0; i < plist.Architectures.array.count; i++
+		       for i = 0; i &lt plist.Architectures.array.count; i++
 			   arch = plist.Architectures.array.value[i].string
 			   if $arch/$bootfile exists
 			       use $arch/$bootfile
@@ -790,28 +792,28 @@ NETBOOT SERVICE
 	 Applications HD.img
 
      The NBImageInfo.plist contains:
-     <?xml version="1.0" encoding="UTF-8"?>
-     <!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
-     <plist version="0.9">
-     <dict>
-	     <key>BootFile</key>
-	     <string>Mac OS ROM</string>
-	     <key>IsEnabled</key>
-	     <true/>
-	     <key>Index</key>
-	     <integer>4</integer>
-	     <key>IsInstall</key>
-	     <false/>
-	     <key>Name</key>
-	     <string>Mac OS 9.2</string>
-	     <key>SharedImage</key>
-	     <string>NetBoot HD.img</string>
-	     <key>PrivateImage</key>
-	     <string>Applications HD.img</string>
-	     <key>Type</key>
-	     <string>Classic</string>
-     </dict>
-     </plist>
+     &lt?xml version="1.0" encoding="UTF-8"?&gt
+     &lt!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd"&gt
+     &ltplist version="0.9"&gt
+     &ltdict&gt
+	     &ltkey&gtBootFile&lt/key&gt
+	     &ltstring&gtMac OS ROM&lt/string&gt
+	     &ltkey&gtIsEnabled&lt/key&gt
+	     &lttrue/&gt
+	     &ltkey&gtIndex&lt/key&gt
+	     &ltinteger&gt4&lt/integer&gt
+	     &ltkey&gtIsInstall&lt/key&gt
+	     &ltfalse/&gt
+	     &ltkey&gtName&lt/key&gt
+	     &ltstring&gtMac OS 9.2&lt/string&gt
+	     &ltkey&gtSharedImage&lt/key&gt
+	     &ltstring&gtNetBoot HD.img&lt/string&gt
+	     &ltkey&gtPrivateImage&lt/key&gt
+	     &ltstring&gtApplications HD.img&lt/string&gt
+	     &ltkey&gtType&lt/key&gt
+	     &ltstring&gtClassic&lt/string&gt
+     &lt/dict&gt
+     &lt/plist&gt
 
      The Type is Classic, which means this is a Mac OS 9 NetBoot image, so the
      implied Kind value is 0 (Mac OS 9).  The BootFile property points to "Mac
@@ -833,26 +835,26 @@ NETBOOT SERVICE
 	 Jaguar.dmg
 
      The NBImageInfo.plist contains:
-     <?xml version="1.0" encoding="UTF-8"?>
-     <!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
-     <plist version="0.9">
-     <dict>
-	     <key>BootFile</key>
-	     <string>booter</string>
-	     <key>IsEnabled</key>
-	     <true/>
-	     <key>Index</key>
-	     <integer>4096</integer>
-	     <key>IsInstall</key>
-	     <false/>
-	     <key>Name</key>
-	     <string>Mac OS X (Jaguar)</string>
-	     <key>RootPath</key>
-	     <string>Jaguar.dmg</string>
-	     <key>Type</key>
-	     <string>NFS</string>
-     </dict>
-     </plist>
+     &lt?xml version="1.0" encoding="UTF-8"?&gt
+     &lt!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd"&gt
+     &ltplist version="0.9"&gt
+     &ltdict&gt
+	     &ltkey&gtBootFile&lt/key&gt
+	     &ltstring&gtbooter&lt/string&gt
+	     &ltkey&gtIsEnabled&lt/key&gt
+	     &lttrue/&gt
+	     &ltkey&gtIndex&lt/key&gt
+	     &ltinteger&gt4096&lt/integer&gt
+	     &ltkey&gtIsInstall&lt/key&gt
+	     &ltfalse/&gt
+	     &ltkey&gtName&lt/key&gt
+	     &ltstring&gtMac OS X (Jaguar)&lt/string&gt
+	     &ltkey&gtRootPath&lt/key&gt
+	     &ltstring&gtJaguar.dmg&lt/string&gt
+	     &ltkey&gtType&lt/key&gt
+	     &ltstring&gtNFS&lt/string&gt
+     &lt/dict&gt
+     &lt/plist&gt
 
      The Type is NFS, and no Kind is specified, so the server assumes this is
      a Mac OS X image with Kind 1.  The BootFile property points to "booter".
@@ -881,31 +883,31 @@ NETBOOT SERVICE
 	 Tiger.dmg
 
      The NBImageInfo.plist contains:
-     <?xml version="1.0" encoding="UTF-8"?>
-     <!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
-     <plist version="0.9">
-     <dict>
-	     <key>Architectures</key>
-	     <array>
-		     <string>i386</string>
-		     <string>ppc</string>
-	     </array>
-	     <key>BootFile</key>
-	     <string>booter</string>
-	     <key>IsInstall</key>
-	     <true/>
-	     <key>IsEnabled</key>
-	     <true/>
-	     <key>Index</key>
-	     <integer>5000</integer>
-	     <key>Name</key>
-	     <string>Mac OS X (Tiger)</string>
-	     <key>RootPath</key>
-	     <string>Tiger.dmg</string>
-	     <key>Type</key>
-	     <string>NFS</string>
-     </dict>
-     </plist>
+     &lt?xml version="1.0" encoding="UTF-8"?&gt
+     &lt!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd"&gt
+     &ltplist version="0.9"&gt
+     &ltdict&gt
+	     &ltkey&gtArchitectures&lt/key&gt
+	     &ltarray&gt
+		     &ltstring&gti386&lt/string&gt
+		     &ltstring&gtppc&lt/string&gt
+	     &lt/array&gt
+	     &ltkey&gtBootFile&lt/key&gt
+	     &ltstring&gtbooter&lt/string&gt
+	     &ltkey&gtIsInstall&lt/key&gt
+	     &lttrue/&gt
+	     &ltkey&gtIsEnabled&lt/key&gt
+	     &lttrue/&gt
+	     &ltkey&gtIndex&lt/key&gt
+	     &ltinteger&gt5000&lt/integer&gt
+	     &ltkey&gtName&lt/key&gt
+	     &ltstring&gtMac OS X (Tiger)&lt/string&gt
+	     &ltkey&gtRootPath&lt/key&gt
+	     &ltstring&gtTiger.dmg&lt/string&gt
+	     &ltkey&gtType&lt/key&gt
+	     &ltstring&gtNFS&lt/string&gt
+     &lt/dict&gt
+     &lt/plist&gt
 
      This example shows how a NetBoot Image that supports multiple architec-
      tures is configured.  The bootfiles for "ppc" reside directly within the
@@ -955,6 +957,6 @@ SEE ALSO
      bootptab(5), xinetd(8), tftpd(8), exports(5)
 
 Mac OS X		       February 8, 2007 		      Mac OS X
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This tutorial will educate the reader on the steps involved in creating..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlXStut - Tutorial for writing XSUBs</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLXSTUT(1)	       Perl Programmers Reference Guide 	  PERLXSTUT(1)
 
 
@@ -59,7 +61,7 @@ SPECIAL NOTES
        in Makefile.PL for this purpose:
 
 	   eval { require 5.007 }
-	       or die <<EOD;
+	       or die &lt&ltEOD;
 	   ############
 	   ### This module uses frobnication framework which is not available before
 	   ### version 5.007 of Perl.  Upgrade your Perl before installing Kara::Mba.
@@ -110,11 +112,11 @@ TUTORIAL
 	   # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 	   # the contents of the Makefile that is written.
 	   WriteMakefile(
-	       NAME	    => 'Mytest',
-	       VERSION_FROM => 'Mytest.pm', # finds $VERSION
-	       LIBS	    => [''],   # e.g., '-lm'
-	       DEFINE	    => '',     # e.g., '-DHAVE_SOMETHING'
-	       INC	    => '',     # e.g., '-I/usr/include/other'
+	       NAME	    =&gt 'Mytest',
+	       VERSION_FROM =&gt 'Mytest.pm', # finds $VERSION
+	       LIBS	    =&gt [''],   # e.g., '-lm'
+	       DEFINE	    =&gt '',     # e.g., '-DHAVE_SOMETHING'
+	       INC	    =&gt '',     # e.g., '-I/usr/include/other'
 	   );
 
        The file Mytest.pm should start with something like this:
@@ -128,7 +130,7 @@ TUTORIAL
 	   require Exporter;
 
 	   our @ISA = qw(Exporter);
-	   our %EXPORT_TAGS = ( 'all' => [ qw(
+	   our %EXPORT_TAGS = ( 'all' =&gt [ qw(
 
 	   ) ] );
 
@@ -188,7 +190,7 @@ TUTORIAL
 
 	   % make
 	   cp lib/Mytest.pm blib/lib/Mytest.pm
-	   perl xsubpp	-typemap typemap  Mytest.xs > Mytest.xsc && mv Mytest.xsc Mytest.c
+	   perl xsubpp	-typemap typemap  Mytest.xs &gt Mytest.xsc && mv Mytest.xsc Mytest.c
 	   Please specify prototyping behavior for Mytest.xs (see perlxs manual)
 	   cc -c     Mytest.c
 	   Running Mkbootstrap for Mytest ()
@@ -264,7 +266,7 @@ TUTORIAL
        number of tests to confirm the behavior of the extension, printing "ok"
        when the test is correct, "not ok" when it is not.
 
-	   use Test::More tests => 4;
+	   use Test::More tests =&gt 4;
 	   BEGIN { use_ok('Mytest') };
 
 	   #########################
@@ -376,9 +378,9 @@ TUTORIAL
 	       round(arg)
 		       double  arg
 		   CODE:
-		       if (arg > 0.0) {
+		       if (arg &gt 0.0) {
 			       arg = floor(arg + 0.5);
-		       } else if (arg < 0.0) {
+		       } else if (arg &lt 0.0) {
 			       arg = ceil(arg - 0.5);
 		       } else {
 			       arg = 0.0;
@@ -389,7 +391,7 @@ TUTORIAL
        Edit the Makefile.PL file so that the corresponding line looks like
        this:
 
-	       'LIBS'	   => ['-lm'],	 # e.g., '-lm'
+	       'LIBS'	   =&gt ['-lm'],	 # e.g., '-lm'
 
        Generate the Makefile and run make.  Change the test number in Mytest.t
        to "9" and add the following tests:
@@ -465,9 +467,9 @@ TUTORIAL
 	       PERL_UNUSED_VAR(cv); /* -W */
 		   {
 		       double  arg = (double)SvNV(ST(0));      /* XXXXX */
-		       if (arg > 0.0) {
+		       if (arg &gt 0.0) {
 			       arg = floor(arg + 0.5);
-		       } else if (arg < 0.0) {
+		       } else if (arg &lt 0.0) {
 			       arg = ceil(arg - 0.5);
 		       } else {
 			       arg = 0.0;
@@ -520,7 +522,7 @@ TUTORIAL
 
        Also create a file mylib.c that looks like this:
 
-	       #include <stdlib.h>
+	       #include &ltstdlib.h&gt
 	       #include "./mylib.h"
 
 	       double
@@ -534,9 +536,9 @@ TUTORIAL
 	       use ExtUtils::MakeMaker;
 	       $Verbose = 1;
 	       WriteMakefile(
-		   NAME   => 'Mytest2::mylib',
-		   SKIP   => [qw(all static static_lib dynamic dynamic_lib)],
-		   clean  => {'FILES' => 'libmylib$(LIB_EXT)'},
+		   NAME   =&gt 'Mytest2::mylib',
+		   SKIP   =&gt [qw(all static static_lib dynamic dynamic_lib)],
+		   clean  =&gt {'FILES' =&gt 'libmylib$(LIB_EXT)'},
 	       );
 
 
@@ -574,12 +576,12 @@ TUTORIAL
        the WriteMakefile call so that it looks like this:
 
 	       WriteMakefile(
-		   'NAME'      => 'Mytest2',
-		   'VERSION_FROM' => 'Mytest2.pm', # finds $VERSION
-		   'LIBS'      => [''],   # e.g., '-lm'
-		   'DEFINE'    => '',	  # e.g., '-DHAVE_SOMETHING'
-		   'INC'       => '',	  # e.g., '-I/usr/include/other'
-		   'MYEXTLIB' => 'mylib/libmylib$(LIB_EXT)',
+		   'NAME'      =&gt 'Mytest2',
+		   'VERSION_FROM' =&gt 'Mytest2.pm', # finds $VERSION
+		   'LIBS'      =&gt [''],   # e.g., '-lm'
+		   'DEFINE'    =&gt '',	  # e.g., '-DHAVE_SOMETHING'
+		   'INC'       =&gt '',	  # e.g., '-I/usr/include/other'
+		   'MYEXTLIB' =&gt 'mylib/libmylib$(LIB_EXT)',
 	       );
 
        and then at the end add a subroutine (which will override the pre-
@@ -633,7 +635,7 @@ TUTORIAL
 
 	       is( &Mytest2::foo(1, 2, "Hello, world!"), 7 );
 	       is( &Mytest2::foo(1, 2, "0.0"), 7 );
-	       ok( abs(&Mytest2::foo(0, 0, "-3.4") - 0.6) <= 0.01 );
+	       ok( abs(&Mytest2::foo(0, 0, "-3.4") - 0.6) &lt= 0.01 );
 
        (When dealing with floating-point comparisons, it is best to not check
        for equality, but rather that the difference between the expected and
@@ -990,7 +992,7 @@ TUTORIAL
        You'll also need to add the following code to the top of the .xs file,
        just after the include of "XSUB.h":
 
-	       #include <sys/vfs.h>
+	       #include &ltsys/vfs.h&gt
 
        Also add the following code segment to Mytest.t while incrementing the
        "9" tests to "11":
@@ -1081,13 +1083,13 @@ TUTORIAL
 
 		   if ((!SvROK(paths))
 		       || (SvTYPE(SvRV(paths)) != SVt_PVAV)
-		       || ((numpaths = av_len((AV *)SvRV(paths))) < 0))
+		       || ((numpaths = av_len((AV *)SvRV(paths))) &lt 0))
 		   {
 		       XSRETURN_UNDEF;
 		   }
 		   results = (AV *)sv_2mortal((SV *)newAV());
 	       CODE:
-		   for (n = 0; n <= numpaths; n++) {
+		   for (n = 0; n &lt= numpaths; n++) {
 		       HV * rh;
 		       STRLEN l;
 		       char * fn = SvPV(*av_fetch((AV *)SvRV(paths), n, 0), l);
@@ -1118,8 +1120,8 @@ TUTORIAL
        tests to "13":
 
 	       $results = Mytest::multi_statfs([ '/', '/blech' ]);
-	       ok( ref $results->[0]) );
-	       ok( ! ref $results->[1] );
+	       ok( ref $results-&gt[0]) );
+	       ok( ! ref $results-&gt[1] );
 
    New Things in this Example
        There are a number of new concepts introduced here, described below:
@@ -1196,7 +1198,7 @@ TUTORIAL
 	       #include "perl.h"
 	       #include "XSUB.h"
 
-	       #include <stdio.h>
+	       #include &ltstdio.h&gt
 
 	       int
 	       fputs(s, stream)
@@ -1314,7 +1316,7 @@ See also
        perlpod.
 
 Author
-       Jeff Okamoto <okamoto@corp.hp.com>
+       Jeff Okamoto &ltokamoto@corp.hp.com&gt
 
        Reviewed and assisted by Dean Roehrich, Ilya Zakharevich, Andreas
        Koenig, and Tim Bunce.
@@ -1330,6 +1332,6 @@ Author
 
 
 perl v5.12.4			  2011-06-07			  PERLXSTUT(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

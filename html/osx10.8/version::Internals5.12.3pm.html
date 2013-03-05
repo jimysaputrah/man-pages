@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Overloaded version objects for all modern versions of Perl.  This..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>version::Internals - Perl extension for Version Objects</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 version::Internals(3pm)Perl Programmers Reference Guideversion::Internals(3pm)
 
 
@@ -48,9 +50,9 @@ WHAT IS A VERSION?
        default stringification will yield the version "Normal Form" only if
        required:
 
-	 $v  = version->new(1.002);	# 1.002, but compares like 1.2.0
-	 $v  = version->new(1.002003);	# 1.002003
-	 $v2 = version->new("v1.2.3");	# v1.2.3
+	 $v  = version-&gtnew(1.002);	# 1.002, but compares like 1.2.0
+	 $v  = version-&gtnew(1.002003);	# 1.002003
+	 $v2 = version-&gtnew("v1.2.3");	# v1.2.3
 
        In specific, version numbers initialized as "Decimal Versions" will
        stringify as they were originally created (i.e. the same string that
@@ -69,12 +71,12 @@ WHAT IS A VERSION?
        purposes of comparison with other version objects.  For example:
 
 					  # Prints     Equivalent to
-	 $v = version->new(	 1.2);	  # 1.2        v1.200.0
-	 $v = version->new(	1.02);	  # 1.02       v1.20.0
-	 $v = version->new(    1.002);	  # 1.002      v1.2.0
-	 $v = version->new(   1.0023);	  # 1.0023     v1.2.300
-	 $v = version->new(  1.00203);	  # 1.00203    v1.2.30
-	 $v = version->new( 1.002003);	  # 1.002003   v1.2.3
+	 $v = version-&gtnew(	 1.2);	  # 1.2        v1.200.0
+	 $v = version-&gtnew(	1.02);	  # 1.02       v1.20.0
+	 $v = version-&gtnew(    1.002);	  # 1.002      v1.2.0
+	 $v = version-&gtnew(   1.0023);	  # 1.0023     v1.2.300
+	 $v = version-&gtnew(  1.00203);	  # 1.00203    v1.2.30
+	 $v = version-&gtnew( 1.002003);	  # 1.002003   v1.2.3
 
        All of the preceding examples are true whether or not the input value
        is quoted.  The important feature is that the input value contains only
@@ -99,8 +101,8 @@ WHAT IS A VERSION?
        single decimal point, e.g.:
 
 					  # Prints
-	 $v = version->new( "v1.200");	  # v1.200.0
-	 $v = version->new("v1.20.0");	  # v1.20.0
+	 $v = version-&gtnew( "v1.200");	  # v1.200.0
+	 $v = version-&gtnew("v1.20.0");	  # v1.20.0
 	 $v = qv("v1.2.3");		  # v1.2.3
 	 $v = qv("1.2.3");		  # v1.2.3
 	 $v = qv("1.20");		  # v1.20.0
@@ -121,11 +123,11 @@ WHAT IS A VERSION?
        underscore:
 
 	 # Declaring
-	 use version 0.77; our $VERSION = version->declare("v1.2_3");
+	 use version 0.77; our $VERSION = version-&gtdeclare("v1.2_3");
 
 	 # Parsing
-	 $v1 = version->parse("v1.2_3");
-	 $v1 = version->parse("1.002_003");
+	 $v1 = version-&gtparse("v1.2_3");
+	 $v1 = version-&gtparse("1.002_003");
 
        Note that you must quote the version when writing an alpha Decimal
        version.  The stringified form of Decimal versions will always be the
@@ -254,16 +256,16 @@ IMPLEMENTATION DETAILS
        for example, but other operations are not likely to be what you intend.
        For example:
 
-	 $VERSION = version->new((qw$Revision: 1.4)[1]/10);
+	 $VERSION = version-&gtnew((qw$Revision: 1.4)[1]/10);
 	 print $VERSION;	  # yields 0.14
-	 $V2 = version->new(100/9); # Integer overflow in decimal number
+	 $V2 = version-&gtnew(100/9); # Integer overflow in decimal number
 	 print $V2;		  # yields something like 11.111.111.100
 
        Perl 5.8.1 and beyond are able to automatically quote v-strings but
        that is not possible in earlier versions of Perl.  In other words:
 
-	 $version = version->new("v2.5.4");  # legal in all versions of Perl
-	 $newvers = version->new(v2.5.4);    # legal only in Perl >= 5.8.1
+	 $version = version-&gtnew("v2.5.4");  # legal in all versions of Perl
+	 $newvers = version-&gtnew(v2.5.4);    # legal only in Perl &gt= 5.8.1
 
    What about v-strings?
        There are two ways to enter v-strings: a bare number with two or more
@@ -277,7 +279,7 @@ IMPLEMENTATION DETAILS
        strongly discouraged in all circumstances.  Also, bare v-strings are
        not completely supported in any version of Perl prior to 5.8.1.
 
-       If you insist on using bare v-strings with Perl > 5.6.0, be aware of
+       If you insist on using bare v-strings with Perl &gt 5.6.0, be aware of
        the following limitations:
 
        1) For Perl releases 5.6.0 through 5.8.0, the v-string code merely
@@ -307,10 +309,10 @@ IMPLEMENTATION DETAILS
        several components:
 
 	   bless( {
-	     'original' => 'v1.2.3_4',
-	     'alpha' => 1,
-	     'qv' => 1,
-	     'version' => [
+	     'original' =&gt 'v1.2.3_4',
+	     'alpha' =&gt 1,
+	     'qv' =&gt 1,
+	     'version' =&gt [
 	       1,
 	       2,
 	       3,
@@ -375,11 +377,11 @@ IMPLEMENTATION DETAILS
        string (to determine whether a given module is available) may need to
        be changed.  It is always better to use the built-in comparison
        implicit in "use" or "require", rather than manually poking at
-       "class->VERSION" and then doing a comparison yourself.
+       "class-&gtVERSION" and then doing a comparison yourself.
 
        The replacement UNIVERSAL::VERSION, when used as a function, like this:
 
-	 print $module->VERSION;
+	 print $module-&gtVERSION;
 
        will also exclusively return the stringified form.  See Stringification
        for more details.
@@ -411,7 +413,7 @@ USAGE DETAILS
 	     Example version 1.002003 (v1.2.3) required--this is only version 1.002002 (v1.2.2)...
 
        Dotted-Decimal version work sometimes
-	   With Perl >= 5.6.2, you can also use a line like this:
+	   With Perl &gt= 5.6.2, you can also use a line like this:
 
 	     use Example 1.2.3;
 
@@ -436,12 +438,12 @@ USAGE DETAILS
 	   In order to facilitate this feature, the following code can be
 	   employed:
 
-	     $VERSION = version->new(qw$Revision: 2.7 $);
+	     $VERSION = version-&gtnew(qw$Revision: 2.7 $);
 
 	   and the version object will be created as if the following code
 	   were used:
 
-	     $VERSION = version->new("v2.7");
+	     $VERSION = version-&gtnew("v2.7");
 
 	   In other words, the version will be automatically parsed out of the
 	   string, and it will be quoted to preserve the meaning CVS normally
@@ -452,18 +454,18 @@ USAGE DETAILS
 	   A new version object can be created as a copy of an existing
 	   version object, either as a class method:
 
-	     $v1 = version->new(12.3);
-	     $v2 = version->new($v1);
+	     $v1 = version-&gtnew(12.3);
+	     $v2 = version-&gtnew($v1);
 
 	   or as an object method:
 
-	     $v1 = version->new(12.3);
-	     $v2 = $v1->new(12.3);
+	     $v1 = version-&gtnew(12.3);
+	     $v2 = $v1-&gtnew(12.3);
 
 	   and in each case, $v1 and $v2 will be identical.  NOTE: if you
 	   create a new object using an existing object like this:
 
-	     $v2 = $v1->new();
+	     $v2 = $v1-&gtnew();
 
 	   the new object will not be a clone of the existing object.  In the
 	   example case, $v2 will be an empty object of the same type as $v1.
@@ -499,9 +501,9 @@ USAGE DETAILS
 
        For the subsequent examples, the following three objects will be used:
 
-	 $ver	= version->new("1.2.3.4"); # see "Quoting Rules"
-	 $alpha = version->new("1.2.3_4"); # see "Alpha Versions"
-	 $nver	= version->new(1.002);	   # see "Decimal Versions"
+	 $ver	= version-&gtnew("1.2.3.4"); # see "Quoting Rules"
+	 $alpha = version-&gtnew("1.2.3_4"); # see "Alpha Versions"
+	 $nver	= version-&gtnew(1.002);	   # see "Decimal Versions"
 
        Normal Form
 	   For any version object which is initialized with multiple decimal
@@ -510,18 +512,18 @@ USAGE DETAILS
 	   in a normalized or reduced form (no extraneous zeros), and with a
 	   leading 'v':
 
-	     print $ver->normal;	 # prints as v1.2.3.4
-	     print $ver->stringify;	 # ditto
+	     print $ver-&gtnormal;	 # prints as v1.2.3.4
+	     print $ver-&gtstringify;	 # ditto
 	     print $ver;		 # ditto
-	     print $nver->normal;	 # prints as v1.2.0
-	     print $nver->stringify;	 # prints as 1.002, see "Stringification"
+	     print $nver-&gtnormal;	 # prints as v1.2.0
+	     print $nver-&gtstringify;	 # prints as 1.002, see "Stringification"
 
 	   In order to preserve the meaning of the processed version, the
 	   normalized representation will always contain at least three sub
 	   terms.  In other words, the following is guaranteed to always be
 	   true:
 
-	     my $newver = version->new($ver->stringify);
+	     my $newver = version-&gtnew($ver-&gtstringify);
 	     if ($newver eq $ver ) # always true
 	       {...}
 
@@ -529,12 +531,12 @@ USAGE DETAILS
 	   Although all mathematical operations on version objects are
 	   forbidden by default, it is possible to retrieve a number which
 	   corresponds to the version object through the use of the
-	   $obj->numify method.  For formatting purposes, when displaying a
+	   $obj-&gtnumify method.  For formatting purposes, when displaying a
 	   number which corresponds a version object, all sub versions are
 	   assumed to have three decimal places.  So for example:
 
-	     print $ver->numify;	 # prints 1.002003004
-	     print $nver->numify;	 # prints 1.002
+	     print $ver-&gtnumify;	 # prints 1.002003004
+	     print $nver-&gtnumify;	 # prints 1.002
 
 	   Unlike the stringification operator, there is never any need to
 	   append trailing zeros to preserve the correct version value.
@@ -552,8 +554,8 @@ USAGE DETAILS
 
 	     Initialized as	     Stringifies to
 	     ==============	     ==============
-	     version->new("1.2")       1.2
-	     version->new("v1.2")     v1.2
+	     version-&gtnew("1.2")       1.2
+	     version-&gtnew("v1.2")     v1.2
 	     qv("1.2.3")	       1.2.3
 	     qv("v1.3.5")	      v1.3.5
 	     qv("1.2")		      v1.2   ### exceptional case
@@ -572,7 +574,7 @@ USAGE DETAILS
 	   rules by manually applying numify() and normal() will sometimes
 	   yield surprising results:
 
-	     print version->new(version->new("v1.0")->numify)->normal; # v1.0.0
+	     print version-&gtnew(version-&gtnew("v1.0")-&gtnumify)-&gtnormal; # v1.0.0
 
 	   The reason for this is that the numify() operator will turn "v1.0"
 	   into the equivalent string "1.000000".  Forcing the outer version
@@ -582,14 +584,14 @@ USAGE DETAILS
 	   As the example in new() shows, you can always create a copy of an
 	   existing version object with the same value by the very compact:
 
-	     $v2 = $v1->new($v1);
+	     $v2 = $v1-&gtnew($v1);
 
 	   and be assured that both $v1 and $v2 will be completely equivalent,
 	   down to the same internal representation as well as
 	   stringification.
 
        Comparison operators
-	   Both "cmp" and "<=>" operators perform the same comparison between
+	   Both "cmp" and "&lt=&gt" operators perform the same comparison between
 	   terms (upgrading to a version object automatically).  Perl
 	   automatically generates all of the other comparison operators based
 	   on those two.  In addition to the obvious equalities listed below,
@@ -601,8 +603,8 @@ USAGE DETAILS
 
 	     As Number	      As String 	  Truth Value
 	     -------------    ----------------	  -----------
-	     $ver >  1.0      $ver gt "1.0"	  true
-	     $ver <  2.5      $ver lt		  true
+	     $ver &gt  1.0      $ver gt "1.0"	  true
+	     $ver &lt  2.5      $ver lt		  true
 	     $ver != 1.3      $ver ne "1.3"	  true
 	     $ver == 1.2      $ver eq "1.2"	  false
 	     $ver == 1.2.3.4  $ver eq "1.2.3.4"   see discussion below
@@ -617,8 +619,8 @@ USAGE DETAILS
 	   unexpected results at first glance.	For example, the following
 	   inequalities hold:
 
-	     version->new(0.96)     > version->new(0.95); # 0.960.0 > 0.950.0
-	     version->new("0.96.1") < version->new(0.95); # 0.096.1 < 0.950.0
+	     version-&gtnew(0.96)     &gt version-&gtnew(0.95); # 0.960.0 &gt 0.950.0
+	     version-&gtnew("0.96.1") &lt version-&gtnew(0.95); # 0.096.1 &lt 0.950.0
 
 	   For this reason, it is best to use either exclusively "Decimal
 	   Versions" or "Dotted-Decimal Versions" with multiple decimal
@@ -628,19 +630,19 @@ USAGE DETAILS
 	   If you need to test whether a version object has been initialized,
 	   you can simply test it directly:
 
-	     $vobj = version->new($something);
+	     $vobj = version-&gtnew($something);
 	     if ( $vobj )   # true only if $something was non-blank
 
 	   You can also test whether a version object is an alpha version, for
 	   example to prevent the use of some feature not present in the main
 	   release:
 
-	     $vobj = version->new("1.2_3"); # MUST QUOTE
+	     $vobj = version-&gtnew("1.2_3"); # MUST QUOTE
 	     ...later...
-	     if ( $vobj->is_alpha )	  # True
+	     if ( $vobj-&gtis_alpha )	  # True
 
 AUTHOR
-       John Peacock <jpeacock@cpan.org>
+       John Peacock &ltjpeacock@cpan.org&gt
 
 SEE ALSO
        perl.
@@ -648,6 +650,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-07	       version::Internals(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

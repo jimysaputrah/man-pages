@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="XML::SAX is a SAX parser access API for Perl. It includes classes and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>XML::SAX - Simple API for XML</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 SAX(3)		      User Contributed Perl Documentation		SAX(3)
 
 
@@ -19,16 +21,16 @@ SYNOPSIS
 	 use XML::SAX;
 
 	 # get a list of known parsers
-	 my $parsers = XML::SAX->parsers();
+	 my $parsers = XML::SAX-&gtparsers();
 
 	 # add/update a parser
-	 XML::SAX->add_parser(q(XML::SAX::PurePerl));
+	 XML::SAX-&gtadd_parser(q(XML::SAX::PurePerl));
 
 	 # remove parser
-	 XML::SAX->remove_parser(q(XML::SAX::Foodelberry));
+	 XML::SAX-&gtremove_parser(q(XML::SAX::Foodelberry));
 
 	 # save parsers
-	 XML::SAX->save_parsers();
+	 XML::SAX-&gtsave_parsers();
 
 DESCRIPTION
        XML::SAX is a SAX parser access API for Perl. It includes classes and
@@ -43,10 +45,10 @@ USING A SAX2 PARSER
 
 	 use XML::SAX::ParserFactory;
 	 use XML::SAX::XYZHandler;
-	 my $handler = XML::SAX::XYZHandler->new();
-	 my $p = XML::SAX::ParserFactory->parser(Handler => $handler);
-	 $p->parse_uri("foo.xml");
-	 # or $p->parse_string("<foo/>") or $p->parse_file($fh);
+	 my $handler = XML::SAX::XYZHandler-&gtnew();
+	 my $p = XML::SAX::ParserFactory-&gtparser(Handler =&gt $handler);
+	 $p-&gtparse_uri("foo.xml");
+	 # or $p-&gtparse_string("&ltfoo/&gt") or $p-&gtparse_file($fh);
 
        This will automatically load a SAX2 parser (defaulting to
        XML::SAX::PurePerl if no others are found) and return it to you.
@@ -72,7 +74,7 @@ WRITING A SAX2 PARSER
 
 	     WriteMakefile(
 		 ...
-		 PREREQ_PM => { 'XML::SAX' => 0 },
+		 PREREQ_PM =&gt { 'XML::SAX' =&gt 0 },
 		 ...
 	     );
 
@@ -83,15 +85,15 @@ WRITING A SAX2 PARSER
 
 	     sub MY::install {
 	       package MY;
-	       my $script = shift->SUPER::install(@_);
+	       my $script = shift-&gtSUPER::install(@_);
 	       if (ExtUtils::MakeMaker::prompt(
 		 "Do you want to modify ParserDetails.ini?", 'Y')
 		 =~ /^y/i) {
 		 $script =~ s/install :: (.*)$/install :: $1 install_sax_driver/m;
-		 $script .= <<"INSTALL";
+		 $script .= &lt&lt"INSTALL";
 
 	     install_sax_driver :
-	     \t\@\$(PERL) -MXML::SAX -e "XML::SAX->add_parser(q(\$(NAME)))->save_parsers()"
+	     \t\@\$(PERL) -MXML::SAX -e "XML::SAX-&gtadd_parser(q(\$(NAME)))-&gtsave_parsers()"
 
 	     INSTALL
 	       }
@@ -110,19 +112,19 @@ WRITING A SAX2 PARSER
 	   something like the following:
 
 	     use Test;
-	     BEGIN { plan tests => 3 }
+	     BEGIN { plan tests =&gt 3 }
 	     use XML::SAX;
 	     use XML::SAX::PurePerl::DebugHandler;
-	     XML::SAX->add_parser(q(XML::SAX::MyDriver));
+	     XML::SAX-&gtadd_parser(q(XML::SAX::MyDriver));
 	     local $XML::SAX::ParserPackage = 'XML::SAX::MyDriver';
 	     eval {
-	       my $handler = XML::SAX::PurePerl::DebugHandler->new();
+	       my $handler = XML::SAX::PurePerl::DebugHandler-&gtnew();
 	       ok($handler);
-	       my $parser = XML::SAX::ParserFactory->parser(Handler => $handler);
+	       my $parser = XML::SAX::ParserFactory-&gtparser(Handler =&gt $handler);
 	       ok($parser);
-	       ok($parser->isa('XML::SAX::MyDriver');
-	       $parser->parse_string("<tag/>");
-	       ok($handler->{seen}{start_element});
+	       ok($parser-&gtisa('XML::SAX::MyDriver');
+	       $parser-&gtparse_string("&lttag/&gt");
+	       ok($handler-&gt{seen}{start_element});
 	     };
 
 EXPORTS
@@ -132,10 +134,10 @@ EXPORTS
        those features via ParserFactory:
 
 	 use XML::SAX qw(Namespaces Validation);
-	 my $factory = XML::SAX::ParserFactory->new();
-	 $factory->require_feature(Namespaces);
-	 $factory->require_feature(Validation);
-	 my $parser = $factory->parser();
+	 my $factory = XML::SAX::ParserFactory-&gtnew();
+	 $factory-&gtrequire_feature(Namespaces);
+	 $factory-&gtrequire_feature(Validation);
+	 my $parser = $factory-&gtparser();
 
 AUTHOR
        Current maintainer: Grant McLean, grantm@cpan.org
@@ -162,6 +164,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-09-04				SAX(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

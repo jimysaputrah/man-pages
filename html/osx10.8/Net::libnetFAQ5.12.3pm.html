@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Where to get this document..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>libnetFAQ - libnet Frequently Asked Questions</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::libnetFAQ(3pm)    Perl Programmers Reference Guide    Net::libnetFAQ(3pm)
 
 
@@ -82,19 +84,19 @@ Using Net::FTP
 
 	   use Net::FTP;
 
-	   # for debugging: $ftp = Net::FTP->new('site','Debug',10);
+	   # for debugging: $ftp = Net::FTP-&gtnew('site','Debug',10);
 	   # open a connection and log in!
 
-	   $ftp = Net::FTP->new('target_site.somewhere.xxx');
-	   $ftp->login('username','password');
+	   $ftp = Net::FTP-&gtnew('target_site.somewhere.xxx');
+	   $ftp-&gtlogin('username','password');
 
 	   # set transfer mode to binary
 
-	   $ftp->binary();
+	   $ftp-&gtbinary();
 
 	   # change the directory on the ftp site
 
-	   $ftp->cwd('/some/path/to/somewhere/');
+	   $ftp-&gtcwd('/some/path/to/somewhere/');
 
 	   foreach $name ('file1', 'file2', 'file3') {
 
@@ -103,18 +105,18 @@ Using Net::FTP
 	   # filename to save the transfer to on the local machine
 	   # can be simply used as get($name) if you want the same name
 
-	     $ftp->get($name,$name);
+	     $ftp-&gtget($name,$name);
 	   }
 
 	   # ftp done!
 
-	   $ftp->quit;
+	   $ftp-&gtquit;
 
    How do I transfer files in binary mode ?
-       To transfer files without <LF><CR> translation Net::FTP provides the
+       To transfer files without &ltLF&gt&ltCR&gt translation Net::FTP provides the
        "binary" method
 
-	   $ftp->binary;
+	   $ftp-&gtbinary;
 
    How can I get the size of a file on a remote FTP server ?
    How can I get the modification time of a file on a remote FTP server ?
@@ -123,25 +125,25 @@ Using Net::FTP
        of a file on the remote server. But some ftp servers may allow a chmod
        command to be issued via a SITE command, eg
 
-	   $ftp->quot('site chmod 0777',$filename);
+	   $ftp-&gtquot('site chmod 0777',$filename);
 
        But this is not guaranteed to work.
 
    Can I do a reget operation like the ftp command ?
    How do I get a directory listing from an FTP server ?
    Changing directory to "" does not fail ?
-       Passing an argument of "" to ->cwd() has the same affect of calling
-       ->cwd() without any arguments. Turn on Debug (See below) and you will
+       Passing an argument of "" to -&gtcwd() has the same affect of calling
+       -&gtcwd() without any arguments. Turn on Debug (See below) and you will
        see what is happening
 
-	   $ftp = Net::FTP->new($host, Debug => 1);
-	   $ftp->login;
-	   $ftp->cwd("");
+	   $ftp = Net::FTP-&gtnew($host, Debug =&gt 1);
+	   $ftp-&gtlogin;
+	   $ftp-&gtcwd("");
 
        gives
 
-	   Net::FTP=GLOB(0x82196d8)>>> CWD /
-	   Net::FTP=GLOB(0x82196d8)<<< 250 CWD command successful.
+	   Net::FTP=GLOB(0x82196d8)&gt&gt&gt CWD /
+	   Net::FTP=GLOB(0x82196d8)&lt&lt&lt 250 CWD command successful.
 
    I am behind a SOCKS firewall, but the Firewall option does not work ?
        The Firewall option is only for support of one type of firewall. The
@@ -161,9 +163,9 @@ Using Net::FTP
        You can still use Net::FTP to traverse these firewalls, but a more
        manual approach must be taken, eg
 
-	   $ftp = Net::FTP->new($firewall) or die $@;
-	   $ftp->login($firewall_user, $firewall_passwd) or die $ftp->message;
-	   $ftp->login($ext_user . '@' . $ext_host, $ext_passwd) or die $ftp->message.
+	   $ftp = Net::FTP-&gtnew($firewall) or die $@;
+	   $ftp-&gtlogin($firewall_user, $firewall_passwd) or die $ftp-&gtmessage;
+	   $ftp-&gtlogin($ext_user . '@' . $ext_host, $ext_passwd) or die $ftp-&gtmessage.
 
    My ftp proxy firewall does not listen on port 21
        FTP servers usually listen on the same port number, port 21, as any
@@ -185,7 +187,7 @@ Using Net::FTP
        servers do allow you to run the chmod command via the "SITE" command.
        This can be done with
 
-	 $ftp->site('chmod','0775',$file);
+	 $ftp-&gtsite('chmod','0775',$file);
 
    I have seen scripts call a method message, but cannot find it documented ?
        Net::FTP, like several other packages in libnet, inherits from
@@ -201,13 +203,13 @@ Using Net::FTP
        sub mput {
 	 my($ftp,$pattern) = @_;
 	 foreach my $file (glob($pattern)) {
-	   $ftp->put($file) or warn $ftp->message;
+	   $ftp-&gtput($file) or warn $ftp-&gtmessage;
 	 } }
 
        sub mget {
 	 my($ftp,$pattern) = @_;
-	 foreach my $file ($ftp->ls($pattern)) {
-	   $ftp->get($file) or warn $ftp->message;
+	 foreach my $file ($ftp-&gtls($pattern)) {
+	   $ftp-&gtget($file) or warn $ftp-&gtmessage;
 	 } }
 
 Using Net::SMTP
@@ -227,7 +229,7 @@ Using Net::SMTP
        server would normally have to forward to another machine, the command
        will succeed with something like
 
-	   252 Couldn't verify <someone@there> but will attempt delivery anyway
+	   252 Couldn't verify &ltsomeone@there&gt but will attempt delivery anyway
 
        This command will fail only if you pass it an address in a domain the
        server directly delivers for, and that address does not exist.
@@ -245,9 +247,9 @@ Debugging scripts
 
 	   use Net::FTP;
 
-	   my $ftp = new Net::FTP($host, Debug => 1);
-	   $ftp->login('gbarr','password');
-	   $ftp->quit;
+	   my $ftp = new Net::FTP($host, Debug =&gt 1);
+	   $ftp-&gtlogin('gbarr','password');
+	   $ftp-&gtquit;
 
        this script would output something like
 
@@ -258,20 +260,20 @@ Debugging scripts
 	Net::FTP:     IO::Socket(1.1603)
 	Net::FTP:	IO::Handle(1.1504)
 
-	Net::FTP=GLOB(0x8152974)<<< 220 imagine FTP server (Version wu-2.4(5) Tue Jul 29 11:17:18 CDT 1997) ready.
-	Net::FTP=GLOB(0x8152974)>>> user gbarr
-	Net::FTP=GLOB(0x8152974)<<< 331 Password required for gbarr.
-	Net::FTP=GLOB(0x8152974)>>> PASS ....
-	Net::FTP=GLOB(0x8152974)<<< 230 User gbarr logged in.  Access restrictions apply.
-	Net::FTP=GLOB(0x8152974)>>> QUIT
-	Net::FTP=GLOB(0x8152974)<<< 221 Goodbye.
+	Net::FTP=GLOB(0x8152974)&lt&lt&lt 220 imagine FTP server (Version wu-2.4(5) Tue Jul 29 11:17:18 CDT 1997) ready.
+	Net::FTP=GLOB(0x8152974)&gt&gt&gt user gbarr
+	Net::FTP=GLOB(0x8152974)&lt&lt&lt 331 Password required for gbarr.
+	Net::FTP=GLOB(0x8152974)&gt&gt&gt PASS ....
+	Net::FTP=GLOB(0x8152974)&lt&lt&lt 230 User gbarr logged in.  Access restrictions apply.
+	Net::FTP=GLOB(0x8152974)&gt&gt&gt QUIT
+	Net::FTP=GLOB(0x8152974)&lt&lt&lt 221 Goodbye.
 
        The first few lines tell you the modules that Net::FTP uses and their
        versions, this is useful data to me when a user reports a bug. The last
        seven lines show the communication with the server. Each line has three
        parts. The first part is the object itself, this is useful for
        separating the output if you are using multiple objects. The second
-       part is either "<<<<" to show data coming from the server or
+       part is either "&lt&lt&lt&lt" to show data coming from the server or
        "&gt&gt&gt&gt" to show data going to the server. The remainder of the
        line is the command being sent or response being received.
 
@@ -281,6 +283,6 @@ AUTHOR AND COPYRIGHT
 
 
 perl v5.12.4			  2011-06-01		   Net::libnetFAQ(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

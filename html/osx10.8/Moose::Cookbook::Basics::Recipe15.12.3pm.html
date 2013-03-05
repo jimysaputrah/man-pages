@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This is the classic Point example. It is taken directly from the Perl 6..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Basics::Recipe1 - The (always classic) Point example.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::BasicUsereContributed PerlMoose::Cookbook::Basics::Recipe1(3)
 
 
@@ -22,13 +24,13 @@ SYNOPSIS
 	 package Point;
 	 use Moose;
 
-	 has 'x' => (isa => 'Int', is => 'rw', required => 1);
-	 has 'y' => (isa => 'Int', is => 'rw', required => 1);
+	 has 'x' =&gt (isa =&gt 'Int', is =&gt 'rw', required =&gt 1);
+	 has 'y' =&gt (isa =&gt 'Int', is =&gt 'rw', required =&gt 1);
 
 	 sub clear {
 	     my $self = shift;
-	     $self->x(0);
-	     $self->y(0);
+	     $self-&gtx(0);
+	     $self-&gty(0);
 	 }
 
 	 package Point3D;
@@ -36,20 +38,20 @@ SYNOPSIS
 
 	 extends 'Point';
 
-	 has 'z' => (isa => 'Int', is => 'rw', required => 1);
+	 has 'z' =&gt (isa =&gt 'Int', is =&gt 'rw', required =&gt 1);
 
-	 after 'clear' => sub {
+	 after 'clear' =&gt sub {
 	     my $self = shift;
-	     $self->z(0);
+	     $self-&gtz(0);
 	 };
 
 	 package main;
 
 	 # hash or hashrefs are ok for the constructor
-	 my $point1 = Point->new(x => 5, y => 7);
-	 my $point2 = Point->new({x => 5, y => 7});
+	 my $point1 = Point-&gtnew(x =&gt 5, y =&gt 7);
+	 my $point2 = Point-&gtnew({x =&gt 5, y =&gt 7});
 
-	 my $point3d = Point3D->new(x => 5, y => 42, z => -5);
+	 my $point3d = Point3D-&gtnew(x =&gt 5, y =&gt 42, z =&gt -5);
 
 DESCRIPTION
        This is the classic Point example. It is taken directly from the Perl 6
@@ -72,14 +74,14 @@ DESCRIPTION
        Now, onto the keywords. The first one we see here is "has", which
        defines an instance attribute in our class:
 
-	 has 'x' => (isa => 'Int', is => 'rw', required => 1);
+	 has 'x' =&gt (isa =&gt 'Int', is =&gt 'rw', required =&gt 1);
 
        This will create an attribute named "x". The "isa" parameter says that
        we expect the value stored in this attribute to pass the type
        constraint for "Int" (1). The accessor generated for this attribute
        will be read-write.
 
-       The "required => 1" parameter means that this attribute must be
+       The "required =&gt 1" parameter means that this attribute must be
        provided when a new object is created. A point object without
        coordinates doesn't make much sense, so we don't allow it.
 
@@ -89,8 +91,8 @@ DESCRIPTION
 
 	 sub clear {
 	     my $self = shift;
-	     $self->x(0);
-	     $self->y(0);
+	     $self-&gtx(0);
+	     $self-&gty(0);
 	 }
 
        That concludes the Point class.
@@ -110,16 +112,16 @@ DESCRIPTION
 
        Next we create a new attribute for Point3D called "z".
 
-	 has 'z' => (isa => 'Int', is => 'rw', required => 1);
+	 has 'z' =&gt (isa =&gt 'Int', is =&gt 'rw', required =&gt 1);
 
        This attribute is just like Point's "x" and "y" attributes.
 
        The "after" keyword demonstrates a Moose feature called "method
        modifiers" (or "advice" for the AOP inclined):
 
-	 after 'clear' => sub {
+	 after 'clear' =&gt sub {
 	     my $self = shift;
-	     $self->z(0);
+	     $self-&gtz(0);
 	 };
 
        When "clear" is called on a Point3D object, our modifier method gets
@@ -135,16 +137,16 @@ DESCRIPTION
 
 	 sub clear {
 	     my $self = shift;
-	     $self->SUPER::clear();
-	     $self->z(0);
+	     $self-&gtSUPER::clear();
+	     $self-&gtz(0);
 	 }
 
        You could also use another Moose method modifier, "override":
 
-	 override 'clear' => sub {
+	 override 'clear' =&gt sub {
 	     my $self = shift;
 	     super();
-	     $self->z(0);
+	     $self-&gtz(0);
 	 };
 
        The "override" modifier allows you to use the "super" keyword to
@@ -156,17 +158,17 @@ DESCRIPTION
        Since Point inherits from Moose::Object, it will also inherit the
        default Moose::Object constructor:
 
-	 my $point1 = Point->new(x => 5, y => 7);
-	 my $point2 = Point->new({x => 5, y => 7});
+	 my $point1 = Point-&gtnew(x =&gt 5, y =&gt 7);
+	 my $point2 = Point-&gtnew({x =&gt 5, y =&gt 7});
 
-	 my $point3d = Point3D->new(x => 5, y => 42, z => -5);
+	 my $point3d = Point3D-&gtnew(x =&gt 5, y =&gt 42, z =&gt -5);
 
        The "new" constructor accepts a named argument pair for each attribute
        defined by the class, which you can provide as a hash or hash
        reference. In this particular example, the attributes are required, and
        calling "new" without them will throw an error.
 
-	 my $point = Point->new( x => 5 ); # no y, kaboom!
+	 my $point = Point-&gtnew( x =&gt 5 ); # no y, kaboom!
 
        From here on, we can use $point and $point3d just as you would any
        other Perl 5 object. For a more detailed example of what can be done,
@@ -210,11 +212,11 @@ SEE ALSO
 	   great explanation of them can be found by following this link.
 
 	   http://www.gigamonkeys.com/book/object-reorientation-generic-functions.html
-	   <http://www.gigamonkeys.com/book/object-reorientation-generic-
-	   functions.html>
+	   &lthttp://www.gigamonkeys.com/book/object-reorientation-generic-
+	   functions.html&gt
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -225,6 +227,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-0Moose::Cookbook::Basics::Recipe1(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

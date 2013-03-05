@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This recipe shows how the "augment" method modifier works. This..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Basics::Recipe6 - The augment/inner example</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::BasicUsereContributed PerlMoose::Cookbook::Basics::Recipe6(3)
 
 
@@ -22,55 +24,55 @@ SYNOPSIS
 	 package Document::Page;
 	 use Moose;
 
-	 has 'body' => ( is => 'rw', isa => 'Str', default => sub {''} );
+	 has 'body' =&gt ( is =&gt 'rw', isa =&gt 'Str', default =&gt sub {''} );
 
 	 sub create {
 	     my $self = shift;
-	     $self->open_page;
+	     $self-&gtopen_page;
 	     inner();
-	     $self->close_page;
+	     $self-&gtclose_page;
 	 }
 
 	 sub append_body {
 	     my ( $self, $appendage ) = @_;
-	     $self->body( $self->body . $appendage );
+	     $self-&gtbody( $self-&gtbody . $appendage );
 	 }
 
-	 sub open_page	{ (shift)->append_body('<page>') }
-	 sub close_page { (shift)->append_body('</page>') }
+	 sub open_page	{ (shift)-&gtappend_body('&ltpage&gt') }
+	 sub close_page { (shift)-&gtappend_body('&lt/page&gt') }
 
 	 package Document::PageWithHeadersAndFooters;
 	 use Moose;
 
 	 extends 'Document::Page';
 
-	 augment 'create' => sub {
+	 augment 'create' =&gt sub {
 	     my $self = shift;
-	     $self->create_header;
+	     $self-&gtcreate_header;
 	     inner();
-	     $self->create_footer;
+	     $self-&gtcreate_footer;
 	 };
 
-	 sub create_header { (shift)->append_body('<header/>') }
-	 sub create_footer { (shift)->append_body('<footer/>') }
+	 sub create_header { (shift)-&gtappend_body('&ltheader/&gt') }
+	 sub create_footer { (shift)-&gtappend_body('&ltfooter/&gt') }
 
 	 package TPSReport;
 	 use Moose;
 
 	 extends 'Document::PageWithHeadersAndFooters';
 
-	 augment 'create' => sub {
+	 augment 'create' =&gt sub {
 	     my $self = shift;
-	     $self->create_tps_report;
+	     $self-&gtcreate_tps_report;
 	     inner();
 	 };
 
 	 sub create_tps_report {
-	     (shift)->append_body('<report type="tps"/>');
+	     (shift)-&gtappend_body('&ltreport type="tps"/&gt');
 	 }
 
-	 # <page><header/><report type="tps"/><footer/></page>
-	 my $report_xml = TPSReport->new->create;
+	 # &ltpage&gt&ltheader/&gt&ltreport type="tps"/&gt&ltfooter/&gt&lt/page&gt
+	 my $report_xml = TPSReport-&gtnew-&gtcreate;
 
 DESCRIPTION
        This recipe shows how the "augment" method modifier works. This
@@ -91,9 +93,9 @@ DESCRIPTION
 
 	 sub create {
 	     my $self = shift;
-	     $self->open_page;
+	     $self-&gtopen_page;
 	     inner();
-	     $self->close_page;
+	     $self-&gtclose_page;
 	 }
 
        The "inner" function is exported by "Moose", and is like "super" for
@@ -102,20 +104,20 @@ DESCRIPTION
        "Document::PageWithHeadersAndFooters". You'll note that we can call
        "inner" in our modifier:
 
-	 augment 'create' => sub {
+	 augment 'create' =&gt sub {
 	     my $self = shift;
-	     $self->create_header;
+	     $self-&gtcreate_header;
 	     inner();
-	     $self->create_footer;
+	     $self-&gtcreate_footer;
 	 };
 
        This finds the next most specific modifier, in the "TPSReport" class.
 
        Finally, in the "TPSReport" class, the chain comes to an end:
 
-	 augment 'create' => sub {
+	 augment 'create' =&gt sub {
 	     my $self = shift;
-	     $self->create_tps_report;
+	     $self-&gtcreate_tps_report;
 	     inner();
 	 };
 
@@ -129,7 +131,7 @@ CONCLUSION
        is very handy.
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -140,6 +142,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-0Moose::Cookbook::Basics::Recipe6(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Getopt::Long module implements an extended getopt function called..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Getopt::Long - Extended processing of command line options</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Getopt::Long(3pm)      Perl Programmers Reference Guide      Getopt::Long(3pm)
 
 
@@ -20,9 +22,9 @@ SYNOPSIS
 	 my $data   = "file.dat";
 	 my $length = 24;
 	 my $verbose;
-	 $result = GetOptions ("length=i" => \$length,	  # numeric
-			       "file=s"   => \$data,	  # string
-			       "verbose"  => \$verbose);  # flag
+	 $result = GetOptions ("length=i" =&gt \$length,	  # numeric
+			       "file=s"   =&gt \$data,	  # string
+			       "verbose"  =&gt \$verbose);  # flag
 
 DESCRIPTION
        The Getopt::Long module implements an extended getopt function called
@@ -107,7 +109,7 @@ Getting Started with Getopt::Long
 
 	   my $verbose = '';   # option variable with default value (false)
 	   my $all = '';       # option variable with default value (false)
-	   GetOptions ('verbose' => \$verbose, 'all' => \$all);
+	   GetOptions ('verbose' =&gt \$verbose, 'all' =&gt \$all);
 
        The call to GetOptions() parses the command line arguments that are
        present in @ARGV and sets the option variable to the value 1 if the
@@ -132,7 +134,7 @@ Getting Started with Getopt::Long
        option name:
 
 	   my $verbose = '';   # option variable with default value (false)
-	   GetOptions ('verbose!' => \$verbose);
+	   GetOptions ('verbose!' =&gt \$verbose);
 
        Now, using "--verbose" on the command line will enable $verbose, as
        expected. But it is also allowed to use "--noverbose", which will
@@ -144,7 +146,7 @@ Getting Started with Getopt::Long
        name:
 
 	   my $verbose = '';   # option variable with default value (false)
-	   GetOptions ('verbose+' => \$verbose);
+	   GetOptions ('verbose+' =&gt \$verbose);
 
        Using "--verbose" on the command line will increment the value of
        $verbose. This way the program can keep track of how many times the
@@ -179,7 +181,7 @@ Getting Started with Getopt::Long
        option itself.
 
 	   my $tag = '';       # option variable with default value
-	   GetOptions ('tag=s' => \$tag);
+	   GetOptions ('tag=s' =&gt \$tag);
 
        In the option specification, the option name is followed by an equals
        sign "=" and the letter "s". The equals sign indicates that this option
@@ -199,12 +201,12 @@ Getting Started with Getopt::Long
        To accomplish this behaviour, simply specify an array reference as the
        destination for the option:
 
-	   GetOptions ("library=s" => \@libfiles);
+	   GetOptions ("library=s" =&gt \@libfiles);
 
        Alternatively, you can specify that the option can have multiple values
        by adding a "@", and pass a scalar reference as the destination:
 
-	   GetOptions ("library=s@" => \$libfiles);
+	   GetOptions ("library=s@" =&gt \$libfiles);
 
        Used with the example above, @libfiles (or @$libfiles) would contain
        two strings upon completion: "lib/srdlib" and "lib/extlib", in that
@@ -215,7 +217,7 @@ Getting Started with Getopt::Long
        multiple occurrences of the options. This is easy using Perl's split()
        and join() operators:
 
-	   GetOptions ("library=s" => \@libfiles);
+	   GetOptions ("library=s" =&gt \@libfiles);
 	   @libfiles = split(/,/,join(',',@libfiles));
 
        Of course, it is important to choose the right separator string for
@@ -232,7 +234,7 @@ Getting Started with Getopt::Long
        specifiers that can be used with regular expression patterns.  For
        example, the above command line would be handled as follows:
 
-	   GetOptions('coordinates=f{2}' => \@coor, 'rgbcolor=i{3}' => \@color);
+	   GetOptions('coordinates=f{2}' =&gt \@coor, 'rgbcolor=i{3}' =&gt \@color);
 
        The destination for the option must be an array or array reference.
 
@@ -246,11 +248,11 @@ Getting Started with Getopt::Long
        take, as value, strings of the form key"="value. The value will be
        stored with the specified key in the hash.
 
-	   GetOptions ("define=s" => \%defines);
+	   GetOptions ("define=s" =&gt \%defines);
 
        Alternatively you can use:
 
-	   GetOptions ("define=s%" => \$defines);
+	   GetOptions ("define=s%" =&gt \$defines);
 
        When used with command line options:
 
@@ -278,8 +280,8 @@ Getting Started with Getopt::Long
        are related to each other. For example:
 
 	   my $verbose = '';   # option variable with default value (false)
-	   GetOptions ('verbose' => \$verbose,
-		       'quiet'	 => sub { $verbose = 0 });
+	   GetOptions ('verbose' =&gt \$verbose,
+		       'quiet'	 =&gt sub { $verbose = 0 });
 
        Here "--verbose" and "--quiet" control the same variable $verbose, but
        with opposite values.
@@ -306,7 +308,7 @@ Getting Started with Getopt::Long
        specification, separated by vertical bar "|" characters. To implement
        the above example:
 
-	   GetOptions ('length|height=f' => \$length);
+	   GetOptions ('length|height=f' =&gt \$length);
 
        The first name is called the primary name, the other names are called
        aliases. When using a hash to store options, the key will always be the
@@ -318,7 +320,7 @@ Getting Started with Getopt::Long
        Without additional configuration, GetOptions() will ignore the case of
        option names, and allow the options to be abbreviated to uniqueness.
 
-	   GetOptions ('length|height=f' => \$length, "head" => \$head);
+	   GetOptions ('length|height=f' =&gt \$length, "head" =&gt \$head);
 
        This call will allow "--l" and "--L" for the length option, but
        requires a least "--hea" and "--hei" for the head and height options.
@@ -416,13 +418,13 @@ Advanced Possibilities
 
 	   use Getopt::Long;
 	   $p = new Getopt::Long::Parser;
-	   $p->configure(...configuration options...);
-	   if ($p->getoptions(...options descriptions...)) ...
+	   $p-&gtconfigure(...configuration options...);
+	   if ($p-&gtgetoptions(...options descriptions...)) ...
 
        Configuration options can be passed to the constructor:
 
 	   $p = new Getopt::Long::Parser
-		    config => [...configuration options...];
+		    config =&gt [...configuration options...];
 
    Thread Safety
        Getopt::Long is thread safe when using ithreads as of Perl 5.8.	It is
@@ -439,9 +441,9 @@ Advanced Possibilities
 	   my $man = 0;
 	   my $help = 0;
 
-	   GetOptions('help|?' => \$help, man => \$man) or pod2usage(2);
+	   GetOptions('help|?' =&gt \$help, man =&gt \$man) or pod2usage(2);
 	   pod2usage(1) if $help;
-	   pod2usage(-exitstatus => 0, -verbose => 2) if $man;
+	   pod2usage(-exitstatus =&gt 0, -verbose =&gt 2) if $man;
 
 	   __END__
 
@@ -461,11 +463,11 @@ Advanced Possibilities
 
 	   =over 8
 
-	   =item B<-help>
+	   =item B&lt-help&gt
 
 	   Print a brief help message and exits.
 
-	   =item B<-man>
+	   =item B&lt-man&gt
 
 	   Prints the manual page and exits.
 
@@ -473,7 +475,7 @@ Advanced Possibilities
 
 	   =head1 DESCRIPTION
 
-	   B<This program> will read the given input file(s) and do something
+	   B&ltThis program&gt will read the given input file(s) and do something
 	   useful with the contents thereof.
 
 	   =cut
@@ -544,13 +546,13 @@ Advanced Possibilities
        actual destinations, for example:
 
 	   my $len = 0;
-	   my %h = ('length' => \$len);
+	   my %h = ('length' =&gt \$len);
 	   GetOptions (\%h, 'length=i');       # will store in $len
 
        This example is fully equivalent with:
 
 	   my $len = 0;
-	   GetOptions ('length=i' => \$len);   # will store in $len
+	   GetOptions ('length=i' =&gt \$len);   # will store in $len
 
        Any mixture is possible. For example, the most frequently used options
        could be stored in variables while all other options get stored in the
@@ -558,7 +560,7 @@ Advanced Possibilities
 
 	   my $verbose = 0;		       # frequently referred
 	   my $debug = 0;		       # frequently referred
-	   my %h = ('verbose' => \$verbose, 'debug' => \$debug);
+	   my %h = ('verbose' =&gt \$verbose, 'debug' =&gt \$debug);
 	   GetOptions (\%h, 'verbose', 'debug', 'filter', 'size=i');
 	   if ( $verbose ) { ... }
 	   if ( exists $h{filter} ) { ... option 'filter' was specified ... }
@@ -623,13 +625,13 @@ Advanced Possibilities
        achieved by adding an option specification with an empty name, for
        example:
 
-	   GetOptions ('' => \$stdio);
+	   GetOptions ('' =&gt \$stdio);
 
        A lone dash on the command line will now be a legal option, and using
        it will set variable $stdio.
 
    Argument callback
-       A special option 'name' "<>" can be used to designate a subroutine to
+       A special option 'name' "&lt&gt" can be used to designate a subroutine to
        handle non-option arguments. When GetOptions() encounters an argument
        that does not look like an option, it will immediately call this
        subroutine and passes it one parameter: the argument name. Well,
@@ -639,7 +641,7 @@ Advanced Possibilities
 
 	   my $width = 80;
 	   sub process { ... }
-	   GetOptions ('width=i' => \$width, '<>' => \&process);
+	   GetOptions ('width=i' =&gt \$width, '&lt&gt' =&gt \&process);
 
        When applied to the following command line:
 
@@ -898,11 +900,11 @@ Exportable Methods
 
 	   You cannot tie this routine directly to an option, e.g.:
 
-	       GetOptions("version" => \&VersionMessage);
+	       GetOptions("version" =&gt \&VersionMessage);
 
 	   Use this instead:
 
-	       GetOptions("version" => sub { VersionMessage() });
+	       GetOptions("version" =&gt sub { VersionMessage() });
 
        HelpMessage
 	   This subroutine produces a standard help message, derived from the
@@ -910,11 +912,11 @@ Exportable Methods
 	   arguments as VersionMessage(). In particular, you cannot tie it
 	   directly to an option, e.g.:
 
-	       GetOptions("help" => \&HelpMessage);
+	       GetOptions("help" =&gt \&HelpMessage);
 
 	   Use this instead:
 
-	       GetOptions("help" => sub { HelpMessage() });
+	       GetOptions("help" =&gt sub { HelpMessage() });
 
 Return values and Errors
        Configuration errors and errors in the option definitions are signalled
@@ -966,7 +968,7 @@ Legacy
        argument).
 
 	   my $len = 0;
-	   GetOptions ('/', 'length=i' => $len);
+	   GetOptions ('/', 'length=i' =&gt $len);
 
        Now the command line may look like:
 
@@ -975,9 +977,9 @@ Legacy
        Note that to terminate options processing still requires a double dash
        "--".
 
-       GetOptions() will not interpret a leading "<>" as option starters if
-       the next argument is a reference. To force "<" and ">" as option
-       starters, use "><". Confusing? Well, using a starter argument is
+       GetOptions() will not interpret a leading "&lt&gt" as option starters if
+       the next argument is a reference. To force "&lt" and "&gt" as option
+       starters, use "&gt&lt". Confusing? Well, using a starter argument is
        strongly deprecated anyway.
 
    Configuration variables
@@ -994,13 +996,13 @@ Tips and Techniques
 	 --list add=first --list add=second --list add=third
 
        where each successive 'list add' option will push the value of add into
-       array ref $list->{'add'}. The result would be like
+       array ref $list-&gt{'add'}. The result would be like
 
-	 $list->{add} = [qw(first second third)];
+	 $list-&gt{add} = [qw(first second third)];
 
        This can be accomplished with a destination routine:
 
-	 GetOptions('list=s%' =>
+	 GetOptions('list=s%' =&gt
 		      sub { push(@{$list{$_[1]}}, $_[2]) });
 
 Troubleshooting
@@ -1044,7 +1046,7 @@ Troubleshooting
 	   GetOptions ("help|?");    # -help and -? will both set $opt_help
 
 AUTHOR
-       Johan Vromans <jvromans@squirrel.nl>
+       Johan Vromans &ltjvromans@squirrel.nl&gt
 
 COPYRIGHT AND DISCLAIMER
        This program is Copyright 1990,2009 by Johan Vromans.  This program is
@@ -1065,6 +1067,6 @@ COPYRIGHT AND DISCLAIMER
 
 
 perl v5.10.1			  2009-04-19		     Getopt::Long(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This class implements base Oracle support. The subclass..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Storage::DBI::Oracle::Generic - Oracle Support for</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::Storage::User:ContriDBIx::Class::Storage::DBI::Oracle::Generic(3)
 
 
@@ -19,38 +21,38 @@ NAME
 SYNOPSIS
 	 # In your result (table) classes
 	 use base 'DBIx::Class::Core';
-	 __PACKAGE__->add_columns({ id => { sequence => 'mysequence', auto_nextval => 1 } });
-	 __PACKAGE__->set_primary_key('id');
+	 __PACKAGE__-&gtadd_columns({ id =&gt { sequence =&gt 'mysequence', auto_nextval =&gt 1 } });
+	 __PACKAGE__-&gtset_primary_key('id');
 
 	 # Somewhere in your Code
 	 # add some data to a table with a hierarchical relationship
-	 $schema->resultset('Person')->create ({
-	       firstname => 'foo',
-	       lastname => 'bar',
-	       children => [
+	 $schema-&gtresultset('Person')-&gtcreate ({
+	       firstname =&gt 'foo',
+	       lastname =&gt 'bar',
+	       children =&gt [
 		   {
-		       firstname => 'child1',
-		       lastname => 'bar',
-		       children => [
+		       firstname =&gt 'child1',
+		       lastname =&gt 'bar',
+		       children =&gt [
 			   {
-			       firstname => 'grandchild',
-			       lastname => 'bar',
+			       firstname =&gt 'grandchild',
+			       lastname =&gt 'bar',
 			   }
 		       ],
 		   },
 		   {
-		       firstname => 'child2',
-		       lastname => 'bar',
+		       firstname =&gt 'child2',
+		       lastname =&gt 'bar',
 		   },
 	       ],
 	   });
 
 	 # select from the hierarchical relationship
-	 my $rs = $schema->resultset('Person')->search({},
+	 my $rs = $schema-&gtresultset('Person')-&gtsearch({},
 	   {
-	     'start_with' => { 'firstname' => 'foo', 'lastname' => 'bar' },
-	     'connect_by' => { 'parentid' => { '-prior' => { -ident => 'personid' } },
-	     'order_siblings_by' => { -asc => 'name' },
+	     'start_with' =&gt { 'firstname' =&gt 'foo', 'lastname' =&gt 'bar' },
+	     'connect_by' =&gt { 'parentid' =&gt { '-prior' =&gt { -ident =&gt 'personid' } },
+	     'order_siblings_by' =&gt { -asc =&gt 'name' },
 	   };
 	 );
 
@@ -83,7 +85,7 @@ METHODS
    connect_call_datetime_setup
        Used as:
 
-	   on_connect_call => 'datetime_setup'
+	   on_connect_call =&gt 'datetime_setup'
 
        In connect_info to set the session nls date, and timestamp values for
        use with DBIx::Class::InflateColumn::DateTime and the necessary
@@ -104,7 +106,7 @@ METHODS
        like this:
 
 	 use Time::HiRes 'time';
-	 my $ts = DateTime->from_epoch(epoch => time);
+	 my $ts = DateTime-&gtfrom_epoch(epoch =&gt time);
 
    relname_to_table_alias
        DBIx::Class uses DBIx::Class::Relationship names as table aliases in
@@ -136,7 +138,7 @@ ATTRIBUTES
        A hashref of conditions used to specify the relationship between parent
        rows and child rows of the hierarchy.
 
-	 connect_by => { parentid => 'prior personid' }
+	 connect_by =&gt { parentid =&gt 'prior personid' }
 
 	 # adds a connect by statement to the query:
 	 # SELECT
@@ -147,7 +149,7 @@ ATTRIBUTES
 	 #     parentid = prior persionid
 
 
-	 connect_by_nocycle => { parentid => 'prior personid' }
+	 connect_by_nocycle =&gt { parentid =&gt 'prior personid' }
 
 	 # adds a connect by statement to the query:
 	 # SELECT
@@ -164,7 +166,7 @@ ATTRIBUTES
 
        It uses the same syntax as "search" in DBIx::Class::ResultSet
 
-	 start_with => { firstname => 'Foo', lastname => 'Bar' }
+	 start_with =&gt { firstname =&gt 'Foo', lastname =&gt 'Bar' }
 
 	 # SELECT
 	 #     me.persionid me.firstname, me.lastname, me.parentid
@@ -182,7 +184,7 @@ ATTRIBUTES
 
        It uses the same syntax as "order_by" in DBIx::Class::ResultSet
 
-	 'order_siblings_by' => 'firstname ASC'
+	 'order_siblings_by' =&gt 'firstname ASC'
 
 	 # SELECT
 	 #     me.persionid me.firstname, me.lastname, me.parentid
@@ -202,6 +204,6 @@ LICENSE
 
 
 perl v5.12.4			 DBIx::Class::Storage::DBI::Oracle::Generic(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

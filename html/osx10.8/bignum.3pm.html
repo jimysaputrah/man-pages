@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="All operators (including basic math operations) are overloaded. Integer..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>bignum - Transparent BigNumber support for Perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 bignum(3pm)	       Perl Programmers Reference Guide 	   bignum(3pm)
 
 
@@ -77,17 +79,17 @@ DESCRIPTION
        from BigInt/BigFloat on them. This even works to some extent on
        expressions:
 
-	       perl -Mbignum -le '$x = 1234; print $x->bdec()'
-	       perl -Mbignum -le 'print 1234->copy()->binc();'
-	       perl -Mbignum -le 'print 1234->copy()->binc->badd(6);'
-	       perl -Mbignum -le 'print +(1234)->copy()->binc()'
+	       perl -Mbignum -le '$x = 1234; print $x-&gtbdec()'
+	       perl -Mbignum -le 'print 1234-&gtcopy()-&gtbinc();'
+	       perl -Mbignum -le 'print 1234-&gtcopy()-&gtbinc-&gtbadd(6);'
+	       perl -Mbignum -le 'print +(1234)-&gtcopy()-&gtbinc()'
 
        (Note that print doesn't do what you expect if the expression starts
        with '(' hence the "+")
 
        You can even chain the operations together as usual:
 
-	       perl -Mbignum -le 'print 1234->copy()->binc->badd(6);'
+	       perl -Mbignum -le 'print 1234-&gtcopy()-&gtbinc-&gtbadd(6);'
 	       1241
 
        Under bignum (or bigint or bigrat), Perl will "upgrade" the numbers
@@ -128,7 +130,7 @@ DESCRIPTION
        under "use bignum;" and this is slower than keeping them as Perl
        scalars:
 
-	       perl -Mbignum -le 'for ($i = 0; $i < 10; $i++) { print ref($i); }'
+	       perl -Mbignum -le 'for ($i = 0; $i &lt 10; $i++) { print ref($i); }'
 
        Please note the following does not work as expected (prints nothing),
        since overloading of '..' is not yet possible in Perl (as of v5.8.0):
@@ -212,7 +214,7 @@ DESCRIPTION
 
        If you want to make a real copy, use the following:
 
-	       $y = $x->copy();
+	       $y = $x-&gtcopy();
 
        Using the copy or the original with overloaded math is okay, e.g. the
        following work:
@@ -224,28 +226,28 @@ DESCRIPTION
        both the original and the copy being destroyed:
 
 	       $x = 9; $y = $x;
-	       print $x->badd(1), " ", $y,"\n";        # prints 10 10
+	       print $x-&gtbadd(1), " ", $y,"\n";        # prints 10 10
 
 	       $x = 9; $y = $x;
-	       print $x->binc(1), " ", $y,"\n";        # prints 10 10
+	       print $x-&gtbinc(1), " ", $y,"\n";        # prints 10 10
 
 	       $x = 9; $y = $x;
-	       print $x->bmul(2), " ", $y,"\n";        # prints 18 18
+	       print $x-&gtbmul(2), " ", $y,"\n";        # prints 18 18
 
        Using methods that do not modify, but test the contents works:
 
 	       $x = 9; $y = $x;
-	       $z = 9 if $x->is_zero(); 	       # works fine
+	       $z = 9 if $x-&gtis_zero(); 	       # works fine
 
        See the documentation about the copy constructor and "=" in overload,
        as well as the documentation in BigInt for further details.
 
        inf()
-	 A shortcut to return Math::BigInt->binf(). Useful because Perl does
+	 A shortcut to return Math::BigInt-&gtbinf(). Useful because Perl does
 	 not always handle bareword "inf" properly.
 
        NaN()
-	 A shortcut to return Math::BigInt->bnan(). Useful because Perl does
+	 A shortcut to return Math::BigInt-&gtbnan(). Useful because Perl does
 	 not always handle bareword "NaN" properly.
 
        e
@@ -298,17 +300,17 @@ DESCRIPTION
        Math with the numbers is done (by default) by a module called
        Math::BigInt::Calc. This is equivalent to saying:
 
-	       use bignum lib => 'Calc';
+	       use bignum lib =&gt 'Calc';
 
        You can change this by using:
 
-	       use bignum lib => 'GMP';
+	       use bignum lib =&gt 'GMP';
 
        The following would first try to find Math::BigInt::Foo, then
        Math::BigInt::Bar, and when this also fails, revert to
        Math::BigInt::Calc:
 
-	       use bignum lib => 'Foo,Math::BigInt::Bar';
+	       use bignum lib =&gt 'Foo,Math::BigInt::Bar';
 
        Please see respective module documentation for further details.
 
@@ -316,12 +318,12 @@ DESCRIPTION
        Math::BigInt did fall back to one of the default libraries.  To supress
        this warning, use "try" instead:
 
-	       use bignum try => 'GMP';
+	       use bignum try =&gt 'GMP';
 
        If you want the code to die instead of falling back, use "only"
        instead:
 
-	       use bignum only => 'GMP';
+	       use bignum only =&gt 'GMP';
 
    INTERNAL FORMAT
        The numbers are stored as objects, and their internals might change at
@@ -331,7 +333,7 @@ DESCRIPTION
        but normal and expected.
 
        You should not depend on the internal format, all accesses must go
-       through accessor methods. E.g. looking at $x->{sign} is not a bright
+       through accessor methods. E.g. looking at $x-&gt{sign} is not a bright
        idea since there is no guaranty that the object in question has such a
        hashkey, nor is a hash underneath at all.
 
@@ -391,7 +393,7 @@ EXAMPLES
 	       perl -Mbignum -le 'print 2*255'
 	       perl -Mbignum -le 'print 4.5+2*255'
 	       perl -Mbignum -le 'print 3/7 + 5/7 + 8/3'
-	       perl -Mbignum -le 'print 123->is_odd()'
+	       perl -Mbignum -le 'print 123-&gtis_odd()'
 	       perl -Mbignum -le 'print log(2)'
 	       perl -Mbignum -le 'print exp(1)'
 	       perl -Mbignum -le 'print 2 ** 0.5'
@@ -409,11 +411,11 @@ SEE ALSO
        Math::BigInt::BitVect, Math::BigInt::Pari and  Math::BigInt::GMP.
 
 AUTHORS
-       (C) by Tels <http://bloodgate.com/> in early 2002 - 2007.
+       (C) by Tels &lthttp://bloodgate.com/&gt in early 2002 - 2007.
 
 
 
 perl v5.12.4			  2011-06-20			   bignum(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

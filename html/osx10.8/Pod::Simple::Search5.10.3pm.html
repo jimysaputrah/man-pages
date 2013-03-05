@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Pod::Simple::Search is a class that you use for running searches for..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Pod::Simple::Search - find POD documents in directory trees</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Pod::Simple::Search(3pmPerl Programmers Reference GuidPod::Simple::Search(3pm)
 
 
@@ -17,12 +19,12 @@ NAME
 
 SYNOPSIS
 	 use Pod::Simple::Search;
-	 my $name2path = Pod::Simple::Search->new->limit_glob('LWP::*')->survey;
+	 my $name2path = Pod::Simple::Search-&gtnew-&gtlimit_glob('LWP::*')-&gtsurvey;
 	 print "Looky see what I found: ",
 	   join(' ', sort keys %$name2path), "\n";
 
 	 print "LWPUA docs = ",
-	   Pod::Simple::Search->new->find('LWP::UserAgent') || "?",
+	   Pod::Simple::Search-&gtnew-&gtfind('LWP::UserAgent') || "?",
 	   "\n";
 
 DESCRIPTION
@@ -41,7 +43,7 @@ CONSTRUCTOR
        parameters:
 
 	 use Pod::Simple::Search;
-	 my $search = Pod::Simple::Search->new;
+	 my $search = Pod::Simple::Search-&gtnew;
 
 ACCESSORS
        This class defines several methods for setting (and, occasionally,
@@ -50,31 +52,31 @@ ACCESSORS
        way searches are carried out.
 
        Note that each of these return $self when you call them as
-       "$self->whatever(value)".  That's so that you can chain together set-
+       "$self-&gtwhatever(value)".  That's so that you can chain together set-
        attribute calls like this:
 
 	 my $name2path =
-	   Pod::Simple::Search->new
-	   -> inc(0) -> verbose(1) -> callback(\&blab)
-	   ->survey(@there);
+	   Pod::Simple::Search-&gtnew
+	   -&gt inc(0) -&gt verbose(1) -&gt callback(\&blab)
+	   -&gtsurvey(@there);
 
        ...which works exactly as if you'd done this:
 
-	 my $search = Pod::Simple::Search->new;
-	 $search->inc(0);
-	 $search->verbose(1);
-	 $search->callback(\&blab);
-	 my $name2path = $search->survey(@there);
+	 my $search = Pod::Simple::Search-&gtnew;
+	 $search-&gtinc(0);
+	 $search-&gtverbose(1);
+	 $search-&gtcallback(\&blab);
+	 my $name2path = $search-&gtsurvey(@there);
 
-       $search->inc( true-or-false );
+       $search-&gtinc( true-or-false );
 	   This attribute, if set to a true value, means that searches should
 	   implicitly add perl's @INC paths. This automatically considers
 	   paths specified in the "PERL5LIB" environment as this is prepended
 	   to @INC by the Perl interpreter itself.  This attribute's default
 	   value is TRUE.  If you want to search only specific directories,
-	   set $self->inc(0) before calling $inc->survey or $inc->find.
+	   set $self-&gtinc(0) before calling $inc-&gtsurvey or $inc-&gtfind.
 
-       $search->verbose( nonnegative-number );
+       $search-&gtverbose( nonnegative-number );
 	   This attribute, if set to a nonzero positive value, will make
 	   searches output (via "warn") notes about what they're doing as they
 	   do it.  This option may be useful for debugging a pod-related
@@ -84,7 +86,7 @@ ACCESSORS
 	   makes the following search(es) even more verbose than 1 would make
 	   them.)
 
-       $search->limit_glob( some-glob-string );
+       $search-&gtlimit_glob( some-glob-string );
 	   This option means that you want to limit the results just to items
 	   whose podnames match the given glob/wildcard expression. For
 	   example, you might limit your search to just "LWP::*", to search
@@ -95,7 +97,7 @@ ACCESSORS
 	   in their full name. (You can also use "?" in a glob expression; so
 	   "DB?" will match "DBI" and "DBD".)
 
-       $search->callback( \&some_routine );
+       $search-&gtcallback( \&some_routine );
 	   This attribute means that every time this search sees a matching
 	   Pod file, it should call this callback routine.  The routine is
 	   called with two parameters: the current file's filespec, and its
@@ -107,7 +109,7 @@ ACCESSORS
 	   This attribute's default value is false, meaning that no callback
 	   is called.
 
-       $search->laborious( true-or-false );
+       $search-&gtlaborious( true-or-false );
 	   Unless you set this attribute to a true value, Pod::Search will
 	   apply Perl-specific heuristics to find the correct module PODs
 	   quickly.  This attribute's default value is false.  You won't
@@ -119,33 +121,33 @@ ACCESSORS
 	   interpreter's version ID, suppressing site_perl as a module
 	   hierarchy name, etc.
 
-       $search->shadows( true-or-false );
+       $search-&gtshadows( true-or-false );
 	   Unless you set this attribute to a true value, Pod::Simple::Search
 	   will consider only the first file of a given modulename as it looks
 	   thru the specified directories; that is, with this option off, if
 	   Pod::Simple::Search has seen a "somepathdir/Foo/Bar.pm" already in
 	   this search, then it won't bother looking at a
 	   "somelaterpathdir/Foo/Bar.pm" later on in that search, because that
-	   file is merely a "shadow". But if you turn on "$self->shadows(1)",
+	   file is merely a "shadow". But if you turn on "$self-&gtshadows(1)",
 	   then these "shadow" files are inspected too, and are noted in the
 	   pathname2podname return hash.
 
 	   This attribute's default value is false; and normally you won't
 	   need to turn it on.
 
-       $search->limit_re( some-regxp );
+       $search-&gtlimit_re( some-regxp );
 	   Setting this attribute (to a value that's a regexp) means that you
 	   want to limit the results just to items whose podnames match the
 	   given regexp. Normally this option is not needed, and the more
 	   efficient "limit_glob" attribute is used instead.
 
-       $search->dir_prefix( some-string-value );
+       $search-&gtdir_prefix( some-string-value );
 	   Setting this attribute to a string value means that the searches
 	   should begin in the specified subdirectory name (like "Pod" or
 	   "File::Find", also expressable as "File/Find"). For example, the
-	   search option "$search->limit_glob("File::Find::R*")" is the same
+	   search option "$search-&gtlimit_glob("File::Find::R*")" is the same
 	   as the combination of the search options
-	   "$search->limit_re("^File::Find::R") -> dir_prefix("File::Find")".
+	   "$search-&gtlimit_re("^File::Find::R") -&gt dir_prefix("File::Find")".
 
 	   Normally you don't need to know about the "dir_prefix" option, but
 	   I include it in case it might prove useful for someone somewhere.
@@ -153,7 +155,7 @@ ACCESSORS
 	   (Implementationally, searching with limit_glob ends up setting
 	   limit_re and usually dir_prefix.)
 
-       $search->progress( some-progress-object );
+       $search-&gtprogress( some-progress-object );
 	   If you set a value for this attribute, the value is expected to be
 	   an object (probably of a class that you define) that has a "reach"
 	   method and a "done" method.	This is meant for reporting progress
@@ -166,20 +168,20 @@ ACCESSORS
 	   "done" methods are called like this:
 
 	     # Every time a file is being scanned for pod:
-	     $progress->reach($count, "Scanning $file");   ++$count;
+	     $progress-&gtreach($count, "Scanning $file");   ++$count;
 
 	     # And then at the end of the search:
-	     $progress->done("Noted $count Pod files total");
+	     $progress-&gtdone("Noted $count Pod files total");
 
 	   Internally, we often set this to an object of class
 	   Pod::Simple::Progress.  That class is probably undocumented, but
 	   you may wish to look at its source.
 
-       $name2path = $self->name2path;
+       $name2path = $self-&gtname2path;
 	   This attribute is not a search parameter, but is used to report the
 	   result of "survey" method, as discussed in the next section.
 
-       $path2name = $self->path2name;
+       $path2name = $self-&gtpath2name;
 	   This attribute is not a search parameter, but is used to report the
 	   result of "survey" method, as discussed in the next section.
 
@@ -188,7 +190,7 @@ MAIN SEARCH METHODS
        ahead and use the following methods to search for Pod files in
        particular ways.
 
-   "$search->survey( @directories )"
+   "$search-&gtsurvey( @directories )"
        The method "survey" searches for POD documents in a given set of files
        and/or directories.  This runs the search according to the various
        options set by the accessors above.  (For example, if the "inc"
@@ -200,15 +202,15 @@ MAIN SEARCH METHODS
 
        "name2path"
 	   A hash that maps from each pod-name to the filespec (like
-	   "Stuff::Thing" => "/whatever/plib/Stuff/Thing.pm")
+	   "Stuff::Thing" =&gt "/whatever/plib/Stuff/Thing.pm")
 
        "path2name"
 	   A hash that maps from each Pod filespec to its pod-name (like
-	   "/whatever/plib/Stuff/Thing.pm" => "Stuff::Thing")
+	   "/whatever/plib/Stuff/Thing.pm" =&gt "Stuff::Thing")
 
        Besides saving these hashes as the hashref attributes "name2path" and
        "path2name", calling this function also returns these hashrefs.	In
-       list context, the return value of "$search->survey" is the list
+       list context, the return value of "$search-&gtsurvey" is the list
        "(\%name2path, \%path2name)".  In scalar context, the return value is
        "\%name2path".  Or you can just call this in void context.
 
@@ -238,17 +240,17 @@ MAIN SEARCH METHODS
        extension (.pm, .pl, .pod) stripped, and path separators replaced by
        "::"'s.
 
-       Calling Pod::Simple::Search->search(...) is short for
-       Pod::Simple::Search->new->search(...).  That is, a throwaway object
+       Calling Pod::Simple::Search-&gtsearch(...) is short for
+       Pod::Simple::Search-&gtnew-&gtsearch(...).  That is, a throwaway object
        with default attribute values is used.
 
-   "$search->simplify_name( $str )"
+   "$search-&gtsimplify_name( $str )"
        The method simplify_name is equivalent to basename, but also strips
        Perl-like extensions (.pm, .pl, .pod) and extensions like .bat, .cmd on
        Win32 and OS/2, or .com on VMS, respectively.
 
-   "$search->find( $pod )"
-   "$search->find( $pod, @search_dirs )"
+   "$search-&gtfind( $pod )"
+   "$search-&gtfind( $pod, @search_dirs )"
        Returns the location of a Pod file, given a Pod/module/script name
        (like "Foo::Bar" or "perlvar" or "perldoc"), and an idea of what
        files/directories to look in.  It searches according to the various
@@ -274,25 +276,25 @@ MAIN SEARCH METHODS
        search; notably, "inc", if true, adds @INC and also
        $Config::Config{'scriptdir'} to the list of directories to search.
 
-       It is common to simply say "$filename = Pod::Simple::Search-> new
-       ->find("perlvar")" so that just the @INC (well, and scriptdir)
+       It is common to simply say "$filename = Pod::Simple::Search-&gt new
+       -&gtfind("perlvar")" so that just the @INC (well, and scriptdir)
        directories are searched.  (This happens because the "inc" attribute is
        true by default.)
 
-       Calling Pod::Simple::Search->find(...) is short for
-       Pod::Simple::Search->new->find(...).  That is, a throwaway object with
+       Calling Pod::Simple::Search-&gtfind(...) is short for
+       Pod::Simple::Search-&gtnew-&gtfind(...).  That is, a throwaway object with
        default attribute values is used.
 
-   "$self->contains_pod( $file )"
+   "$self-&gtcontains_pod( $file )"
        Returns true if the supplied filename (not POD module) contains some
        Pod documentation.
 
 AUTHOR
-       Sean M. Burke <sburke@cpan.org> borrowed code from Marek Rouchal's
+       Sean M. Burke &ltsburke@cpan.org&gt borrowed code from Marek Rouchal's
        Pod::Find, which in turn heavily borrowed code from Nick Ing-Simmons'
        PodToHtml.
 
-       Tim Jenness <t.jenness@jach.hawaii.edu> provided "find" and
+       Tim Jenness &ltt.jenness@jach.hawaii.edu&gt provided "find" and
        "contains_pod" to Pod::Find.
 
 SEE ALSO
@@ -301,6 +303,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-02-12	      Pod::Simple::Search(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

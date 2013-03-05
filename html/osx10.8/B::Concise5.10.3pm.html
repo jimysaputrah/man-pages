@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This compiler backend prints the internal OPs of a Perl program's..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>B::Concise - Walk Perl syntax tree, printing concise info about ops</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 B::Concise(3pm)        Perl Programmers Reference Guide        B::Concise(3pm)
 
 
@@ -35,14 +37,14 @@ EXAMPLE
        default) formatting conventions on the same code snippet.
 
 	   % perl -MO=Concise,-exec -e '$a = $b + 42'
-	   1  <0> enter
-	   2  <;> nextstate(main 1 -e:1) v
-	   3  <#> gvsv[*b] s
-	   4  <$> const[IV 42] s
-	*  5  <2> add[t3] sK/2
-	   6  <#> gvsv[*a] s
-	   7  <2> sassign vKS/2
-	   8  <@> leave[1 ref] vKP/REFC
+	   1  &lt0&gt enter
+	   2  &lt;&gt nextstate(main 1 -e:1) v
+	   3  &lt#&gt gvsv[*b] s
+	   4  &lt$&gt const[IV 42] s
+	*  5  &lt2&gt add[t3] sK/2
+	   6  &lt#&gt gvsv[*a] s
+	   7  &lt2&gt sassign vKS/2
+	   8  &lt@&gt leave[1 ref] vKP/REFC
 
        In this -exec rendering, each opcode is executed in the order shown.
        The add opcode, marked with '*', is discussed in more detail.
@@ -53,7 +55,7 @@ EXAMPLE
        branches.
 
        The symbol between angle brackets indicates the op's type, for example;
-       <2> is a BINOP, <@> a LISTOP, and <#> is a PADOP, which is used in
+       &lt2&gt is a BINOP, &lt@&gt a LISTOP, and &lt#&gt is a PADOP, which is used in
        threaded perls. (see "OP class abbreviations").
 
        The opname, as in 'add[t1]', may be followed by op-specific information
@@ -62,16 +64,16 @@ EXAMPLE
        The op-flags (ex 'sK/2') are described in ("OP flags abbreviations").
 
 	   % perl -MO=Concise -e '$a = $b + 42'
-	   8  <@> leave[1 ref] vKP/REFC ->(end)
-	   1	 <0> enter ->2
-	   2	 <;> nextstate(main 1 -e:1) v ->3
-	   7	 <2> sassign vKS/2 ->8
-	*  5	    <2> add[t1] sK/2 ->6
-	   -	       <1> ex-rv2sv sK/1 ->4
-	   3		  <$> gvsv(*b) s ->4
-	   4	       <$> const(IV 42) s ->5
-	   -	    <1> ex-rv2sv sKRM*/1 ->7
-	   6	       <$> gvsv(*a) s ->7
+	   8  &lt@&gt leave[1 ref] vKP/REFC -&gt(end)
+	   1	 &lt0&gt enter -&gt2
+	   2	 &lt;&gt nextstate(main 1 -e:1) v -&gt3
+	   7	 &lt2&gt sassign vKS/2 -&gt8
+	*  5	    &lt2&gt add[t1] sK/2 -&gt6
+	   -	       &lt1&gt ex-rv2sv sK/1 -&gt4
+	   3		  &lt$&gt gvsv(*b) s -&gt4
+	   4	       &lt$&gt const(IV 42) s -&gt5
+	   -	    &lt1&gt ex-rv2sv sKRM*/1 -&gt7
+	   6	       &lt$&gt gvsv(*a) s -&gt7
 
        The default rendering is top-down, so they're not in execution order.
        This form reflects the way the stack is used to parse and evaluate
@@ -111,7 +113,7 @@ OPTIONS
        -basic
 	   Print OPs in the order they appear in the OP tree (a preorder
 	   traversal, starting at the root). The indentation of each OP shows
-	   its level in the tree, and the '->' at the end of the line
+	   its level in the tree, and the '-&gt' at the end of the line
 	   indicates the next opcode in execution order.  This mode is the
 	   default, so the flag is included simply for completeness.
 
@@ -203,23 +205,23 @@ OPTIONS
 	   the nextstate OP) will be preceded by the 1st line of source code
 	   that generates it.  For example:
 
-	       1  <0> enter
+	       1  &lt0&gt enter
 	       # 1: my $i;
-	       2  <;> nextstate(main 1 junk.pl:1) v:{
-	       3  <0> padsv[$i:1,10] vM/LVINTRO
+	       2  &lt;&gt nextstate(main 1 junk.pl:1) v:{
+	       3  &lt0&gt padsv[$i:1,10] vM/LVINTRO
 	       # 3: for $i (0..9) {
-	       4  <;> nextstate(main 3 junk.pl:3) v:{
-	       5  <0> pushmark s
-	       6  <$> const[IV 0] s
-	       7  <$> const[IV 9] s
-	       8  <{> enteriter(next->j last->m redo->9)[$i:1,10] lKS
-	       k  <0> iter s
-	       l  <|> and(other->9) vK/1
+	       4  &lt;&gt nextstate(main 3 junk.pl:3) v:{
+	       5  &lt0&gt pushmark s
+	       6  &lt$&gt const[IV 0] s
+	       7  &lt$&gt const[IV 9] s
+	       8  &lt{&gt enteriter(next-&gtj last-&gtm redo-&gt9)[$i:1,10] lKS
+	       k  &lt0&gt iter s
+	       l  &lt|&gt and(other-&gt9) vK/1
 	       # 4:	print "line ";
-	       9      <;> nextstate(main 2 junk.pl:4) v
-	       a      <0> pushmark s
-	       b      <$> const[PV "line "] s
-	       c      <@> print vK
+	       9      &lt;&gt nextstate(main 2 junk.pl:4) v
+	       a      &lt0&gt pushmark s
+	       b      &lt$&gt const[PV "line "] s
+	       c      &lt@&gt print vK
 	       # 5:	print "$i\n";
 	       ...
 
@@ -252,7 +254,7 @@ OPTIONS
        -banner
 	   restores default banner behavior.
 
-       -banneris => subref
+       -banneris =&gt subref
 	   TBC: a hookpoint (and an option to set it) for a user-supplied
 	   function to produce a banner appropriate for users needs.  It's not
 	   ideal, because the rendering-state variables, which are a natural
@@ -305,15 +307,15 @@ ABBREVIATIONS
 
        Private flags, if any are set for an opcode, are displayed after a '/'
 
-	   8  <@> leave[1 ref] vKP/REFC ->(end)
-	   7	 <2> sassign vKS/2 ->8
+	   8  &lt@&gt leave[1 ref] vKP/REFC -&gt(end)
+	   7	 &lt2&gt sassign vKS/2 -&gt8
 
        They're opcode specific, and occur less often than the public ones, so
        they're represented by short mnemonics instead of single-chars; see
        op.h for gory details, or try this quick 2-liner:
 
-	 $> perl -MB::Concise -de 1
-	 DB<1> |x \%B::Concise::priv
+	 $&gt perl -MB::Concise -de 1
+	 DB&lt1&gt |x \%B::Concise::priv
 
 FORMATTING SPECIFICATIONS
        For each line-style ('concise', 'terse', 'linenoise', etc.) there are 3
@@ -374,9 +376,9 @@ FORMATTING SPECIFICATIONS
 
        #Var
 	   This ucfirst form of #var generates a tag-value form of itself for
-	   display; it converts '#Var' into a 'Var => #var' style, which is
+	   display; it converts '#Var' into a 'Var =&gt #var' style, which is
 	   then handled as described above.  (Imp-note: #Vars cannot be used
-	   for conditional-fills, because the => #var transform is done after
+	   for conditional-fills, because the =&gt #var transform is done after
 	   the check for #Var's value).
 
        The following variables are 'defined' by B::Concise; when they are used
@@ -434,8 +436,8 @@ FORMATTING SPECIFICATIONS
 	       [ arybase
 	       { block scope
 	       % localise %^H
-	       < open in
-	       > open out
+	       &lt open in
+	       &gt open out
 	       I overload int
 	       F overload float
 	       B overload binary
@@ -553,7 +555,7 @@ One-Liner Command tips
 	   single main program will have many subs.
 
        perl -MB::Concise -e 'B::Concise::compile("-exec","-src",
-       \%B::Concise::)->()'
+       \%B::Concise::)-&gt()'
 	   This renders all functions in the B::Concise package with the
 	   source lines.  It eschews the O framework so that the stashref can
 	   be passed directly to B::Concise::compile().  See -stash option for
@@ -573,14 +575,14 @@ Using B::Concise outside of the O framework
 
    Example: Altering Concise Renderings
 	   use B::Concise qw(set_style add_callback);
-	   add_style($yourStyleName => $defaultfmt, $gotofmt, $treefmt);
+	   add_style($yourStyleName =&gt $defaultfmt, $gotofmt, $treefmt);
 	   add_callback
 	     ( sub {
 		   my ($h, $op, $format, $level, $stylename) = @_;
-		   $h->{variable} = some_func($op);
+		   $h-&gt{variable} = some_func($op);
 	       });
 	   $walker = B::Concise::compile(@options,@subnames,@subrefs);
-	   $walker->();
+	   $walker-&gt();
 
    set_style()
        set_style accepts 3 arguments, and updates the three format-specs
@@ -612,7 +614,7 @@ Using B::Concise outside of the O framework
 
 	 1. A hashref, containing the variable names and values which are
 	    populated into the report-line for the op
-	 2. the op, as a B<B::OP> object
+	 2. the op, as a B&ltB::OP&gt object
 	 3. a reference to the format string
 	 4. the formatting (indent) level
 	 5. the selected stylename
@@ -637,18 +639,18 @@ Using B::Concise outside of the O framework
 
 	   my $walker = B::Concise::compile('-terse','aFuncName', \&aSubRef);  # 1
 	   walk_output(\my $buf);
-	   $walker->(); 		       # 1 renders -terse
+	   $walker-&gt(); 		       # 1 renders -terse
 	   set_style_standard('concise');      # 2
-	   $walker->(); 		       # 2 renders -concise
-	   $walker->(@new);		       # 3 renders whatever
+	   $walker-&gt(); 		       # 2 renders -concise
+	   $walker-&gt(@new);		       # 3 renders whatever
 	   print "3 different renderings: terse, concise, and @new: $buf\n";
 
        When $walker is called, it traverses the subroutines supplied when it
        was created, and renders them using the current style.  You can change
        the style afterwards in several different ways:
 
-	 1. call C<compile>, altering style or mode/order
-	 2. call C<set_style_standard>
+	 1. call C&ltcompile&gt, altering style or mode/order
+	 2. call C&ltset_style_standard&gt
 	 3. call $walker, passing @new options
 
        Passing new options to the $walker is the easiest way to change amongst
@@ -676,11 +678,11 @@ Using B::Concise outside of the O framework
        continue processing.
 
 AUTHOR
-       Stephen McCamant, <smcc@CSUA.Berkeley.EDU>.
+       Stephen McCamant, &ltsmcc@CSUA.Berkeley.EDU&gt.
 
 
 
 perl v5.10.1			  2009-02-12		       B::Concise(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

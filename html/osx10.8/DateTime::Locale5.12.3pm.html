@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="DateTime::Locale is primarily a factory for the various locale..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DateTime::Locale - Localization support for DateTime.pm</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DateTime::Locale(3)   User Contributed Perl Documentation  DateTime::Locale(3)
 
 
@@ -18,15 +20,15 @@ NAME
 SYNOPSIS
 	 use DateTime::Locale;
 
-	 my $loc = DateTime::Locale->load('en_GB');
+	 my $loc = DateTime::Locale-&gtload('en_GB');
 
-	 print $loc->native_locale_name(),   "\n",
-	       $loc->datetime_format_long(), "\n";
+	 print $loc-&gtnative_locale_name(),   "\n",
+	       $loc-&gtdatetime_format_long(), "\n";
 
 	 # but mostly just things like ...
 
-	 my $dt = DateTime->now( locale => 'fr' );
-	 print "Aujourd'hui le mois est " . $dt->month_name(), "\n";
+	 my $dt = DateTime-&gtnow( locale =&gt 'fr' );
+	 print "Aujourd'hui le mois est " . $dt-&gtmonth_name(), "\n";
 
 DESCRIPTION
        DateTime::Locale is primarily a factory for the various locale
@@ -39,7 +41,7 @@ DESCRIPTION
 USAGE
        This module provides the following class methods:
 
-   DateTime::Locale->load( $locale_id | $locale_name | $alias )
+   DateTime::Locale-&gtload( $locale_id | $locale_name | $alias )
        Returns the locale object for the specified locale id, name, or alias -
        see the "DateTime::Locale::Catalog" documentation for a list of built
        in names and ids. The name provided may be either the English or native
@@ -80,32 +82,32 @@ USAGE
        This is done for forwards compatibility, in case something that is
        currently an alias becomes a unique locale in the future.
 
-       This means that the value of "$locale->id()" and the object's class may
+       This means that the value of "$locale-&gtid()" and the object's class may
        not match.
 
        The loaded locale is cached, so that locale objects may be singletons.
-       Calling "DateTime::Locale->register()",
-       "DateTime::Locale->add_aliases()", or
-       "DateTime::Locale->remove_alias()" clears the cache.
+       Calling "DateTime::Locale-&gtregister()",
+       "DateTime::Locale-&gtadd_aliases()", or
+       "DateTime::Locale-&gtremove_alias()" clears the cache.
 
-   DateTime::Locale->ids()
-	 my @ids = DateTime::Locale->ids();
-	 my $ids = DateTime::Locale->ids();
+   DateTime::Locale-&gtids()
+	 my @ids = DateTime::Locale-&gtids();
+	 my $ids = DateTime::Locale-&gtids();
 
        Returns an unsorted list of the available locale ids, or an array
        reference if called in a scalar context. This list does not include
        aliases.
 
-   DateTime::Locale->names()
-	 my @names = DateTime::Locale->names();
-	 my $names = DateTime::Locale->names();
+   DateTime::Locale-&gtnames()
+	 my @names = DateTime::Locale-&gtnames();
+	 my $names = DateTime::Locale-&gtnames();
 
        Returns an unsorted list of the available locale names in English, or
        an array reference if called in a scalar context.
 
-   DateTime::Locale->native_names()
-	 my @names = DateTime::Locale->native_names();
-	 my $names = DateTime::Locale->native_names();
+   DateTime::Locale-&gtnative_names()
+	 my @names = DateTime::Locale-&gtnative_names();
+	 my $names = DateTime::Locale-&gtnative_names();
 
        Returns an unsorted list of the available locale names in their native
        language, or an array reference if called in a scalar context. All
@@ -114,7 +116,7 @@ USAGE
        NB: Some locales are only partially translated, so their native locale
        names may still contain some English.
 
-   DateTime::Locale->add_aliases ( $alias1 => $id1, $alias2 => $id2, ... )
+   DateTime::Locale-&gtadd_aliases ( $alias1 =&gt $id1, $alias2 =&gt $id2, ... )
        Adds an alias to an existing locale id. This allows a locale to be
        loaded by its alias rather than id or name. Multiple aliases are
        allowed.
@@ -122,32 +124,32 @@ USAGE
        If the passed locale id is neither registered nor listed in
        DateTime::Local::Catalog's list of ids, an exception is thrown.
 
-	DateTime::Locale->add_aliases( LastResort => 'es_ES' );
+	DateTime::Locale-&gtadd_aliases( LastResort =&gt 'es_ES' );
 
-	# Equivalent to DateTime::Locale->load('es_ES');
-	DateTime::Locale->load('LastResort');
+	# Equivalent to DateTime::Locale-&gtload('es_ES');
+	DateTime::Locale-&gtload('LastResort');
 
        You can also pass a hash reference to this method.
 
-	DateTime::Locale->add_aliases( { Default     => 'en_GB',
-					 Alternative => 'en_US',
-					 LastResort  => 'es_ES' } );
+	DateTime::Locale-&gtadd_aliases( { Default     =&gt 'en_GB',
+					 Alternative =&gt 'en_US',
+					 LastResort  =&gt 'es_ES' } );
 
-   DateTime::Locale->remove_alias( $alias )
+   DateTime::Locale-&gtremove_alias( $alias )
        Removes a locale id alias, and returns true if the specified alias
        actually existed.
 
-	DateTime::Locale->add_aliases( LastResort => 'es_ES' );
+	DateTime::Locale-&gtadd_aliases( LastResort =&gt 'es_ES' );
 
-	# Equivalent to DateTime::Locale->load('es_ES');
-	DateTime::Locale->load('LastResort');
+	# Equivalent to DateTime::Locale-&gtload('es_ES');
+	DateTime::Locale-&gtload('LastResort');
 
-	DateTime::Locale->remove_alias('LastResort');
+	DateTime::Locale-&gtremove_alias('LastResort');
 
 	# Throws an exception, 'LastResort' no longer exists
-	DateTime::Locale->load('LastResort');
+	DateTime::Locale-&gtload('LastResort');
 
-   DateTime::Locale->register( { ... }, { ... } )
+   DateTime::Locale-&gtregister( { ... }, { ... } )
        This method allows you to register custom locales with the module. A
        single locale is specified as a hash, and you may register multiple
        locales at once by passing an array of hash references.
@@ -156,23 +158,23 @@ USAGE
        and will not be returned by querying methods such as "ids()" or
        "names()".
 
-	register( id	       => $locale_id,
-		  en_language  => ..., # something like 'English' or 'Afar',
+	register( id	       =&gt $locale_id,
+		  en_language  =&gt ..., # something like 'English' or 'Afar',
 
 		  # All other keys are optional. These are:
-		  en_script    => ...,
-		  en_territory => ...,
-		  en_variant   => ...,
+		  en_script    =&gt ...,
+		  en_territory =&gt ...,
+		  en_variant   =&gt ...,
 
-		  native_language  => ...,
-		  native_sript	   => ...,
-		  native_territory => ...,
-		  native_variant   => ...,
+		  native_language  =&gt ...,
+		  native_sript	   =&gt ...,
+		  native_territory =&gt ...,
+		  native_variant   =&gt ...,
 
 		  # Optional - defaults to DateTime::Locale::$locale_id
-		  class   => $class_name,
+		  class   =&gt $class_name,
 
-		  replace => $boolean
+		  replace =&gt $boolean
 		)
 
        The locale id and English name are required, and the following formats
@@ -207,35 +209,35 @@ USAGE
 
        Examples:
 
-	DateTime::Locale->register
-	    ( id	   => 'en_GB_RIDAS',
-	      en_language  => 'English',
-	      en_territory => 'United Kingdom',
-	      en_variant   => 'Ridas Custom Locale',
+	DateTime::Locale-&gtregister
+	    ( id	   =&gt 'en_GB_RIDAS',
+	      en_language  =&gt 'English',
+	      en_territory =&gt 'United Kingdom',
+	      en_variant   =&gt 'Ridas Custom Locale',
 	    );
 
 	# Returns instance of class DateTime::Locale::en_GB_RIDAS
-	my $l = DateTime::Locale->load('en_GB_RIDAS');
+	my $l = DateTime::Locale-&gtload('en_GB_RIDAS');
 
-	DateTime::Locale->register
-	    ( id	       => 'hu_HU',
-	      en_language      => 'Hungarian',
-	      en_territory     => Hungary',
-	      native_language  => 'Magyar',
-	      native_territory => 'Magyarorszag',
+	DateTime::Locale-&gtregister
+	    ( id	       =&gt 'hu_HU',
+	      en_language      =&gt 'Hungarian',
+	      en_territory     =&gt Hungary',
+	      native_language  =&gt 'Magyar',
+	      native_territory =&gt 'Magyarorszag',
 	    );
 
 	# Returns instance of class DateTime::Locale::hu_HU
-	my $l = DateTime::Locale->load('hu_HU');
+	my $l = DateTime::Locale-&gtload('hu_HU');
 
-	DateTime::Locale->register
-	    ( id    => 'en_GB_RIDAS',
-	      name  => 'English United Kingdom Ridas custom locale',
-	      class => 'Ridas::Locales::CustomGB',
+	DateTime::Locale-&gtregister
+	    ( id    =&gt 'en_GB_RIDAS',
+	      name  =&gt 'English United Kingdom Ridas custom locale',
+	      class =&gt 'Ridas::Locales::CustomGB',
 	    );
 
 	# Returns instance of class Ridas::Locales::CustomGB
-	my $l = DateTime::Locale->load('en_GB_RIDAS');
+	my $l = DateTime::Locale-&gtload('en_GB_RIDAS');
 
        If you register a locale for an id that is already registered, the
        "replace" parameter must be true or an exception will be thrown.
@@ -280,12 +282,12 @@ ADDING CUSTOM LOCALES
 
        Now register it:
 
-	DateTime::Locale->register
-	    ( id    => 'en_GB_RIDAS1',
+	DateTime::Locale-&gtregister
+	    ( id    =&gt 'en_GB_RIDAS1',
 
 	      # name, territory, and variant as described in register() documentation
 
-	      class => 'Ridas::Locale::en_GB_RIDAS1',
+	      class =&gt 'Ridas::Locale::en_GB_RIDAS1',
 	    );
 
    Creating a completely new locale
@@ -303,55 +305,55 @@ ADDING CUSTOM LOCALES
        The following methods can be used to get information about the locale's
        id and name.
 
-       o   $locale->id()
+       o   $locale-&gtid()
 
 	   The complete locale id, something like "en_US".
 
-       o   $locale->language_id()
+       o   $locale-&gtlanguage_id()
 
 	   The language portion of the id, like "en".
 
-       o   $locale->script_id()
+       o   $locale-&gtscript_id()
 
 	   The script portion of the id, like "Hant".
 
-       o   $locale->territory_id()
+       o   $locale-&gtterritory_id()
 
 	   The territory portion of the id, like "US".
 
-       o   $locale->variant_id()
+       o   $locale-&gtvariant_id()
 
 	   The variant portion of the id, like "PREEURO".
 
-       o   $locale->name()
+       o   $locale-&gtname()
 
 	   The locale's complete name, which always includes at least a
 	   language component, plus optional territory and variant components.
 	   Something like "English United States". The value returned will
 	   always be in English.
 
-       o   $locale->language()
+       o   $locale-&gtlanguage()
 
-       o   $locale->script()
+       o   $locale-&gtscript()
 
-       o   $locale->territory()
+       o   $locale-&gtterritory()
 
-       o   $locale->variant()
+       o   $locale-&gtvariant()
 
 	   The relevant component from the locale's complete name, like
 	   "English" or "United States".
 
-       o   $locale->native_name()
+       o   $locale-&gtnative_name()
 
 	   The locale's complete name in localized form as a UTF-8 string.
 
-       o   $locale->native_language()
+       o   $locale-&gtnative_language()
 
-       o   $locale->native_script()
+       o   $locale-&gtnative_script()
 
-       o   $locale->native_territory()
+       o   $locale-&gtnative_territory()
 
-       o   $locale->native_variant()
+       o   $locale-&gtnative_variant()
 
 	   The relevant component from the locale's complete native name as a
 	   UTF-8 string.
@@ -368,95 +370,95 @@ ADDING CUSTOM LOCALES
        The wide name should always be the full name of thing in question. The
        narrow name should be just one or two characters.
 
-       o   $locale->month_format_wide()
+       o   $locale-&gtmonth_format_wide()
 
-       o   $locale->month_format_abbreviated()
+       o   $locale-&gtmonth_format_abbreviated()
 
-       o   $locale->month_format_narrow()
+       o   $locale-&gtmonth_format_narrow()
 
-       o   $locale->month_stand_alone_wide()
+       o   $locale-&gtmonth_stand_alone_wide()
 
-       o   $locale->month_stand_alone_abbreviated()
+       o   $locale-&gtmonth_stand_alone_abbreviated()
 
-       o   $locale->month_stand_alone_narrow()
+       o   $locale-&gtmonth_stand_alone_narrow()
 
-       o   $locale->day_format_wide()
+       o   $locale-&gtday_format_wide()
 
-       o   $locale->day_format_abbreviated()
+       o   $locale-&gtday_format_abbreviated()
 
-       o   $locale->day_format_narrow()
+       o   $locale-&gtday_format_narrow()
 
-       o   $locale->day_stand_alone_wide()
+       o   $locale-&gtday_stand_alone_wide()
 
-       o   $locale->day_stand_alone_abbreviated()
+       o   $locale-&gtday_stand_alone_abbreviated()
 
-       o   $locale->day_stand_alone_narrow()
+       o   $locale-&gtday_stand_alone_narrow()
 
-       o   $locale->quarter_format_wide()
+       o   $locale-&gtquarter_format_wide()
 
-       o   $locale->quarter_format_abbreviated()
+       o   $locale-&gtquarter_format_abbreviated()
 
-       o   $locale->quarter_format_narrow()
+       o   $locale-&gtquarter_format_narrow()
 
-       o   $locale->quarter_stand_alone_wide()
+       o   $locale-&gtquarter_stand_alone_wide()
 
-       o   $locale->quarter_stand_alone_abbreviated()
+       o   $locale-&gtquarter_stand_alone_abbreviated()
 
-       o   $locale->quarter_stand_alone_narrow()
+       o   $locale-&gtquarter_stand_alone_narrow()
 
-       o   $locale->am_pm_abbreviated()
+       o   $locale-&gtam_pm_abbreviated()
 
-       o   $locale->era_wide()
+       o   $locale-&gtera_wide()
 
-       o   $locale->era_abbreviated()
+       o   $locale-&gtera_abbreviated()
 
-       o   $locale->era_narrow()
+       o   $locale-&gtera_narrow()
 
        The following methods return strings appropriate for the
-       "DateTime->format_cldr()" method:
+       "DateTime-&gtformat_cldr()" method:
 
-       o   $locale->date_format_full()
+       o   $locale-&gtdate_format_full()
 
-       o   $locale->date_format_long()
+       o   $locale-&gtdate_format_long()
 
-       o   $locale->date_format_medium()
+       o   $locale-&gtdate_format_medium()
 
-       o   $locale->date_format_short()
+       o   $locale-&gtdate_format_short()
 
-       o   $locale->date_format_default()
+       o   $locale-&gtdate_format_default()
 
-       o   $locale->time_format_full()
+       o   $locale-&gttime_format_full()
 
-       o   $locale->time_format_long()
+       o   $locale-&gttime_format_long()
 
-       o   $locale->time_format_medium()
+       o   $locale-&gttime_format_medium()
 
-       o   $locale->time_format_short()
+       o   $locale-&gttime_format_short()
 
-       o   $locale->time_format_default()
+       o   $locale-&gttime_format_default()
 
-       o   $locale->datetime_format_full()
+       o   $locale-&gtdatetime_format_full()
 
-       o   $locale->datetime_format_long()
+       o   $locale-&gtdatetime_format_long()
 
-       o   $locale->datetime_format_medium()
+       o   $locale-&gtdatetime_format_medium()
 
-       o   $locale->datetime_format_short()
+       o   $locale-&gtdatetime_format_short()
 
-       o   $locale->datetime_format_default()
+       o   $locale-&gtdatetime_format_default()
 
        A locale may also offer one or more formats for displaying part of a
        datetime, such as the year and month, or hour and minute.
 
-       o   $locale->format_for($name)
+       o   $locale-&gtformat_for($name)
 
-	   These are accessed by passing a name to "$locale->format_for(...)",
+	   These are accessed by passing a name to "$locale-&gtformat_for(...)",
 	   where the name is a CLDR-style format specifier.
 
 	   The return value is a string suitable for passing to
-	   "$dt->format_cldr()", so you can do something like this:
+	   "$dt-&gtformat_cldr()", so you can do something like this:
 
-	     print $dt->format_cldr( $dt->locale()->format_for('MMMdd') )
+	     print $dt-&gtformat_cldr( $dt-&gtlocale()-&gtformat_for('MMMdd') )
 
 	   which for the "en" locale would print out something like "08 Jul".
 
@@ -465,16 +467,16 @@ ADDING CUSTOM LOCALES
 	   "zh" locale includes the Chinese characters for "day" (X) and month
 	   (X), so you get something like "8X23X".
 
-       o   $locale->available_formats()
+       o   $locale-&gtavailable_formats()
 
 	   This should return a list of all the format names that could be
-	   passed to "$locale->format_for()".
+	   passed to "$locale-&gtformat_for()".
 
        The following methods deal with the default format lengths:
 
-       o   $locale->default_date_format_length()
+       o   $locale-&gtdefault_date_format_length()
 
-       o   $locale->default_time_format_length()
+       o   $locale-&gtdefault_time_format_length()
 
 	   These methods return one of "full", "long", "medium", or "short",
 	   indicating the current default format length.
@@ -482,21 +484,21 @@ ADDING CUSTOM LOCALES
 	   The default when an object is created is determined by the CLDR
 	   locale data.
 
-       o   $locale->set_default_date_format_length($length)
+       o   $locale-&gtset_default_date_format_length($length)
 
-       o   $locale->set_default_time_format_length($length)
+       o   $locale-&gtset_default_time_format_length($length)
 
 	   These methods accept one of "full", "long", "medium", or "short",
 	   indicating the new default format length.
 
        There are also some miscellaneous methods locales should support:
 
-       o   $locale->prefers_24_hour_time()
+       o   $locale-&gtprefers_24_hour_time()
 
 	   Returns a boolean indicating whether or not the locale prefers
 	   24-hour time.
 
-       o   $locale->first_day_of_week()
+       o   $locale-&gtfirst_day_of_week()
 
 	   Returns a number from 1 to 7 indicating the local first day of the
 	   week, with Monday being 1 and Sunday being 7.
@@ -534,12 +536,12 @@ DONATIONS
 
        To donate, log into PayPal and send money to autarch@urth.org or use
        the button on this page: http://www.urth.org/~autarch/fs-donation.html
-       <http://www.urth.org/~autarch/fs-donation.html>
+       &lthttp://www.urth.org/~autarch/fs-donation.html&gt
 
 AUTHORS
-       Richard Evans <rich@ridas.com>
+       Richard Evans &ltrich@ridas.com&gt
 
-       Dave Rolsky <autarch@urth.org>
+       Dave Rolsky &ltautarch@urth.org&gt
 
        These modules are loosely based on the DateTime::Language modules,
        which were in turn based on the Date::Language modules from Graham
@@ -570,6 +572,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2012-06-20		   DateTime::Locale(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

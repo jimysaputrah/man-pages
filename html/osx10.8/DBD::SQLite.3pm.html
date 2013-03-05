@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="SQLite is a public domain file-based relational database engine that..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBD::SQLite - Self-contained RDBMS in a DBI Driver</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBD::SQLite(3)	      User Contributed Perl Documentation	DBD::SQLite(3)
 
 
@@ -17,11 +19,11 @@ NAME
 
 SYNOPSIS
 	 use DBI;
-	 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile","","");
+	 my $dbh = DBI-&gtconnect("dbi:SQLite:dbname=$dbfile","","");
 
 DESCRIPTION
        SQLite is a public domain file-based relational database engine that
-       you can find at <http://www.sqlite.org/>.
+       you can find at &lthttp://www.sqlite.org/&gt.
 
        DBD::SQLite is a Perl DBI driver for SQLite, that includes the entire
        thing in the distribution.  So in order to get a fast transaction
@@ -31,7 +33,7 @@ DESCRIPTION
        SQLite supports the following features:
 
        Implements a large subset of SQL92
-	   See <http://www.sqlite.org/lang.html> for details.
+	   See &lthttp://www.sqlite.org/lang.html&gt for details.
 
        A complete DB in a single disk file
 	   Everything for your database is stored in a single disk file,
@@ -57,7 +59,7 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
        database file (with or without a parent directory) in the DBI
        connection string (as a database "name"):
 
-	 my $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile","","");
+	 my $dbh = DBI-&gtconnect("dbi:SQLite:dbname=$dbfile","","");
 
        The file is opened in read/write mode, and will be created if it does
        not exist yet.
@@ -101,19 +103,19 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
        order to store natively as a BLOB use the following code:
 
 	 use DBI qw(:sql_types);
-	 my $dbh = DBI->connect("dbi:SQLite:dbfile","","");
+	 my $dbh = DBI-&gtconnect("dbi:SQLite:dbfile","","");
 
 	 my $blob = `cat foo.jpg`;
-	 my $sth = $dbh->prepare("INSERT INTO mytable VALUES (1, ?)");
-	 $sth->bind_param(1, $blob, SQL_BLOB);
-	 $sth->execute();
+	 my $sth = $dbh-&gtprepare("INSERT INTO mytable VALUES (1, ?)");
+	 $sth-&gtbind_param(1, $blob, SQL_BLOB);
+	 $sth-&gtexecute();
 
        And then retrieval just works:
 
-	 $sth = $dbh->prepare("SELECT * FROM mytable WHERE id = 1");
-	 $sth->execute();
-	 my $row = $sth->fetch;
-	 my $blobo = $row->[1];
+	 $sth = $dbh-&gtprepare("SELECT * FROM mytable WHERE id = 1");
+	 $sth-&gtexecute();
+	 my $row = $sth-&gtfetch;
+	 my $blobo = $row-&gt[1];
 
 	 # now $blobo == $blob
 
@@ -121,16 +123,16 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
        As of this writing, a SQL that compares a return value of a function
        with a numeric bind value like this doesn't work as you might expect.
 
-	 my $sth = $dbh->prepare(q{
-	   SELECT bar FROM foo GROUP BY bar HAVING count(*) > ?;
+	 my $sth = $dbh-&gtprepare(q{
+	   SELECT bar FROM foo GROUP BY bar HAVING count(*) &gt ?;
 	 });
-	 $sth->execute(5);
+	 $sth-&gtexecute(5);
 
        This is because DBD::SQLite assumes that all the bind values are text
        (and should be quoted) by default. Thus the above statement becomes
        like this while executing:
 
-	 SELECT bar FROM foo GROUP BY bar HAVING count(*) > "5";
+	 SELECT bar FROM foo GROUP BY bar HAVING count(*) &gt "5";
 
        There are three workarounds for this.
 
@@ -140,36 +142,36 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
 
 	     use DBI qw(:sql_types);  # Don't forget this
 
-	     my $sth = $dbh->prepare(q{
-	       SELECT bar FROM foo GROUP BY bar HAVING count(*) > ?;
+	     my $sth = $dbh-&gtprepare(q{
+	       SELECT bar FROM foo GROUP BY bar HAVING count(*) &gt ?;
 	     });
-	     $sth->bind_param(1, 5, SQL_INTEGER);
-	     $sth->execute();
+	     $sth-&gtbind_param(1, 5, SQL_INTEGER);
+	     $sth-&gtexecute();
 
        Add zero to make it a number
 	   This is somewhat weird, but works anyway.
 
-	     my $sth = $dbh->prepare(q{
-	       SELECT bar FROM foo GROUP BY bar HAVING count(*) > (? + 0);
+	     my $sth = $dbh-&gtprepare(q{
+	       SELECT bar FROM foo GROUP BY bar HAVING count(*) &gt (? + 0);
 	     });
-	     $sth->execute(5);
+	     $sth-&gtexecute(5);
 
        Set "sqlite_see_if_its_a_number" database handle attribute
 	   As of version 1.32_02, you can use "sqlite_see_if_its_a_number" to
 	   let DBD::SQLite to see if the bind values are numbers or not.
 
-	     $dbh->{sqlite_see_if_its_a_number} = 1;
-	     my $sth = $dbh->prepare(q{
-	       SELECT bar FROM foo GROUP BY bar HAVING count(*) > ?;
+	     $dbh-&gt{sqlite_see_if_its_a_number} = 1;
+	     my $sth = $dbh-&gtprepare(q{
+	       SELECT bar FROM foo GROUP BY bar HAVING count(*) &gt ?;
 	     });
-	     $sth->execute(5);
+	     $sth-&gtexecute(5);
 
 	   You can set it to true when you connect to a database.
 
-	     my $dbh = DBI->connect('dbi:SQLite:foo', undef, undef, {
-	       AutoCommit => 1,
-	       RaiseError => 1,
-	       sqlite_see_if_its_a_number => 1,
+	     my $dbh = DBI-&gtconnect('dbi:SQLite:foo', undef, undef, {
+	       AutoCommit =&gt 1,
+	       RaiseError =&gt 1,
+	       sqlite_see_if_its_a_number =&gt 1,
 	     });
 
 	   This is the most straightforward solution, but as noted above,
@@ -183,16 +185,16 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
        SQLite supports several placeholder expressions, including "?"  and
        ":AAAA". Consult the DBI and sqlite documentation for details.
 
-       <http://www.sqlite.org/lang_expr.html#varparam>
+       &lthttp://www.sqlite.org/lang_expr.html#varparam&gt
 
        Note that a question mark actually means a next unused (numbered)
        placeholder. You're advised not to use it with other (numbered or
        named) placeholders to avoid confusion.
 
-	 my $sth = $dbh->prepare(
+	 my $sth = $dbh-&gtprepare(
 	   'update TABLE set a=?1 where b=?2 and a IS NOT ?1'
 	 );
-	 $sth->execute(1, 2);
+	 $sth-&gtexecute(1, 2);
 
    Foreign Keys
        BE PREPARED! WOLVES APPROACH!!
@@ -206,12 +208,12 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
        To do this, issue the following pragma (see below), preferably as soon
        as you connect to a database and you're not in a transaction:
 
-	 $dbh->do("PRAGMA foreign_keys = ON");
+	 $dbh-&gtdo("PRAGMA foreign_keys = ON");
 
        And you can explicitly disable the feature whenever you like by turning
        the pragma off:
 
-	 $dbh->do("PRAGMA foreign_keys = OFF");
+	 $dbh-&gtdo("PRAGMA foreign_keys = OFF");
 
        As of this writing, this feature is disabled by default by the sqlite
        team, and by us, to secure backward compatibility, as this feature may
@@ -223,7 +225,7 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
        likely that the sqlite team will turn it default-on in the future, and
        we plan to do it NO LATER THAN they do so.
 
-       See <http://www.sqlite.org/foreignkeys.html> for details.
+       See &lthttp://www.sqlite.org/foreignkeys.html&gt for details.
 
    Pragma
        SQLite has a set of "Pragma"s to modifiy its operation or to query for
@@ -231,7 +233,7 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
        work with other DBD libraries, but you may find some of these are quite
        useful. DBD::SQLite actually sets some (like "show_datatypes") for you
        when you connect to a database.	See
-       <http://www.sqlite.org/pragma.html> for details.
+       &lthttp://www.sqlite.org/pragma.html&gt for details.
 
    Transactions
        DBI/DBD::SQLite's transactions may be a bit confusing. They behave
@@ -245,15 +247,15 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
 	   statement. To end it, call "commit/rollback" methods, or issue the
 	   corresponding statements.
 
-	     $dbh->{AutoCommit} = 1;
+	     $dbh-&gt{AutoCommit} = 1;
 
-	     $dbh->begin_work; # or $dbh->do('BEGIN TRANSACTION');
+	     $dbh-&gtbegin_work; # or $dbh-&gtdo('BEGIN TRANSACTION');
 
-	     # $dbh->{AutoCommit} is turned off temporarily during a transaction;
+	     # $dbh-&gt{AutoCommit} is turned off temporarily during a transaction;
 
-	     $dbh->commit; # or $dbh->do('COMMIT');
+	     $dbh-&gtcommit; # or $dbh-&gtdo('COMMIT');
 
-	     # $dbh->{AutoCommit} is turned on again;
+	     # $dbh-&gt{AutoCommit} is turned on again;
 
        When the AutoCommit flag is off
 	   You're supposed to always use the transactional mode, until you
@@ -264,21 +266,21 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
 	   commit or roll it back freely. Another transaction will
 	   automatically begins if you execute another statement.
 
-	     $dbh->{AutoCommit} = 0;
+	     $dbh-&gt{AutoCommit} = 0;
 
-	     # $dbh->do('BEGIN TRANSACTION') is not necessary, but possible
+	     # $dbh-&gtdo('BEGIN TRANSACTION') is not necessary, but possible
 
 	     ...
 
-	     $dbh->commit; # or $dbh->do('COMMIT');
+	     $dbh-&gtcommit; # or $dbh-&gtdo('COMMIT');
 
-	     # $dbh->{AutoCommit} stays intact;
+	     # $dbh-&gt{AutoCommit} stays intact;
 
-	     $dbh->{AutoCommit} = 1;  # ends the transactional mode
+	     $dbh-&gt{AutoCommit} = 1;  # ends the transactional mode
 
        This "AutoCommit" mode is independent from the autocommit mode of the
        internal SQLite library, which always begins by a "BEGIN" statement,
-       and ends by a "COMMIT" or a <ROLLBACK>.
+       and ends by a "COMMIT" or a &ltROLLBACK&gt.
 
    Transaction and Database Locking
        Transaction by "AutoCommit" or "begin_work" is nice and handy, but
@@ -303,12 +305,12 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
        transaction (even when you simply use "begin_work" or turn off the
        "AutoCommit".).
 
-	 my $dbh = DBI->connect("dbi:SQLite::memory:", "", "", {
-	   sqlite_use_immediate_transaction => 1,
+	 my $dbh = DBI-&gtconnect("dbi:SQLite::memory:", "", "", {
+	   sqlite_use_immediate_transaction =&gt 1,
 	 });
 
        Note that this works only when all of the connections use the same
-       (non-deferred) transaction. See <http://sqlite.org/lockingv3.html> for
+       (non-deferred) transaction. See &lthttp://sqlite.org/lockingv3.html&gt for
        locking details.
 
    Processing Multiple Statements At A Time
@@ -318,7 +320,7 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
        processes the first statement, and discards the rest.
 
        Since 1.30_01, you can retrieve those ignored (unprepared) statements
-       via "$sth->{sqlite_unprepared_statements}". It usually contains nothing
+       via "$sth-&gt{sqlite_unprepared_statements}". It usually contains nothing
        but white spaces, but if you really care, you can check this attribute
        to see if there's anything left undone. Also, if you set a
        "sqlite_allow_multiple_statements" attribute of a database handle to
@@ -342,7 +344,7 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
 	 ORDER BY count desc
 	 LIMIT 20
 
-       To discover the top 20 hit URLs on the site (<http://axkit.org>), and
+       To discover the top 20 hit URLs on the site (&lthttp://axkit.org&gt), and
        it returned within 2 seconds. He was seriously considering switching
        his log analysis code to use this little speed demon!
 
@@ -360,7 +362,7 @@ NOTABLE DIFFERENCES FROM OTHER DRIVERS
        The memory usage of SQLite can also be tuned using the cache_size
        pragma.
 
-	 $dbh->do("PRAGMA cache_size = 800000");
+	 $dbh-&gtdo("PRAGMA cache_size = 800000");
 
        The above will allocate 800M for DB cache; the default is 2M.  Your
        sweet spot probably lies somewhere in between.
@@ -374,23 +376,23 @@ DRIVER PRIVATE ATTRIBUTES
        sqlite_unicode
 	   If set to a true value, DBD::SQLite will turn the UTF-8 flag on for
 	   all text strings coming out of the database (this feature is
-	   currently disabled for perl < 5.8.5). For more details on the UTF-8
+	   currently disabled for perl &lt 5.8.5). For more details on the UTF-8
 	   flag see perlunicode. The default is for the UTF-8 flag to be
 	   turned off.
 
 	   Also note that due to some bizarreness in SQLite's type system (see
-	   <http://www.sqlite.org/datatype3.html>), if you want to retain
-	   blob-style behavior for some columns under "$dbh->{sqlite_unicode}
+	   &lthttp://www.sqlite.org/datatype3.html&gt), if you want to retain
+	   blob-style behavior for some columns under "$dbh-&gt{sqlite_unicode}
 	   = 1" (say, to store images in the database), you have to state so
 	   explicitly using the 3-argument form of "bind_param" in DBI when
 	   doing updates:
 
 	     use DBI qw(:sql_types);
-	     $dbh->{sqlite_unicode} = 1;
-	     my $sth = $dbh->prepare("INSERT INTO mytable (blobcolumn) VALUES (?)");
+	     $dbh-&gt{sqlite_unicode} = 1;
+	     my $sth = $dbh-&gtprepare("INSERT INTO mytable (blobcolumn) VALUES (?)");
 
 	     # Binary_data will be stored as is.
-	     $sth->bind_param(1, $binary_data, SQL_BLOB);
+	     $sth-&gtbind_param(1, $binary_data, SQL_BLOB);
 
 	   Defining the column type as "BLOB" in the DDL is not sufficient.
 
@@ -425,7 +427,7 @@ METHODS
        methods.
 
    table_info
-	 $sth = $dbh->table_info(undef, $schema, $table, $type, \%attr);
+	 $sth = $dbh-&gttable_info(undef, $schema, $table, $type, \%attr);
 
        Returns all tables and schemas (databases) as specified in "table_info"
        in DBI.	The schema and table arguments will do a "LIKE" search. You
@@ -451,8 +453,8 @@ METHODS
        'VIEW', 'LOCAL TEMPORARY' or 'SYSTEM TABLE'.
 
    primary_key, primary_key_info
-	 @names = $dbh->primary_key(undef, $schema, $table);
-	 $sth	= $dbh->primary_key_info(undef, $schema, $table, \%attr);
+	 @names = $dbh-&gtprimary_key(undef, $schema, $table);
+	 $sth	= $dbh-&gtprimary_key_info(undef, $schema, $table, \%attr);
 
        You can retrieve primary key names or more detailed information.  As
        noted above, SQLite does not have the concept of catalogs, so the first
@@ -465,14 +467,14 @@ DRIVER PRIVATE METHODS
        tweak, but the use of func() method is now discouraged by the DBI
        author for various reasons (see DBI's document
        http://search.cpan.org/dist/DBI/lib/DBI/DBD.pm#Using_install_method()_to_expose_driver-private_methods
-       <http://search.cpan.org/dist/DBI/lib/DBI/DBD.pm#Using_install_method()_to_expose_driver-
-       private_methods> for details). So, if you're using DBI >= 1.608, use
+       &lthttp://search.cpan.org/dist/DBI/lib/DBI/DBD.pm#Using_install_method()_to_expose_driver-
+       private_methods&gt for details). So, if you're using DBI &gt= 1.608, use
        these "sqlite_" methods. If you need to use an older DBI, you can call
        these like this:
 
-	 $dbh->func( ..., "(method name without sqlite_ prefix)" );
+	 $dbh-&gtfunc( ..., "(method name without sqlite_ prefix)" );
 
-   $dbh->sqlite_last_insert_rowid()
+   $dbh-&gtsqlite_last_insert_rowid()
        This method returns the last inserted rowid. If you specify an INTEGER
        PRIMARY KEY as the first column in your table, that is the column that
        is returned.  Otherwise, it is the hidden ROWID column. See the sqlite
@@ -481,18 +483,18 @@ DRIVER PRIVATE METHODS
        Generally you should not be using this method. Use the DBI
        last_insert_id method instead. The usage of this is:
 
-	 $h->last_insert_id($catalog, $schema, $table_name, $field_name [, \%attr ])
+	 $h-&gtlast_insert_id($catalog, $schema, $table_name, $field_name [, \%attr ])
 
-       Running "$h->last_insert_id("","","","")" is the equivalent of running
-       "$dbh->sqlite_last_insert_rowid()" directly.
+       Running "$h-&gtlast_insert_id("","","","")" is the equivalent of running
+       "$dbh-&gtsqlite_last_insert_rowid()" directly.
 
-   $dbh->sqlite_busy_timeout()
+   $dbh-&gtsqlite_busy_timeout()
        Retrieve the current busy timeout.
 
-   $dbh->sqlite_busy_timeout( $ms )
+   $dbh-&gtsqlite_busy_timeout( $ms )
        Set the current busy timeout. The timeout is in milliseconds.
 
-   $dbh->sqlite_create_function( $name, $argc, $code_ref )
+   $dbh-&gtsqlite_create_function( $name, $argc, $code_ref )
        This method will register a new function which will be usable in an SQL
        query. The method's parameters are:
 
@@ -510,7 +512,7 @@ DRIVER PRIVATE METHODS
        For example, here is how to define a now() function which returns the
        current number of seconds since the epoch:
 
-	 $dbh->sqlite_create_function( 'now', 0, sub { return time } );
+	 $dbh-&gtsqlite_create_function( 'now', 0, sub { return time } );
 
        After this, it could be use from SQL as:
 
@@ -537,7 +539,7 @@ DRIVER PRIVATE METHODS
        Note that regexp matching will not use SQLite indices, but will iterate
        over all rows, so it could be quite costly in terms of performance.
 
-   $dbh->sqlite_create_collation( $name, $code_ref )
+   $dbh-&gtsqlite_create_collation( $name, $code_ref )
        This method manually registers a new function which will be usable in
        an SQL query as a COLLATE option for sorting. Such functions can also
        be registered automatically on demand: see section "COLLATION
@@ -552,12 +554,12 @@ DRIVER PRIVATE METHODS
 	   Reference to the function's implementation.	The driver will check
 	   that this is a proper sorting function.
 
-   $dbh->sqlite_collation_needed( $code_ref )
+   $dbh-&gtsqlite_collation_needed( $code_ref )
        This method manually registers a callback function that will be invoked
        whenever an undefined collation sequence is required from an SQL
        statement. The callback is invoked as
 
-	 $code_ref->($dbh, $collation_name)
+	 $code_ref-&gt($dbh, $collation_name)
 
        and should register the desired collation using
        "sqlite_create_collation".
@@ -567,7 +569,7 @@ DRIVER PRIVATE METHODS
        the %DBD::SQLite::COLLATION hash (see section "COLLATION FUNCTIONS"
        below).
 
-   $dbh->sqlite_create_aggregate( $name, $argc, $pkg )
+   $dbh-&gtsqlite_create_aggregate( $name, $argc, $pkg )
        This method will register a new aggregate function which can then be
        used from SQL. The method's parameters are:
 
@@ -636,7 +638,7 @@ DRIVER PRIVATE METHODS
 	     return $sigma;
 	 }
 
-	 $dbh->sqlite_create_aggregate( "variance", 1, 'variance' );
+	 $dbh-&gtsqlite_create_aggregate( "variance", 1, 'variance' );
 
        The aggregate function can then be used as:
 
@@ -646,7 +648,7 @@ DRIVER PRIVATE METHODS
 
        For more examples, see the DBD::SQLite::Cookbook.
 
-   $dbh->sqlite_progress_handler( $n_opcodes, $code_ref )
+   $dbh-&gtsqlite_progress_handler( $n_opcodes, $code_ref )
        This method registers a handler to be invoked periodically during long
        running calls to SQLite.
 
@@ -665,7 +667,7 @@ DRIVER PRIVATE METHODS
 	   Set this argument to "undef" if you want to unregister a previous
 	   progress handler.
 
-   $dbh->sqlite_commit_hook( $code_ref )
+   $dbh-&gtsqlite_commit_hook( $code_ref )
        This method registers a callback function to be invoked whenever a
        transaction is committed. Any callback set by a previous call to
        "sqlite_commit_hook" is overridden. A reference to the previous
@@ -675,16 +677,16 @@ DRIVER PRIVATE METHODS
        When the commit hook callback returns zero, the commit operation is
        allowed to continue normally. If the callback returns non-zero, then
        the commit is converted into a rollback (in that case, any attempt to
-       explicitly call "$dbh->rollback()" afterwards would yield an error).
+       explicitly call "$dbh-&gtrollback()" afterwards would yield an error).
 
-   $dbh->sqlite_rollback_hook( $code_ref )
+   $dbh-&gtsqlite_rollback_hook( $code_ref )
        This method registers a callback function to be invoked whenever a
        transaction is rolled back. Any callback set by a previous call to
        "sqlite_rollback_hook" is overridden. A reference to the previous
        callback (if any) is returned.  Registering an "undef" disables the
        callback.
 
-   $dbh->sqlite_update_hook( $code_ref )
+   $dbh-&gtsqlite_update_hook( $code_ref )
        This method registers a callback function to be invoked whenever a row
        is updated, inserted or deleted. Any callback set by a previous call to
        "sqlite_update_hook" is overridden. A reference to the previous
@@ -693,7 +695,7 @@ DRIVER PRIVATE METHODS
 
        The callback will be called as
 
-	 $code_ref->($action_code, $database, $table, $rowid)
+	 $code_ref-&gt($action_code, $database, $table, $rowid)
 
        where
 
@@ -712,7 +714,7 @@ DRIVER PRIVATE METHODS
 	   is the unique 64-bit signed integer key of the affected row within
 	   that table.
 
-   $dbh->sqlite_set_authorizer( $code_ref )
+   $dbh-&gtsqlite_set_authorizer( $code_ref )
        This method registers an authorizer callback to be invoked whenever SQL
        statements are being compiled by the "prepare" in DBI method.  The
        authorizer callback should return "DBD::SQLite::OK" to allow the
@@ -734,7 +736,7 @@ DRIVER PRIVATE METHODS
 
        The callback will be called as
 
-	 $code_ref->($action_code, $string1, $string2, $database, $trigger_or_view)
+	 $code_ref-&gt($action_code, $string1, $string2, $database, $trigger_or_view)
 
        where
 
@@ -753,25 +755,25 @@ DRIVER PRIVATE METHODS
 	   for the access attempt, or "undef" if this access attempt is
 	   directly from top-level SQL code.
 
-   $dbh->sqlite_backup_from_file( $filename )
+   $dbh-&gtsqlite_backup_from_file( $filename )
        This method accesses the SQLite Online Backup API, and will take a
        backup of the named database file, copying it to, and overwriting, your
        current database connection. This can be particularly handy if your
        current connection is to the special :memory: database, and you wish to
        populate it from an existing DB.
 
-   $dbh->sqlite_backup_to_file( $filename )
+   $dbh-&gtsqlite_backup_to_file( $filename )
        This method accesses the SQLite Online Backup API, and will take a
        backup of the currently connected database, and write it out to the
        named file.
 
-   $dbh->sqlite_enable_load_extension( $bool )
+   $dbh-&gtsqlite_enable_load_extension( $bool )
        Calling this method with a true value enables loading (external)
        sqlite3 extensions. After the call, you can load extensions like this:
 
-	 $dbh->sqlite_enable_load_extension(1);
-	 $sth = $dbh->prepare("select load_extension('libsqlitefunctions.so')")
-	 or die "Cannot prepare: " . $dbh->errstr();
+	 $dbh-&gtsqlite_enable_load_extension(1);
+	 $sth = $dbh-&gtprepare("select load_extension('libsqlitefunctions.so')")
+	 or die "Cannot prepare: " . $dbh-&gterrstr();
 
    DBD::SQLite::compile_options()
        Returns an array of compile options (available since sqlite 3.6.23,
@@ -786,7 +788,7 @@ DRIVER CONSTANTS
        operation would be written as follows :
 
 	 use DBD::SQLite;
-	 $dbh->sqlite_set_authorizer(sub {
+	 $dbh-&gtsqlite_set_authorizer(sub {
 	   my $action_code = shift;
 	   return $action_code == DBD::SQLite::DELETE ? DBD::SQLite::DENY
 						      : DBD::SQLite::OK;
@@ -794,7 +796,7 @@ DRIVER CONSTANTS
 
        The list of constants implemented in "DBD::SQLite" is given below; more
        information can be found ad at
-       <http://www.sqlite.org/c3ref/constlist.html>.
+       &lthttp://www.sqlite.org/c3ref/constlist.html&gt.
 
    Authorizer Return Codes
 	 OK
@@ -850,7 +852,7 @@ COLLATION FUNCTIONS
        SQLite v3 provides the ability for users to supply arbitrary comparison
        functions, known as user-defined "collation sequences" or "collating
        functions", to be used for comparing two text values.
-       <http://www.sqlite.org/datatype3.html#collation> explains how
+       &lthttp://www.sqlite.org/datatype3.html#collation&gt explains how
        collations are used in various SQL expressions.
 
    Builtin collation sequences
@@ -893,18 +895,18 @@ COLLATION FUNCTIONS
 	 SELECT * FROM foo ORDER BY name COLLATE perllocale
 
    Unicode handling
-       If the attribute "$dbh->{sqlite_unicode}" is set, strings coming from
+       If the attribute "$dbh-&gt{sqlite_unicode}" is set, strings coming from
        the database and passed to the collation function will be properly
        tagged with the utf8 flag; but this only works if the "sqlite_unicode"
        attribute is set before the first call to a perl collation sequence .
        The recommended way to activate unicode is to set the parameter at
        connection time :
 
-	 my $dbh = DBI->connect(
+	 my $dbh = DBI-&gtconnect(
 	     "dbi:SQLite:dbname=foo", "", "",
 	     {
-		 RaiseError	=> 1,
-		 sqlite_unicode => 1,
+		 RaiseError	=&gt 1,
+		 sqlite_unicode =&gt 1,
 	     }
 	 );
 
@@ -928,9 +930,9 @@ COLLATION FUNCTIONS
 	     [aaaaaacdeeeeiiiinoooooouuuuy] for $a, $b;
 	   $a cmp $b;
 	 };
-	 my $dbh  = DBI->connect("dbi:SQLite:dbname=dbfile");
+	 my $dbh  = DBI-&gtconnect("dbi:SQLite:dbname=dbfile");
 	 my $sql  = "SELECT ... FROM ... ORDER BY ... COLLATE no_accents");
-	 my $rows = $dbh->selectall_arrayref($sql);
+	 my $rows = $dbh-&gtselectall_arrayref($sql);
 
        The builtin "perl" or "perllocale" collations are predefined in that
        same hash.
@@ -960,24 +962,24 @@ FULLTEXT SEARCH
 
    Short introduction to FTS3
        The detailed documentation for FTS3 can be found at
-       <http://www.sqlite.org/fts3.html>. Here is a very short example :
+       &lthttp://www.sqlite.org/fts3.html&gt. Here is a very short example :
 
-	 $dbh->do(<<"") or die DBI::errstr;
+	 $dbh-&gtdo(&lt&lt"") or die DBI::errstr;
 	 CREATE VIRTUAL TABLE fts_example USING fts3(content)
 
-	 my $sth = $dbh->prepare("INSERT INTO fts_example(content) VALUES (?))");
-	 $sth->execute($_) foreach @docs_to_insert;
+	 my $sth = $dbh-&gtprepare("INSERT INTO fts_example(content) VALUES (?))");
+	 $sth-&gtexecute($_) foreach @docs_to_insert;
 
-	 my $results = $dbh->selectall_arrayref(<<"");
+	 my $results = $dbh-&gtselectall_arrayref(&lt&lt"");
 	 SELECT docid, snippet(content) FROM fts_example WHERE content MATCH 'foo'
 
        The key points in this example are :
 
        o   The syntax for creating FTS3 tables is
 
-	     CREATE VIRTUAL TABLE <table_name> USING fts3(<columns>)
+	     CREATE VIRTUAL TABLE &lttable_name&gt USING fts3(&ltcolumns&gt)
 
-	   where "<columns>" is a list of column names. Columns may be typed,
+	   where "&ltcolumns&gt" is a list of column names. Columns may be typed,
 	   but the type information is ignored. If no columns are specified,
 	   the default is a single column named "content".  In addition, FTS3
 	   tables have an implicit column called "docid" (or also "rowid") for
@@ -997,13 +999,13 @@ FULLTEXT SEARCH
 
        There are many more details to building and searching FTS3 tables, so
        we strongly invite you to read the full documentation at at
-       <http://www.sqlite.org/fts3.html>.
+       &lthttp://www.sqlite.org/fts3.html&gt.
 
        Incompatible change : starting from version 1.31, "DBD::SQLite" uses
        the new, recommended "Enhanced Query Syntax" for binary set operators
        (AND, OR, NOT, possibly nested with parenthesis). Previous versions of
        "DBD::SQLite" used the "Standard Query Syntax" (see
-       <http://www.sqlite.org/fts3.html#section_3_2>).	Unfortunately this is
+       &lthttp://www.sqlite.org/fts3.html#section_3_2&gt).	Unfortunately this is
        a compilation switch, so it cannot be tuned at runtime; however, since
        FTS3 was never advertised in versions prior to 1.31, the change should
        be invisible to the vast majority of "DBD::SQLite" users. If, however,
@@ -1018,9 +1020,9 @@ FULLTEXT SEARCH
        are split into tokens; therefore FTS3 table declarations can explicitly
        specify how to perform tokenization:
 
-	 CREATE ... USING fts3(<columns>, tokenize=<tokenizer>)
+	 CREATE ... USING fts3(&ltcolumns&gt, tokenize=&lttokenizer&gt)
 
-       where "<tokenizer>" is a sequence of space-separated words that
+       where "&lttokenizer&gt" is a sequence of space-separated words that
        triggers a specific tokenizer, as explained below.
 
        SQLite builtin tokenizers
@@ -1068,14 +1070,14 @@ FULLTEXT SEARCH
        a perl tokenizer, that can hook to any tokenizing algorithm written in
        Perl. This is specified as follows :
 
-	 CREATE ... USING fts3(<columns>, tokenize=perl '<perl_function>')
+	 CREATE ... USING fts3(&ltcolumns&gt, tokenize=perl '&ltperl_function&gt')
 
-       where "<perl_function>" is a fully qualified Perl function name (i.e.
+       where "&ltperl_function&gt" is a fully qualified Perl function name (i.e.
        prefixed by the name of the package in which that function is
        declared). So for example if the function is "my_func" in the main
        program, write
 
-	 CREATE ... USING fts3(<columns>, tokenize=perl 'main::my_func')
+	 CREATE ... USING fts3(&ltcolumns&gt, tokenize=perl 'main::my_func')
 
        That function should return a code reference that takes a string as
        single argument, and returns an iterator (another function), which
@@ -1118,8 +1120,8 @@ FULLTEXT SEARCH
        already implemented in the Search::Tokenizer module :
 
 	 use Search::Tokenizer;
-	 $dbh->do(<<"") or die DBI::errstr;
-	 CREATE ... USING fts3(<columns>,
+	 $dbh-&gtdo(&lt&lt"") or die DBI::errstr;
+	 CREATE ... USING fts3(&ltcolumns&gt,
 			       tokenize=perl 'Search::Tokenizer::unaccent')
 
        or you can use "new" in Search::Tokenizer to build your own tokenizer.
@@ -1154,25 +1156,25 @@ R* TREE SUPPORT
        region:
 
 	 # IDs that are contained within query coordinates
-	 my $contained_sql = <<"";
+	 my $contained_sql = &lt&lt"";
 	 SELECT id FROM try_rtree
-	    WHERE  minLong >= ? AND maxLong <= ?
-	    AND    minLat  >= ? AND maxLat  <= ?
+	    WHERE  minLong &gt= ? AND maxLong &lt= ?
+	    AND    minLat  &gt= ? AND maxLat  &lt= ?
 
 	 # ... and those that overlap query coordinates
-	 my $overlap_sql = <<"";
+	 my $overlap_sql = &lt&lt"";
 	 SELECT id FROM try_rtree
-	    WHERE    maxLong >= ? AND minLong <= ?
-	    AND      maxLat  >= ? AND minLat  <= ?
+	    WHERE    maxLong &gt= ? AND minLong &lt= ?
+	    AND      maxLat  &gt= ? AND minLat  &lt= ?
 
-	 my $contained = $dbh->selectcol_arrayref($contained_sql,undef,
+	 my $contained = $dbh-&gtselectcol_arrayref($contained_sql,undef,
 			       $minLong, $maxLong, $minLat, $maxLat);
 
-	 my $overlapping = $dbh->selectcol_arrayref($overlap_sql,undef,
+	 my $overlapping = $dbh-&gtselectcol_arrayref($overlap_sql,undef,
 			       $minLong, $maxLong, $minLat, $maxLat);
 
        For more detail, please see the SQLite R-Tree page
-       (<http://www.sqlite.org/rtree.html>). Note that custom R-Tree queries
+       (&lthttp://www.sqlite.org/rtree.html&gt). Note that custom R-Tree queries
        using callbacks, as mentioned in the prior link, have not been
        implemented yet.
 
@@ -1189,14 +1191,14 @@ FOR DBD::SQLITE EXTENSION AUTHORS
 	 # or only a particular header, amalgamated in sqlite3.c
 	 my $what_i_want = 'parse.h';
 	 my $sqlite3_c = catfile(dist_dir('DBD-SQLite'), 'sqlite3.c');
-	 open my $fh, '<', $sqlite3_c or die $!;
-	 my $code = do { local $/; <$fh> };
+	 open my $fh, '&lt', $sqlite3_c or die $!;
+	 my $code = do { local $/; &lt$fh&gt };
 	 my ($parse_h) = $code =~ m{(
 	   /\*+[ ]Begin[ ]file[ ]$what_i_want[ ]\*+
 	   .+?
 	   /\*+[ ]End[ ]of[ ]$what_i_want[ ]\*+/
 	 )}sx;
-	 open my $out, '>', $what_i_want or die $!;
+	 open my $out, '&gt', $what_i_want or die $!;
 	 print $out $parse_h;
 	 close $out;
 
@@ -1223,7 +1225,7 @@ TO DO
 
    Support for custom callbacks for R-Tree queries
        Custom queries of a R-Tree index using a callback are possible with the
-       SQLite C API (<http://www.sqlite.org/rtree.html>), so one could
+       SQLite C API (&lthttp://www.sqlite.org/rtree.html&gt), so one could
        potentially use a callback that narrowed the result set down based on a
        specific need, such as querying for overlapping circles.
 
@@ -1231,26 +1233,26 @@ SUPPORT
        Bugs should be reported via the CPAN bug tracker at
 
        http://rt.cpan.org/NoAuth/ReportBug.html?Queue=DBD-SQLite
-       <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=DBD-SQLite>
+       &lthttp://rt.cpan.org/NoAuth/ReportBug.html?Queue=DBD-SQLite&gt
 
        Note that bugs of bundled sqlite library (i.e. bugs in "sqlite3.[ch]")
        should be reported to the sqlite developers at sqlite.org via their bug
        tracker or via their mailing list.
 
 AUTHORS
-       Matt Sergeant <matt@sergeant.org>
+       Matt Sergeant &ltmatt@sergeant.org&gt
 
-       Francis J. Lacoste <flacoste@logreport.org>
+       Francis J. Lacoste &ltflacoste@logreport.org&gt
 
-       Wolfgang Sourdeau <wolfgang@logreport.org>
+       Wolfgang Sourdeau &ltwolfgang@logreport.org&gt
 
-       Adam Kennedy <adamk@cpan.org>
+       Adam Kennedy &ltadamk@cpan.org&gt
 
-       Max Maischein <corion@cpan.org>
+       Max Maischein &ltcorion@cpan.org&gt
 
-       Laurent Dami <dami@cpan.org>
+       Laurent Dami &ltdami@cpan.org&gt
 
-       Kenichi Ishigaki <ishigaki@cpan.org>
+       Kenichi Ishigaki &ltishigaki@cpan.org&gt
 
 COPYRIGHT
        The bundled SQLite code in this distribution is Public Domain.
@@ -1277,6 +1279,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-05-30			DBD::SQLite(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

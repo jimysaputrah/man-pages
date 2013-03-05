@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module provide functions that return newly created "HTTP::Request"..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>HTTP::Request::Common - Construct common HTTP::Request objects</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 HTTP::Request::Common(User Contributed Perl DocumentatHTTP::Request::Common(3)
 
 
@@ -17,9 +19,9 @@ NAME
 
 SYNOPSIS
 	 use HTTP::Request::Common;
-	 $ua = LWP::UserAgent->new;
-	 $ua->request(GET 'http://www.sn.no/');
-	 $ua->request(POST 'http://somewhere/foo', [foo => bar, bar => foo]);
+	 $ua = LWP::UserAgent-&gtnew;
+	 $ua-&gtrequest(GET 'http://www.sn.no/');
+	 $ua-&gtrequest(POST 'http://somewhere/foo', [foo =&gt bar, bar =&gt foo]);
 
 DESCRIPTION
        This module provide functions that return newly created "HTTP::Request"
@@ -28,14 +30,14 @@ DESCRIPTION
        following functions are provided:
 
        GET $url
-       GET $url, Header => Value,...
+       GET $url, Header =&gt Value,...
 	   The GET() function returns an "HTTP::Request" object initialized
 	   with the "GET" method and the specified URL.  It is roughly
 	   equivalent to the following call
 
-	     HTTP::Request->new(
-		GET => $url,
-		HTTP::Headers->new(Header => Value,...),
+	     HTTP::Request-&gtnew(
+		GET =&gt $url,
+		HTTP::Headers-&gtnew(Header =&gt Value,...),
 	     )
 
 	   but is less cluttered.  What is different is that a header named
@@ -45,18 +47,18 @@ DESCRIPTION
 	   POST() functions described below.
 
 	   The get(...) method of "LWP::UserAgent" exists as a shortcut for
-	   $ua->request(GET ...).
+	   $ua-&gtrequest(GET ...).
 
        HEAD $url
-       HEAD $url, Header => Value,...
+       HEAD $url, Header =&gt Value,...
 	   Like GET() but the method in the request is "HEAD".
 
 	   The head(...)  method of "LWP::UserAgent" exists as a shortcut for
-	   $ua->request(HEAD ...).
+	   $ua-&gtrequest(HEAD ...).
 
        PUT $url
-       PUT $url, Header => Value,...
-       PUT $url, Header => Value,..., Content => $content
+       PUT $url, Header =&gt Value,...
+       PUT $url, Header =&gt Value,..., Content =&gt $content
 	   Like GET() but the method in the request is "PUT".
 
 	   The content of the request can be specified using the "Content"
@@ -66,15 +68,15 @@ DESCRIPTION
 	   request returned in a separate statement.
 
        DELETE $url
-       DELETE $url, Header => Value,...
+       DELETE $url, Header =&gt Value,...
 	   Like GET() but the method in the request is "DELETE".  This
 	   function is not exported by default.
 
        POST $url
-       POST $url, Header => Value,...
-       POST $url, $form_ref, Header => Value,...
-       POST $url, Header => Value,..., Content => $form_ref
-       POST $url, Header => Value,..., Content => $content
+       POST $url, Header =&gt Value,...
+       POST $url, $form_ref, Header =&gt Value,...
+       POST $url, Header =&gt Value,..., Content =&gt $form_ref
+       POST $url, Header =&gt Value,..., Content =&gt $content
 	   This works mostly like PUT() with "POST" as the method, but this
 	   function also takes a second optional array or hash reference
 	   parameter $form_ref.  As for PUT() the content can also be
@@ -84,14 +86,14 @@ DESCRIPTION
 	   The $form_ref argument can be used to pass key/value pairs for the
 	   form content.  By default we will initialize a request using the
 	   "application/x-www-form-urlencoded" content type.  This means that
-	   you can emulate a HTML <form> POSTing like this:
+	   you can emulate a HTML &ltform&gt POSTing like this:
 
 	     POST 'http://www.perl.org/survey.cgi',
-		  [ name   => 'Gisle Aas',
-		    email  => 'gisle@aas.no',
-		    gender => 'M',
-		    born   => '1964',
-		    perc   => '3%',
+		  [ name   =&gt 'Gisle Aas',
+		    email  =&gt 'gisle@aas.no',
+		    gender =&gt 'M',
+		    born   =&gt '1964',
+		    perc   =&gt '3%',
 		  ];
 
 	   This will create a HTTP::Request object that looks like this:
@@ -112,8 +114,8 @@ DESCRIPTION
 	   the $form_ref is an array reference, then it is treated as a file
 	   part specification with the following interpretation:
 
-	     [ $file, $filename, Header => Value... ]
-	     [ undef, $filename, Header => Value,..., Content => $content ]
+	     [ $file, $filename, Header =&gt Value... ]
+	     [ undef, $filename, Header =&gt Value,..., Content =&gt $content ]
 
 	   The first value in the array ($file) is the name of a file to open.
 	   This file will be read and its content placed in the request.  The
@@ -134,12 +136,12 @@ DESCRIPTION
 	   achieved by this:
 
 	     POST 'http://www.perl.org/survey.cgi',
-		  Content_Type => 'form-data',
-		  Content      => [ name  => 'Gisle Aas',
-				    email => 'gisle@aas.no',
-				    gender => 'M',
-				    born   => '1964',
-				    init   => ["$ENV{HOME}/.profile"],
+		  Content_Type =&gt 'form-data',
+		  Content      =&gt [ name  =&gt 'Gisle Aas',
+				    email =&gt 'gisle@aas.no',
+				    gender =&gt 'M',
+				    born   =&gt '1964',
+				    init   =&gt ["$ENV{HOME}/.profile"],
 				  ]
 
 	   This will create a HTTP::Request object that almost looks this (the
@@ -188,7 +190,7 @@ DESCRIPTION
 	   that the last chunk is delivered, the subroutine will "Croak".
 
 	   The post(...)  method of "LWP::UserAgent" exists as a shortcut for
-	   $ua->request(POST ...).
+	   $ua-&gtrequest(POST ...).
 
 SEE ALSO
        HTTP::Request, LWP::UserAgent
@@ -202,6 +204,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-03-07	      HTTP::Request::Common(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

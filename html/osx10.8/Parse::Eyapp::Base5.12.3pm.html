@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Parse::Eyapp::Base - Miscellaneous support functions for Parse::Eyapp</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Parse::Eyapp::Base(3) User Contributed Perl DocumentationParse::Eyapp::Base(3)
 
 
@@ -47,15 +49,15 @@ SUBROUTINES
 
 	 pl@nereida:~/src/perl/YappWithDefaultAction/lib/Parse/Eyapp$ perl -wde 0
 	 main::(-e:1):	 0
-	   DB<1> use Parse::Eyapp::Base qw(:all)
-	   DB<2> insert_method( qw{PLUS MINUS TIMES }, 'printclass', sub { print "$_[0]\n" } )
-	   DB<3> $_->printclass for qw{PLUS MINUS TIMES }
+	   DB&lt1&gt use Parse::Eyapp::Base qw(:all)
+	   DB&lt2&gt insert_method( qw{PLUS MINUS TIMES }, 'printclass', sub { print "$_[0]\n" } )
+	   DB&lt3&gt $_-&gtprintclass for qw{PLUS MINUS TIMES }
 	 PLUS
 	 MINUS
 	 TIMES
 
-	   DB<4> insert_method( qw{PLUS MINUS TIMES }, 'printclass')
-	   DB<5> print $_->can('printclass')?"Yes\n":"No\n"  for qw{PLUS MINUS TIMES }
+	   DB&lt4&gt insert_method( qw{PLUS MINUS TIMES }, 'printclass')
+	   DB&lt5&gt print $_-&gtcan('printclass')?"Yes\n":"No\n"  for qw{PLUS MINUS TIMES }
 	 No
 	 No
 	 No
@@ -76,12 +78,12 @@ SUBROUTINES
 
 	 pl@nereida:~/src/perl/YappWithDefaultAction/lib/Parse/Eyapp$ perl -wde 0
 	 main::(-e:1):	 0
-	   DB<1> use Parse::Eyapp::Base qw(:all)
-	   DB<2> insert_function('Tutu::tata', 'titi', sub{ print "Inside titi\n"})
-	   DB<3> titi()
+	   DB&lt1&gt use Parse::Eyapp::Base qw(:all)
+	   DB&lt2&gt insert_function('Tutu::tata', 'titi', sub{ print "Inside titi\n"})
+	   DB&lt3&gt titi()
 	 Inside titi
 
-	   DB<4> Tutu::tata()
+	   DB&lt4&gt Tutu::tata()
 	 Inside titi
 
    Function "empty_method"
@@ -107,22 +109,22 @@ SUBROUTINES
 
 	 pl@nereida:~/src/perl/YappWithDefaultAction/lib/Parse/Eyapp$ perl -wde 0
 	 main::(-e:1):	 0
-	   DB<1> use Parse::Eyapp::Base qw(:all)
-	   DB<2> sub Tutu::titi { print "Inside first Tutu::titi!\n" }
-	   DB<3> push_method('Tutu', 'titi', sub { print "New titi!\n" })
-	   DB<4> Tutu::titi()
+	   DB&lt1&gt use Parse::Eyapp::Base qw(:all)
+	   DB&lt2&gt sub Tutu::titi { print "Inside first Tutu::titi!\n" }
+	   DB&lt3&gt push_method('Tutu', 'titi', sub { print "New titi!\n" })
+	   DB&lt4&gt Tutu::titi()
 	 New titi!
 
-	   DB<5> pop_method('Tutu', 'titi')
-	   DB<6> Tutu::titi()
+	   DB&lt5&gt pop_method('Tutu', 'titi')
+	   DB&lt6&gt Tutu::titi()
 	 Inside first Tutu::titi!
 
-	   DB<7> push_method('Tutu', 'titi') # No handler: sub Tutu::titi no longer exists
-	   DB<8> print "Can't titi\n" unless Tutu->can('titi')
+	   DB&lt7&gt push_method('Tutu', 'titi') # No handler: sub Tutu::titi no longer exists
+	   DB&lt8&gt print "Can't titi\n" unless Tutu-&gtcan('titi')
 	 Can't titi
 
-	   DB<9> pop_method('Tutu', 'titi') # Give me the old sub
-	   DB<10> Tutu::titi()
+	   DB&lt9&gt pop_method('Tutu', 'titi') # Give me the old sub
+	   DB&lt10&gt Tutu::titi()
 	 Inside first Tutu::titi!
 
        The caller class is assumed if no classes are specified.
@@ -153,7 +155,7 @@ SUBROUTINES
 	   19
 	   20  for (@classes) {
 	   21	 if (defined($oldf{$_})) {
-	   22	   print "Old function 'tutu' in $_ gives: ".$oldf{$_}->()."\n";
+	   22	   print "Old function 'tutu' in $_ gives: ".$oldf{$_}-&gt()."\n";
 	   23	 }
 	   24	 else {
 	   25	    print "Function 'tutu' wasn't defined in $_\n";
@@ -171,25 +173,25 @@ SUBROUTINES
 	 pl@nereida:~/LEyapp/examples$ perl -wd returnedbypushmethod.pl
 	 main::(returnedbypushmethod.pl:8):
 	 8:	 my @classes = qw{main Cham Chum};
-	   DB<1> c 18
+	   DB&lt1&gt c 18
 	 main::(returnedbypushmethod.pl:18):
 	 18:	 print "Calling new function 'tutu':".&tutu()."\n";
-	   DB<2> n
+	   DB&lt2&gt n
 	 Calling new function 'tutu':titi
 	 main::(returnedbypushmethod.pl:20):
 	 20:	 for (@classes) {
-	   DB<2> x @tutu
+	   DB&lt2&gt x @tutu
 	 0  9
 	 1  10
 	 2  11
 	 3  12
-	   DB<3> x @Cham::tutu
+	   DB&lt3&gt x @Cham::tutu
 	 0  1
 	 1  2
 	 2  3
-	   DB<4> p $Cham::tutu
+	   DB&lt4&gt p $Cham::tutu
 	 8
-	   DB<5> c
+	   DB&lt5&gt c
 	 Old function 'tutu' in main gives: tutu
 	 Function 'tutu' wasn't defined in Cham
 	 Old function 'tutu' in Chum gives: chum
@@ -217,8 +219,8 @@ SUBROUTINES
 
 	     my $old = pop_method('tutu');
 
-	     print "Function 'tutu' is available\n" if main->can('tutu');
-	     print "Old function 'tutu' gives: ".$old->()."\n";
+	     print "Function 'tutu' is available\n" if main-&gtcan('tutu');
+	     print "Old function 'tutu' gives: ".$old-&gt()."\n";
 
 	   When executed gives the following output:
 
@@ -257,7 +259,7 @@ SUBROUTINES
 
 	 Tutu::plim();
 	 # main can't call 'tutu'
-	 print "Can't tutu\n" unless Tutu->can('tutu');
+	 print "Can't tutu\n" unless Tutu-&gtcan('tutu');
 	 Tutu::plim();
 
        When executed the former program produces this output:
@@ -277,7 +279,7 @@ SUBROUTINES
 	 Loading DB routines from perl5db.pl version 1.28
 	 Editor support available.
 	 main::(usetypes.pl:5):  my $filename = shift || die "Usage:\n$0 file.c\n";
-	   DB<1> c Parse::Eyapp::Node::str
+	   DB&lt1&gt c Parse::Eyapp::Node::str
 	 1 int f() {
 	 2   int a[30];
 	 3
@@ -287,7 +289,7 @@ SUBROUTINES
 	 716:	   my @terms;
 
        Let us assume I want to see the syntax tree for this program.  I can
-       see it using "$_[0]->str" but the problem is that nodes "PROGRAM" and
+       see it using "$_[0]-&gtstr" but the problem is that nodes "PROGRAM" and
        "FUNCTION" have defined a "footnote" method that will dump their symbol
        and type tables producing hundred of lines of output and making
        difficult to see the shape of the tree.	This is because method "str"
@@ -295,19 +297,19 @@ SUBROUTINES
        "footnote". The solution is to use "push_method" to make the "footnote"
        methods disappear:
 
-	   DB<2> use Parse::Eyapp::Base qw(:all)
-	   DB<3> push_method(qw{PROGRAM FUNCTION}, 'footnote')
+	   DB&lt2&gt use Parse::Eyapp::Base qw(:all)
+	   DB&lt3&gt push_method(qw{PROGRAM FUNCTION}, 'footnote')
 
        The use of "push_method" without an explicit code handler eliminates
        the CODE entry for "footnote":
 
-	   DB<4> p $_->can('footnote')? "1\n" : "0\n" for (qw{PROGRAM FUNCTION})
+	   DB&lt4&gt p $_-&gtcan('footnote')? "1\n" : "0\n" for (qw{PROGRAM FUNCTION})
 	 0
 	 0
 
        Now I can see the shape of the tree:
 
-	   DB<5> p $_[0]->str
+	   DB&lt5&gt p $_[0]-&gtstr
 
 	 PROGRAM(
 	   FUNCTION[f](
@@ -317,14 +319,14 @@ SUBROUTINES
 
        If I want back the "footnote" methods I can use "pop_method":
 
-	   DB<6> pop_method(qw{PROGRAM FUNCTION}, 'footnote')
-	   DB<7> p $_->can('footnote')? "1\n" : "0\n" for (qw{PROGRAM FUNCTION})
+	   DB&lt6&gt pop_method(qw{PROGRAM FUNCTION}, 'footnote')
+	   DB&lt7&gt p $_-&gtcan('footnote')? "1\n" : "0\n" for (qw{PROGRAM FUNCTION})
 	   1
 	   1
 
        Now the information will be profuse:
 
-	   DB<8> p $_[0]->str
+	   DB&lt8&gt p $_[0]-&gtstr
 
 	 PROGRAM^{0}(
 	   FUNCTION[f]^{1}(
@@ -335,36 +337,36 @@ SUBROUTINES
 	 0)
 	 Types:
 	 $VAR1 = {
-	   'CHAR' => bless( {
-	     'children' => []
+	   'CHAR' =&gt bless( {
+	     'children' =&gt []
 	   }, 'CHAR' ),
 	   ..... etc, etc.
-	   'A_30(INT)' => bless( {
-	     'children' => [
-	       $VAR1->{'INT'}
+	   'A_30(INT)' =&gt bless( {
+	     'children' =&gt [
+	       $VAR1-&gt{'INT'}
 	     ]
 	   }, 'A_30' )
 	 };
 	 Symbol Table:
 	 $VAR1 = {
-	   'f' => {
-	     'type' => 'F(X_0(),INT)',
-	     'line' => 1
+	   'f' =&gt {
+	     'type' =&gt 'F(X_0(),INT)',
+	     'line' =&gt 1
 	   }
 	 };
 
 	 ---------------------------
 	 1)
 	 $VAR1 = {
-	   'a' => {
-	     'type' => 'A_30(INT)',
-	     'line' => 2
+	   'a' =&gt {
+	     'type' =&gt 'A_30(INT)',
+	     'line' =&gt 2
 	   }
 	 };
 
        You can still do something like this to achieve a similar effect:
 
-	 DB<9> p eval { local (*PROGRAM::footnote, *FUNCTION::footnote) = (sub {}, sub {}); $_[0]->str }
+	 DB&lt9&gt p eval { local (*PROGRAM::footnote, *FUNCTION::footnote) = (sub {}, sub {}); $_[0]-&gtstr }
 
 	 PROGRAM(
 	   FUNCTION[f](
@@ -397,11 +399,11 @@ SUBROUTINES
 
 	 pl@nereida:~/src/perl/YappWithDefaultAction/lib/Parse/Eyapp$ perl -wde 0
 	 main::(-e:1):	 0
-	   DB<1> use Parse::Eyapp::Base qw(:all)
-	   DB<2> !!ls *yp # There are two files with extension .yp in this directory
+	   DB&lt1&gt use Parse::Eyapp::Base qw(:all)
+	   DB&lt2&gt !!ls *yp # There are two files with extension .yp in this directory
 	 Parse.yp  Treeregexp.yp
-	   DB<3> $x = slurp_file('Parse', 'yp') # read the whole file
-	   DB<4> p $x =~ tr/\n// # file Parse.yp has 1038 lines
+	   DB&lt3&gt $x = slurp_file('Parse', 'yp') # read the whole file
+	   DB&lt4&gt p $x =~ tr/\n// # file Parse.yp has 1038 lines
 	 1038
 
    Function "valid_keys"
@@ -413,16 +415,16 @@ SUBROUTINES
 
 	 pl@nereida:~/src/perl/YappWithDefaultAction/lib/Parse/Eyapp$ perl -wde 0
 	 main::(-e:1):	 0
-	   DB<1> use Parse::Eyapp::Base qw(:all)
-	   DB<2> %h = ( SCOPE_NAME => 'STRING', ENTRY_NAME => 'STRING', SCOPE_DEPTH => 'STRING')
-	   DB<3> $x = valid_keys(%h)
-	   DB<4> p $x
+	   DB&lt1&gt use Parse::Eyapp::Base qw(:all)
+	   DB&lt2&gt %h = ( SCOPE_NAME =&gt 'STRING', ENTRY_NAME =&gt 'STRING', SCOPE_DEPTH =&gt 'STRING')
+	   DB&lt3&gt $x = valid_keys(%h)
+	   DB&lt4&gt p $x
 	 ENTRY_NAME, SCOPE_DEPTH, SCOPE_NAME
 
    Function "invalid_keys"
        It is called with two hash references:
 
-	   DB<5> p invalid_keys(\%h, { SCOPE_NAME => 'a', ENTRY_NAMe => 'b', SCOPE_DEPTH => 'c'})
+	   DB&lt5&gt p invalid_keys(\%h, { SCOPE_NAME =&gt 'a', ENTRY_NAMe =&gt 'b', SCOPE_DEPTH =&gt 'c'})
 	 ENTRY_NAMe
 
        It returns the first key in the second hash that does not appear in the
@@ -437,9 +439,9 @@ SUBROUTINES
 	    6  use Parse::Eyapp::Base qw(valid_keys invalid_keys);
 	    7
 	    8  my %_new_scope = (
-	    9	 SCOPE_NAME	 => 'STRING',
-	   10	 ENTRY_NAME	 => 'STRING',
-	   11	 SCOPE_DEPTH	 => 'STRING',
+	    9	 SCOPE_NAME	 =&gt 'STRING',
+	   10	 ENTRY_NAME	 =&gt 'STRING',
+	   11	 SCOPE_DEPTH	 =&gt 'STRING',
 	   12  );
 	   13  my $valid_scope_keys = valid_keys(%_new_scope);
 	   14
@@ -477,10 +479,10 @@ SUBROUTINES
        Returns a string like $input but with lines numbered and the numbers
        correctly indented. See an example:
 
-	   DB<1> use Parse::Eyapp::Base qw(:all)
-	   DB<2> $input = "Another line!\n"x12
-	   DB<3> $output = numbered($input)
-	   DB<4> p $output
+	   DB&lt1&gt use Parse::Eyapp::Base qw(:all)
+	   DB&lt2&gt $input = "Another line!\n"x12
+	   DB&lt3&gt $output = numbered($input)
+	   DB&lt4&gt p $output
 	  1 Another line!
 	  2 Another line!
 	  3 Another line!
@@ -498,11 +500,11 @@ SEE ALSO
        o   Parse::Eyapp,
 
 CONTRIBUTORS
-       o Hal Finkel <http://www.halssoftware.com/>
+       o Hal Finkel &lthttp://www.halssoftware.com/&gt
 
-       o G. Williams <http://kasei.us/>
+       o G. Williams &lthttp://kasei.us/&gt
 
-       o Thomas L. Shinnick <http://search.cpan.org/~tshinnic/>
+       o Thomas L. Shinnick &lthttp://search.cpan.org/~tshinnic/&gt
 
        o Frank Leray
 
@@ -512,7 +514,7 @@ AUTHOR
 ACKNOWLEDGMENTS
        This work has been supported by CEE (FEDER) and the Spanish Ministry of
        Educacion y Ciencia through Plan Nacional I+D+I number
-       TIN2005-08818-C04-04 (ULL::OPLINK project <http://www.oplink.ull.es/>).
+       TIN2005-08818-C04-04 (ULL::OPLINK project &lthttp://www.oplink.ull.es/&gt).
        Support from Gobierno de Canarias was through GC02210601 (Grupos
        Consolidados).  The University of La Laguna has also supported my work
        in many ways and for many years.
@@ -543,6 +545,6 @@ LICENCE AND COPYRIGHT
 
 
 perl v5.12.4			  2011-02-16		 Parse::Eyapp::Base(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

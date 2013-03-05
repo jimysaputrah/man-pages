@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Sub::Exporter::Cookbook - useful, demonstrative, or stupid</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Sub::Exporter::CookbooUser Contributed Perl DocumentSub::Exporter::Cookbook(3)
 
 
@@ -34,8 +36,8 @@ THE RECIPES
 	 package Object::Strenuous;
 
 	 use Sub::Exporter::Util;
-	 use Sub::Exporter -setup => {
-	   exports => [ objection => curry_method('new') ],
+	 use Sub::Exporter -setup =&gt {
+	   exports =&gt [ objection =&gt curry_method('new') ],
 	 };
 
        With this configuration, the importing code may contain:
@@ -44,7 +46,7 @@ THE RECIPES
 
        ...and this will be equivalent to:
 
-	 my $obj = Object::Strenuous->new("irrelevant");
+	 my $obj = Object::Strenuous-&gtnew("irrelevant");
 
        The built-in invocant is determined by the invocant for the "import"
        method.	That means that if we were to subclass Object::Strenuous as
@@ -60,16 +62,16 @@ THE RECIPES
        like this:
 
 	 package Cypher;
-	 use Sub::Exporter -setup => {
-	   exports => [ encypher => curry_method ],
+	 use Sub::Exporter -setup =&gt {
+	   exports =&gt [ encypher =&gt curry_method ],
 	 };
 
        with the expectation that "import" will be called an instantiated
        Cypher object:
 
 	 BEGIN {
-	   my $cypher = Cypher->new( ... );
-	   $cypher->import('encypher');
+	   my $cypher = Cypher-&gtnew( ... );
+	   $cypher-&gtimport('encypher');
 	 }
 
        Now there is a globally-available "encypher" routine which calls the
@@ -86,8 +88,8 @@ THE RECIPES
 
 	 use Data::Dumper;
 
-	 use Sub::Exporter -setup => {
-	   exports => [ qw(dump) ]
+	 use Sub::Exporter -setup =&gt {
+	   exports =&gt [ qw(dump) ]
 	 };
 
 	 sub dump {
@@ -98,21 +100,21 @@ THE RECIPES
        When writing your own object class, you can then import "dump" to be
        used as a method, called like so:
 
-	 $object->dump;
+	 $object-&gtdump;
 
        By assuming that the importing class will provide a certain interface,
        a method-exporting module can be used as a simple plugin:
 
 	 package Number::Plugin::Upto;
-	 use Sub::Exporter -setup => {
-	   into    => 'Number',
-	   exports => [ qw(upto) ],
-	   groups  => [ default => [ qw(upto) ] ],
+	 use Sub::Exporter -setup =&gt {
+	   into    =&gt 'Number',
+	   exports =&gt [ qw(upto) ],
+	   groups  =&gt [ default =&gt [ qw(upto) ] ],
 	 };
 
 	 sub upto {
 	   my ($self) = @_;
-	   return 1 .. abs($self->as_integer);
+	   return 1 .. abs($self-&gtas_integer);
 	 }
 
        The "into" line in the configuration says that this plugin will export,
@@ -121,7 +123,7 @@ THE RECIPES
        destination provides an "as_integer" method like the one it expects.
        To import it to a different destination, one can just write:
 
-	 use Number::Plugin::Upto { into => 'Quantity' };
+	 use Number::Plugin::Upto { into =&gt 'Quantity' };
 
    Mixing-in Complex External Behavior
        When exporting methods to be used as methods (see above), one very
@@ -134,8 +136,8 @@ THE RECIPES
 
 	 package Data::Analyzer;
 
-	 use Sub::Exporter -setup => {
-	   exports => [ analyze => \'_generate_analyzer' ],
+	 use Sub::Exporter -setup =&gt {
+	   exports =&gt [ analyze =&gt \'_generate_analyzer' ],
 	 };
 
 	 sub _generate_analyzer {
@@ -144,13 +146,13 @@ THE RECIPES
 	   return sub {
 	     my ($self) = @_;
 
-	     my $values = [ $self->values ];
+	     my $values = [ $self-&gtvalues ];
 
-	     my $analyzer = $mixin->new($values);
-	     $analyzer->perform_analysis;
-	     $analyzer->aggregate_results;
+	     my $analyzer = $mixin-&gtnew($values);
+	     $analyzer-&gtperform_analysis;
+	     $analyzer-&gtaggregate_results;
 
-	     return $analyzer->summary;
+	     return $analyzer-&gtsummary;
 	   };
 	 }
 
@@ -171,19 +173,19 @@ THE RECIPES
 
 	 package Important::Constants;
 
-	 use Sub::Exporter -setup => {
-	   collectors => [ constants => \'_set_constants' ],
+	 use Sub::Exporter -setup =&gt {
+	   collectors =&gt [ constants =&gt \'_set_constants' ],
 	 };
 
 	 sub _set_constants {
 	   my ($class, $value, $data) = @_;
 
-	   Package::Generator->assign_symbols(
-	     $data->{into},
+	   Package::Generator-&gtassign_symbols(
+	     $data-&gt{into},
 	     [
-	       MEANING_OF_LIFE => 42,
-	       ONE_TRUE_BASE   => 13,
-	       FACTORS	       => [ 6, 9 ],
+	       MEANING_OF_LIFE =&gt 42,
+	       ONE_TRUE_BASE   =&gt 13,
+	       FACTORS	       =&gt [ 6, 9 ],
 	     ],
 	   );
 	 }
@@ -202,14 +204,14 @@ THE RECIPES
        It's trivial to make a collector that changes the inheritence of an
        importing package:
 
-	 use Sub::Exporter -setup => {
-	   collectors => { -base => \'_make_base' },
+	 use Sub::Exporter -setup =&gt {
+	   collectors =&gt { -base =&gt \'_make_base' },
 	 };
 
 	 sub _make_base {
 	   my ($class, $value, $data) = @_;
 
-	   my $target = $data->{into};
+	   my $target = $data-&gt{into};
 	   push @{"$target\::ISA"}, $class;
 	 }
 
@@ -224,17 +226,17 @@ THE RECIPES
 
 	 package Framework::Util;
 
-	 use Sub::Exporter -setup => {
-	   exports    => [ qw(log global_config) ],
-	   collectors => { _become_plugin => \'_become_plugin' },
-	   groups     => [ -plugin => [ qw(log global_config _become_plugin) ]
+	 use Sub::Exporter -setup =&gt {
+	   exports    =&gt [ qw(log global_config) ],
+	   collectors =&gt { _become_plugin =&gt \'_become_plugin' },
+	   groups     =&gt [ -plugin =&gt [ qw(log global_config _become_plugin) ]
 	 };
 
 	 sub _become_plugin {
 	   my ($class, $value, $data) = @_;
 
-	   my $target = $data->{into};
-	   push @{"$target\::ISA"}, $class->plugin_base_class;
+	   my $target = $data-&gt{into};
+	   push @{"$target\::ISA"}, $class-&gtplugin_base_class;
 	 }
 
        Now, you can write a plugin like this:
@@ -250,15 +252,15 @@ THE RECIPES
 	  my ($pkg) = @_;
 	  my $new_pkg = "$pkg\::UsingSubExporter";
 
-	  return $new_pkg if $new_pkg->isa($pkg);
+	  return $new_pkg if $new_pkg-&gtisa($pkg);
 
 	  Sub::Exporter::setup_exporter({
-	    as	    => 'import',
-	    into    => $new_pkg,
-	    exports => [ @{"$pkg\::EXPORT_OK"} ],
-	    groups  => {
+	    as	    =&gt 'import',
+	    into    =&gt $new_pkg,
+	    exports =&gt [ @{"$pkg\::EXPORT_OK"} ],
+	    groups  =&gt {
 	      %{{"$pkg\::EXPORT_TAG"},
-	      default => [ @{"$pkg\::EXPORTS"} ],
+	      default =&gt [ @{"$pkg\::EXPORTS"} ],
 	    },
 	  });
 
@@ -272,7 +274,7 @@ THE RECIPES
 
 	 BEGIN {
 	   require Toolkit;
-	   exporter_upgrade('Toolkit')->import(exported_sub => { -as => 'foo' })
+	   exporter_upgrade('Toolkit')-&gtimport(exported_sub =&gt { -as =&gt 'foo' })
 	 }
 
        If you're feeling particularly naughty, this routine could have been
@@ -280,7 +282,7 @@ THE RECIPES
 
 	 BEGIN {
 	   require Toolkit;
-	   Toolkit->exporter_upgrade->import(exported_sub => { -as => 'foo' })
+	   Toolkit-&gtexporter_upgrade-&gtimport(exported_sub =&gt { -as =&gt 'foo' })
 	 }
 
        The new package will have all the same exporter configuration as the
@@ -290,7 +292,7 @@ THE RECIPES
        subclassed and some of its exports replaced.
 
 AUTHOR
-       Ricardo SIGNES, "<rjbs@cpan.org>"
+       Ricardo SIGNES, "&ltrjbs@cpan.org&gt"
 
 COPYRIGHT
        Copyright 2007, Ricardo SIGNES.	This is free software;	you can
@@ -299,6 +301,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2008-11-21	    Sub::Exporter::Cookbook(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

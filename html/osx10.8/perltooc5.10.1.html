@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="When designing an object class, you are sometimes faced with the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perltooc - Tom's OO Tutorial for Class Data in Perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLTOOC(1)	       Perl Programmers Reference Guide 	   PERLTOOC(1)
 
 
@@ -49,8 +51,8 @@ DESCRIPTION
        class attributes, then these two invocations should both be possible,
        and almost certainly equivalent.
 
-	   Some_Class->population_count()
-	   $an_object->population_count()
+	   Some_Class-&gtpopulation_count()
+	   $an_object-&gtpopulation_count()
 
        The question is, where do you store the state which that method
        accesses?  Unlike more restrictive languages like C++, where these are
@@ -155,8 +157,8 @@ Class Data as Package Variables
 	   package Some_Class;
 	   use strict;
 	   our %ClassData = (	       # our() is new to perl5.6
-	       CData1 => "",
-	       CData2 => "",
+	       CData1 =&gt "",
+	       CData2 =&gt "",
 	   );
 
        Using closures (see perlref) and direct access to the package symbol
@@ -262,8 +264,8 @@ Class Data as Package Variables
 	       my $obclass = shift;
 	       my $class   = ref($obclass) || $obclass;
 	       my $varname = $class . "::ClassData";
-	       $varname->{$datum} = shift if @_;
-	       return $varname->{$datum};
+	       $varname-&gt{$datum} = shift if @_;
+	       return $varname-&gt{$datum};
 	   }
 
    The Eponymous Meta-Object
@@ -296,8 +298,8 @@ Class Data as Package Variables
 
 	   # create class meta-object using that most perfect of names
 	   our %Some_Class = (	       # our() is new to perl5.6
-	       CData1 => "",
-	       CData2 => "",
+	       CData1 =&gt "",
+	       CData2 =&gt "",
 	   );
 
 	   # this accessor is calling-package-relative
@@ -305,16 +307,16 @@ Class Data as Package Variables
 	       my $obclass = shift;
 	       my $class   = ref($obclass) || $obclass;
 	       no strict "refs";       # to access eponymous meta-object
-	       $class->{CData1} = shift if @_;
-	       return $class->{CData1};
+	       $class-&gt{CData1} = shift if @_;
+	       return $class-&gt{CData1};
 	   }
 
 	   # but this accessor is not
 	   sub CData2 {
 	       shift;		       # XXX: ignore calling class/object
 	       no strict "refs";       # to access eponymous meta-object
-	       __PACKAGE__ -> {CData2} = shift if @_;
-	       return __PACKAGE__ -> {CData2};
+	       __PACKAGE__ -&gt {CData2} = shift if @_;
+	       return __PACKAGE__ -&gt {CData2};
 	   }
 
        In the second accessor method, the __PACKAGE__ notation was used for
@@ -329,8 +331,8 @@ Class Data as Package Variables
 	       shift;		       # XXX: ignore calling class/object
 	       no strict "refs";       # to access eponymous meta-object
 	       my $class = __PACKAGE__;
-	       $class->{CData2} = shift if @_;
-	       return $class->{CData2};
+	       $class-&gt{CData2} = shift if @_;
+	       return $class-&gt{CData2};
 	   }
 
        Even though we're using symbolic references for good not evil, some
@@ -348,8 +350,8 @@ Class Data as Package Variables
 	   use strict;
 
 	   our %Some_Class = (	       # our() is new to perl5.6
-	       CData1 => "",
-	       CData2 => "",
+	       CData1 =&gt "",
+	       CData2 =&gt "",
 	   );
 
 	   # tri-natured: function, class method, or object method
@@ -366,9 +368,9 @@ Class Data as Package Variables
 	       no strict "refs";
 	       *$datum = sub {
 		   use strict "refs";
-		   my $self = shift->_classobj();
-		   $self->{$datum} = shift if @_;
-		   return $self->{$datum};
+		   my $self = shift-&gt_classobj();
+		   $self-&gt{$datum} = shift if @_;
+		   return $self-&gt{$datum};
 	       }
 	   }
 
@@ -385,29 +387,29 @@ Class Data as Package Variables
 	   sub new {
 	       my $obclass = shift;
 	       return bless my $self = {
-		   ObData1 => "",
-		   ObData2 => "",
-		   CData1  => \$CData1,
-		   CData2  => \$CData2,
-	       } => (ref $obclass || $obclass);
+		   ObData1 =&gt "",
+		   ObData2 =&gt "",
+		   CData1  =&gt \$CData1,
+		   CData2  =&gt \$CData2,
+	       } =&gt (ref $obclass || $obclass);
 	   }
 
 	   sub ObData1 {
 	       my $self = shift;
-	       $self->{ObData1} = shift if @_;
-	       return $self->{ObData1};
+	       $self-&gt{ObData1} = shift if @_;
+	       return $self-&gt{ObData1};
 	   }
 
 	   sub ObData2 {
 	       my $self = shift;
-	       $self->{ObData2} = shift if @_;
-	       return $self->{ObData2};
+	       $self-&gt{ObData2} = shift if @_;
+	       return $self-&gt{ObData2};
 	   }
 
 	   sub CData1 {
 	       my $self = shift;
 	       my $dataref = ref $self
-			       ? $self->{CData1}
+			       ? $self-&gt{CData1}
 			       : \$CData1;
 	       $$dataref = shift if @_;
 	       return $$dataref;
@@ -416,7 +418,7 @@ Class Data as Package Variables
 	   sub CData2 {
 	       my $self = shift;
 	       my $dataref = ref $self
-			       ? $self->{CData2}
+			       ? $self-&gt{CData2}
 			       : \$CData2;
 	       $$dataref = shift if @_;
 	       return $$dataref;
@@ -432,8 +434,8 @@ Class Data as Package Variables
 	       use strict;
 
 	       our %Some_Class = (     # our() is new to perl5.6
-		   CData1 => "",
-		   CData2 => "",
+		   CData1 =&gt "",
+		   CData2 =&gt "",
 	       );
 
 	       sub _classobj {
@@ -446,40 +448,40 @@ Class Data as Package Variables
 
 	       sub new {
 		   my $obclass	= shift;
-		   my $classobj = $obclass->_classobj();
+		   my $classobj = $obclass-&gt_classobj();
 		   bless my $self = {
-		       ObData1 => "",
-		       ObData2 => "",
-		       CData1  => \$classobj->{CData1},
-		       CData2  => \$classobj->{CData2},
-		   } => (ref $obclass || $obclass);
+		       ObData1 =&gt "",
+		       ObData2 =&gt "",
+		       CData1  =&gt \$classobj-&gt{CData1},
+		       CData2  =&gt \$classobj-&gt{CData2},
+		   } =&gt (ref $obclass || $obclass);
 		   return $self;
 	       }
 
 	       sub ObData1 {
 		   my $self = shift;
-		   $self->{ObData1} = shift if @_;
-		   return $self->{ObData1};
+		   $self-&gt{ObData1} = shift if @_;
+		   return $self-&gt{ObData1};
 	       }
 
 	       sub ObData2 {
 		   my $self = shift;
-		   $self->{ObData2} = shift if @_;
-		   return $self->{ObData2};
+		   $self-&gt{ObData2} = shift if @_;
+		   return $self-&gt{ObData2};
 	       }
 
 	       sub CData1 {
 		   my $self = shift;
-		   $self = $self->_classobj() unless ref $self;
-		   my $dataref = $self->{CData1};
+		   $self = $self-&gt_classobj() unless ref $self;
+		   my $dataref = $self-&gt{CData1};
 		   $$dataref = shift if @_;
 		   return $$dataref;
 	       }
 
 	       sub CData2 {
 		   my $self = shift;
-		   $self = $self->_classobj() unless ref $self;
-		   my $dataref = $self->{CData2};
+		   $self = $self-&gt_classobj() unless ref $self;
+		   my $dataref = $self-&gt{CData2};
 		   $$dataref = shift if @_;
 		   return $$dataref;
 	       }
@@ -533,45 +535,45 @@ Class Data as Package Variables
 	   # accessor method for "name" attribute
 	   sub name {
 	       my $self = shift;
-	       $self->{name} = shift if @_;
-	       return $self->{name};
+	       $self-&gt{name} = shift if @_;
+	       return $self-&gt{name};
 	   }
 
 	   # read-only accessor method for "birthday" attribute
 	   sub birthday {
 	       my $self = shift;
 	       die "can't reset birthday" if @_;  # XXX: croak() is better
-	       return $self->{birthday};
+	       return $self-&gt{birthday};
 	   }
 
 	   # accessor method for "stars" attribute
 	   sub stars {
 	       my $self = shift;
-	       $self->{stars} = shift if @_;
-	       return $self->{stars};
+	       $self-&gt{stars} = shift if @_;
+	       return $self-&gt{stars};
 	   }
 
 	   # oh my - one of our stars just went out!
 	   sub supernova {
 	       my $self = shift;
-	       my $count = $self->stars();
-	       $self->stars($count - 1) if $count > 0;
+	       my $count = $self-&gtstars();
+	       $self-&gtstars($count - 1) if $count &gt 0;
 	   }
 
 	   # constructor/initializer method - fix by reboot
 	   sub bigbang {
 	       my $self = shift;
 	       %$self = (
-		   name 	=> "the world according to tchrist",
-		   birthday	=> time(),
-		   stars	=> 0,
+		   name 	=&gt "the world according to tchrist",
+		   birthday	=&gt time(),
+		   stars	=&gt 0,
 	       );
 	       return $self;	   # yes, it's probably a class.  SURPRISE!
 	   }
 
 	   # After the class is compiled, but before any use or require
 	   # returns, we start off the universe with a bang.
-	   __PACKAGE__ -> bigbang();
+	   __PACKAGE__ -&gt bigbang();
 
        Hold on, that doesn't look like anything special.  Those attribute
        accessors look no different than they would if this were a regular
@@ -608,7 +610,7 @@ Class Data as Package Variables
 	       my $protoverse = shift;
 	       my $class      = ref($protoverse) || $protoverse;
 	       my $self       = {};
-	       return bless($self, $class)->bigbang();
+	       return bless($self, $class)-&gtbigbang();
 	   }
 	   1;
 
@@ -661,8 +663,8 @@ Class Data as Package Variables
        particular object.  The class's eponymous hash can also be used to
        implement translucent attributes.  A translucent attribute is one that
        has a class-wide default.  Each object can set its own value for the
-       attribute, in which case "$object->attribute()" returns that value.
-       But if no value has been set, then "$object->attribute()" returns the
+       attribute, in which case "$object-&gtattribute()" returns that value.
+       But if no value has been set, then "$object-&gtattribute()" returns the
        class-wide default.
 
        We'll apply something of a copy-on-write approach to these translucent
@@ -682,13 +684,13 @@ Class Data as Package Variables
        constructor that happens to be named &spawn.
 
 	   use Vermin;
-	   Vermin->color("vermilion");
+	   Vermin-&gtcolor("vermilion");
 
-	   $ob1 = Vermin->spawn();     # so that's where Jedi come from
-	   $ob2 = Vermin->spawn();
-	   $ob3 = Vermin->spawn();
+	   $ob1 = Vermin-&gtspawn();     # so that's where Jedi come from
+	   $ob2 = Vermin-&gtspawn();
+	   $ob3 = Vermin-&gtspawn();
 
-	   print $obj3->color();       # prints "vermilion"
+	   print $obj3-&gtcolor();       # prints "vermilion"
 
        Each of these objects' colors is now "vermilion", because that's the
        meta-object's value for that attribute, and these objects do not have
@@ -697,9 +699,9 @@ Class Data as Package Variables
        Changing the attribute on one object has no effect on other objects
        previously created.
 
-	   $ob3->color("chartreuse");
-	   print $ob3->color();        # prints "chartreuse"
-	   print $ob1->color();        # prints "vermilion", translucently
+	   $ob3-&gtcolor("chartreuse");
+	   print $ob3-&gtcolor();        # prints "chartreuse"
+	   print $ob1-&gtcolor();        # prints "vermilion", translucently
 
        If you now use $ob3 to spawn off another object, the new object will
        take the color its parent held, which now happens to be "chartreuse".
@@ -709,8 +711,8 @@ Class Data as Package Variables
        the invoking object is a reference to an instantiated object, the
        &spawn constructor uses that existing object as a template.
 
-	   $ob4 = $ob3->spawn();       # $ob3 now template, not %Vermin
-	   print $ob4->color();        # prints "chartreuse"
+	   $ob4 = $ob3-&gtspawn();       # $ob3 now template, not %Vermin
+	   print $ob4-&gtcolor();        # prints "chartreuse"
 
        Any actual values set on the template object will be copied to the new
        object.	But attributes undefined in the template object, being
@@ -719,11 +721,11 @@ Class Data as Package Variables
 
        Now let's change the color attribute on the entire class:
 
-	   Vermin->color("azure");
-	   print $ob1->color();        # prints "azure"
-	   print $ob2->color();        # prints "azure"
-	   print $ob3->color();        # prints "chartreuse"
-	   print $ob4->color();        # prints "chartreuse"
+	   Vermin-&gtcolor("azure");
+	   print $ob1-&gtcolor();        # prints "azure"
+	   print $ob2-&gtcolor();        # prints "azure"
+	   print $ob3-&gtcolor();        # prints "chartreuse"
+	   print $ob4-&gtcolor();        # prints "chartreuse"
 
        That color change took effect only in the first pair of objects, which
        were still translucently accessing the meta-object's values.  The
@@ -735,9 +737,9 @@ Class Data as Package Variables
        value of $ob4 see that change?  Or vice-versa.  If you change the color
        of $ob4, does then the value of $ob3 shift?
 
-	   $ob3->color("amethyst");
-	   print $ob3->color();        # prints "amethyst"
-	   print $ob4->color();        # hmm: "chartreuse" or "amethyst"?
+	   $ob3-&gtcolor("amethyst");
+	   print $ob3-&gtcolor();        # prints "amethyst"
+	   print $ob4-&gtcolor();        # hmm: "chartreuse" or "amethyst"?
 
        While one could argue that in certain rare cases it should, let's not
        do that.  Good taste aside, we want the answer to the question posed in
@@ -755,7 +757,7 @@ Class Data as Package Variables
        Let's design the class so that when you invoke an accessor method with
        "undef" as its argument, that attribute returns to translucency.
 
-	   $ob4->color(undef);	       # back to "azure"
+	   $ob4-&gtcolor(undef);	       # back to "azure"
 
        Here's a complete implementation of Vermin as described above.
 
@@ -767,8 +769,8 @@ Class Data as Package Variables
 	   # and translucency.
 
 	   our %Vermin = (	       # our() is new to perl5.6
-	       PopCount => 0,	       # capital for class attributes
-	       color	=> "beige",    # small for instance attributes
+	       PopCount =&gt 0,	       # capital for class attributes
+	       color	=&gt "beige",    # small for instance attributes
 	   );
 
 	   # constructor method
@@ -778,7 +780,7 @@ Class Data as Package Variables
 	       my $class   = ref($obclass) || $obclass;
 	       my $self = {};
 	       bless($self, $class);
-	       $class->{PopCount}++;
+	       $class-&gt{PopCount}++;
 	       # init fields from invoking object, or omit if
 	       # invoking object is the class to provide translucency
 	       %$self = %$obclass if ref $obclass;
@@ -793,16 +795,16 @@ Class Data as Package Variables
 
 	       # handle class invocation
 	       unless (ref $self) {
-		   $class->{color} = shift if @_;
-		   return $class->{color}
+		   $class-&gt{color} = shift if @_;
+		   return $class-&gt{color}
 	       }
 
 	       # handle object invocation
-	       $self->{color} = shift if @_;
-	       if (defined $self->{color}) {  # not exists!
-		   return $self->{color};
+	       $self-&gt{color} = shift if @_;
+	       if (defined $self-&gt{color}) {  # not exists!
+		   return $self-&gt{color};
 	       } else {
-		   return $class->{color};
+		   return $class-&gt{color};
 	       }
 	   }
 
@@ -812,7 +814,7 @@ Class Data as Package Variables
 	   sub population {
 	       my $obclass = shift;
 	       my $class   = ref($obclass) || $obclass;
-	       return $class->{PopCount};
+	       return $class-&gt{PopCount};
 	   }
 
 	   # instance destructor
@@ -820,7 +822,7 @@ Class Data as Package Variables
 	   sub DESTROY {
 	       my $self  = shift;
 	       my $class = ref $self;
-	       $class->{PopCount}--;
+	       $class-&gt{PopCount}--;
 	   }
 
        Here are a couple of helper methods that might be convenient.  They
@@ -835,7 +837,7 @@ Class Data as Package Variables
 	   # (typically?) invoked only as object method
 	   sub is_translucent {
 	       my($self, $attr)  = @_;
-	       return !defined $self->{$attr};
+	       return !defined $self-&gt{$attr};
 	   }
 
 	   # test for presence of attribute in class
@@ -843,7 +845,7 @@ Class Data as Package Variables
 	   sub has_attribute {
 	       my($self, $attr)  = @_;
 	       my $class = ref($self) || $self;
-	       return exists $class->{$attr};
+	       return exists $class-&gt{$attr};
 	   }
 
        If you prefer to install your accessors more generically, you can make
@@ -855,19 +857,19 @@ Class Data as Package Variables
 		   ? sub {  # install class accessor
 			   my $obclass = shift;
 			   my $class   = ref($obclass) || $obclass;
-			   return $class->{$datum};
+			   return $class-&gt{$datum};
 			 }
 		   : sub { # install translucent accessor
 			   my $self  = shift;
 			   my $class = ref($self) || $self;
 			   unless (ref $self) {
-			       $class->{$datum} = shift if @_;
-			       return $class->{$datum}
+			       $class-&gt{$datum} = shift if @_;
+			       return $class-&gt{$datum}
 			   }
-			   $self->{$datum} = shift if @_;
-			   return defined $self->{$datum}
-			       ? $self	-> {$datum}
-			       : $class -> {$datum}
+			   $self-&gt{$datum} = shift if @_;
+			   return defined $self-&gt{$datum}
+			       ? $self	-&gt {$datum}
+			       : $class -&gt {$datum}
 			 }
 	   }
 
@@ -974,8 +976,8 @@ Class Data as Lexical Variables
 
 	   package Some_Class;
 	   my %ClassData = (
-	       CData1 => "",
-	       CData2 => "",
+	       CData1 =&gt "",
+	       CData2 =&gt "",
 	   );
 	   sub CData1 {
 	       shift;  # XXX: ignore calling class/object
@@ -994,8 +996,8 @@ Class Data as Lexical Variables
 
 	   package Some_Class;
 	   my %ClassData = (
-	       CData1 => "",
-	       CData2 => "",
+	       CData1 =&gt "",
+	       CData2 =&gt "",
 	   );
 	   for my $datum (keys %ClassData) {
 	       no strict "refs";
@@ -1052,19 +1054,19 @@ Class Data as Lexical Variables
 	   @ISA = qw(Some_Class);
 
 	   my %ClassData = (
-	       CData1 => "",
+	       CData1 =&gt "",
 	   );
 
 	   sub CData1 {
 	       my($self, $newvalue) = @_;
-	       if (@_ > 1) {
+	       if (@_ &gt 1) {
 		   # set locally first
 		   $ClassData{CData1} = $newvalue;
 
 		   # then pass the buck up to the first
 		   # overridden version, if there is one
-		   if ($self->can("SUPER::CData1")) {
-		       $self->SUPER::CData1($newvalue);
+		   if ($self-&gtcan("SUPER::CData1")) {
+		       $self-&gtSUPER::CData1($newvalue);
 		   }
 	       }
 	       return $ClassData{CData1};
@@ -1075,8 +1077,8 @@ Class Data as Lexical Variables
 
 	   for my $parent (@ISA) {
 	       my $methname = $parent . "::CData1";
-	       if ($self->can($methname)) {
-		   $self->$methname($newvalue);
+	       if ($self-&gtcan($methname)) {
+		   $self-&gt$methname($newvalue);
 	       }
 	   }
 
@@ -1085,8 +1087,8 @@ Class Data as Lexical Variables
        improvement:
 
 	   for my $parent (@ISA) {
-	       if (my $coderef = $self->can($parent . "::CData1")) {
-		   $self->$coderef($newvalue);
+	       if (my $coderef = $self-&gtcan($parent . "::CData1")) {
+		   $self-&gt$coderef($newvalue);
 	       }
 	   }
 
@@ -1146,8 +1148,8 @@ Class Data as Lexical Variables
 
 	   {  # scope for ultra-private meta-object for class attributes
 	       my %ClassData = (
-		   CData1 => "",
-		   CData2 => "",
+		   CData1 =&gt "",
+		   CData2 =&gt "",
 	       );
 
 	       for my $datum (keys %ClassData ) {
@@ -1155,7 +1157,7 @@ Class Data as Lexical Variables
 		   *$datum = sub {
 		       use strict "refs";
 		       my ($self, $newvalue) = @_;
-		       $ClassData{$datum} = $newvalue if @_ > 1;
+		       $ClassData{$datum} = $newvalue if @_ &gt 1;
 		       return $ClassData{$datum};
 		   }
 	       }
@@ -1180,12 +1182,12 @@ Class Data as Lexical Variables
 
 	   package Vermin;
 	   $class = "Vermin";
-	   $class->{PopCount}++;
+	   $class-&gt{PopCount}++;
 	   # accesses $Vermin::Vermin{PopCount}
 
 	   package Vermin::Noxious;
 	   $class = "Vermin::Noxious";
-	   $class->{PopCount}++;
+	   $class-&gt{PopCount}++;
 	   # accesses $Vermin::Noxious{PopCount}
 
        In the first case, because the class name had no double-colons, we got
@@ -1225,8 +1227,8 @@ Class Data as Lexical Variables
 	   # so the latter can be used for both initialization
 	   # and translucency.	it's a template.
 	   my %ClassData = (
-	       PopCount => 0,	       # capital for class attributes
-	       color	=> "beige",    # small for instance attributes
+	       PopCount =&gt 0,	       # capital for class attributes
+	       color	=&gt "beige",    # small for instance attributes
 	   );
 
 	   # constructor method
@@ -1255,9 +1257,9 @@ Class Data as Lexical Variables
 	       }
 
 	       # handle object invocation
-	       $self->{color} = shift if @_;
-	       if (defined $self->{color}) {  # not exists!
-		   return $self->{color};
+	       $self-&gt{color} = shift if @_;
+	       if (defined $self-&gt{color}) {  # not exists!
+		   return $self-&gt{color};
 	       } else {
 		   return $ClassData{color};
 	       }
@@ -1279,7 +1281,7 @@ Class Data as Lexical Variables
 	   sub is_translucent {
 	       my($self, $attr)  = @_;
 	       $self = \%ClassData if !ref $self;
-	       return !defined $self->{$attr};
+	       return !defined $self-&gt{$attr};
 	   }
 
 	   # test for presence of attribute in class
@@ -1299,8 +1301,8 @@ NOTES
        module's methods wind up getting compiled.
 
        The usual mealy-mouthed package-munging doubtless applies to setting up
-       names of object attributes.  For example, "$self->{ObData1}" should
-       probably be "$self->{ __PACKAGE__ . "_ObData1" }", but that would just
+       names of object attributes.  For example, "$self-&gt{ObData1}" should
+       probably be "$self-&gt{ __PACKAGE__ . "_ObData1" }", but that would just
        confuse the examples.
 
 SEE ALSO
@@ -1336,6 +1338,6 @@ HISTORY
 
 
 perl v5.10.1			  2009-02-12			   PERLTOOC(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

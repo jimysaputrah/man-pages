@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The getattrlist() function returns attributes (that is, metadata) of file..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>getattrlist, fgetattrlist -- get file system attributes</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 
 GETATTRLIST(2)		    BSD System Calls Manual		GETATTRLIST(2)
 
@@ -15,8 +17,8 @@ NAME
      getattrlist, fgetattrlist -- get file system attributes
 
 SYNOPSIS
-     #include <sys/attr.h>
-     #include <unistd.h>
+     #include &ltsys/attr.h&gt
+     #include &ltunistd.h&gt
 
      int
      getattrlist(const char* path, struct attrlist * attrList, void * attrBuf,
@@ -58,7 +60,7 @@ DESCRIPTION
      able.
 
      The attrList parameter is a pointer to an attrlist structure, as defined
-     by <sys/attr.h> (shown below).  It determines what attributes are
+     by &ltsys/attr.h&gt (shown below).  It determines what attributes are
      returned by the function.	You are responsible for filling out all fields
      of this structure before calling the function.
 
@@ -157,7 +159,7 @@ ATTRIBUTE BUFFER
 	  data types).
 
      If the attribute is of variable length, it is represented in the list by
-     an attrreference structure, as defined by <sys/attr.h> (shown below).
+     an attrreference structure, as defined by &ltsys/attr.h&gt (shown below).
 
      typedef struct attrreference {
 	 int32_t	attr_dataoffset;
@@ -185,9 +187,9 @@ ATTRIBUTE BUFFER
      beyond the end of the attribute buffer.  That is, it's possible for the
      attribute data to start beyond the end of the attribute buffer (that is,
      if attrRef is a pointer to the attrreference_t, ( ( (char *) attrRef ) +
-     attr_dataoffset ) > ( ( (char *) attrBuf ) + attrSize ) ) or, indeed, for
+     attr_dataoffset ) &gt ( ( (char *) attrBuf ) + attrSize ) ) or, indeed, for
      the attribute data to extend beyond the end of the attribute buffer (that
-     is, ( ( (char *) attrRef ) + attr_dataoffset + attr_datalength ) > ( (
+     is, ( ( (char *) attrRef ) + attr_dataoffset + attr_datalength ) &gt ( (
      (char *) attrBuf ) + attrSize ) ).  If this happens you must increase the
      size of the buffer and call getattrlist() to get an accurate copy of the
      attribute.
@@ -237,11 +239,11 @@ COMMON ATTRIBUTES
 
      ATTR_CMN_OBJTYPE	       An fsobj_type_t that identifies the type of
 			       file system object.  The values are taken from
-			       enum vtype in <sys/vnode.h>.
+			       enum vtype in &ltsys/vnode.h&gt.
 
      ATTR_CMN_OBJTAG	       An fsobj_tag_t that identifies the type of file
 			       system containing the object.  The values are
-			       taken from enum vtagtype in <sys/vnode.h>.
+			       taken from enum vtagtype in &ltsys/vnode.h&gt.
 
      ATTR_CMN_OBJID	       An fsobj_id_t structure that uniquely identi-
 			       fies the file system object within its volume.
@@ -290,7 +292,7 @@ COMMON ATTRIBUTES
 			       less round trip conversion of names between
 			       Unicode and traditional Mac OS script encod-
 			       ings.  The values are defined in
-			       <CarbonCore/TextCommon.h>.  File systems that
+			       &ltCarbonCore/TextCommon.h&gt.  File systems that
 			       do not have an appropriate text encoding value
 			       should return kTextEncodingMacUnicode.  See DTS
 			       Q&A 1173 "File Manager Text Encoding Hints".
@@ -327,7 +329,7 @@ COMMON ATTRIBUTES
 			       structure (or, for directories, a FolderInfo
 			       structure and an ExtendedFolderInfo structure).
 			       These structures are defined in
-			       <CarbonCore/Finder.h>.
+			       &ltCarbonCore/Finder.h&gt.
 
 			       This attribute is not byte swapped by the file
 			       system.	The value of multibyte fields on disk
@@ -437,7 +439,7 @@ VOLUME ATTRIBUTES
 			       word.  This value is unique within a given file
 			       system type and lets you distinguish between
 			       different volume formats handled by the same
-			       file system.  See <CarbonCore/Files.h> for more
+			       file system.  See &ltCarbonCore/Files.h&gt for more
 			       details.
 
      ATTR_VOL_SIZE	       An off_t containing the total size of the vol-
@@ -762,7 +764,7 @@ VOLUME CAPABILITIES
 				      space on disk.  A sparse file may have
 				      an allocated size on disk that is less
 				      than its logical length (that is,
-				      ATTR_FILE_ALLOCSIZE <
+				      ATTR_FILE_ALLOCSIZE &lt
 				      ATTR_FILE_TOTALSIZE ).
 
 				      Introduced with Darwin 7.0 (Mac OS X
@@ -1092,13 +1094,13 @@ EXAMPLES
      The following code prints the file type and creator of a file, assuming
      that the volume supports the required attributes.
 
-     #include <assert.h>
-     #include <stdio.h>
-     #include <string.h>
-     #include <sys/attr.h>
-     #include <sys/errno.h>
-     #include <unistd.h>
-     #include <sys/vnode.h>
+     #include &ltassert.h&gt
+     #include &ltstdio.h&gt
+     #include &ltstring.h&gt
+     #include &ltsys/attr.h&gt
+     #include &ltsys/errno.h&gt
+     #include &ltunistd.h&gt
+     #include &ltsys/vnode.h&gt
 
      typedef struct attrlist attrlist_t;
 
@@ -1148,14 +1150,14 @@ EXAMPLES
      The following code is an alternative implementation that uses nested
      structures to group the related attributes.
 
-     #include <assert.h>
-     #include <stdio.h>
-     #include <stddef.h>
-     #include <string.h>
-     #include <sys/attr.h>
-     #include <sys/errno.h>
-     #include <unistd.h>
-     #include <sys/vnode.h>
+     #include &ltassert.h&gt
+     #include &ltstdio.h&gt
+     #include &ltstddef.h&gt
+     #include &ltstring.h&gt
+     #include &ltsys/attr.h&gt
+     #include &ltsys/errno.h&gt
+     #include &ltunistd.h&gt
+     #include &ltsys/vnode.h&gt
 
      typedef struct attrlist attrlist_t;
 
@@ -1220,14 +1222,14 @@ EXAMPLES
      It assumes that the volume specified by path supports the necessary
      attributes.
 
-     #include <assert.h>
-     #include <stdio.h>
-     #include <stddef.h>
-     #include <string.h>
-     #include <sys/attr.h>
-     #include <sys/errno.h>
-     #include <unistd.h>
-     #include <sys/vnode.h>
+     #include &ltassert.h&gt
+     #include &ltstdio.h&gt
+     #include &ltstddef.h&gt
+     #include &ltstring.h&gt
+     #include &ltsys/attr.h&gt
+     #include &ltsys/errno.h&gt
+     #include &ltunistd.h&gt
+     #include &ltsys/vnode.h&gt
 
      typedef struct attrlist attrlist_t;
 
@@ -1262,8 +1264,8 @@ EXAMPLES
 	 }
 
 	 if (err == 0) {
-	     assert(attrBuf.length >  offsetof(VolAttrBuf, mountPointSpace));
-	     assert(attrBuf.length <= sizeof(attrBuf));
+	     assert(attrBuf.length &gt  offsetof(VolAttrBuf, mountPointSpace));
+	     assert(attrBuf.length &lt= sizeof(attrBuf));
 
 	     printf("Volume information for %s:\n", path);
 	     printf("ATTR_VOL_FILECOUNT:  %u\n", attrBuf.fileCount);
@@ -1289,13 +1291,13 @@ EXAMPLES
      controls; without the attribute, in 64-bit code, the fields of the struc-
      ture are not placed at the locations that the kernel expects.
 
-     #include <stdio.h>
-     #include <stdlib.h>
-     #include <unistd.h>
-     #include <string.h>
-     #include <err.h>
-     #include <time.h>
-     #include <sys/attr.h>
+     #include &ltstdio.h&gt
+     #include &ltstdlib.h&gt
+     #include &ltunistd.h&gt
+     #include &ltstring.h&gt
+     #include &lterr.h&gt
+     #include &lttime.h&gt
+     #include &ltsys/attr.h&gt
 
      /* The alignment and packing attribute is necessary in 64-bit code */
      struct AttrListTimes {
@@ -1309,7 +1311,7 @@ EXAMPLES
 	     int	     rv;
 	     int	     i;
 
-	     for (i = 1; i < argc; i++) {
+	     for (i = 1; i &lt argc; i++) {
 		     struct attrlist attrList;
 		     struct AttrListTimes myStat = {0};
 		     char	    *path = argv[i];
@@ -1339,6 +1341,6 @@ HISTORY
      10.0).
 
 Darwin			       October 14, 2004 			Darwin
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

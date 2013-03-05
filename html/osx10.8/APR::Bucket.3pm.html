@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""APR::Bucket" allows you to create, manipulate and delete APR buckets...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>APR::Bucket - Perl API for manipulating APR Buckets</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apache_mod_papache_mod_perl-106~237::mod_perl-2.0.5::docs::api::APR::Bucket(3)
 
 
@@ -17,28 +19,28 @@ NAME
 
 Synopsis
 	 use APR::Bucket ();
-	 my $ba = $c->bucket_alloc;
+	 my $ba = $c-&gtbucket_alloc;
 
-	 $b1 = APR::Bucket->new($ba, "aaa");
+	 $b1 = APR::Bucket-&gtnew($ba, "aaa");
 	 $b2 = APR::Bucket::eos_create($ba);
 	 $b3 = APR::Bucket::flush_create($ba);
 
-	 $b2->is_eos;
-	 $b3->is_flush;
+	 $b2-&gtis_eos;
+	 $b3-&gtis_flush;
 
-	 $len = $b1->length;
-	 $len = $b1->read($data);
-	 $type = $b1->type;
+	 $len = $b1-&gtlength;
+	 $len = $b1-&gtread($data);
+	 $type = $b1-&gttype;
 
-	 $b1->insert_after($b2);
-	 $b1->insert_before($b3);
-	 $b1->remove;
-	 $b1->destroy;
+	 $b1-&gtinsert_after($b2);
+	 $b1-&gtinsert_before($b3);
+	 $b1-&gtremove;
+	 $b1-&gtdestroy;
 
-	 $b2->delete; # remove+destroy
+	 $b2-&gtdelete; # remove+destroy
 
-	 $b4 = APR::Bucket->new($ba, "to be setaside");
-	 $b4->setaside($pool);
+	 $b4 = APR::Bucket-&gtnew($ba, "to be setaside");
+	 $b4-&gtsetaside($pool);
 
 Description
        "APR::Bucket" allows you to create, manipulate and delete APR buckets.
@@ -47,18 +49,18 @@ Description
        to read the function right to left. The following code sample helps to
        visualize the operations:
 
-	 my $bb = APR::Brigade->new($r->pool, $ba);
-	 my $d1 = APR::Bucket->new($ba, "d1");
-	 my $d2 = APR::Bucket->new($ba, "d2");
+	 my $bb = APR::Brigade-&gtnew($r-&gtpool, $ba);
+	 my $d1 = APR::Bucket-&gtnew($ba, "d1");
+	 my $d2 = APR::Bucket-&gtnew($ba, "d2");
 	 my $f1 = APR::Bucket::flush_create($ba);
 	 my $f2 = APR::Bucket::flush_create($ba);
 	 my $e1 = APR::Bucket::eos_create($ba);
-				  # head->tail
-	 $bb->insert_head(  $d1); # head->d1->tail
-	 $d1->insert_after( $d2); # head->d1->d2->tail
-	 $d2->insert_before($f1); # head->d1->f1->d2->tail
-	 $d2->insert_after( $f2); # head->d1->f1->d2->f2->tail
-	 $bb->insert_tail(  $e1); # head->d1->f1->d2->f2->e1->tail
+				  # head-&gttail
+	 $bb-&gtinsert_head(  $d1); # head-&gtd1-&gttail
+	 $d1-&gtinsert_after( $d2); # head-&gtd1-&gtd2-&gttail
+	 $d2-&gtinsert_before($f1); # head-&gtd1-&gtf1-&gtd2-&gttail
+	 $d2-&gtinsert_after( $f2); # head-&gtd1-&gtf1-&gtd2-&gtf2-&gttail
+	 $bb-&gtinsert_tail(  $e1); # head-&gtd1-&gtf1-&gtd2-&gtf2-&gte1-&gttail
 
 API
        "APR::Bucket" provides the following functions and/or methods:
@@ -67,7 +69,7 @@ API
        Tell the bucket to remove itself from the bucket brigade it belongs to,
        and destroy itself.
 
-	 $bucket->delete();
+	 $bucket-&gtdelete();
 
        obj: $bucket ( "APR::Bucket object" )
        ret: no return value
@@ -78,19 +80,19 @@ API
 
        "delete" is a convenience wrapper, internally doing:
 
-	 $b->remove;
-	 $b->destroy;
+	 $b-&gtremove;
+	 $b-&gtdestroy;
 
        Examples:
 
        Assuming that $bb already exists and filled with buckets, replace the
        existing data buckets with new buckets with upcased data;
 
-	 for (my $b = $bb->first; $b; $b = $bb->next($b)) {
-	    if ($b->read(my $data)) {
-		 my $nb = APR::Bucket->new($bb->bucket_alloc, uc $data);
-		 $b->insert_before($nb);
-		 $b->delete;
+	 for (my $b = $bb-&gtfirst; $b; $b = $bb-&gtnext($b)) {
+	    if ($b-&gtread(my $data)) {
+		 my $nb = APR::Bucket-&gtnew($bb-&gtbucket_alloc, uc $data);
+		 $b-&gtinsert_before($nb);
+		 $b-&gtdelete;
 		 $b = $nb;
 	     }
 	 }
@@ -99,7 +101,7 @@ API
        Free the resources used by a bucket. If multiple buckets refer to the
        same resource it is freed when the last one goes away.
 
-	 $bucket->destroy();
+	 $bucket-&gtdestroy();
 
        obj: $bucket ( "APR::Bucket object" )
        ret: no return value
@@ -113,8 +115,8 @@ API
 
        Usually instead of calling:
 
-	 $b->remove;
-	 $b->destroy;
+	 $b-&gtremove;
+	 $b-&gtdestroy;
 
        it's better to call "delete" which does exactly that.
 
@@ -139,7 +141,7 @@ API
 
 	 use APR::Bucket ();
 	 use Apache2::Connection ();
-	 my $ba = $c->bucket_alloc;
+	 my $ba = $c-&gtbucket_alloc;
 	 my $eos_b = APR::Bucket::eos_create($ba);
 
    "flush_create"
@@ -162,7 +164,7 @@ API
    "insert_after"
        Insert a list of buckets after a specified bucket
 
-	 $after_bucket->insert_after($add_bucket);
+	 $after_bucket-&gtinsert_after($add_bucket);
 
        obj: $after_bucket ( "APR::Bucket object" )
 	   The bucket to insert after
@@ -177,7 +179,7 @@ API
    "insert_before"
        Insert a list of buckets before a specified bucket
 
-	 $before_bucket->insert_before($add_bucket);
+	 $before_bucket-&gtinsert_before($add_bucket);
 
        obj: $before_bucket ( "APR::Bucket object" )
 	   The bucket to insert before
@@ -192,7 +194,7 @@ API
    "is_eos"
        Determine if a bucket is an EOS bucket
 
-	 $ret = $bucket->is_eos();
+	 $ret = $bucket-&gtis_eos();
 
        obj: $bucket ( "APR::Bucket object" )
        ret: $ret ( boolean )
@@ -201,7 +203,7 @@ API
    "is_flush"
        Determine if a bucket is a FLUSH bucket
 
-	 $ret = $bucket->is_flush();
+	 $ret = $bucket-&gtis_flush();
 
        obj: $bucket ( "APR::Bucket object" )
        ret: $ret ( boolean )
@@ -210,7 +212,7 @@ API
    "length"
        Get the length of the data in the bucket.
 
-	 $len = $b->length;
+	 $len = $b-&gtlength;
 
        obj: $b ( "APR::Bucket object" )
        ret: $len ( integer )
@@ -221,10 +223,10 @@ API
    "new"
        Create a new bucket and initialize it with data:
 
-	 $nb = APR::Bucket->new($ba, $data);
-	 $nb =		$b->new($ba, $data);
-	 $nb = APR::Bucket->new($ba, $data, $offset);
-	 $nb = APR::Bucket->new($ba, $data, $offset, $len);
+	 $nb = APR::Bucket-&gtnew($ba, $data);
+	 $nb =		$b-&gtnew($ba, $data);
+	 $nb = APR::Bucket-&gtnew($ba, $data, $offset);
+	 $nb = APR::Bucket-&gtnew($ba, $data, $offset, $len);
 
        obj: $b ( "APR::Bucket object or class" )
        arg1: $ba ( "APR::BucketAlloc object" )
@@ -262,7 +264,7 @@ API
 
 	     use APR::Bucket ();
 	     my $data = "my data";
-	     my $b = APR::Bucket->new($ba, $data);
+	     my $b = APR::Bucket-&gtnew($ba, $data);
 
 	   now the bucket contains the string 'my data'.
 
@@ -271,7 +273,7 @@ API
 	     use APR::Bucket ();
 	     my $data	= "my data";
 	     my $offset = 3;
-	     my $b = APR::Bucket->new($ba, $data, $offset);
+	     my $b = APR::Bucket-&gtnew($ba, $data, $offset);
 
 	   now the bucket contains the string 'data'.
 
@@ -282,15 +284,15 @@ API
 	     my $data	= "my data";
 	     my $offset = 3;
 	     my $len	= 3;
-	     my $b = APR::Bucket->new($ba, $data, $offset, $len);
+	     my $b = APR::Bucket-&gtnew($ba, $data, $offset, $len);
 
 	   now the bucket contains the string 'dat'.
 
    "read"
        Read the data from the bucket.
 
-	 $len = $b->read($buffer);
-	 $len = $b->read($buffer, $block);
+	 $len = $b-&gtread($buffer);
+	 $len = $b-&gtread($buffer, $block);
 
        obj: $b ( "APR::Bucket object" )
 	   The bucket to read from
@@ -315,24 +317,24 @@ API
 
        It's important to know that certain bucket types (e.g. file bucket),
        may perform a split and insert extra buckets following the current one.
-       Therefore never call "$b->remove", before calling "$b->read", or you
+       Therefore never call "$b-&gtremove", before calling "$b-&gtread", or you
        may lose data.
 
        Examples:
 
        Blocking read:
 
-	 my $len = $b->read(my $buffer);
+	 my $len = $b-&gtread(my $buffer);
 
        Non-blocking read:
 
 	 use APR::Const -compile 'NONBLOCK_READ';
-	 my $len = $b->read(my $buffer, APR::Const::NONBLOCK_READ);
+	 my $len = $b-&gtread(my $buffer, APR::Const::NONBLOCK_READ);
 
    "remove"
        Tell the bucket to remove itself from the bucket brigade it belongs to.
 
-	 $bucket->remove();
+	 $bucket-&gtremove();
 
        obj: $bucket ( "APR::Bucket object" )
        ret: no return value
@@ -351,21 +353,21 @@ API
        Assuming that $bb1 already exists and filled with buckets, move every
        odd bucket number to $bb2 and every even to $bb3:
 
-	 my $bb2 = APR::Brigade->new($c->pool, $c->bucket_alloc);
-	 my $bb3 = APR::Brigade->new($c->pool, $c->bucket_alloc);
+	 my $bb2 = APR::Brigade-&gtnew($c-&gtpool, $c-&gtbucket_alloc);
+	 my $bb3 = APR::Brigade-&gtnew($c-&gtpool, $c-&gtbucket_alloc);
 	 my $count = 0;
-	 while (my $bucket = $bb->first) {
+	 while (my $bucket = $bb-&gtfirst) {
 	     $count++;
-	     $bucket->remove;
+	     $bucket-&gtremove;
 	     $count % 2
-		 ? $bb2->insert_tail($bucket)
-		 : $bb3->insert_tail($bucket);
+		 ? $bb2-&gtinsert_tail($bucket)
+		 : $bb3-&gtinsert_tail($bucket);
 	 }
 
    "setaside"
        Ensure the bucket's data lasts at least as long as the given pool:
 
-	 my $status = $b->setaside($pool);
+	 my $status = $b-&gtsetaside($pool);
 
        obj: $b ( "APR::Bucket object" )
        arg1: $pool ( "APR::Pool object" )
@@ -378,7 +380,7 @@ API
 	   ask for the return value. If this method is called in the "VOID"
 	   context, i.e.:
 
-	     $b->setaside($pool);
+	     $b-&gtsetaside($pool);
 
 	   mod_perl will do the error checking on your behalf, and if the
 	   return code is not "APR::Const::SUCCESS", an "APR::Error exception"
@@ -408,7 +410,7 @@ API
    "type"
        Get the type of the data in the bucket.
 
-	 $type = $b->type;
+	 $type = $b-&gttype;
 
        obj: $b ( "APR::Bucket object" )
        ret: $type ( "APR::BucketType object" )
@@ -423,8 +425,8 @@ API
 	 use APR::Bucket ();
 	 use APR::BucketType ();
 	 my $b = APR::Bucket::flush_create($ba);
-	 my $type = $b->type;
-	 my $type_name =  $type->name; # FLUSH
+	 my $type = $b-&gttype;
+	 my $type_name =  $type-&gtname; # FLUSH
 
        The type name will be 'FLUSH' in this example.
 
@@ -438,7 +440,7 @@ Unsupported API
        supported API.
 
    "data"
-	 $data = $b->data;
+	 $data = $b-&gtdata;
 
        Gives a C pointer to the address of the data in the bucket. I can't see
        what use can be done of it in Perl.
@@ -448,12 +450,12 @@ Unsupported API
        since: subject to change
 
    "start"
-	 $start = $b->start;
+	 $start = $b-&gtstart;
 
        It gives the offset to when a new bucket is created with a non-zero
        offset value:
 
-	 my $b = APR::Bucket->new($ba, $data, $offset, $len);
+	 my $b = APR::Bucket-&gtnew($ba, $data, $offset, $len);
 
        So if the offset was 3. $start will be 3 too.
 
@@ -477,6 +479,6 @@ Authors
 
 
 perl v5.12.4apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::APR::Bucket(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

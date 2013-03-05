@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The first recipe demonstrated how to build very basic Moose classes,..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Basics::Recipe2 - A simple BankAccount example</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::BasicUsereContributed PerlMoose::Cookbook::Basics::Recipe2(3)
 
 
@@ -19,19 +21,19 @@ SYNOPSIS
 	 package BankAccount;
 	 use Moose;
 
-	 has 'balance' => ( isa => 'Int', is => 'rw', default => 0 );
+	 has 'balance' =&gt ( isa =&gt 'Int', is =&gt 'rw', default =&gt 0 );
 
 	 sub deposit {
 	     my ( $self, $amount ) = @_;
-	     $self->balance( $self->balance + $amount );
+	     $self-&gtbalance( $self-&gtbalance + $amount );
 	 }
 
 	 sub withdraw {
 	     my ( $self, $amount ) = @_;
-	     my $current_balance = $self->balance();
-	     ( $current_balance >= $amount )
+	     my $current_balance = $self-&gtbalance();
+	     ( $current_balance &gt= $amount )
 		 || confess "Account overdrawn";
-	     $self->balance( $current_balance - $amount );
+	     $self-&gtbalance( $current_balance - $amount );
 	 }
 
 	 package CheckingAccount;
@@ -39,14 +41,14 @@ SYNOPSIS
 
 	 extends 'BankAccount';
 
-	 has 'overdraft_account' => ( isa => 'BankAccount', is => 'rw' );
+	 has 'overdraft_account' =&gt ( isa =&gt 'BankAccount', is =&gt 'rw' );
 
-	 before 'withdraw' => sub {
+	 before 'withdraw' =&gt sub {
 	     my ( $self, $amount ) = @_;
-	     my $overdraft_amount = $amount - $self->balance();
-	     if ( $self->overdraft_account && $overdraft_amount > 0 ) {
-		 $self->overdraft_account->withdraw($overdraft_amount);
-		 $self->deposit($overdraft_amount);
+	     my $overdraft_amount = $amount - $self-&gtbalance();
+	     if ( $self-&gtoverdraft_account && $overdraft_amount &gt 0 ) {
+		 $self-&gtoverdraft_account-&gtwithdraw($overdraft_amount);
+		 $self-&gtdeposit($overdraft_amount);
 	     }
 	 };
 
@@ -72,7 +74,7 @@ DESCRIPTION
        The first class, BankAccount, introduces a new attribute feature, a
        default value:
 
-	 has 'balance' => ( isa => 'Int', is => 'rw', default => 0 );
+	 has 'balance' =&gt ( isa =&gt 'Int', is =&gt 'rw', default =&gt 0 );
 
        This says that a BankAccount has a "balance" attribute, which has an
        "Int" type constraint, a read/write accessor, and a default value of 0.
@@ -88,7 +90,7 @@ DESCRIPTION
        next line introduces yet another new attribute feature, class-based
        type constraints:
 
-	 has 'overdraft_account' => ( isa => 'BankAccount', is => 'rw' );
+	 has 'overdraft_account' =&gt ( isa =&gt 'BankAccount', is =&gt 'rw' );
 
        Up until now, we have only seen the "Int" type constraint, which (as we
        saw in the first recipe) is a builtin type constraint. The
@@ -106,18 +108,18 @@ DESCRIPTION
        In CheckingAccount, we see another method modifier, the "before"
        modifier.
 
-	 before 'withdraw' => sub {
+	 before 'withdraw' =&gt sub {
 	     my ( $self, $amount ) = @_;
-	     my $overdraft_amount = $amount - $self->balance();
-	     if ( $self->overdraft_account && $overdraft_amount > 0 ) {
-		 $self->overdraft_account->withdraw($overdraft_amount);
-		 $self->deposit($overdraft_amount);
+	     my $overdraft_amount = $amount - $self-&gtbalance();
+	     if ( $self-&gtoverdraft_account && $overdraft_amount &gt 0 ) {
+		 $self-&gtoverdraft_account-&gtwithdraw($overdraft_amount);
+		 $self-&gtdeposit($overdraft_amount);
 	     }
 	 };
 
        Just as with the "after" modifier from the first recipe, Moose will
        handle calling the superclass method (in this case
-       "BankAccount->withdraw").
+       "BankAccount-&gtwithdraw").
 
        The "before" modifier will (obviously) run before the code from the
        superclass is run. Here, "before" modifier implements overdraft
@@ -131,34 +133,34 @@ DESCRIPTION
 
 	 sub withdraw {
 	     my ( $self, $amount ) = @_;
-	     my $overdraft_amount = $amount - $self->balance();
-	     if ( $self->overdraft_account && $overdraft_amount > 0 ) {
-		 $self->overdraft_account->withdraw($overdraft_amount);
-		 $self->deposit($overdraft_amount);
+	     my $overdraft_amount = $amount - $self-&gtbalance();
+	     if ( $self-&gtoverdraft_account && $overdraft_amount &gt 0 ) {
+		 $self-&gtoverdraft_account-&gtwithdraw($overdraft_amount);
+		 $self-&gtdeposit($overdraft_amount);
 	     }
-	     $self->SUPER::withdraw($amount);
+	     $self-&gtSUPER::withdraw($amount);
 	 }
 
        The benefit of taking the method modifier approach is we do not need to
        remember to call "SUPER::withdraw" and pass it the $amount argument
-       when writing "CheckingAccount->withdraw".
+       when writing "CheckingAccount-&gtwithdraw".
 
        This is actually more than just a convenience for forgetful
        programmers. Using method modifiers helps isolate subclasses from
-       changes in the superclasses. For instance, if BankAccount->withdraw
+       changes in the superclasses. For instance, if BankAccount-&gtwithdraw
        were to add an additional argument of some kind, the version of
-       CheckingAccount->withdraw which uses "SUPER::withdraw" would not pass
+       CheckingAccount-&gtwithdraw which uses "SUPER::withdraw" would not pass
        that extra argument correctly, whereas the method modifier version
        would automatically pass along all arguments correctly.
 
        Just as with the first recipe, object instantiation uses the "new"
        method, which accepts named parameters.
 
-	 my $savings_account = BankAccount->new( balance => 250 );
+	 my $savings_account = BankAccount-&gtnew( balance =&gt 250 );
 
-	 my $checking_account = CheckingAccount->new(
-	     balance	       => 100,
-	     overdraft_account => $savings_account,
+	 my $checking_account = CheckingAccount-&gtnew(
+	     balance	       =&gt 100,
+	     overdraft_account =&gt $savings_account,
 	 );
 
        And as with the first recipe, a more in-depth example can be found in
@@ -196,17 +198,17 @@ SEE ALSO
 	   The BankAccount example in this recipe is directly taken from the
 	   examples in this chapter of "Practical Common Lisp":
 
-	   <http://www.gigamonkeys.com/book/object-reorientation-generic-functions.html>
+	   &lthttp://www.gigamonkeys.com/book/object-reorientation-generic-functions.html&gt
 
 AUTHORS
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
-       Dave Rolsky <autarch@urth.org>
+       Dave Rolsky &ltautarch@urth.org&gt
 
 COPYRIGHT AND LICENSE
        Copyright 2006-2010 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -214,6 +216,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2010-02-2Moose::Cookbook::Basics::Recipe2(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

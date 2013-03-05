@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The  primary purpose of this slapd(8) backend is to PRESENT information..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>slapd-sql - SQL backend to slapd</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 SLAPD-SQL(5)							  SLAPD-SQL(5)
 
 
@@ -59,12 +61,12 @@ CONFIGURATION
        cific to this backend are described in the slapd.conf(5) manual page.
 
 DATA SOURCE CONFIGURATION
-       dbname <datasource name>
+       dbname &ltdatasource name&gt
 	      The name of the ODBC datasource to use.
 
-       dbhost <hostname>
-       dbpasswd <password>
-       dbuser <username>
+       dbhost &lthostname&gt
+       dbpasswd &ltpassword&gt
+       dbuser &ltusername&gt
 	      The  three  above  options  are generally unneeded, because this
 	      information is taken from the datasource specified by the dbname
 	      directive.   They  allow to override datasource settings.  Also,
@@ -76,22 +78,22 @@ SCOPING CONFIGURATION
        These options specify SQL query templates for scoping searches.
 
 
-       subtree_cond <SQL expression>
+       subtree_cond &ltSQL expression&gt
 	      Specifies a where-clause template used to form a subtree	search
-	      condition  (dn="(.+,)?<dn>$").   It  may	differ	from  one  SQL
+	      condition  (dn="(.+,)?&ltdn&gt$").   It  may	differ	from  one  SQL
 	      dialect to another (see samples).  By default, it is constructed
 	      based  on  the  knowledge about how to normalize DN values (e.g.
-	      "<upper_func>(ldap_entries.dn)   LIKE    CONCAT('%',?)");    see
+	      "&ltupper_func&gt(ldap_entries.dn)   LIKE    CONCAT('%',?)");    see
 	      upper_func, upper_needs_cast, concat_pattern and strcast_func in
 	      "HELPER CONFIGURATION" for details.
 
 
-       children_cond <SQL expression>
+       children_cond &ltSQL expression&gt
 	      Specifies a where-clause template used to form a children search
-	      condition  (dn=".+,<dn>$").   It may differ from one SQL dialect
+	      condition  (dn=".+,&ltdn&gt$").   It may differ from one SQL dialect
 	      to another (see samples).  By default, it is  constructed  based
 	      on  the  knowledge  about  how  to  normalize  DN  values  (e.g.
-	      "<upper_func>(ldap_entries.dn)   LIKE   CONCAT('%,',?)");    see
+	      "&ltupper_func&gt(ldap_entries.dn)   LIKE   CONCAT('%,',?)");    see
 	      upper_func, upper_needs_cast, concat_pattern and strcast_func in
 	      "HELPER CONFIGURATION" for details.
 
@@ -111,14 +113,14 @@ STATEMENT CONFIGURATION
        parameter number and order must not be changed.
 
 
-       oc_query <SQL expression>
+       oc_query &ltSQL expression&gt
 	      The  query  that is used to collect the objectClass mapping data
 	      from table  ldap_oc_mappings;  see  "METAINFORMATION  USED"  for
 	      details.	 The default is "SELECT id, name, keytbl, keycol, cre-
 	      ate_proc, delete_proc, expect_return FROM ldap_oc_mappings".
 
 
-       at_query <SQL expression>
+       at_query &ltSQL expression&gt
 	      The query that is used to collect the attributeType mapping data
 	      from  table  ldap_attr_mappings;	see "METAINFORMATION USED" for
 	      details.	The default  is  "SELECT  name,  sel_expr,  from_tbls,
@@ -126,32 +128,32 @@ STATEMENT CONFIGURATION
 	      FROM ldap_attr_mappings WHERE oc_map_id=?".
 
 
-       id_query <SQL expression>
+       id_query &ltSQL expression&gt
 	      The query that is used  to  map  a  DN  to  an  entry  in  table
 	      ldap_entries;  see  "METAINFORMATION  USED"  for	details.   The
 	      default  is  "SELECT  id,keyval,oc_map_id,dn  FROM  ldap_entries
-	      WHERE  <DN  match  expr>",  where <DN match expr> is constructed
+	      WHERE  &ltDN  match  expr&gt",  where &ltDN match expr&gt is constructed
 	      based on the knowledge about how to normalize  DN  values  (e.g.
 	      "dn=?"  if  no  means  to uppercase strings are available; typi-
-	      cally,   "<upper_func>(dn)=?"   is   used);   see    upper_func,
+	      cally,   "&ltupper_func&gt(dn)=?"   is   used);   see    upper_func,
 	      upper_needs_cast,  concat_pattern  and  strcast_func  in "HELPER
 	      CONFIGURATION" for details.
 
 
-       insentry_stmt <SQL expression>
+       insentry_stmt &ltSQL expression&gt
 	      The statement that is used  to  insert  a  new  entry  in  table
 	      ldap_entries;  see  "METAINFORMATION  USED"  for	details.   The
 	      default is "INSERT INTO  ldap_entries  (dn,  oc_map_id,  parent,
 	      keyval) VALUES (?, ?, ?, ?)".
 
 
-       delentry_stmt <SQL expression>
+       delentry_stmt &ltSQL expression&gt
 	      The  statement that is used to delete an existing entry from ta-
 	      ble ldap_entries; see "METAINFORMATION USED" for	details.   The
 	      default is "DELETE FROM ldap_entries WHERE id=?".
 
 
-       delobjclasses_stmt <SQL expression>
+       delobjclasses_stmt &ltSQL expression&gt
 	      The statement that is used to delete an existing entry's ID from
 	      table ldap_objclasses; see "METAINFORMATION USED"  for  details.
 	      The   default   is   "DELETE  FROM  ldap_entry_objclasses  WHERE
@@ -173,7 +175,7 @@ HELPER CONFIGURATION
        by the concat_pattern directive.
 
 
-       upper_func <SQL function name>
+       upper_func &ltSQL function name&gt
 	      Specifies  the name of a function that converts a given value to
 	      uppercase.  This is used for case insensitive matching when  the
 	      RDBMS  is case sensitive.  It may differ from one SQL dialect to
@@ -184,15 +186,15 @@ HELPER CONFIGURATION
 
        upper_needs_cast { NO | yes }
 	      Set this directive to yes if upper_func needs an	explicit  cast
-	      when applied to literal strings.	A cast in the form CAST (<arg>
-	      AS VARCHAR(<max DN length>)) is used, where <max DN  length>  is
+	      when applied to literal strings.	A cast in the form CAST (&ltarg&gt
+	      AS VARCHAR(&ltmax DN length&gt)) is used, where &ltmax DN  length&gt  is
 	      builtin  in  back-sql;  see  macro BACKSQL_MAX_DN_LEN (currently
 	      255;   note   that   slapd's    builtin	 limit,    in	 macro
 	      SLAP_LDAPDN_MAXLEN,  is  set to 8192).  This is experimental and
 	      may change in future releases.
 
 
-       strcast_func <SQL function name>
+       strcast_func &ltSQL function name&gt
 	      Specifies the name of a function that converts a given value  to
 	      a string for appropriate ordering.  This is used in "SELECT DIS-
 	      TINCT"  statements  for  strongly  typed	RDBMSes  with	little
@@ -201,26 +203,26 @@ HELPER CONFIGURATION
 	      releases.
 
 
-       concat_pattern <pattern>
+       concat_pattern &ltpattern&gt
 	      This  statement  defines the pattern that is used to concatenate
 	      strings.	The pattern MUST contain two question marks, '?', that
 	      will  be	replaced by the two strings that must be concatenated.
 	      The default value is CONCAT(?,?); a form that  is  known	to  be
 	      highly  portable	(IBM db2, PostgreSQL) is ?||?, but an explicit
 	      cast  may  be  required  when  operating	on  literal   strings:
-	      CAST(?||?  AS  VARCHAR(<length>)).   On  some  RDBMSes (IBM db2,
+	      CAST(?||?  AS  VARCHAR(&ltlength&gt)).   On  some  RDBMSes (IBM db2,
 	      MSSQL) the form ?+?  is known to work as well.  Carefully  check
 	      the  documentation  of  your RDBMS or stay with the examples for
 	      supported ones.  This is experimental and may change  in	future
 	      releases.
 
 
-       aliasing_keyword <string>
+       aliasing_keyword &ltstring&gt
 	      Define  the  aliasing  keyword.	Some RDBMSes use the word "AS"
 	      (the default), others don't use any.
 
 
-       aliasing_quote <string>
+       aliasing_quote &ltstring&gt
 	      Define the quoting char of the aliasing keyword.	 Some  RDBMSes
 	      don't  require  any  (the default), others may require single or
 	      double quotes.
@@ -253,10 +255,10 @@ HELPER CONFIGURATION
 	      RDBMS side that dynamically creates the missing parent.
 
 
-       baseObject [ <filename> ]
+       baseObject [ &ltfilename&gt ]
 	      Instructs the database to create and manage an in-memory baseOb-
 	      ject entry instead of looking for one  in  the  RDBMS.   If  the
-	      (optional)  <filename> argument is given, the entry is read from
+	      (optional)  &ltfilename&gt argument is given, the entry is read from
 	      that file in LDIF(5) format; otherwise, an  entry  with  object-
 	      Class  extensibleObject  is created based on the contents of the
 	      RDN  of  the  baseObject.   This	is  particularly  useful  when
@@ -275,7 +277,7 @@ HELPER CONFIGURATION
 	      dure.
 
 
-       fetch_attrs <attrlist>
+       fetch_attrs &ltattrlist&gt
        fetch_all_attrs { NO | yes }
 	      The  first statement allows to provide a list of attributes that
 	      must always be fetched in addition to  those  requested  by  any
@@ -295,8 +297,8 @@ HELPER CONFIGURATION
 	      entries are built.  By default it is set to yes.
 
 
-       sqllayer <name> [...]
-	      Loads the layer <name> onto a stack of helpers that are used  to
+       sqllayer &ltname&gt [...]
+	      Loads the layer &ltname&gt onto a stack of helpers that are used  to
 	      map  DNs from LDAP to SQL representation and vice-versa.	Subse-
 	      quent args are passed to the layer configuration routine.   This
 	      is  highly  experimental	and  should be used with extreme care.
@@ -409,7 +411,7 @@ METAINFORMATION USED
 	 from_tbls="persons"
 	 join_where=NULL
 	 ************
-	 id=<n>
+	 id=&ltn&gt
 	 oc_map_id=1
 	 name="telephoneNumber"
 	 sel_expr="phones.phone"
@@ -444,10 +446,10 @@ METAINFORMATION USED
 	 ldap_entries
 	 ------------
 	 id=1
-	 dn=<dn you choose>
+	 dn=&ltdn you choose&gt
 	 oc_map_id=...
-	 parent=<parent record id>
-	 keyval=<value of primary key>
+	 parent=&ltparent record id&gt
+	 keyval=&ltvalue of primary key&gt
 
        This  table  defines mappings between DNs of entries in your LDAP tree,
        and values of primary keys for corresponding relational data.   It  has
@@ -620,6 +622,6 @@ SEE ALSO
 
 
 OpenLDAP 2.4.28 		  2011/11/24			  SLAPD-SQL(5)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

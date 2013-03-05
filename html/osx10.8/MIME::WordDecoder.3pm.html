@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="WARNING: Most of this module is deprecated and may disappear.  It..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MIME::WordDecoder - decode RFC 2047 encoded words to a local</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MIME::WordDecoder(3)  User Contributed Perl Documentation MIME::WordDecoder(3)
 
 
@@ -34,14 +36,14 @@ SYNOPSIS
 
 
 	   ### Decode a MIME string (e.g., into Latin1) via the default decoder:
-	   $str = $wd->decode('To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld>');
+	   $str = $wd-&gtdecode('To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= &ltkeld&gt');
 
 	   ### Decode a string using the default decoder, non-OO style:
-	   $str = unmime('To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld>');
+	   $str = unmime('To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= &ltkeld&gt');
 
 	   ### Decode a string to an internal Perl string, non-OO style
 	   ### The result is likely to have the UTF8 flag ON.
-	   $str = mime_to_perl_string('To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld>');
+	   $str = mime_to_perl_string('To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= &ltkeld&gt');
 
 DESCRIPTION
        WARNING: Most of this module is deprecated and may disappear.  It
@@ -71,23 +73,23 @@ DESCRIPTION
        Here's a decoder which uses that:
 
 	  ### Construct a decoder:
-	  $wd = MIME::WordDecoder->new({'US-ASCII'   => "KEEP",   ### sub { $_[0] }
-					'ISO-8859-1' => \&keep7bit,
-					'ISO-8859-2' => \&keep7bit,
-					'Big5'	     => "WARN",
-					'*'	     => "DIE"});
+	  $wd = MIME::WordDecoder-&gtnew({'US-ASCII'   =&gt "KEEP",   ### sub { $_[0] }
+					'ISO-8859-1' =&gt \&keep7bit,
+					'ISO-8859-2' =&gt \&keep7bit,
+					'Big5'	     =&gt "WARN",
+					'*'	     =&gt "DIE"});
 
 	  ### Convert some MIME text to a pure ASCII string...
-	  $ascii = $wd->decode('To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld>');
+	  $ascii = $wd-&gtdecode('To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= &ltkeld&gt');
 
-	  ### ...which will now hold: "To: Keld J#rn Simonsen <keld>"
+	  ### ...which will now hold: "To: Keld J#rn Simonsen &ltkeld&gt"
 
        The UTF-8 built-in decoder decodes everything into Perl's internal
        string format, possibly turning on the internal UTF8 flag.  Use it like
        this:
 
 	   $wd = supported MIME::WordDecoder 'UTF-8';
-	   $perl_string = $wd->decode('To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld>');
+	   $perl_string = $wd-&gtdecode('To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= &ltkeld&gt');
 	   # perl_string will be a valid UTF-8 string with the "UTF8" flag set.
 
        Generally, you should use the UTF-8 decoder in preference to "unmime".
@@ -105,7 +107,7 @@ PUBLIC INTERFACE
 
 	   If DECODER is given, installs such an object:
 
-	       MIME::WordDecoder->supported("ISO-8859-1" =>
+	       MIME::WordDecoder-&gtsupported("ISO-8859-1" =&gt
 					    (new MIME::WordDecoder::ISO_8859 "1"));
 
 	   You should not override this method.
@@ -114,7 +116,7 @@ PUBLIC INTERFACE
 	   Class method, constructor.  If \@HANDLERS is given, then @HANDLERS
 	   is passed to handler() to initiallize the internal map.
 
-       handler CHARSET=>\&SUBREF, ...
+       handler CHARSET=&gt\&SUBREF, ...
 	   Instance method.  Set the handler SUBREF for a given CHARSET, for
 	   as many pairs as you care to supply.
 
@@ -132,10 +134,10 @@ PUBLIC INTERFACE
 	   For example:
 
 	       $wd = new MIME::WordDecoder;
-	       $wd->handler('US-ASCII'	 => "KEEP");
-	       $wd->handler('ISO-8859-1' => \&handle_latin1,
-			    'ISO-8859-2' => \&handle_latin1,
-			    '*' 	 => "DIE");
+	       $wd-&gthandler('US-ASCII'	 =&gt "KEEP");
+	       $wd-&gthandler('ISO-8859-1' =&gt \&handle_latin1,
+			    'ISO-8859-2' =&gt \&handle_latin1,
+			    '*' 	 =&gt "DIE");
 
 	   Notice that, much as with %SIG, the SUBREF can also be taken from a
 	   set of special keywords:
@@ -183,11 +185,11 @@ SUBCLASSES
 
 	       ### What to translate unknown characters to (can also use empty):
 	       ### Default is "?".
-	       $wd->unknown("?");
+	       $wd-&gtunknown("?");
 
 	       ### Collapse runs of unknown characters to a single unknown()?
 	       ### Default is false.
-	       $wd->collapse(1);
+	       $wd-&gtcollapse(1);
 
 	   According to http://czyborra.com/charsets/iso8859.html (ca.
 	   November 2000):
@@ -231,6 +233,6 @@ AUTHOR
 
 
 perl v5.12.4			  2011-02-17		  MIME::WordDecoder(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

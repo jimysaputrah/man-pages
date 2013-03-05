@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module is an implementation of Unicode Technical Standard #10..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Unicode::Collate - Unicode Collation Algorithm</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Unicode::Collate(3pm)  Perl Programmers Reference Guide  Unicode::Collate(3pm)
 
 
@@ -19,13 +21,13 @@ SYNOPSIS
 	 use Unicode::Collate;
 
 	 #construct
-	 $Collator = Unicode::Collate->new(%tailoring);
+	 $Collator = Unicode::Collate-&gtnew(%tailoring);
 
 	 #sort
-	 @sorted = $Collator->sort(@not_sorted);
+	 @sorted = $Collator-&gtsort(@not_sorted);
 
 	 #compare
-	 $result = $Collator->cmp($a, $b); # returns 1, 0, or -1.
+	 $result = $Collator-&gtcmp($a, $b); # returns 1, 0, or -1.
 
 	 # If %tailoring is false (i.e. empty),
 	 # $Collator should do the default collation.
@@ -37,26 +39,26 @@ DESCRIPTION
    Constructor and Tailoring
        The "new" method returns a collator object.
 
-	  $Collator = Unicode::Collate->new(
-	     UCA_Version => $UCA_Version,
-	     alternate => $alternate, # deprecated: use of 'variable' is recommended.
-	     backwards => $levelNumber, # or \@levelNumbers
-	     entry => $element,
-	     hangul_terminator => $term_primary_weight,
-	     ignoreName => qr/$ignoreName/,
-	     ignoreChar => qr/$ignoreChar/,
-	     katakana_before_hiragana => $bool,
-	     level => $collationLevel,
-	     normalization  => $normalization_form,
-	     overrideCJK => \&overrideCJK,
-	     overrideHangul => \&overrideHangul,
-	     preprocess => \&preprocess,
-	     rearrange => \@charList,
-	     table => $filename,
-	     undefName => qr/$undefName/,
-	     undefChar => qr/$undefChar/,
-	     upper_before_lower => $bool,
-	     variable => $variable,
+	  $Collator = Unicode::Collate-&gtnew(
+	     UCA_Version =&gt $UCA_Version,
+	     alternate =&gt $alternate, # deprecated: use of 'variable' is recommended.
+	     backwards =&gt $levelNumber, # or \@levelNumbers
+	     entry =&gt $element,
+	     hangul_terminator =&gt $term_primary_weight,
+	     ignoreName =&gt qr/$ignoreName/,
+	     ignoreChar =&gt qr/$ignoreChar/,
+	     katakana_before_hiragana =&gt $bool,
+	     level =&gt $collationLevel,
+	     normalization  =&gt $normalization_form,
+	     overrideCJK =&gt \&overrideCJK,
+	     overrideHangul =&gt \&overrideHangul,
+	     preprocess =&gt \&preprocess,
+	     rearrange =&gt \@charList,
+	     table =&gt $filename,
+	     undefName =&gt qr/$undefName/,
+	     undefChar =&gt qr/$undefChar/,
+	     upper_before_lower =&gt $bool,
+	     variable =&gt $variable,
 	  );
 
        UCA_Version
@@ -85,7 +87,7 @@ DESCRIPTION
        backwards
 	   -- see 3.1.2 French Accents, UTS #10.
 
-		backwards => $levelNumber or \@levelNumbers
+		backwards =&gt $levelNumber or \@levelNumbers
 
 	   Weights in reverse order; ex. level 2 (diacritic ordering) in
 	   French.  If omitted, forwards at all the levels.
@@ -98,7 +100,7 @@ DESCRIPTION
 	   elements is overrided.  If it does not exist, the mapping is
 	   defined additionally.
 
-	       entry => <<'ENTRY', # for DUCET v4.0.0 (allkeys-4.0.0.txt)
+	       entry =&gt &lt&lt'ENTRY', # for DUCET v4.0.0 (allkeys-4.0.0.txt)
 	   0063 0068 ; [.0E6A.0020.0002.0063] # ch
 	   0043 0068 ; [.0E6A.0020.0007.0043] # Ch
 	   0043 0048 ; [.0E6A.0020.0008.0043] # CH
@@ -111,9 +113,9 @@ DESCRIPTION
 	   004E 0303 ; [.0F7B.0020.0008.00D1] # N-tilde
 	   ENTRY
 
-	       entry => <<'ENTRY', # for DUCET v4.0.0 (allkeys-4.0.0.txt)
-	   00E6 ; [.0E33.0020.0002.00E6][.0E8B.0020.0002.00E6] # ae ligature as <a><e>
-	   00C6 ; [.0E33.0020.0008.00C6][.0E8B.0020.0008.00C6] # AE ligature as <A><E>
+	       entry =&gt &lt&lt'ENTRY', # for DUCET v4.0.0 (allkeys-4.0.0.txt)
+	   00E6 ; [.0E33.0020.0002.00E6][.0E8B.0020.0002.00E6] # ae ligature as &lta&gt&lte&gt
+	   00C6 ; [.0E33.0020.0008.00C6][.0E8B.0020.0008.00C6] # AE ligature as &ltA&gt&ltE&gt
 	   ENTRY
 
 	   NOTE: The code point in the UCA file format (before ';') must be a
@@ -127,7 +129,7 @@ DESCRIPTION
 
 	   In DUCET v4.0.0, primary weight of "C" is 0E60 and that of "D" is
 	   "0E6D". So setting primary weight of "CH" to "0E6A" (as a value
-	   between 0E60 and "0E6D") makes ordering as "C < CH < D".  Exactly
+	   between 0E60 and "0E6D") makes ordering as "C &lt CH &lt D".  Exactly
 	   speaking DUCET already has some characters between "C" and "D":
 	   "small capital C" ("U+1D04") with primary weight 0E64,
 	   "c-hook/C-hook" ("U+0188/U+0187") with 0E65, and "c-curl"
@@ -197,7 +199,7 @@ DESCRIPTION
 	     Level 3: case ordering
 	     Level 4: tie-breaking (e.g. in the case when variable is 'shifted')
 
-	     ex.level => 2,
+	     ex.level =&gt 2,
 
 	   If omitted, the maximum is the 4th.
 
@@ -221,21 +223,21 @@ DESCRIPTION
 	   If "undef" (not a string "undef") is passed explicitly as the value
 	   for this key, any normalization is not carried out (this may make
 	   tailoring easier if any normalization is not desired). Under
-	   "(normalization => undef)", only contiguous contractions are
+	   "(normalization =&gt undef)", only contiguous contractions are
 	   resolved; e.g. even if "A-ring" (and "A-ring-cedilla") is ordered
 	   after "Z", "A-cedilla-ring" would be primary equal to "A".  In this
-	   point, "(normalization => undef, preprocess => sub { NFD(shift) })"
-	   is not equivalent to "(normalization => 'NFD')".
+	   point, "(normalization =&gt undef, preprocess =&gt sub { NFD(shift) })"
+	   is not equivalent to "(normalization =&gt 'NFD')".
 
-	   In the case of "(normalization => "prenormalized")", any
+	   In the case of "(normalization =&gt "prenormalized")", any
 	   normalization is not performed, but non-contiguous contractions
 	   with combining characters are performed.  Therefore "(normalization
-	   => 'prenormalized', preprocess => sub { NFD(shift) })" is
-	   equivalent to "(normalization => 'NFD')".  If source strings are
-	   finely prenormalized, "(normalization => 'prenormalized')" may save
+	   =&gt 'prenormalized', preprocess =&gt sub { NFD(shift) })" is
+	   equivalent to "(normalization =&gt 'NFD')".  If source strings are
+	   finely prenormalized, "(normalization =&gt 'prenormalized')" may save
 	   time for normalization.
 
-	   Except "(normalization => undef)", Unicode::Normalize is required
+	   Except "(normalization =&gt undef)", Unicode::Normalize is required
 	   (see also CAVEAT).
 
        overrideCJK
@@ -252,7 +254,7 @@ DESCRIPTION
 
 	   ex. CJK Unified Ideographs in the JIS code point order.
 
-	     overrideCJK => sub {
+	     overrideCJK =&gt sub {
 		 my $u = shift; 	    # get a Unicode codepoint
 		 my $b = pack('n', $u);     # to UTF-16BE
 		 my $s = your_unicode_to_sjis_converter($b); # convert
@@ -262,9 +264,9 @@ DESCRIPTION
 
 	   ex. ignores all CJK Unified Ideographs.
 
-	     overrideCJK => sub {()}, # CODEREF returning empty list
+	     overrideCJK =&gt sub {()}, # CODEREF returning empty list
 
-	      # where ->eq("Pe\x{4E00}rl", "Perl") is true
+	      # where -&gteq("Pe\x{4E00}rl", "Perl") is true
 	      # as U+4E00 is a CJK Unified Ideograph and to be ignorable.
 
 	   If "undef" is passed explicitly as the value for this key, weights
@@ -276,7 +278,7 @@ DESCRIPTION
 	   -- see 7.1 Derived Collation Elements, UTS #10.
 
 	   By default, Hangul Syllables are decomposed into Hangul Jamo, even
-	   if "(normalization => undef)".  But the mapping of Hangul Syllables
+	   if "(normalization =&gt undef)".  But the mapping of Hangul Syllables
 	   may be overrided.
 
 	   This parameter works like "overrideCJK", so see there for examples.
@@ -299,7 +301,7 @@ DESCRIPTION
 	   ex. dropping English articles, such as "a" or "the".  Then, "the
 	   pen" is before "a pencil".
 
-		preprocess => sub {
+		preprocess =&gt sub {
 		      my $str = shift;
 		      $str =~ s/\b(?:an?|the)\s+//gi;
 		      return $str;
@@ -314,7 +316,7 @@ DESCRIPTION
 	   rearranged.	If "UCA_Version" is equal to or lesser than 11,
 	   default is:
 
-	       rearrange => [ 0x0E40..0x0E44, 0x0EC0..0x0EC4 ],
+	       rearrange =&gt [ 0x0E40..0x0E44, 0x0EC0..0x0EC4 ],
 
 	   If you want to disallow any rearrangement, pass "undef" or "[]" (a
 	   reference to empty list) as the value for this key.
@@ -344,9 +346,9 @@ DESCRIPTION
 	   A typical way to define a collation element table without any file
 	   of table:
 
-	      $onlyABC = Unicode::Collate->new(
-		  table => undef,
-		  entry => << 'ENTRIES',
+	      $onlyABC = Unicode::Collate-&gtnew(
+		  table =&gt undef,
+		  entry =&gt &lt&lt 'ENTRIES',
 	   0061 ; [.0101.0020.0002.0061] # LATIN SMALL LETTER A
 	   0041 ; [.0101.0020.0008.0041] # LATIN CAPITAL LETTER A
 	   0062 ; [.0102.0020.0002.0062] # LATIN SMALL LETTER B
@@ -379,7 +381,7 @@ DESCRIPTION
 	   ex. Collation weights for beyond-BMP characters are not stored in
 	   object:
 
-	       undefChar => qr/[^\0-\x{fffd}]/,
+	       undefChar =&gt qr/[^\0-\x{fffd}]/,
 
        upper_before_lower
 	   -- see 6.6 Case Comparisons, UTS #10.
@@ -400,7 +402,7 @@ DESCRIPTION
 	   elements, which are marked with an ASTERISK in the table (NOTE:
 	   Many punction marks and symbols are variable in allkeys.txt).
 
-	      variable => 'blanked', 'non-ignorable', 'shifted', or 'shift-trimmed'.
+	      variable =&gt 'blanked', 'non-ignorable', 'shifted', or 'shift-trimmed'.
 
 	   These names are case-insensitive.  By default (if specification is
 	   omitted), 'shifted' is adopted.
@@ -418,19 +420,19 @@ DESCRIPTION
 			       are trimmed.
 
    Methods for Collation
-       "@sorted = $Collator->sort(@not_sorted)"
+       "@sorted = $Collator-&gtsort(@not_sorted)"
 	   Sorts a list of strings.
 
-       "$result = $Collator->cmp($a, $b)"
+       "$result = $Collator-&gtcmp($a, $b)"
 	   Returns 1 (when $a is greater than $b) or 0 (when $a is equal to
 	   $b) or -1 (when $a is lesser than $b).
 
-       "$result = $Collator->eq($a, $b)"
-       "$result = $Collator->ne($a, $b)"
-       "$result = $Collator->lt($a, $b)"
-       "$result = $Collator->le($a, $b)"
-       "$result = $Collator->gt($a, $b)"
-       "$result = $Collator->ge($a, $b)"
+       "$result = $Collator-&gteq($a, $b)"
+       "$result = $Collator-&gtne($a, $b)"
+       "$result = $Collator-&gtlt($a, $b)"
+       "$result = $Collator-&gtle($a, $b)"
+       "$result = $Collator-&gtgt($a, $b)"
+       "$result = $Collator-&gtge($a, $b)"
 	   They works like the same name operators as theirs.
 
 	      eq : whether $a is equal to $b.
@@ -440,7 +442,7 @@ DESCRIPTION
 	      gt : whether $a is greater than $b.
 	      ge : whether $a is greater than $b or equal to $b.
 
-       "$sortKey = $Collator->getSortKey($string)"
+       "$sortKey = $Collator-&gtgetSortKey($string)"
 	   -- see 4.3 Form Sort Key, UTS #10.
 
 	   Returns a sort key.
@@ -448,19 +450,19 @@ DESCRIPTION
 	   You compare the sort keys using a binary comparison and get the
 	   result of the comparison of the strings using UCA.
 
-	      $Collator->getSortKey($a) cmp $Collator->getSortKey($b)
+	      $Collator-&gtgetSortKey($a) cmp $Collator-&gtgetSortKey($b)
 
 		 is equivalent to
 
-	      $Collator->cmp($a, $b)
+	      $Collator-&gtcmp($a, $b)
 
-       "$sortKeyForm = $Collator->viewSortKey($string)"
+       "$sortKeyForm = $Collator-&gtviewSortKey($string)"
 	   Converts a sorting key into its representation form.  If
 	   "UCA_Version" is 8, the output is slightly different.
 
 	      use Unicode::Collate;
-	      my $c = Unicode::Collate->new();
-	      print $c->viewSortKey("Perl"),"\n";
+	      my $c = Unicode::Collate-&gtnew();
+	      print $c-&gtviewSortKey("Perl"),"\n";
 
 	      # output:
 	      # [0B67 0A65 0B7F 0B03 | 0020 0020 0020 0020 | 0008 0002 0002 0002 | FFFF FFFF FFFF FFFF]
@@ -477,8 +479,8 @@ DESCRIPTION
        "m//g", "s///", "s///g", respectively, but they are not aware of any
        pattern, but only a literal substring.
 
-       "$position = $Collator->index($string, $substring[, $position])"
-       "($position, $length) = $Collator->index($string, $substring[,
+       "$position = $Collator-&gtindex($string, $substring[, $position])"
+       "($position, $length) = $Collator-&gtindex($string, $substring[,
        $position])"
 	   If $substring matches a part of $string, returns the position of
 	   the first occurrence of the matching part in scalar context; in
@@ -490,19 +492,19 @@ DESCRIPTION
 
 	   e.g. you say
 
-	     my $Collator = Unicode::Collate->new( normalization => undef, level => 1 );
-						# (normalization => undef) is REQUIRED.
+	     my $Collator = Unicode::Collate-&gtnew( normalization =&gt undef, level =&gt 1 );
+						# (normalization =&gt undef) is REQUIRED.
 	     my $str = "Ich muss studieren Perl.";
 	     my $sub = "MUeSS";
 	     my $match;
-	     if (my($pos,$len) = $Collator->index($str, $sub)) {
+	     if (my($pos,$len) = $Collator-&gtindex($str, $sub)) {
 		 $match = substr($str, $pos, $len);
 	     }
 
 	   and get "muss" in $match since "muss" is primary equal to "MUeSS".
 
-       "$match_ref = $Collator->match($string, $substring)"
-       "($match)   = $Collator->match($string, $substring)"
+       "$match_ref = $Collator-&gtmatch($string, $substring)"
+       "($match)   = $Collator-&gtmatch($string, $substring)"
 	   If $substring matches a part of $string, in scalar context, returns
 	   a reference to the first occurrence of the matching part
 	   ($match_ref is always true if matches, since every reference is
@@ -514,7 +516,7 @@ DESCRIPTION
 
 	   e.g.
 
-	       if ($match_ref = $Collator->match($str, $sub)) { # scalar context
+	       if ($match_ref = $Collator-&gtmatch($str, $sub)) { # scalar context
 		   print "matches [$$match_ref].\n";
 	       } else {
 		   print "doesn't match.\n";
@@ -522,62 +524,62 @@ DESCRIPTION
 
 		or
 
-	       if (($match) = $Collator->match($str, $sub)) { # list context
+	       if (($match) = $Collator-&gtmatch($str, $sub)) { # list context
 		   print "matches [$match].\n";
 	       } else {
 		   print "doesn't match.\n";
 	       }
 
-       "@match = $Collator->gmatch($string, $substring)"
+       "@match = $Collator-&gtgmatch($string, $substring)"
 	   If $substring matches a part of $string, returns all the matching
 	   parts (or matching count in scalar context).
 
 	   If $substring does not match any part of $string, returns an empty
 	   list.
 
-       "$count = $Collator->subst($string, $substring, $replacement)"
+       "$count = $Collator-&gtsubst($string, $substring, $replacement)"
 	   If $substring matches a part of $string, the first occurrence of
 	   the matching part is replaced by $replacement ($string is modified)
 	   and return $count (always equals to 1).
 
 	   $replacement can be a "CODEREF", taking the matching part as an
 	   argument, and returning a string to replace the matching part (a
-	   bit similar to "s/(..)/$coderef->($1)/e").
+	   bit similar to "s/(..)/$coderef-&gt($1)/e").
 
-       "$count = $Collator->gsubst($string, $substring, $replacement)"
+       "$count = $Collator-&gtgsubst($string, $substring, $replacement)"
 	   If $substring matches a part of $string, all the occurrences of the
 	   matching part is replaced by $replacement ($string is modified) and
 	   return $count.
 
 	   $replacement can be a "CODEREF", taking the matching part as an
 	   argument, and returning a string to replace the matching part (a
-	   bit similar to "s/(..)/$coderef->($1)/eg").
+	   bit similar to "s/(..)/$coderef-&gt($1)/eg").
 
 	   e.g.
 
-	     my $Collator = Unicode::Collate->new( normalization => undef, level => 1 );
-						# (normalization => undef) is REQUIRED.
+	     my $Collator = Unicode::Collate-&gtnew( normalization =&gt undef, level =&gt 1 );
+						# (normalization =&gt undef) is REQUIRED.
 	     my $str = "Camel donkey zebra came\x{301}l CAMEL horse cAm\0E\0L...";
-	     $Collator->gsubst($str, "camel", sub { "<b>$_[0]</b>" });
+	     $Collator-&gtgsubst($str, "camel", sub { "&ltb&gt$_[0]&lt/b&gt" });
 
-	     # now $str is "<b>Camel</b> donkey zebra <b>came\x{301}l</b> <b>CAMEL</b> horse <b>cAm\0E\0L</b>...";
+	     # now $str is "&ltb&gtCamel&lt/b&gt donkey zebra &ltb&gtcame\x{301}l&lt/b&gt &ltb&gtCAMEL&lt/b&gt horse &ltb&gtcAm\0E\0L&lt/b&gt...";
 	     # i.e., all the camels are made bold-faced.
 
    Other Methods
-       "%old_tailoring = $Collator->change(%new_tailoring)"
+       "%old_tailoring = $Collator-&gtchange(%new_tailoring)"
 	   Change the value of specified keys and returns the changed part.
 
-	       $Collator = Unicode::Collate->new(level => 4);
+	       $Collator = Unicode::Collate-&gtnew(level =&gt 4);
 
-	       $Collator->eq("perl", "PERL"); # false
+	       $Collator-&gteq("perl", "PERL"); # false
 
-	       %old = $Collator->change(level => 2); # returns (level => 4).
+	       %old = $Collator-&gtchange(level =&gt 2); # returns (level =&gt 4).
 
-	       $Collator->eq("perl", "PERL"); # true
+	       $Collator-&gteq("perl", "PERL"); # true
 
-	       $Collator->change(%old); # returns (level => 2).
+	       $Collator-&gtchange(%old); # returns (level =&gt 2).
 
-	       $Collator->eq("perl", "PERL"); # false
+	       $Collator-&gteq("perl", "PERL"); # false
 
 	   Not all "(key,value)"s are allowed to be changed.  See also
 	   @Unicode::Collate::ChangeOK and @Unicode::Collate::ChangeNG.
@@ -585,13 +587,13 @@ DESCRIPTION
 	   In the scalar context, returns the modified collator (but it is not
 	   a clone from the original).
 
-	       $Collator->change(level => 2)->eq("perl", "PERL"); # true
+	       $Collator-&gtchange(level =&gt 2)-&gteq("perl", "PERL"); # true
 
-	       $Collator->eq("perl", "PERL"); # true; now max level is 2nd.
+	       $Collator-&gteq("perl", "PERL"); # true; now max level is 2nd.
 
-	       $Collator->change(level => 4)->eq("perl", "PERL"); # false
+	       $Collator-&gtchange(level =&gt 4)-&gteq("perl", "PERL"); # false
 
-       "$version = $Collator->version()"
+       "$version = $Collator-&gtversion()"
 	   Returns the version number (a string) of the Unicode Standard which
 	   the "table" file used by the collator object is based on.  If the
 	   table does not include a version line (starting with @version),
@@ -610,8 +612,8 @@ EXPORT
 INSTALL
        Though this module can be used without any "table" file, to use this
        module easily, it is recommended to install a table file in the UCA
-       format, by copying it under the directory <a place in
-       @INC>/Unicode/Collate.
+       format, by copying it under the directory &lta place in
+       @INC&gt/Unicode/Collate.
 
        The most preferable one is "The Default Unicode Collation Element
        Table" (aka DUCET), available from the Unicode Consortium's website:
@@ -621,8 +623,8 @@ INSTALL
 	  http://www.unicode.org/Public/UCA/latest/allkeys.txt (latest version)
 
        If DUCET is not installed, it is recommended to copy the file from
-       http://www.unicode.org/Public/UCA/latest/allkeys.txt to <a place in
-       @INC>/Unicode/Collate/allkeys.txt manually.
+       http://www.unicode.org/Public/UCA/latest/allkeys.txt to &lta place in
+       @INC&gt/Unicode/Collate/allkeys.txt manually.
 
 CAVEATS
        Normalization
@@ -630,55 +632,55 @@ CAVEATS
 	   Unicode::Normalize module (see Unicode::Normalize).
 
 	   If you need not it (say, in the case when you need not handle any
-	   combining characters), assign "normalization => undef" explicitly.
+	   combining characters), assign "normalization =&gt undef" explicitly.
 
 	   -- see 6.5 Avoiding Normalization, UTS #10.
 
        Conformance Test
 	   The Conformance Test for the UCA is available under
-	   <http://www.unicode.org/Public/UCA/>.
+	   &lthttp://www.unicode.org/Public/UCA/&gt.
 
 	   For CollationTest_SHIFTED.txt, a collator via
-	   "Unicode::Collate->new( )" should be used; for
+	   "Unicode::Collate-&gtnew( )" should be used; for
 	   CollationTest_NON_IGNORABLE.txt, a collator via
-	   "Unicode::Collate->new(variable => "non-ignorable", level => 3)".
+	   "Unicode::Collate-&gtnew(variable =&gt "non-ignorable", level =&gt 3)".
 
 	   Unicode::Normalize is required to try The Conformance Test.
 
 AUTHOR, COPYRIGHT AND LICENSE
        The Unicode::Collate module for perl was written by SADAHIRO Tomoyuki,
-       <SADAHIRO@cpan.org>. This module is Copyright(C) 2001-2005, SADAHIRO
+       &ltSADAHIRO@cpan.org&gt. This module is Copyright(C) 2001-2005, SADAHIRO
        Tomoyuki. Japan. All rights reserved.
 
        This module is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
 
        The file Unicode/Collate/allkeys.txt was copied directly from
-       <http://www.unicode.org/Public/UCA/4.1.0/allkeys.txt>.  This file is
+       &lthttp://www.unicode.org/Public/UCA/4.1.0/allkeys.txt&gt.  This file is
        Copyright (c) 1991-2005 Unicode, Inc. All rights reserved.  Distributed
-       under the Terms of Use in <http://www.unicode.org/copyright.html>.
+       under the Terms of Use in &lthttp://www.unicode.org/copyright.html&gt.
 
 SEE ALSO
        Unicode Collation Algorithm - UTS #10
-	   <http://www.unicode.org/reports/tr10/>
+	   &lthttp://www.unicode.org/reports/tr10/&gt
 
        The Default Unicode Collation Element Table (DUCET)
-	   <http://www.unicode.org/Public/UCA/latest/allkeys.txt>
+	   &lthttp://www.unicode.org/Public/UCA/latest/allkeys.txt&gt
 
        The conformance test for the UCA
-	   <http://www.unicode.org/Public/UCA/latest/CollationTest.html>
+	   &lthttp://www.unicode.org/Public/UCA/latest/CollationTest.html&gt
 
-	   <http://www.unicode.org/Public/UCA/latest/CollationTest.zip>
+	   &lthttp://www.unicode.org/Public/UCA/latest/CollationTest.zip&gt
 
        Hangul Syllable Type
-	   <http://www.unicode.org/Public/UNIDATA/HangulSyllableType.txt>
+	   &lthttp://www.unicode.org/Public/UNIDATA/HangulSyllableType.txt&gt
 
        Unicode Normalization Forms - UAX #15
-	   <http://www.unicode.org/reports/tr15/>
+	   &lthttp://www.unicode.org/reports/tr15/&gt
 
 
 
 perl v5.12.4			  2011-06-07		 Unicode::Collate(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

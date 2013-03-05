@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Prior to release 5.0 of Perl, a programmer could use dbmopen() to..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perltie - how to hide an object class in a simple variable</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLTIE(1)	       Perl Programmers Reference Guide 	    PERLTIE(1)
 
 
@@ -70,7 +72,7 @@ DESCRIPTION
        system priority is retrieved and returned.  If those variables are set,
        then the process's priority is changed!
 
-       We'll use Jarkko Hietaniemi <jhi@iki.fi>'s BSD::Resource class (not
+       We'll use Jarkko Hietaniemi &ltjhi@iki.fi&gt's BSD::Resource class (not
        included) to access the PRIO_PROCESS, PRIO_MIN, and PRIO_MAX constants
        from your system, as well as the getpriority() and setpriority() system
        calls.  Here's the preamble of the class.
@@ -146,14 +148,14 @@ DESCRIPTION
 		   my $new_nicety = shift;
 		   croak "usage error" if @_;
 
-		   if ($new_nicety < PRIO_MIN) {
+		   if ($new_nicety &lt PRIO_MIN) {
 		       carp sprintf
 			 "WARNING: priority %d less than minimum system priority %d",
 			     $new_nicety, PRIO_MIN if $^W;
 		       $new_nicety = PRIO_MIN;
 		   }
 
-		   if ($new_nicety > PRIO_MAX) {
+		   if ($new_nicety &gt PRIO_MAX) {
 		       carp sprintf
 			 "WARNING: priority %d greater than maximum system priority %d",
 			     $new_nicety, PRIO_MAX if $^W;
@@ -214,7 +216,7 @@ DESCRIPTION
 	   use FixedElem_Array;
 	   tie @array, 'FixedElem_Array', 3;
 	   $array[0] = 'cat';  # ok.
-	   $array[1] = 'dogs'; # exception, length('dogs') > 3.
+	   $array[1] = 'dogs'; # exception, length('dogs') &gt 3.
 
        The preamble code for the class is as follows:
 
@@ -243,8 +245,8 @@ DESCRIPTION
 		   croak "usage: tie ARRAY, '" . __PACKAGE__ . "', elem_size";
 		 }
 		 return bless {
-		   ELEMSIZE => $elemsize,
-		   ARRAY    => [],
+		   ELEMSIZE =&gt $elemsize,
+		   ARRAY    =&gt [],
 		 }, $class;
 	       }
 
@@ -256,7 +258,7 @@ DESCRIPTION
 	       sub FETCH {
 		 my $self  = shift;
 		 my $index = shift;
-		 return $self->{ARRAY}->[$index];
+		 return $self-&gt{ARRAY}-&gt[$index];
 	       }
 
 	   If a negative array index is used to read from an array, the index
@@ -278,19 +280,19 @@ DESCRIPTION
 	   reference: the index at which we're trying to store something and
 	   the value we're trying to put there.
 
-	   In our example, "undef" is really "$self->{ELEMSIZE}" number of
+	   In our example, "undef" is really "$self-&gt{ELEMSIZE}" number of
 	   spaces so we have a little more work to do here:
 
 	       sub STORE {
 		 my $self = shift;
 		 my( $index, $value ) = @_;
-		 if ( length $value > $self->{ELEMSIZE} ) {
-		   croak "length of $value is greater than $self->{ELEMSIZE}";
+		 if ( length $value &gt $self-&gt{ELEMSIZE} ) {
+		   croak "length of $value is greater than $self-&gt{ELEMSIZE}";
 		 }
 		 # fill in the blanks
-		 $self->EXTEND( $index ) if $index > $self->FETCHSIZE();
+		 $self-&gtEXTEND( $index ) if $index &gt $self-&gtFETCHSIZE();
 		 # right justify to keep element size for smaller elements
-		 $self->{ARRAY}->[$index] = sprintf "%$self->{ELEMSIZE}s", $value;
+		 $self-&gt{ARRAY}-&gt[$index] = sprintf "%$self-&gt{ELEMSIZE}s", $value;
 	       }
 
 	   Negative indexes are treated the same as with FETCH.
@@ -301,7 +303,7 @@ DESCRIPTION
 
 	       sub FETCHSIZE {
 		 my $self = shift;
-		 return scalar @{$self->{ARRAY}};
+		 return scalar @{$self-&gt{ARRAY}};
 	       }
 
        STORESIZE this, count
@@ -312,18 +314,18 @@ DESCRIPTION
 	   deleted.
 
 	   In our example, 'undef' is really an element containing
-	   "$self->{ELEMSIZE}" number of spaces.  Observe:
+	   "$self-&gt{ELEMSIZE}" number of spaces.  Observe:
 
 	       sub STORESIZE {
 		 my $self  = shift;
 		 my $count = shift;
-		 if ( $count > $self->FETCHSIZE() ) {
-		   foreach ( $count - $self->FETCHSIZE() .. $count ) {
-		     $self->STORE( $_, '' );
+		 if ( $count &gt $self-&gtFETCHSIZE() ) {
+		   foreach ( $count - $self-&gtFETCHSIZE() .. $count ) {
+		     $self-&gtSTORE( $_, '' );
 		   }
-		 } elsif ( $count < $self->FETCHSIZE() ) {
-		   foreach ( 0 .. $self->FETCHSIZE() - $count - 2 ) {
-		     $self->POP();
+		 } elsif ( $count &lt $self-&gtFETCHSIZE() ) {
+		   foreach ( 0 .. $self-&gtFETCHSIZE() - $count - 2 ) {
+		     $self-&gtPOP();
 		   }
 		 }
 	       }
@@ -340,32 +342,32 @@ DESCRIPTION
 	       sub EXTEND {
 		 my $self  = shift;
 		 my $count = shift;
-		 $self->STORESIZE( $count );
+		 $self-&gtSTORESIZE( $count );
 	       }
 
        EXISTS this, key
 	   Verify that the element at index key exists in the tied array this.
 
 	   In our example, we will determine that if an element consists of
-	   "$self->{ELEMSIZE}" spaces only, it does not exist:
+	   "$self-&gt{ELEMSIZE}" spaces only, it does not exist:
 
 	       sub EXISTS {
 		 my $self  = shift;
 		 my $index = shift;
-		 return 0 if ! defined $self->{ARRAY}->[$index] ||
-			     $self->{ARRAY}->[$index] eq ' ' x $self->{ELEMSIZE};
+		 return 0 if ! defined $self-&gt{ARRAY}-&gt[$index] ||
+			     $self-&gt{ARRAY}-&gt[$index] eq ' ' x $self-&gt{ELEMSIZE};
 		 return 1;
 	       }
 
        DELETE this, key
 	   Delete the element at index key from the tied array this.
 
-	   In our example, a deleted item is "$self->{ELEMSIZE}" spaces:
+	   In our example, a deleted item is "$self-&gt{ELEMSIZE}" spaces:
 
 	       sub DELETE {
 		 my $self  = shift;
 		 my $index = shift;
-		 return $self->STORE( $index, '' );
+		 return $self-&gtSTORE( $index, '' );
 	       }
 
        CLEAR this
@@ -374,7 +376,7 @@ DESCRIPTION
 
 	       sub CLEAR {
 		 my $self = shift;
-		 return $self->{ARRAY} = [];
+		 return $self-&gt{ARRAY} = [];
 	       }
 
        PUSH this, LIST
@@ -383,9 +385,9 @@ DESCRIPTION
 	       sub PUSH {
 		 my $self = shift;
 		 my @list = @_;
-		 my $last = $self->FETCHSIZE();
-		 $self->STORE( $last + $_, $list[$_] ) foreach 0 .. $#list;
-		 return $self->FETCHSIZE();
+		 my $last = $self-&gtFETCHSIZE();
+		 $self-&gtSTORE( $last + $_, $list[$_] ) foreach 0 .. $#list;
+		 return $self-&gtFETCHSIZE();
 	       }
 
        POP this
@@ -393,7 +395,7 @@ DESCRIPTION
 
 	       sub POP {
 		 my $self = shift;
-		 return pop @{$self->{ARRAY}};
+		 return pop @{$self-&gt{ARRAY}};
 	       }
 
        SHIFT this
@@ -402,7 +404,7 @@ DESCRIPTION
 
 	       sub SHIFT {
 		 my $self = shift;
-		 return shift @{$self->{ARRAY}};
+		 return shift @{$self-&gt{ARRAY}};
 	       }
 
        UNSHIFT this, LIST
@@ -414,9 +416,9 @@ DESCRIPTION
 		 my @list = @_;
 		 my $size = scalar( @list );
 		 # make room for our list
-		 @{$self->{ARRAY}}[ $size .. $#{$self->{ARRAY}} + $size ]
-		  = @{$self->{ARRAY}};
-		 $self->STORE( $_, $list[$_] ) foreach 0 .. $#list;
+		 @{$self-&gt{ARRAY}}[ $size .. $#{$self-&gt{ARRAY}} + $size ]
+		  = @{$self-&gt{ARRAY}};
+		 $self-&gtSTORE( $_, $list[$_] ) foreach 0 .. $#list;
 	       }
 
        SPLICE this, offset, length, LIST
@@ -436,13 +438,13 @@ DESCRIPTION
 	       sub SPLICE {
 		 my $self   = shift;
 		 my $offset = shift || 0;
-		 my $length = shift || $self->FETCHSIZE() - $offset;
+		 my $length = shift || $self-&gtFETCHSIZE() - $offset;
 		 my @list   = ();
 		 if ( @_ ) {
-		   tie @list, __PACKAGE__, $self->{ELEMSIZE};
+		   tie @list, __PACKAGE__, $self-&gt{ELEMSIZE};
 		   @list   = @_;
 		 }
-		 return splice @{$self->{ARRAY}}, $offset, $length, @list;
+		 return splice @{$self-&gt{ARRAY}}, $offset, $length, @list;
 	       }
 
        UNTIE this
@@ -534,7 +536,7 @@ DESCRIPTION
 
 	       sub TIEHASH {
 		   my $self = shift;
-		   my $user = shift || $>;
+		   my $user = shift || $&gt;
 		   my $dotdir = shift || '';
 		   croak "usage: @{[&whowasi]} [USER [DOTDIR]]" if @_;
 		   $user = getpwuid($user) if $user =~ /^\d+$/;
@@ -543,17 +545,17 @@ DESCRIPTION
 		   $dir .= "/$dotdir" if $dotdir;
 
 		   my $node = {
-		       USER    => $user,
-		       HOME    => $dir,
-		       LIST    => {},
-		       CLOBBER => 0,
+		       USER    =&gt $user,
+		       HOME    =&gt $dir,
+		       LIST    =&gt {},
+		       CLOBBER =&gt 0,
 		   };
 
 		   opendir(DIR, $dir)
 			   || croak "@{[&whowasi]}: can't opendir $dir: $!";
 		   foreach $dot ( grep /^\./ && -f "$dir/$_", readdir(DIR)) {
 		       $dot =~ s/^\.//;
-		       $node->{LIST}{$dot} = undef;
+		       $node-&gt{LIST}{$dot} = undef;
 		   }
 		   closedir DIR;
 		   return bless $node, $self;
@@ -575,18 +577,18 @@ DESCRIPTION
 		   carp &whowasi if $DEBUG;
 		   my $self = shift;
 		   my $dot = shift;
-		   my $dir = $self->{HOME};
+		   my $dir = $self-&gt{HOME};
 		   my $file = "$dir/.$dot";
 
-		   unless (exists $self->{LIST}->{$dot} || -f $file) {
+		   unless (exists $self-&gt{LIST}-&gt{$dot} || -f $file) {
 		       carp "@{[&whowasi]}: no $dot file" if $DEBUG;
 		       return undef;
 		   }
 
-		   if (defined $self->{LIST}->{$dot}) {
-		       return $self->{LIST}->{$dot};
+		   if (defined $self-&gt{LIST}-&gt{$dot}) {
+		       return $self-&gt{LIST}-&gt{$dot};
 		   } else {
-		       return $self->{LIST}->{$dot} = `cat $dir/.$dot`;
+		       return $self-&gt{LIST}-&gt{$dot} = `cat $dir/.$dot`;
 		   }
 	       }
 
@@ -610,13 +612,13 @@ DESCRIPTION
 		   my $self = shift;
 		   my $dot = shift;
 		   my $value = shift;
-		   my $file = $self->{HOME} . "/.$dot";
-		   my $user = $self->{USER};
+		   my $file = $self-&gt{HOME} . "/.$dot";
+		   my $user = $self-&gt{USER};
 
 		   croak "@{[&whowasi]}: $file not clobberable"
-		       unless $self->{CLOBBER};
+		       unless $self-&gt{CLOBBER};
 
-		   open(F, "> $file") || croak "can't open $file: $!";
+		   open(F, "&gt $file") || croak "can't open $file: $!";
 		   print F $value;
 		   close(F);
 	       }
@@ -624,7 +626,7 @@ DESCRIPTION
 	   If they wanted to clobber something, they might say:
 
 	       $ob = tie %daemon_dots, 'daemon';
-	       $ob->clobber(1);
+	       $ob-&gtclobber(1);
 	       $daemon_dots{signature} = "A true daemon\n";
 
 	   Another way to lay hands on a reference to the underlying object is
@@ -632,13 +634,13 @@ DESCRIPTION
 	   clobber using:
 
 	       tie %daemon_dots, 'daemon';
-	       tied(%daemon_dots)->clobber(1);
+	       tied(%daemon_dots)-&gtclobber(1);
 
 	   The clobber method is simply:
 
 	       sub clobber {
 		   my $self = shift;
-		   $self->{CLOBBER} = @_ ? shift : 1;
+		   $self-&gt{CLOBBER} = @_ ? shift : 1;
 	       }
 
        DELETE this, key
@@ -651,10 +653,10 @@ DESCRIPTION
 
 		   my $self = shift;
 		   my $dot = shift;
-		   my $file = $self->{HOME} . "/.$dot";
+		   my $file = $self-&gt{HOME} . "/.$dot";
 		   croak "@{[&whowasi]}: won't remove file $file"
-		       unless $self->{CLOBBER};
-		   delete $self->{LIST}->{$dot};
+		       unless $self-&gt{CLOBBER};
+		   delete $self-&gt{LIST}-&gt{$dot};
 		   my $success = unlink($file);
 		   carp "@{[&whowasi]}: can't unlink $file: $!" unless $success;
 		   $success;
@@ -678,11 +680,11 @@ DESCRIPTION
 	       sub CLEAR    {
 		   carp &whowasi if $DEBUG;
 		   my $self = shift;
-		   croak "@{[&whowasi]}: won't remove all dot files for $self->{USER}"
-		       unless $self->{CLOBBER} > 1;
+		   croak "@{[&whowasi]}: won't remove all dot files for $self-&gt{USER}"
+		       unless $self-&gt{CLOBBER} &gt 1;
 		   my $dot;
-		   foreach $dot ( keys %{$self->{LIST}}) {
-		       $self->DELETE($dot);
+		   foreach $dot ( keys %{$self-&gt{LIST}}) {
+		       $self-&gtDELETE($dot);
 		   }
 	       }
 
@@ -695,7 +697,7 @@ DESCRIPTION
 		   carp &whowasi if $DEBUG;
 		   my $self = shift;
 		   my $dot = shift;
-		   return exists $self->{LIST}->{$dot};
+		   return exists $self-&gt{LIST}-&gt{$dot};
 	       }
 
        FIRSTKEY this
@@ -705,8 +707,8 @@ DESCRIPTION
 	       sub FIRSTKEY {
 		   carp &whowasi if $DEBUG;
 		   my $self = shift;
-		   my $a = keys %{$self->{LIST}};	   # reset each() iterator
-		   each %{$self->{LIST}}
+		   my $a = keys %{$self-&gt{LIST}};	   # reset each() iterator
+		   each %{$self-&gt{LIST}}
 	       }
 
        NEXTKEY this, lastkey
@@ -723,7 +725,7 @@ DESCRIPTION
 	       sub NEXTKEY  {
 		   carp &whowasi if $DEBUG;
 		   my $self = shift;
-		   return each %{ $self->{LIST} }
+		   return each %{ $self-&gt{LIST} }
 	       }
 
        SCALAR this
@@ -743,12 +745,12 @@ DESCRIPTION
 	   context.
 
 	   In our example we can just call "scalar" on the underlying hash
-	   referenced by "$self->{LIST}":
+	   referenced by "$self-&gt{LIST}":
 
 	       sub SCALAR {
 		   carp &whowasi if $DEBUG;
 		   my $self = shift;
-		   return scalar %{ $self->{LIST} }
+		   return scalar %{ $self-&gt{LIST} }
 	       }
 
        UNTIE this
@@ -806,7 +808,7 @@ DESCRIPTION
 	   to return a blessed reference of some sort. The reference can be
 	   used to hold some internal information.
 
-	       sub TIEHANDLE { print "<shout>\n"; my $i; bless \$i, shift }
+	       sub TIEHANDLE { print "&ltshout&gt\n"; my $i; bless \$i, shift }
 
        WRITE this, LIST
 	   This method will be called when the handle is written to via the
@@ -855,7 +857,7 @@ DESCRIPTION
 
        READLINE this
 	   This method will be called when the handle is read from via
-	   <HANDLE>.  The method should return undef when there is no more
+	   &ltHANDLE&gt.  The method should return undef when there is no more
 	   data.
 
 	       sub READLINE { $r = shift; "READLINE called $$r times\n"; }
@@ -892,7 +894,7 @@ DESCRIPTION
 	   the tied handle is about to be destroyed. This is useful for
 	   debugging and possibly cleaning up.
 
-	       sub DESTROY { print "</shout>\n" }
+	       sub DESTROY { print "&lt/shout&gt\n" }
 
        Here's how to use our little example:
 
@@ -900,7 +902,7 @@ DESCRIPTION
 	   print FOO "hello\n";
 	   $a = 4; $b = 6;
 	   print FOO $a, " plus ", $b, " equals ", $a + $b, "\n";
-	   print <FOO>;
+	   print &ltFOO&gt;
 
    UNTIE this
        You can define for all tie types an UNTIE method that will be called at
@@ -924,29 +926,29 @@ DESCRIPTION
 	   sub TIESCALAR {
 	       my $class = shift;
 	       my $filename = shift;
-	       my $handle = IO::File->new( "> $filename" )
+	       my $handle = IO::File-&gtnew( "&gt $filename" )
 				or die "Cannot open $filename: $!\n";
 
 	       print $handle "The Start\n";
-	       bless {FH => $handle, Value => 0}, $class;
+	       bless {FH =&gt $handle, Value =&gt 0}, $class;
 	   }
 
 	   sub FETCH {
 	       my $self = shift;
-	       return $self->{Value};
+	       return $self-&gt{Value};
 	   }
 
 	   sub STORE {
 	       my $self = shift;
 	       my $value = shift;
-	       my $handle = $self->{FH};
+	       my $handle = $self-&gt{FH};
 	       print $handle "$value\n";
-	       $self->{Value} = $value;
+	       $self-&gt{Value} = $value;
 	   }
 
 	   sub DESTROY {
 	       my $self = shift;
-	       my $handle = $self->{FH};
+	       my $handle = $self-&gt{FH};
 	       print $handle "The End\n";
 	       close $handle;
 	   }
@@ -982,7 +984,7 @@ DESCRIPTION
 	   sub comment {
 	       my $self = shift;
 	       my $text = shift;
-	       my $handle = $self->{FH};
+	       my $handle = $self-&gt{FH};
 	       print $handle $text, "\n";
 	   }
 
@@ -1090,18 +1092,18 @@ BUGS
 AUTHOR
        Tom Christiansen
 
-       TIEHANDLE by Sven Verdoolaege <skimo@dns.ufsia.ac.be> and Doug
-       MacEachern <dougm@osf.org>
+       TIEHANDLE by Sven Verdoolaege &ltskimo@dns.ufsia.ac.be&gt and Doug
+       MacEachern &ltdougm@osf.org&gt
 
-       UNTIE by Nick Ing-Simmons <nick@ing-simmons.net>
+       UNTIE by Nick Ing-Simmons &ltnick@ing-simmons.net&gt
 
-       SCALAR by Tassilo von Parseval <tassilo.von.parseval@rwth-aachen.de>
+       SCALAR by Tassilo von Parseval &lttassilo.von.parseval@rwth-aachen.de&gt
 
-       Tying Arrays by Casey West <casey@geeknest.com>
+       Tying Arrays by Casey West &ltcasey@geeknest.com&gt
 
 
 
 perl v5.12.4			  2011-06-07			    PERLTIE(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

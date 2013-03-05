@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document provides a step-by-step guide, how to create a new..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBI::DBD::SqlEngine::HowTo - Guide to create DBI::DBD::SqlEngine based</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBI::DBD::SqlEngine::HUser(Contributed Perl DocumDBI::DBD::SqlEngine::HowTo(3)
 
 
@@ -116,22 +118,22 @@ CREATING DRIVER CLASSES
 	   {
 	       my $dbh = $_[0];
 
-	       $dbh->SUPER::init_valid_attributes ();
+	       $dbh-&gtSUPER::init_valid_attributes ();
 
-	       $dbh->{foo_valid_attrs} = {
-		   foo_version	       => 1,   # contains version of this driver
-		   foo_valid_attrs     => 1,   # contains the valid attributes of foo drivers
-		   foo_readonly_attrs  => 1,   # contains immutable attributes of foo drivers
-		   foo_bar	       => 1,   # contains the bar attribute
-		   foo_baz	       => 1,   # contains the baz attribute
-		   foo_manager	       => 1,   # contains the manager of the driver instance
-		   foo_manager_type    => 1,   # contains the manager class of the driver instance
+	       $dbh-&gt{foo_valid_attrs} = {
+		   foo_version	       =&gt 1,   # contains version of this driver
+		   foo_valid_attrs     =&gt 1,   # contains the valid attributes of foo drivers
+		   foo_readonly_attrs  =&gt 1,   # contains immutable attributes of foo drivers
+		   foo_bar	       =&gt 1,   # contains the bar attribute
+		   foo_baz	       =&gt 1,   # contains the baz attribute
+		   foo_manager	       =&gt 1,   # contains the manager of the driver instance
+		   foo_manager_type    =&gt 1,   # contains the manager class of the driver instance
 	       };
-	       $dbh->{foo_readonly_attrs} = {
-		   foo_version	       => 1,   # ensure no-one modifies the driver version
-		   foo_valid_attrs     => 1,   # do not permit to add more valid attributes ...
-		   foo_readonly_attrs  => 1,   # ... or make the immutable mutable
-		   foo_manager	       => 1,   # manager is set internally only
+	       $dbh-&gt{foo_readonly_attrs} = {
+		   foo_version	       =&gt 1,   # ensure no-one modifies the driver version
+		   foo_valid_attrs     =&gt 1,   # do not permit to add more valid attributes ...
+		   foo_readonly_attrs  =&gt 1,   # ... or make the immutable mutable
+		   foo_manager	       =&gt 1,   # manager is set internally only
 	       };
 
 	       return $dbh;
@@ -144,13 +146,13 @@ CREATING DRIVER CLASSES
 	   {
 	       my ( $dbh, $attrib, $value ) = @_;
 
-	       $dbh->SUPER::STORE( $attrib, $value );
+	       $dbh-&gtSUPER::STORE( $attrib, $value );
 
 	       # we're still alive, so no exception is thrown ...
 	       # by DBI::DBD::SqlEngine::db::STORE
 	       if ( $attrib eq "foo_manager_type" )
 	       {
-		   $dbh->{foo_manager} = $dbh->{foo_manager_type}->new();
+		   $dbh-&gt{foo_manager} = $dbh-&gt{foo_manager_type}-&gtnew();
 		   # ... probably correct some states based on the new
 		   # foo_manager_type - see DBD::Sys for an example
 	       }
@@ -164,19 +166,19 @@ CREATING DRIVER CLASSES
 	   {
 	       my ($dbh, $phase) = @_;
 
-	       $dbh->SUPER::init_default_attributes($phase);
+	       $dbh-&gtSUPER::init_default_attributes($phase);
 
 	       if( 0 == $phase )
 	       {
 		   # init all attributes which have no knowledge about
 		   # user settings from DSN or the attribute hash
-		   $dbh->{foo_manager_type} = "DBD::Foo::Manager";
+		   $dbh-&gt{foo_manager_type} = "DBD::Foo::Manager";
 	       }
 	       elsif( 1 == $phase )
 	       {
 		   # init phase with more knowledge from DSN or attribute
 		   # hash
-		   $dbh->{foo_manager} = $dbh->{foo_manager_type}->new();
+		   $dbh-&gt{foo_manager} = $dbh-&gt{foo_manager_type}-&gtnew();
 	       }
 
 	       return $dbh;
@@ -208,8 +210,8 @@ AUTHOR
 
        The module DBI::DBD::SqlEngine is currently maintained by
 
-       H.Merijn Brand < h.m.brand at xs4all.nl > and Jens Rehsack  < rehsack
-       at googlemail.com >
+       H.Merijn Brand &lt h.m.brand at xs4all.nl &gt and Jens Rehsack  &lt rehsack
+       at googlemail.com &gt
 
 COPYRIGHT AND LICENSE
        Copyright (C) 2010 by H.Merijn Brand & Jens Rehsack
@@ -223,6 +225,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2010-08-30	 DBI::DBD::SqlEngine::HowTo(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

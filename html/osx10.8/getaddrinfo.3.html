@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The getaddrinfo() function is used to get a list of IP addresses and port..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>getaddrinfo, freeaddrinfo -- socket address structure to host and service</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 
 GETADDRINFO(3)		 BSD Library Functions Manual		GETADDRINFO(3)
 
@@ -16,9 +18,9 @@ NAME
      name
 
 SYNOPSIS
-     #include <sys/types.h>
-     #include <sys/socket.h>
-     #include <netdb.h>
+     #include &ltsys/types.h&gt
+     #include &ltsys/socket.h&gt
+     #include &ltnetdb.h&gt
 
      int
      getaddrinfo(const char *hostname, const char *servname,
@@ -41,7 +43,7 @@ DESCRIPTION
      hostname and servname must be non-null.
 
      hints is an optional pointer to a struct addrinfo, as defined by
-     <netdb.h>:
+     &ltnetdb.h&gt:
 
      struct addrinfo {
 	     int ai_flags;	     /* input flags */
@@ -206,15 +208,15 @@ EXAMPLES
 		   /*NOTREACHED*/
 	   }
 	   s = -1;
-	   for (res = res0; res; res = res->ai_next) {
-		   s = socket(res->ai_family, res->ai_socktype,
-		       res->ai_protocol);
-		   if (s < 0) {
+	   for (res = res0; res; res = res-&gtai_next) {
+		   s = socket(res-&gtai_family, res-&gtai_socktype,
+		       res-&gtai_protocol);
+		   if (s &lt 0) {
 			   cause = "socket";
 			   continue;
 		   }
 
-		   if (connect(s, res->ai_addr, res->ai_addrlen) < 0) {
+		   if (connect(s, res-&gtai_addr, res-&gtai_addrlen) &lt 0) {
 			   cause = "connect";
 			   close(s);
 			   s = -1;
@@ -223,7 +225,7 @@ EXAMPLES
 
 		   break;  /* okay we got one */
 	   }
-	   if (s < 0) {
+	   if (s &lt 0) {
 		   err(1, "%s", cause);
 		   /*NOTREACHED*/
 	   }
@@ -248,15 +250,15 @@ EXAMPLES
 		   /*NOTREACHED*/
 	   }
 	   nsock = 0;
-	   for (res = res0; res && nsock < MAXSOCK; res = res->ai_next) {
-		   s[nsock] = socket(res->ai_family, res->ai_socktype,
-		       res->ai_protocol);
-		   if (s[nsock] < 0) {
+	   for (res = res0; res && nsock &lt MAXSOCK; res = res-&gtai_next) {
+		   s[nsock] = socket(res-&gtai_family, res-&gtai_socktype,
+		       res-&gtai_protocol);
+		   if (s[nsock] &lt 0) {
 			   cause = "socket";
 			   continue;
 		   }
 
-		   if (bind(s[nsock], res->ai_addr, res->ai_addrlen) < 0) {
+		   if (bind(s[nsock], res-&gtai_addr, res-&gtai_addrlen) &lt 0) {
 			   cause = "bind";
 			   close(s[nsock]);
 			   continue;
@@ -292,6 +294,6 @@ STANDARDS
      Interface Extensions for IPv6''.
 
 BSD				 July 1, 2008				   BSD
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

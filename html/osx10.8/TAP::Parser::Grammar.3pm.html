@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""TAP::Parser::Grammar" tokenizes lines from a TAP stream and constructs..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>TAP::Parser::Grammar - A grammar for the Test Anything Protocol.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 TAP::Parser::Grammar(3pPerl Programmers Reference GuiTAP::Parser::Grammar(3pm)
 
 
@@ -20,13 +22,13 @@ VERSION
 
 SYNOPSIS
 	 use TAP::Parser::Grammar;
-	 my $grammar = $self->make_grammar({
-	   stream  => $tap_parser_stream,
-	   parser  => $tap_parser,
-	   version => 12,
+	 my $grammar = $self-&gtmake_grammar({
+	   stream  =&gt $tap_parser_stream,
+	   parser  =&gt $tap_parser,
+	   version =&gt 12,
 	 });
 
-	 my $result = $grammar->tokenize;
+	 my $result = $grammar-&gttokenize;
 
 DESCRIPTION
        "TAP::Parser::Grammar" tokenizes lines from a TAP stream and constructs
@@ -41,10 +43,10 @@ METHODS
    Class Methods
        "new"
 
-	 my $grammar = TAP::Parser::Grammar->new({
-	     stream  => $stream,
-	     parser  => $parser,
-	     version => $version,
+	 my $grammar = TAP::Parser::Grammar-&gtnew({
+	     stream  =&gt $stream,
+	     parser  =&gt $parser,
+	     version =&gt $version,
 	 });
 
        Returns TAP::Parser grammar object that will parse the specified
@@ -55,7 +57,7 @@ METHODS
    Instance Methods
        "set_version"
 
-	 $grammar->set_version(13);
+	 $grammar-&gtset_version(13);
 
        Tell the grammar which TAP syntax version to support. The lowest
        supported version is 12. Although 'TAP version' isn't valid version 12
@@ -63,46 +65,46 @@ METHODS
 
        "tokenize"
 
-	 my $token = $grammar->tokenize;
+	 my $token = $grammar-&gttokenize;
 
        This method will return a TAP::Parser::Result object representing the
        current line of TAP.
 
        "token_types"
 
-	 my @types = $grammar->token_types;
+	 my @types = $grammar-&gttoken_types;
 
        Returns the different types of tokens which this grammar can parse.
 
        "syntax_for"
 
-	 my $syntax = $grammar->syntax_for($token_type);
+	 my $syntax = $grammar-&gtsyntax_for($token_type);
 
        Returns a pre-compiled regular expression which will match a chunk of
        TAP corresponding to the token type.  For example (not that you should
-       really pay attention to this, "$grammar->syntax_for('comment')" will
+       really pay attention to this, "$grammar-&gtsyntax_for('comment')" will
        return "qr/^#(.*)/".
 
        "handler_for"
 
-	 my $handler = $grammar->handler_for($token_type);
+	 my $handler = $grammar-&gthandler_for($token_type);
 
        Returns a code reference which, when passed an appropriate line of TAP,
        returns the lexed token corresponding to that line.  As a result, the
        basic TAP parsing loop looks similar to the following:
 
 	my @tokens;
-	my $grammar = TAP::Grammar->new;
-	LINE: while ( defined( my $line = $parser->_next_chunk_of_tap ) ) {
-	    foreach my $type ( $grammar->token_types ) {
-		my $syntax  = $grammar->syntax_for($type);
+	my $grammar = TAP::Grammar-&gtnew;
+	LINE: while ( defined( my $line = $parser-&gt_next_chunk_of_tap ) ) {
+	    foreach my $type ( $grammar-&gttoken_types ) {
+		my $syntax  = $grammar-&gtsyntax_for($type);
 		if ( $line =~ $syntax ) {
-		    my $handler = $grammar->handler_for($type);
-		    push @tokens => $grammar->$handler($line);
+		    my $handler = $grammar-&gthandler_for($type);
+		    push @tokens =&gt $grammar-&gt$handler($line);
 		    next LINE;
 		}
 	    }
-	    push @tokens => $grammar->_make_unknown_token($line);
+	    push @tokens =&gt $grammar-&gt_make_unknown_token($line);
 	}
 
 TAP GRAMMAR
@@ -190,6 +192,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-07	     TAP::Parser::Grammar(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

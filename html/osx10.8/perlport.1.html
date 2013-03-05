@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Perl runs on numerous operating systems.  While most of them share much..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlport - Writing portable Perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLPORT(1)	       Perl Programmers Reference Guide 	   PERLPORT(1)
 
 
@@ -82,8 +84,8 @@ DESCRIPTION
        This information should not be considered complete; it includes
        possibly transient information about idiosyncrasies of some of the
        ports, almost all of which are in a state of constant evolution.  Thus,
-       this material should be considered a perpetual work in progress ("<IMG
-       SRC="yellow_sign.gif" ALT="Under Construction">").
+       this material should be considered a perpetual work in progress ("&ltIMG
+       SRC="yellow_sign.gif" ALT="Under Construction"&gt").
 
 ISSUES
    Newlines
@@ -135,7 +137,7 @@ ISSUES
        separator $/ is "\n", but robust socket code will recognize as either
        "\012" or "\015\012" as end of line:
 
-	   while (<SOCKET>) {
+	   while (&ltSOCKET&gt) {
 	       # ...
 	   }
 
@@ -145,7 +147,7 @@ ISSUES
 	   use Socket qw(:DEFAULT :crlf);
 	   local($/) = LF;	# not needed if $/ is already \012
 
-	   while (<SOCKET>) {
+	   while (&ltSOCKET&gt) {
 	       s/$CR?$LF/\n/;	# not sure if socket uses LF or CRLF, OK
 	   #   s/\015?\012/\n/; # same thing
 	   }
@@ -219,7 +221,7 @@ ISSUES
        connections use the "pack" and "unpack" formats "n" and "N", the
        "network" orders.  These are guaranteed to be portable.
 
-       As of perl 5.9.2, you can also use the ">" and "<" modifiers to force
+       As of perl 5.9.2, you can also use the "&gt" and "&lt" modifiers to force
        big- or little-endian byte-order.  This is useful if you want to store
        signed integers or 64-bit integers, for example.
 
@@ -357,16 +359,16 @@ ISSUES
        Many systems (DOS, VMS ODS-2) cannot have more than one "." in their
        filenames.
 
-       Don't assume ">" won't be the first character of a filename.  Always
-       use "<" explicitly to open a file for reading, or even better, use the
+       Don't assume "&gt" won't be the first character of a filename.  Always
+       use "&lt" explicitly to open a file for reading, or even better, use the
        three-arg version of open, unless you want the user to be able to
        specify a pipe open.
 
-	   open my $fh, '<', $existing_file) or die $!;
+	   open my $fh, '&lt', $existing_file) or die $!;
 
        If filenames might use strange characters, it is safest to open it with
        "sysopen" instead of "open".  "open" is magic and can translate
-       characters like ">", "<", and "|", which may be the wrong thing to do.
+       characters like "&gt", "&lt", and "|", which may be the wrong thing to do.
        (Sometimes, though, it's the right thing.)  Three-arg open can also
        help protect against this translation in cases where it is undesirable.
 
@@ -686,12 +688,12 @@ ISSUES
 
 	   # NOTE: this is no longer "bad" in perl5.005
 	   for (0..10000000) {} 		      # bad
-	   for (my $x = 0; $x <= 10000000; ++$x) {}   # good
+	   for (my $x = 0; $x &lt= 10000000; ++$x) {}   # good
 
-	   my @lines = <$very_large_file>;	      # bad
+	   my @lines = &lt$very_large_file&gt;	      # bad
 
-	   while (<$fh>) {$file .= $_}		      # sometimes bad
-	   my $file = join('', <$fh>);		      # better
+	   while (&lt$fh&gt) {$file .= $_}		      # sometimes bad
+	   my $file = join('', &lt$fh&gt);		      # better
 
        The last two constructs may appear unintuitive to most people.  The
        first repeatedly grows a string, whereas the second allocates a large
@@ -719,7 +721,7 @@ ISSUES
        operation.)
 
        Don't assume the Unix user and group semantics: especially, don't
-       expect the $< and $> (or the $( and $)) to work for switching
+       expect the $&lt and $&gt (or the $( and $)) to work for switching
        identities (or memberships).
 
        Don't assume set-uid and set-gid semantics. (And even if you do, think
@@ -900,7 +902,7 @@ PLATFORMS
        distribution) Win32::GetOSName().  The very portable POSIX::uname()
        will work too:
 
-	   c:\> perl -MPOSIX -we "print join '|', uname"
+	   c:\&gt perl -MPOSIX -we "print join '|', uname"
 	   Windows NT|moonru|5.0|Build 2195 (Service Pack 2)|x86
 
        Also see:
@@ -965,7 +967,7 @@ PLATFORMS
 	   $ endif
 
        Do take care with "$ ASSIGN/nolog/user SYS$COMMAND: SYS$INPUT" if your
-       perl-in-DCL script expects to do things like "$read = <STDIN>;".
+       perl-in-DCL script expects to do things like "$read = &ltSTDIN&gt;".
 
        The VMS operating system has two filesystems, known as ODS-2 and ODS-5.
 
@@ -1052,7 +1054,7 @@ PLATFORMS
        many directory levels have snuck into the core by running the following
        in the top-level source directory:
 
-	  $ perl -ne "$_=~s/\s+.*//; print if scalar(split /\//) > 8;" < MANIFEST
+	  $ perl -ne "$_=~s/\s+.*//; print if scalar(split /\//) &gt 8;" &lt MANIFEST
 
        The VMS::Filespec module, which gets installed as part of the build
        process on VMS, is a pure Perl module that can easily be installed on
@@ -1112,12 +1114,12 @@ PLATFORMS
        either VOS- or Unix-style file specifications as in either of the
        following:
 
-	   $ perl -ne "print if /perl_setup/i" >system>notices
+	   $ perl -ne "print if /perl_setup/i" &gtsystem&gtnotices
 	   $ perl -ne "print if /perl_setup/i" /system/notices
 
        or even a mixture of both as in:
 
-	   $ perl -ne "print if /perl_setup/i" >system/notices
+	   $ perl -ne "print if /perl_setup/i" &gtsystem/notices
 
        Even though VOS allows the slash character to appear in object names,
        because the VOS port of Perl interprets it as a pathname delimiting
@@ -1128,13 +1130,13 @@ PLATFORMS
        Older releases of VOS (prior to OpenVOS Release 17.0) limit file names
        to 32 or fewer characters, prohibit file names from starting with a "-"
        character, and prohibit file names from containing any character
-       matching "tr/ !#%&'()*;<=>?//".
+       matching "tr/ !#%&'()*;&lt=&gt?//".
 
        Newer releases of VOS (OpenVOS Release 17.0 or later) support a feature
        known as extended names.  On these releases, file names can contain up
        to 255 characters, are prohibited from starting with a "-" character,
        and the set of prohibited characters is reduced to any character
-       matching "tr/#%*<>?//".	There are restrictions involving spaces and
+       matching "tr/#%*&lt&gt?//".	There are restrictions involving spaces and
        apostrophies:  these characters must not begin or end a name, nor can
        they immediately precede or follow a period.  Additionally, a space
        must not immediately precede another space or hyphen.  Specifically,
@@ -1296,9 +1298,9 @@ PLATFORMS
        Writing to a new file "System:Modules" would be allowed only if
        "System$Path" contains a single item list.  The filesystem will also
        expand system variables in filenames if enclosed in angle brackets, so
-       "<System$Dir>.Modules" would look for the file
+       "&ltSystem$Dir&gt.Modules" would look for the file
        "$ENV{'System$Dir'} . 'Modules'".  The obvious implication of this is
-       that fully qualified filenames can start with "<>" and should be
+       that fully qualified filenames can start with "&lt&gt" and should be
        protected when "open" is used for input.
 
        Because "." was in use as a directory separator and filenames could not
@@ -1337,11 +1339,11 @@ PLATFORMS
        Unix emulation library emulates Unix filehandles.  Consequently, you
        can't rely on passing "STDIN", "STDOUT", or "STDERR" to your children.
 
-       The desire of users to express filenames of the form "<Foo$Dir>.Bar" on
+       The desire of users to express filenames of the form "&ltFoo$Dir&gt.Bar" on
        the command line unquoted causes problems, too: "``" command output
        capture has to perform a guessing game.	It assumes that a string
-       "<[^<>]+\$[^<>]>" is a reference to an environment variable, whereas
-       anything else involving "<" or ">" is redirection, and generally
+       "&lt[^&lt&gt]+\$[^&lt&gt]&gt" is a reference to an environment variable, whereas
+       anything else involving "&lt" or "&gt" is redirection, and generally
        manages to be 99% right.  Of course, the problem remains that scripts
        cannot rely on any Unix tools being available, or that any tools found
        have Unix-like command line arguments.
@@ -1454,7 +1456,7 @@ FUNCTION IMPLEMENTATIONS
 
 	       The current version of the standards for "atan2()" is available
 	       at
-	       <http://www.opengroup.org/onlinepubs/009695399/functions/atan2.html>.
+	       &lthttp://www.opengroup.org/onlinepubs/009695399/functions/atan2.html&gt.
 
        binmode Meaningless.  (RISC OS)
 
@@ -1785,14 +1787,14 @@ FUNCTION IMPLEMENTATIONS
 	       process and immediately returns its process designator, without
 	       waiting for it to terminate.  Return value may be used
 	       subsequently in "wait" or "waitpid".  Failure to spawn() a
-	       subprocess is indicated by setting $? to "255 << 8".  $? is set
+	       subprocess is indicated by setting $? to "255 &lt&lt 8".  $? is set
 	       in a way compatible with Unix (i.e. the exitstatus of the
-	       subprocess is obtained by "$? >> 8", as described in the
+	       subprocess is obtained by "$? &gt&gt 8", as described in the
 	       documentation).	(Win32)
 
 	       There is no shell to process metacharacters, and the native
 	       standard is to pass a command line terminated by "\n" "\r" or
-	       "\0" to the spawned program.  Redirection such as "> foo" is
+	       "\0" to the spawned program.  Redirection such as "&gt foo" is
 	       performed (if at all) by the run time library of the spawned
 	       program.  "system" list will call the Unix emulation library's
 	       "exec" emulation, which attempts to provide emulation of the
@@ -1826,7 +1828,7 @@ FUNCTION IMPLEMENTATIONS
 	       Truncation to same-or-shorter lengths only. (VOS)
 
 	       If a FILEHANDLE is supplied, it must be writable and opened in
-	       append mode (i.e., use "open(FH, '>>filename')" or
+	       append mode (i.e., use "open(FH, '&gt&gtfilename')" or
 	       "sysopen(FH,...,O_APPEND|O_RDWR)".  If a filename is supplied,
 	       it should not be held open elsewhere. (Win32)
 
@@ -2040,29 +2042,29 @@ SEE ALSO
        perlwin32, and Win32.
 
 AUTHORS / CONTRIBUTORS
-       Abigail <abigail@foad.org>, Charles Bailey <bailey@newman.upenn.edu>,
-       Graham Barr <gbarr@pobox.com>, Tom Christiansen <tchrist@perl.com>,
-       Nicholas Clark <nick@ccl4.org>, Thomas Dorner <Thomas.Dorner@start.de>,
-       Andy Dougherty <doughera@lafayette.edu>, Dominic Dunlop
-       <domo@computer.org>, Neale Ferguson <neale@vma.tabnsw.com.au>, David J.
-       Fiander <davidf@mks.com>, Paul Green <Paul.Green@stratus.com>, M.J.T.
-       Guy <mjtg@cam.ac.uk>, Jarkko Hietaniemi <jhi@iki.fi>, Luther Huffman
-       <lutherh@stratcom.com>, Nick Ing-Simmons <nick@ing-simmons.net>,
-       Andreas J. Koenig <a.koenig@mind.de>, Markus Laker
-       <mlaker@contax.co.uk>, Andrew M. Langmead <aml@world.std.com>, Larry
-       Moore <ljmoore@freespace.net>, Paul Moore
-       <Paul.Moore@uk.origin-it.com>, Chris Nandor <pudge@pobox.com>, Matthias
-       Neeracher <neeracher@mac.com>, Philip Newton <pne@cpan.org>, Gary Ng
-       <71564.1743@CompuServe.COM>, Tom Phoenix <rootbeer@teleport.com>, Andre
-       Pirard <A.Pirard@ulg.ac.be>, Peter Prymmer <pvhp@forte.com>, Hugo van
-       der Sanden <hv@crypt0.demon.co.uk>, Gurusamy Sarathy
-       <gsar@activestate.com>, Paul J. Schinder <schinder@pobox.com>, Michael
-       G Schwern <schwern@pobox.com>, Dan Sugalski <dan@sidhe.org>, Nathan
-       Torkington <gnat@frii.com>.  John Malmberg <wb8tyw@qsl.net>
+       Abigail &ltabigail@foad.org&gt, Charles Bailey &ltbailey@newman.upenn.edu&gt,
+       Graham Barr &ltgbarr@pobox.com&gt, Tom Christiansen &lttchrist@perl.com&gt,
+       Nicholas Clark &ltnick@ccl4.org&gt, Thomas Dorner &ltThomas.Dorner@start.de&gt,
+       Andy Dougherty &ltdoughera@lafayette.edu&gt, Dominic Dunlop
+       &ltdomo@computer.org&gt, Neale Ferguson &ltneale@vma.tabnsw.com.au&gt, David J.
+       Fiander &ltdavidf@mks.com&gt, Paul Green &ltPaul.Green@stratus.com&gt, M.J.T.
+       Guy &ltmjtg@cam.ac.uk&gt, Jarkko Hietaniemi &ltjhi@iki.fi&gt, Luther Huffman
+       &ltlutherh@stratcom.com&gt, Nick Ing-Simmons &ltnick@ing-simmons.net&gt,
+       Andreas J. Koenig &lta.koenig@mind.de&gt, Markus Laker
+       &ltmlaker@contax.co.uk&gt, Andrew M. Langmead &ltaml@world.std.com&gt, Larry
+       Moore &ltljmoore@freespace.net&gt, Paul Moore
+       &ltPaul.Moore@uk.origin-it.com&gt, Chris Nandor &ltpudge@pobox.com&gt, Matthias
+       Neeracher &ltneeracher@mac.com&gt, Philip Newton &ltpne@cpan.org&gt, Gary Ng
+       &lt71564.1743@CompuServe.COM&gt, Tom Phoenix &ltrootbeer@teleport.com&gt, Andre
+       Pirard &ltA.Pirard@ulg.ac.be&gt, Peter Prymmer &ltpvhp@forte.com&gt, Hugo van
+       der Sanden &lthv@crypt0.demon.co.uk&gt, Gurusamy Sarathy
+       &ltgsar@activestate.com&gt, Paul J. Schinder &ltschinder@pobox.com&gt, Michael
+       G Schwern &ltschwern@pobox.com&gt, Dan Sugalski &ltdan@sidhe.org&gt, Nathan
+       Torkington &ltgnat@frii.com&gt.  John Malmberg &ltwb8tyw@qsl.net&gt
 
 
 
 perl v5.12.4			  2011-06-07			   PERLPORT(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

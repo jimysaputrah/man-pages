@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The word Relationship has a specific meaning in DBIx::Class, see the..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Relationship - Inter-table relationships</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::RelationsUser3Contributed Perl DocumeDBIx::Class::Relationship(3)
 
 
@@ -17,20 +19,20 @@ NAME
 
 SYNOPSIS
 	 ## Creating relationships
-	 MyApp::Schema::Actor->has_many('actorroles' => 'MyApp::Schema::ActorRole',
+	 MyApp::Schema::Actor-&gthas_many('actorroles' =&gt 'MyApp::Schema::ActorRole',
 				       'actor');
-	 MyApp::Schema::Role->has_many('actorroles' => 'MyApp::Schema::ActorRole',
+	 MyApp::Schema::Role-&gthas_many('actorroles' =&gt 'MyApp::Schema::ActorRole',
 				       'role');
-	 MyApp::Schema::ActorRole->belongs_to('role' => 'MyApp::Schema::Role');
-	 MyApp::Schema::ActorRole->belongs_to('actor' => 'MyApp::Schema::Actor');
+	 MyApp::Schema::ActorRole-&gtbelongs_to('role' =&gt 'MyApp::Schema::Role');
+	 MyApp::Schema::ActorRole-&gtbelongs_to('actor' =&gt 'MyApp::Schema::Actor');
 
-	 MyApp::Schema::Role->many_to_many('actors' => 'actorroles', 'actor');
-	 MyApp::Schema::Actor->many_to_many('roles' => 'actorroles', 'role');
+	 MyApp::Schema::Role-&gtmany_to_many('actors' =&gt 'actorroles', 'actor');
+	 MyApp::Schema::Actor-&gtmany_to_many('roles' =&gt 'actorroles', 'role');
 
 	 ## Using relationships
-	 $schema->resultset('Actor')->find({ id => 1})->roles();
-	 $schema->resultset('Role')->find({ id => 1 })->actorroles->search_related('actor', { Name => 'Fred' });
-	 $schema->resultset('Actor')->add_to_roles({ Name => 'Sherlock Holmes'});
+	 $schema-&gtresultset('Actor')-&gtfind({ id =&gt 1})-&gtroles();
+	 $schema-&gtresultset('Role')-&gtfind({ id =&gt 1 })-&gtactorroles-&gtsearch_related('actor', { Name =&gt 'Fred' });
+	 $schema-&gtresultset('Actor')-&gtadd_to_roles({ Name =&gt 'Sherlock Holmes'});
 
        See DBIx::Class::Manual::Cookbook for more.
 
@@ -59,13 +61,13 @@ DESCRIPTION
        Then without relationships, the method of getting all books by Fred
        goes like this:
 
-	my $fred = $schema->resultset('Author')->find({ Name => 'Fred' });
-	my $fredsbooks = $schema->resultset('Book')->search({ Author => $fred->ID });
+	my $fred = $schema-&gtresultset('Author')-&gtfind({ Name =&gt 'Fred' });
+	my $fredsbooks = $schema-&gtresultset('Book')-&gtsearch({ Author =&gt $fred-&gtID });
 
        With a has_many relationship called "books" on Author (see below for
        details), we can do this instead:
 
-	my $fredsbooks = $schema->resultset('Author')->find({ Name => 'Fred' })->books;
+	my $fredsbooks = $schema-&gtresultset('Author')-&gtfind({ Name =&gt 'Fred' })-&gtbooks;
 
        Each relationship sets up an accessor method on the "Row" in
        DBIx::Class::Manual::Glossary objects that represent the items of your
@@ -77,10 +79,10 @@ DESCRIPTION
        Since the database is not actually queried until you attempt to
        retrieve the data for an actual item, no time is wasted producing them.
 
-	my $cheapfredbooks = $schema->resultset('Author')->find({
-	  Name => 'Fred',
-	})->books->search_related('prices', {
-	  Price => { '<=' => '5.00' },
+	my $cheapfredbooks = $schema-&gtresultset('Author')-&gtfind({
+	  Name =&gt 'Fred',
+	})-&gtbooks-&gtsearch_related('prices', {
+	  Price =&gt { '&lt=' =&gt '5.00' },
 	});
 
        will produce a query something like:
@@ -88,7 +90,7 @@ DESCRIPTION
 	SELECT * FROM Author me
 	LEFT JOIN Books books ON books.author = me.id
 	LEFT JOIN Prices prices ON prices.book = books.id
-	WHERE prices.Price <= 5.00
+	WHERE prices.Price &lt= 5.00
 
        all without needing multiple fetches.
 
@@ -100,7 +102,7 @@ DESCRIPTION
 METHODS
        All helper methods are called similar to the following template:
 
-	 __PACKAGE__->$method_name('relname', 'Foreign::Class', \%cond|\@cond|\&cond?, \%attrs?);
+	 __PACKAGE__-&gt$method_name('relname', 'Foreign::Class', \%cond|\@cond|\&cond?, \%attrs?);
 
        Both "cond" and "attrs" are optional. Pass "undef" for "cond" if you
        want to use the default value for it, but still want to set "attrs".
@@ -146,55 +148,55 @@ METHODS
 	   For more info see "condition" in DBIx::Class::Relationship.
 
 	 # in a Book class (where Author has many Books)
-	 My::DBIC::Schema::Book->belongs_to(
-	   author =>
+	 My::DBIC::Schema::Book-&gtbelongs_to(
+	   author =&gt
 	   'My::DBIC::Schema::Author',
 	   'author_id'
 	 );
 
 	 # OR (same result)
-	 My::DBIC::Schema::Book->belongs_to(
-	   author =>
+	 My::DBIC::Schema::Book-&gtbelongs_to(
+	   author =&gt
 	   'My::DBIC::Schema::Author',
-	   { 'foreign.author_id' => 'self.author_id' }
+	   { 'foreign.author_id' =&gt 'self.author_id' }
 	 );
 
 	 # OR (similar result but uglier accessor name)
-	 My::DBIC::Schema::Book->belongs_to(
-	   author_id =>
+	 My::DBIC::Schema::Book-&gtbelongs_to(
+	   author_id =&gt
 	   'My::DBIC::Schema::Author'
 	 );
 
 	 # Usage
-	 my $author_obj = $book->author; # get author object
-	 $book->author( $new_author_obj ); # set author object
-	 $book->author_id(); # get the plain id
+	 my $author_obj = $book-&gtauthor; # get author object
+	 $book-&gtauthor( $new_author_obj ); # set author object
+	 $book-&gtauthor_id(); # get the plain id
 
 	 # To retrieve the plain id if you used the ugly version:
-	 $book->get_column('author_id');
+	 $book-&gtget_column('author_id');
 
        If the relationship is optional -- i.e. the column containing the
        foreign key can be NULL -- then the belongs_to relationship does the
-       right thing. Thus, in the example above "$obj->author" would return
+       right thing. Thus, in the example above "$obj-&gtauthor" would return
        "undef".  However in this case you would probably want to set the
        join_type attribute so that a "LEFT JOIN" is done, which makes complex
        resultsets involving "join" or "prefetch" operations work correctly.
        The modified declaration is shown below:
 
 	 # in a Book class (where Author has_many Books)
-	 __PACKAGE__->belongs_to(
-	   author =>
+	 __PACKAGE__-&gtbelongs_to(
+	   author =&gt
 	   'My::DBIC::Schema::Author',
 	   'author',
-	   { join_type => 'left' }
+	   { join_type =&gt 'left' }
 	 );
 
        Cascading deletes are off by default on a "belongs_to" relationship. To
-       turn them on, pass "cascade_delete => 1" in the $attr hashref.
+       turn them on, pass "cascade_delete =&gt 1" in the $attr hashref.
 
        By default, DBIC will return undef and avoid querying the database if a
        "belongs_to" accessor is called when any part of the foreign key IS
-       NULL. To disable this behavior, pass "undef_on_null_fk => 0" in the
+       NULL. To disable this behavior, pass "undef_on_null_fk =&gt 0" in the
        "\%attrs" hashref.
 
        NOTE: If you are used to Class::DBI relationships, this is the
@@ -244,48 +246,48 @@ METHODS
 
 	 # in an Author class (where Author has_many Books)
 	 # assuming related class is storing our PK in "author_id"
-	 My::DBIC::Schema::Author->has_many(
-	   books =>
+	 My::DBIC::Schema::Author-&gthas_many(
+	   books =&gt
 	   'My::DBIC::Schema::Book',
 	   'author_id'
 	 );
 
 	 # OR (same result)
-	 My::DBIC::Schema::Author->has_many(
-	   books =>
+	 My::DBIC::Schema::Author-&gthas_many(
+	   books =&gt
 	   'My::DBIC::Schema::Book',
-	   { 'foreign.author_id' => 'self.id' },
+	   { 'foreign.author_id' =&gt 'self.id' },
 	 );
 
 	 # OR (similar result, assuming related_class is storing our PK, in "author")
 	 # (the "author" is guessed at from "Author" in the class namespace)
-	 My::DBIC::Schema::Author->has_many(
-	   books =>
+	 My::DBIC::Schema::Author-&gthas_many(
+	   books =&gt
 	   'My::DBIC::Schema::Book',
 	 );
 
 
 	 # Usage
 	 # resultset of Books belonging to author
-	 my $booklist = $author->books;
+	 my $booklist = $author-&gtbooks;
 
 	 # resultset of Books belonging to author, restricted by author name
-	 my $booklist = $author->books({
-	   name => { LIKE => '%macaroni%' },
-	   { prefetch => [qw/book/],
+	 my $booklist = $author-&gtbooks({
+	   name =&gt { LIKE =&gt '%macaroni%' },
+	   { prefetch =&gt [qw/book/],
 	 });
 
 	 # array of Book objects belonging to author
-	 my @book_objs = $author->books;
+	 my @book_objs = $author-&gtbooks;
 
 	 # force resultset even in list context
-	 my $books_rs = $author->books;
-	 ( $books_rs ) = $obj->books_rs;
+	 my $books_rs = $author-&gtbooks;
+	 ( $books_rs ) = $obj-&gtbooks_rs;
 
 	 # create a new book for this author, the relation fields are auto-filled
-	 $author->create_related('books', \%col_data);
+	 $author-&gtcreate_related('books', \%col_data);
 	 # alternative method for the above
-	 $author->add_to_books(\%col_data);
+	 $author-&gtadd_to_books(\%col_data);
 
        Three methods are created when you create a has_many relationship.  The
        first method is the expected accessor method, "$accessor_name()".  The
@@ -299,7 +301,7 @@ METHODS
 
        If you delete an object in a class with a "has_many" relationship, all
        the related objects will be deleted as well.  To turn this behaviour
-       off, pass "cascade_delete => 0" in the $attr hashref.
+       off, pass "cascade_delete =&gt 0" in the $attr hashref.
 
        The cascaded operations are performed after the requested delete or
        update, so if your database has a constraint on the relationship, it
@@ -308,8 +310,8 @@ METHODS
 
        If you copy an object in a class with a "has_many" relationship, all
        the related objects will be copied as well. To turn this behaviour off,
-       pass "cascade_copy => 0" in the $attr hashref. The behaviour defaults
-       to "cascade_copy => 1".
+       pass "cascade_copy =&gt 0" in the $attr hashref. The behaviour defaults
+       to "cascade_copy =&gt 1".
 
        See "attributes" in DBIx::Class::Relationship::Base for documentation
        on relationship methods and valid relationship attributes. Also see
@@ -351,31 +353,31 @@ METHODS
 	   DBIx::Class::Relationship.
 
 	 # Author may have an entry in the pseudonym table
-	 My::DBIC::Schema::Author->might_have(
-	   pseudonym =>
+	 My::DBIC::Schema::Author-&gtmight_have(
+	   pseudonym =&gt
 	   'My::DBIC::Schema::Pseudonym',
 	   'author_id',
 	 );
 
 	 # OR (same result, assuming the related_class stores our PK)
-	 My::DBIC::Schema::Author->might_have(
-	   pseudonym =>
+	 My::DBIC::Schema::Author-&gtmight_have(
+	   pseudonym =&gt
 	   'My::DBIC::Schema::Pseudonym',
 	 );
 
 	 # OR (same result)
-	 My::DBIC::Schema::Author->might_have(
-	   pseudonym =>
+	 My::DBIC::Schema::Author-&gtmight_have(
+	   pseudonym =&gt
 	   'My::DBIC::Schema::Pseudonym',
-	   { 'foreign.author_id' => 'self.id' },
+	   { 'foreign.author_id' =&gt 'self.id' },
 	 );
 
 	 # Usage
-	 my $pname = $author->pseudonym; # to get the Pseudonym object
+	 my $pname = $author-&gtpseudonym; # to get the Pseudonym object
 
        If you update or delete an object in a class with a "might_have"
        relationship, the related object will be updated or deleted as well. To
-       turn off this behavior, add "cascade_delete => 0" to the $attr hashref.
+       turn off this behavior, add "cascade_delete =&gt 0" to the $attr hashref.
 
        The cascaded operations are performed after the requested delete or
        update, so if your database has a constraint on the relationship, it
@@ -435,27 +437,27 @@ METHODS
 	   DBIx::Class::Relationship.
 
 	 # Every book has exactly one ISBN
-	 My::DBIC::Schema::Book->has_one(
-	   isbn =>
+	 My::DBIC::Schema::Book-&gthas_one(
+	   isbn =&gt
 	   'My::DBIC::Schema::ISBN',
 	   'book_id',
 	 );
 
 	 # OR (same result, assuming related_class stores our PK)
-	 My::DBIC::Schema::Book->has_one(
-	   isbn =>
+	 My::DBIC::Schema::Book-&gthas_one(
+	   isbn =&gt
 	   'My::DBIC::Schema::ISBN',
 	 );
 
 	 # OR (same result)
-	 My::DBIC::Schema::Book->has_one(
-	   isbn =>
+	 My::DBIC::Schema::Book-&gthas_one(
+	   isbn =&gt
 	   'My::DBIC::Schema::ISBN',
-	   { 'foreign.book_id' => 'self.id' },
+	   { 'foreign.book_id' =&gt 'self.id' },
 	 );
 
 	 # Usage
-	 my $isbn_obj = $book->isbn; # to get the ISBN object
+	 my $isbn_obj = $book-&gtisbn; # to get the ISBN object
 
        Creates a one-to-one relationship with another class. This is just like
        "might_have", except the implication is that the other object is always
@@ -514,29 +516,29 @@ METHODS
 
        To create a many_to_many relationship from Actor to Role:
 
-	 My::DBIC::Schema::Actor->has_many( actor_roles =>
+	 My::DBIC::Schema::Actor-&gthas_many( actor_roles =&gt
 					    'My::DBIC::Schema::ActorRoles',
 					    'actor' );
-	 My::DBIC::Schema::ActorRoles->belongs_to( role =>
+	 My::DBIC::Schema::ActorRoles-&gtbelongs_to( role =&gt
 						   'My::DBIC::Schema::Role' );
-	 My::DBIC::Schema::ActorRoles->belongs_to( actor =>
+	 My::DBIC::Schema::ActorRoles-&gtbelongs_to( actor =&gt
 						   'My::DBIC::Schema::Actor' );
 
-	 My::DBIC::Schema::Actor->many_to_many( roles => 'actor_roles',
+	 My::DBIC::Schema::Actor-&gtmany_to_many( roles =&gt 'actor_roles',
 						'role' );
 
        And, for the reverse relationship, from Role to Actor:
 
-	 My::DBIC::Schema::Role->has_many( actor_roles =>
+	 My::DBIC::Schema::Role-&gthas_many( actor_roles =&gt
 					   'My::DBIC::Schema::ActorRoles',
 					   'role' );
 
-	 My::DBIC::Schema::Role->many_to_many( actors => 'actor_roles', 'actor' );
+	 My::DBIC::Schema::Role-&gtmany_to_many( actors =&gt 'actor_roles', 'actor' );
 
        To add a role for your actor, and fill in the year of the role in the
        actor_roles table:
 
-	 $actor->add_to_roles($role, { year => 1995 });
+	 $actor-&gtadd_to_roles($role, { year =&gt 1995 });
 
        In the above example, ActorRoles is the link table class, and Role is
        the foreign class. The $link_rel_name parameter is the name of the
@@ -567,6 +569,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-07-26	  DBIx::Class::Relationship(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

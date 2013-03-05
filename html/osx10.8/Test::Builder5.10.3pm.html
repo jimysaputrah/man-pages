@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Test::Simple and Test::More have proven to be popular testing modules,..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Test::Builder - Backend for building test libraries</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Test::Builder(3pm)     Perl Programmers Reference Guide     Test::Builder(3pm)
 
 
@@ -23,9 +25,9 @@ SYNOPSIS
 
 	 sub ok {
 	     my($test, $name) = @_;
-	     my $tb = $CLASS->builder;
+	     my $tb = $CLASS-&gtbuilder;
 
-	     $tb->ok($test, $name);
+	     $tb-&gtok($test, $name);
 	 }
 
 DESCRIPTION
@@ -36,7 +38,7 @@ DESCRIPTION
 
    Construction
        new
-	     my $Test = Test::Builder->new;
+	     my $Test = Test::Builder-&gtnew;
 
 	   Returns a Test::Builder object representing the current state of
 	   the test.
@@ -51,7 +53,7 @@ DESCRIPTION
 	   the singleton, use "create".
 
        create
-	     my $Test = Test::Builder->create;
+	     my $Test = Test::Builder-&gtcreate;
 
 	   Ok, so there can be more than one Test::Builder object and this is
 	   how you get it.  You might use this instead of "new()" if you're
@@ -63,7 +65,7 @@ DESCRIPTION
 	   using this method.  Also, the method name may change in the future.
 
        reset
-	     $Test->reset;
+	     $Test-&gtreset;
 
 	   Reinitializes the Test::Builder singleton to its original state.
 	   Mostly useful for tests run in persistent environments where the
@@ -74,9 +76,9 @@ DESCRIPTION
        are.  You usually only want to call one of these methods.
 
        plan
-	     $Test->plan('no_plan');
-	     $Test->plan( skip_all => $reason );
-	     $Test->plan( tests => $num_tests );
+	     $Test-&gtplan('no_plan');
+	     $Test-&gtplan( skip_all =&gt $reason );
+	     $Test-&gtplan( tests =&gt $num_tests );
 
 	   A convenient way to set up your tests.  Call this and Test::Builder
 	   will print the appropriate headers and take the appropriate
@@ -85,20 +87,20 @@ DESCRIPTION
 	   If you call "plan()", don't call any of the other methods below.
 
        expected_tests
-	       my $max = $Test->expected_tests;
-	       $Test->expected_tests($max);
+	       my $max = $Test-&gtexpected_tests;
+	       $Test-&gtexpected_tests($max);
 
 	   Gets/sets the number of tests we expect this test to run and prints
 	   out the appropriate headers.
 
        no_plan
-	     $Test->no_plan;
+	     $Test-&gtno_plan;
 
 	   Declares that this test will run an indeterminate number of tests.
 
        done_testing
-	     $Test->done_testing();
-	     $Test->done_testing($num_tests);
+	     $Test-&gtdone_testing();
+	     $Test-&gtdone_testing($num_tests);
 
 	   Declares that you are done testing, no more tests will be run after
 	   this point.
@@ -119,33 +121,33 @@ DESCRIPTION
 	   "done_testing()" is, in effect, used when you'd want to use
 	   "no_plan", but safer. You'd use it like so:
 
-	       $Test->ok($a == $b);
-	       $Test->done_testing();
+	       $Test-&gtok($a == $b);
+	       $Test-&gtdone_testing();
 
 	   Or to plan a variable number of tests:
 
 	       for my $test (@tests) {
-		   $Test->ok($test);
+		   $Test-&gtok($test);
 	       }
-	       $Test->done_testing(@tests);
+	       $Test-&gtdone_testing(@tests);
 
        has_plan
-	     $plan = $Test->has_plan
+	     $plan = $Test-&gthas_plan
 
 	   Find out whether a plan has been defined. $plan is either "undef"
 	   (no plan has been set), "no_plan" (indeterminate # of tests) or an
 	   integer (the number of expected tests).
 
        skip_all
-	     $Test->skip_all;
-	     $Test->skip_all($reason);
+	     $Test-&gtskip_all;
+	     $Test-&gtskip_all($reason);
 
 	   Skips all the tests, using the given $reason.  Exits immediately
 	   with 0.
 
        exported_to
-	     my $pack = $Test->exported_to;
-	     $Test->exported_to($pack);
+	     my $pack = $Test-&gtexported_to;
+	     $Test-&gtexported_to($pack);
 
 	   Tells Test::Builder what package you exported your functions to.
 
@@ -161,38 +163,38 @@ DESCRIPTION
        $name is always optional.
 
        ok
-	     $Test->ok($test, $name);
+	     $Test-&gtok($test, $name);
 
 	   Your basic test.  Pass if $test is true, fail if $test is false.
 	   Just like Test::Simple's "ok()".
 
        is_eq
-	     $Test->is_eq($got, $expected, $name);
+	     $Test-&gtis_eq($got, $expected, $name);
 
 	   Like Test::More's "is()".  Checks if "$got eq $expected".  This is
 	   the string version.
 
        is_num
-	     $Test->is_num($got, $expected, $name);
+	     $Test-&gtis_num($got, $expected, $name);
 
 	   Like Test::More's "is()".  Checks if "$got == $expected".  This is
 	   the numeric version.
 
        isnt_eq
-	     $Test->isnt_eq($got, $dont_expect, $name);
+	     $Test-&gtisnt_eq($got, $dont_expect, $name);
 
 	   Like Test::More's "isnt()".	Checks if "$got ne $dont_expect".
 	   This is the string version.
 
        isnt_num
-	     $Test->isnt_num($got, $dont_expect, $name);
+	     $Test-&gtisnt_num($got, $dont_expect, $name);
 
 	   Like Test::More's "isnt()".	Checks if "$got ne $dont_expect".
 	   This is the numeric version.
 
        like
-	     $Test->like($this, qr/$regex/, $name);
-	     $Test->like($this, '/$regex/', $name);
+	     $Test-&gtlike($this, qr/$regex/, $name);
+	     $Test-&gtlike($this, '/$regex/', $name);
 
 	   Like Test::More's "like()".	Checks if $this matches the given
 	   $regex.
@@ -201,25 +203,25 @@ DESCRIPTION
 	   5.005.
 
        unlike
-	     $Test->unlike($this, qr/$regex/, $name);
-	     $Test->unlike($this, '/$regex/', $name);
+	     $Test-&gtunlike($this, qr/$regex/, $name);
+	     $Test-&gtunlike($this, '/$regex/', $name);
 
 	   Like Test::More's "unlike()".  Checks if $this does not match the
 	   given $regex.
 
        cmp_ok
-	     $Test->cmp_ok($this, $type, $that, $name);
+	     $Test-&gtcmp_ok($this, $type, $that, $name);
 
 	   Works just like Test::More's "cmp_ok()".
 
-	       $Test->cmp_ok($big_num, '!=', $other_big_num);
+	       $Test-&gtcmp_ok($big_num, '!=', $other_big_num);
 
    Other Testing Methods
        These are methods which are used in the course of writing a test but
        are not themselves tests.
 
        BAIL_OUT
-	       $Test->BAIL_OUT($reason);
+	       $Test-&gtBAIL_OUT($reason);
 
 	   Indicates to the Test::Harness that things are going so badly all
 	   testing should terminate.  This includes running any additional
@@ -228,14 +230,14 @@ DESCRIPTION
 	   It will exit with 255.
 
        skip
-	       $Test->skip;
-	       $Test->skip($why);
+	       $Test-&gtskip;
+	       $Test-&gtskip($why);
 
 	   Skips the current test, reporting $why.
 
        todo_skip
-	     $Test->todo_skip;
-	     $Test->todo_skip($why);
+	     $Test-&gttodo_skip;
+	     $Test-&gttodo_skip($why);
 
 	   Like "skip()", only it will declare the test as failing and TODO.
 	   Similar to
@@ -246,8 +248,8 @@ DESCRIPTION
        These methods are useful when writing your own test methods.
 
        maybe_regex
-	     $Test->maybe_regex(qr/$regex/);
-	     $Test->maybe_regex('/$regex/');
+	     $Test-&gtmaybe_regex(qr/$regex/);
+	     $Test-&gtmaybe_regex('/$regex/');
 
 	   Convenience method for building testing functions that take regular
 	   expressions as arguments, but need to work before perl 5.005.
@@ -263,20 +265,20 @@ DESCRIPTION
 
 	     sub laconic_like {
 		 my ($self, $this, $regex, $name) = @_;
-		 my $usable_regex = $self->maybe_regex($regex);
+		 my $usable_regex = $self-&gtmaybe_regex($regex);
 		 die "expecting regex, found '$regex'\n"
 		     unless $usable_regex;
-		 $self->ok($this =~ m/$usable_regex/, $name);
+		 $self-&gtok($this =~ m/$usable_regex/, $name);
 	     }
 
        is_fh
-	       my $is_fh = $Test->is_fh($thing);
+	       my $is_fh = $Test-&gtis_fh($thing);
 
 	   Determines if the given $thing can be used as a filehandle.
 
    Test style
        level
-	       $Test->level($how_high);
+	       $Test-&gtlevel($how_high);
 
 	   How far up the call stack should $Test look when reporting where
 	   the test failed.
@@ -290,14 +292,14 @@ DESCRIPTION
 		   my $test = shift;
 
 		   local $Test::Builder::Level = $Test::Builder::Level + 1;
-		   $TB->ok($test);
+		   $TB-&gtok($test);
 	       }
 
 	   To be polite to other functions wrapping your own you usually want
 	   to increment $Level rather than set it to a constant.
 
        use_numbers
-	       $Test->use_numbers($on_or_off);
+	       $Test-&gtuse_numbers($on_or_off);
 
 	   Whether or not the test should output numbers.  That is, this if
 	   true:
@@ -318,13 +320,13 @@ DESCRIPTION
 	   Defaults to on.
 
        no_diag
-	       $Test->no_diag($no_diag);
+	       $Test-&gtno_diag($no_diag);
 
 	   If set true no diagnostics will be printed.	This includes calls to
 	   "diag()".
 
        no_ending
-	       $Test->no_ending($no_ending);
+	       $Test-&gtno_ending($no_ending);
 
 	   Normally, Test::Builder does some extra diagnostics when the test
 	   ends.  It also changes the exit code as described below.
@@ -332,7 +334,7 @@ DESCRIPTION
 	   If this is true, none of that will be done.
 
        no_header
-	       $Test->no_header($no_header);
+	       $Test-&gtno_header($no_header);
 
 	   If set to true, no "1..N" header will be printed.
 
@@ -343,7 +345,7 @@ DESCRIPTION
        Test::Builder's default output settings will not be affected.
 
        diag
-	       $Test->diag(@msgs);
+	       $Test-&gtdiag(@msgs);
 
 	   Prints out the given @msgs.	Like "print", arguments are simply
 	   appended together.
@@ -364,13 +366,13 @@ DESCRIPTION
 	       return ok(...) || diag(...);
 
        note
-	       $Test->note(@msgs);
+	       $Test-&gtnote(@msgs);
 
 	   Like "diag()", but it prints to the "output()" handle so it will
 	   not normally be seen by the user except in verbose mode.
 
        explain
-	       my @dump = $Test->explain(@msgs);
+	       my @dump = $Test-&gtexplain(@msgs);
 
 	   Will dump the contents of any references in a human readable
 	   format.  Handy for things like...
@@ -384,10 +386,10 @@ DESCRIPTION
        output
        failure_output
        todo_output
-	       my $filehandle = $Test->output;
-	       $Test->output($filehandle);
-	       $Test->output($filename);
-	       $Test->output(\$scalar);
+	       my $filehandle = $Test-&gtoutput;
+	       $Test-&gtoutput($filehandle);
+	       $Test-&gtoutput($filename);
+	       $Test-&gtoutput(\$scalar);
 
 	   These methods control where Test::Builder will print its output.
 	   They take either an open $filehandle, a $filename to open and write
@@ -411,26 +413,26 @@ DESCRIPTION
 	   Defaults to STDOUT.
 
        reset_outputs
-	     $tb->reset_outputs;
+	     $tb-&gtreset_outputs;
 
 	   Resets all the output filehandles back to their defaults.
 
        carp
-	     $tb->carp(@message);
+	     $tb-&gtcarp(@message);
 
 	   Warns with @message but the message will appear to come from the
-	   point where the original test function was called ("$tb->caller").
+	   point where the original test function was called ("$tb-&gtcaller").
 
        croak
-	     $tb->croak(@message);
+	     $tb-&gtcroak(@message);
 
 	   Dies with @message but the message will appear to come from the
-	   point where the original test function was called ("$tb->caller").
+	   point where the original test function was called ("$tb-&gtcaller").
 
    Test Status and Info
        current_test
-	       my $curr_test = $Test->current_test;
-	       $Test->current_test($num);
+	       my $curr_test = $Test-&gtcurrent_test;
+	       $Test-&gtcurrent_test($num);
 
 	   Gets/sets the current test number we're on.	You usually shouldn't
 	   have to set this.
@@ -440,7 +442,7 @@ DESCRIPTION
 	   are deleted.  You can erase history if you really want to.
 
        summary
-	       my @tests = $Test->summary;
+	       my @tests = $Test-&gtsummary;
 
 	   A simple summary of the tests so far.  True for pass, false for
 	   fail.  This is a logical pass/fail, so todos are passes.
@@ -448,16 +450,16 @@ DESCRIPTION
 	   Of course, test #1 is $tests[0], etc...
 
        details
-	       my @tests = $Test->details;
+	       my @tests = $Test-&gtdetails;
 
 	   Like "summary()", but with a lot more detail.
 
 	       $tests[$test_num - 1] =
-		       { 'ok'	    => is the test considered a pass?
-			 actual_ok  => did it literally say 'ok'?
-			 name	    => name of the test (if any)
-			 type	    => type of test (if any, see below).
-			 reason     => reason for the above (if any)
+		       { 'ok'	    =&gt is the test considered a pass?
+			 actual_ok  =&gt did it literally say 'ok'?
+			 name	    =&gt name of the test (if any)
+			 type	    =&gt type of test (if any, see below).
+			 reason     =&gt reason for the above (if any)
 		       };
 
 	   'ok' is true if Test::Harness will consider the test to be a pass.
@@ -487,16 +489,16 @@ DESCRIPTION
 	   would result in this structure:
 
 	       $tests[22] =    # 23 - 1, since arrays start from 0.
-		 { ok	     => 1,   # logically, the test passed since its todo
-		   actual_ok => 0,   # in absolute terms, it failed
-		   name      => 'hole count',
-		   type      => 'todo',
-		   reason    => 'insufficient donuts'
+		 { ok	     =&gt 1,   # logically, the test passed since its todo
+		   actual_ok =&gt 0,   # in absolute terms, it failed
+		   name      =&gt 'hole count',
+		   type      =&gt 'todo',
+		   reason    =&gt 'insufficient donuts'
 		 };
 
        todo
-	       my $todo_reason = $Test->todo;
-	       my $todo_reason = $Test->todo($pack);
+	       my $todo_reason = $Test-&gttodo;
+	       my $todo_reason = $Test-&gttodo($pack);
 
 	   If the current tests are considered "TODO" it will return the
 	   reason, if any.  This reason can come from a $TODO variable or the
@@ -504,7 +506,7 @@ DESCRIPTION
 
 	   Since a TODO test does not need a reason, this function can return
 	   an empty string even when inside a TODO block.  Use
-	   "$Test->in_todo" to determine if you are currently inside a TODO
+	   "$Test-&gtin_todo" to determine if you are currently inside a TODO
 	   block.
 
 	   "todo()" is about finding the right package to look for $TODO in.
@@ -518,20 +520,20 @@ DESCRIPTION
 	   explicitly what $pack to use.
 
        find_TODO
-	       my $todo_reason = $Test->find_TODO();
-	       my $todo_reason = $Test->find_TODO($pack):
+	       my $todo_reason = $Test-&gtfind_TODO();
+	       my $todo_reason = $Test-&gtfind_TODO($pack):
 
 	   Like "todo()" but only returns the value of $TODO ignoring
 	   "todo_start()".
 
        in_todo
-	       my $in_todo = $Test->in_todo;
+	       my $in_todo = $Test-&gtin_todo;
 
 	   Returns true if the test is currently inside a TODO block.
 
        todo_start
-	       $Test->todo_start();
-	       $Test->todo_start($message);
+	       $Test-&gttodo_start();
+	       $Test-&gttodo_start($message);
 
 	   This method allows you declare all subsequent tests as TODO tests,
 	   up until the "todo_end" method has been called.
@@ -544,12 +546,12 @@ DESCRIPTION
 
 	   Note that you can use this to nest "todo" tests
 
-	    $Test->todo_start('working on this');
+	    $Test-&gttodo_start('working on this');
 	    # lots of code
-	    $Test->todo_start('working on that');
+	    $Test-&gttodo_start('working on that');
 	    # more code
-	    $Test->todo_end;
-	    $Test->todo_end;
+	    $Test-&gttodo_end;
+	    $Test-&gttodo_end;
 
 	   This is generally not recommended, but large testing systems often
 	   have weird internal needs.
@@ -559,26 +561,26 @@ DESCRIPTION
 
 	    TODO: {
 		local $TODO = 'We have work to do!';
-		$Test->todo_start('working on this');
+		$Test-&gttodo_start('working on this');
 		# lots of code
-		$Test->todo_start('working on that');
+		$Test-&gttodo_start('working on that');
 		# more code
-		$Test->todo_end;
-		$Test->todo_end;
+		$Test-&gttodo_end;
+		$Test-&gttodo_end;
 	    }
 
 	   Pick one style or another of "TODO" to be on the safe side.
 
        "todo_end"
-	    $Test->todo_end;
+	    $Test-&gttodo_end;
 
 	   Stops running tests as "TODO" tests.  This method is fatal if
 	   called without a preceding "todo_start" method call.
 
        caller
-	       my $package = $Test->caller;
-	       my($pack, $file, $line) = $Test->caller;
-	       my($pack, $file, $line) = $Test->caller($height);
+	       my $package = $Test-&gtcaller;
+	       my($pack, $file, $line) = $Test-&gtcaller;
+	       my($pack, $file, $line) = $Test-&gtcaller($height);
 
 	   Like the normal "caller()", except it reports according to your
 	   "level()".
@@ -617,7 +619,7 @@ THREADS
        Test::Builder.
 
 MEMORY
-       An informative hash, accessable via "<details()">, is stored for each
+       An informative hash, accessable via "&ltdetails()"&gt, is stored for each
        test you perform.  So memory usage will scale linearly with each test
        run. Although this is not a problem for most test suites, it can become
        an issue if you do large (hundred thousands to million) combinatorics
@@ -638,11 +640,11 @@ SEE ALSO
 
 AUTHORS
        Original code by chromatic, maintained by Michael G Schwern
-       <schwern@pobox.com>
+       &ltschwern@pobox.com&gt
 
 COPYRIGHT
-       Copyright 2002-2008 by chromatic <chromatic@wgz.org> and
-			      Michael G Schwern <schwern@pobox.com>.
+       Copyright 2002-2008 by chromatic &ltchromatic@wgz.org&gt and
+			      Michael G Schwern &ltschwern@pobox.com&gt.
 
        This program is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -652,6 +654,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-07-07		    Test::Builder(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

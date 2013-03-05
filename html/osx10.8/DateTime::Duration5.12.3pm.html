@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This is a simple class for representing duration objects. These objects..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DateTime::Duration - Duration objects for date math</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DateTime::Duration(3) User Contributed Perl DocumentationDateTime::Duration(3)
 
 
@@ -21,50 +23,50 @@ VERSION
 SYNOPSIS
 	 use DateTime::Duration;
 
-	 $dur = DateTime::Duration->new(
-	     years	 => 3,
-	     months	 => 5,
-	     weeks	 => 1,
-	     days	 => 1,
-	     hours	 => 6,
-	     minutes	 => 15,
-	     seconds	 => 45,
-	     nanoseconds => 12000
+	 $dur = DateTime::Duration-&gtnew(
+	     years	 =&gt 3,
+	     months	 =&gt 5,
+	     weeks	 =&gt 1,
+	     days	 =&gt 1,
+	     hours	 =&gt 6,
+	     minutes	 =&gt 15,
+	     seconds	 =&gt 45,
+	     nanoseconds =&gt 12000
 	 );
 
-	 my ( $days, $hours, $seconds ) = $dur->in_units('days', 'hours', 'seconds');
+	 my ( $days, $hours, $seconds ) = $dur-&gtin_units('days', 'hours', 'seconds');
 
 	 # Human-readable accessors, always positive, but consider using
 	 # DateTime::Format::Duration instead
-	 $dur->years;
-	 $dur->months;
-	 $dur->weeks;
-	 $dur->days;
-	 $dur->hours;
-	 $dur->minutes;
-	 $dur->seconds;
-	 $dur->nanoseconds;
+	 $dur-&gtyears;
+	 $dur-&gtmonths;
+	 $dur-&gtweeks;
+	 $dur-&gtdays;
+	 $dur-&gthours;
+	 $dur-&gtminutes;
+	 $dur-&gtseconds;
+	 $dur-&gtnanoseconds;
 
-	 $dur->is_wrap_mode
-	 $dur->is_limit_mode
-	 $dur->is_preserve_mode
+	 $dur-&gtis_wrap_mode
+	 $dur-&gtis_limit_mode
+	 $dur-&gtis_preserve_mode
 
-	 print $dur->end_of_month_mode;
+	 print $dur-&gtend_of_month_mode;
 
 	 # Multiply all values by -1
-	 my $opposite = $dur->inverse;
+	 my $opposite = $dur-&gtinverse;
 
 	 my $bigger  = $dur1 + $dur2;
 	 my $smaller = $dur1 - $dur2; # the result could be negative
 	 my $bigger  = $dur1 * 3;
 
-	 my $base_dt = DateTime->new( year => 2000 );
+	 my $base_dt = DateTime-&gtnew( year =&gt 2000 );
 	 my @sorted =
-	     sort { DateTime::Duration->compare( $a, $b, $base_dt ) } @durations;
+	     sort { DateTime::Duration-&gtcompare( $a, $b, $base_dt ) } @durations;
 
-	 if ( $dur->is_positive ) { ... }
-	 if ( $dur->is_zero )	  { ... }
-	 if ( $dur->is_negative ) { ... }
+	 if ( $dur-&gtis_positive ) { ... }
+	 if ( $dur-&gtis_zero )	  { ... }
+	 if ( $dur-&gtis_negative ) { ... }
 
 DESCRIPTION
        This is a simple class for representing duration objects. These objects
@@ -130,24 +132,24 @@ METHODS
 	   but may be negative. Smaller units are computed from what remains
 	   after taking away the larger units given, so for example:
 
-	     my $dur = DateTime::Duration->new( years => 1, months => 15 );
+	     my $dur = DateTime::Duration-&gtnew( years =&gt 1, months =&gt 15 );
 
-	     $dur->in_units( 'years' ); 	   # 2
-	     $dur->in_units( 'months' );	   # 27
-	     $dur->in_units( 'years', 'months' );  # (2, 3)
-	     $dur->in_units( 'weeks', 'days' );    # (0, 0) !
+	     $dur-&gtin_units( 'years' ); 	   # 2
+	     $dur-&gtin_units( 'months' );	   # 27
+	     $dur-&gtin_units( 'years', 'months' );  # (2, 3)
+	     $dur-&gtin_units( 'weeks', 'days' );    # (0, 0) !
 
 	   The last example demonstrates that there will not be any conversion
 	   between units which don't have a fixed conversion rate. The only
 	   conversions possible are:
 
-	   o	   years <=> months
+	   o	   years &lt=&gt months
 
-	   o	   weeks <=> days
+	   o	   weeks &lt=&gt days
 
-	   o	   hours <=> minutes
+	   o	   hours &lt=&gt minutes
 
-	   o	   seconds <=> nanoseconds
+	   o	   seconds &lt=&gt nanoseconds
 
 	   For the explanation of why this is the case, please see the How
 	   Datetime Math Works section of the DateTime.pm documentation
@@ -196,7 +198,7 @@ METHODS
 	   duration is positive or negative.
 
 	   You can set the end of month mode in the inverted duration
-	   explicitly by passing "end_of_month => ..." to the "inverse()"
+	   explicitly by passing "end_of_month =&gt ..." to the "inverse()"
 	   method.
 
        o   add_duration( $duration_object ), subtract_duration(
@@ -215,7 +217,7 @@ METHODS
 
 	   Multiplies each unit in the by the specified number.
 
-       o   DateTime::Duration->compare( $duration1, $duration2, $base_datetime
+       o   DateTime::Duration-&gtcompare( $duration1, $duration2, $base_datetime
 	   )
 
 	   This is a class method that can be used to compare or sort
@@ -225,7 +227,7 @@ METHODS
 	   are not comparable.	For example, 1 month may or may not be longer
 	   than 29 days, depending on what datetime it is added to.
 
-	   If no base datetime is given, then the result of "DateTime->now" is
+	   If no base datetime is given, then the result of "DateTime-&gtnow" is
 	   used instead. Using this default will give non-repeatable results
 	   if used to compare two duration objects containing different units.
 	   It will also give non-repeatable results if the durations contain
@@ -259,14 +261,14 @@ METHODS
 
 	   Here's what each method returns:
 
-	    $dur->years()	== abs( $dur->in_units('years') )
-	    $dur->months()	== abs( ( $dur->in_units( 'months', 'years' ) )[0] )
-	    $dur->weeks()	== abs( $dur->in_units( 'weeks' ) )
-	    $dur->days()	== abs( ( $dur->in_units( 'days', 'weeks' ) )[0] )
-	    $dur->hours()	== abs( $dur->in_units( 'hours' ) )
-	    $dur->minutes	== abs( ( $dur->in_units( 'minutes', 'hours' ) )[0] )
-	    $dur->seconds	== abs( $dur->in_units( 'seconds' ) )
-	    $dur->nanoseconds() == abs( ( $dur->in_units( 'nanoseconds', 'seconds' ) )[0] )
+	    $dur-&gtyears()	== abs( $dur-&gtin_units('years') )
+	    $dur-&gtmonths()	== abs( ( $dur-&gtin_units( 'months', 'years' ) )[0] )
+	    $dur-&gtweeks()	== abs( $dur-&gtin_units( 'weeks' ) )
+	    $dur-&gtdays()	== abs( ( $dur-&gtin_units( 'days', 'weeks' ) )[0] )
+	    $dur-&gthours()	== abs( $dur-&gtin_units( 'hours' ) )
+	    $dur-&gtminutes	== abs( ( $dur-&gtin_units( 'minutes', 'hours' ) )[0] )
+	    $dur-&gtseconds	== abs( $dur-&gtin_units( 'seconds' ) )
+	    $dur-&gtnanoseconds() == abs( ( $dur-&gtin_units( 'nanoseconds', 'seconds' ) )[0] )
 
 	   If this seems confusing, remember that you can always use the
 	   "in_units()" method to specify exactly what you want.
@@ -278,7 +280,7 @@ METHODS
        This class overloads addition, subtraction, and mutiplication.
 
        Comparison is not overloaded. If you attempt to compare durations using
-       "<=>" or "cmp", then an exception will be thrown!  Use the "compare()"
+       "&lt=&gt" or "cmp", then an exception will be thrown!  Use the "compare()"
        class method instead.
 
 SUPPORT
@@ -291,7 +293,7 @@ SEE ALSO
        http://datetime.perl.org/
 
 AUTHOR
-       Dave Rolsky <autarch@urth.org>
+       Dave Rolsky &ltautarch@urth.org&gt
 
 COPYRIGHT AND LICENSE
        This software is Copyright (c) 2011 by Dave Rolsky.
@@ -303,6 +305,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2012-06-20		 DateTime::Duration(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

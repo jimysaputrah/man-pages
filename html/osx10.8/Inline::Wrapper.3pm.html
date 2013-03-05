@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Inline::Wrapper provides wrapper routines around Inline to make..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Inline::Wrapper - Convenient module wrapper/loader routines for</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Inline::Wrapper(3)    User Contributed Perl Documentation   Inline::Wrapper(3)
 
 
@@ -21,14 +23,14 @@ SYNOPSIS
 
 	use Inline::Wrapper;
 
-	my $inline = Inline::Wrapper->new(
-	   language    => 'C',
-	   base_dir    => '.',
+	my $inline = Inline::Wrapper-&gtnew(
+	   language    =&gt 'C',
+	   base_dir    =&gt '.',
 	);
 
-	my @symbols = $inline->load( 'answer' );
+	my @symbols = $inline-&gtload( 'answer' );
 
-	my @retvals = $inline->run( 'answer', 'the_answer', 3, 56 );
+	my @retvals = $inline-&gtrun( 'answer', 'the_answer', 3, 56 );
 
 	print "The answer is: ", $retvals[0], "\n";
 
@@ -37,7 +39,7 @@ SYNOPSIS
        answer.c:
 
 	int the_answer( int arg1, int arg2 ) {
-	    return ( arg1 * arg2 ) >> 2;
+	    return ( arg1 * arg2 ) &gt&gt 2;
 	}
 
 DESCRIPTION
@@ -73,10 +75,10 @@ FEATURES
 
 CONSTRUCTOR
    new()
-	   my $wrapper = Inline::Wrapper->new(
-		 language	 => 'C',
-		 base_dir	 => 'src/code/C',
-		 auto_reload	 => 1,
+	   my $wrapper = Inline::Wrapper-&gtnew(
+		 language	 =&gt 'C',
+		 base_dir	 =&gt 'src/code/C',
+		 auto_reload	 =&gt 1,
 	   );
 
        Create a new Inline::Wrapper object, with the appropriate attributes
@@ -84,7 +86,7 @@ CONSTRUCTOR
 
        ARGUMENTS:
 
-       All arguments are of the hash form  Var => Value.  "new()" will
+       All arguments are of the hash form  Var =&gt Value.  "new()" will
        complain and croak if they do not follow this form.
 
        The arguments to "new()" become the defaults used by "load()".  You can
@@ -115,7 +117,7 @@ CONSTRUCTOR
 
 METHODS
    initialize()
-	   $obj->initialize();
+	   $obj-&gtinitialize();
 
        Initialize arguments.  If you are subclassing, overload this, not
        "new()".
@@ -123,7 +125,7 @@ METHODS
        Generally only called from within "new()".
 
    load()
-	   my @functions = $obj->load( $modname, %arguments );
+	   my @functions = $obj-&gtload( $modname, %arguments );
 
        The workhorse.  Loads the actual module referred to by $modname,
        imports its symbols into a private namespace, and makes them available
@@ -169,13 +171,13 @@ METHODS
        4. Attempts to open the file at the path constructed above, and if
        successful, slurps in the entire source file.
        5. Attempts to bind() (compile and set symbols) it with the
-       Inline->bind() method into a private namespace.
+       Inline-&gtbind() method into a private namespace.
        6. If step 5 was successful, set the load time, and return the list of
        loaded, available functions provided by the module.
        7. If step 5 failed, warn and return an empty list.
 
    unload()
-	   $obj->unload( $modname );
+	   $obj-&gtunload( $modname );
 
        Completely unload the module identified by $modname, and render its
        functions uncallable.
@@ -187,7 +189,7 @@ METHODS
        failure.
 
    run()
-	   my @retvals = $obj->run( $modname, $function, @arguments );
+	   my @retvals = $obj-&gtrun( $modname, $function, @arguments );
 
        Run the named $function that you loaded from $modname, with the
        specified @arguments (if any).
@@ -207,13 +209,13 @@ METHODS
        you get.
 
    modules()
-	   my @modules = $obj->modules();
+	   my @modules = $obj-&gtmodules();
 
        Returns a list of loaded module names, or the empty list if no modules
        have been (successfully) loaded.
 
    functions()
-	   my @functions = $obj->functions( $modname );
+	   my @functions = $obj-&gtfunctions( $modname );
 
        Returns a list of loaded @functions, which were made available by
        loading $modname.
@@ -223,12 +225,12 @@ ACCESSORS
        settings after creating the object.
 
    base_dir()
-	   my $base_dir = $obj->base_dir();
+	   my $base_dir = $obj-&gtbase_dir();
 
        Returns the default base_dir attribute from the object.
 
    set_base_dir()
-	   $obj->set_base_dir( '/some/path' );
+	   $obj-&gtset_base_dir( '/some/path' );
 
        Sets the default base_dir attribute of the object, and returns whatever
        it ended up being set to.
@@ -236,13 +238,13 @@ ACCESSORS
        NOTE: Only affects modules loaded after this setting was made.
 
    auto_reload()
-	   my $bool = $obj->auto_reload();
+	   my $bool = $obj-&gtauto_reload();
 
        Returns a $boolean as to whether or not the default auto_reload setting
        is enabled for new modules.
 
    set_auto_reload()
-	   $obj->set_auto_reload( 1 );
+	   $obj-&gtset_auto_reload( 1 );
 
        Sets the default auto_reload attribute of the object, and returns
        whatever it ended up being set to.
@@ -250,12 +252,12 @@ ACCESSORS
        NOTE: Only affects modules loaded after this setting was made.
 
    language()
-	   my $lang = $obj->language();
+	   my $lang = $obj-&gtlanguage();
 
        Returns the default language attribute of the object.
 
    set_language()
-	   $obj->set_language( 'C' );
+	   $obj-&gtset_language( 'C' );
 
        Sets the default language attribute of the object, and returns whatever
        it ended up being set to.
@@ -267,7 +269,7 @@ ACCESSORS
        languages via the "add_language()" method.
 
    add_language()
-	   $obj->add_language( 'Lojban' => '.xkcd' );
+	   $obj-&gtadd_language( 'Lojban' =&gt '.xkcd' );
 
        Adds a language to the "known languages" table, allowing you to later
        use "set_language()".
@@ -293,7 +295,7 @@ SEE ALSO
 ACKNOWLEDGEMENTS
        Thank you, kennethk and ikegami for your assistance on perlmonks.
 
-       <http://perlmonks.org/index.pl?node_id=732598>
+       &lthttp://perlmonks.org/index.pl?node_id=732598&gt
 
 AUTHOR
        Please kindly read through this documentation and the examples/
@@ -315,6 +317,6 @@ LICENSE
 
 
 perl v5.12.4			  2010-03-10		    Inline::Wrapper(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

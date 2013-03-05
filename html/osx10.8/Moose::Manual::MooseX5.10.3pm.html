@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Manual::MooseX - Recommended Moose extensions</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Manual::MooseX(User Contributed Perl DocumentatMoose::Manual::MooseX(3)
 
 
@@ -42,7 +44,7 @@ Moose::Autobox
 
 	 use Moose::Autobox;
 
-	 $somebody_elses_object->orders->push($order);
+	 $somebody_elses_object-&gtorders-&gtpush($order);
 
        Lexically scoped and not to everybody's taste, but very handy for
        sugaring up other people's APIs and your own code.
@@ -60,7 +62,7 @@ MooseX::StrictConstructor
 	 has 'name';
 	 has 'email';
 
-	 User->new( name => 'Bob', emali => 'bob@example.com' );
+	 User-&gtnew( name =&gt 'Bob', emali =&gt 'bob@example.com' );
 
        With MooseX::StrictConstructor, that typo ("emali") will cause a
        runtime error. With plain old Moose, the "emali" attribute would be
@@ -86,7 +88,7 @@ MooseX::Params::Validate
 	 sub login {
 	     my $self = shift;
 	     my ($password)
-		 = validated_list( \@_, password => { isa => 'Str', required => 1 } );
+		 = validated_list( \@_, password =&gt { isa =&gt 'Str', required =&gt 1 } );
 
 	     ...
 	 }
@@ -104,16 +106,16 @@ MooseX::Getopt
 	 use Moose;
 	 with 'MooseX::Getopt';
 
-	 has 'input' => (
-	     is       => 'ro',
-	     isa      => 'Str',
-	     required => 1
+	 has 'input' =&gt (
+	     is       =&gt 'ro',
+	     isa      =&gt 'Str',
+	     required =&gt 1
 	 );
 
-	 has 'output' => (
-	     is       => 'ro',
-	     isa      => 'Str',
-	     required => 1
+	 has 'output' =&gt (
+	     is       =&gt 'ro',
+	     isa      =&gt 'Str',
+	     required =&gt 1
 	 );
 
 	 sub run { ... }
@@ -122,11 +124,11 @@ MooseX::Getopt
 
 	 use App::Foo;
 
-	 App::Foo->new_with_options->run;
+	 App::Foo-&gtnew_with_options-&gtrun;
 
        From the command line, someone can execute the script:
 
-	 foo@example> foo --input /path/to/input --output /path/to/output
+	 foo@example&gt foo --input /path/to/input --output /path/to/output
 
 MooseX::Singleton
        To be honest, using a singleton is just a way to have a magic global
@@ -141,7 +143,7 @@ MooseX::Singleton
 
 	 use MooseX::Singleton; # instead of Moose
 
-	 has 'cache_dir' => ( ... );
+	 has 'cache_dir' =&gt ( ... );
 
        It's that simple.
 
@@ -156,8 +158,8 @@ EXTENSIONS TO CONSIDER
 
 	 class User {
 
-	     has 'name'  => ( ... );
-	     has 'email' => ( ... );
+	     has 'name'  =&gt ( ... );
+	     has 'email' =&gt ( ... );
 
 	     method login (Str $password) { ... }
 	 }
@@ -166,12 +168,12 @@ EXTENSIONS TO CONSIDER
        This extension helps you build a type library for your application. It
        also lets you predeclare type names and use them as barewords.
 
-	 use MooseX::Types -declare => ['PositiveInt'];
+	 use MooseX::Types -declare =&gt ['PositiveInt'];
 	 use MooseX::Types::Moose 'Int';
 
 	 subtype PositiveInt,
 	     as Int,
-	     where { $_ > 0 },
+	     where { $_ &gt 0 },
 	     message { "Int is not larger than 0" };
 
        One nice feature is that those bareword names are actually namespaced
@@ -182,15 +184,15 @@ EXTENSIONS TO CONSIDER
        This extension builds on top of MooseX::Types to let you declare
        complex data structure types.
 
-	 use MooseX::Types -declare => [ qw( Name Color ) ];
+	 use MooseX::Types -declare =&gt [ qw( Name Color ) ];
 	 use MooseX::Types::Moose qw(Str Int);
 	 use MooseX::Types::Structured qw(Dict Tuple Optional);
 
 	 subtype Name
-	     => as Dict[ first => Str, middle => Optional[Str], last => Str ];
+	     =&gt as Dict[ first =&gt Str, middle =&gt Optional[Str], last =&gt Str ];
 
 	 subtype Color
-	     => as Tuple[ Int, Int, Int, Optional[Int] ];
+	     =&gt as Tuple[ Int, Int, Int, Optional[Int] ];
 
        Of course, you could always use objects to represent these sorts of
        things too.
@@ -205,14 +207,14 @@ EXTENSIONS TO CONSIDER
 	 use Moose;
 	 use MooseX::ClassAttribute;
 
-	 has 'name' => ( ... );
+	 has 'name' =&gt ( ... );
 
-	 class_has 'Cache' => ( ... );
+	 class_has 'Cache' =&gt ( ... );
 
        Note however that this class attribute does not inherit like a
        Class::Data::Inheritable or similar attribute - calling
 
-	 $subclass->Cache($cache);
+	 $subclass-&gtCache($cache);
 
        will set it for the superclass as well. Additionally, class data is
        usually The Wrong Thing To Do in a strongly OO program since it makes
@@ -251,12 +253,12 @@ EXTENSIONS TO CONSIDER
        things like BUILD methods are called.
 
 AUTHOR
-       Dave Rolsky <autarch@urth.org>
+       Dave Rolsky &ltautarch@urth.org&gt
 
 COPYRIGHT AND LICENSE
        Copyright 2009 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -264,6 +266,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2009-12-06	      Moose::Manual::MooseX(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

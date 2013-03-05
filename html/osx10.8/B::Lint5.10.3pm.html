@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The B::Lint module is equivalent to an extended version of the -w..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>B::Lint - Perl lint</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 B::Lint(3pm)	       Perl Programmers Reference Guide 	  B::Lint(3pm)
 
 
@@ -34,7 +36,7 @@ OPTIONS AND LINT CHECKS
        ones. Available options are:
 
        magic-diamond
-	       Produces a warning whenever the magic "<>" readline is used.
+	       Produces a warning whenever the magic "&lt&gt" readline is used.
 	       Internally it uses perl's two-argument open which itself treats
 	       filenames with special characters specially. This could allow
 	       interestingly named files to have unexpected effects when
@@ -44,8 +46,8 @@ OPTIONS AND LINT CHECKS
 		 % perl -pe 1
 
 	       The above creates a file named "rm *|". When perl opens it with
-	       "<>" it actually executes the shell program "rm *". This makes
-	       "<>" dangerous to use carelessly.
+	       "&lt&gt" it actually executes the shell program "rm *". This makes
+	       "&lt&gt" dangerous to use carelessly.
 
        context Produces a warning whenever an array is used in an implicit
 	       scalar context. For example, both of the lines
@@ -79,8 +81,8 @@ OPTIONS AND LINT CHECKS
 	       is also the name of a subroutine in the current package.
 	       Typical mistakes that it will trap are:
 
-		   use constant foo => 'bar';
-		   @a = ( foo => 1 );
+		   use constant foo =&gt 'bar';
+		   @a = ( foo =&gt 1 );
 		   $b{foo} = 2;
 
 	       Neither of these will do what a naive user would expect.
@@ -100,7 +102,7 @@ OPTIONS AND LINT CHECKS
 	       This option warns whenever an undefined subroutine is invoked.
 	       This option will only catch explicitly invoked subroutines such
 	       as "foo()" and not indirect invocations such as "&$subref()" or
-	       "$obj->meth()". Note that some programs or modules delay
+	       "$obj-&gtmeth()". Note that some programs or modules delay
 	       definition of subs until runtime by means of the AUTOLOAD
 	       mechanism.
 
@@ -126,7 +128,7 @@ EXTENDING LINT
        find available plugins. Plugins are expected but not required to inform
        Lint of which checks they are adding.
 
-       The "B::Lint->register_plugin( MyPlugin => \@new_checks )" method adds
+       The "B::Lint-&gtregister_plugin( MyPlugin =&gt \@new_checks )" method adds
        the list of @new_checks to the list of valid checks. If your module
        wasn't loaded by Module::Pluggable then your class name is added to the
        list of plugins.
@@ -135,22 +137,22 @@ EXTENDING LINT
        one of its parents. It will be called on every op as a regular method
        call with a hash ref of checks as its parameter.
 
-       The class methods "B::Lint->file" and "B::Lint->line" contain the
+       The class methods "B::Lint-&gtfile" and "B::Lint-&gtline" contain the
        current filename and line number.
 
 	 package Sample;
 	 use B::Lint;
-	 B::Lint->register_plugin( Sample => [ 'good_taste' ] );
+	 B::Lint-&gtregister_plugin( Sample =&gt [ 'good_taste' ] );
 
 	 sub match {
 	     my ( $op, $checks_href ) = shift @_;
-	     if ( $checks_href->{good_taste} ) {
+	     if ( $checks_href-&gt{good_taste} ) {
 		 ...
 	     }
 	 }
 
 TODO
-       while(<FH>) stomps $_
+       while(&ltFH&gt) stomps $_
        strict oo
        unchecked system calls
        more tests, validate against older perls
@@ -167,6 +169,6 @@ ACKNOWLEDGEMENTS
 
 
 perl v5.10.1			  2009-02-12			  B::Lint(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This class is a formatter that takes Pod and renders it as XHTML..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Pod::Simple::XHTML -- format Pod as validating XHTML</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Pod::Simple::XHTML(3pm)Perl Programmers Reference GuidePod::Simple::XHTML(3pm)
 
 
@@ -18,11 +20,11 @@ NAME
 SYNOPSIS
 	 use Pod::Simple::XHTML;
 
-	 my $parser = Pod::Simple::XHTML->new();
+	 my $parser = Pod::Simple::XHTML-&gtnew();
 
 	 ...
 
-	 $parser->parse_file('path/to/file.pod');
+	 $parser-&gtparse_file('path/to/file.pod');
 
 DESCRIPTION
        This class is a formatter that takes Pod and renders it as XHTML
@@ -37,9 +39,9 @@ METHODS
        the HTML output. Call these after creating the parser object, but
        before the call to "parse_file":
 
-	 my $parser = Pod::PseudoPod::HTML->new();
-	 $parser->set_optional_param("value");
-	 $parser->parse_file($file);
+	 my $parser = Pod::PseudoPod::HTML-&gtnew();
+	 $parser-&gtset_optional_param("value");
+	 $parser-&gtparse_file($file);
 
    perldoc_url_prefix
        In turning Foo::Bar into http://whatever/Foo%3a%3aBar, what to put
@@ -63,7 +65,7 @@ METHODS
        already be &-escaped.
 
    html_css
-	 $parser->html_css('path/to/style.css');
+	 $parser-&gthtml_css('path/to/style.css');
 
        The URL or relative path of a CSS file to include. This option is not
        set by default.
@@ -79,7 +81,7 @@ METHODS
        Additional arbitrary HTML tags for the header of the document. The
        default value is just a content type header tag:
 
-	 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	 &ltmeta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"&gt
 
        Add additional meta tags here, or blocks of inline CSS or JavaScript
        (wrapped in the appropriate tags).
@@ -134,21 +136,21 @@ SUBCLASSING
        So, let's say you want add a custom element called 'foo'. In your
        subclass's "new" method, after calling "SUPER::new" you'd call:
 
-	 $new->accept_targets_as_text( 'foo' );
+	 $new-&gtaccept_targets_as_text( 'foo' );
 
        Then override the "start_for" method in the subclass to check for when
-       "$flags->{'target'}" is equal to 'foo' and set a flag that marks that
-       you're in a foo block (maybe "$self->{'in_foo'} = 1"). Then override
+       "$flags-&gt{'target'}" is equal to 'foo' and set a flag that marks that
+       you're in a foo block (maybe "$self-&gt{'in_foo'} = 1"). Then override
        the "handle_text" method to check for the flag, and pass $text to your
        custom subroutine to construct the HTML output for 'foo' elements,
        something like:
 
 	 sub handle_text {
 	     my ($self, $text) = @_;
-	     if ($self->{'in_foo'}) {
-		 $self->{'scratch'} .= build_foo_html($text);
+	     if ($self-&gt{'in_foo'}) {
+		 $self-&gt{'scratch'} .= build_foo_html($text);
 	     } else {
-		 $self->{'scratch'} .= $text;
+		 $self-&gt{'scratch'} .= $text;
 	     }
 	 }
 
@@ -158,9 +160,9 @@ SUBCLASSING
        entity escaping or wrapping in a "div" element.
 
    resolve_pod_page_link
-	 my $url = $pod->resolve_pod_page_link('Net::Ping', 'INSTALL');
-	 my $url = $pod->resolve_pod_page_link('perlpodspec');
-	 my $url = $pod->resolve_pod_page_link(undef, 'SYNOPSIS');
+	 my $url = $pod-&gtresolve_pod_page_link('Net::Ping', 'INSTALL');
+	 my $url = $pod-&gtresolve_pod_page_link('perlpodspec');
+	 my $url = $pod-&gtresolve_pod_page_link(undef, 'SYNOPSIS');
 
        Resolves a POD link target (typically a module or POD file name) and
        section name to a URL. The resulting link will be returned for the
@@ -174,8 +176,8 @@ SUBCLASSING
        a link to a section in the current document.
 
    resolve_man_page_link
-	 my $url = $pod->resolve_man_page_link('crontab(5)', 'EXAMPLE CRON FILE');
-	 my $url = $pod->resolve_man_page_link('crontab');
+	 my $url = $pod-&gtresolve_man_page_link('crontab(5)', 'EXAMPLE CRON FILE');
+	 my $url = $pod-&gtresolve_man_page_link('crontab');
 
        Resolves a man page link target and numeric section to a URL. The
        resulting link will be returned for the above examples as:
@@ -185,17 +187,17 @@ SUBCLASSING
 
        Note that the first argument is required. The section number will be
        parsed from it, and if it's missing will default to 1. The second
-       argument is currently ignored, as man.he.net <http://man.he.net> does
+       argument is currently ignored, as man.he.net &lthttp://man.he.net&gt does
        not currently include linkable IDs or anchor names in its pages.
        Subclass to link to a different man page HTTP server.
 
    idify
-	 my $id   = $pod->idify($text);
-	 my $hash = $pod->idify($text, 1);
+	 my $id   = $pod-&gtidify($text);
+	 my $hash = $pod-&gtidify($text, 1);
 
        This method turns an arbitrary string into a valid XHTML ID attribute
        value.  The rules enforced, following
-       <http://webdesign.about.com/od/htmltags/a/aa031707.htm>, are:
+       &lthttp://webdesign.about.com/od/htmltags/a/aa031707.htm&gt, are:
 
        o   The id must start with a letter (a-z or A-Z)
 
@@ -208,11 +210,11 @@ SUBCLASSING
        the Pod::Simple::XHTML object unless a second argument is passed a true
        value. ID attributes should always be unique within a single XHTML
        document, but pass the true value if you are creating not an ID but a
-       URL hash to point to an ID (i.e., if you need to put the "#foo" in "<a
-       href="#foo">foo</a>".
+       URL hash to point to an ID (i.e., if you need to put the "#foo" in "&lta
+       href="#foo"&gtfoo&lt/a&gt".
 
    batch_mode_page_object_init
-	 $pod->batch_mode_page_object_init($batchconvobj, $module, $infile, $outfile, $depth);
+	 $pod-&gtbatch_mode_page_object_init($batchconvobj, $module, $infile, $outfile, $depth);
 
        Called by Pod::Simple::HTMLBatch so that the class has a chance to
        initialize the converter. Internally it sets the "batch_mode" property
@@ -228,13 +230,13 @@ SUPPORT
        pod-people-subscribe@perl.org to subscribe.
 
        This module is managed in an open GitHub repository,
-       http://github.com/theory/pod-simple/ <http://github.com/theory/pod-
-       simple/>. Feel free to fork and contribute, or to clone
-       git://github.com/theory/pod-simple.git <git://github.com/theory/pod-
-       simple.git> and send patches!
+       http://github.com/theory/pod-simple/ &lthttp://github.com/theory/pod-
+       simple/&gt. Feel free to fork and contribute, or to clone
+       git://github.com/theory/pod-simple.git &ltgit://github.com/theory/pod-
+       simple.git&gt and send patches!
 
        Patches against Pod::Simple are welcome. Please send bug reports to
-       <bug-pod-simple@rt.cpan.org>.
+       &ltbug-pod-simple@rt.cpan.org&gt.
 
 COPYRIGHT AND DISCLAIMERS
        Copyright (c) 2003-2005 Allison Randal.
@@ -247,17 +249,17 @@ COPYRIGHT AND DISCLAIMERS
        merchantability or fitness for a particular purpose.
 
 ACKNOWLEDGEMENTS
-       Thanks to Hurricane Electrict <http://he.net/> for permission to use
-       its Linux man pages online <http://man.he.net/> site for man page
+       Thanks to Hurricane Electrict &lthttp://he.net/&gt for permission to use
+       its Linux man pages online &lthttp://man.he.net/&gt site for man page
        links.
 
-       Thanks to search.cpan.org <http://search.cpan.org/> for permission to
+       Thanks to search.cpan.org &lthttp://search.cpan.org/&gt for permission to
        use the site for Perl module links.
 
 AUTHOR
-       Pod::Simpele::XHTML was created by Allison Randal <allison@perl.org>.
+       Pod::Simpele::XHTML was created by Allison Randal &ltallison@perl.org&gt.
 
-       Pod::Simple was created by Sean M. Burke <sburke@cpan.org>.  But don't
+       Pod::Simple was created by Sean M. Burke &ltsburke@cpan.org&gt.  But don't
        bother him, he's retired.
 
        Pod::Simple is maintained by:
@@ -271,6 +273,6 @@ AUTHOR
 
 
 perl v5.12.4			  2011-06-07	       Pod::Simple::XHTML(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

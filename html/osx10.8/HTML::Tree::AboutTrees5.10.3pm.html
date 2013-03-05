@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The following article by Sean M. Burke first appeared in The Perl..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>HTML::Tree::AboutTrees -- article on tree-shaped data structures in</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 HTML::Tree::AboutTreesUser Contributed Perl DocumentaHTML::Tree::AboutTrees(3)
 
 
@@ -350,28 +352,28 @@ Trees
        and character data in a tree structure where there is one root element,
        and elements can contain either other elements, or character data.
 
-	   Footnote: For sake of simplicity, I'm glossing over comments (<!--
-	   ... -->), processing instructions (<?xml version='1.0'>), and
-	   declarations (<!ELEMENT ...>, <!DOCTYPE ...>).  And I'm not
+	   Footnote: For sake of simplicity, I'm glossing over comments (&lt!--
+	   ... --&gt), processing instructions (&lt?xml version='1.0'&gt), and
+	   declarations (&lt!ELEMENT ...&gt, &lt!DOCTYPE ...&gt).  And I'm not
 	   bothering to distinguish entity references (&lt;, &#64;) or CDATA
-	   sections (<![CDATA[ ...]]>) from normal text.
+	   sections (&lt![CDATA[ ...]]&gt) from normal text.
 
        For example, consider this HTML document:
 
-	 <html lang="en-US">
-	   <head>
-	     <title>
+	 &lthtml lang="en-US"&gt
+	   &lthead&gt
+	     &lttitle&gt
 	       Blank Document!
-	     </title>
-	   </head>
-	   <body bgcolor="#d010ff">
+	     &lt/title&gt
+	   &lt/head&gt
+	   &ltbody bgcolor="#d010ff"&gt
 	     I've got
-	     <em>
+	     &ltem&gt
 	       something to saaaaay
-	     </em>
+	     &lt/em&gt
 	     !
-	   </body>
-	 </html>
+	   &lt/body&gt
+	 &lt/html&gt
 
        I've indented this to point out what nodes (elements or text items) are
        children of what, with each node on a line of its own.
@@ -395,17 +397,17 @@ Trees
 
        Each HTML::Element object contains a number of pieces of data:
 
-       * its element name ("html", "h1", etc., accessed as $element->tag)
+       * its element name ("html", "h1", etc., accessed as $element-&gttag)
 
        * a list of elements (or text segments) that it contains, if any
-       (accessed as $element->content_list or $element->content, depending on
+       (accessed as $element-&gtcontent_list or $element-&gtcontent, depending on
        whether you want a list, or an arrayref)
 
-       * what element, if any, contains it (accessed as $element->parent)
+       * what element, if any, contains it (accessed as $element-&gtparent)
 
        * and any SGML attributes that the element has, such as "lang="en-US"",
-       "align="center"", etc. (accessed as $element->attr('lang'),
-       $element->attr('center'), etc.)
+       "align="center"", etc. (accessed as $element-&gtattr('lang'),
+       $element-&gtattr('center'), etc.)
 
        So, for example, when HTML::TreeBuilder builds the tree for the above
        HTML document source, the object for the "body" element has these
@@ -434,7 +436,7 @@ Trees
        in the above HTML tree does happen to be accessible as the root's child
        #1's child #1:
 
-	 $root->content->[1]->content->[1]
+	 $root-&gtcontent-&gt[1]-&gtcontent-&gt[1]
 
        But with trees, you typically don't know the exact location (via
        indexes) of the data you're looking for.  Instead, finding what you
@@ -448,21 +450,21 @@ Trees
 
        For example, that "em" node can be found as:
 
-	 my $that_em = $root->find_by_tag_name('em');
+	 my $that_em = $root-&gtfind_by_tag_name('em');
 
        or as:
 
-	 @ems = $root->find_by_tag_name('em');
+	 @ems = $root-&gtfind_by_tag_name('em');
 	  # will only have one element for this particular tree
 
        Now, given an HTML document of whatever structure and complexity, if
        you wanted to do something like change every
 
-	   <em>stuff</em>
+	   &ltem&gtstuff&lt/em&gt
 
        to
 
-	   <em class="funky"> <b>[-</b> stuff <b>-]</b> </em>
+	   &ltem class="funky"&gt &ltb&gt[-&lt/b&gt stuff &ltb&gt-]&lt/b&gt &lt/em&gt
 
        the first step is to frame this operation in terms of what you're doing
        to the tree.  You're changing this:
@@ -492,27 +494,27 @@ Trees
 	 use HTML::Element 1.53;
 	 use HTML::TreeBuilder 2.96;
 	 # Build the tree by parsing the document
-	 my $root = HTML::TreeBuilder->new;
-	 $root->parse_file('whatever.html'); # source file
+	 my $root = HTML::TreeBuilder-&gtnew;
+	 $root-&gtparse_file('whatever.html'); # source file
 
 	 # Now make new nodes where needed
-	 foreach my $em ($root->find_by_tag_name('em')) {
-	   $em->attr('class', 'funky'); # Set that attribute
+	 foreach my $em ($root-&gtfind_by_tag_name('em')) {
+	   $em-&gtattr('class', 'funky'); # Set that attribute
 
 	   # Make the two new B nodes
-	   my $new1 = HTML::Element->new('b');
-	   my $new2 = HTML::Element->new('b');
+	   my $new1 = HTML::Element-&gtnew('b');
+	   my $new2 = HTML::Element-&gtnew('b');
 	   # Give them content (they have none at first)
-	   $new1->push_content('[-');
-	   $new2->push_content('-]');
+	   $new1-&gtpush_content('[-');
+	   $new2-&gtpush_content('-]');
 
 	   # And put 'em in place!
-	   $em->unshift_content($new1);
-	   $em->push_content($new2);
+	   $em-&gtunshift_content($new1);
+	   $em-&gtpush_content($new2);
 	 }
 	 print
-	  "<!-- Looky see what I did! -->\n",
-	  $root->as_HTML(), "\n";
+	  "&lt!-- Looky see what I did! --&gt\n",
+	  $root-&gtas_HTML(), "\n";
 
        The class HTML::Element provides just about every method I can image
        you needing, for manipulating trees made of HTML::Element objects.
@@ -713,8 +715,8 @@ Trees
        my experience that hashes are best for cases where you have more than
        just two or three bits of data, or especially when you might need to
        add new bits of data.  Moreover, hash key names are mnemonic --
-       $node->{'last_move_payoff'} is plain as day, whereas it's not so easy
-       having to remember with an array that $node->[3] is where you decided
+       $node-&gt{'last_move_payoff'} is plain as day, whereas it's not so easy
+       having to remember with an array that $node-&gt[3] is where you decided
        to keep the payoff.
 
 	   Footnote: Of course, there are ways around that problem: just swear
@@ -722,9 +724,9 @@ Trees
 	   and instead use constants with mnemonic names:
 
 	     use strict;
-	     use constant idx_PAYOFF => 3;
+	     use constant idx_PAYOFF =&gt 3;
 	     ...
-	     $n->[idx_PAYOFF]
+	     $n-&gt[idx_PAYOFF]
 
 	   Or use a pseudohash.  But I prefer to keep it simple, and use a
 	   hash.
@@ -740,20 +742,20 @@ Trees
        So, we might as well represent nodes like so:
 
 	 $node = { # hashref
-	    'board'	     => ...board string, e.g., "xx_x_xoo_oo"
+	    'board'	     =&gt ...board string, e.g., "xx_x_xoo_oo"
 
-	    'last_move_payoff' => ...payoff of the move
+	    'last_move_payoff' =&gt ...payoff of the move
 				   that got us here.
 
-	    'last_move_from' =>  ...the start...
-	    'last_move_to'   =>  ...and end point of the move
+	    'last_move_from' =&gt  ...the start...
+	    'last_move_to'   =&gt  ...and end point of the move
 				     that got us here.	E.g., 5 and 6,
 				     representing a move from 5 to 6.
 
-	    'whose_turn'     => ...whose move it then becomes.
+	    'whose_turn'     =&gt ...whose move it then becomes.
 				  just an 'x' or 'o'.
 
-	    'successors' => ...the successors
+	    'successors' =&gt ...the successors
 	 };
 
        Note that we could have a field called something like 'last_move_who'
@@ -777,7 +779,7 @@ Trees
 
 	 $node = {
 	   ...
-	   'successors' => [ ...nodes... ],
+	   'successors' =&gt [ ...nodes... ],
 	   ...
 	 };
 
@@ -787,38 +789,38 @@ Trees
 
 	 # Board just before move 3 in above game
 	 my $n0 = {
-	   'board' => 'xx_xx_oo_oo',
-	   'last_move_payoff' => 0,
-	   'last_move_from' =>	9,
-	   'last_move_to'   =>	7,
-	   'whose_turn' => 'x',
-	   'successors' => [],
+	   'board' =&gt 'xx_xx_oo_oo',
+	   'last_move_payoff' =&gt 0,
+	   'last_move_from' =&gt	9,
+	   'last_move_to'   =&gt	7,
+	   'whose_turn' =&gt 'x',
+	   'successors' =&gt [],
 	 };
 
 	 # And, for now, just two of the successors:
 
 	 # X moves 4 to 6, giving xx__xxoo_oo
 	 my $n1 = {
-	   'board' => 'xx__xxoo_oo',
-	   'last_move_payoff' => 0,
-	   'last_move_from' =>	4,
-	   'last_move_to'   =>	6,
-	   'whose_turn' => 'o',
-	   'successors' => [],
+	   'board' =&gt 'xx__xxoo_oo',
+	   'last_move_payoff' =&gt 0,
+	   'last_move_from' =&gt	4,
+	   'last_move_to'   =&gt	6,
+	   'whose_turn' =&gt 'o',
+	   'successors' =&gt [],
 	 };
 
 	 # or X moves 5 to 6, giving xx_x_xoo_oo
 	 my $n2 = {
-	   'board' => 'xx_x_xoo_oo',
-	   'last_move_payoff' => 0,
-	   'last_move_from' =>	5,
-	   'last_move_to'   =>	6,
-	   'whose_turn' => 'o',
-	   'successors' => [],
+	   'board' =&gt 'xx_x_xoo_oo',
+	   'last_move_payoff' =&gt 0,
+	   'last_move_from' =&gt	5,
+	   'last_move_to'   =&gt	6,
+	   'whose_turn' =&gt 'o',
+	   'successors' =&gt [],
 	 };
 
 	 # Now connect them...
-	 push @{$n0->{'successors'}}, $n1, $n2;
+	 push @{$n0-&gt{'successors'}}, $n1, $n2;
 
    Digression: Links to Parents
        In comparing what we store in an Alak game tree node to what
@@ -879,7 +881,7 @@ Trees
        thing to have happen.  There's three ways around this:
 
        1) When you're finished with a node, delete the reference each of its
-       children have to it (in this case, deleting $n1->{'parent'}, say).
+       children have to it (in this case, deleting $n1-&gt{'parent'}, say).
        When you're finished with a whole tree, just go through the whole tree
        erasing links that children have to their children.
 
@@ -923,7 +925,7 @@ Trees
 	   my $n = $_[0]; # "n" is for node
 	   print
 	     ...something expressing $n'n content...
-	   foreach my $s (@{$n->{'successors'}}) {
+	   foreach my $s (@{$n-&gt{'successors'}}) {
 	     # "s for successor
 	     dump($s);
 	   }
@@ -966,16 +968,16 @@ Trees
 
 	   # "xx_xx_oo_oo  (O moved 9 to 7, 0 payoff)"
 	   print
-	     $n->{'board'}, "  (",
-	     ($n->{'whose_turn'} eq 'o' ? 'X' : 'O'),
+	     $n-&gt{'board'}, "  (",
+	     ($n-&gt{'whose_turn'} eq 'o' ? 'X' : 'O'),
 	     # Infer who last moved from whose turn it is now.
-	     " moved ", $n->{'last_move_from'},
-	     " to ",	$n->{'last_move_to'},
-	     ", ",	$n->{'last_move_payoff'},
+	     " moved ", $n-&gt{'last_move_from'},
+	     " to ",	$n-&gt{'last_move_to'},
+	     ", ",	$n-&gt{'last_move_payoff'},
 	     " payoff)\n",
 	   ;
 
-	   foreach my $s (@{$n->{'successors'}}) {
+	   foreach my $s (@{$n-&gt{'successors'}}) {
 	     dump_tree($s);
 	   }
 	 }
@@ -1001,7 +1003,7 @@ Trees
 	   print
 	     "	" x $depth,
 	     ...stuff...
-	   foreach my $s (@{$n->{'successors'}}) {
+	   foreach my $s (@{$n-&gt{'successors'}}) {
 	     dump_tree($s, $depth + 1);
 	   }
 	 }
@@ -1032,12 +1034,12 @@ Trees
 		 print "  " x $depth,
 		   ...stuff...
 		 ++$depth;
-		 foreach my $s (@{$n->{'successors'}}) {
-		   $recursor->($s);
+		 foreach my $s (@{$n-&gt{'successors'}}) {
+		   $recursor-&gt($s);
 		 }
 		 --$depth;
 	       }
-	       $recursor->($start_node); # start recursing
+	       $recursor-&gt($start_node); # start recursing
 	       undef $recursor;
 	     }
 
@@ -1093,12 +1095,12 @@ Trees
 	   my $n = $_[0];
 	   figure_successors($n);
 	    unless
-	     @{$n->{'successors'}}
+	     @{$n-&gt{'successors'}}
 	       # already has successors.
-	     or $n->{'endgame'}
+	     or $n-&gt{'endgame'}
 	       # can't have successors.
 	   }
-	   foreach my $s (@{$n->{'successors'}}) {
+	   foreach my $s (@{$n-&gt{'successors'}}) {
 	     grow($s); # recurse
 	   }
 	 }
@@ -1146,11 +1148,11 @@ Trees
 	   my $depth = $_[1] || 0;
 	   figure_successors($n)
 	    unless
-	     $depth >= $Max_depth
-	     or @{$n->{'successors'}}
-	     or $n->{'endgame'}
+	     $depth &gt= $Max_depth
+	     or @{$n-&gt{'successors'}}
+	     or $n-&gt{'endgame'}
 	   }
-	   foreach my $s (@{$n->{'successors'}}) {
+	   foreach my $s (@{$n-&gt{'successors'}}) {
 	     grow($s, $depth + 1);
 	   }
 	   # If we're at $Max_depth, then figure_successors
@@ -1202,22 +1204,22 @@ Trees
 	   my $depth = $_[1] || 0;
 	   figure_successors($n);
 	    unless
-	     $depth >= $Max_depth
-	     or @{$n->{'successors'}}
-	     or $n->{'endgame'}
+	     $depth &gt= $Max_depth
+	     or @{$n-&gt{'successors'}}
+	     or $n-&gt{'endgame'}
 	   }
 
-	   if(@{$n->{'successors'}}) {
+	   if(@{$n-&gt{'successors'}}) {
 	     my $a_payoff_sum = 0;
-	     foreach my $s (@{$n->{'successors'}}) {
+	     foreach my $s (@{$n-&gt{'successors'}}) {
 	       grow($s, $depth + 1);  # RECURSE
-	       $a_payoff_sum += $s->{'average_payoff'};
+	       $a_payoff_sum += $s-&gt{'average_payoff'};
 	     }
-	     $n->{'average_payoff'}
-	      = $a_payoff_sum / @{$n->{'successors'}};
+	     $n-&gt{'average_payoff'}
+	      = $a_payoff_sum / @{$n-&gt{'successors'}};
 	   } else {
-	     $n->{'average_payoff'}
-	      = $n->{'last_move_payoff'};
+	     $n-&gt{'average_payoff'}
+	      = $n-&gt{'last_move_payoff'};
 	   }
 	 }
 
@@ -1311,6 +1313,6 @@ BACK
 
 
 perl v5.10.1			  2006-08-03	     HTML::Tree::AboutTrees(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

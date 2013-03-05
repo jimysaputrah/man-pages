@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This is an introduction to the use of performance and optimization..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlperf - Perl Performance and Optimization Techniques</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLPERF(1)	       Perl Programmers Reference Guide 	   PERLPERF(1)
 
 
@@ -83,7 +85,7 @@ GENERAL GUIDELINES
 
        Using a subroutine as part of your sort is a powerful way to get
        exactly what you want, but will usually be slower than the built-in
-       alphabetic "cmp" and numeric "<=>" sort operators.  It is possible to
+       alphabetic "cmp" and numeric "&lt=&gt" sort operators.  It is possible to
        make multiple passes over your data, building indices to make the
        upcoming sort more efficient, and to use what is known as the "OM"
        (Orcish Maneuver) to cache the sort keys in advance.  The cache lookup,
@@ -123,7 +125,7 @@ BENCHMARKS
        I'm sure most of us have seen code which looks like, (or worse than),
        this:
 
-	   if ( $obj->{_ref}->{_myscore} >= $obj->{_ref}->{_yourscore} ) {
+	   if ( $obj-&gt{_ref}-&gt{_myscore} &gt= $obj-&gt{_ref}-&gt{_yourscore} ) {
 	       ...
 
        This sort of code can be a real eyesore to read, as well as being very
@@ -146,20 +148,20 @@ BENCHMARKS
 	   use Benchmark;
 
 	   my $ref = {
-		   'ref'   => {
-		       _myscore    => '100 + 1',
-		       _yourscore  => '102 - 1',
+		   'ref'   =&gt {
+		       _myscore    =&gt '100 + 1',
+		       _yourscore  =&gt '102 - 1',
 		   },
 	   };
 
 	   timethese(1000000, {
-		   'direct'	  => sub {
-		       my $x = $ref->{ref}->{_myscore} . $ref->{ref}->{_yourscore} ;
+		   'direct'	  =&gt sub {
+		       my $x = $ref-&gt{ref}-&gt{_myscore} . $ref-&gt{ref}-&gt{_yourscore} ;
 		   },
-		   'dereference'  => sub {
-		       my $ref	= $ref->{ref};
-		       my $myscore = $ref->{_myscore};
-		       my $yourscore = $ref->{_yourscore};
+		   'dereference'  =&gt sub {
+		       my $ref	= $ref-&gt{ref};
+		       my $myscore = $ref-&gt{_myscore};
+		       my $yourscore = $ref-&gt{_yourscore};
 		       my $x = $myscore . $yourscore;
 		   },
 	   });
@@ -172,7 +174,7 @@ BENCHMARKS
        iterations, we can take a look at the report output by the "Benchmark"
        module, to see which approach is the most effective.
 
-	   $> perl dereference
+	   $&gt perl dereference
 
 	   Benchmark: timing 1000000 iterations of dereference, direct...
 	   dereference:  2 wallclock secs ( 1.59 usr +	0.00 sys =  1.59 CPU) @ 628930.82/s (n=1000000)
@@ -216,13 +218,13 @@ BENCHMARKS
 	   my $STR = "$$-this and that";
 
 	   timethese( 1000000, {
-		   'sr'  => sub { my $str = $STR; $str =~ s/[aeiou]/x/g; return $str; },
-		   'tr'  => sub { my $str = $STR; $str =~ tr/aeiou/xxxxx/; return $str; },
+		   'sr'  =&gt sub { my $str = $STR; $str =~ s/[aeiou]/x/g; return $str; },
+		   'tr'  =&gt sub { my $str = $STR; $str =~ tr/aeiou/xxxxx/; return $str; },
 	   });
 
        Running the code gives us our results:
 
-	   $> perl regex-transliterate
+	   $&gt perl regex-transliterate
 
 	   Benchmark: timing 1000000 iterations of sr, tr...
 		   sr:	2 wallclock secs ( 1.19 usr +  0.00 sys =  1.19 CPU) @ 840336.13/s (n=1000000)
@@ -257,8 +259,8 @@ PROFILING TOOLS
 
 	   =head1 DESCRIPTION
 
-	   This program parses the given filename, specified with C<-f>, and displays a
-	   simple analysis of the words found therein.	Use the C<-d> switch to enable
+	   This program parses the given filename, specified with C&lt-f&gt, and displays a
+	   simple analysis of the words found therein.	Use the C&lt-d&gt switch to enable
 	   debugging messages.
 
 	   =cut
@@ -270,21 +272,21 @@ PROFILING TOOLS
 	   my $file    = '';
 
 	   my $result = GetOptions (
-	       'debug'	       => \$debug,
-	       'file=s'        => \$file,
+	       'debug'	       =&gt \$debug,
+	       'file=s'        =&gt \$file,
 	   );
 	   die("invalid args") unless $result;
 
 	   unless ( -f $file ) {
 	       die("Usage: $0 -f filename [-d]");
 	   }
-	   my $FH = FileHandle->new("< $file") or die("unable to open file($file): $!");
+	   my $FH = FileHandle-&gtnew("&lt $file") or die("unable to open file($file): $!");
 
 	   my $i_LINES = 0;
 	   my $i_WORDS = 0;
 	   my %count   = ();
 
-	   my @lines = <$FH>;
+	   my @lines = &lt$FH&gt;
 	   foreach my $line ( @lines ) {
 	       $i_LINES++;
 	       $line =~ s/\n//;
@@ -365,9 +367,9 @@ PROFILING TOOLS
        baseline for Perl profiling tools.  Run the above program under the
        control of "Devel::DProf" by using the "-d" switch on the command-line.
 
-	   $> perl -d:DProf wordmatch -f perl5db.pl
+	   $&gt perl -d:DProf wordmatch -f perl5db.pl
 
-	   <...multiple lines snipped...>
+	   &lt...multiple lines snipped...&gt
 
 	   wordmatch report for perl5db.pl:
 	   lines in file: 9428
@@ -385,7 +387,7 @@ PROFILING TOOLS
        produce a human readable statistics report of the run of your program.
        Note that this may take a little time.
 
-	   $> dprofpp
+	   $&gt dprofpp
 
 	   Total Elapsed Time = 2.951677 Seconds
 	     User+System Time = 2.871677 Seconds
@@ -422,9 +424,9 @@ PROFILING TOOLS
        special "-d:" flag, you pull "Devel::Profiler" in directly as a module
        using "-M".
 
-	   $> perl -MDevel::Profiler wordmatch -f perl5db.pl
+	   $&gt perl -MDevel::Profiler wordmatch -f perl5db.pl
 
-	   <...multiple lines snipped...>
+	   &lt...multiple lines snipped...&gt
 
 	   wordmatch report for perl5db.pl:
 	   lines in file: 9428
@@ -440,7 +442,7 @@ PROFILING TOOLS
        statistics reader program.  "dprofpp" usage is therefore identical to
        the above example.
 
-	   $> dprofpp
+	   $&gt dprofpp
 
 	   Total Elapsed Time =   20.984 Seconds
 	     User+System Time =   19.981 Seconds
@@ -486,9 +488,9 @@ PROFILING TOOLS
        line was called, and how long each line took to execute.  It is called
        by supplying the familiar "-d" flag to Perl at runtime.
 
-	   $> perl -d:SmallProf wordmatch -f perl5db.pl
+	   $&gt perl -d:SmallProf wordmatch -f perl5db.pl
 
-	   <...multiple lines snipped...>
+	   &lt...multiple lines snipped...&gt
 
 	   wordmatch report for perl5db.pl:
 	   lines in file: 9428
@@ -502,13 +504,13 @@ PROFILING TOOLS
        "Devel::SmallProf" writes it's output into a file called smallprof.out,
        by default.  The format of the file looks like this:
 
-	   <num> <time> <ctime> <line>:<text>
+	   &ltnum&gt &lttime&gt &ltctime&gt &ltline&gt:&lttext&gt
 
        When the program has terminated, the output may be examined and sorted
        using any standard text filtering utilities.  Something like the
        following may be sufficient:
 
-	   $> cat smallprof.out | grep \d*: | sort -k3 | tac | head -n20
+	   $&gt cat smallprof.out | grep \d*: | sort -k3 | tac | head -n20
 
 	   251215   1.65674   7.68000	 75: if ( $word =~ /($regex)/ ) {
 	   251215   0.03264   4.40000	 79: debug("word: $i_wd ".($has ? 'matches' :
@@ -547,9 +549,9 @@ PROFILING TOOLS
        example "Devel::SmallProf", because it's written in "C".  To use
        "Devel::FastProf", supply the "-d" argument to Perl:
 
-	   $> perl -d:FastProf wordmatch -f perl5db.pl
+	   $&gt perl -d:FastProf wordmatch -f perl5db.pl
 
-	   <...multiple lines snipped...>
+	   &lt...multiple lines snipped...&gt
 
 	   wordmatch report for perl5db.pl:
 	   lines in file: 9428
@@ -564,7 +566,7 @@ PROFILING TOOLS
        current directory.  The output file, which can be specified, can be
        interpreted by using the "fprofpp" command-line program.
 
-	   $> fprofpp | head -n20
+	   $&gt fprofpp | head -n20
 
 	   # fprofpp output format is:
 	   # filename:line time count: source
@@ -600,7 +602,7 @@ PROFILING TOOLS
        coolness just goes on.  Enough of that, let's see how to it works -
        just use the familiar "-d" switch to plug it in and run the code.
 
-	   $> perl -d:NYTProf wordmatch -f perl5db.pl
+	   $&gt perl -d:NYTProf wordmatch -f perl5db.pl
 
 	   wordmatch report for perl5db.pl:
 	   lines in file: 9427
@@ -617,7 +619,7 @@ PROFILING TOOLS
        programs.  We've used the Unix sytem "html2text" utility to convert the
        nytprof/index.html file for convenience here.
 
-	   $> html2text nytprof/index.html
+	   $&gt html2text nytprof/index.html
 
 	   Performance Profile Index
 	   For wordmatch
@@ -689,7 +691,7 @@ PROFILING TOOLS
        sufficient to give an idea of the sort of output you can expect from
        this cool tool.
 
-	   $> html2text nytprof/wordmatch-line.html
+	   $&gt html2text nytprof/wordmatch-line.html
 
 	   Performance Profile -- -block view-.-line view-.-sub view-
 	   For wordmatch
@@ -721,7 +723,7 @@ PROFILING TOOLS
 	   |6	|      |	 |	 |=head1 NAME					 |
 	   |7	|      |	 |	 |						 |
 	   |8	|      |	 |	 |filewords - word analysis of input file	 |
-	   <...snip...>
+	   &lt...snip...&gt
 	   |62	|1     |0.00445  |0.00445|print report( %count );			 |
 	   |	|      |	 |	 |# spent 0.21404s making 1 calls to main::report|
 	   |63	|      |	 |	 |						 |
@@ -737,7 +739,7 @@ PROFILING TOOLS
 	   |	|      |	 |	 |0.00005s/call # 50243 times (1.94134+0.51687s) |
 	   |	|      |	 |	 |at line 54 of wordmatch, avg 0.00005s/call	 |
 	   |	|      |	 |	 |sub matches { 				 |
-	   <...snip...>
+	   &lt...snip...&gt
 	   |102 |      |	 |	 |						 |
 	   |	|      |	 |	 |# spent 2.71199s within main::debug which was  |
 	   |	|      |	 |	 |called 260642 times, avg 0.00001s/call: #	 |
@@ -830,7 +832,7 @@ SORTING
 	   my @data;
 
 	   LINE:
-	   while ( <> ) {
+	   while ( &lt&gt ) {
 	       my $line = $_;
 	       if (
 		   $line =~ m/^(
@@ -859,19 +861,19 @@ SORTING
 	   }
 
 	   my @sorted = sort {
-	       $a->[3] cmp $b->[3]
+	       $a-&gt[3] cmp $b-&gt[3]
 		       ||
-	       $a->[2] cmp $b->[2]
+	       $a-&gt[2] cmp $b-&gt[2]
 		       ||
-	       $a->[0] cmp $b->[0]
+	       $a-&gt[0] cmp $b-&gt[0]
 		       ||
-	       $a->[1] cmp $b->[1]
+	       $a-&gt[1] cmp $b-&gt[1]
 		       ||
-	       $a->[4] cmp $b->[4]
+	       $a-&gt[4] cmp $b-&gt[4]
 	   } @data;
 
 	   foreach my $data ( @sorted ) {
-	       print $data->[5];
+	       print $data-&gt[5];
 	   }
 
 	   exit 0;
@@ -880,7 +882,7 @@ SORTING
        the output is correct from following test runs and use the system
        "time" utility to check the overall runtime.
 
-	   $> time ./sort-apache-log logfile > out-sort
+	   $&gt time ./sort-apache-log logfile &gt out-sort
 
 	   real    0m17.371s
 	   user    0m15.757s
@@ -920,18 +922,18 @@ SORTING
 
 	   print
 
-	       map $_->[0] =>
+	       map $_-&gt[0] =&gt
 
 	       sort {
-		   $a->[4] cmp $b->[4]
+		   $a-&gt[4] cmp $b-&gt[4]
 			   ||
-		   $a->[3] cmp $b->[3]
+		   $a-&gt[3] cmp $b-&gt[3]
 			   ||
-		   $a->[1] cmp $b->[1]
+		   $a-&gt[1] cmp $b-&gt[1]
 			   ||
-		   $a->[2] cmp $b->[2]
+		   $a-&gt[2] cmp $b-&gt[2]
 			   ||
-		   $a->[5] cmp $b->[5]
+		   $a-&gt[5] cmp $b-&gt[5]
 	       }
 	       map  [ $_, m/^(
 		   ([\w\.\-]+)		   # client
@@ -947,14 +949,14 @@ SORTING
 		   .*
 	       )$/xo ]
 
-	       => <>;
+	       =&gt &lt&gt;
 
 	   exit 0;
 
        Run the new code against the same logfile, as above, to check the new
        time.
 
-	   $> time ./sort-apache-log-schwarzian logfile > out-schwarz
+	   $&gt time ./sort-apache-log-schwarzian logfile &gt out-schwarz
 
 	   real    0m9.664s
 	   user    0m8.873s
@@ -965,7 +967,7 @@ SORTING
        consistent with the first program run, this is where the Unix system
        "cksum" utility comes in.
 
-	   $> cksum out-sort out-schwarz
+	   $&gt cksum out-sort out-schwarz
 	   3044173777 52029194 out-sort
 	   3044173777 52029194 out-schwarz
 
@@ -984,7 +986,7 @@ LOGGING
 
        A common sight is code which looks something like this:
 
-	   logger->debug( "A logging message via process-id: $$ INC: " . Dumper(\%INC) )
+	   logger-&gtdebug( "A logging message via process-id: $$ INC: " . Dumper(\%INC) )
 
        The problem is that this code will always be parsed and executed, even
        when the debug level set in the logging configuration file is zero.
@@ -995,7 +997,7 @@ LOGGING
        the message string constructed, all of which work could be bypassed by
        a debug variable at the statement level, like this:
 
-	   logger->debug( "A logging message via process-id: $$ INC: " . Dumper(\%INC) ) if $DEBUG;
+	   logger-&gtdebug( "A logging message via process-id: $$ INC: " . Dumper(\%INC) ) if $DEBUG;
 
        This effect can be demonstrated by setting up a test script with both
        forms, including a "debug()" subroutine to emulate typical "logger()"
@@ -1021,17 +1023,17 @@ LOGGING
 	   };
 
 	   timethese(100000, {
-		   'debug'	 => sub {
+		   'debug'	 =&gt sub {
 		       debug( "A $0 logging message via process-id: $$" . Dumper(\%INC) )
 		   },
-		   'ifdebug'  => sub {
+		   'ifdebug'  =&gt sub {
 		       debug( "A $0 logging message via process-id: $$" . Dumper(\%INC) ) if $DEBUG
 		   },
 	   });
 
        Let's see what "Benchmark" makes of this:
 
-	   $> perl ifdebug
+	   $&gt perl ifdebug
 	   Benchmark: timing 100000 iterations of constant, sub...
 	      ifdebug:	0 wallclock secs ( 0.01 usr +  0.00 sys =  0.01 CPU) @ 10000000.00/s (n=100000)
 		       (warning: too few iterations for a reliable count)
@@ -1058,7 +1060,7 @@ LOGGING
 	   use Benchmark;
 	   use Data::Dumper;
 	   use constant
-	       DEBUG => 0
+	       DEBUG =&gt 0
 	   ;
 
 	   sub debug {
@@ -1069,17 +1071,17 @@ LOGGING
 	   };
 
 	   timethese(100000, {
-		   'debug'	 => sub {
+		   'debug'	 =&gt sub {
 		       debug( "A $0 logging message via process-id: $$" . Dumper(\%INC) )
 		   },
-		   'constant'  => sub {
+		   'constant'  =&gt sub {
 		       debug( "A $0 logging message via process-id: $$" . Dumper(\%INC) ) if DEBUG
 		   },
 	   });
 
        Running this program produces the following output:
 
-	   $> perl ifdebug-constant
+	   $&gt perl ifdebug-constant
 	   Benchmark: timing 100000 iterations of constant, sub...
 	     constant:	0 wallclock secs (-0.00 usr +  0.00 sys = -0.00 CPU) @ -7205759403792793600000.00/s (n=100000)
 		       (warning: too few iterations for a reliable count)
@@ -1092,7 +1094,7 @@ LOGGING
        we asked for 100000, we can use the very useful "B::Deparse" to inspect
        the new code:
 
-	   $> perl -MO=Deparse ifdebug-constant
+	   $&gt perl -MO=Deparse ifdebug-constant
 
 	   use Benchmark;
 	   use Data::Dumper;
@@ -1130,7 +1132,7 @@ POSTSCRIPT
        nearly instantaneous program, but it's not going to do very much,
        here's a very efficient one:
 
-	   $> perl -e 0
+	   $&gt perl -e 0
 
        Optimizing that any further is a job for "p5p".
 
@@ -1192,11 +1194,11 @@ SEE ALSO
 	   http://www.sysarch.com/Perl/sort_paper.html
 
 AUTHOR
-       Richard Foley <richard.foley@rfi.net> Copyright (c) 2008
+       Richard Foley &ltrichard.foley@rfi.net&gt Copyright (c) 2008
 
 
 
 perl v5.12.4			  2011-06-07			   PERLPERF(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

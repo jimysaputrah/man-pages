@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The "Inline::Python" module allows you to put Python source code..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Inline::Python - Write Perl subs and classes in Python.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Python(3)	      User Contributed Perl Documentation	     Python(3)
 
 
@@ -19,7 +21,7 @@ SYNOPSIS
 	  print "9 + 16 = ", add(9, 16), "\n";
 	  print "9 - 16 = ", subtract(9, 16), "\n";
 
-	  use Inline Python => <<'END_OF_PYTHON_CODE';
+	  use Inline Python =&gt &lt&lt'END_OF_PYTHON_CODE';
 	  def add(x,y):
 	     return x + y
 
@@ -59,12 +61,12 @@ Using the Inline::Python Module
    Giving Your Source to Inline
        The most basic form for using "Inline::Python" is this:
 
-	  use Inline Python => 'Python source code';
+	  use Inline Python =&gt 'Python source code';
 
        Of course, you can use Perl's "here document" style of quoting to make
        the code slightly easier to read:
 
-	  use Inline Python => <<'END';
+	  use Inline Python =&gt &lt&lt'END';
 
 	    Python source code goes here.
 
@@ -138,7 +140,7 @@ Using the Inline::Python Module
 
        In other cases, you may be writing Inline::Python code as follows:
 
-	  use Inline Python => <<'END';
+	  use Inline Python =&gt &lt&lt'END';
 	  class Foo(object):
 	     def __init__(self):
 		print "new Foo object being created"
@@ -154,7 +156,7 @@ Using the Inline::Python Module
        accessible only through its class methods.
 
 	 # Class is defined as 'def Class(float):'
-	 my $obj = Class->new(4);
+	 my $obj = Class-&gtnew(4);
 	 print $$obj "\n"; # will NOT print '4.0'
 
    New-Style
@@ -164,7 +166,7 @@ Using the Inline::Python Module
 
        Of course you can! Check this out:
 
-	  use Inline Python => <<END;
+	  use Inline Python =&gt &lt&ltEND;
 
 	  def Foo():
 	      class Bar:
@@ -177,7 +179,7 @@ Using the Inline::Python Module
 	  END
 
 	  my $o = Foo();
-	  $o->tank();
+	  $o-&gttank();
 
        In this example, "Bar" isn't imported because it isn't a global -- it's
        hidden inside the function Foo(). But Foo() is imported into Perl, and
@@ -268,7 +270,7 @@ Using the PerlPkg Type
 
 	  sub __getattr__ {
 	      my ($self, $attr) = @_;
-	      return $self->{$attr};
+	      return $self-&gt{$attr};
 	  }
 
        This allows Python code to access the perl object's data like:
@@ -285,7 +287,7 @@ Using the PerlPkg Type
 	       my ($self, $positional, $named) = @_;
 	       foreach (qw( named1 named2 )) {
 		   last unless @$positional;
-		   $named->{$_} = shift @$positional;
+		   $named-&gt{$_} = shift @$positional;
 	       }
 	       ...
 	   }
@@ -298,11 +300,11 @@ Using the PerlPkg Type
 	       if (@_ == 3 and $size and ref $size and ref $size eq 'ARRAY' and ref $useimage eq 'HASH') { # called using named parameters
 		   foreach (qw( named1 named2 ... )) {
 		       last unless @$positional;
-		       $named->{$_} = shift @$positional;
+		       $named-&gt{$_} = shift @$positional;
 		   }
 	       }
 	       else {
-		   $named = { named1 => $positional, named2 => $named, named3 => $_[3], ... };
+		   $named = { named1 =&gt $positional, named2 =&gt $named, named3 =&gt $_[3], ... };
 	       }
 	       ...
 	   }
@@ -375,7 +377,7 @@ Under the Hood
        Perl which delegate the action to some C functions I've written, which
        know how to call Python functions and methods.
 
-	  use Inline Python => <<'END';
+	  use Inline Python =&gt &lt&lt'END';
 
 	  class Foo:
 	     def __init__(self):
@@ -422,7 +424,7 @@ The Do-it-yourselfer's Guide to Inline::Python
 
 	  use Inline::Python qw(py_eval);
 
-	  py_eval(<<'END');
+	  py_eval(&lt&lt'END');
 
 	  class MyClass:
 	      def __init__(self): self.data = {}
@@ -433,9 +435,9 @@ The Do-it-yourselfer's Guide to Inline::Python
 
 	  END
 
-	  my $o = Inline::Python::Object->new('__main__', 'MyClass');
-	  $o->put("candy", "yummy");
-	  die "Ooops" unless $o->get("candy") eq 'yummy';
+	  my $o = Inline::Python::Object-&gtnew('__main__', 'MyClass');
+	  $o-&gtput("candy", "yummy");
+	  die "Ooops" unless $o-&gtget("candy") eq 'yummy';
 
        Inline::Python provides a full suite of exportable functions you can
        use to manipulate Python objects and functions "directly".
@@ -518,7 +520,7 @@ The Do-it-yourselfer's Guide to Inline::Python
 
 	  use Inline::Python qw(py_eval py_bind_func);
 
-	  py_eval(<<'END');
+	  py_eval(&lt&lt'END');
 
 	  def Foo():
 	     return 42
@@ -548,7 +550,7 @@ The Do-it-yourselfer's Guide to Inline::Python
 
 	  use Inline::Python qw(py_eval py_bind_class);
 
-	  py_eval(<<'END');
+	  py_eval(&lt&lt'END');
 
 	  class Foo:
 	     def __init__(self):
@@ -605,8 +607,8 @@ The Do-it-yourselfer's Guide to Inline::Python
        On my machine, %namespace looks something like this:
 
 	  $VAR1 = {
-		    'classes' => { ... },
-		    'functions' => [
+		    'classes' =&gt { ... },
+		    'functions' =&gt [
 				     '_keep_alive',
 				     'loads',
 				     'dump',
@@ -661,7 +663,7 @@ BUGS AND DEFICIENCIES
 
 	   Example:
 
-	      use Inline Python => <<'END';
+	      use Inline Python =&gt &lt&lt'END';
 
 	      import mymodule
 
@@ -688,16 +690,16 @@ SUPPORTED PLATFORMS
        certainly not work with Python 3.
 
 AUTHOR
-       Neil Watkiss <NEILW@cpan.org>
+       Neil Watkiss &ltNEILW@cpan.org&gt
 
-       Brian Ingerson <INGY@cpan.org> is the author of Inline, Inline::C and
+       Brian Ingerson &ltINGY@cpan.org&gt is the author of Inline, Inline::C and
        Inline::CPR. He was responsible for much encouragement and many
        suggestions throughout the development of Inline::Python.
 
        Eric Wilhelm provided support for 'new-style' classes in version 0.21.
        Many thanks, Eric!
 
-       Stefan Seifert <NINE@cpan.org> fixed some bugs and is current co-
+       Stefan Seifert &ltNINE@cpan.org&gt fixed some bugs and is current co-
        maintainer.
 
 COPYRIGHT
@@ -711,6 +713,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-04-29			     Python(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

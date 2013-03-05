@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="NetAddr::IP::Util provides a suite of tools for manipulating and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>NetAddr::IP::Util -- IPv4/6 and 128 bit number utilities</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Util(3) 	      User Contributed Perl Documentation	       Util(3)
 
 
@@ -44,20 +46,20 @@ SYNOPSIS
 
 	 use NetAddr::IP::Util qw(:all :inet :ipv4 :ipv6 :math)
 
-	 :inet	 =>    inet_aton, inet_ntoa, ipv6_aton,
+	 :inet	 =&gt    inet_aton, inet_ntoa, ipv6_aton,
 		       ipv6_n2x, ipv6_n2d, inet_any2n,
 		       inet_n2dx, inet_n2ad, ipv4to6,
 		       mask4to6, ipanyto6, maskanyto6,
 		       ipv6to4
 
-	 :ipv4	 =>    inet_aton, inet_ntoa
+	 :ipv4	 =&gt    inet_aton, inet_ntoa
 
-	 :ipv6	 =>    ipv6_aton, ipv6_n2x, ipv6_n2d,
+	 :ipv6	 =&gt    ipv6_aton, ipv6_n2x, ipv6_n2d,
 		       inet_any2n, inet_n2dx, inet_n2ad
 		       ipv4to6, mask4to6, ipanyto6,
 		       maskanyto6, ipv6to4
 
-	 :math	 =>    hasbits, isIPv4, addconst,
+	 :math	 =&gt    hasbits, isIPv4, addconst,
 		       add128, sub128, notcontiguous,
 		       bin2bcd, bcd2bin, shiftleft
 
@@ -302,8 +304,8 @@ DESCRIPTION
 	   one's complement of ARG2 +1 to the ARG1. It is logically NOT
 	   borrow.
 
-		   i.e.    if ARG1 >= ARG2 then carry = 1
-		   or	   if ARG1  < ARG2 then carry = 0
+		   i.e.    if ARG1 &gt= ARG2 then carry = 1
+		   or	   if ARG1  &lt ARG2 then carry = 0
 
        o   ($spurious,$cidr) = notcontiguous($mask128);
 
@@ -392,18 +394,18 @@ EXAMPLES
 
 	 ... elsewhere
 	   $nip = {
-	       addr    => $vecip,
-	       mask    => $mask,
-	       bits    => $bits,
+	       addr    =&gt $vecip,
+	       mask    =&gt $mask,
+	       bits    =&gt $bits,
 	   };
 
 	 # return network and broadcast addresses from IP and Mask
 	 #
 	 sub netbroad {
 	   my($nip) = shift;
-	   my $notmask = ~ $nip->{mask};
-	   my $bcast   = $nip->{addr} | $notmask;
-	   my $network = $nip->{addr} & $nip->{mask};
+	   my $notmask = ~ $nip-&gt{mask};
+	   my $bcast   = $nip-&gt{addr} | $notmask;
+	   my $network = $nip-&gt{addr} & $nip-&gt{mask};
 	   return ($network, $broadcast);
 	 }
 
@@ -411,9 +413,9 @@ EXAMPLES
 	 #
 	 sub within {
 	   my($nip,$net) = @_;
-	   my $addr = $nip->{addr}
+	   my $addr = $nip-&gt{addr}
 	   my($nw,$bc) = netbroad($net);
-	 # arg1 >= arg2, sub128 returns true
+	 # arg1 &gt= arg2, sub128 returns true
 	   return (sub128($addr,$nw) && sub128($bc,$addr))
 	       ? 1 : 0;
 	 }
@@ -424,16 +426,16 @@ EXAMPLES
 	 #
 	 sub addwrap {
 	   my($nip,$const) = @_;
-	   my $mask    = $nip->{addr};
-	   my $bits    = $nip->{bits};
+	   my $mask    = $nip-&gt{addr};
+	   my $bits    = $nip-&gt{bits};
 	   my $notmask = ~ $mask;
 	   my $hibits  = $addr & $mask;
 	   my $addr = addconst($addr,$const);
 	   my $wraponly = $addr & $notmask;
 	   my $newip = {
-	       addr    => $hibits | $wraponly,
-	       mask    => $mask,
-	       bits    => $bits,
+	       addr    =&gt $hibits | $wraponly,
+	       mask    =&gt $mask,
+	       bits    =&gt $bits,
 	   };
 	   # bless $newip as appropriate
 	   return $newip;
@@ -465,7 +467,7 @@ EXPORT_OK
 	       mode
 
 AUTHOR
-       Michael Robinton <michael@bizsystems.com>
+       Michael Robinton &ltmichael@bizsystems.com&gt
 
 ACKNOWLEDGMENTS
        The following functions are used in whole or in part as include files
@@ -481,7 +483,7 @@ ACKNOWLEDGMENTS
        of us.
 
 COPYRIGHT
-       Copyright 2003 - 2010, Michael Robinton <michael@bizsystems.com>
+       Copyright 2003 - 2010, Michael Robinton &ltmichael@bizsystems.com&gt
 
        LICENSE AND WARRANTY
 
@@ -494,11 +496,11 @@ COPYRIGHT
        accept any and all the liability.
 
 AUTHOR
-       Michael Robinton <michael@bizsystems.com>
+       Michael Robinton &ltmichael@bizsystems.com&gt
 
 
 
 perl v5.10.1			  2010-05-12			       Util(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

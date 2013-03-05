@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Net::LDAP::Control::VLV" provides an interface for the creation and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::LDAP::Control::VLV - LDAPv3 Virtual List View control object</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::LDAP::Control::VLUser Contributed Perl DocumentNet::LDAP::Control::VLV(3)
 
 
@@ -20,54 +22,54 @@ SYNOPSIS
 	use Net::LDAP::Control::VLV;
 	use Net::LDAP::Constant qw( LDAP_CONTROL_VLVRESPONSE );
 
-	$ldap = Net::LDAP->new( "ldap.mydomain.eg" );
+	$ldap = Net::LDAP-&gtnew( "ldap.mydomain.eg" );
 
 	# Get the first 20 entries
-	$vlv  = Net::LDAP::Control::VLV->new(
-		  before  => 0,        # No entries from before target entry
-		  after   => 19,       # 19 entries after target entry
-		  content => 0,        # List size unknown
-		  offset  => 1,        # Target entry is the first
+	$vlv  = Net::LDAP::Control::VLV-&gtnew(
+		  before  =&gt 0,        # No entries from before target entry
+		  after   =&gt 19,       # 19 entries after target entry
+		  content =&gt 0,        # List size unknown
+		  offset  =&gt 1,        # Target entry is the first
 		);
-	$sort = Net::LDAP::Control::Sort->new( order => 'cn' );
+	$sort = Net::LDAP::Control::Sort-&gtnew( order =&gt 'cn' );
 
-	@args = ( base	   => "o=Ace Industry, c=us",
-		  scope    => "subtree",
-		  filter   => "(objectClass=inetOrgPerson)",
-		  callback => \&process_entry, # Call this sub for each entry
-		  control  => [ $vlv, $sort ],
+	@args = ( base	   =&gt "o=Ace Industry, c=us",
+		  scope    =&gt "subtree",
+		  filter   =&gt "(objectClass=inetOrgPerson)",
+		  callback =&gt \&process_entry, # Call this sub for each entry
+		  control  =&gt [ $vlv, $sort ],
 	);
 
-	$mesg = $ldap->search( @args );
+	$mesg = $ldap-&gtsearch( @args );
 
 	# Get VLV response control
-	($resp)  = $mesg->control( LDAP_CONTROL_VLVRESPONSE ) or die;
-	$vlv->response( $resp );
+	($resp)  = $mesg-&gtcontrol( LDAP_CONTROL_VLVRESPONSE ) or die;
+	$vlv-&gtresponse( $resp );
 
 	# Set the control to get the last 20 entries
-	$vlv->end;
+	$vlv-&gtend;
 
-	$mesg = $ldap->search( @args );
+	$mesg = $ldap-&gtsearch( @args );
 
 	# Get VLV response control
-	($resp)  = $mesg->control( LDAP_CONTROL_VLVRESPONSE ) or die;
-	$vlv->response( $resp );
+	($resp)  = $mesg-&gtcontrol( LDAP_CONTROL_VLVRESPONSE ) or die;
+	$vlv-&gtresponse( $resp );
 
 	# Now get the previous page
-	$vlv->scroll_page( -1 );
+	$vlv-&gtscroll_page( -1 );
 
-	$mesg = $ldap->search( @args );
+	$mesg = $ldap-&gtsearch( @args );
 
 	# Get VLV response control
-	($resp)  = $mesg->control( LDAP_CONTROL_VLVRESPONSE ) or die;
-	$vlv->response( $resp );
+	($resp)  = $mesg-&gtcontrol( LDAP_CONTROL_VLVRESPONSE ) or die;
+	$vlv-&gtresponse( $resp );
 
 	# Now page with first entry starting with "B" in the middle
-	$vlv->before(9);       # Change page to show 9 before
-	$vlv->after(10);       # Change page to show 10 after
-	$vlv->assert("B");     # assert "B"
+	$vlv-&gtbefore(9);       # Change page to show 9 before
+	$vlv-&gtafter(10);       # Change page to show 10 after
+	$vlv-&gtassert("B");     # assert "B"
 
-	$mesg = $ldap->search( @args );
+	$mesg = $ldap-&gtsearch( @args );
 
 DESCRIPTION
        "Net::LDAP::Control::VLV" provides an interface for the creation and
@@ -159,10 +161,10 @@ SEE ALSO
        Net::LDAP::Control::VLVResponse
 
 AUTHOR
-       Graham Barr <gbarr@pobox.com>
+       Graham Barr &ltgbarr@pobox.com&gt
 
        Please report any bugs, or post any suggestions, to the perl-ldap
-       mailing list <perl-ldap@perl.org>
+       mailing list &ltperl-ldap@perl.org&gt
 
 COPYRIGHT
        Copyright (c) 2000-2004 Graham Barr. All rights reserved. This program
@@ -172,6 +174,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2010-03-11	    Net::LDAP::Control::VLV(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document gives a general idea of Unicode and how to use Unicode in..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perluniintro - Perl Unicode introduction</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLUNIINTRO(1)        Perl Programmers Reference Guide        PERLUNIINTRO(1)
 
 
@@ -304,11 +306,11 @@ DESCRIPTION
        encoding you desire--and to avoid the warning--open the stream with the
        desired encoding. Some examples:
 
-	   open FH, ">:utf8", "file";
+	   open FH, "&gt:utf8", "file";
 
-	   open FH, ">:encoding(ucs2)",      "file";
-	   open FH, ">:encoding(UTF-8)",     "file";
-	   open FH, ">:encoding(shift_jis)", "file";
+	   open FH, "&gt:encoding(ucs2)",      "file";
+	   open FH, "&gt:encoding(UTF-8)",     "file";
+	   open FH, "&gt:encoding(shift_jis)", "file";
 
        and on already open streams, use "binmode()":
 
@@ -334,33 +336,33 @@ DESCRIPTION
        Unicode in Perl's eyes.	To do that, specify the appropriate layer when
        opening files
 
-	   open(my $fh,'<:encoding(utf8)', 'anything');
-	   my $line_of_unicode = <$fh>;
+	   open(my $fh,'&lt:encoding(utf8)', 'anything');
+	   my $line_of_unicode = &lt$fh&gt;
 
-	   open(my $fh,'<:encoding(Big5)', 'anything');
-	   my $line_of_unicode = <$fh>;
+	   open(my $fh,'&lt:encoding(Big5)', 'anything');
+	   my $line_of_unicode = &lt$fh&gt;
 
        The I/O layers can also be specified more flexibly with the "open"
        pragma.	See open, or look at the following example.
 
 	   use open ':encoding(utf8)'; # input/output default encoding will be UTF-8
-	   open X, ">file";
+	   open X, "&gtfile";
 	   print X chr(0x100), "\n";
 	   close X;
-	   open Y, "<file";
-	   printf "%#x\n", ord(<Y>); # this should print 0x100
+	   open Y, "&ltfile";
+	   printf "%#x\n", ord(&ltY&gt); # this should print 0x100
 	   close Y;
 
        With the "open" pragma you can use the ":locale" layer
 
 	   BEGIN { $ENV{LC_ALL} = $ENV{LANG} = 'ru_RU.KOI8-R' }
 	   # the :locale will probe the locale environment variables like LC_ALL
-	   use open OUT => ':locale'; # russki parusski
-	   open(O, ">koi8");
+	   use open OUT =&gt ':locale'; # russki parusski
+	   open(O, "&gtkoi8");
 	   print O chr(0x430); # Unicode CYRILLIC SMALL LETTER A = KOI8-R 0xc1
 	   close O;
-	   open(I, "<koi8");
-	   printf "%#x\n", ord(<I>), "\n"; # this should print 0xc1
+	   open(I, "&ltkoi8");
+	   printf "%#x\n", ord(&ltI&gt), "\n"; # this should print 0xc1
 	   close I;
 
        These methods install a transparent filter on the I/O stream that
@@ -385,9 +387,9 @@ DESCRIPTION
        contents of the file "text.jis" (encoded as ISO-2022-JP, aka JIS) to
        the file "text.utf8", encoded as UTF-8:
 
-	   open(my $nihongo, '<:encoding(iso-2022-jp)', 'text.jis');
-	   open(my $unicode, '>:utf8',			'text.utf8');
-	   while (<$nihongo>) { print $unicode $_ }
+	   open(my $nihongo, '&lt:encoding(iso-2022-jp)', 'text.jis');
+	   open(my $unicode, '&gt:utf8',			'text.utf8');
+	   while (&lt$nihongo&gt) { print $unicode $_ }
 
        The naming of encodings, both by the "open()" and by the "open" pragma
        allows for flexible names: "koi8-r" and "KOI8R" will both be
@@ -409,9 +411,9 @@ DESCRIPTION
 	   # BAD CODE WARNING
 	   open F, "file";
 	   local $/; ## read in the whole file of 8-bit characters
-	   $t = <F>;
+	   $t = &ltF&gt;
 	   close F;
-	   open F, ">:encoding(utf8)", "file";
+	   open F, "&gt:encoding(utf8)", "file";
 	   print F $t; ## convert to UTF-8 on output
 	   close F;
 
@@ -432,7 +434,7 @@ DESCRIPTION
 
 	  sub nice_string {
 	      join("",
-		map { $_ > 255 ?		  # if wide character...
+		map { $_ &gt 255 ?		  # if wide character...
 		      sprintf("\\x{%04X}", $_) :  # \x{...}
 		      chr($_) =~ /[[:cntrl:]]/ ?  # else if control character ...
 		      sprintf("\\x%02X", $_) :	  # \x..
@@ -503,8 +505,8 @@ DESCRIPTION
 	   The long answer is that you need to consider character
 	   normalization and casing issues: see Unicode::Normalize, Unicode
 	   Technical Reports #15 and #21, Unicode Normalization Forms and Case
-	   Mappings, <http://www.unicode.org/unicode/reports/tr15/> and
-	   <http://www.unicode.org/unicode/reports/tr21/>
+	   Mappings, &lthttp://www.unicode.org/unicode/reports/tr15/&gt and
+	   &lthttp://www.unicode.org/unicode/reports/tr21/&gt
 
 	   As of Perl 5.8.0, the "Full" case-folding of Case
 	   Mappings/SpecialCasing is implemented.
@@ -520,12 +522,12 @@ DESCRIPTION
 	   The short answer is that by default, Perl compares strings ("lt",
 	   "le", "cmp", "ge", "gt") based only on the code points of the
 	   characters.	In the above case, the answer is "after", since 0x00C1
-	   > 0x00C0.
+	   &gt 0x00C0.
 
 	   The long answer is that "it depends", and a good answer cannot be
 	   given without knowing (at the very least) the language context.
 	   See Unicode::Collate, and Unicode Collation Algorithm
-	   <http://www.unicode.org/unicode/reports/tr10/>
+	   &lthttp://www.unicode.org/unicode/reports/tr10/&gt
 
    Miscellaneous
        o   Character Ranges and Classes
@@ -701,8 +703,8 @@ DESCRIPTION
 
        o   How Do I Display Unicode?  How Do I Input Unicode?
 
-	   See <http://www.alanwood.net/unicode/> and
-	   <http://www.cl.cam.ac.uk/~mgk25/unicode.html>
+	   See &lthttp://www.alanwood.net/unicode/&gt and
+	   &lthttp://www.cl.cam.ac.uk/~mgk25/unicode.html&gt
 
        o   How Does Unicode Work With Traditional Locales?
 
@@ -744,32 +746,32 @@ DESCRIPTION
    Further Resources
        o   Unicode Consortium
 
-	   <http://www.unicode.org/>
+	   &lthttp://www.unicode.org/&gt
 
        o   Unicode FAQ
 
-	   <http://www.unicode.org/unicode/faq/>
+	   &lthttp://www.unicode.org/unicode/faq/&gt
 
        o   Unicode Glossary
 
-	   <http://www.unicode.org/glossary/>
+	   &lthttp://www.unicode.org/glossary/&gt
 
        o   Unicode Useful Resources
 
-	   <http://www.unicode.org/unicode/onlinedat/resources.html>
+	   &lthttp://www.unicode.org/unicode/onlinedat/resources.html&gt
 
        o   Unicode and Multilingual Support in HTML, Fonts, Web Browsers and
 	   Other Applications
 
-	   <http://www.alanwood.net/unicode/>
+	   &lthttp://www.alanwood.net/unicode/&gt
 
        o   UTF-8 and Unicode FAQ for Unix/Linux
 
-	   <http://www.cl.cam.ac.uk/~mgk25/unicode.html>
+	   &lthttp://www.cl.cam.ac.uk/~mgk25/unicode.html&gt
 
        o   Legacy Character Sets
 
-	   <http://www.czyborra.com/> <http://www.eki.ee/letter/>
+	   &lthttp://www.czyborra.com/&gt &lthttp://www.eki.ee/letter/&gt
 
        o   The Unicode support files live within the Perl installation in the
 	   directory
@@ -802,10 +804,10 @@ UNICODE IN OLDER PERLS
        UTF-8 bytes and back, the code works even with older Perl 5 versions.
 
 	   # ISO 8859-1 to UTF-8
-	   s/([\x80-\xFF])/chr(0xC0|ord($1)>>6).chr(0x80|ord($1)&0x3F)/eg;
+	   s/([\x80-\xFF])/chr(0xC0|ord($1)&gt&gt6).chr(0x80|ord($1)&0x3F)/eg;
 
 	   # UTF-8 to ISO 8859-1
-	   s/([\xC2\xC3])([\x80-\xBF])/chr(ord($1)<<6&0xC0|ord($2)&0x3F)/eg;
+	   s/([\xC2\xC3])([\x80-\xBF])/chr(ord($1)&lt&lt6&0xC0|ord($2)&0x3F)/eg;
 
 SEE ALSO
        perlunitut, perlunicode, Encode, open, utf8, bytes, perlretut, perlrun,
@@ -817,13 +819,13 @@ ACKNOWLEDGMENTS
        mailing lists for their valuable feedback.
 
 AUTHOR, COPYRIGHT, AND LICENSE
-       Copyright 2001-2002 Jarkko Hietaniemi <jhi@iki.fi>
+       Copyright 2001-2002 Jarkko Hietaniemi &ltjhi@iki.fi&gt
 
        This document may be distributed under the same terms as Perl itself.
 
 
 
 perl v5.10.1			  2009-02-25		       PERLUNIINTRO(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

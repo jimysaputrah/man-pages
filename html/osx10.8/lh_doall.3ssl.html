@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This library implements dynamic hash tables. The hash table entries can..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>lh_new, lh_free, lh_insert, lh_delete, lh_retrieve, lh_doall,</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 lhash(3)			    OpenSSL			      lhash(3)
 
 
@@ -17,7 +19,7 @@ NAME
        lh_doall_arg, lh_error - dynamic hash table
 
 SYNOPSIS
-	#include <openssl/lhash.h>
+	#include &ltopenssl/lhash.h&gt
 
 	LHASH *lh_new(LHASH_HASH_FN_TYPE hash, LHASH_COMP_FN_TYPE compare);
 	void lh_free(LHASH *table);
@@ -147,7 +149,7 @@ DESCRIPTION
        in your callbacks: the table may decrease in size, moving the item that
        you are currently on down lower in the hash table - this could cause
        some entries to be skipped during the iteration.  The second best
-       solution to this problem is to set hash->down_load=0 before you start
+       solution to this problem is to set hash-&gtdown_load=0 before you start
        (which will stop the hash table ever decreasing in size).  The best
        solution is probably to avoid deleting items from the hash table inside
        a "doall" callback!
@@ -249,17 +251,17 @@ INTERNALS
        The decision to increase or decrease the hash table size is made
        depending on the 'load' of the hash table.  The load is the number of
        items in the hash table divided by the size of the hash table.  The
-       default values are as follows.  If (hash->up_load < load) => expand.
-       if (hash->down_load > load) => contract.  The up_load has a default
+       default values are as follows.  If (hash-&gtup_load &lt load) =&gt expand.
+       if (hash-&gtdown_load &gt load) =&gt contract.  The up_load has a default
        value of 1 and down_load has a default value of 2.  These numbers can
        be modified by the application by just playing with the up_load and
        down_load variables.  The 'load' is kept in a form which is multiplied
-       by 256.	So hash->up_load=8*256; will cause a load of 8 to be set.
+       by 256.	So hash-&gtup_load=8*256; will cause a load of 8 to be set.
 
        If you are interested in performance the field to watch is
        num_comp_calls.	The hash library keeps track of the 'hash' value for
        each item so when a lookup is done, the 'hashes' are compared, if there
-       is a match, then a full compare is done, and hash->num_comp_calls is
+       is a match, then a full compare is done, and hash-&gtnum_comp_calls is
        incremented.  If num_comp_calls is not equal to num_delete plus
        num_retrieve it means that your hash function is generating hashes that
        are the same for different values.  It is probably worth changing your
@@ -293,6 +295,6 @@ HISTORY
 
 
 47				  2011-09-28			      lhash(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

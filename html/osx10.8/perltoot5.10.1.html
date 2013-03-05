@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Object-oriented programming is a big seller these days.	Some managers..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perltoot - Tom's object-oriented tutorial for perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLTOOT(1)	       Perl Programmers Reference Guide 	   PERLTOOT(1)
 
 
@@ -108,22 +110,22 @@ Creating a Class
        go about it something like this:
 
 	   $rec = {
-	       name  => "Jason",
-	       age   => 23,
-	       peers => [ "Norbert", "Rhys", "Phineas"],
+	       name  =&gt "Jason",
+	       age   =&gt 23,
+	       peers =&gt [ "Norbert", "Rhys", "Phineas"],
 	   };
 
        If you felt like it, you could add a bit of visual distinction by up-
        casing the hash keys:
 
 	   $rec = {
-	       NAME  => "Jason",
-	       AGE   => 23,
-	       PEERS => [ "Norbert", "Rhys", "Phineas"],
+	       NAME  =&gt "Jason",
+	       AGE   =&gt 23,
+	       PEERS =&gt [ "Norbert", "Rhys", "Phineas"],
 	   };
 
-       And so you could get at "$rec->{NAME}" to find "Jason", or "@{
-       $rec->{PEERS} }" to get at "Norbert", "Rhys", and "Phineas".  (Have you
+       And so you could get at "$rec-&gt{NAME}" to find "Jason", or "@{
+       $rec-&gt{PEERS} }" to get at "Norbert", "Rhys", and "Phineas".  (Have you
        ever noticed how many 23-year-old programmers seem to be named "Jason"
        these days? :-)
 
@@ -151,17 +153,17 @@ Creating a Class
 
 	   use Person;
 
-	   $him = Person->new();
-	   $him->name("Jason");
-	   $him->age(23);
-	   $him->peers( "Norbert", "Rhys", "Phineas" );
+	   $him = Person-&gtnew();
+	   $him-&gtname("Jason");
+	   $him-&gtage(23);
+	   $him-&gtpeers( "Norbert", "Rhys", "Phineas" );
 
 	   push @All_Recs, $him;  # save object in array for later
 
-	   printf "%s is %d years old.\n", $him->name, $him->age;
-	   print "His peers are: ", join(", ", $him->peers), "\n";
+	   printf "%s is %d years old.\n", $him-&gtname, $him-&gtage;
+	   print "His peers are: ", join(", ", $him-&gtpeers), "\n";
 
-	   printf "Last rec's name is %s\n", $All_Recs[-1]->name;
+	   printf "Last rec's name is %s\n", $All_Recs[-1]-&gtname;
 
        As you can see, the user of the class doesn't know (or at least, has no
        business paying attention to the fact) that the object has one
@@ -186,9 +188,9 @@ Creating a Class
 	   ##################################################
 	   sub new {
 	       my $self  = {};
-	       $self->{NAME}   = undef;
-	       $self->{AGE}    = undef;
-	       $self->{PEERS}  = [];
+	       $self-&gt{NAME}   = undef;
+	       $self-&gt{AGE}    = undef;
+	       $self-&gt{PEERS}  = [];
 	       bless($self);	       # but see below
 	       return $self;
 	   }
@@ -202,20 +204,20 @@ Creating a Class
 
 	   sub name {
 	       my $self = shift;
-	       if (@_) { $self->{NAME} = shift }
-	       return $self->{NAME};
+	       if (@_) { $self-&gt{NAME} = shift }
+	       return $self-&gt{NAME};
 	   }
 
 	   sub age {
 	       my $self = shift;
-	       if (@_) { $self->{AGE} = shift }
-	       return $self->{AGE};
+	       if (@_) { $self-&gt{AGE} = shift }
+	       return $self-&gt{AGE};
 	   }
 
 	   sub peers {
 	       my $self = shift;
-	       if (@_) { @{ $self->{PEERS} } = @_ }
-	       return @{ $self->{PEERS} };
+	       if (@_) { @{ $self-&gt{PEERS} } = @_ }
+	       return @{ $self-&gt{PEERS} };
 	   }
 
 	   1;  # so the require or use succeeds
@@ -238,9 +240,9 @@ Creating a Class
 	   sub new {
 	       my $class = shift;
 	       my $self  = {};
-	       $self->{NAME}   = undef;
-	       $self->{AGE}    = undef;
-	       $self->{PEERS}  = [];
+	       $self-&gt{NAME}   = undef;
+	       $self-&gt{AGE}    = undef;
+	       $self-&gt{PEERS}  = [];
 	       bless ($self, $class);
 	       return $self;
 	   }
@@ -286,7 +288,7 @@ Creating a Class
        The only situation where Perl's reference-based GC won't work is when
        there's a circularity in the data structure, such as:
 
-	   $this->{WHATEVER} = $this;
+	   $this-&gt{WHATEVER} = $this;
 
        In that case, you must delete the self-reference manually if you expect
        your program not to leak memory.  While admittedly error-prone, this is
@@ -323,14 +325,14 @@ Creating a Class
 	   sub exclaim {
 	       my $self = shift;
 	       return sprintf "Hi, I'm %s, age %d, working with %s",
-		   $self->{NAME}, $self->{AGE}, join(", ", @{$self->{PEERS}});
+		   $self-&gt{NAME}, $self-&gt{AGE}, join(", ", @{$self-&gt{PEERS}});
 	   }
 
        Or maybe even one like this:
 
 	   sub happy_birthday {
 	       my $self = shift;
-	       return ++$self->{AGE};
+	       return ++$self-&gt{AGE};
 	   }
 
        Some might argue that one should go at these this way:
@@ -338,12 +340,12 @@ Creating a Class
 	   sub exclaim {
 	       my $self = shift;
 	       return sprintf "Hi, I'm %s, age %d, working with %s",
-		   $self->name, $self->age, join(", ", $self->peers);
+		   $self-&gtname, $self-&gtage, join(", ", $self-&gtpeers);
 	   }
 
 	   sub happy_birthday {
 	       my $self = shift;
-	       return $self->age( $self->age() + 1 );
+	       return $self-&gtage( $self-&gtage() + 1 );
 	   }
 
        But since these methods are all executing in the class itself, this may
@@ -401,9 +403,9 @@ Class Data
 	       my $class = shift;
 	       my $self  = {};
 	       $Census++;
-	       $self->{NAME}   = undef;
-	       $self->{AGE}    = undef;
-	       $self->{PEERS}  = [];
+	       $self-&gt{NAME}   = undef;
+	       $self-&gt{AGE}    = undef;
+	       $self-&gt{PEERS}  = [];
 	       bless ($self, $class);
 	       return $self;
 	   }
@@ -454,20 +456,20 @@ Class Data
 	   sub new {
 	       my $class = shift;
 	       my $self  = {};
-	       $self->{NAME}	 = undef;
-	       $self->{AGE}	 = undef;
-	       $self->{PEERS}	 = [];
+	       $self-&gt{NAME}	 = undef;
+	       $self-&gt{AGE}	 = undef;
+	       $self-&gt{PEERS}	 = [];
 	       # "private" data
-	       $self->{"_CENSUS"} = \$Census;
+	       $self-&gt{"_CENSUS"} = \$Census;
 	       bless ($self, $class);
-	       ++ ${ $self->{"_CENSUS"} };
+	       ++ ${ $self-&gt{"_CENSUS"} };
 	       return $self;
 	   }
 
 	   sub population {
 	       my $self = shift;
 	       if (ref $self) {
-		   return ${ $self->{"_CENSUS"} };
+		   return ${ $self-&gt{"_CENSUS"} };
 	       } else {
 		   return $Census;
 	       }
@@ -475,7 +477,7 @@ Class Data
 
 	   sub DESTROY {
 	       my $self = shift;
-	       -- ${ $self->{"_CENSUS"} };
+	       -- ${ $self-&gt{"_CENSUS"} };
 	   }
 
    Debugging Methods
@@ -496,7 +498,7 @@ Class Data
 	   sub debug {
 	       my $class = shift;
 	       if (ref $class)	{ confess "Class method called as object method" }
-	       unless (@_ == 1) { confess "usage: CLASSNAME->debug(level)" }
+	       unless (@_ == 1) { confess "usage: CLASSNAME-&gtdebug(level)" }
 	       $Debugging = shift;
 	   }
 
@@ -504,15 +506,15 @@ Class Data
 
 	   sub DESTROY {
 	       my $self = shift;
-	       if ($Debugging) { carp "Destroying $self " . $self->name }
-	       -- ${ $self->{"_CENSUS"} };
+	       if ($Debugging) { carp "Destroying $self " . $self-&gtname }
+	       -- ${ $self-&gt{"_CENSUS"} };
 	   }
 
        One could conceivably make a per-object debug state.  That way you
        could call both of these:
 
-	   Person->debug(1);   # entire class
-	   $him->debug(1);     # just this object
+	   Person-&gtdebug(1);   # entire class
+	   $him-&gtdebug(1);     # just this object
 
        To do so, we need our debugging method to be a "bimodal" one, one that
        works on both classes and objects.  Therefore, adjust the debug() and
@@ -520,10 +522,10 @@ Class Data
 
 	   sub debug {
 	       my $self = shift;
-	       confess "usage: thing->debug(level)"    unless @_ == 1;
+	       confess "usage: thing-&gtdebug(level)"    unless @_ == 1;
 	       my $level = shift;
 	       if (ref($self))	{
-		   $self->{"_DEBUG"} = $level;	       # just myself
+		   $self-&gt{"_DEBUG"} = $level;	       # just myself
 	       } else {
 		   $Debugging	     = $level;	       # whole class
 	       }
@@ -531,14 +533,14 @@ Class Data
 
 	   sub DESTROY {
 	       my $self = shift;
-	       if ($Debugging || $self->{"_DEBUG"}) {
-		   carp "Destroying $self " . $self->name;
+	       if ($Debugging || $self-&gt{"_DEBUG"}) {
+		   carp "Destroying $self " . $self-&gtname;
 	       }
-	       -- ${ $self->{"_CENSUS"} };
+	       -- ${ $self-&gt{"_CENSUS"} };
 	   }
 
        What happens if a derived class (which we'll call Employee) inherits
-       methods from this Person base class?  Then "Employee->debug()", when
+       methods from this Person base class?  Then "Employee-&gtdebug()", when
        called as a class method, manipulates $Person::Debugging not
        $Employee::Debugging.
 
@@ -582,29 +584,29 @@ Class Data
 	    #################
 	    # class methods #
 	    #################
-	    $ob    = Person->new;
-	    $count = Person->population;
+	    $ob    = Person-&gtnew;
+	    $count = Person-&gtpopulation;
 
 	    #######################
 	    # object data methods #
 	    #######################
 
 	    ### get versions ###
-		$who   = $ob->name;
-		$years = $ob->age;
-		@pals  = $ob->peers;
+		$who   = $ob-&gtname;
+		$years = $ob-&gtage;
+		@pals  = $ob-&gtpeers;
 
 	    ### set versions ###
-		$ob->name("Jason");
-		$ob->age(23);
-		$ob->peers( "Norbert", "Rhys", "Phineas" );
+		$ob-&gtname("Jason");
+		$ob-&gtage(23);
+		$ob-&gtpeers( "Norbert", "Rhys", "Phineas" );
 
 	    ########################
 	    # other object methods #
 	    ########################
 
-	    $phrase = $ob->exclaim;
-	    $ob->happy_birthday;
+	    $phrase = $ob-&gtexclaim;
+	    $ob-&gthappy_birthday;
 
 	   =head1 DESCRIPTION
 
@@ -630,13 +632,13 @@ Aggregation
        the Fullname class look like?  To answer that question, you have to
        first figure out how you want to use it.  How about we use it this way:
 
-	   $him = Person->new();
-	   $him->fullname->title("St");
-	   $him->fullname->christian("Thomas");
-	   $him->fullname->surname("Aquinas");
-	   $him->fullname->nickname("Tommy");
-	   printf "His normal name is %s\n", $him->name;
-	   printf "But his real name is %s\n", $him->fullname->as_string;
+	   $him = Person-&gtnew();
+	   $him-&gtfullname-&gttitle("St");
+	   $him-&gtfullname-&gtchristian("Thomas");
+	   $him-&gtfullname-&gtsurname("Aquinas");
+	   $him-&gtfullname-&gtnickname("Tommy");
+	   printf "His normal name is %s\n", $him-&gtname;
+	   printf "But his real name is %s\n", $him-&gtfullname-&gtas_string;
 
        Ok.  To do this, we'll change Person::new() so that it supports a full
        name field this way:
@@ -644,26 +646,26 @@ Aggregation
 	   sub new {
 	       my $class = shift;
 	       my $self  = {};
-	       $self->{FULLNAME} = Fullname->new();
-	       $self->{AGE}	 = undef;
-	       $self->{PEERS}	 = [];
-	       $self->{"_CENSUS"} = \$Census;
+	       $self-&gt{FULLNAME} = Fullname-&gtnew();
+	       $self-&gt{AGE}	 = undef;
+	       $self-&gt{PEERS}	 = [];
+	       $self-&gt{"_CENSUS"} = \$Census;
 	       bless ($self, $class);
-	       ++ ${ $self->{"_CENSUS"} };
+	       ++ ${ $self-&gt{"_CENSUS"} };
 	       return $self;
 	   }
 
 	   sub fullname {
 	       my $self = shift;
-	       return $self->{FULLNAME};
+	       return $self-&gt{FULLNAME};
 	   }
 
        Then to support old code, define Person::name() this way:
 
 	   sub name {
 	       my $self = shift;
-	       return $self->{FULLNAME}->nickname(@_)
-		 ||   $self->{FULLNAME}->christian(@_);
+	       return $self-&gt{FULLNAME}-&gtnickname(@_)
+		 ||   $self-&gt{FULLNAME}-&gtchristian(@_);
 	   }
 
        Here's the Fullname class.  We'll use the same technique of using a
@@ -676,10 +678,10 @@ Aggregation
 	   sub new {
 	       my $class = shift;
 	       my $self  = {
-		   TITLE       => undef,
-		   CHRISTIAN   => undef,
-		   SURNAME     => undef,
-		   NICK        => undef,
+		   TITLE       =&gt undef,
+		   CHRISTIAN   =&gt undef,
+		   SURNAME     =&gt undef,
+		   NICK        =&gt undef,
 	       };
 	       bless ($self, $class);
 	       return $self;
@@ -687,33 +689,33 @@ Aggregation
 
 	   sub christian {
 	       my $self = shift;
-	       if (@_) { $self->{CHRISTIAN} = shift }
-	       return $self->{CHRISTIAN};
+	       if (@_) { $self-&gt{CHRISTIAN} = shift }
+	       return $self-&gt{CHRISTIAN};
 	   }
 
 	   sub surname {
 	       my $self = shift;
-	       if (@_) { $self->{SURNAME} = shift }
-	       return $self->{SURNAME};
+	       if (@_) { $self-&gt{SURNAME} = shift }
+	       return $self-&gt{SURNAME};
 	   }
 
 	   sub nickname {
 	       my $self = shift;
-	       if (@_) { $self->{NICK} = shift }
-	       return $self->{NICK};
+	       if (@_) { $self-&gt{NICK} = shift }
+	       return $self-&gt{NICK};
 	   }
 
 	   sub title {
 	       my $self = shift;
-	       if (@_) { $self->{TITLE} = shift }
-	       return $self->{TITLE};
+	       if (@_) { $self-&gt{TITLE} = shift }
+	       return $self-&gt{TITLE};
 	   }
 
 	   sub as_string {
 	       my $self = shift;
 	       my $name = join(" ", @$self{'CHRISTIAN', 'SURNAME'});
-	       if ($self->{TITLE}) {
-		   $name = $self->{TITLE} . " " . $name;
+	       if ($self-&gt{TITLE}) {
+		   $name = $self-&gt{TITLE} . " " . $name;
 	       }
 	       return $name;
 	   }
@@ -728,25 +730,25 @@ Aggregation
 	   sub END { show_census() }
 
 	   sub show_census ()  {
-	       printf "Current population: %d\n", Person->population;
+	       printf "Current population: %d\n", Person-&gtpopulation;
 	   }
 
-	   Person->debug(1);
+	   Person-&gtdebug(1);
 
 	   show_census();
 
-	   my $him = Person->new();
+	   my $him = Person-&gtnew();
 
-	   $him->fullname->christian("Thomas");
-	   $him->fullname->surname("Aquinas");
-	   $him->fullname->nickname("Tommy");
-	   $him->fullname->title("St");
-	   $him->age(1);
+	   $him-&gtfullname-&gtchristian("Thomas");
+	   $him-&gtfullname-&gtsurname("Aquinas");
+	   $him-&gtfullname-&gtnickname("Tommy");
+	   $him-&gtfullname-&gttitle("St");
+	   $him-&gtage(1);
 
-	   printf "%s is really %s.\n", $him->name, $him->fullname->as_string;
-	   printf "%s's age: %d.\n", $him->name, $him->age;
-	   $him->happy_birthday;
-	   printf "%s's age: %d.\n", $him->name, $him->age;
+	   printf "%s is really %s.\n", $him-&gtname, $him-&gtfullname-&gtas_string;
+	   printf "%s's age: %d.\n", $him-&gtname, $him-&gtage;
+	   $him-&gthappy_birthday;
+	   printf "%s's age: %d.\n", $him-&gtname, $him-&gtage;
 
 	   show_census();
 
@@ -795,10 +797,10 @@ Inheritance
        program like this:
 
 	   use Employee;
-	   my $empl = Employee->new();
-	   $empl->name("Jason");
-	   $empl->age(23);
-	   printf "%s is age %d.\n", $empl->name, $empl->age;
+	   my $empl = Employee-&gtnew();
+	   $empl-&gtname("Jason");
+	   $empl-&gtage(23);
+	   printf "%s is age %d.\n", $empl-&gtname, $empl-&gtage;
 
        By proper design, we mean always using the two-argument form of
        bless(), avoiding direct access of global data, and not exporting
@@ -812,7 +814,7 @@ Inheritance
        method?	Well, in principle, yes.  A method is just a function that
        expects as its first argument a class name (package) or object (blessed
        reference).   Person::new() is the function that both the
-       "Person->new()" method and the "Employee->new()" method end up calling.
+       "Person-&gtnew()" method and the "Employee-&gtnew()" method end up calling.
        Understand that while a method call looks a lot like a function call,
        they aren't really quite the same, and if you treat them as the same,
        you'll very soon be left with nothing but broken programs.  First, the
@@ -822,8 +824,8 @@ Inheritance
 
 	       Method Call	       Resulting Function Call
 	       -----------	       ------------------------
-	       Person->new()	       Person::new("Person")
-	       Employee->new()	       Person::new("Employee")
+	       Person-&gtnew()	       Person::new("Person")
+	       Employee-&gtnew()	       Person::new("Employee")
 
        So don't use function calls when you mean to call a method.
 
@@ -838,20 +840,20 @@ Inheritance
 
 	   sub salary {
 	       my $self = shift;
-	       if (@_) { $self->{SALARY} = shift }
-	       return $self->{SALARY};
+	       if (@_) { $self-&gt{SALARY} = shift }
+	       return $self-&gt{SALARY};
 	   }
 
 	   sub id_number {
 	       my $self = shift;
-	       if (@_) { $self->{ID} = shift }
-	       return $self->{ID};
+	       if (@_) { $self-&gt{ID} = shift }
+	       return $self-&gt{ID};
 	   }
 
 	   sub start_date {
 	       my $self = shift;
-	       if (@_) { $self->{START_DATE} = shift }
-	       return $self->{START_DATE};
+	       if (@_) { $self-&gt{START_DATE} = shift }
+	       return $self-&gt{START_DATE};
 	   }
 
    Overridden Methods
@@ -862,8 +864,8 @@ Inheritance
        list of peer names, let's return slightly different strings.  So doing
        this:
 
-	   $empl->peers("Peter", "Paul", "Mary");
-	   printf "His peers are: %s\n", join(", ", $empl->peers);
+	   $empl-&gtpeers("Peter", "Paul", "Mary");
+	   printf "His peers are: %s\n", join(", ", $empl-&gtpeers);
 
        will produce:
 
@@ -873,8 +875,8 @@ Inheritance
 
 	   sub peers {
 	       my $self = shift;
-	       if (@_) { @{ $self->{PEERS} } = @_ }
-	       return map { "PEON=\U$_" } @{ $self->{PEERS} };
+	       if (@_) { @{ $self-&gt{PEERS} } = @_ }
+	       return map { "PEON=\U$_" } @{ $self-&gt{PEERS} };
 	   }
 
        There, we've just demonstrated the high-falutin' concept known in
@@ -896,10 +898,10 @@ Inheritance
 
 	   sub debug {
 	       my $self = shift;
-	       confess "usage: thing->debug(level)"    unless @_ == 1;
+	       confess "usage: thing-&gtdebug(level)"    unless @_ == 1;
 	       my $level = shift;
 	       if (ref($self))	{
-		   $self->{"_DEBUG"} = $level;
+		   $self-&gt{"_DEBUG"} = $level;
 	       } else {
 		   $Debugging = $level; 	   # whole class
 	       }
@@ -911,11 +913,11 @@ Inheritance
        doesn't have a debug() function, but is inheriting its debug() method
        from elsewhere?	It would have been slightly better to say
 
-	   Person->debug($Debugging);
+	   Person-&gtdebug($Debugging);
 
        But even that's got too much hard-coded.  It's somewhat better to say
 
-	   $self->Person::debug($Debugging);
+	   $self-&gtPerson::debug($Debugging);
 
        Which is a funny way to say to start looking for a debug() method up in
        Person.	This strategy is more often seen on overridden object methods
@@ -926,7 +928,7 @@ Inheritance
        classes you inherit from, or add others.  Fortunately, the pseudoclass
        SUPER comes to the rescue here.
 
-	   $self->SUPER::debug($Debugging);
+	   $self-&gtSUPER::debug($Debugging);
 
        This way it starts looking in my class's @ISA.  This only makes sense
        from within a method call, though.  Don't try to access anything in
@@ -949,20 +951,20 @@ Inheritance
 	   #!/usr/bin/perl -w
 	   use strict;
 	   use Boss;
-	   Boss->debug(1);
+	   Boss-&gtdebug(1);
 
-	   my $boss = Boss->new();
+	   my $boss = Boss-&gtnew();
 
-	   $boss->fullname->title("Don");
-	   $boss->fullname->surname("Pichon Alvarez");
-	   $boss->fullname->christian("Federico Jesus");
-	   $boss->fullname->nickname("Fred");
+	   $boss-&gtfullname-&gttitle("Don");
+	   $boss-&gtfullname-&gtsurname("Pichon Alvarez");
+	   $boss-&gtfullname-&gtchristian("Federico Jesus");
+	   $boss-&gtfullname-&gtnickname("Fred");
 
-	   $boss->age(47);
-	   $boss->peers("Frank", "Felipe", "Faust");
+	   $boss-&gtage(47);
+	   $boss-&gtpeers("Frank", "Felipe", "Faust");
 
-	   printf "%s is age %d.\n", $boss->fullname->as_string, $boss->age;
-	   printf "His peers are: %s\n", join(", ", $boss->peers);
+	   printf "%s is age %d.\n", $boss-&gtfullname-&gtas_string, $boss-&gtage;
+	   printf "His peers are: %s\n", join(", ", $boss-&gtpeers);
 
        Running it, we see that we're still ok.	If you'd like to dump out your
        object in a nice format, somewhat like the way the 'x' command works in
@@ -976,15 +978,15 @@ Inheritance
 
 	   Here's the boss:
 	   $VAR1 = bless( {
-		_CENSUS => \1,
-		FULLNAME => bless( {
-				     TITLE => 'Don',
-				     SURNAME => 'Pichon Alvarez',
-				     NICK => 'Fred',
-				     CHRISTIAN => 'Federico Jesus'
+		_CENSUS =&gt \1,
+		FULLNAME =&gt bless( {
+				     TITLE =&gt 'Don',
+				     SURNAME =&gt 'Pichon Alvarez',
+				     NICK =&gt 'Fred',
+				     CHRISTIAN =&gt 'Federico Jesus'
 				   }, 'Fullname' ),
-		AGE => 47,
-		PEERS => [
+		AGE =&gt 47,
+		PEERS =&gt [
 			   'Frank',
 			   'Felipe',
 			   'Faust'
@@ -1001,10 +1003,10 @@ Inheritance
 
 	   sub new {
 	       my $class = shift;
-	       my $self  = $class->SUPER::new();
-	       $self->{SALARY}	      = undef;
-	       $self->{ID}	      = undef;
-	       $self->{START_DATE}    = undef;
+	       my $self  = $class-&gtSUPER::new();
+	       $self-&gt{SALARY}	      = undef;
+	       $self-&gt{ID}	      = undef;
+	       $self-&gt{START_DATE}    = undef;
 	       bless ($self, $class);	       # reconsecrate
 	       return $self;
 	   }
@@ -1035,8 +1037,8 @@ Inheritance
 
        If you have an object of class Third:
 
-	   my $ob = Third->new();
-	   $ob->spin();
+	   my $ob = Third-&gtnew();
+	   $ob-&gtspin();
 
        How do we find a spin() method (or a new() method for that matter)?
        Because the search is depth-first, classes will be looked up in the
@@ -1093,20 +1095,20 @@ Inheritance
        you whether an object or class "is" another one without having to
        traverse the hierarchy yourself:
 
-	  $has_io = $fd->isa("IO::Handle");
-	  $itza_handle = IO::Socket->isa("IO::Handle");
+	  $has_io = $fd-&gtisa("IO::Handle");
+	  $itza_handle = IO::Socket-&gtisa("IO::Handle");
 
        The can() method, called against that object or class, reports back
        whether its string argument is a callable method name in that class.
        In fact, it gives you back a function reference to that method:
 
-	  $his_print_method = $obj->can('as_string');
+	  $his_print_method = $obj-&gtcan('as_string');
 
        Finally, the VERSION method checks whether the class (or the object's
        class) has a package global called $VERSION that's high enough, as in:
 
-	   Some_Module->VERSION(3.0);
-	   $his_vers = $ob->VERSION();
+	   Some_Module-&gtVERSION(3.0);
+	   $his_vers = $ob-&gtVERSION();
 
        However, we don't usually call VERSION ourselves.  (Remember that an
        all uppercase function name is a Perl convention that indicates that
@@ -1145,8 +1147,8 @@ Inheritance
 	   package Foo;
 	   sub normal_method { return "321" }
 
-       Calling Foo->special_method() will return "123", but calling
-       Foo->isa('REALLYUNIVERSAL') or Foo->isa('UNIVERSAL') will return false.
+       Calling Foo-&gtspecial_method() will return "123", but calling
+       Foo-&gtisa('REALLYUNIVERSAL') or Foo-&gtisa('UNIVERSAL') will return false.
 
        If your class is using an alternate mro like C3 (see mro), method
        resolution within UNIVERSAL / @UNIVERSAL::ISA will still occur in the
@@ -1171,13 +1173,13 @@ Inheritance
 
 	   find_method(class, methname) {
 	       foreach $class (get_mro(class)) {
-		   if($class->has_method(methname)) {
-		       return ref_to($class->$methname);
+		   if($class-&gthas_method(methname)) {
+		       return ref_to($class-&gt$methname);
 		   }
 	       }
 	       foreach $class (get_mro(UNIVERSAL)) {
-		   if($class->has_method(methname)) {
-		       return ref_to($class->$methname);
+		   if($class-&gthas_method(methname)) {
+		       return ref_to($class-&gt$methname);
 		   }
 	       }
 	       return undef;
@@ -1213,29 +1215,29 @@ Alternate Object Representations
 	   ############################################
 	   sub new {
 	       my $self = [];
-	       $self->[$NAME]	= undef;  # this is unnecessary
-	       $self->[$AGE]	= undef;  # as is this
-	       $self->[$PEERS]	= [];	  # but this isn't, really
+	       $self-&gt[$NAME]	= undef;  # this is unnecessary
+	       $self-&gt[$AGE]	= undef;  # as is this
+	       $self-&gt[$PEERS]	= [];	  # but this isn't, really
 	       bless($self);
 	       return $self;
 	   }
 
 	   sub name {
 	       my $self = shift;
-	       if (@_) { $self->[$NAME] = shift }
-	       return $self->[$NAME];
+	       if (@_) { $self-&gt[$NAME] = shift }
+	       return $self-&gt[$NAME];
 	   }
 
 	   sub age {
 	       my $self = shift;
-	       if (@_) { $self->[$AGE] = shift }
-	       return $self->[$AGE];
+	       if (@_) { $self-&gt[$AGE] = shift }
+	       return $self-&gt[$AGE];
 	   }
 
 	   sub peers {
 	       my $self = shift;
-	       if (@_) { @{ $self->[$PEERS] } = @_ }
-	       return @{ $self->[$PEERS] };
+	       if (@_) { @{ $self-&gt[$PEERS] } = @_ }
+	       return @{ $self-&gt[$PEERS] };
 	   }
 
 	   1;  # so the require or use succeeds
@@ -1273,12 +1275,12 @@ Alternate Object Representations
        Use would be similar to before:
 
 	   use Person;
-	   $him = Person->new();
-	   $him->name("Jason");
-	   $him->age(23);
-	   $him->peers( [ "Norbert", "Rhys", "Phineas" ] );
-	   printf "%s is %d years old.\n", $him->name, $him->age;
-	   print "His peers are: ", join(", ", @{$him->peers}), "\n";
+	   $him = Person-&gtnew();
+	   $him-&gtname("Jason");
+	   $him-&gtage(23);
+	   $him-&gtpeers( [ "Norbert", "Rhys", "Phineas" ] );
+	   printf "%s is %d years old.\n", $him-&gtname, $him-&gtage;
+	   print "His peers are: ", join(", ", @{$him-&gtpeers}), "\n";
 
        but the implementation would be radically, perhaps even sublimely
        different:
@@ -1288,14 +1290,14 @@ Alternate Object Representations
 	   sub new {
 		my $class  = shift;
 		my $self = {
-		   NAME  => undef,
-		   AGE	 => undef,
-		   PEERS => [],
+		   NAME  =&gt undef,
+		   AGE	 =&gt undef,
+		   PEERS =&gt [],
 		};
 		my $closure = sub {
 		   my $field = shift;
-		   if (@_) { $self->{$field} = shift }
-		   return    $self->{$field};
+		   if (@_) { $self-&gt{$field} = shift }
+		   return    $self-&gt{$field};
 	       };
 	       bless($closure, $class);
 	       return $closure;
@@ -1318,7 +1320,7 @@ Alternate Object Representations
        Although this is the same function each time, it contains a different
        version of $self.
 
-       When a method like "$him->name("Jason")" is called, its implicit zeroth
+       When a method like "$him-&gtname("Jason")" is called, its implicit zeroth
        argument is the invoking object--just as it is with all method calls.
        But in this case, it's our code reference (something like a function
        pointer in C++, but with deep binding of lexical variables).  There's
@@ -1409,15 +1411,15 @@ AUTOLOAD: Proxy Methods
 	   our $AUTOLOAD;  # it's a package global
 
 	   my %fields = (
-	       name	   => undef,
-	       age	   => undef,
-	       peers	   => undef,
+	       name	   =&gt undef,
+	       age	   =&gt undef,
+	       peers	   =&gt undef,
 	   );
 
 	   sub new {
 	       my $class = shift;
 	       my $self  = {
-		   _permitted => \%fields,
+		   _permitted =&gt \%fields,
 		   %fields,
 	       };
 	       bless $self, $class;
@@ -1446,14 +1448,14 @@ AUTOLOAD: Proxy Methods
 	       my $name = $AUTOLOAD;
 	       $name =~ s/.*://;   # strip fully-qualified portion
 
-	       unless (exists $self->{_permitted}->{$name} ) {
+	       unless (exists $self-&gt{_permitted}-&gt{$name} ) {
 		   croak "Can't access `$name' field in class $type";
 	       }
 
 	       if (@_) {
-		   return $self->{$name} = shift;
+		   return $self-&gt{$name} = shift;
 	       } else {
-		   return $self->{$name};
+		   return $self-&gt{$name};
 	       }
 	   }
 
@@ -1476,16 +1478,16 @@ AUTOLOAD: Proxy Methods
 	   our @ISA = qw(Person);
 
 	   my %fields = (
-	       id	   => undef,
-	       salary	   => undef,
+	       id	   =&gt undef,
+	       salary	   =&gt undef,
 	   );
 
 	   sub new {
 	       my $class = shift;
-	       my $self  = $class->SUPER::new();
+	       my $self  = $class-&gtSUPER::new();
 	       my($element);
 	       foreach $element (keys %fields) {
-		   $self->{_permitted}->{$element} = $fields{$element};
+		   $self-&gt{_permitted}-&gt{$element} = $fields{$element};
 	       }
 	       @{$self}{keys %fields} = values %fields;
 	       return $self;
@@ -1526,21 +1528,21 @@ Metaclassical Tools
 	   use Class::Struct qw(struct);
 	   use Jobbie;	# user-defined; see below
 
-	   struct 'Fred' => {
-	       one	  => '$',
-	       many	  => '@',
-	       profession => 'Jobbie',	# does not call Jobbie->new()
+	   struct 'Fred' =&gt {
+	       one	  =&gt '$',
+	       many	  =&gt '@',
+	       profession =&gt 'Jobbie',	# does not call Jobbie-&gtnew()
 	   };
 
-	   $ob = Fred->new(profession => Jobbie->new());
-	   $ob->one("hmmmm");
+	   $ob = Fred-&gtnew(profession =&gt Jobbie-&gtnew());
+	   $ob-&gtone("hmmmm");
 
-	   $ob->many(0, "here");
-	   $ob->many(1, "you");
-	   $ob->many(2, "go");
-	   print "Just set: ", $ob->many(2), "\n";
+	   $ob-&gtmany(0, "here");
+	   $ob-&gtmany(1, "you");
+	   $ob-&gtmany(2, "go");
+	   print "Just set: ", $ob-&gtmany(2), "\n";
 
-	   $ob->profession->salary(10_000);
+	   $ob-&gtprofession-&gtsalary(10_000);
 
        You can declare types in the struct to be basic Perl types, or user-
        defined types (classes).  User types will be initialized by calling
@@ -1560,17 +1562,17 @@ Metaclassical Tools
 	   use Net::hostent;
 	   $h = gethostbyname("perl.com");  # object return
 	   printf "perl.com's real name is %s, address %s\n",
-	       $h->name, inet_ntoa($h->addr);
+	       $h-&gtname, inet_ntoa($h-&gtaddr);
 
        Here's how to do this using the Class::Struct module.  The crux is
        going to be this call:
 
-	   struct 'Net::hostent' => [	       # note bracket
-	       name	  => '$',
-	       aliases	  => '@',
-	       addrtype   => '$',
-	       'length'   => '$',
-	       addr_list  => '@',
+	   struct 'Net::hostent' =&gt [	       # note bracket
+	       name	  =&gt '$',
+	       aliases	  =&gt '@',
+	       addrtype   =&gt '$',
+	       'length'   =&gt '$',
+	       addr_list  =&gt '@',
 	    ];
 
        Which creates object methods of those names and types.  It even creates
@@ -1578,12 +1580,12 @@ Metaclassical Tools
 
        We could also have implemented our object this way:
 
-	   struct 'Net::hostent' => {	       # note brace
-	       name	  => '$',
-	       aliases	  => '@',
-	       addrtype   => '$',
-	       'length'   => '$',
-	       addr_list  => '@',
+	   struct 'Net::hostent' =&gt {	       # note brace
+	       name	  =&gt '$',
+	       aliases	  =&gt '@',
+	       addrtype   =&gt '$',
+	       'length'   =&gt '$',
+	       addr_list  =&gt '@',
 	    };
 
        and then Class::Struct would have used an anonymous hash as the object
@@ -1605,7 +1607,7 @@ Metaclassical Tools
 				      $h_addrtype     $h_length
 				      @h_addr_list    $h_addr
 				  );
-	       our %EXPORT_TAGS = ( FIELDS => [ @EXPORT_OK, @EXPORT ] );
+	       our %EXPORT_TAGS = ( FIELDS =&gt [ @EXPORT_OK, @EXPORT ] );
 	   }
 	   our @EXPORT_OK;
 
@@ -1613,25 +1615,25 @@ Metaclassical Tools
 	   sub import { goto &Exporter::import }
 
 	   use Class::Struct qw(struct);
-	   struct 'Net::hostent' => [
-	      name	  => '$',
-	      aliases	  => '@',
-	      addrtype	  => '$',
-	      'length'	  => '$',
-	      addr_list   => '@',
+	   struct 'Net::hostent' =&gt [
+	      name	  =&gt '$',
+	      aliases	  =&gt '@',
+	      addrtype	  =&gt '$',
+	      'length'	  =&gt '$',
+	      addr_list   =&gt '@',
 	   ];
 
-	   sub addr { shift->addr_list->[0] }
+	   sub addr { shift-&gtaddr_list-&gt[0] }
 
 	   sub populate (@) {
 	       return unless @_;
 	       my $hob = new();  # Class::Struct made this!
-	       $h_name	   =	$hob->[0]	       = $_[0];
-	       @h_aliases  = @{ $hob->[1] } = split ' ', $_[1];
-	       $h_addrtype =	$hob->[2]	       = $_[2];
-	       $h_length   =	$hob->[3]	       = $_[3];
+	       $h_name	   =	$hob-&gt[0]	       = $_[0];
+	       @h_aliases  = @{ $hob-&gt[1] } = split ' ', $_[1];
+	       $h_addrtype =	$hob-&gt[2]	       = $_[2];
+	       $h_length   =	$hob-&gt[3]	       = $_[3];
 	       $h_addr	   =				 $_[4];
-	       @h_addr_list = @{ $hob->[4] } =	       @_[ (4 .. $#_) ];
+	       @h_addr_list = @{ $hob-&gt[4] } =	       @_[ (4 .. $#_) ];
 	       return $hob;
 	   }
 
@@ -1689,9 +1691,9 @@ Metaclassical Tools
 	   sub new {
 		my $class = shift;
 		my $self = {
-		   NAME  => undef,
-		   AGE	 => undef,
-		   PEERS => [],
+		   NAME  =&gt undef,
+		   AGE	 =&gt undef,
+		   PEERS =&gt [],
 	       };
 	       bless($self, $class);
 	       return $self;
@@ -1809,6 +1811,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2009-02-12			   PERLTOOT(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

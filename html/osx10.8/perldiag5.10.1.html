@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="These messages are classified as follows (listed in increasing order of..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perldiag - various Perl diagnostics</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLDIAG(1)	       Perl Programmers Reference Guide 	   PERLDIAG(1)
 
 
@@ -62,7 +64,7 @@ DESCRIPTION
 	   (X) You can't allocate more than 64K on an MS-DOS machine.
 
        '%c' allowed only after types %s
-	   (F) The modifiers '!', '<' and '>' are allowed in pack() or
+	   (F) The modifiers '!', '&lt' and '&gt' are allowed in pack() or
 	   unpack() only after certain types.  See "pack" in perlfunc.
 
        Ambiguous call resolved as CORE::%s(), qualify as such or use &
@@ -94,21 +96,21 @@ DESCRIPTION
 	   supplying a missing quote, operator, parenthesis pair or
 	   declaration.
 
-       '|' and '<' may not both be specified on command line
+       '|' and '&lt' may not both be specified on command line
 	   (F) An error peculiar to VMS.  Perl does its own command line
 	   redirection, and found that STDIN was a pipe, and that you also
-	   tried to redirect STDIN using '<'.  Only one STDIN stream to a
+	   tried to redirect STDIN using '&lt'.  Only one STDIN stream to a
 	   customer, please.
 
-       '|' and '>' may not both be specified on command line
+       '|' and '&gt' may not both be specified on command line
 	   (F) An error peculiar to VMS.  Perl does its own command line
 	   redirection, and thinks you tried to redirect stdout both to a file
 	   and into a pipe to another command.	You need to choose one or the
 	   other, though nothing's stopping you from piping into a program or
 	   Perl script which 'splits' output into two streams, such as
 
-	       open(OUT,">$ARGV[0]") or die "Can't write to $ARGV[0]: $!";
-	       while (<STDIN>) {
+	       open(OUT,"&gt$ARGV[0]") or die "Can't write to $ARGV[0]: $!";
+	       while (&ltSTDIN&gt) {
 		   print;
 		   print OUT;
 	       }
@@ -137,7 +139,7 @@ DESCRIPTION
 	   subroutine with an ampersand, such as:
 
 	       $foo{$bar}
-	       $ref->{"susie"}[12]
+	       $ref-&gt{"susie"}[12]
 	       &do_something
 
        %s argument is not a HASH or ARRAY element or slice
@@ -145,12 +147,12 @@ DESCRIPTION
 	   element, such as:
 
 	       $foo{$bar}
-	       $ref->{"susie"}[12]
+	       $ref-&gt{"susie"}[12]
 
 	   or a hash or array slice, such as:
 
 	       @foo[$bar, $baz, $xyzzy]
-	       @{$ref->[12]}{"susie", "queue"}
+	       @{$ref-&gt[12]}{"susie", "queue"}
 
        %s argument is not a subroutine name
 	   (F) The argument to exists() for "exists &sub" must be a subroutine
@@ -366,14 +368,14 @@ DESCRIPTION
 	   It may also indicate a misspelled constant that has been
 	   interpreted as a bareword:
 
-	       use constant TYPO => 1;
+	       use constant TYPO =&gt 1;
 	       if (TYOP) { print "foo" }
 
 	   The "strict" pragma is useful in avoiding such errors.
 
        Bareword "%s" not allowed while "strict subs" in use
 	   (F) With "strict subs" in use, a bareword is only allowed as a
-	   subroutine identifier, in curly brackets or to the left of the "=>"
+	   subroutine identifier, in curly brackets or to the left of the "=&gt"
 	   symbol.  Perhaps you need to predeclare a subroutine?
 
        Bareword "%s" refers to nonexistent package
@@ -401,7 +403,7 @@ DESCRIPTION
 	   the variable form because other Perl programmers will expect it,
 	   and it works better if there are more than 9 backreferences.
 
-       Binary number > 0b11111111111111111111111111111111 non-portable
+       Binary number &gt 0b11111111111111111111111111111111 non-portable
 	   (W portable) The binary number you specified is larger than 2**32-1
 	   (4294967295) and therefore non-portable between systems.  See
 	   perlport for more on portability concerns.
@@ -415,7 +417,7 @@ DESCRIPTION
 	   (W unopened) You tried binmode() on a filehandle that was never
 	   opened.  Check you control flow and number of arguments.
 
-       Bit vector size > 32 non-portable
+       Bit vector size &gt 32 non-portable
 	   (W portable) Using bit vector sizes larger than 32 is non-portable.
 
        Bizarre copy of %s in %s
@@ -446,7 +448,7 @@ DESCRIPTION
 	   (F) An argument to pack("w",...) was too large to compress.	The
 	   BER compressed integer format can only be used with positive
 	   integers, and you attempted to compress Infinity or a very large
-	   number (> 1e308).  See "pack" in perlfunc.
+	   number (&gt 1e308).  See "pack" in perlfunc.
 
        Cannot compress negative numbers in pack
 	   (F) An argument to pack("w",...) was negative.  The BER compressed
@@ -493,7 +495,7 @@ DESCRIPTION
 
 	       $BADREF = undef;
 	       process $BADREF 1,2,3;
-	       $BADREF->process(1,2,3);
+	       $BADREF-&gtprocess(1,2,3);
 
        Can't call method "%s" on unblessed reference
 	   (F) A method call must know in what package it's supposed to run.
@@ -510,7 +512,7 @@ DESCRIPTION
 
 	       $BADREF = 42;
 	       process $BADREF 1,2,3;
-	       $BADREF->process(1,2,3);
+	       $BADREF-&gtprocess(1,2,3);
 
        Can't chdir to %s
 	   (F) You called "perl -x/foo/bar", but "/foo/bar" is not a directory
@@ -584,9 +586,9 @@ DESCRIPTION
 	   14 characters and Perl was unable to create a unique filename
 	   during inplace editing with the -i switch.  The file was ignored.
 
-       Can't do {n,m} with n > m in regex; marked by <-- HERE in m/%s/
+       Can't do {n,m} with n &gt m in regex; marked by &lt-- HERE in m/%s/
 	   (F) Minima must be less than or equal to maxima. If you really want
-	   your regexp to match something 0 times, just put {0}. The <-- HERE
+	   your regexp to match something 0 times, just put {0}. The &lt-- HERE
 	   shows in the regular expression about where the problem was
 	   discovered. See perlre.
 
@@ -817,7 +819,7 @@ DESCRIPTION
 
        Can't locate PerlIO%s
 	   (F) You tried to use in open() a PerlIO layer that does not exist,
-	   e.g. open(FH, ">:nosuchlayer", "somefile").
+	   e.g. open(FH, "&gt:nosuchlayer", "somefile").
 
        Can't make list assignment to \%ENV on this system
 	   (F) List assignment to %ENV is not supported on some systems,
@@ -848,7 +850,7 @@ DESCRIPTION
 	   considered a block that loops once.	See "next" in perlfunc.
 
        Can't open %s: %s
-	   (S inplace) The implicit opening of a file through use of the "<>"
+	   (S inplace) The implicit opening of a file through use of the "&lt&gt"
 	   filehandle, either implicitly under the "-n" or "-p" command-line
 	   switches, or explicitly, failed for the indicated reason.  Usually
 	   this is because you don't have read permission for a file which you
@@ -858,7 +860,7 @@ DESCRIPTION
 	   (W io) You tried to open a scalar reference for reading or writing,
 	   using the 3-arg open() syntax :
 
-	       open FH, '>', $ref;
+	       open FH, '&gt', $ref;
 
 	   but your version of perl is compiled without perlio, and this form
 	   of open is not supported.
@@ -867,22 +869,22 @@ DESCRIPTION
 	   (W pipe) You tried to say "open(CMD, "|cmd|")", which is not
 	   supported.  You can try any of several modules in the Perl library
 	   to do this, such as IPC::Open2.  Alternately, direct the pipe's
-	   output to a file using ">", and then read it in under a different
+	   output to a file using "&gt", and then read it in under a different
 	   file handle.
 
        Can't open error file %s as stderr
 	   (F) An error peculiar to VMS.  Perl does its own command line
-	   redirection, and couldn't open the file specified after '2>' or
-	   '2>>' on the command line for writing.
+	   redirection, and couldn't open the file specified after '2&gt' or
+	   '2&gt&gt' on the command line for writing.
 
        Can't open input file %s as stdin
 	   (F) An error peculiar to VMS.  Perl does its own command line
-	   redirection, and couldn't open the file specified after '<' on the
+	   redirection, and couldn't open the file specified after '&lt' on the
 	   command line for reading.
 
        Can't open output file %s as stdout
 	   (F) An error peculiar to VMS.  Perl does its own command line
-	   redirection, and couldn't open the file specified after '>' or '>>'
+	   redirection, and couldn't open the file specified after '&gt' or '&gt&gt'
 	   on the command line for writing.
 
        Can't open output pipe (name: %s)
@@ -1008,7 +1010,7 @@ DESCRIPTION
 	   the Errno.pm module. The Errno module is expected to tie the %!
 	   hash to provide symbolic names for $! errno values.
 
-       Can't use both '<' and '>' after type '%c' in %s
+       Can't use both '&lt' and '&gt' after type '%c' in %s
 	   (F) A type cannot be forced to have both big-endian and little-
 	   endian byte-order at the same time, so this combination of
 	   modifiers is not allowed.  See "pack" in perlfunc.
@@ -1032,7 +1034,7 @@ DESCRIPTION
 
        Can't use "my %s" in sort comparison
 	   (F) The global variables $a and $b are reserved for sort
-	   comparisons.  You mentioned $a or $b in the same line as the <=> or
+	   comparisons.  You mentioned $a or $b in the same line as the &lt=&gt or
 	   cmp operator, and the variable had earlier been declared as a
 	   lexical variable.  Either qualify the sort variable with the
 	   package name, or rename the lexical variable.
@@ -1218,7 +1220,7 @@ DESCRIPTION
 	   the corresponding "overload" or "charnames" pragma?	See charnames
 	   and overload.
 
-       Constant(%s)%s: %s in regex; marked by <-- HERE in m/%s/
+       Constant(%s)%s: %s in regex; marked by &lt-- HERE in m/%s/
 	   (F) The parser found inconsistencies while attempting to find the
 	   character name specified in the "\N{...}" escape.  Perhaps you
 	   forgot to load the corresponding "charnames" pragma?  See
@@ -1291,7 +1293,7 @@ DESCRIPTION
 	   there are neither package declarations nor a $VERSION.
 
        Delimiter for here document is too long
-	   (F) In a here document construct like "<<FOO", the label "FOO" is
+	   (F) In a here document construct like "&lt&ltFOO", the label "FOO" is
 	   too long for Perl to handle.  You have to be seriously twisted to
 	   write code that triggers this error.
 
@@ -1437,17 +1439,17 @@ DESCRIPTION
 	   assertion, but that construct is only allowed when the "use re
 	   'eval'" pragma is in effect.  See "(?{ code })" in perlre.
 
-       EVAL without pos change exceeded limit in regex; marked by <-- HERE in
+       EVAL without pos change exceeded limit in regex; marked by &lt-- HERE in
        m/%s/
 	   (F) You used a pattern that nested too many EVAL calls without
 	   consuming any text. Restructure the pattern so that text is
 	   consumed.
 
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered.
 
-       Excessively long <> operator
-	   (F) The contents of a <> operator may not exceed the maximum size
+       Excessively long &lt&gt operator
+	   (F) The contents of a &lt&gt operator may not exceed the maximum size
 	   of a Perl identifier.  If you're just trying to glob a long list of
 	   filenames, try using the glob() operator, or put the filenames into
 	   a variable and glob that.
@@ -1496,11 +1498,11 @@ DESCRIPTION
 	   CHECK, INIT, or END subroutine.  Processing of the remainder of the
 	   queue of such routines has been prematurely ended.
 
-       False [] range "%s" in regex; marked by <-- HERE in m/%s/
+       False [] range "%s" in regex; marked by &lt-- HERE in m/%s/
 	   (W regexp) A character class range must start and end at a literal
 	   character, not another character class like "\d" or "[:alpha:]".
 	   The "-" in your false range is interpreted as a literal "-".
-	   Consider quoting the "-", "\-".  The <-- HERE shows in the regular
+	   Consider quoting the "-", "\-".  The &lt-- HERE shows in the regular
 	   expression about where the problem was discovered.  See perlre.
 
        Fatal VMS error at %s, line %d
@@ -1526,15 +1528,15 @@ DESCRIPTION
        Filehandle %s opened only for input
 	   (W io) You tried to write on a read-only filehandle.  If you
 	   intended it to be a read-write filehandle, you needed to open it
-	   with "+<" or "+>" or "+>>" instead of with "<" or nothing.  If you
-	   intended only to write the file, use ">" or ">>".  See "open" in
+	   with "+&lt" or "+&gt" or "+&gt&gt" instead of with "&lt" or nothing.  If you
+	   intended only to write the file, use "&gt" or "&gt&gt".  See "open" in
 	   perlfunc.
 
        Filehandle %s opened only for output
 	   (W io) You tried to read from a filehandle opened only for writing,
 	   If you intended it to be a read/write filehandle, you needed to
-	   open it with "+<" or "+>" or "+>>" instead of with "<" or nothing.
-	   If you intended only to read from the file, use "<".  See "open" in
+	   open it with "+&lt" or "+&gt" or "+&gt&gt" instead of with "&lt" or nothing.
+	   If you intended only to read from the file, use "&lt".  See "open" in
 	   perlfunc.  Another possibility is that you attempted to open
 	   filedescriptor 0 (also known as STDIN) for output (maybe you closed
 	   STDIN earlier?).
@@ -1621,7 +1623,7 @@ DESCRIPTION
 
        glob failed (%s)
 	   (W glob) Something went wrong with the external program(s) used for
-	   "glob" and "<*.c>".	Usually, this means that you supplied a "glob"
+	   "glob" and "&lt*.c&gt".	Usually, this means that you supplied a "glob"
 	   pattern that caused the external program to fail and exit with a
 	   nonzero status.  If the message indicates that the abnormal exit
 	   resulted in a coredump, this may also mean that your csh (C shell)
@@ -1668,7 +1670,7 @@ DESCRIPTION
 	   (F) The parser has given up trying to parse the program after 10
 	   errors.  Further error messages would likely be uninformative.
 
-       Hexadecimal number > 0xffffffff non-portable
+       Hexadecimal number &gt 0xffffffff non-portable
 	   (W portable) The hexadecimal number you specified is larger than
 	   2**32-1 (4294967295) and therefore non-portable between systems.
 	   See perlport for more on portability concerns.
@@ -1680,7 +1682,7 @@ DESCRIPTION
 	   Future versions of Perl are likely to eliminate these arbitrary
 	   limitations.
 
-       Ignoring %s in character class in regex; marked by <-- HERE in m/%s/
+       Ignoring %s in character class in regex; marked by &lt-- HERE in m/%s/
 	   (W) Named Unicode character escapes (\N{...}) may return multi-char
 	   or zero length sequences. When such an escape is used in a
 	   character class its behaviour is not well defined. Check that the
@@ -1778,12 +1780,12 @@ DESCRIPTION
 	   UTF-EBCDIC encoding is limited to code points no larger than
 	   2147483647 (0x7FFFFFFF).
 
-       Infinite recursion in regex; marked by <-- HERE in m/%s/
+       Infinite recursion in regex; marked by &lt-- HERE in m/%s/
 	   (F) You used a pattern that references itself without consuming any
 	   input text. You should check the pattern to ensure that recursive
 	   patterns either consume text or fail.
 
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered.
 
        Initialization of state variables in list context currently forbidden
@@ -1840,9 +1842,9 @@ DESCRIPTION
 	   trying to use some odd mathematical operation as a version, like
 	   100/9.
 
-       Internal disaster in regex; marked by <-- HERE in m/%s/
+       Internal disaster in regex; marked by &lt-- HERE in m/%s/
 	   (P) Something went badly wrong in the regular expression parser.
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered.
 
        Internal inconsistency in tracking vforks
@@ -1854,9 +1856,9 @@ DESCRIPTION
 	   "exec" as a request to terminate the Perl script and execute the
 	   specified command.
 
-       Internal urp in regex; marked by <-- HERE in m/%s/
+       Internal urp in regex; marked by &lt-- HERE in m/%s/
 	   (P) Something went badly awry in the regular expression parser. The
-	   <-- HERE shows in the regular expression about where the problem
+	   &lt-- HERE shows in the regular expression about where the problem
 	   was discovered.
 
        %s (...) interpreted as function
@@ -1877,12 +1879,12 @@ DESCRIPTION
 	   (W printf) Perl does not understand the given format conversion.
 	   See "sprintf" in perlfunc.
 
-       Invalid escape in the specified encoding in regex; marked by <-- HERE
+       Invalid escape in the specified encoding in regex; marked by &lt-- HERE
        in m/%s/
-	   (W regexp) The numeric escape (for example "\xHH") of value < 256
+	   (W regexp) The numeric escape (for example "\xHH") of value &lt 256
 	   didn't correspond to a single character through the conversion from
 	   the encoding specified by the encoding pragma.  The escape was
-	   replaced with REPLACEMENT CHARACTER (U+FFFD) instead.  The <-- HERE
+	   replaced with REPLACEMENT CHARACTER (U+FFFD) instead.  The &lt-- HERE
 	   shows in the regular expression about where the escape was
 	   discovered.
 
@@ -1891,11 +1893,11 @@ DESCRIPTION
 	   'foo'", where "foo" is not a valid method resolution order (MRO).
 	   (Currently, the only valid ones are "dfs" and "c3"). See mro.
 
-       Invalid [] range "%s" in regex; marked by <-- HERE in m/%s/
+       Invalid [] range "%s" in regex; marked by &lt-- HERE in m/%s/
 	   (F) The range specified in a character class had a minimum
 	   character greater than the maximum character.  One possibility is
 	   that you forgot the "{}" from your ending "\x{}" - "\x" without the
-	   curly braces can go only up to "ff".  The <-- HERE shows in the
+	   curly braces can go only up to "ff".  The &lt-- HERE shows in the
 	   regular expression about where the problem was discovered.  See
 	   perlre.
 
@@ -2090,10 +2092,10 @@ DESCRIPTION
 	   process signals safely. (See "Deferred Signals (Safe Signals)" in
 	   perlipc.)
 
-       %s matches null string many times in regex; marked by <-- HERE in m/%s/
+       %s matches null string many times in regex; marked by &lt-- HERE in m/%s/
 	   (W regexp) The pattern you've specified would be an infinite loop
 	   if the regular expression engine didn't specifically check for
-	   that.  The <-- HERE shows in the regular expression about where the
+	   that.  The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered.  See perlre.
 
        "%s" may clash with future reserved word
@@ -2257,9 +2259,9 @@ DESCRIPTION
 	   (F) When "vec" is called in an lvalue context, the second argument
 	   must be greater than or equal to zero.
 
-       Nested quantifiers in regex; marked by <-- HERE in m/%s/
+       Nested quantifiers in regex; marked by &lt-- HERE in m/%s/
 	   (F) You can't quantify a quantifier without intervening
-	   parentheses. So things like ** or +* or ?* are illegal. The <--
+	   parentheses. So things like ** or +* or ?* are illegal. The &lt--
 	   HERE shows in the regular expression about where the problem was
 	   discovered.
 
@@ -2323,9 +2325,9 @@ DESCRIPTION
        No -e allowed in setuid scripts
 	   (F) A setuid script can't be specified by the user.
 
-       No error file after 2> or 2>> on command line
+       No error file after 2&gt or 2&gt&gt on command line
 	   (F) An error peculiar to VMS.  Perl handles its own command line
-	   redirection, and found a '2>' or a '2>>' on the command line, but
+	   redirection, and found a '2&gt' or a '2&gt&gt' on the command line, but
 	   can't find the name of the file to which to write data destined for
 	   stderr.
 
@@ -2333,9 +2335,9 @@ DESCRIPTION
 	   (F) A pack or unpack template has an opening '(' or '[' without its
 	   matching counterpart. See "pack" in perlfunc.
 
-       No input file after < on command line
+       No input file after &lt on command line
 	   (F) An error peculiar to VMS.  Perl handles its own command line
-	   redirection, and found a '<' on the command line, but can't find
+	   redirection, and found a '&lt' on the command line, but can't find
 	   the name of the file from which to read data for stdin.
 
        No #! line
@@ -2352,14 +2354,14 @@ DESCRIPTION
 	   (F) The "no" keyword is recognized and executed at compile time,
 	   and returns no useful value.  See perlmod.
 
-       No output file after > on command line
+       No output file after &gt on command line
 	   (F) An error peculiar to VMS.  Perl handles its own command line
-	   redirection, and found a lone '>' at the end of the command line,
+	   redirection, and found a lone '&gt' at the end of the command line,
 	   so it doesn't know where you wanted to redirect stdout.
 
-       No output file after > or >> on command line
+       No output file after &gt or &gt&gt on command line
 	   (F) An error peculiar to VMS.  Perl handles its own command line
-	   redirection, and found a '>' or a '>>' on the command line, but
+	   redirection, and found a '&gt' or a '&gt&gt' on the command line, but
 	   can't find the name of the file to which to write data destined for
 	   stdout.
 
@@ -2516,7 +2518,7 @@ DESCRIPTION
 	   The octal number interpretation of such numbers may be supported in
 	   a future version.
 
-       Octal number > 037777777777 non-portable
+       Octal number &gt 037777777777 non-portable
 	   (W portable) The octal number you specified is larger than 2**32-1
 	   (4294967295) and therefore non-portable between systems.  See
 	   perlport for more on portability concerns.
@@ -2829,12 +2831,12 @@ DESCRIPTION
 	   modifier.
 
        Pattern subroutine nesting without pos change exceeded limit in regex;
-       marked by <-- HERE in m/%s/
+       marked by &lt-- HERE in m/%s/
 	   (F) You used a pattern that uses too many nested subpattern calls
 	   without consuming any text. Restructure the pattern so text is
 	   consumed before the nesting limit is exceeded.
 
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered.
 
        Parentheses missing around "%s" list
@@ -2863,7 +2865,7 @@ DESCRIPTION
 	   (F) Your platform has very uncommon byte-order and integer size, so
 	   it was not possible to set up some or all fixed-width byte-order
 	   conversion functions.  This is only a problem when you're using the
-	   '<' or '>' modifiers in (un)pack templates.	See "pack" in
+	   '&lt' or '&gt' modifiers in (un)pack templates.	See "pack" in
 	   perlfunc.
 
        Perl %s required--this is only version %s, stopped
@@ -2915,9 +2917,9 @@ DESCRIPTION
 	   (F) The script would have to be opened by the C preprocessor by
 	   name, which provides a race condition that breaks security.
 
-       POSIX class [:%s:] unknown in regex; marked by <-- HERE in m/%s/
+       POSIX class [:%s:] unknown in regex; marked by &lt-- HERE in m/%s/
 	   (F) The class in the character class [: :] syntax is unknown.  The
-	   <-- HERE shows in the regular expression about where the problem
+	   &lt-- HERE shows in the regular expression about where the problem
 	   was discovered.  Note that the POSIX character classes do not have
 	   the "is" prefix the corresponding C interfaces have: in other
 	   words, it's "[[:print:]]", not "isprint".  See perlre.
@@ -2927,32 +2929,32 @@ DESCRIPTION
 	   unlike the BSD version, which takes a pid.
 
        POSIX syntax [%s] belongs inside character classes in regex; marked by
-       <-- HERE in m/%s/
+       &lt-- HERE in m/%s/
 	   (W regexp) The character class constructs [: :], [= =], and [. .]
 	   go inside character classes, the [] are part of the construct, for
 	   example: /[012[:alpha:]345]/.  Note that [= =] and [. .] are not
 	   currently implemented; they are simply placeholders for future
-	   extensions and will cause fatal errors.  The <-- HERE shows in the
+	   extensions and will cause fatal errors.  The &lt-- HERE shows in the
 	   regular expression about where the problem was discovered.  See
 	   perlre.
 
        POSIX syntax [. .] is reserved for future extensions in regex; marked
-       by <-- HERE in m/%s/
+       by &lt-- HERE in m/%s/
 	   (F regexp) Within regular expression character classes ([]) the
 	   syntax beginning with "[." and ending with ".]" is reserved for
 	   future extensions.  If you need to represent those character
 	   sequences inside a regular expression character class, just quote
-	   the square brackets with the backslash: "\[." and ".\]".  The <--
+	   the square brackets with the backslash: "\[." and ".\]".  The &lt--
 	   HERE shows in the regular expression about where the problem was
 	   discovered.	See perlre.
 
        POSIX syntax [= =] is reserved for future extensions in regex; marked
-       by <-- HERE in m/%s/
+       by &lt-- HERE in m/%s/
 	   (F) Within regular expression character classes ([]) the syntax
 	   beginning with "[=" and ending with "=]" is reserved for future
 	   extensions.	If you need to represent those character sequences
 	   inside a regular expression character class, just quote the square
-	   brackets with the backslash: "\[=" and "=\]".  The <-- HERE shows
+	   brackets with the backslash: "\[=" and "=\]".  The &lt-- HERE shows
 	   in the regular expression about where the problem was discovered.
 	   See perlre.
 
@@ -3082,18 +3084,18 @@ DESCRIPTION
 	   (F) You've omitted the closing parenthesis in a function prototype
 	   definition.
 
-       Quantifier follows nothing in regex; marked by <-- HERE in m/%s/
+       Quantifier follows nothing in regex; marked by &lt-- HERE in m/%s/
 	   (F) You started a regular expression with a quantifier. Backslash
-	   it if you meant it literally. The <-- HERE shows in the regular
+	   it if you meant it literally. The &lt-- HERE shows in the regular
 	   expression about where the problem was discovered. See perlre.
 
-       Quantifier in {,} bigger than %d in regex; marked by <-- HERE in m/%s/
+       Quantifier in {,} bigger than %d in regex; marked by &lt-- HERE in m/%s/
 	   (F) There is currently a limit to the size of the min and max
-	   values of the {min,max} construct. The <-- HERE shows in the
+	   values of the {min,max} construct. The &lt-- HERE shows in the
 	   regular expression about where the problem was discovered. See
 	   perlre.
 
-       Quantifier unexpected on zero-length expression; marked by <-- HERE in
+       Quantifier unexpected on zero-length expression; marked by &lt-- HERE in
        m/%s/
 	   (W regexp) You applied a regular expression quantifier in a place
 	   where it makes no sense, such as on a zero-width assertion.	Try
@@ -3102,7 +3104,7 @@ DESCRIPTION
 	   repetitions of "xyz" is "/abc(?=(?:xyz){3})/", not
 	   "/abc(?=xyz){3}/".
 
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered.
 
        Range iterator outside integer range
@@ -3155,9 +3157,9 @@ DESCRIPTION
 	   This usually means that you used the anon hash constructor when you
 	   meant to use parens. In any case, a hash requires key/value pairs.
 
-	       %hash = { one => 1, two => 2, };    # WRONG
+	       %hash = { one =&gt 1, two =&gt 2, };    # WRONG
 	       %hash = [ qw/ an anon array / ];    # WRONG
-	       %hash = ( one => 1, two => 2, );    # right
+	       %hash = ( one =&gt 1, two =&gt 2, );    # right
 	       %hash = qw( one 1 two 2 );		   # also fine
 
        Reference is already weak
@@ -3174,44 +3176,44 @@ DESCRIPTION
 	   (normal backreferences) or with strictly negative integers
 	   (relative backreferences), but using 0 does not make sense.
 
-       Reference to nonexistent group in regex; marked by <-- HERE in m/%s/
+       Reference to nonexistent group in regex; marked by &lt-- HERE in m/%s/
 	   (F) You used something like "\7" in your regular expression, but
 	   there are not at least seven sets of capturing parentheses in the
 	   expression. If you wanted to have the character with value 7
 	   inserted into the regular expression, prepend a zero to make the
 	   number at least two digits: "\07"
 
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered.
 
-       Reference to nonexistent or unclosed group in regex; marked by <-- HERE
+       Reference to nonexistent or unclosed group in regex; marked by &lt-- HERE
        in m/%s/
 	   (F) You used something like "\g{-7}" in your regular expression,
 	   but there are not at least seven sets of closed capturing
 	   parentheses in the expression before where the "\g{-7}" was
 	   located.
 
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered.
 
-       Reference to nonexistent named group in regex; marked by <-- HERE in
+       Reference to nonexistent named group in regex; marked by &lt-- HERE in
        m/%s/
-	   (F) You used something like "\k'NAME'" or "\k<NAME>" in your
+	   (F) You used something like "\k'NAME'" or "\k&ltNAME&gt" in your
 	   regular expression, but there is no corresponding named capturing
-	   parentheses such as "(?'NAME'...)" or "(?<NAME"...). Check if the
+	   parentheses such as "(?'NAME'...)" or "(?&ltNAME"...). Check if the
 	   name has been spelled correctly both in the backreference and the
 	   declaration.
 
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered.
 
-       (?(DEFINE)....) does not allow branches in regex; marked by <-- HERE in
+       (?(DEFINE)....) does not allow branches in regex; marked by &lt-- HERE in
        m/%s/
 	   (F) You used something like "(?(DEFINE)...|..)" which is illegal.
 	   The most likely cause of this error is that you left out a
 	   parenthesis inside of the "...." part.
 
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered.
 
        regexp memory corruption
@@ -3336,37 +3338,37 @@ DESCRIPTION
 	   (W closed) The socket you're sending to got itself closed sometime
 	   before now.	Check your control flow.
 
-       Sequence (? incomplete in regex; marked by <-- HERE in m/%s/
+       Sequence (? incomplete in regex; marked by &lt-- HERE in m/%s/
 	   (F) A regular expression ended with an incomplete extension (?. The
-	   <-- HERE shows in the regular expression about where the problem
+	   &lt-- HERE shows in the regular expression about where the problem
 	   was discovered. See perlre.
 
-       Sequence (?%s...) not implemented in regex; marked by <-- HERE in m/%s/
+       Sequence (?%s...) not implemented in regex; marked by &lt-- HERE in m/%s/
 	   (F) A proposed regular expression extension has the character
-	   reserved but has not yet been written. The <-- HERE shows in the
+	   reserved but has not yet been written. The &lt-- HERE shows in the
 	   regular expression about where the problem was discovered. See
 	   perlre.
 
-       Sequence (?%s...) not recognized in regex; marked by <-- HERE in m/%s/
+       Sequence (?%s...) not recognized in regex; marked by &lt-- HERE in m/%s/
 	   (F) You used a regular expression extension that doesn't make
-	   sense.  The <-- HERE shows in the regular expression about where
+	   sense.  The &lt-- HERE shows in the regular expression about where
 	   the problem was discovered.	See perlre.
 
-       Sequence \\%s... not terminated in regex; marked by <-- HERE in m/%s/
+       Sequence \\%s... not terminated in regex; marked by &lt-- HERE in m/%s/
 	   (F) The regular expression expects a mandatory argument following
 	   the escape sequence and this has been omitted or incorrectly
 	   written.
 
-       Sequence (?#... not terminated in regex; marked by <-- HERE in m/%s/
+       Sequence (?#... not terminated in regex; marked by &lt-- HERE in m/%s/
 	   (F) A regular expression comment must be terminated by a closing
-	   parenthesis.  Embedded parentheses aren't allowed.  The <-- HERE
+	   parenthesis.  Embedded parentheses aren't allowed.  The &lt-- HERE
 	   shows in the regular expression about where the problem was
 	   discovered. See perlre.
 
        Sequence (?{...}) not terminated or not {}-balanced in regex; marked by
-       <-- HERE in m/%s/
+       &lt-- HERE in m/%s/
 	   (F) If the contents of a (?{...}) clause contains braces, they must
-	   balance for Perl to properly detect the end of the clause. The <--
+	   balance for Perl to properly detect the end of the clause. The &lt--
 	   HERE shows in the regular expression about where the problem was
 	   discovered. See perlre.
 
@@ -3402,7 +3404,7 @@ DESCRIPTION
 	   Configure didn't think so.
 
        seteuid() not implemented
-	   (F) You tried to assign to $>, and your operating system doesn't
+	   (F) You tried to assign to $&gt, and your operating system doesn't
 	   support the seteuid() system call (or equivalent), or at least
 	   Configure didn't think so.
 
@@ -3417,7 +3419,7 @@ DESCRIPTION
 	   Configure didn't think so.
 
        setruid() not implemented
-	   (F) You tried to assign to $<, and your operating system doesn't
+	   (F) You tried to assign to $&lt, and your operating system doesn't
 	   support the setruid() system call (or equivalent), or at least
 	   Configure didn't think so.
 
@@ -3442,8 +3444,8 @@ DESCRIPTION
 	   interpreted as the != (numeric not equal) and ~ (1's complement)
 	   operators: probably not what you intended.
 
-       <> should be quotes
-	   (F) You wrote "require <file>" when you should have written
+       &lt&gt should be quotes
+	   (F) You wrote "require &ltfile&gt" when you should have written
 	   "require 'file'".
 
        /%s/ should probably be written as "%s"
@@ -3472,7 +3474,7 @@ DESCRIPTION
 
        Sort subroutine didn't return a numeric value
 	   (F) A sort comparison routine must return a number.	You probably
-	   blew it by not using "<=>" or "cmp", or by not using them
+	   blew it by not using "&lt=&gt" or "cmp", or by not using them
 	   correctly.  See "sort" in perlfunc.
 
        Sort subroutine didn't return single value
@@ -3551,7 +3553,7 @@ DESCRIPTION
 	   actually inferior to its current type.
 
        Switch (?(condition)... contains too many branches in regex; marked by
-       <-- HERE in m/%s/
+       &lt-- HERE in m/%s/
 	   (F) A (?(condition)if-clause|else-clause) construct can have at
 	   most two branches (the if-clause and the else-clause). If you want
 	   one or both to contain alternation, such as using
@@ -3559,12 +3561,12 @@ DESCRIPTION
 
 	       (?(condition)(?:this|that|other)|else-clause)
 
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered. See perlre.
 
-       Switch condition not recognized in regex; marked by <-- HERE in m/%s/
+       Switch condition not recognized in regex; marked by &lt-- HERE in m/%s/
 	   (F) If the argument to the (?(...)if-clause|else-clause) construct
-	   is a number, it can be only a number. The <-- HERE shows in the
+	   is a number, it can be only a number. The &lt-- HERE shows in the
 	   regular expression about where the problem was discovered. See
 	   perlre.
 
@@ -3686,7 +3688,7 @@ DESCRIPTION
 	   isn't the target of the change to %ENV which produced the warning.
 
        thread failed to start: %s
-	   (W threads)(S) The entry point function of threads->create() failed
+	   (W threads)(S) The entry point function of threads-&gtcreate() failed
 	   for some reason.
 
        times not implemented
@@ -3860,8 +3862,8 @@ DESCRIPTION
 
        Unknown open() mode '%s'
 	   (F) The second argument of 3-argument open() is not among the list
-	   of valid modes: "<", ">", ">>", "+<", "+>", "+>>", "-|", "|-",
-	   "<&", ">&".
+	   of valid modes: "&lt", "&gt", "&gt&gt", "+&lt", "+&gt", "+&gt&gt", "-|", "|-",
+	   "&lt&", "&gt&".
 
        Unknown PerlIO layer "%s"
 	   (W layer) An attempt was made to push an unknown layer onto the
@@ -3880,7 +3882,7 @@ DESCRIPTION
        Unknown "re" subpragma '%s' (known ones are: %s)
 	   You tried to use an unknown subpragma of the "re" pragma.
 
-       Unknown switch condition (?(%.2s in regex; marked by <-- HERE in m/%s/
+       Unknown switch condition (?(%.2s in regex; marked by &lt-- HERE in m/%s/
 	   (F) The condition part of a (?(condition)if-clause|else-clause)
 	   construct is not known. The condition may be lookahead or
 	   lookbehind (the condition is true if the lookahead or lookbehind is
@@ -3888,7 +3890,7 @@ DESCRIPTION
 	   evaluates to a true value), or a number (the condition is true if
 	   the set of capturing parentheses named by the number matched).
 
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered.  See perlre.
 
        Unknown Unicode option letter '%c'
@@ -3907,23 +3909,23 @@ DESCRIPTION
 	   module (e.g. "use warnings 'File::Find'"), you must have imported
 	   this module
 
-       Unknown verb pattern '%s' in regex; marked by <-- HERE in m/%s/
+       Unknown verb pattern '%s' in regex; marked by &lt-- HERE in m/%s/
 	   (F) You either made a typo or have incorrectly put a "*" quantifier
 	   after an open brace in your pattern.  Check the pattern and review
 	   perlre for details on legal verb patterns.
 
 	   first.
 
-       unmatched [ in regex; marked by <-- HERE in m/%s/
+       unmatched [ in regex; marked by &lt-- HERE in m/%s/
 	   (F) The brackets around a character class must match. If you wish
 	   to include a closing bracket in a character class, backslash it or
-	   put it first. The <-- HERE shows in the regular expression about
+	   put it first. The &lt-- HERE shows in the regular expression about
 	   where the problem was discovered. See perlre.
 
-       unmatched ( in regex; marked by <-- HERE in m/%s/
+       unmatched ( in regex; marked by &lt-- HERE in m/%s/
 	   (F) Unbackslashed parentheses must always be balanced in regular
 	   expressions. If you're a vi user, the % key is valuable for finding
-	   the matching parenthesis. The <-- HERE shows in the regular
+	   the matching parenthesis. The &lt-- HERE shows in the regular
 	   expression about where the problem was discovered. See perlre.
 
        Unmatched right %s bracket
@@ -3945,21 +3947,21 @@ DESCRIPTION
 	   a directory as a Perl program.
 
        Unrecognized escape \\%c in character class passed through in regex;
-       marked by <-- HERE in m/%s/
+       marked by &lt-- HERE in m/%s/
 	   (W regexp) You used a backslash-character combination which is not
 	   recognized by Perl inside character classes.  The character was
-	   understood literally.  The <-- HERE shows in the regular expression
+	   understood literally.  The &lt-- HERE shows in the regular expression
 	   about where the escape was discovered.
 
        Unrecognized escape \\%c passed through
 	   (W misc) You used a backslash-character combination which is not
 	   recognized by Perl.	The character was understood literally.
 
-       Unrecognized escape \\%c passed through in regex; marked by <-- HERE in
+       Unrecognized escape \\%c passed through in regex; marked by &lt-- HERE in
        m/%s/
 	   (W regexp) You used a backslash-character combination which is not
 	   recognized by Perl.	The character was understood literally.  The
-	   <-- HERE shows in the regular expression about where the escape was
+	   &lt-- HERE shows in the regular expression about where the escape was
 	   discovered.
 
        Unrecognized signal name "%s"
@@ -4020,20 +4022,20 @@ DESCRIPTION
 	   compressed integer format and could not be converted to an integer.
 	   See "pack" in perlfunc.
 
-       Unterminated verb pattern in regex; marked by <-- HERE in m/%s/
+       Unterminated verb pattern in regex; marked by &lt-- HERE in m/%s/
 	   (F) You used a pattern of the form "(*VERB)" but did not terminate
 	   the pattern with a ")". Fix the pattern and retry.
 
-       Unterminated verb pattern argument in regex; marked by <-- HERE in
+       Unterminated verb pattern argument in regex; marked by &lt-- HERE in
        m/%s/
 	   (F) You used a pattern of the form "(*VERB:ARG)" but did not
 	   terminate the pattern with a ")". Fix the pattern and retry.
 
-       Unterminated \g{...} pattern in regex; marked by <-- HERE in m/%s/
+       Unterminated \g{...} pattern in regex; marked by &lt-- HERE in m/%s/
 	   (F) You missed a close brace on a \g{..} pattern (group reference)
 	   in a regular expression. Fix the pattern and retry.
 
-       Unterminated <> operator
+       Unterminated &lt&gt operator
 	   (F) The lexer saw a left angle bracket in a place where it was
 	   expecting a term, so it's looking for the corresponding right angle
 	   bracket, and not finding it.  Chances are you left some needed
@@ -4052,7 +4054,7 @@ DESCRIPTION
 	   (F) You called a Win32 function with incorrect arguments.  See
 	   Win32 for more information.
 
-       Useless (?-%s) - don't use /%s modifier in regex; marked by <-- HERE in
+       Useless (?-%s) - don't use /%s modifier in regex; marked by &lt-- HERE in
        m/%s/
 	   (W regexp) You have used an internal modifier such as (?-o) that
 	   has no meaning unless removed from the entire regexp:
@@ -4063,7 +4065,7 @@ DESCRIPTION
 
 	       if ($string =~ /$pattern/) { ... }
 
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered. See perlre.
 
        Useless localization of %s
@@ -4072,7 +4074,7 @@ DESCRIPTION
 	   change at some point in the future, but in the meantime such code
 	   is discouraged.
 
-       Useless (?%s) - use /%s modifier in regex; marked by <-- HERE in m/%s/
+       Useless (?%s) - use /%s modifier in regex; marked by &lt-- HERE in m/%s/
 	   (W regexp) You have used an internal modifier such as (?o) that has
 	   no meaning unless applied to the entire regexp:
 
@@ -4082,7 +4084,7 @@ DESCRIPTION
 
 	       if ($string =~ /$pattern/o) { ... }
 
-	   The <-- HERE shows in the regular expression about where the
+	   The &lt-- HERE shows in the regular expression about where the
 	   problem was discovered. See perlre.
 
        Useless use of %s in void context
@@ -4148,7 +4150,7 @@ DESCRIPTION
 	   (F) The "use" keyword is recognized and executed at compile time,
 	   and returns no useful value.  See perlmod.
 
-       Use of bare << to mean <<"" is deprecated
+       Use of bare &lt&lt to mean &lt&lt"" is deprecated
 	   (D deprecated, W syntax) You are now encouraged to use the
 	   explicitly quoted form if you wish to use an empty line as the
 	   terminator of the here-document.
@@ -4207,8 +4209,8 @@ DESCRIPTION
 	   (D deprecated) As an (ahem) accidental feature, "AUTOLOAD"
 	   subroutines are looked up as methods (using the @ISA hierarchy)
 	   even when the subroutines to be autoloaded were called as plain
-	   functions (e.g.  "Foo::bar()"), not as methods (e.g. "Foo->bar()"
-	   or "$obj->bar()").
+	   functions (e.g.  "Foo::bar()"), not as methods (e.g. "Foo-&gtbar()"
+	   or "$obj-&gtbar()").
 
 	   This bug will be rectified in future by using method lookup only
 	   for methods' "AUTOLOAD"s.  However, there is a significant base of
@@ -4293,13 +4295,13 @@ DESCRIPTION
 
        Using a hash as a reference is deprecated
 	   (D deprecated) You tried to use a hash as a reference, as in
-	   "%foo->{"bar"}" or "%$ref->{"hello"}".  Versions of perl <= 5.6.1
+	   "%foo-&gt{"bar"}" or "%$ref-&gt{"hello"}".  Versions of perl &lt= 5.6.1
 	   used to allow this syntax, but shouldn't have. It is now
 	   deprecated, and will be removed in a future version.
 
        Using an array as a reference is deprecated
 	   (D deprecated) You tried to use an array as a reference, as in
-	   "@foo->[23]" or "@$ref->[99]".  Versions of perl <= 5.6.1 used to
+	   "@foo-&gt[23]" or "@$ref-&gt[99]".  Versions of perl &lt= 5.6.1 used to
 	   allow this syntax, but shouldn't have. It is now deprecated, and
 	   will be removed in a future version.
 
@@ -4313,7 +4315,7 @@ DESCRIPTION
 	   turn off this warning by "no warnings 'utf8';".
 
        Value of %s can be "0"; test with defined()
-	   (W misc) In a conditional expression, you used <HANDLE>, <*>
+	   (W misc) In a conditional expression, you used &ltHANDLE&gt, &lt*&gt
 	   (glob), "each()", or "readdir()" as a boolean value.  Each of these
 	   constructs can return a value of "0"; that would make the
 	   conditional expression false, which is probably not what you
@@ -4342,7 +4344,7 @@ DESCRIPTION
 	   Conversely, the following won't give a warning since the anonymous
 	   subroutine has by now been created and is live:
 
-	       sub { my $a; eval 'sub f { $a }' }->();
+	       sub { my $a; eval 'sub f { $a }' }-&gt();
 
 	   The second situation is caused by an eval accessing a variable that
 	   has gone out of scope, for example,
@@ -4351,7 +4353,7 @@ DESCRIPTION
 		   my $a;
 		   sub { eval '$a' }
 	       }
-	       f()->();
+	       f()-&gt();
 
 	   Here, when the '$a' in the eval is being compiled, f() is not
 	   currently being executed, so its $a is not available for capture.
@@ -4396,12 +4398,12 @@ DESCRIPTION
 	   that reference variables in outer subroutines are created, they are
 	   automatically rebound to the current values of such variables.
 
-       Verb pattern '%s' has a mandatory argument in regex; marked by <-- HERE
+       Verb pattern '%s' has a mandatory argument in regex; marked by &lt-- HERE
        in m/%s/
 	   (F) You used a verb pattern that requires an argument. Supply an
 	   argument or check that you are using the right verb.
 
-       Verb pattern '%s' may not have an argument in regex; marked by <-- HERE
+       Verb pattern '%s' may not have an argument in regex; marked by &lt-- HERE
        in m/%s/
 	   (F) You used a verb pattern that is not allowed an argument. Remove
 	   the argument or check that you are using the right verb.
@@ -4443,7 +4445,7 @@ DESCRIPTION
 	   So put in parentheses to say what you really mean.
 
        Wide character in %s
-	   (S utf8) Perl met a wide character (>255) when it wasn't expecting
+	   (S utf8) Perl met a wide character (&gt255) when it wasn't expecting
 	   one.  This warning is by default on for I/O (like print).  The
 	   easiest way to quiet this warning is simply to add the ":utf8"
 	   layer to the output, e.g. "binmode STDOUT, ':utf8'".  Another way
@@ -4506,6 +4508,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-07-26			   PERLDIAG(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

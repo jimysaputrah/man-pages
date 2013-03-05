@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This describes the shell code for the `new' completion system, referred..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>zshcompsys - zsh completion system</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 ZSHCOMPSYS(1)							 ZSHCOMPSYS(1)
 
 
@@ -364,7 +366,7 @@ INITIALIZATION
 
        For the -value- context, the form is `-value-,name,command', where name
        is the name of the parameter.  In the case of elements of  an  associa-
-       tive  array,  for  example  `assoc=(key	<TAB>',  name  is  expanded to
+       tive  array,  for  example  `assoc=(key	&ltTAB&gt',  name  is  expanded to
        `name-key'.  In certain special	contexts,  such  as  completing  after
        `make  CFLAGS=',  the  command part gives the name of the command, here
        make; otherwise it is empty.
@@ -372,16 +374,16 @@ INITIALIZATION
        It is not necessary to define fully specific completions as  the  func-
        tions  provided	will  try  to  generate  completions  by progressively
        replacing the elements with `-default-'.  For example, when  completing
-       after  `foo=<TAB>',  _value will try the names `-value-,foo,' (note the
+       after  `foo=&ltTAB&gt',  _value will try the names `-value-,foo,' (note the
        empty	      command	       part),	       `-value-,foo,-default-'
        and`-value-,-default-,-default-', in that order, until it finds a func-
        tion to handle the context.
 
        As an example:
 
-	      compdef '_files -g "*.log"' '-redirect-,2>,-default-'
+	      compdef '_files -g "*.log"' '-redirect-,2&gt,-default-'
 
-       completes files matching `*.log' after `2> <TAB>' for any command  with
+       completes files matching `*.log' after `2&gt &ltTAB&gt' for any command  with
        no more specific handler defined.
 
        Also:
@@ -395,9 +397,9 @@ INITIALIZATION
        The  same  lookup  rules  are used when looking up styles (as described
        below); for example
 
-	      zstyle ':completion:*:*:-redirect-,2>,*:*' file-patterns '*.log'
+	      zstyle ':completion:*:*:-redirect-,2&gt,*:*' file-patterns '*.log'
 
-       is another way to make  completion  after  `2>  <TAB>'  complete  files
+       is another way to make  completion  after  `2&gt  &ltTAB&gt'  complete  files
        matching `*.log'.
 
 
@@ -3076,7 +3078,7 @@ UTILITY FUNCTIONS
 	      `tag:descr:action'.  The tags are offered using _tags and if the
 	      tag is requested, the action is executed with the given descrip-
 	      tion descr.  The actions are those accepted  by  the  _arguments
-	      function	(described  below), excluding the `->state' and `=...'
+	      function	(described  below), excluding the `-&gtstate' and `=...'
 	      forms.
 
 	      For example, the action may be a simple function call:
@@ -3306,7 +3308,7 @@ UTILITY FUNCTIONS
        used, and on subsequent calls `_arguments !$^global_options'.
 
        In each of the forms above the action determines how completions should
-       be generated.  Except for the `->string' form below, the action will be
+       be generated.  Except for the `-&gtstring' form below, the action will be
        executed by calling the _all_labels function to process all tag labels.
        No special handling of tags is needed unless a function call introduces
        a new one.
@@ -3334,7 +3336,7 @@ UTILITY FUNCTIONS
 	      The  matches  will be listed together with their descriptions if
 	      the description style is set with the values tag in the context.
 
-       ->string
+       -&gtstring
 	      In this form, _arguments processes the arguments and options and
 	      then returns control to the calling function with parameters set
 	      to  indicate  the state of processing; the calling function then
@@ -3342,7 +3344,7 @@ UTILITY FUNCTIONS
 	      example,	functions  that implement a state machine can use this
 	      type of action.
 
-	      Where _arguments encounters a  `->string',  it  will  strip  all
+	      Where _arguments encounters a  `-&gtstring',  it  will  strip  all
 	      leading  and  trailing  whitespace from string and set the array
 	      state to the set of all stringss for which an action  is	to  be
 	      performed.
@@ -3360,7 +3362,7 @@ UTILITY FUNCTIONS
 	      of resetting these parameters or propagating changes in them.
 
 	      A  function calling _arguments with at least one action contain-
-	      ing a `->string' must therefore declare appropriate local param-
+	      ing a `-&gtstring' must therefore declare appropriate local param-
 	      eters:
 
 		     local context state line
@@ -3417,7 +3419,7 @@ UTILITY FUNCTIONS
        slashes.
 
        The  parameter  `context' is set when returning to the calling function
-       to perform an action of the form `->string'.  It is set to an array  of
+       to perform an action of the form `-&gtstring'.  It is set to an array  of
        elements  corresponding	to  the elements of $state.  Each element is a
        suitable name for the argument field of the context: either a string of
        the  form `option-opt-n' for the n'th argument of the option -opt, or a
@@ -3504,7 +3506,7 @@ UTILITY FUNCTIONS
        to `-foo-bar'.
 
        The  option  -C tells _arguments to modify the curcontext parameter for
-       an action of the form `->state'.  This is the standard  parameter  used
+       an action of the form `-&gtstate'.  This is the standard  parameter  used
        to  keep  track	of  the current context.  Here it (and not the context
        array) should be made local to the calling function  to	avoid  passing
        back  the modified value and should be initialised to the current value
@@ -3843,7 +3845,7 @@ UTILITY FUNCTIONS
 		     _arguments '-n-: :_guard "[0-9]#" "numeric value"' '-none'
 
 	      _arguments can be made to  both  display	the  message  `numeric
-	      value'  and  complete  options  after `-n<TAB>'.	If the `-n' is
+	      value'  and  complete  options  after `-n&ltTAB&gt'.	If the `-n' is
 	      already followed by one or more digits (the  pattern  passed  to
 	      _guard)  only the message will be displayed; if the `-n' is fol-
 	      lowed by another character, only options are completed.
@@ -4415,14 +4417,14 @@ UTILITY FUNCTIONS
 		     local context state line
 		     typeset -A val_args
 
-	      when using an action of the form `->string'.  With this function
+	      when using an action of the form `-&gtstring'.  With this function
 	      the context parameter will be set to the name of the value whose
 	      argument is to be completed.
 
 	      Note  also  that _values normally adds the character used as the
 	      separator between values as an auto-removable suffix (similar to
 	      a  `/'  after a directory).  However, this is not possible for a
-	      `->string' action as the matches for the argument are  generated
+	      `-&gtstring' action as the matches for the argument are  generated
 	      by  the  calling	function.  To get the usual behaviour, the the
 	      calling function can add the separator x as a suffix by  passing
 	      the options `-qS x' either directly or indirectly to compadd.
@@ -4494,6 +4496,6 @@ COMPLETION DIRECTORIES
 
 
 zsh 4.3.11		       December 20, 2010		 ZSHCOMPSYS(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

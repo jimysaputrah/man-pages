@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This class is the part of Mail::DKIM responsible for generating..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Mail::DKIM::Signer - generates a DKIM signature for a message</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Mail::DKIM::Signer(3) User Contributed Perl DocumentationMail::DKIM::Signer(3)
 
 
@@ -20,32 +22,32 @@ SYNOPSIS
 	 use Mail::DKIM::TextWrap;  #recommended
 
 	 # create a signer object
-	 my $dkim = Mail::DKIM::Signer->new(
-			 Algorithm => "rsa-sha1",
-			 Method => "relaxed",
-			 Domain => "example.org",
-			 Selector => "selector1",
-			 KeyFile => "private.key",
+	 my $dkim = Mail::DKIM::Signer-&gtnew(
+			 Algorithm =&gt "rsa-sha1",
+			 Method =&gt "relaxed",
+			 Domain =&gt "example.org",
+			 Selector =&gt "selector1",
+			 KeyFile =&gt "private.key",
 		    );
 
 	 # read an email from a file handle
-	 $dkim->load(*STDIN);
+	 $dkim-&gtload(*STDIN);
 
 	 # or read an email and pass it into the signer, one line at a time
-	 while (<STDIN>)
+	 while (&ltSTDIN&gt)
 	 {
 	     # remove local line terminators
 	     chomp;
 	     s/\015$//;
 
 	     # use SMTP line terminators
-	     $dkim->PRINT("$_\015\012");
+	     $dkim-&gtPRINT("$_\015\012");
 	 }
-	 $dkim->CLOSE;
+	 $dkim-&gtCLOSE;
 
 	 # what is the signature result?
-	 my $signature = $dkim->signature;
-	 print $signature->as_string;
+	 my $signature = $dkim-&gtsignature;
+	 print $signature-&gtas_string;
 
 DESCRIPTION
        This class is the part of Mail::DKIM responsible for generating
@@ -70,17 +72,17 @@ CONSTRUCTOR
        Construct an object-oriented signer.
 
 	 # create a signer using the default policy
-	 my $dkim = Mail::DKIM::Signer->new(
-			 Algorithm => "rsa-sha1",
-			 Method => "relaxed",
-			 Domain => "example.org",
-			 Selector => "selector1",
-			 KeyFile => "private.key",
+	 my $dkim = Mail::DKIM::Signer-&gtnew(
+			 Algorithm =&gt "rsa-sha1",
+			 Method =&gt "relaxed",
+			 Domain =&gt "example.org",
+			 Selector =&gt "selector1",
+			 KeyFile =&gt "private.key",
 		    );
 
 	 # create a signer using a custom policy
-	 my $dkim = Mail::DKIM::Signer->new(
-			 Policy => $policyfn,
+	 my $dkim = Mail::DKIM::Signer-&gtnew(
+			 Policy =&gt $policyfn,
 		    );
 
        The "default policy" is to create a DKIM signature using the specified
@@ -106,7 +108,7 @@ METHODS
    PRINT()
        Feed part of the message to the signer.
 
-	 $dkim->PRINT("a line of the message\015\012");
+	 $dkim-&gtPRINT("a line of the message\015\012");
 
        Feeds content of the message being signed into the signer.  The API is
        designed this way so that the entire message does NOT need to be read
@@ -115,12 +117,12 @@ METHODS
        Please note that although the PRINT() method expects you to use SMTP-
        style line termination characters, you should NOT use the SMTP-style
        dot-stuffing technique described in RFC 2821 section 4.5.2.  Nor should
-       you use a <CR><LF>.<CR><LF> sequence to terminate the message.
+       you use a &ltCR&gt&ltLF&gt.&ltCR&gt&ltLF&gt sequence to terminate the message.
 
    CLOSE()
        Call this when finished feeding in the message.
 
-	 $dkim->CLOSE;
+	 $dkim-&gtCLOSE;
 
        This method finishes the canonicalization process, computes a hash, and
        generates a signature.
@@ -128,7 +130,7 @@ METHODS
    add_signature()
        Used by signer policy to create a new signature.
 
-	 $dkim->add_signature(new Mail::DKIM::Signature(...));
+	 $dkim-&gtadd_signature(new Mail::DKIM::Signature(...));
 
        Signer policies can use this method to specify complete parameters for
        the signature to add, including what type of signature. For more
@@ -137,30 +139,30 @@ METHODS
    algorithm()
        Get or set the selected algorithm.
 
-	 $alg = $dkim->algorithm;
+	 $alg = $dkim-&gtalgorithm;
 
-	 $dkim->algorithm("rsa-sha1");
+	 $dkim-&gtalgorithm("rsa-sha1");
 
    domain()
        Get or set the selected domain.
 
-	 $alg = $dkim->domain;
+	 $alg = $dkim-&gtdomain;
 
-	 $dkim->domain("example.org");
+	 $dkim-&gtdomain("example.org");
 
    load()
        Load the entire message from a file handle.
 
-	 $dkim->load($file_handle);
+	 $dkim-&gtload($file_handle);
 
        Reads a complete message from the designated file handle, feeding it
-       into the signer.  The message must use <CRLF> line terminators (same as
+       into the signer.  The message must use &ltCRLF&gt line terminators (same as
        the SMTP protocol).
 
    headers()
        Determine which headers to put in signature.
 
-	 my $headers = $dkim->headers;
+	 my $headers = $dkim-&gtheaders;
 
        This is a string containing the names of the header fields that will be
        signed, separated by colons.
@@ -168,9 +170,9 @@ METHODS
    key()
        Get or set the private key object.
 
-	 my $key = $dkim->key;
+	 my $key = $dkim-&gtkey;
 
-	 $dkim->key(Mail::DKIM::PrivateKey->load(File => "private.key"));
+	 $dkim-&gtkey(Mail::DKIM::PrivateKey-&gtload(File =&gt "private.key"));
 
        The key object can be any object that implements the sign_digest()
        method.	(Providing your own object can be useful if your actual keys
@@ -182,9 +184,9 @@ METHODS
    key_file()
        Get or set the filename containing the private key.
 
-	 my $filename = $dkim->key_file;
+	 my $filename = $dkim-&gtkey_file;
 
-	 $dkim->key_file("private.key");
+	 $dkim-&gtkey_file("private.key");
 
        If you use this method to specify a private key file, do not use
        "key()".
@@ -192,14 +194,14 @@ METHODS
    method()
        Get or set the selected canonicalization method.
 
-	 $alg = $dkim->method;
+	 $alg = $dkim-&gtmethod;
 
-	 $dkim->method("relaxed");
+	 $dkim-&gtmethod("relaxed");
 
    message_originator()
        Access the "From" header.
 
-	 my $address = $dkim->message_originator;
+	 my $address = $dkim-&gtmessage_originator;
 
        Returns the "originator address" found in the message, as a
        Mail::Address object.  This is typically the (first) name and email
@@ -208,14 +210,14 @@ METHODS
 
        To get just the email address part, do:
 
-	 my $email = $dkim->message_originator->address;
+	 my $email = $dkim-&gtmessage_originator-&gtaddress;
 
        See also "message_sender()".
 
    message_sender()
        Access the "From" or "Sender" header.
 
-	 my $address = $dkim->message_sender;
+	 my $address = $dkim-&gtmessage_sender;
 
        Returns the "sender" found in the message, as a Mail::Address object.
        This is typically the (first) name and email address found in the
@@ -225,7 +227,7 @@ METHODS
 
        To get just the email address part, do:
 
-	 my $email = $dkim->message_sender->address;
+	 my $email = $dkim-&gtmessage_sender-&gtaddress;
 
        The "sender" is the mailbox of the agent responsible for the actual
        transmission of the message. For example, if a secretary were to send a
@@ -235,14 +237,14 @@ METHODS
    selector()
        Get or set the current key selector.
 
-	 $alg = $dkim->selector;
+	 $alg = $dkim-&gtselector;
 
-	 $dkim->selector("alpha");
+	 $dkim-&gtselector("alpha");
 
    signature()
        Access the generated signature object.
 
-	 my $signature = $dkim->signature;
+	 my $signature = $dkim-&gtsignature;
 
        Returns the generated signature. The signature is an object of type
        Mail::DKIM::Signature. If multiple signatures were generated, this
@@ -255,7 +257,7 @@ METHODS
    signatures()
        Access list of generated signature objects.
 
-	 my @signatures = $dkim->signatures;
+	 my @signatures = $dkim-&gtsignatures;
 
        Returns all generated signatures, as a list.
 
@@ -272,10 +274,10 @@ SIGNER POLICIES
 	     my $dkim = shift;
 
 	     # specify signature parameters
-	     $dkim->algorithm("rsa-sha1");
-	     $dkim->method("relaxed");
-	     $dkim->domain("example.org");
-	     $dkim->selector("mx1");
+	     $dkim-&gtalgorithm("rsa-sha1");
+	     $dkim-&gtmethod("relaxed");
+	     $dkim-&gtdomain("example.org");
+	     $dkim-&gtselector("mx1");
 
 	     # return true value to create the signature
 	     return 1;
@@ -289,21 +291,21 @@ SIGNER POLICIES
 
 	 my $policyfn = sub {
 	     my $dkim = shift;
-	     $dkim->add_signature(
+	     $dkim-&gtadd_signature(
 		     new Mail::DKIM::Signature(
-			     Algorithm => "rsa-sha1",
-			     Method => "relaxed",
-			     Headers => $dkim->headers,
-			     Domain => "example.org",
-			     Selector => "mx1",
+			     Algorithm =&gt "rsa-sha1",
+			     Method =&gt "relaxed",
+			     Headers =&gt $dkim-&gtheaders,
+			     Domain =&gt "example.org",
+			     Selector =&gt "mx1",
 		     ));
-	     $dkim->add_signature(
+	     $dkim-&gtadd_signature(
 		     new Mail::DKIM::DkSignature(
-			     Algorithm => "rsa-sha1",
-			     Method => "nofws",
-			     Headers => $dkim->headers,
-			     Domain => "example.org",
-			     Selector => "mx1",
+			     Algorithm =&gt "rsa-sha1",
+			     Method =&gt "nofws",
+			     Headers =&gt $dkim-&gtheaders,
+			     Domain =&gt "example.org",
+			     Selector =&gt "mx1",
 		     ));
 	     return;
 	 };
@@ -316,7 +318,7 @@ SEE ALSO
        Mail::DKIM::SignerPolicy
 
 AUTHOR
-       Jason Long, <jlong@messiah.edu>
+       Jason Long, &ltjlong@messiah.edu&gt
 
 COPYRIGHT AND LICENSE
        Copyright (C) 2006-2007 by Messiah College
@@ -328,6 +330,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2010-11-14		 Mail::DKIM::Signer(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

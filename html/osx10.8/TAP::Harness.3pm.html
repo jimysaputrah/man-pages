@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This is a simple test harness which allows tests to be run and results..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>TAP::Harness - Run test scripts with statistics</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 TAP::Harness(3pm)      Perl Programmers Reference Guide      TAP::Harness(3pm)
 
 
@@ -24,18 +26,18 @@ DESCRIPTION
 
 SYNOPSIS
 	use TAP::Harness;
-	my $harness = TAP::Harness->new( \%args );
-	$harness->runtests(@tests);
+	my $harness = TAP::Harness-&gtnew( \%args );
+	$harness-&gtruntests(@tests);
 
 METHODS
    Class Methods
        "new"
 
 	my %args = (
-	   verbosity => 1,
-	   lib	   => [ 'lib', 'blib/lib', 'blib/arch' ],
+	   verbosity =&gt 1,
+	   lib	   =&gt [ 'lib', 'blib/lib', 'blib/arch' ],
 	)
-	my $harness = TAP::Harness->new( \%args );
+	my $harness = TAP::Harness-&gtnew( \%args );
 
        The constructor returns a new "TAP::Harness" object. It accepts an
        optional hashref whose allowed keys are:
@@ -102,7 +104,7 @@ METHODS
 	   spits out TAP is fine. You can use this argument to specify the
 	   name of the program (and optional switches) to run your tests with:
 
-	     exec => ['/usr/bin/ruby', '-w']
+	     exec =&gt ['/usr/bin/ruby', '-w']
 
 	   You can also pass a subroutine reference in order to determine and
 	   return the proper program to run based on a given test script. The
@@ -113,7 +115,7 @@ METHODS
 	   "undef", in which case TAP::Harness will fall back on executing the
 	   test script in Perl:
 
-	       exec => sub {
+	       exec =&gt sub {
 		   my ( $harness, $test_file ) = @_;
 
 		   # Let Perl tests run.
@@ -167,7 +169,7 @@ METHODS
 	   made in the summary report. To see all of the parse errors, set
 	   this argument to true:
 
-	     errors => 1
+	     errors =&gt 1
 
        o   "directives"
 
@@ -192,12 +194,12 @@ METHODS
 	   executed in parallel. This is an experimental feature and the
 	   interface may change.
 
-	       $harness->rules(
-		   {   par => [
-			   { seq => '../ext/DB_File/t/*' },
-			   { seq => '../ext/IO_Compress_Zlib/t/*' },
-			   { seq => '../lib/CPANPLUS/*' },
-			   { seq => '../lib/ExtUtils/t/*' },
+	       $harness-&gtrules(
+		   {   par =&gt [
+			   { seq =&gt '../ext/DB_File/t/*' },
+			   { seq =&gt '../ext/IO_Compress_Zlib/t/*' },
+			   { seq =&gt '../lib/CPANPLUS/*' },
+			   { seq =&gt '../lib/ExtUtils/t/*' },
 			   '*'
 		       ]
 		   }
@@ -212,7 +214,7 @@ METHODS
    Instance Methods
        "runtests"
 
-	   $harness->runtests(@tests);
+	   $harness-&gtruntests(@tests);
 
        Accepts and array of @tests to be run. This should generally be the
        names of test files, but this is not required. Each element in @tests
@@ -223,7 +225,7 @@ METHODS
        the test name by supplying the test as a reference to an array
        containing "[ $test, $alias ]":
 
-	   $harness->runtests( [ 't/foo.t', 'Foo Once' ],
+	   $harness-&gtruntests( [ 't/foo.t', 'Foo Once' ],
 			       [ 't/foo.t', 'Foo Twice' ] );
 
        Normally it is an error to attempt to run the same test twice. Aliases
@@ -245,7 +247,7 @@ METHODS
 
        "aggregate_tests"
 
-	 $harness->aggregate_tests( $aggregate, @tests );
+	 $harness-&gtaggregate_tests( $aggregate, @tests );
 
        Run the named tests and display a summary of result. Tests will be run
        in the order found.
@@ -258,20 +260,20 @@ METHODS
        example, in the case where some tests should run in parallel but others
        are unsuitable for parallel execution.
 
-	   my $formatter   = TAP::Formatter::Console->new;
-	   my $ser_harness = TAP::Harness->new( { formatter => $formatter } );
-	   my $par_harness = TAP::Harness->new(
-	       {   formatter => $formatter,
-		   jobs      => 9
+	   my $formatter   = TAP::Formatter::Console-&gtnew;
+	   my $ser_harness = TAP::Harness-&gtnew( { formatter =&gt $formatter } );
+	   my $par_harness = TAP::Harness-&gtnew(
+	       {   formatter =&gt $formatter,
+		   jobs      =&gt 9
 	       }
 	   );
-	   my $aggregator = TAP::Parser::Aggregator->new;
+	   my $aggregator = TAP::Parser::Aggregator-&gtnew;
 
-	   $aggregator->start();
-	   $ser_harness->aggregate_tests( $aggregator, @ser_tests );
-	   $par_harness->aggregate_tests( $aggregator, @par_tests );
-	   $aggregator->stop();
-	   $formatter->summary($aggregator);
+	   $aggregator-&gtstart();
+	   $ser_harness-&gtaggregate_tests( $aggregator, @ser_tests );
+	   $par_harness-&gtaggregate_tests( $aggregator, @par_tests );
+	   $aggregator-&gtstop();
+	   $formatter-&gtsummary($aggregator);
 
        Note that for simpler testing requirements it will often be possible to
        replace the above code with a single call to "runtests".
@@ -314,29 +316,29 @@ SUBCLASSING
 
        "summary"
 
-	 $harness->summary( \%args );
+	 $harness-&gtsummary( \%args );
 
        "summary" prints the summary report after all tests are run. The
        argument is a hashref with the following keys:
 
        o   "start"
 
-	   This is created with "Benchmark->new" and it the time the tests
+	   This is created with "Benchmark-&gtnew" and it the time the tests
 	   started. You can print a useful summary time, if desired, with:
 
-	       $self->output(
-		   timestr( timediff( Benchmark->new, $start_time ), 'nop' ) );
+	       $self-&gtoutput(
+		   timestr( timediff( Benchmark-&gtnew, $start_time ), 'nop' ) );
 
        o   "tests"
 
 	   This is an array reference of all test names. To get the
 	   TAP::Parser object for individual tests:
 
-	    my $aggregate = $args->{aggregate};
-	    my $tests	  = $args->{tests};
+	    my $aggregate = $args-&gt{aggregate};
+	    my $tests	  = $args-&gt{tests};
 
 	    for my $name ( @$tests ) {
-		my ($parser) = $aggregate->parsers($test);
+		my ($parser) = $aggregate-&gtparsers($test);
 		... do something with $parser
 	    }
 
@@ -347,7 +349,7 @@ SUBCLASSING
        Make a new parser and display formatter session. Typically used and/or
        overridden in subclasses.
 
-	   my ( $parser, $session ) = $harness->make_parser;
+	   my ( $parser, $session ) = $harness-&gtmake_parser;
 
        "finish_parser"
 
@@ -371,6 +373,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-07		     TAP::Harness(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

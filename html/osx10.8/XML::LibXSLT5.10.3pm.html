@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module is an interface to the gnome project's libxslt. This is an..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>XML::LibXSLT - Interface to the gnome libxslt library</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 LibXSLT(3)	      User Contributed Perl Documentation	    LibXSLT(3)
 
 
@@ -19,16 +21,16 @@ SYNOPSIS
 	 use XML::LibXSLT;
 	 use XML::LibXML;
 
-	 my $xslt = XML::LibXSLT->new();
+	 my $xslt = XML::LibXSLT-&gtnew();
 
-	 my $source = XML::LibXML->load_xml(location => 'foo.xml');
-	 my $style_doc = XML::LibXML->load_xml(location=>'bar.xsl', no_cdata=>1);
+	 my $source = XML::LibXML-&gtload_xml(location =&gt 'foo.xml');
+	 my $style_doc = XML::LibXML-&gtload_xml(location=&gt'bar.xsl', no_cdata=&gt1);
 
-	 my $stylesheet = $xslt->parse_stylesheet($style_doc);
+	 my $stylesheet = $xslt-&gtparse_stylesheet($style_doc);
 
-	 my $results = $stylesheet->transform($source);
+	 my $results = $stylesheet-&gttransform($source);
 
-	 print $stylesheet->output_as_bytes($results);
+	 print $stylesheet-&gtoutput_as_bytes($results);
 
 DESCRIPTION
        This module is an interface to the gnome project's libxslt. This is an
@@ -46,7 +48,7 @@ OPTIONS
        called without a parameter to retrieve the current value.
 
        max_depth
-	     XML::LibXSLT->max_depth(1000);
+	     XML::LibXSLT-&gtmax_depth(1000);
 
 	   This option sets the maximum recursion depth for a stylesheet. See
 	   the very end of section 5.4 of the XSLT specification for more
@@ -55,31 +57,31 @@ OPTIONS
 	   Default value is 250.
 
        debug_callback
-	     XML::LibXSLT->debug_callback($subref);
+	     XML::LibXSLT-&gtdebug_callback($subref);
 
 	   Sets a callback to be used for debug messages. If you don't set
 	   this, debug messages will be ignored.
 
        register_function
-	     XML::LibXSLT->register_function($uri, $name, $subref);
+	     XML::LibXSLT-&gtregister_function($uri, $name, $subref);
 
 	   Registers an XSLT extension function mapped to the given URI. For
 	   example:
 
-	     XML::LibXSLT->register_function("urn:foo", "bar",
+	     XML::LibXSLT-&gtregister_function("urn:foo", "bar",
 	       sub { scalar localtime });
 
 	   Will register a "bar" function in the "urn:foo" namespace (which
 	   you have to define in your XSLT using "xmlns:...") that will return
 	   the current date and time as a string:
 
-	     <xsl:stylesheet version="1.0"
+	     &ltxsl:stylesheet version="1.0"
 	       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	       xmlns:foo="urn:foo">
-	     <xsl:template match="/">
-	       The time is: <xsl:value-of select="foo:bar()"/>
-	     </xsl:template>
-	     </xsl:stylesheet>
+	       xmlns:foo="urn:foo"&gt
+	     &ltxsl:template match="/"&gt
+	       The time is: &ltxsl:value-of select="foo:bar()"/&gt
+	     &lt/xsl:template&gt
+	     &lt/xsl:stylesheet&gt
 
 	   Parameters can be in whatever format you like. If you pass in a
 	   nodelist it will be a XML::LibXML::NodeList object in your perl
@@ -106,7 +108,7 @@ API
 	   otherwise libxslt may misbehave. The best way to assure this is to
 	   load the stylesheet with no_cdata flag, e.g.
 
-	     my $stylesheet_doc = XML::LibXML->load_xml(location=>"some.xsl", no_cdata=>1);
+	     my $stylesheet_doc = XML::LibXML-&gtload_xml(location=&gt"some.xsl", no_cdata=&gt1);
 
        parse_stylesheet_file($filename)
 	   Exactly the same as the above, but parses the given filename
@@ -132,21 +134,21 @@ XML::LibXSLT::Stylesheet
        happen with one stylesheet without requiring a reparse.
 
        transform(doc, %params)
-	     my $results = $stylesheet->transform($doc, foo => "value);
-	     print $stylesheet->output_as_bytes($results);
+	     my $results = $stylesheet-&gttransform($doc, foo =&gt "value);
+	     print $stylesheet-&gtoutput_as_bytes($results);
 
 	   Transforms the passed in XML::LibXML::Document object, and returns
 	   a new XML::LibXML::Document. Extra hash entries are used as
 	   parameters.	See output_string
 
        transform_file(filename, %params)
-	     my $results = $stylesheet->transform_file($filename, bar => "value");
+	     my $results = $stylesheet-&gttransform_file($filename, bar =&gt "value");
 
        output_as_bytes(result)
 	   Returns a scalar that is the XSLT rendering of the
 	   XML::LibXML::Document object using the desired output format
 	   (specified in the xsl:output tag in the stylesheet). Note that you
-	   can also call $result->toString, but that will *always* output the
+	   can also call $result-&gttoString, but that will *always* output the
 	   document in XML format which may not be what you asked for in the
 	   xsl:output tag. The scalar is a byte string encoded in the output
 	   encoding specified in the stylesheet.
@@ -183,14 +185,14 @@ Parameters
        pass a string to the XSLT engine, you actually have to pass it as a
        quoted string:
 
-	 $stylesheet->transform($doc, param => "'string'");
+	 $stylesheet-&gttransform($doc, param =&gt "'string'");
 
        Note the quotes within quotes there!
 
        Obviously this isn't much fun, so you can make it easy on yourself:
 
-	 $stylesheet->transform($doc, XML::LibXSLT::xpath_to_string(
-	       param => "string"
+	 $stylesheet-&gttransform($doc, XML::LibXSLT::xpath_to_string(
+	       param =&gt "string"
 	       ));
 
        The utility function does the right thing with respect to strings in
@@ -236,16 +238,16 @@ XML::LibXSLT::Security
        preferences to the XML::LibXSLT or XML::LibXSLT::Stylesheet object
        using "security_callbacks()".
 
-	 my $security = XML::LibXSLT::Security->new();
-	 $security->register_callback( read_file  => $read_cb );
-	 $security->register_callback( write_file => $write_cb );
-	 $security->register_callback( create_dir => $create_cb );
-	 $security->register_callback( read_net   => $read_net_cb );
-	 $security->register_callback( write_net  => $write_net_cb );
+	 my $security = XML::LibXSLT::Security-&gtnew();
+	 $security-&gtregister_callback( read_file  =&gt $read_cb );
+	 $security-&gtregister_callback( write_file =&gt $write_cb );
+	 $security-&gtregister_callback( create_dir =&gt $create_cb );
+	 $security-&gtregister_callback( read_net   =&gt $read_net_cb );
+	 $security-&gtregister_callback( write_net  =&gt $write_net_cb );
 
-	 $xslt->security_callbacks( $security );
+	 $xslt-&gtsecurity_callbacks( $security );
 	  -OR-
-	 $stylesheet->security_callbacks( $security );
+	 $stylesheet-&gtsecurity_callbacks( $security );
 
        The registered callback functions are called when access to a resource
        is requested. If the access should be allowed the callback should
@@ -257,7 +259,7 @@ XML::LibXSLT::Security
 	   can use this to get the current XML::LibXSLT::Stylesheet object by
 	   calling "stylesheet()".
 
-	     my $stylesheet = $tctxt->stylesheet();
+	     my $stylesheet = $tctxt-&gtstylesheet();
 
 	   The stylesheet object can then be used to share contextual
 	   information between different calls to the security callbacks.
@@ -354,6 +356,6 @@ SEE ALSO
 
 
 perl v5.10.1			  2009-10-07			    LibXSLT(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

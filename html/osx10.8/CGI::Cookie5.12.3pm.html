@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="CGI::Cookie is an interface to HTTP/1.1 cookies, an innovation that..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>CGI::Cookie - Interface to HTTP Cookies</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 CGI::Cookie(3)	      User Contributed Perl Documentation	CGI::Cookie(3)
 
 
@@ -20,19 +22,19 @@ SYNOPSIS
 	   use CGI::Cookie;
 
 	   # Create new cookies and send them
-	   $cookie1 = CGI::Cookie->new(-name=>'ID',-value=>123456);
-	   $cookie2 = CGI::Cookie->new(-name=>'preferences',
-				      -value=>{ font => Helvetica,
-						size => 12 }
+	   $cookie1 = CGI::Cookie-&gtnew(-name=&gt'ID',-value=&gt123456);
+	   $cookie2 = CGI::Cookie-&gtnew(-name=&gt'preferences',
+				      -value=&gt{ font =&gt Helvetica,
+						size =&gt 12 }
 				      );
-	   print header(-cookie=>[$cookie1,$cookie2]);
+	   print header(-cookie=&gt[$cookie1,$cookie2]);
 
 	   # fetch existing cookies
-	   %cookies = CGI::Cookie->fetch;
-	   $id = $cookies{'ID'}->value;
+	   %cookies = CGI::Cookie-&gtfetch;
+	   $id = $cookies{'ID'}-&gtvalue;
 
 	   # create cookies returned from an external source
-	   %cookies = CGI::Cookie->parse($ENV{COOKIE});
+	   %cookies = CGI::Cookie-&gtparse($ENV{COOKIE});
 
 DESCRIPTION
        CGI::Cookie is an interface to HTTP/1.1 cookies, an innovation that
@@ -105,12 +107,12 @@ USING CGI::Cookie
 		   http://www.owasp.org/index.php/HTTPOnly#Browsers_Supporting_HTTPOnly
 
    Creating New Cookies
-	       my $c = CGI::Cookie->new(-name	 =>  'foo',
-				    -value   =>  'bar',
-				    -expires =>  '+3M',
-				    -domain  =>  '.capricorn.com',
-				    -path    =>  '/cgi-bin/database',
-				    -secure  =>  1
+	       my $c = CGI::Cookie-&gtnew(-name	 =&gt  'foo',
+				    -value   =&gt  'bar',
+				    -expires =&gt  '+3M',
+				    -domain  =&gt  '.capricorn.com',
+				    -path    =&gt  '/cgi-bin/database',
+				    -secure  =&gt  1
 				   );
 
        Create cookies from scratch with the new method.  The -name and -value
@@ -151,15 +153,15 @@ USING CGI::Cookie
        mod_perl request object as the first argument to "new()". It will
        simply be ignored:
 
-	 my $c = CGI::Cookie->new($r,
-				 -name	  =>  'foo',
-				 -value   =>  ['bar','baz']);
+	 my $c = CGI::Cookie-&gtnew($r,
+				 -name	  =&gt  'foo',
+				 -value   =&gt  ['bar','baz']);
 
    Sending the Cookie to the Browser
        The simplest way to send a cookie to the browser is by calling the
        bake() method:
 
-	 $c->bake;
+	 $c-&gtbake;
 
        This will print the Set-Cookie HTTP header to STDOUT using CGI.pm.
        CGI.pm will be loaded for this purpose if it is not already. Otherwise
@@ -167,15 +169,15 @@ USING CGI::Cookie
 
        Under mod_perl, pass in an Apache request object:
 
-	 $c->bake($r);
+	 $c-&gtbake($r);
 
        If you want to set the cookie yourself, Within a CGI script you can
        send a cookie to the browser by creating one or more Set-Cookie: fields
        in the HTTP header.  Here is a typical sequence:
 
-	 my $c = CGI::Cookie->new(-name    =>  'foo',
-				 -value   =>  ['bar','baz'],
-				 -expires =>  '+3M');
+	 my $c = CGI::Cookie-&gtnew(-name    =&gt  'foo',
+				 -value   =&gt  ['bar','baz'],
+				 -expires =&gt  '+3M');
 
 	 print "Set-Cookie: $c\n";
 	 print "Content-Type: text/html\n\n";
@@ -185,28 +187,28 @@ USING CGI::Cookie
        If you are using CGI.pm, you send cookies by providing a -cookie
        argument to the header() method:
 
-	 print header(-cookie=>$c);
+	 print header(-cookie=&gt$c);
 
        Mod_perl users can set cookies using the request object's header_out()
        method:
 
-	 $r->headers_out->set('Set-Cookie' => $c);
+	 $r-&gtheaders_out-&gtset('Set-Cookie' =&gt $c);
 
        Internally, Cookie overloads the "" operator to call its as_string()
        method when incorporated into the HTTP header.  as_string() turns the
        Cookie's internal representation into an RFC-compliant text
        representation.	You may call as_string() yourself if you prefer:
 
-	 print "Set-Cookie: ",$c->as_string,"\n";
+	 print "Set-Cookie: ",$c-&gtas_string,"\n";
 
    Recovering Previous Cookies
-	       %cookies = CGI::Cookie->fetch;
+	       %cookies = CGI::Cookie-&gtfetch;
 
        fetch returns an associative array consisting of all cookies returned
        by the browser.	The keys of the array are the cookie names.  You can
        iterate through the cookies this way:
 
-	       %cookies = CGI::Cookie->fetch;
+	       %cookies = CGI::Cookie-&gtfetch;
 	       for (keys %cookies) {
 		  do_something($cookies{$_});
 	       }
@@ -224,12 +226,12 @@ USING CGI::Cookie
        using the parse() class method:
 
 	      $COOKIES = `cat /usr/tmp/Cookie_stash`;
-	      %cookies = CGI::Cookie->parse($COOKIES);
+	      %cookies = CGI::Cookie-&gtparse($COOKIES);
 
        If you are in a mod_perl environment, you can save some overhead by
        passing the request object to fetch() like this:
 
-	  CGI::Cookie->fetch($r);
+	  CGI::Cookie-&gtfetch($r);
 
        If the value passed to parse() is undefined, an empty array will
        returned in list contact, and an empty hashref will be returned in
@@ -245,14 +247,14 @@ USING CGI::Cookie
        name()
 	   Get or set the cookie's name.  Example:
 
-		   $name = $c->name;
-		   $new_name = $c->name('fred');
+		   $name = $c-&gtname;
+		   $new_name = $c-&gtname('fred');
 
        value()
 	   Get or set the cookie's value.  Example:
 
-		   $value = $c->value;
-		   @new_value = $c->value(['a','b','c','d']);
+		   $value = $c-&gtvalue;
+		   @new_value = $c-&gtvalue(['a','b','c','d']);
 
 	   value() is context sensitive.  In a list context it will return the
 	   current value of the cookie as an array.  In a scalar context it
@@ -281,12 +283,12 @@ BUGS
 SEE ALSO
        CGI::Carp, CGI
 
-       RFC 2109 <http://www.ietf.org/rfc/rfc2109.txt>, RFC 2695
-       <http://www.ietf.org/rfc/rfc2965.txt>
+       RFC 2109 &lthttp://www.ietf.org/rfc/rfc2109.txt&gt, RFC 2695
+       &lthttp://www.ietf.org/rfc/rfc2965.txt&gt
 
 
 
 perl v5.12.4			  2011-01-05			CGI::Cookie(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

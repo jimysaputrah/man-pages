@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Manual::Features - A boatload of DBIx::Class features with</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::Manual::FUserrContributed Perl DoDBIx::Class::Manual::Features(3)
 
 
@@ -26,8 +28,8 @@ META
        Currently (June 9, 2010) 6 active branches (committed to in the last
        two weeks) in git.  Last release (0.08122) had 14 new features, and 16
        bug fixes.  Of course that ebbs and flows
-       <http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=dbsrgits/DBIx-
-       Class.git;a=blob;f=Changes>.)
+       &lthttp://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=dbsrgits/DBIx-
+       Class.git;a=blob;f=Changes&gt.)
 
    Responsive Community
        I needed MSSQL order-by support; the community helped me add support
@@ -48,18 +50,18 @@ General ORM
        D - Delete
 
    SQL: Create
-	my $sth = $dbh->prepare('
+	my $sth = $dbh-&gtprepare('
 	   INSERT INTO books
 	   (title, author_id)
 	   values (?,?)
 	');
 
-	$sth->execute( 'A book title', $author_id );
+	$sth-&gtexecute( 'A book title', $author_id );
 
    DBIC: Create
-	my $book = $book_rs->create({
-	   title     => 'A book title',
-	   author_id => $author_id,
+	my $book = $book_rs-&gtcreate({
+	   title     =&gt 'A book title',
+	   author_id =&gt $author_id,
 	});
 
        See "create" in DBIx::Class::ResultSet
@@ -69,32 +71,32 @@ General ORM
        Transparently uses INSERT ... RETURNING for databases that support it
 
    SQL: Read
-	my $sth = $dbh->prepare('
+	my $sth = $dbh-&gtprepare('
 	   SELECT title,
 	   authors.name as author_name
 	   FROM books, authors
 	   WHERE books.author = authors.id
 	');
 
-	while ( my $book = $sth->fetchrow_hashref ) {
-	  say "Author of $book->{title} is $book->{author_name}";
+	while ( my $book = $sth-&gtfetchrow_hashref ) {
+	  say "Author of $book-&gt{title} is $book-&gt{author_name}";
 	}
 
    DBIC: Read
-	my $book = $book_rs->find($book_id);
+	my $book = $book_rs-&gtfind($book_id);
 
        or
 
-	my $book = $book_rs->search({ title => 'A book title' }, { rows => 1 })->next;
+	my $book = $book_rs-&gtsearch({ title =&gt 'A book title' }, { rows =&gt 1 })-&gtnext;
 
        or
 
-	my @books = $book_rs->search({ author => $author_id })->all;
+	my @books = $book_rs-&gtsearch({ author =&gt $author_id })-&gtall;
 
        or
 
-	while( my $book = $books_rs->next ) {
-	  printf "Author of %s is %s\n", $book->title, $book->author->name;
+	while( my $book = $books_rs-&gtnext ) {
+	  printf "Author of %s is %s\n", $book-&gttitle, $book-&gtauthor-&gtname;
 	}
 
        See "find" in DBIx::Class::ResultSet, "search" in
@@ -104,33 +106,33 @@ General ORM
        TMTOWTDI!
 
    SQL: Update
-	my $update = $dbh->prepare('
+	my $update = $dbh-&gtprepare('
 	   UPDATE books
 	   SET title = ?
 	   WHERE id = ?
 	');
 
-	$update->execute( 'New title', $book_id );
+	$update-&gtexecute( 'New title', $book_id );
 
    DBIC: Update
-	$book->update({ title => 'New title' });
+	$book-&gtupdate({ title =&gt 'New title' });
 
        See "update" in DBIx::Class::Row
 
        Will not update unless value changes
 
    SQL: Delete
-	my $delete = $dbh->prepare('DELETE FROM books WHERE id = ?');
+	my $delete = $dbh-&gtprepare('DELETE FROM books WHERE id = ?');
 
-	$delete->execute($book_id);
+	$delete-&gtexecute($book_id);
 
    DBIC: Delete
-	$book->delete
+	$book-&gtdelete
 
        See "delete" in DBIx::Class::Row
 
    SQL: Search
-	my $sth = $dbh->prepare('
+	my $sth = $dbh-&gtprepare('
 	  SELECT title,
 	  authors.name as author_name
 	  FROM books
@@ -139,10 +141,10 @@ General ORM
 	');
 
    DBIC: Search
-	my $book = $book_rs->search({
-	   'me.name'  => { -like => '%monte cristo%' },
-	   'me.topic' => 'jailbreak',
-	})->next;
+	my $book = $book_rs-&gtsearch({
+	   'me.name'  =&gt { -like =&gt '%monte cristo%' },
+	   'me.topic' =&gt 'jailbreak',
+	})-&gtnext;
 
        See SQL::Abstract, "next" in DBIx::Class::ResultSet, and "search" in
        DBIx::Class::ResultSet
@@ -174,12 +176,12 @@ DBIx::Class Specific Features
        These things may be in other ORM's, but they are very specific, so
        doubtful
 
-   ->deploy
+   -&gtdeploy
        Create a database from your DBIx::Class schema.
 
-	my $schema = Frew::Schema->connect( $dsn, $user, $pass );
+	my $schema = Frew::Schema-&gtconnect( $dsn, $user, $pass );
 
-	$schema->deploy
+	$schema-&gtdeploy
 
        See "deploy" in DBIx::Class::Schema.
 
@@ -195,16 +197,16 @@ DBIx::Class Specific Features
 
 	use base 'DBIx::Class::Schema::Loader';
 
-	__PACKAGE__->loader_options({
-	   naming => 'v7',
-	   debug  => $ENV{DBIC_TRACE},
+	__PACKAGE__-&gtloader_options({
+	   naming =&gt 'v7',
+	   debug  =&gt $ENV{DBIC_TRACE},
 	});
 
 	1;
 
 	# elsewhere...
 
-	my $schema = Frew::Schema->connect( $dsn, $user, $pass );
+	my $schema = Frew::Schema-&gtconnect( $dsn, $user, $pass );
 
        See DBIx::Class::Schema::Loader and "CONSTRUCTOR_OPTIONS" in
        DBIx::Class::Schema::Loader::Base.
@@ -212,28 +214,28 @@ DBIx::Class Specific Features
    Populate
        Made for inserting lots of rows very quicky into database
 
-	$schema->populate([ Users =>
+	$schema-&gtpopulate([ Users =&gt
 	   [qw( username password )],
-	   [qw( frew	 >=4char$ )],
+	   [qw( frew	 &gt=4char$ )],
 	   [qw(      ...	  )],
 	   [qw(      ...	  )],
 	);
 
        See "populate" in DBIx::Class::Schema
 
-       I use populate here <http://blog.afoolishmanifesto.com/archives/1255>
+       I use populate here &lthttp://blog.afoolishmanifesto.com/archives/1255&gt
        to export our whole (200M~) db to SQLite
 
    Multicreate
        Create an object and it's related objects all at once
 
-	$schema->resultset('Author')->create({
-	   name => 'Stephen King',
-	   books => [{ title => 'The Dark Tower' }],
-	   address => {
-	      street => '123 Turtle Back Lane',
-	      state  => { abbreviation => 'ME' },
-	      city   => { name => 'Lowell'     },
+	$schema-&gtresultset('Author')-&gtcreate({
+	   name =&gt 'Stephen King',
+	   books =&gt [{ title =&gt 'The Dark Tower' }],
+	   address =&gt {
+	      street =&gt '123 Turtle Back Lane',
+	      state  =&gt { abbreviation =&gt 'ME' },
+	      city   =&gt { name =&gt 'Lowell'     },
 	   },
 	});
 
@@ -289,15 +291,15 @@ DBIx::Class Specific Features
 
 	sub good {
 	   my $self = shift;
-	   $self->search({
-	      $self->current_source_alias . '.rating' => { '>=' => 4 }
+	   $self-&gtsearch({
+	      $self-&gtcurrent_source_alias . '.rating' =&gt { '&gt=' =&gt 4 }
 	   })
 	};
 
 	sub cheap {
 	   my $self = shift;
-	   $self->search({
-	      $self->current_source_alias . '.price' => { '<=' => 5}
+	   $self-&gtsearch({
+	      $self-&gtcurrent_source_alias . '.price' =&gt { '&lt=' =&gt 5}
 	   })
 	};
 
@@ -313,30 +315,30 @@ DBIx::Class Specific Features
        no matter what
 
    ResultSet method in Action
-	$schema->resultset('Book')->good
+	$schema-&gtresultset('Book')-&gtgood
 
    ResultSet Chaining
-	$schema->resultset('Book')
-	   ->good
-	   ->cheap
-	   ->recent
+	$schema-&gtresultset('Book')
+	   -&gtgood
+	   -&gtcheap
+	   -&gtrecent
 
    search_related
-	my $score = $schema->resultset('User')
-	   ->search({'me.userid' => 'frew'})
-	   ->related_resultset('access')
-	   ->related_resultset('mgmt')
-	   ->related_resultset('orders')
-	   ->telephone
-	   ->search_related( shops => {
-	      'shops.datecompleted' => {
-		 -between => ['2009-10-01','2009-10-08']
+	my $score = $schema-&gtresultset('User')
+	   -&gtsearch({'me.userid' =&gt 'frew'})
+	   -&gtrelated_resultset('access')
+	   -&gtrelated_resultset('mgmt')
+	   -&gtrelated_resultset('orders')
+	   -&gttelephone
+	   -&gtsearch_related( shops =&gt {
+	      'shops.datecompleted' =&gt {
+		 -between =&gt ['2009-10-01','2009-10-08']
 	      }
-	   })->completed
-	   ->related_resultset('rpt_score')
-	   ->search(undef, { rows => 1})
-	   ->get_column('raw_scores')
-	   ->next;
+	   })-&gtcompleted
+	   -&gtrelated_resultset('rpt_score')
+	   -&gtsearch(undef, { rows =&gt 1})
+	   -&gtget_column('raw_scores')
+	   -&gtnext;
 
        The SQL that this produces (with placeholders filled in for clarity's
        sake) on our system (Microsoft SQL) is:
@@ -376,14 +378,14 @@ DBIx::Class Specific Features
        DBIx::ClassResultSet, and "get_column" in DBIx::Class::ResultSet.
 
    bonus rel methods
-	my $book = $author->create_related(
-	   books => {
-	      title => 'Another Discworld book',
+	my $book = $author-&gtcreate_related(
+	   books =&gt {
+	      title =&gt 'Another Discworld book',
 	   }
 	);
 
-	my $book2 = $pratchett->add_to_books({
-	   title => 'MOAR Discworld book',
+	my $book2 = $pratchett-&gtadd_to_books({
+	   title =&gt 'MOAR Discworld book',
 	});
 
        See "create_related" in DBIx::Class::Relationship::Base and
@@ -392,13 +394,13 @@ DBIx::Class Specific Features
        Note that it automatically fills in foreign key for you
 
    Excellent Transaction Support
-	$schema->txn_do(sub {
+	$schema-&gttxn_do(sub {
 	   ...
 	});
 
-	$schema->txn_begin; # <-- low level
+	$schema-&gttxn_begin; # &lt-- low level
 	# ...
-	$schema->txn_commit;
+	$schema-&gttxn_commit;
 
        See "txn_do" in DBIx::Class::Schema, "txn_begin" in
        DBIx::Class::Schema, and "txn_commit" in DBIx::Class::Schema.
@@ -415,12 +417,12 @@ DBIx::Class Specific Features
 
 	# Result code here
 
-	__PACKAGE__->load_components('InflateColumn');
+	__PACKAGE__-&gtload_components('InflateColumn');
 
-	__PACKAGE__->inflate_column(
-	   date_published => {
-	      inflate => sub { DateTime::Format::MySQL->parse_date( shift ) },
-	      deflate => sub { shift->ymd },
+	__PACKAGE__-&gtinflate_column(
+	   date_published =&gt {
+	      inflate =&gt sub { DateTime::Format::MySQL-&gtparse_date( shift ) },
+	      deflate =&gt sub { shift-&gtymd },
 	   },
 	);
 
@@ -428,11 +430,11 @@ DBIx::Class Specific Features
        DBIx::Class::InflateColumn, and DBIx::Class::InflateColumn::DateTime.
 
    InflateColumn: deflation
-	$book->date_published(DateTime->now);
-	$book->update;
+	$book-&gtdate_published(DateTime-&gtnow);
+	$book-&gtupdate;
 
    InflateColumn: inflation
-	say $book->date_published->month_abbr; # Nov
+	say $book-&gtdate_published-&gtmonth_abbr; # Nov
 
    FilterColumn
 	package Frew::Schema::Result::Book;
@@ -444,12 +446,12 @@ DBIx::Class Specific Features
 
 	# Result code here
 
-	__PACKAGE__->load_components('FilterColumn');
+	__PACKAGE__-&gtload_components('FilterColumn');
 
-	__PACKAGE__->filter_column(
-	   length => {
-	      to_storage   => 'to_metric',
-	      from_storage => 'to_imperial',
+	__PACKAGE__-&gtfilter_column(
+	   length =&gt {
+	      to_storage   =&gt 'to_metric',
+	      from_storage =&gt 'to_imperial',
 	   },
 	);
 
@@ -460,32 +462,32 @@ DBIx::Class Specific Features
        DBIx::Class::FilterColumn
 
    ResultSetColumn
-	my $rsc = $schema->resultset('Book')->get_column('price');
-	$rsc->first;
-	$rsc->all;
-	$rsc->min;
-	$rsc->max;
-	$rsc->sum;
+	my $rsc = $schema-&gtresultset('Book')-&gtget_column('price');
+	$rsc-&gtfirst;
+	$rsc-&gtall;
+	$rsc-&gtmin;
+	$rsc-&gtmax;
+	$rsc-&gtsum;
 
        See DBIx::Class::ResultSetColumn
 
    Aggregates
-	my @res = $rs->search(undef, {
-	   select   => [
+	my @res = $rs-&gtsearch(undef, {
+	   select   =&gt [
 	      'price',
 	      'genre',
-	      { max => price },
-	      { avg => price },
+	      { max =&gt price },
+	      { avg =&gt price },
 	   ],
-	   as	    => [
+	   as	    =&gt [
 	      qw(price genre max_price avg_price)
 	   ],
-	   group_by => [qw(price genre)],
+	   group_by =&gt [qw(price genre)],
 	});
 	for (@res) {
-	   say $_->price . ' ' . $_->genre;
-	   say $_->get_column('max_price');
-	   say $_->get_column('avg_price');
+	   say $_-&gtprice . ' ' . $_-&gtgenre;
+	   say $_-&gtget_column('max_price');
+	   say $_-&gtget_column('avg_price');
 	}
 
        See "select" in DBIx::Class::ResultSet, "as" in DBIx::Class::ResultSet,
@@ -497,8 +499,8 @@ DBIx::Class Specific Features
        public for get resultset column (prev example)
 
    HRI
-	$rs->search(undef, {
-	  result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+	$rs-&gtsearch(undef, {
+	  result_class =&gt 'DBIx::Class::ResultClass::HashRefInflator',
 	});
 
        See "result_class" in DBIx::Class::ResultSet and
@@ -507,30 +509,30 @@ DBIx::Class Specific Features
        Easy on memory
        Mega fast
        Great for quick debugging
-       Great for performance tuning (we went from 2m to < 3s)
+       Great for performance tuning (we went from 2m to &lt 3s)
 
    Subquery Support
-	my $inner_query = $schema->resultset('Artist')
-	   ->search({
-	    name => [ 'Billy Joel', 'Brittany Spears' ],
-	})->get_column('id')->as_query;
+	my $inner_query = $schema-&gtresultset('Artist')
+	   -&gtsearch({
+	    name =&gt [ 'Billy Joel', 'Brittany Spears' ],
+	})-&gtget_column('id')-&gtas_query;
 
-	my $rs = $schema->resultset('CD')->search({
-	    artist_id => { -in => $inner_query },
+	my $rs = $schema-&gtresultset('CD')-&gtsearch({
+	    artist_id =&gt { -in =&gt $inner_query },
 	});
 
        See "Subqueries" in DBIx::Class::Manual::Cookbook
 
    Bare SQL w/ Placeholders
-	$rs->update({
+	$rs-&gtupdate({
 	   # !!! SQL INJECTION VECTOR
-	   price => \"price + $inc", # DON'T DO THIS
+	   price =&gt \"price + $inc", # DON'T DO THIS
 	});
 
        Better:
 
-	$rs->update({
-	   price => \['price + ?', [inc => $inc]],
+	$rs-&gtupdate({
+	   price =&gt \['price + ?', [inc =&gt $inc]],
 	});
 
        See "Literal_SQL_with_placeholders_and_bind_values_(subqueries)" in
@@ -539,6 +541,6 @@ DBIx::Class Specific Features
 
 
 perl v5.12.4			  2011-07-26  DBIx::Class::Manual::Features(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

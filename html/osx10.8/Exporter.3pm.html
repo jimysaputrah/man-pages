@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Exporter module implements an "import" method which allows a module..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Exporter - Implements default import method for modules</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Exporter(3pm)	       Perl Programmers Reference Guide 	 Exporter(3pm)
 
 
@@ -73,15 +75,15 @@ DESCRIPTION
        common symbol names to reduce the risk of name clashes.
 
        Generally anything not exported is still accessible from outside the
-       module using the "YourModule::item_name" (or "$blessed_ref->method")
+       module using the "YourModule::item_name" (or "$blessed_ref-&gtmethod")
        syntax.	By convention you can use a leading underscore on names to
        informally indicate that they are 'internal' and not for public use.
 
        (It is actually possible to get private functions by saying:
 
 	 my $subref = sub { ... };
-	 $subref->(@args);	      # Call it as a function
-	 $obj->$subref(@args);	      # Use it as a method
+	 $subref-&gt(@args);	      # Call it as a function
+	 $obj-&gt$subref(@args);	      # Use it as a method
 
        However if you use them for methods it is up to you to figure out how
        to make inheritance work.)
@@ -138,7 +140,7 @@ Advanced features
 
 	   @EXPORT	= qw(A1 A2 A3 A4 A5);
 	   @EXPORT_OK	= qw(B1 B2 B3 B4 B5);
-	   %EXPORT_TAGS = (T1 => [qw(A1 A2 B1 B2)], T2 => [qw(A1 A2 B3 B4)]);
+	   %EXPORT_TAGS = (T1 =&gt [qw(A1 A2 B1 B2)], T2 =&gt [qw(A1 A2 B3 B4)]);
 
 	   Note that you cannot use tags in @EXPORT or @EXPORT_OK.
 	   Names in EXPORT_TAGS must also appear in @EXPORT or @EXPORT_OK.
@@ -164,7 +166,7 @@ Advanced features
        situations where you can't directly call Exporter's import method. The
        export_to_level method looks like:
 
-	   MyPackage->export_to_level($where_to_export, $package, @what_to_export);
+	   MyPackage-&gtexport_to_level($where_to_export, $package, @what_to_export);
 
        where $where_to_export is an integer telling how far up the calling
        stack to export your symbols, and @what_to_export is an array telling
@@ -196,7 +198,7 @@ Advanced features
 	   sub import
 	   {
 	       $A::b = 1;
-	       A->export_to_level(1, @_);
+	       A-&gtexport_to_level(1, @_);
 	   }
 
        This will export the symbols one level 'above' the current package -
@@ -223,7 +225,7 @@ Advanced features
 
    Module Version Checking
        The Exporter module will convert an attempt to import a number from a
-       module into a call to "$module_name->require_version($value)". This can
+       module into a call to "$module_name-&gtrequire_version($value)". This can
        be used to validate that the version of the module being used is
        greater than or equal to the required version.
 
@@ -248,7 +250,7 @@ Advanced features
        generating an error. The Exporter will call an export_fail method with
        a list of the failed symbols:
 
-	 @failed_symbols = $module_name->export_fail(@failed_symbols);
+	 @failed_symbols = $module_name-&gtexport_fail(@failed_symbols);
 
        If the "export_fail" method returns an empty list then no error is
        recorded and all the requested symbols are exported. If the returned
@@ -267,7 +269,7 @@ Advanced features
        @EXPORT or @EXPORT_OK, two utility functions are provided which allow
        you to easily add tagged sets of symbols to @EXPORT or @EXPORT_OK:
 
-	 %EXPORT_TAGS = (foo => [qw(aa bb cc)], bar => [qw(aa cc dd)]);
+	 %EXPORT_TAGS = (foo =&gt [qw(aa bb cc)], bar =&gt [qw(aa cc dd)]);
 
 	 Exporter::export_tags('foo');	   # add aa, bb and cc to @EXPORT
 	 Exporter::export_ok_tags('bar');  # add aa, cc and dd to @EXPORT_OK
@@ -283,7 +285,7 @@ Advanced features
 
        The simplest way to do this is:
 
-	 %EXPORT_TAGS = (foo => [qw(aa bb cc)], bar => [qw(aa cc dd)]);
+	 %EXPORT_TAGS = (foo =&gt [qw(aa bb cc)], bar =&gt [qw(aa cc dd)]);
 
 	 # add all the other ":class" tags to the ":all" class,
 	 # deleting duplicates
@@ -402,7 +404,7 @@ Good Practices
        boilerplate code at a single gulp in the use statement.
 
 	  use Exporter::Easy (
-	      OK => [ qw(munge frobnicate) ],
+	      OK =&gt [ qw(munge frobnicate) ],
 	  );
 	  # @ISA setup is automatic
 	  # all assignments happen at compile time
@@ -452,6 +454,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-06-07			 Exporter(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

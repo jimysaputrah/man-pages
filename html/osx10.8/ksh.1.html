@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Ksh is a command and programming language that executes	commands  read..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>ksh,  rksh,  pfksh  - KornShell, a standard/restricted command and pro-</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 KSH(1)									KSH(1)
 
 
@@ -38,7 +40,7 @@ DESCRIPTION
    Definitions.
        A metacharacter is one of the following characters:
 
-	      ;   &   (   )   |   <   >   new-line   space   tab
+	      ;   &   (   )   |   &lt   &gt   new-line   space   tab
 
        A  blank  is a tab or a space.  An identifier is a sequence of letters,
        digits, or underscores starting with a letter or  underscore.   Identi-
@@ -91,7 +93,7 @@ DESCRIPTION
        bol |& causes asynchronous execution of the preceding pipeline  with  a
        two-way	pipe  established  to the parent shell; the standard input and
        output of the spawned pipeline can be written to and read from  by  the
-       parent shell by applying the redirection operators <& and >& with arg p
+       parent shell by applying the redirection operators &lt& and &gt& with arg p
        to commands and by using -p option of the built-in  commands  read  and
        print described later.  The symbol && (||) causes the list following it
        to be executed only if the preceding pipeline returns a zero (non-zero)
@@ -319,7 +321,7 @@ DESCRIPTION
 			   source='command .'
 			   stop='kill -s STOP'
 			   suspend='kill -s STOP $$'
-			   times='{ { time;} 2>&1;}'
+			   times='{ { time;} 2&gt&1;}'
 			   type='whence -v'
 
    Tilde Substitution.
@@ -348,8 +350,8 @@ DESCRIPTION
        or follow a ;.  In the third (obsolete) form, the  string  between  the
        quotes  is  processed for special quoting characters before the command
        is executed (see Quoting below).  The command substitution $(cat  file)
-       can  be	replaced  by  the equivalent but faster $(<file).  The command
-       substitution $(n<#) will expand to the current  byte  offset  for  file
+       can  be	replaced  by  the equivalent but faster $(&ltfile).  The command
+       substitution $(n&lt#) will expand to the current  byte  offset  for  file
        descriptor n.  Except for the second form, the command list is run in a
        subshell so that no side effects are possible.  For  the  second  form,
        the final } will be recognized as a reserved word after any token.
@@ -362,15 +364,15 @@ DESCRIPTION
    Process Substitution.
        This feature is only available on versions of the UNIX operating system
        that support the /dev/fd directory for naming open files.  Each command
-       argument  of  the  form	<(list) or >(list) will run process list asyn-
+       argument  of  the  form	&lt(list) or &gt(list) will run process list asyn-
        chronously connected to some file in /dev/fd.  The name	of  this  file
-       will  become  the  argument  to	the  command.	If  the form with > is
-       selected then writing on this file will provide input for list.	 If  <
+       will  become  the  argument  to	the  command.	If  the form with &gt is
+       selected then writing on this file will provide input for list.	 If  &lt
        is used, then the file passed as an argument will contain the output of
        the list process.  For example,
 
-	      paste <(cut -f1  file1)  <(cut  -f3  file2)  |  tee  >(process1)
-	      >(process2)
+	      paste &lt(cut -f1  file1)  &lt(cut  -f3  file2)  |  tee  &gt(process1)
+	      &gt(process2)
 
        cuts fields 1 and 3 from the files file1 and file2 respectively, pastes
        the results together, and  sends  it  to  the  processes  process1  and
@@ -378,7 +380,7 @@ DESCRIPTION
        the file, which is passed as an argument to  the  command,  is  a  UNIX
        pipe(2)	so programs that expect to lseek(2) on the file will not work.
 
-       Process substitution of the form <(list) can also be used  with	the  <
+       Process substitution of the form &lt(list) can also be used  with	the  &lt
        redirection  operator  which  causes  the output of list to be standard
        input or the input for whatever file descriptor is specified.
 
@@ -799,7 +801,7 @@ DESCRIPTION
 		     is  replaced  by the command number (see Command Re-entry
 		     below).  Two successive occurrences of !  will produce  a
 		     single !  when the prompt string is printed.
-	      PS2    Secondary prompt string, by default ``> ''.
+	      PS2    Secondary prompt string, by default ``&gt ''.
 	      PS3    Selection	prompt	string	used  within a select loop, by
 		     default ``#? ''.
 	      PS4    The value of this	variable  is  expanded	for  parameter
@@ -895,7 +897,7 @@ DESCRIPTION
 
        In  the remaining forms, a field is created for each number starting at
        n1 and continuing until it reaches n2 incrementing n1 by n3.  The cases
-       where n3 is not specified behave as if n3 where 1 if n1<=n2 and -1 oth-
+       where n3 is not specified behave as if n3 where 1 if n1&lt=n2 and -1 oth-
        erwise.	If forms which specify %fmt any format flags, widths and  pre-
        cisions	can  be  specified  and  fmt  can end in any of the specifiers
        cdiouxX.  For  example,	{a,z}{1..5..3%02d}{b..c}x  expands  to	the  8
@@ -1235,10 +1237,10 @@ DESCRIPTION
        string =~ ere
 	      True  if	string	matches  the  pattern  ~(E)ere where ere is an
 	      extended regular expression.
-       string1 < string2
+       string1 &lt string2
 	      True, if string1 comes before string2 based on  ASCII  value  of
 	      their characters.
-       string1 > string2
+       string1 &gt string2
 	      True,  if  string1  comes  after string2 based on ASCII value of
 	      their characters.
        The following obsolete arithmetic comparisons are also permitted:
@@ -1289,34 +1291,34 @@ DESCRIPTION
        No intervening space is allowed between the characters  of  redirection
        operators.
 
-       <word	     Use file word as standard input (file descriptor 0).
+       &ltword	     Use file word as standard input (file descriptor 0).
 
-       >word	     Use file word as standard output (file descriptor 1).  If
+       &gtword	     Use file word as standard output (file descriptor 1).  If
 		     the file does not exist then it is created.  If the  file
 		     exists,  and  the	noclobber option is on, this causes an
 		     error; otherwise, it is truncated to zero length.
 
-       >|word	     Sames as  >,  except  that  it  overrides	the  noclobber
+       &gt|word	     Sames as  &gt,  except  that  it  overrides	the  noclobber
 		     option.
 
-       >;word	     Write  output  to	a temporary file.  If the command com-
+       &gt;word	     Write  output  to	a temporary file.  If the command com-
 		     pletes successfully rename it to word, otherwise,	delete
-		     the  temporary  file.   >;word  cannot  be  used with the
+		     the  temporary  file.   &gt;word  cannot  be  used with the
 		     exec(2).  built-in.
 
-       >>word	     Use file word as standard output.	If  the  file  exists,
+       &gt&gtword	     Use file word as standard output.	If  the  file  exists,
 		     then  output  is  appended to it (by first seeking to the
 		     end-of-file); otherwise, the file is created.
 
-       <>word	     Open file word for reading and writing as	standard  out-
+       &lt&gtword	     Open file word for reading and writing as	standard  out-
 		     put.
 
-       <>;word	     The  same	as <>word except that if the command completes
+       &lt&gt;word	     The  same	as &lt&gtword except that if the command completes
 		     successfully, word is truncated to the offset at  command
-		     completion.   <>;word  cannot  be	used with the exec(2).
+		     completion.   &lt&gt;word  cannot  be	used with the exec(2).
 		     built-in.
 
-       <<[-]word     The shell input is read up to a line that is the same  as
+       &lt&lt[-]word     The shell input is read up to a line that is the same  as
 		     word after any quoting has been removed, or to an end-of-
 		     file.  No parameter substitution,	command  substitution,
 		     arithmetic  substitution  or file name generation is per-
@@ -1326,63 +1328,63 @@ DESCRIPTION
 		     the  characters  of  the  document;  otherwise, parameter
 		     expansion, command substitution, and arithmetic substitu-
 		     tion  occur,  \new-line is ignored, and \ must be used to
-		     quote the characters \, $, `.  If - is  appended  to  <<,
+		     quote the characters \, $, `.  If - is  appended  to  &lt&lt,
 		     then all leading tabs are stripped from word and from the
-		     document.	If # is appended to <<,  then  leading	spaces
+		     document.	If # is appended to &lt&lt,  then  leading	spaces
 		     and tabs will be stripped off the first line of the docu-
 		     ment and up to an equivalent indentation will be stripped
 		     from  the	remaining  lines and from word.  A tab stop is
 		     assumed to occur at every 8 columns for the  purposes  of
 		     determining the indentation.
 
-       <<<word	     A	short  form of here document in which word becomes the
+       &lt&lt&ltword	     A	short  form of here document in which word becomes the
 		     contents of the here-document after any parameter	expan-
 		     sion,  command  substitution, and arithmetic substitution
 		     occur.
 
-       <&digit	     The standard input is  duplicated	from  file  descriptor
+       &lt&digit	     The standard input is  duplicated	from  file  descriptor
 		     digit  (see  dup(2)).   Similarly for the standard output
-		     using >&digit.
+		     using &gt&digit.
 
-       <&digit-      The file descriptor given by digit is moved  to  standard
-		     input.  Similarly for the standard output using >&digit-.
+       &lt&digit-      The file descriptor given by digit is moved  to  standard
+		     input.  Similarly for the standard output using &gt&digit-.
 
-       <&-	     The standard input is closed.  Similarly for the standard
-		     output using >&-.
+       &lt&-	     The standard input is closed.  Similarly for the standard
+		     output using &gt&-.
 
-       <&p	     The input from the co-process is moved to standard input.
+       &lt&p	     The input from the co-process is moved to standard input.
 
-       >&p	     The output to the co-process is moved to standard output.
+       &gt&p	     The output to the co-process is moved to standard output.
 
-       <#((expr))    Evaluate  arithmetic  expression  expr  and position file
+       &lt#((expr))    Evaluate  arithmetic  expression  expr  and position file
 		     descriptor 0 to the resulting value bytes from the  start
 		     of  the  file.  The variables CUR and EOF evaluate to the
 		     current offset and end-of-file offset  respectively  when
 		     evaluating expr.
 
-       >#((offset))  The same as <# except applies to file descriptor 1.
+       &gt#((offset))  The same as &lt# except applies to file descriptor 1.
 
-       <#pattern     Seeks  forward to the beginning of the next line contain-
+       &lt#pattern     Seeks  forward to the beginning of the next line contain-
 		     ing pattern.
 
-       <##pattern    The same as <# except that the portion of the  file  that
+       &lt##pattern    The same as &lt# except that the portion of the  file  that
 		     is skipped is copied to standard output.
 
        If  one of the above is preceded by a digit, with no intervening space,
        then the file descriptor number referred to is that  specified  by  the
        digit (instead of the default 0 or 1).  If one of the above, other than
-       >&- and the ># and <# forms, is preceded by {varname} with no interven-
-       ing  space,  then a file descriptor number > 10 will be selected by the
-       shell and stored in the variable varname.  If >&- or the any of the  >#
-       and  <# forms is preceded by {varname} the value of varname defines the
+       &gt&- and the &gt# and &lt# forms, is preceded by {varname} with no interven-
+       ing  space,  then a file descriptor number &gt 10 will be selected by the
+       shell and stored in the variable varname.  If &gt&- or the any of the  &gt#
+       and  &lt# forms is preceded by {varname} the value of varname defines the
        file descriptor to close or position.  For example:
 
-	      ... 2>&1
+	      ... 2&gt&1
 
        means file descriptor 2 is to be opened for writing as a  duplicate  of
        file descriptor 1 and
 
-	      exec {n}<file
+	      exec {n}&ltfile
 
        means  open  file  named file for reading and store the file descriptor
        number in variable n.
@@ -1391,7 +1393,7 @@ DESCRIPTION
        shell  evaluates  each  redirection  in	terms of the (file descriptor,
        file) association at the time of evaluation.  For example:
 
-	      ... 1>fname 2>&1
+	      ... 1&gtfname 2&gt&1
 
        first associates file descriptor 1 with file fname.  It then associates
        file descriptor 2 with the file associated with file descriptor 1 (i.e.
@@ -1771,7 +1773,7 @@ DESCRIPTION
        left.  If the line is longer than the window width minus two, a mark is
        displayed at the end of the window to notify the user.  As  the	cursor
        moves  and  reaches  the  window boundaries the window will be centered
-       about the cursor.  The mark is a > (<, *) if the line  extends  on  the
+       about the cursor.  The mark is a &gt (&lt, *) if the line  extends  on  the
        right (left, both) side(s) of the window.
 
        The  search  commands  in  each edit mode provide access to the history
@@ -1905,8 +1907,8 @@ DESCRIPTION
        M-[A	 If the cursor is at the end of the line, it is equivalent  to
 		 ^R with string set to the contents of the current line.  Oth-
 		 erwise, it is equivalent to ^P.
-       M-<	 Fetch the least recent (oldest) history line.
-       M->	 Fetch the most recent (youngest) history line.
+       M-&lt	 Fetch the least recent (oldest) history line.
+       M-&gt	 Fetch the most recent (youngest) history line.
        ^N	 Fetch next command line.  Each time ^N is  entered  the  next
 		 command line forward in time is accessed.
        M-[B	 Equivalent to ^N.
@@ -2218,7 +2220,7 @@ DESCRIPTION
 	      in  name.  The ISO C/C++ prototype is b_mycommand(int argc, char
 	      *argv[], void *context) for the builtin command mycommand  where
 	      argv  is	array  an  of argc elements and context is an optional
-	      pointer to a Shell_t structure as described in <ast/shell.h>.
+	      pointer to a Shell_t structure as described in &ltast/shell.h&gt.
 	      Special built-ins cannot be bound to a pathname or deleted.  The
 	      -d  option deletes each of the given built-ins.  On systems that
 	      support dynamic loading, the -f option names  a  shared  library
@@ -2240,7 +2242,7 @@ DESCRIPTION
 	      HOME is the default arg.	The variable PWD is set to the current
 	      directory.   The	shell  variable CDPATH defines the search path
 	      for the directory containing arg.  Alternative  directory  names
-	      are separated by a colon (:).  The default path is <null> (spec-
+	      are separated by a colon (:).  The default path is &ltnull&gt (spec-
 	      ifying the current directory).  Note that the current  directory
 	      is  specified  by a null path name, which can appear immediately
 	      after the equal sign or between the  colon  delimiters  anywhere
@@ -2418,7 +2420,7 @@ DESCRIPTION
 	      Sends either the TERM (terminate) signal or the specified signal
 	      to the specified jobs or processes.  Signals are either given by
 	      number with the -n option or by name  with  the  -s  option  (as
-	      given  in  <signal.h>,  stripped	of the prefix ``SIG'' with the
+	      given  in  &ltsignal.h&gt,  stripped	of the prefix ``SIG'' with the
 	      exception that SIGCLD is named CHLD).  For backward  compatibil-
 	      ity,  the  n  and s can be omitted and the number or name placed
 	      immediately after the -.	If the signal being sent is TERM (ter-
@@ -2602,9 +2604,9 @@ DESCRIPTION
 	      -B      Enable brace pattern  field  generation.	 This  is  the
 		      default behavior.
 	      -B      Enable brace group expansion.  On by default.
-	      -C      Prevents	redirection  > from truncating existing files.
+	      -C      Prevents	redirection  &gt from truncating existing files.
 		      Files that are created are opened with the O_EXCL  mode.
-		      Requires >| to truncate a file when turned on.
+		      Requires &gt| to truncate a file when turned on.
 	      -G      Causes  the pattern ** by itself to match files and zero
 		      or more directories and sub-directories  when  used  for
 		      file  name generation.  If followed by a / only directo-
@@ -3052,7 +3054,7 @@ DESCRIPTION
 	      setting  or  unsetting  the  value  or attributes of SHELL, ENV,
 	      FPATH, or PATH,
 	      specifying path or command names containing /,
-	      redirecting output (>, >|, <>, and >>).
+	      redirecting output (&gt, &gt|, &lt&gt, and &gt&gt).
 	      adding or deleting built-in commands.
 	      using command -p to invoke a command.
 
@@ -3148,6 +3150,6 @@ CAVEATS
 
 
 									KSH(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

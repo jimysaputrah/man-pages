@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Fellow Americans, you probably won't know what the hell this module is..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MIME::Words - deal with RFC 2047 encoded words</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MIME::Words(3)	      User Contributed Perl Documentation	MIME::Words(3)
 
 
@@ -26,12 +28,12 @@ SYNOPSIS
 
 	   ### Decode the string into another string, forgetting the charsets:
 	   $decoded = decode_mimewords(
-		 'To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld@dkuug.dk>',
+		 'To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= &ltkeld@dkuug.dk&gt',
 		 );
 
 	   ### Split string into array of decoded [DATA,CHARSET] pairs:
 	   @decoded = decode_mimewords(
-		 'To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld@dkuug.dk>',
+		 'To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= &ltkeld@dkuug.dk&gt',
 		 );
 
 	   ### Encode a single unsafe word:
@@ -46,9 +48,9 @@ DESCRIPTION
 
        For example, here's a valid MIME header you might get:
 
-	     From: =?US-ASCII?Q?Keith_Moore?= <moore@cs.utk.edu>
-	     To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld@dkuug.dk>
-	     CC: =?ISO-8859-1?Q?Andr=E9_?= Pirard <PIRARD@vm1.ulg.ac.be>
+	     From: =?US-ASCII?Q?Keith_Moore?= &ltmoore@cs.utk.edu&gt
+	     To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= &ltkeld@dkuug.dk&gt
+	     CC: =?ISO-8859-1?Q?Andr=E9_?= Pirard &ltPIRARD@vm1.ulg.ac.be&gt
 	     Subject: =?ISO-8859-1?B?SWYgeW91IGNhbiByZWFkIHRoaXMgeW8=?=
 	      =?ISO-8859-2?B?dSB1bmRlcnN0YW5kIHRoZSBleGFtcGxlLg==?=
 	      =?US-ASCII?Q?.._cool!?=
@@ -56,9 +58,9 @@ DESCRIPTION
        The fields basically decode to (sorry, I can only approximate the Latin
        characters with 7 bit sequences /o and 'e):
 
-	     From: Keith Moore <moore@cs.utk.edu>
-	     To: Keld J/orn Simonsen <keld@dkuug.dk>
-	     CC: Andr'e  Pirard <PIRARD@vm1.ulg.ac.be>
+	     From: Keith Moore &ltmoore@cs.utk.edu&gt
+	     To: Keld J/orn Simonsen &ltkeld@dkuug.dk&gt
+	     CC: Andr'e  Pirard &ltPIRARD@vm1.ulg.ac.be&gt
 	     Subject: If you can read this you understand the example... cool!
 
 PUBLIC INTERFACE
@@ -72,7 +74,7 @@ PUBLIC INTERFACE
 	   data are returned in a 1-element array "[DATA]", giving an
 	   effective CHARSET of "undef".
 
-	       $enc = '=?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld@dkuug.dk>';
+	       $enc = '=?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= &ltkeld@dkuug.dk&gt';
 	       foreach (decode_mimewords($enc)) {
 		   print "", ($_[1] || 'US-ASCII'), ": ", $_[0], "\n";
 	       }
@@ -100,7 +102,7 @@ PUBLIC INTERFACE
 	   Function.  Encode a single RAW "word" that has unsafe characters.
 	   The "word" will be encoded in its entirety.
 
-	       ### Encode "<<Franc,ois>>":
+	       ### Encode "&lt&ltFranc,ois&gt&gt":
 	       $encoded = encode_mimeword("\xABFran\xE7ois\xBB");
 
 	   You may specify the ENCODING ("Q" or "B"), which defaults to "Q".
@@ -159,6 +161,6 @@ AUTHOR
 
 
 perl v5.10.1			  2008-06-30			MIME::Words(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

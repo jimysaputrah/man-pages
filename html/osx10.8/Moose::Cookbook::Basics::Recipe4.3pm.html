@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This recipe introduces the "subtype" sugar function from..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Basics::Recipe4 - Subtypes, and modeling a simple</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::BasicUsereContributed PerlMoose::Cookbook::Basics::Recipe4(3)
 
 
@@ -27,71 +29,71 @@ SYNOPSIS
 	 use Locale::US;
 	 use Regexp::Common 'zip';
 
-	 my $STATES = Locale::US->new;
+	 my $STATES = Locale::US-&gtnew;
 	 subtype 'USState'
-	     => as Str
-	     => where {
-		    (	 exists $STATES->{code2state}{ uc($_) }
-		      || exists $STATES->{state2code}{ uc($_) } );
+	     =&gt as Str
+	     =&gt where {
+		    (	 exists $STATES-&gt{code2state}{ uc($_) }
+		      || exists $STATES-&gt{state2code}{ uc($_) } );
 		};
 
 	 subtype 'USZipCode'
-	     => as Value
-	     => where {
-		    /^$RE{zip}{US}{-extended => 'allow'}$/;
+	     =&gt as Value
+	     =&gt where {
+		    /^$RE{zip}{US}{-extended =&gt 'allow'}$/;
 		};
 
-	 has 'street'	=> ( is => 'rw', isa => 'Str' );
-	 has 'city'	=> ( is => 'rw', isa => 'Str' );
-	 has 'state'	=> ( is => 'rw', isa => 'USState' );
-	 has 'zip_code' => ( is => 'rw', isa => 'USZipCode' );
+	 has 'street'	=&gt ( is =&gt 'rw', isa =&gt 'Str' );
+	 has 'city'	=&gt ( is =&gt 'rw', isa =&gt 'Str' );
+	 has 'state'	=&gt ( is =&gt 'rw', isa =&gt 'USState' );
+	 has 'zip_code' =&gt ( is =&gt 'rw', isa =&gt 'USZipCode' );
 
 	 package Company;
 	 use Moose;
 	 use Moose::Util::TypeConstraints;
 
-	 has 'name' => ( is => 'rw', isa => 'Str', required => 1 );
-	 has 'address'	 => ( is => 'rw', isa => 'Address' );
-	 has 'employees' => (
-	     is      => 'rw',
-	     isa     => 'ArrayRef[Employee]',
-	     default => sub { [] },
+	 has 'name' =&gt ( is =&gt 'rw', isa =&gt 'Str', required =&gt 1 );
+	 has 'address'	 =&gt ( is =&gt 'rw', isa =&gt 'Address' );
+	 has 'employees' =&gt (
+	     is      =&gt 'rw',
+	     isa     =&gt 'ArrayRef[Employee]',
+	     default =&gt sub { [] },
 	 );
 
 	 sub BUILD {
 	     my ( $self, $params ) = @_;
-	     foreach my $employee ( @{ $self->employees } ) {
-		 $employee->employer($self);
+	     foreach my $employee ( @{ $self-&gtemployees } ) {
+		 $employee-&gtemployer($self);
 	     }
 	 }
 
-	 after 'employees' => sub {
+	 after 'employees' =&gt sub {
 	     my ( $self, $employees ) = @_;
 	     return unless $employees;
 	     foreach my $employee ( @$employees ) {
-		 $employee->employer($self);
+		 $employee-&gtemployer($self);
 	     }
 	 };
 
 	 package Person;
 	 use Moose;
 
-	 has 'first_name' => ( is => 'rw', isa => 'Str', required => 1 );
-	 has 'last_name'  => ( is => 'rw', isa => 'Str', required => 1 );
-	 has 'middle_initial' => (
-	     is        => 'rw', isa => 'Str',
-	     predicate => 'has_middle_initial'
+	 has 'first_name' =&gt ( is =&gt 'rw', isa =&gt 'Str', required =&gt 1 );
+	 has 'last_name'  =&gt ( is =&gt 'rw', isa =&gt 'Str', required =&gt 1 );
+	 has 'middle_initial' =&gt (
+	     is        =&gt 'rw', isa =&gt 'Str',
+	     predicate =&gt 'has_middle_initial'
 	 );
-	 has 'address' => ( is => 'rw', isa => 'Address' );
+	 has 'address' =&gt ( is =&gt 'rw', isa =&gt 'Address' );
 
 	 sub full_name {
 	     my $self = shift;
-	     return $self->first_name
+	     return $self-&gtfirst_name
 		 . (
-		 $self->has_middle_initial
-		 ? ' ' . $self->middle_initial . '. '
+		 $self-&gthas_middle_initial
+		 ? ' ' . $self-&gtmiddle_initial . '. '
 		 : ' '
-		 ) . $self->last_name;
+		 ) . $self-&gtlast_name;
 	 }
 
 	 package Employee;
@@ -99,12 +101,12 @@ SYNOPSIS
 
 	 extends 'Person';
 
-	 has 'title'	=> ( is => 'rw', isa => 'Str',	   required => 1 );
-	 has 'employer' => ( is => 'rw', isa => 'Company', weak_ref => 1 );
+	 has 'title'	=&gt ( is =&gt 'rw', isa =&gt 'Str',	   required =&gt 1 );
+	 has 'employer' =&gt ( is =&gt 'rw', isa =&gt 'Company', weak_ref =&gt 1 );
 
-	 override 'full_name' => sub {
+	 override 'full_name' =&gt sub {
 	     my $self = shift;
-	     super() . ', ' . $self->title;
+	     super() . ', ' . $self-&gttitle;
 	 };
 
 DESCRIPTION
@@ -131,7 +133,7 @@ DESCRIPTION
 
        We can now use the "USState" type just like Moose's builtin types:
 
-	 has 'state'	=> ( is => 'rw', isa => 'USState' );
+	 has 'state'	=&gt ( is =&gt 'rw', isa =&gt 'USState' );
 
        When the "state" attribute is set, the value is checked against the
        "USState" constraint. If the value is not valid, an exception will be
@@ -142,9 +144,9 @@ DESCRIPTION
        for the "zip_code" attribute.
 
 	 subtype 'USZipCode'
-	     => as Value
-	     => where {
-		    /^$RE{zip}{US}{-extended => 'allow'}$/;
+	     =&gt as Value
+	     =&gt where {
+		    /^$RE{zip}{US}{-extended =&gt 'allow'}$/;
 		};
 
        Using a subtype instead of requiring a class for each type greatly
@@ -164,11 +166,11 @@ DESCRIPTION
        our classes, so we can use that for the "Company" class's "address"
        attribute:
 
-	 has 'address'	 => ( is => 'rw', isa => 'Address' );
+	 has 'address'	 =&gt ( is =&gt 'rw', isa =&gt 'Address' );
 
        A company also needs a name:
 
-	 has 'name' => ( is => 'rw', isa => 'Str', required => 1 );
+	 has 'name' =&gt ( is =&gt 'rw', isa =&gt 'Str', required =&gt 1 );
 
        This introduces a new attribute option, "required". If an attribute is
        required, then it must be passed to the class's constructor, or an
@@ -178,10 +180,10 @@ DESCRIPTION
 
        The next attribute, "employees", uses a parameterized type constraint:
 
-	 has 'employees' => (
-	     is      => 'rw',
-	     isa     => 'ArrayRef[Employee]'
-	     default => sub { [] },
+	 has 'employees' =&gt (
+	     is      =&gt 'rw',
+	     isa     =&gt 'ArrayRef[Employee]'
+	     default =&gt sub { [] },
 	 );
 
        This constraint says that "employees" must be an array reference where
@@ -216,13 +218,13 @@ DESCRIPTION
 
 	 sub BUILD {
 	     my ( $self, $params ) = @_;
-	     foreach my $employee ( @{ $self->employees } ) {
-		 $employee->employer($self);
+	     foreach my $employee ( @{ $self-&gtemployees } ) {
+		 $employee-&gtemployer($self);
 	     }
 	 }
 
        The "BUILD" method is executed after type constraints are checked, so
-       it is safe to assume that if "$self->employees" has a value, it will be
+       it is safe to assume that if "$self-&gtemployees" has a value, it will be
        an array reference, and that the elements of that array reference will
        be "Employee" objects.
 
@@ -231,11 +233,11 @@ DESCRIPTION
 
        To do this we can use an "after" modifier:
 
-	 after 'employees' => sub {
+	 after 'employees' =&gt sub {
 	     my ( $self, $employees ) = @_;
 	     return unless $employees;
 	     foreach my $employee ( @$employees ) {
-		 $employee->employer($self);
+		 $employee-&gtemployer($self);
 	     }
 	 };
 
@@ -253,9 +255,9 @@ DESCRIPTION
        The only new feature in the "Employee" class is the "override" method
        modifier:
 
-	 override 'full_name' => sub {
+	 override 'full_name' =&gt sub {
 	     my $self = shift;
-	     super() . ', ' . $self->title;
+	     super() . ', ' . $self-&gttitle;
 	 };
 
        This is just a sugary alternative to Perl's built in "SUPER::" feature.
@@ -287,7 +289,7 @@ FOOTNOTES
 	   "ArrayRef[]", which doesn't make any sense.
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -298,6 +300,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-0Moose::Cookbook::Basics::Recipe4(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

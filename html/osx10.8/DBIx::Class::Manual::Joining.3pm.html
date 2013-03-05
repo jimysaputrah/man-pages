@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document should help you to use DBIx::Class if you are trying to..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Manual::Joining - Manual on joining tables with</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::Manual::JUsernContributed Perl DocDBIx::Class::Manual::Joining(3)
 
 
@@ -47,7 +49,7 @@ WHAT ARE JOINS
        fields from other, related, tables. There are various types of joins,
        depending on which combination of the data you wish to retrieve, see
        MySQL's doc on JOINs:
-       <http://dev.mysql.com/doc/refman/5.0/en/join.html>.
+       &lthttp://dev.mysql.com/doc/refman/5.0/en/join.html&gt.
 
 DEFINING JOINS AND RELATIONSHIPS
        In DBIx::Class each relationship between two tables needs to first be
@@ -58,11 +60,11 @@ DEFINING JOINS AND RELATIONSHIPS
 
        For the CDs/Tracks example, that means writing, in "MySchema::CD":
 
-	 MySchema::CD->has_many('tracks', 'MySchema::Tracks');
+	 MySchema::CD-&gthas_many('tracks', 'MySchema::Tracks');
 
        And in "MySchema::Tracks":
 
-	 MySchema::Tracks->belongs_to('cd', 'MySchema::CD', 'CDID');
+	 MySchema::Tracks-&gtbelongs_to('cd', 'MySchema::CD', 'CDID');
 
        There are several other types of relationships, they are more
        comprehensively described in DBIx::Class::Relationship.
@@ -80,12 +82,12 @@ USING JOINS
        which "relations" to also refine your results based on, using the join
        attribute, like this:
 
-	 $schema->resultset('CD')->search(
-	   { 'Title' => 'Funky CD',
-	     'tracks.Name' => { like => 'T%' }
+	 $schema-&gtresultset('CD')-&gtsearch(
+	   { 'Title' =&gt 'Funky CD',
+	     'tracks.Name' =&gt { like =&gt 'T%' }
 	   },
-	   { join      => 'tracks',
-	     order_by  => ['tracks.id'],
+	   { join      =&gt 'tracks',
+	     order_by  =&gt ['tracks.id'],
 	   }
 	 );
 
@@ -122,11 +124,11 @@ FETCHING RELATED DATA
        To fetch entire related objects, e.g. CDs and all Track data, use the
        'prefetch' attribute:
 
-	 $schema->resultset('CD')->search(
-	   { 'Title' => 'Funky CD',
+	 $schema-&gtresultset('CD')-&gtsearch(
+	   { 'Title' =&gt 'Funky CD',
 	   },
-	   { prefetch	   => 'tracks',
-	     order_by  => ['tracks.id'],
+	   { prefetch	   =&gt 'tracks',
+	     order_by  =&gt ['tracks.id'],
 	   }
 	 );
 
@@ -142,13 +144,13 @@ FETCHING RELATED DATA
        attributes can be used. For example, if the CD data is required and
        just the track name from the Tracks table:
 
-	 $schema->resultset('CD')->search(
-	   { 'Title' => 'Funky CD',
+	 $schema-&gtresultset('CD')-&gtsearch(
+	   { 'Title' =&gt 'Funky CD',
 	   },
-	   { join      => 'tracks',
-	     '+select' => ['tracks.Name'],
-	     '+as'     => ['track_name'],
-	     order_by  => ['tracks.id'],
+	   { join      =&gt 'tracks',
+	     '+select' =&gt ['tracks.Name'],
+	     '+as'     =&gt ['track_name'],
+	     order_by  =&gt ['tracks.id'],
 	   }
 	 );
 
@@ -162,14 +164,14 @@ FETCHING RELATED DATA
        This type of column restriction has a downside, the resulting $row
        object will have no 'track_name' accessor:
 
-	 while(my $row = $search_rs->next) {
-	    print $row->track_name; ## ERROR
+	 while(my $row = $search_rs-&gtnext) {
+	    print $row-&gttrack_name; ## ERROR
 	 }
 
        Instead "get_column" must be used:
 
-	 while(my $row = $search_rs->next) {
-	    print $row->get_colum('track_name'); ## WORKS
+	 while(my $row = $search_rs-&gtnext) {
+	    print $row-&gtget_colum('track_name'); ## WORKS
 	 }
 
    Incomplete related objects
@@ -182,13 +184,13 @@ FETCHING RELATED DATA
        To fetch an incomplete related object, supply the dotted notation to
        the '+as' attribute:
 
-	 $schema->resultset('CD')->search(
-	   { 'Title' => 'Funky CD',
+	 $schema-&gtresultset('CD')-&gtsearch(
+	   { 'Title' =&gt 'Funky CD',
 	   },
-	   { join      => 'tracks',
-	     '+select' => ['tracks.Name'],
-	     '+as'     => ['tracks.Name'],
-	     order_by  => ['tracks.id'],
+	   { join      =&gt 'tracks',
+	     '+select' =&gt ['tracks.Name'],
+	     '+as'     =&gt ['tracks.Name'],
+	     order_by  =&gt ['tracks.id'],
 	   }
 	 );
 
@@ -198,8 +200,8 @@ FETCHING RELATED DATA
 
        Now you can access the result using the relationship accessor:
 
-	 while(my $row = $search_rs->next) {
-	    print $row->tracks->name; ## WORKS
+	 while(my $row = $search_rs-&gtnext) {
+	    print $row-&gttracks-&gtname; ## WORKS
 	 }
 
        However, this will produce broken objects. If the tracks id column is
@@ -219,13 +221,13 @@ COMPLEX JOINS AND STUFF
 
        In "MySchema::Tracks":
 
-	 MySchema::Tracks->belongs_to('artist', 'MySchema::Artist', 'ArtistID');
+	 MySchema::Tracks-&gtbelongs_to('artist', 'MySchema::Artist', 'ArtistID');
 
        The search:
 
-	 $schema->resultset('CD')->search(
-	   { 'Title' => 'Funky CD' },
-	   { join      => { 'tracks' => 'artist' },
+	 $schema-&gtresultset('CD')-&gtsearch(
+	   { 'Title' =&gt 'Funky CD' },
+	   { join      =&gt { 'tracks' =&gt 'artist' },
 	   }
 	 );
 
@@ -237,25 +239,25 @@ COMPLEX JOINS AND STUFF
        a hashref to indicate the join depth. This can theoretically go as deep
        as you like (warning: contrived examples!):
 
-	 join => { room => { table => 'leg' } }
+	 join =&gt { room =&gt { table =&gt 'leg' } }
 
        To join two relations at the same level, use an arrayref instead:
 
-	 join => { room => [ 'chair', 'table' ] }
+	 join =&gt { room =&gt [ 'chair', 'table' ] }
 
        Or combine the two:
 
-	 join => { room => [ 'chair', { table => 'leg' } ]
+	 join =&gt { room =&gt [ 'chair', { table =&gt 'leg' } ]
 
    Table aliases
        As an aside to all the discussion on joins, note that DBIx::Class uses
        the "relation names" as table aliases. This is important when you need
        to add grouping or ordering to your queries:
 
-	 $schema->resultset('CD')->search(
-	   { 'Title' => 'Funky CD' },
-	   { join      => { 'tracks' => 'artist' },
-	     order_by  => [ 'tracks.Name', 'artist.Artist' ],
+	 $schema-&gtresultset('CD')-&gtsearch(
+	   { 'Title' =&gt 'Funky CD' },
+	   { join      =&gt { 'tracks' =&gt 'artist' },
+	     order_by  =&gt [ 'tracks.Name', 'artist.Artist' ],
 	   }
 	 );
 
@@ -271,13 +273,13 @@ COMPLEX JOINS AND STUFF
        There is no magic to this, just do it. The table aliases will
        automatically be numbered:
 
-	 join => [ 'room', 'room' ]
+	 join =&gt [ 'room', 'room' ]
 
        The aliases are: "room" and "room_2".
 
 
 
 perl v5.12.4			  2010-10-07   DBIx::Class::Manual::Joining(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

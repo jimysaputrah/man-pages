@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Apache2::Filter" provides Perl API for Apache 2.0 filtering framework...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Apache2::Filter - Perl API for Apache 2.0 Filtering</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apache_mapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::Filter(3)
 
 
@@ -19,34 +21,34 @@ Synopsis
 	 use Apache2::Filter ();
 
 	 # filter attributes
-	 my $c = $f->c;
-	 my $r = $f->r;
-	 my $frec = $f->frec();
-	 my $next_f = $f->next;
+	 my $c = $f-&gtc;
+	 my $r = $f-&gtr;
+	 my $frec = $f-&gtfrec();
+	 my $next_f = $f-&gtnext;
 
-	 my $ctx = $f->ctx;
-	 $f->ctx($ctx);
+	 my $ctx = $f-&gtctx;
+	 $f-&gtctx($ctx);
 
 	 # bucket brigade filtering API
-	 $rc = $f->next->get_brigade($bb, $mode, $block, $readbytes);
-	 $rc = $f->next->pass_brigade($bb);
-	 $rc = $f->fflush($bb);
+	 $rc = $f-&gtnext-&gtget_brigade($bb, $mode, $block, $readbytes);
+	 $rc = $f-&gtnext-&gtpass_brigade($bb);
+	 $rc = $f-&gtfflush($bb);
 
 	 # streaming filtering API
-	 while ($filter->read(my $buffer, $wanted)) {
+	 while ($filter-&gtread(my $buffer, $wanted)) {
 	     # transform $buffer here
-	     $filter->print($buffer);
+	     $filter-&gtprint($buffer);
 	 }
-	 if ($f->seen_eos) {
-	     $filter->print("filter signature");
+	 if ($f-&gtseen_eos) {
+	     $filter-&gtprint("filter signature");
 	 }
 
 	 # filter manipulations
-	 $r->add_input_filter(\&callback);
-	 $c->add_input_filter(\&callback);
-	 $r->add_output_filter(\&callback);
-	 $c->add_output_filter(\&callback);
-	 $f->remove;
+	 $r-&gtadd_input_filter(\&callback);
+	 $c-&gtadd_input_filter(\&callback);
+	 $r-&gtadd_output_filter(\&callback);
+	 $c-&gtadd_output_filter(\&callback);
+	 $f-&gtremove;
 
 Description
        "Apache2::Filter" provides Perl API for Apache 2.0 filtering framework.
@@ -61,7 +63,7 @@ Common Filter API
        Get the current connection object from a connection or a request
        filter:
 
-	 $c = $f->c;
+	 $c = $f-&gtc;
 
        obj: $f ( "Apache2::Filter object" )
        ret: $c ( "Apache2::Connection object" )
@@ -70,8 +72,8 @@ Common Filter API
    "ctx"
        Get/set the filter context data.
 
-	 $ctx = $f->ctx;
-		$f->ctx($ctx);
+	 $ctx = $f-&gtctx;
+		$f-&gtctx($ctx);
 
        obj: $f ( "Apache2::Filter object" )
        opt arg2: $ctx ( SCALAR )
@@ -95,22 +97,22 @@ Common Filter API
 
        For example you can store a hash reference:
 
-	 $f->ctx({ foo => 'bar' });
+	 $f-&gtctx({ foo =&gt 'bar' });
 
        and then access it:
 
-	 $foo = $f->ctx->{foo};
+	 $foo = $f-&gtctx-&gt{foo};
 
        if you access the context more than once it's more efficient to copy
        it's value before using it:
 
-	 my $ctx = $f->ctx;
-	 $foo = $ctx->{foo};
+	 my $ctx = $f-&gtctx;
+	 $foo = $ctx-&gt{foo};
 
        to avoid redundant method calls. As of this writing $ctx is not a tied
        variable, so if you modify it need to store it at the end:
 
-	 $f->ctx($ctx);
+	 $f-&gtctx($ctx);
 
        META: later we might make it a TIEd-variable interface, so it'll be
        stored automatically.
@@ -120,26 +122,26 @@ Common Filter API
        example here is how to ensure that something happens only once during
        the filter's life:
 
-	 unless ($f->ctx) {
+	 unless ($f-&gtctx) {
 	     do_something_once();
-	     $f->ctx(1);
+	     $f-&gtctx(1);
 	 }
 
    "frec"
        Get/set the "Apache2::FilterRec" (filter record) object.
 
-	 $frec = $f->frec();
+	 $frec = $f-&gtfrec();
 
        obj: $f ( "Apache2::Filter object" )
        ret: $frec ( "Apache2::FilterRec object" )
        since: 2.0.00
 
-       For example you can call "$frec->name" to get filter's name.
+       For example you can call "$frec-&gtname" to get filter's name.
 
    "next"
        Return the "Apache2::Filter" object of the next filter in chain.
 
-	 $next_f = $f->next;
+	 $next_f = $f-&gtnext;
 
        obj: $f ( "Apache2::Filter object" )
 	   The current filter object
@@ -156,12 +158,12 @@ Common Filter API
        other methods the behavior is undefined.
 
        The next filter can be a mod_perl one or not, it's easy to tell which
-       one is that by calling "$f->frec->name".
+       one is that by calling "$f-&gtfrec-&gtname".
 
    "r"
        Inside an HTTP request filter retrieve the current request object:
 
-	 $r = $f->r;
+	 $r = $f-&gtr;
 
        obj: $f ( "Apache2::Filter object" )
        ret: $r ( "Apache2::RequestRec object" )
@@ -174,7 +176,7 @@ Common Filter API
        Remove the current filter from the filter chain (for the current
        request or connection).
 
-	 $f->remove;
+	 $f-&gtremove;
 
        obj: $f ( "Apache2::Filter object" )
        ret: no return value
@@ -192,13 +194,13 @@ Common Filter API
        Apache and then make sure to require the minimum Apache version if you
        rely on.
 
-       Remember that if the connection is "$c->keepalive" ) and the connection
+       Remember that if the connection is "$c-&gtkeepalive" ) and the connection
        filter is removed, it won't be added until the connection is closed.
        Which may happen after many HTTP requests. You may want to keep the
        filter in place and pass the data through unmodified, by returning
        "Apache2::Const::DECLINED". If you need to reset the whole or parts of
        the filter context between requests, use the technique based on
-       "$c->keepalives" counting.
+       "$c-&gtkeepalives" counting.
 
        This method works for native Apache (non-mod_perl) filters too.
 
@@ -209,7 +211,7 @@ Bucket Brigade Filter API
    "fflush"
        Flush a bucket brigade down the filter stack.
 
-	 $rc = $f->fflush($bb);
+	 $rc = $f-&gtfflush($bb);
 
        obj: $f ( "Apache2::Filter object" )
 	   The current filter
@@ -228,28 +230,28 @@ Bucket Brigade Filter API
 
        "fflush" is a shortcut method. So instead of doing:
 
-	 my $b = APR::Bucket::flush_create($f->c->bucket_alloc);
-	 $bb->insert_tail($b);
-	 $f->pass_brigade($bb);
+	 my $b = APR::Bucket::flush_create($f-&gtc-&gtbucket_alloc);
+	 $bb-&gtinsert_tail($b);
+	 $f-&gtpass_brigade($bb);
 
        one can just write:
 
-	 $f->fflush($bb);
+	 $f-&gtfflush($bb);
 
    "get_brigade"
        This is a method to use in bucket brigade input filters. It acquires a
        bucket brigade from the upstream input filter.
 
-	 $rc = $next_f->get_brigade($bb, $mode, $block, $readbytes);
-	 $rc = $next_f->get_brigade($bb, $mode, $block);
-	 $rc = $next_f->get_brigade($bb, $mode)
-	 $rc = $next_f->get_brigade($bb);
+	 $rc = $next_f-&gtget_brigade($bb, $mode, $block, $readbytes);
+	 $rc = $next_f-&gtget_brigade($bb, $mode, $block);
+	 $rc = $next_f-&gtget_brigade($bb, $mode)
+	 $rc = $next_f-&gtget_brigade($bb);
 
        obj: $next_f ( "Apache2::Filter object" )
 	   The next filter in the filter chain.
 
-	   Inside filter handlers it's usually "$f->next". Inside protocol
-	   handlers: "$c->input_filters".
+	   Inside filter handlers it's usually "$f-&gtnext". Inside protocol
+	   handlers: "$c-&gtinput_filters".
 
        arg1: $bb ( "APR::Brigade object" )
 	   The original bucket brigade passed to "get_brigade()", which must
@@ -260,7 +262,7 @@ Bucket Brigade Filter API
 
 	   Otherwise it should be created:
 
-	     my $bb = APR::Brigade->new($c->pool, $c->bucket_alloc);
+	     my $bb = APR::Brigade-&gtnew($c-&gtpool, $c-&gtbucket_alloc);
 
 	   On return it gets populated with the next bucket brigade. That
 	   brigade may contain nothing if there was no more data to read. The
@@ -317,7 +319,7 @@ Bucket Brigade Filter API
 	   You don't have to ask for the return value. If this function is
 	   called in the VOID context, e.g.:
 
-	     $f->next->get_brigade($bb, $mode, $block, $readbytes);
+	     $f-&gtnext-&gtget_brigade($bb, $mode, $block, $readbytes);
 
 	   mod_perl will do the error checking on your behalf, and if the
 	   return code is not "APR::Const::SUCCESS", an "APR::Error exception"
@@ -360,7 +362,7 @@ Bucket Brigade Filter API
 
        Either compile all these constants with:
 
-	 use Apache2::Const -compile => qw(:input_mode);
+	 use Apache2::Const -compile =&gt qw(:input_mode);
 
        But it's a bit more efficient to compile only those constants that you
        need.
@@ -371,12 +373,12 @@ Bucket Brigade Filter API
        from the upstream filter:
 
 	 use Apache2::Filter ();
-	 use APR::Const    -compile => qw(SUCCESS);
-	 use Apache2::Const -compile => qw(OK);
+	 use APR::Const    -compile =&gt qw(SUCCESS);
+	 use Apache2::Const -compile =&gt qw(OK);
 	 sub filter {
 	     my ($f, $bb, $mode, $block, $readbytes) = @_;
 
-	     my $rc = $f->next->get_brigade($bb, $mode, $block, $readbytes);
+	     my $rc = $f-&gtnext-&gtget_brigade($bb, $mode, $block, $readbytes);
 	     return $rc unless $rc == APR::Const::SUCCESS;
 
 	     # ... process $bb
@@ -395,7 +397,7 @@ Bucket Brigade Filter API
 	 sub filter {
 	     my ($f, $bb, $mode, $block, $readbytes) = @_;
 
-	     $f->next->get_brigade($bb, $mode, $block, $readbytes);
+	     $f-&gtnext-&gtget_brigade($bb, $mode, $block, $readbytes);
 
 	     # ... process $bb
 
@@ -412,13 +414,13 @@ Bucket Brigade Filter API
        This is a method to use in bucket brigade output filters.  It passes
        the current bucket brigade to the downstream output filter.
 
-	 $rc = $next_f->pass_brigade($bb);
+	 $rc = $next_f-&gtpass_brigade($bb);
 
        obj: $next_f ( "Apache2::Filter object" )
 	   The next filter in the filter chain.
 
-	   Inside output filter handlers it's usually "$f->next". Inside
-	   protocol handlers: "$c->output_filters".
+	   Inside output filter handlers it's usually "$f-&gtnext". Inside
+	   protocol handlers: "$c-&gtoutput_filters".
 
        arg1: $bb ( "APR::Brigade object" )
 	   The bucket brigade to pass.
@@ -455,14 +457,14 @@ Bucket Brigade Filter API
        in the bucket brigade):
 
 	 use Apache2::Filter ();
-	 use APR::Const    -compile => qw(SUCCESS);
-	 use Apache2::Const -compile => qw(OK);
+	 use APR::Const    -compile =&gt qw(SUCCESS);
+	 use Apache2::Const -compile =&gt qw(OK);
 	 sub filter {
 	     my ($f, $bb) = @_;
 
 	     # ... process $bb
 
-	     my $rc = $f->next->pass_brigade($bb);
+	     my $rc = $f-&gtnext-&gtpass_brigade($bb);
 	     return $rc unless $rc == APR::Const::SUCCESS;
 
 	     return Apache2::Const::OK;
@@ -476,7 +478,7 @@ Streaming Filter API
        Send the contents of $buffer to the next filter in chain (via internal
        buffer).
 
-	 $sent = $f->print($buffer);
+	 $sent = $f-&gtprint($buffer);
 
        obj: $f ( "Apache2::Filter object" )
        arg1: $buffer ( string )
@@ -495,7 +497,7 @@ Streaming Filter API
    "read"
        Read data from the filter
 
-	 $read = $f->read($buffer, $wanted);
+	 $read = $f-&gtread($buffer, $wanted);
 
        obj: $f ( "Apache2::Filter object" )
        arg1: $buffer ( SCALAR )
@@ -520,9 +522,9 @@ Streaming Filter API
        tells exactly how many were read, making it easy to use it in a while
        loop:
 
-	 while ($filter->read(my $buffer, $wanted)) {
+	 while ($filter-&gtread(my $buffer, $wanted)) {
 	     # transform $buffer here
-	     $filter->print($buffer);
+	     $filter-&gtprint($buffer);
 	 }
 
        This is a streaming filter method, which acquires a single bucket
@@ -537,7 +539,7 @@ Streaming Filter API
        This methods returns a true value when the EOS bucket is seen by the
        "read" method.
 
-	 $ok = $f->seen_eos;
+	 $ok = $f-&gtseen_eos;
 
        obj: $f ( "Apache2::Filter object" )
 	   The filter to remove
@@ -548,12 +550,12 @@ Streaming Filter API
        since: 2.0.00
 
        This method only works in streaming filters which exhaustively
-       "$f->read" all the incoming data in a while loop, like so:
+       "$f-&gtread" all the incoming data in a while loop, like so:
 
-	     while ($f->read(my $buffer, $wanted)) {
+	     while ($f-&gtread(my $buffer, $wanted)) {
 		 # do something with $buffer
 	     }
-	     if ($f->seen_eos) {
+	     if ($f-&gtseen_eos) {
 		 # do something
 	     }
 
@@ -567,7 +569,7 @@ Streaming Filter API
        EOS event by itself. So when the filter is done it has to set the EOS
        flag:
 
-	 $f->seen_eos(1);
+	 $f-&gtseen_eos(1);
 
        when the filter handler returns, internally mod_perl will take care of
        creating and sending the EOS bucket to the upstream input filter.
@@ -589,11 +591,11 @@ Other Filter-related API
    "add_input_filter"
        Add &callback filter handler to input request filter chain.
 
-	 $r->add_input_filter(\&callback);
+	 $r-&gtadd_input_filter(\&callback);
 
        Add &callback filter handler to input connection filter chain.
 
-	 $c->add_input_filter(\&callback);
+	 $c-&gtadd_input_filter(\&callback);
 
        obj: $c ( "Apache2::Connection object" ) or $r ( "Apache2::RequestRec
        object" )
@@ -615,11 +617,11 @@ Other Filter-related API
    "add_output_filter"
        Add &callback filter handler to output request filter chain.
 
-	 $r->add_output_filter(\&callback);
+	 $r-&gtadd_output_filter(\&callback);
 
        Add &callback filter handler to output connection filter chain.
 
-	 $c->add_output_filter(\&callback);
+	 $c-&gtadd_output_filter(\&callback);
 
        obj: $c ( "Apache2::Connection object" ) or $r ( "Apache2::RequestRec
        object" )
@@ -764,6 +766,6 @@ Authors
 
 
 perl v5.apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::Filter(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Net::LDAP::Entry object represents a single entry in the directory...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::LDAP::Entry - An LDAP entry object</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::LDAP::Entry(3)   User Contributed Perl Documentation  Net::LDAP::Entry(3)
 
 
@@ -18,14 +20,14 @@ NAME
 SYNOPSIS
 	use Net::LDAP;
 
-	$ldap = Net::LDAP->new ( $host );
-	$mesg = $ldap->search ( @search_args );
+	$ldap = Net::LDAP-&gtnew ( $host );
+	$mesg = $ldap-&gtsearch ( @search_args );
 
-	my $max = $mesg->count;
-	for ( $i = 0 ; $i < $max ; $i++ ) {
-	  my $entry = $mesg->entry ( $i );
-	  foreach my $attr ( $entry->attributes ) {
-	    print join( "\n ", $attr, $entry->get_value( $attr ) ), "\n";
+	my $max = $mesg-&gtcount;
+	for ( $i = 0 ; $i &lt $max ; $i++ ) {
+	  my $entry = $mesg-&gtentry ( $i );
+	  foreach my $attr ( $entry-&gtattributes ) {
+	    print join( "\n ", $attr, $entry-&gtget_value( $attr ) ), "\n";
 	  }
 	}
 
@@ -33,34 +35,34 @@ SYNOPSIS
 
 	use Net::LDAP::Entry;
 
-	$entry = Net::LDAP::Entry->new;
+	$entry = Net::LDAP::Entry-&gtnew;
 
-	$entry->dn($dn);
+	$entry-&gtdn($dn);
 
-	$entry->add (
-	  attr1 => 'value1',
-	  attr2 => [ qw(value1 value2) ]
+	$entry-&gtadd (
+	  attr1 =&gt 'value1',
+	  attr2 =&gt [ qw(value1 value2) ]
 	);
 
-	$entry->delete ( 'unwanted' );
+	$entry-&gtdelete ( 'unwanted' );
 
-	$entry->replace (
-	  attr1 => 'newvalue'
-	  attr2 => [ qw(new values) ]
+	$entry-&gtreplace (
+	  attr1 =&gt 'newvalue'
+	  attr2 =&gt [ qw(new values) ]
 	);
 
-	$entry->update ( $ldap ); # update directory server
+	$entry-&gtupdate ( $ldap ); # update directory server
 
-	$entry2 = $entry->clone; # copies entry
+	$entry2 = $entry-&gtclone; # copies entry
 
 	# new alternate syntax
 
-	$entry = Net::LDAP::Entry->new ( $dn
-	  , attr1 => 'value1'
-	  , attr2 => [ qw(value1 value2) ]
-	)->add(
-	  attr3   => 'value'
-	)->update( $ldap );
+	$entry = Net::LDAP::Entry-&gtnew ( $dn
+	  , attr1 =&gt 'value1'
+	  , attr2 =&gt [ qw(value1 value2) ]
+	)-&gtadd(
+	  attr3   =&gt 'value'
+	)-&gtupdate( $ldap );
 
 DESCRIPTION
        The Net::LDAP::Entry object represents a single entry in the directory.
@@ -81,41 +83,41 @@ CONSTRUCTORS
 	   Optionally, you can provide a DN and a list of arguments passed to
 	   the add method.
 
-	    Net::LDAP::Entry->new()
+	    Net::LDAP::Entry-&gtnew()
 
 	    # or
-	    Net::LDAP::Entry->new( $dn )
+	    Net::LDAP::Entry-&gtnew( $dn )
 
 	    # or
-	    Net::LDAP::Entry->new( $dn ,
-	     objectClass => [qw( top posixAccount )] , uid => 'admin'
+	    Net::LDAP::Entry-&gtnew( $dn ,
+	     objectClass =&gt [qw( top posixAccount )] , uid =&gt 'admin'
 	    )
 
        clone ( )
 	   Returns a copy of the Net::LDAP::Entry object.
 
 METHODS
-       add ( ATTR => VALUE, ... )
+       add ( ATTR =&gt VALUE, ... )
 	   Add more attributes or values to the entry and returns the entry
 	   itself. Each "VALUE" should be a string if only a single value is
 	   wanted in the attribute, or a reference to an array of strings if
 	   multiple values are wanted. The values given will be added to the
 	   values which already exist for the given attributes.
 
-	    $entry->add ( 'sn' => 'Barr' );
+	    $entry-&gtadd ( 'sn' =&gt 'Barr' );
 
-	    $entry->add ( 'street' => [ '1 some road','nowhere' ] );
+	    $entry-&gtadd ( 'street' =&gt [ '1 some road','nowhere' ] );
 
 	   NOTE: these changes are local to the client and will not appear on
 	   the directory server until the "update" method is called. As "add"
 	   returns the entry, you can write something like.
 
-	    $entry->add ( 'sn' => 'Barr' )->update( $ldap );
+	    $entry-&gtadd ( 'sn' =&gt 'Barr' )-&gtupdate( $ldap );
 
        attributes ( OPTIONS )
 	   Return a list of attributes in this entry
 
-	   nooptions => 1
+	   nooptions =&gt 1
 	       Return a list of the attribute names excluding any options. For
 	       example for the entry
 
@@ -125,10 +127,10 @@ METHODS
 
 	       then
 
-		 @values = $entry->attributes;
+		 @values = $entry-&gtattributes;
 		 print "default: @values\n";
 
-		 @values = $entry->attributes ( nooptions => 1 );
+		 @values = $entry-&gtattributes ( nooptions =&gt 1 );
 		 print "nooptions: @values\n";
 
 	       will output
@@ -155,7 +157,7 @@ METHODS
 	       object, which will result in the entry being removed from the
 	       directory server.
 
-		$entry->delete->update( $ldap )
+		$entry-&gtdelete-&gtupdate( $ldap )
 
 	   modify
 	       The update method will call the modify method on the client
@@ -172,14 +174,14 @@ METHODS
        delete ( )
 	   Delete the entry from the server on the next call to "update".
 
-       delete ( ATTR => [ VALUE, ... ], ... )
+       delete ( ATTR =&gt [ VALUE, ... ], ... )
 	   Delete the values of given attributes from the entry. Values are
 	   references to arrays; passing a reference to an empty array is the
 	   same as passing "undef", and will result in the entire attribute
 	   being deleted. For example:
 
-	    $entry->delete ( 'mail' => [ 'foo.bar@example.com' ] );
-	    $entry->delete ( 'description' => [ ], 'streetAddress' => [ ] );
+	    $entry-&gtdelete ( 'mail' =&gt [ 'foo.bar@example.com' ] );
+	    $entry-&gtdelete ( 'description' =&gt [ ], 'streetAddress' =&gt [ ] );
 
 	   NOTE: these changes are local to the client and will not appear on
 	   the directory server until the "update" method is called.
@@ -193,10 +195,10 @@ METHODS
 	   NOTE: these changes are local to the client and will not appear on
 	   the directory server until the "update" method is called.
 
-       ldif ( OPTION => VALUE, ... )
+       ldif ( OPTION =&gt VALUE, ... )
 	   Returns the entry as an LDIF string. Possible options are
 
-	   change => VALUE
+	   change =&gt VALUE
 	       If given a true value then the LDIF will be generated as a
 	       change record.  If false, then the LDIF generated will
 	       represent the entry content. If unspecified then it will
@@ -222,7 +224,7 @@ METHODS
 	   attribute does not exist. In a scalar context returns the first
 	   value for the attribute or undef if the attribute does not exist.
 
-	   alloptions => 1
+	   alloptions =&gt 1
 	       The result will be a hash reference. The keys of the hash will
 	       be the options and the hash value will be the values for those
 	       attributes.  For example if an entry had:
@@ -233,29 +235,29 @@ METHODS
 	       Then a get for attribute "name" with alloptions set to a true
 	       value
 
-		$ref = $entry->get_value ( 'name', alloptions => 1 );
+		$ref = $entry-&gtget_value ( 'name', alloptions =&gt 1 );
 
 	       will return a hash reference that would be like
 
 		{
-		  ''	   => [ 'Graham Barr' ],
-		  ';en-us' => [ 'Bob' ]
+		  ''	   =&gt [ 'Graham Barr' ],
+		  ';en-us' =&gt [ 'Bob' ]
 		}
 
 	       If alloptions is not set or is set to false only the attribute
 	       values for the exactly matching name are returned.
 
-	   asref => 1
+	   asref =&gt 1
 	       The result will be a reference to an array containing all the
 	       values for the attribute, or "undef" if the attribute does not
 	       exist.
 
-		$scalar = $entry->get_value ( 'name' );
+		$scalar = $entry-&gtget_value ( 'name' );
 
 	       $scalar will be the first value for the "name" attribute, or
 	       "undef" if the entry does not contain a "name" attribute.
 
-		$ref = $entry->get_value ( 'name', asref => 1 );
+		$ref = $entry-&gtget_value ( 'name', asref =&gt 1 );
 
 	       $ref will be a reference to an array, which will have all the
 	       values for the "name" attribute. If the entry does not have an
@@ -266,7 +268,7 @@ METHODS
 	   object. These values and thier contents should NOT be modified
 	   directly.
 
-       replace ( ATTR => VALUE, ... )
+       replace ( ATTR =&gt VALUE, ... )
 	   Similar to "add", except that the values given will replace any
 	   values that already exist for the given attributes.
 
@@ -296,10 +298,10 @@ SEE ALSO
        Net::LDAP, Net::LDAP::LDIF
 
 AUTHOR
-       Graham Barr <gbarr@pobox.com>.
+       Graham Barr &ltgbarr@pobox.com&gt.
 
        Please report any bugs, or post any suggestions, to the perl-ldap
-       mailing list <perl-ldap@perl.org>.
+       mailing list &ltperl-ldap@perl.org&gt.
 
 COPYRIGHT
        Copyright (c) 1997-2004 Graham Barr. All rights reserved. This program
@@ -309,6 +311,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-01-22		   Net::LDAP::Entry(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

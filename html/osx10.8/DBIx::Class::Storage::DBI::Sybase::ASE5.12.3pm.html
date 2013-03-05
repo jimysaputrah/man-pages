@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="If your version of Sybase does not support placeholders, then your..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Storage::DBI::Sybase::ASE - Sybase ASE SQL Server support</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::Storage::User:ContributeDBIx::Class::Storage::DBI::Sybase::ASE(3)
 
 
@@ -32,15 +34,15 @@ DESCRIPTION
 
        A recommended connect_info setting:
 
-	 on_connect_call => [['datetime_setup'], ['blob_setup', log_on_update => 0]]
+	 on_connect_call =&gt [['datetime_setup'], ['blob_setup', log_on_update =&gt 0]]
 
 METHODS
    connect_call_blob_setup
        Used as:
 
-	 on_connect_call => [ [ 'blob_setup', log_on_update => 0 ] ]
+	 on_connect_call =&gt [ [ 'blob_setup', log_on_update =&gt 0 ] ]
 
-       Does "$dbh->{syb_binary_images} = 1;" to return "IMAGE" data as raw
+       Does "$dbh-&gt{syb_binary_images} = 1;" to return "IMAGE" data as raw
        binary instead of as a hex string.
 
        Recommended.
@@ -55,12 +57,12 @@ METHODS
    connect_call_datetime_setup
        Used as:
 
-	 on_connect_call => 'datetime_setup'
+	 on_connect_call =&gt 'datetime_setup'
 
        In connect_info to set:
 
-	 $dbh->syb_date_fmt('ISO_strict'); # output fmt: 2004-08-21T14:36:48.080Z
-	 $dbh->do('set dateformat mdy');   # input fmt:  08/13/1979 18:08:55.080
+	 $dbh-&gtsyb_date_fmt('ISO_strict'); # output fmt: 2004-08-21T14:36:48.080Z
+	 $dbh-&gtdo('set dateformat mdy');   # input fmt:  08/13/1979 18:08:55.080
 
        This works for both "DATETIME" and "SMALLDATETIME" columns, note that
        "SMALLDATETIME" columns only have minute precision.
@@ -71,21 +73,21 @@ Schema::Loader Support
 
 FreeTDS
        This driver supports DBD::Sybase compiled against FreeTDS
-       (<http://www.freetds.org/>) to the best of our ability, however it is
+       (&lthttp://www.freetds.org/&gt) to the best of our ability, however it is
        recommended that you recompile DBD::Sybase against the Sybase Open
        Client libraries. They are a part of the Sybase ASE distribution:
 
        The Open Client FAQ is here:
-       <http://www.isug.com/Sybase_FAQ/ASE/section7.html>.
+       &lthttp://www.isug.com/Sybase_FAQ/ASE/section7.html&gt.
 
        Sybase ASE for Linux (which comes with the Open Client libraries) may
        be downloaded here:
-       <http://response.sybase.com/forms/ASE_Linux_Download>.
+       &lthttp://response.sybase.com/forms/ASE_Linux_Download&gt.
 
-       To see if you're using FreeTDS check "$schema->storage->using_freetds",
+       To see if you're using FreeTDS check "$schema-&gtstorage-&gtusing_freetds",
        or run:
 
-	 perl -MDBI -le 'my $dbh = DBI->connect($dsn, $user, $pass); print $dbh->{syb_oc_version}'
+	 perl -MDBI -le 'my $dbh = DBI-&gtconnect($dsn, $user, $pass); print $dbh-&gt{syb_oc_version}'
 
        It is recommended to set "tds version" for your ASE server to 5.0 in
        "/etc/freetds/freetds.conf".
@@ -131,11 +133,11 @@ TRANSACTIONS
 
        For example, this will not work:
 
-	 $schema->txn_do(sub {
-	   my $rs = $schema->resultset('Book');
-	   while (my $row = $rs->next) {
-	     $schema->resultset('MetaData')->create({
-	       book_id => $row->id,
+	 $schema-&gttxn_do(sub {
+	   my $rs = $schema-&gtresultset('Book');
+	   while (my $row = $rs-&gtnext) {
+	     $schema-&gtresultset('MetaData')-&gtcreate({
+	       book_id =&gt $row-&gtid,
 	       ...
 	     });
 	   }
@@ -143,8 +145,8 @@ TRANSACTIONS
 
        This won't either:
 
-	 my $first_row = $large_rs->first;
-	 $schema->txn_do(sub { ... });
+	 my $first_row = $large_rs-&gtfirst;
+	 $schema-&gttxn_do(sub { ... });
 
        Transactions done for inserts in "AutoCommit" mode when placeholders
        are in use are not affected, as they are done on an extra database
@@ -169,7 +171,7 @@ MAXIMUM CONNECTIONS
        DSN.
 
        See
-       <http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.help.ase_15.0.sag1/html/sag1/sag1272.htm>
+       &lthttp://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.help.ase_15.0.sag1/html/sag1/sag1272.htm&gt
        for information on changing the setting on the server side.
 
 DATES
@@ -180,14 +182,14 @@ TEXT/IMAGE COLUMNS
        DBD::Sybase compiled with FreeTDS will NOT allow you to insert or
        update "TEXT/IMAGE" columns.
 
-       Setting "$dbh->{LongReadLen}" will also not work with FreeTDS use
+       Setting "$dbh-&gt{LongReadLen}" will also not work with FreeTDS use
        either:
 
-	 $schema->storage->dbh->do("SET TEXTSIZE $bytes");
+	 $schema-&gtstorage-&gtdbh-&gtdo("SET TEXTSIZE $bytes");
 
        or
 
-	 $schema->storage->set_textsize($bytes);
+	 $schema-&gtstorage-&gtset_textsize($bytes);
 
        instead.
 
@@ -204,8 +206,8 @@ BULK API
        To use this feature effectively, use a large number of rows for each
        populate call, eg.:
 
-	 while (my $rows = $data_source->get_100_rows()) {
-	   $rs->populate($rows);
+	 while (my $rows = $data_source-&gtget_100_rows()) {
+	   $rs-&gtpopulate($rows);
 	 }
 
        NOTE: the add_columns calls in your "Result" classes must list columns
@@ -223,11 +225,11 @@ COMPUTED COLUMNS
 
        represent them in your Result classes as:
 
-	 created_dtm => {
-	   data_type => undef,
-	   default_value => \'getdate()',
-	   is_nullable => 0,
-	   inflate_datetime => 1,
+	 created_dtm =&gt {
+	   data_type =&gt undef,
+	   default_value =&gt \'getdate()',
+	   is_nullable =&gt 0,
+	   inflate_datetime =&gt 1,
 	 }
 
        The "data_type" must exist and must be "undef". Then empty inserts will
@@ -236,18 +238,18 @@ COMPUTED COLUMNS
 TIMESTAMP COLUMNS
        "timestamp" columns in Sybase ASE are not really timestamps, see:
        http://dba.fyicenter.com/Interview-Questions/SYBASE/The_timestamp_datatype_in_Sybase_.html
-       <http://dba.fyicenter.com/Interview-
-       Questions/SYBASE/The_timestamp_datatype_in_Sybase_.html>.
+       &lthttp://dba.fyicenter.com/Interview-
+       Questions/SYBASE/The_timestamp_datatype_in_Sybase_.html&gt.
 
        They should be defined in your Result classes as:
 
-	 ts => {
-	   data_type => 'timestamp',
-	   is_nullable => 0,
-	   inflate_datetime => 0,
+	 ts =&gt {
+	   data_type =&gt 'timestamp',
+	   is_nullable =&gt 0,
+	   inflate_datetime =&gt 0,
 	 }
 
-       The "<inflate_datetime =" 0>> is necessary if you use
+       The "&ltinflate_datetime =" 0&gt&gt is necessary if you use
        DBIx::Class::InflateColumn::DateTime, and most people do, and still
        want to be able to read these values.
 
@@ -274,6 +276,6 @@ LICENSE
 
 
 perl v5.12.4			  201DBIx::Class::Storage::DBI::Sybase::ASE(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

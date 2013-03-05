@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The Attribute Protocol is almost entirely an invention of "Class::MOP"...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Class::MOP::Attribute - Attribute Meta Object</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Class::MOP::Attribute(User Contributed Perl DocumentatClass::MOP::Attribute(3)
 
 
@@ -19,21 +21,21 @@ VERSION
        version 2.0205
 
 SYNOPSIS
-	 Class::MOP::Attribute->new(
-	     foo => (
-		 accessor  => 'foo',	       # dual purpose get/set accessor
-		 predicate => 'has_foo',       # predicate check for defined-ness
-		 init_arg  => '-foo',	       # class->new will look for a -foo key
-		 default   => 'BAR IS BAZ!'    # if no -foo key is provided, use this
+	 Class::MOP::Attribute-&gtnew(
+	     foo =&gt (
+		 accessor  =&gt 'foo',	       # dual purpose get/set accessor
+		 predicate =&gt 'has_foo',       # predicate check for defined-ness
+		 init_arg  =&gt '-foo',	       # class-&gtnew will look for a -foo key
+		 default   =&gt 'BAR IS BAZ!'    # if no -foo key is provided, use this
 	     )
 	 );
 
-	 Class::MOP::Attribute->new(
-	     bar => (
-		 reader    => 'bar',	       # getter
-		 writer    => 'set_bar',       # setter
-		 predicate => 'has_bar',       # predicate check for defined-ness
-		 init_arg  => ':bar',	       # class->new will look for a :bar key
+	 Class::MOP::Attribute-&gtnew(
+	     bar =&gt (
+		 reader    =&gt 'bar',	       # getter
+		 writer    =&gt 'set_bar',       # setter
+		 predicate =&gt 'has_bar',       # predicate check for defined-ness
+		 init_arg  =&gt ':bar',	       # class-&gtnew will look for a :bar key
 					       # no default value means it is undef
 	     )
 	 );
@@ -50,7 +52,7 @@ DESCRIPTION
 
 METHODS
    Creation
-       Class::MOP::Attribute->new($name, ?%options)
+       Class::MOP::Attribute-&gtnew($name, ?%options)
 	   An attribute must (at the very least), have a $name. All other
 	   %options are added as key-value pairs.
 
@@ -60,7 +62,7 @@ METHODS
 		   initialization hash. For instance, if we have an "init_arg"
 		   value of "-foo", then the following code will Just Work.
 
-		     MyClass->meta->new_object( -foo => 'Hello There' );
+		     MyClass-&gtmeta-&gtnew_object( -foo =&gt 'Hello There' );
 
 		   If an init_arg is not assigned, it will automatically use
 		   the attribute's name. If "init_arg" is explicitly set to
@@ -86,17 +88,17 @@ METHODS
 		   initialize it with a HASH or ARRAY ref, then you need to
 		   wrap that inside a subroutine reference:
 
-		     Class::MOP::Attribute->new(
-			 'foo' => (
-			     default => sub { [] },
+		     Class::MOP::Attribute-&gtnew(
+			 'foo' =&gt (
+			     default =&gt sub { [] },
 			 )
 		     );
 
 		     # or ...
 
-		     Class::MOP::Attribute->new(
-			 'foo' => (
-			     default => sub { {} },
+		     Class::MOP::Attribute-&gtnew(
+			 'foo' =&gt (
+			     default =&gt sub { {} },
 			 )
 		     );
 
@@ -104,9 +106,9 @@ METHODS
 		   reference itself, then you need to wrap that in a
 		   subroutine as well:
 
-		     Class::MOP::Attribute->new(
-			 'foo' => (
-			     default => sub {
+		     Class::MOP::Attribute-&gtnew(
+			 'foo' =&gt (
+			     default =&gt sub {
 				 sub { print "Hello World" }
 			     },
 			 )
@@ -117,9 +119,9 @@ METHODS
 		   can take advantage of the fact that when the "default"
 		   value is called as a method:
 
-		     Class::MOP::Attribute->new(
-			 'object_identity' => (
-			     default => sub { Scalar::Util::refaddr( $_[0] ) },
+		     Class::MOP::Attribute-&gtnew(
+			 'object_identity' =&gt (
+			     default =&gt sub { Scalar::Util::refaddr( $_[0] ) },
 			 )
 		     );
 
@@ -146,11 +148,11 @@ METHODS
 		   This contrived example shows an initializer that sets the
 		   attribute to twice the given value.
 
-		     Class::MOP::Attribute->new(
-			 'doubled' => (
-			     initializer => sub {
+		     Class::MOP::Attribute-&gtnew(
+			 'doubled' =&gt (
+			     initializer =&gt sub {
 				 my ( $self, $value, $set, $attr ) = @_;
-				 $set->( $value * 2 );
+				 $set-&gt( $value * 2 );
 			     },
 			 )
 		     );
@@ -158,10 +160,10 @@ METHODS
 		   Since an initializer can be a method name, you can easily
 		   make attribute initialization use the writer:
 
-		     Class::MOP::Attribute->new(
-			 'some_attr' => (
-			     writer	 => 'some_attr',
-			     initializer => 'some_attr',
+		     Class::MOP::Attribute-&gtnew(
+			 'some_attr' =&gt (
+			     writer	 =&gt 'some_attr',
+			     initializer =&gt 'some_attr',
 			 )
 		     );
 
@@ -169,7 +171,7 @@ METHODS
 		   method modifications) will need to examine @_ and determine
 		   under which context it is being called:
 
-		     around 'some_attr' => sub {
+		     around 'some_attr' =&gt sub {
 			 my $orig = shift;
 			 my $self = shift;
 			 # $value is not defined if being called as a reader
@@ -177,16 +179,16 @@ METHODS
 			 my ($value, $setter, $attr) = @_;
 
 			 # the reader behaves normally
-			 return $self->$orig if not @_;
+			 return $self-&gt$orig if not @_;
 
 			 # mutate $value as desired
-			 # $value = <something($value);
+			 # $value = &ltsomething($value);
 
 			 # if called as an initializer, set the value and we're done
-			 return $setter->($row) if $setter;
+			 return $setter-&gt($row) if $setter;
 
 			 # otherwise, call the real writer with the new value
-			 $self->$orig($row);
+			 $self-&gt$orig($row);
 		     };
 
 	   The "accessor", "reader", "writer", "predicate" and "clearer"
@@ -206,7 +208,7 @@ METHODS
 
 		   Note that "undef" is a legitimate value, so this will work:
 
-		     $object->set_something(undef);
+		     $object-&gtset_something(undef);
 
 	   o	   reader
 
@@ -220,7 +222,7 @@ METHODS
 
 		   Note that "undef" is a legitimate value, so this will work:
 
-		     $object->set_something(undef);
+		     $object-&gtset_something(undef);
 
 	   o	   predicate
 
@@ -249,7 +251,7 @@ METHODS
 		   inlined accessor code so that error messages report a
 		   useful line and file name.
 
-       $attr->clone(%options)
+       $attr-&gtclone(%options)
 	   This clones the attribute. Any options you provide will override
 	   the settings of the original attribute. You can change the name of
 	   the new attribute by passing a "name" key in %options.
@@ -258,26 +260,26 @@ METHODS
        These are all basic read-only accessors for the values passed into the
        constructor.
 
-       $attr->name
+       $attr-&gtname
 	   Returns the attribute's name.
 
-       $attr->accessor
-       $attr->reader
-       $attr->writer
-       $attr->predicate
-       $attr->clearer
+       $attr-&gtaccessor
+       $attr-&gtreader
+       $attr-&gtwriter
+       $attr-&gtpredicate
+       $attr-&gtclearer
 	   The "accessor", "reader", "writer", "predicate", and "clearer"
 	   methods all return exactly what was passed to the constructor, so
 	   it can be either a string containing a method name, or a hash
 	   reference.
 
-       $attr->initializer
+       $attr-&gtinitializer
 	   Returns the initializer as passed to the constructor, so this may
 	   be either a method name or a subroutine reference.
 
-       $attr->init_arg
-       $attr->is_default_a_coderef
-       $attr->default($instance)
+       $attr-&gtinit_arg
+       $attr-&gtis_default_a_coderef
+       $attr-&gtdefault($instance)
 	   The $instance argument is optional. If you don't pass it, the
 	   return value for this method is exactly what was passed to the
 	   constructor, either a simple scalar or a subroutine reference.
@@ -286,55 +288,55 @@ METHODS
 	   reference, then the reference is called as a method on the
 	   $instance and the generated value is returned.
 
-       $attr->slots
+       $attr-&gtslots
 	   Return a list of slots required by the attribute. This is usually
 	   just one, the name of the attribute.
 
 	   A slot is the name of the hash key used to store the attribute in
 	   an object instance.
 
-       $attr->get_read_method
-       $attr->get_write_method
+       $attr-&gtget_read_method
+       $attr-&gtget_write_method
 	   Returns the name of a method suitable for reading or writing the
 	   value of the attribute in the associated class.
 
 	   If an attribute is read- or write-only, then these methods can
 	   return "undef" as appropriate.
 
-       $attr->has_read_method
-       $attr->has_write_method
+       $attr-&gthas_read_method
+       $attr-&gthas_write_method
 	   This returns a boolean indicating whether the attribute has a named
 	   read or write method.
 
-       $attr->get_read_method_ref
-       $attr->get_write_method_ref
+       $attr-&gtget_read_method_ref
+       $attr-&gtget_write_method_ref
 	   Returns the subroutine reference of a method suitable for reading
 	   or writing the attribute's value in the associated class. These
 	   methods always return a subroutine reference, regardless of whether
 	   or not the attribute is read- or write-only.
 
-       $attr->insertion_order
+       $attr-&gtinsertion_order
 	   If this attribute has been inserted into a class, this returns a
 	   zero based index regarding the order of insertion.
 
    Informational predicates
        These are all basic predicate methods for the values passed into "new".
 
-       $attr->has_accessor
-       $attr->has_reader
-       $attr->has_writer
-       $attr->has_predicate
-       $attr->has_clearer
-       $attr->has_initializer
-       $attr->has_init_arg
+       $attr-&gthas_accessor
+       $attr-&gthas_reader
+       $attr-&gthas_writer
+       $attr-&gthas_predicate
+       $attr-&gthas_clearer
+       $attr-&gthas_initializer
+       $attr-&gthas_init_arg
 	   This will be false if the "init_arg" was set to "undef".
 
-       $attr->has_default
+       $attr-&gthas_default
 	   This will be false if the "default" was set to "undef", since
 	   "undef" is the default "default" anyway.
 
-       $attr->has_builder
-       $attr->has_insertion_order
+       $attr-&gthas_builder
+       $attr-&gthas_insertion_order
 	   This will be false if this attribute has not be inserted into a
 	   class
 
@@ -345,7 +347,7 @@ METHODS
        These methods are not for general use, and should only be used if you
        really know what you are doing.
 
-       $attr->initialize_instance_slot($meta_instance, $instance, $params)
+       $attr-&gtinitialize_instance_slot($meta_instance, $instance, $params)
 	   This method is used internally to initialize the attribute's slot
 	   in the object $instance.
 
@@ -354,35 +356,35 @@ METHODS
 
 	   It's unlikely that you'll need to call this method yourself.
 
-       $attr->set_value($instance, $value)
+       $attr-&gtset_value($instance, $value)
 	   Sets the value without going through the accessor. Note that this
 	   works even with read-only attributes.
 
-       $attr->set_raw_value($instance, $value)
+       $attr-&gtset_raw_value($instance, $value)
 	   Sets the value with no side effects such as a trigger.
 
 	   This doesn't actually apply to Class::MOP attributes, only to
 	   subclasses.
 
-       $attr->set_initial_value($instance, $value)
+       $attr-&gtset_initial_value($instance, $value)
 	   Sets the value without going through the accessor. This method is
 	   only called when the instance is first being initialized.
 
-       $attr->get_value($instance)
+       $attr-&gtget_value($instance)
 	   Returns the value without going through the accessor. Note that
 	   this works even with write-only accessors.
 
-       $attr->get_raw_value($instance)
+       $attr-&gtget_raw_value($instance)
 	   Returns the value without any side effects such as lazy attributes.
 
 	   Doesn't actually apply to Class::MOP attributes, only to
 	   subclasses.
 
-       $attr->has_value($instance)
+       $attr-&gthas_value($instance)
 	   Return a boolean indicating whether the attribute has been set in
 	   $instance. This how the default "predicate" method works.
 
-       $attr->clear_value($instance)
+       $attr-&gtclear_value($instance)
 	   This will clear the attribute's value in $instance. This is what
 	   the default "clearer" calls.
 
@@ -395,11 +397,11 @@ METHODS
        are they very magical, they are mostly used internally and by metaclass
        instances.
 
-       $attr->associated_class
+       $attr-&gtassociated_class
 	   This returns the "Class::MOP::Class" with which this attribute is
 	   associated, if any.
 
-       $attr->attach_to_class($metaclass)
+       $attr-&gtattach_to_class($metaclass)
 	   This method stores a weakened reference to the $metaclass object
 	   internally.
 
@@ -409,7 +411,7 @@ METHODS
 	   It is probably best to use the Class::MOP::Class "add_attribute"
 	   method instead.
 
-       $attr->detach_from_class
+       $attr-&gtdetach_from_class
 	   This method removes the associate metaclass object from the
 	   attribute it has one.
 
@@ -420,42 +422,42 @@ METHODS
 	   method instead.
 
    Attribute Accessor generation
-       $attr->accessor_metaclass
+       $attr-&gtaccessor_metaclass
 	   Accessor methods are generated using an accessor metaclass. By
 	   default, this is Class::MOP::Method::Accessor. This method returns
 	   the name of the accessor metaclass that this attribute uses.
 
-       $attr->associate_method($method)
+       $attr-&gtassociate_method($method)
 	   This associates a Class::MOP::Method object with the attribute.
 	   Typically, this is called internally when an attribute generates
 	   its accessors.
 
-       $attr->associated_methods
+       $attr-&gtassociated_methods
 	   This returns the list of methods which have been associated with
 	   the attribute.
 
-       $attr->install_accessors
+       $attr-&gtinstall_accessors
 	   This method generates and installs code the attributes various
 	   accessors. It is typically called from the Class::MOP::Class
 	   "add_attribute" method.
 
-       $attr->remove_accessors
+       $attr-&gtremove_accessors
 	   This method removes all of the accessors associated with the
 	   attribute.
 
 	   This does not currently remove methods from the list returned by
 	   "associated_methods".
 
-       $attr->inline_get
-       $attr->inline_set
-       $attr->inline_has
-       $attr->inline_clear
+       $attr-&gtinline_get
+       $attr-&gtinline_set
+       $attr-&gtinline_has
+       $attr-&gtinline_clear
 	   These methods return a code snippet suitable for inlining the
 	   relevant operation. They expect strings containing variable names
 	   to be used in the inlining, like '$self' or '$_[1]'.
 
    Introspection
-       Class::MOP::Attribute->meta
+       Class::MOP::Attribute-&gtmeta
 	   This will return a Class::MOP::Class instance for this class.
 
 	   It should also be noted that Class::MOP will actually bootstrap
@@ -463,7 +465,7 @@ METHODS
 	   its metaclass.
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        This software is copyright (c) 2011 by Infinity Interactive, Inc..
@@ -474,6 +476,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-09-06	      Class::MOP::Attribute(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

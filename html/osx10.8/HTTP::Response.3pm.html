@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The "HTTP::Response" class encapsulates HTTP style responses.  A..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>HTTP::Response - HTTP style response message</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 HTTP::Response(3)     User Contributed Perl Documentation    HTTP::Response(3)
 
 
@@ -20,12 +22,12 @@ SYNOPSIS
        "LWP::UserAgent":
 
 	   # ...
-	   $response = $ua->request($request)
-	   if ($response->is_success) {
-	       print $response->decoded_content;
+	   $response = $ua-&gtrequest($request)
+	   if ($response-&gtis_success) {
+	       print $response-&gtdecoded_content;
 	   }
 	   else {
-	       print STDERR $response->status_line, "\n";
+	       print STDERR $response-&gtstatus_line, "\n";
 	   }
 
 DESCRIPTION
@@ -38,10 +40,10 @@ DESCRIPTION
        "HTTP::Response" is a subclass of "HTTP::Message" and therefore
        inherits its methods.  The following additional methods are available:
 
-       $r = HTTP::Response->new( $code )
-       $r = HTTP::Response->new( $code, $msg )
-       $r = HTTP::Response->new( $code, $msg, $header )
-       $r = HTTP::Response->new( $code, $msg, $header, $content )
+       $r = HTTP::Response-&gtnew( $code )
+       $r = HTTP::Response-&gtnew( $code, $msg )
+       $r = HTTP::Response-&gtnew( $code, $msg, $header )
+       $r = HTTP::Response-&gtnew( $code, $msg, $header, $content )
 	   Constructs a new "HTTP::Response" object describing a response with
 	   response code $code and optional message $msg.  The optional
 	   $header argument should be a reference to an "HTTP::Headers" object
@@ -49,71 +51,71 @@ DESCRIPTION
 	   $content argument should be a string of bytes.  The meaning these
 	   arguments are described below.
 
-       $r = HTTP::Response->parse( $str )
+       $r = HTTP::Response-&gtparse( $str )
 	   This constructs a new response object by parsing the given string.
 
-       $r->code
-       $r->code( $code )
+       $r-&gtcode
+       $r-&gtcode( $code )
 	   This is used to get/set the code attribute.	The code is a 3 digit
 	   number that encode the overall outcome of a HTTP response.  The
 	   "HTTP::Status" module provide constants that provide mnemonic names
 	   for the code attribute.
 
-       $r->message
-       $r->message( $message )
+       $r-&gtmessage
+       $r-&gtmessage( $message )
 	   This is used to get/set the message attribute.  The message is a
 	   short human readable single line string that explains the response
 	   code.
 
-       $r->header( $field )
-       $r->header( $field => $value )
+       $r-&gtheader( $field )
+       $r-&gtheader( $field =&gt $value )
 	   This is used to get/set header values and it is inherited from
 	   "HTTP::Headers" via "HTTP::Message".  See HTTP::Headers for details
 	   and other similar methods that can be used to access the headers.
 
-       $r->content
-       $r->content( $bytes )
+       $r-&gtcontent
+       $r-&gtcontent( $bytes )
 	   This is used to get/set the raw content and it is inherited from
 	   the "HTTP::Message" base class.  See HTTP::Message for details and
 	   other methods that can be used to access the content.
 
-       $r->decoded_content( %options )
+       $r-&gtdecoded_content( %options )
 	   This will return the content after any "Content-Encoding" and
 	   charsets have been decoded.	See HTTP::Message for details.
 
-       $r->request
-       $r->request( $request )
+       $r-&gtrequest
+       $r-&gtrequest( $request )
 	   This is used to get/set the request attribute.  The request
 	   attribute is a reference to the the request that caused this
 	   response.  It does not have to be the same request passed to the
-	   $ua->request() method, because there might have been redirects and
+	   $ua-&gtrequest() method, because there might have been redirects and
 	   authorization retries in between.
 
-       $r->previous
-       $r->previous( $response )
+       $r-&gtprevious
+       $r-&gtprevious( $response )
 	   This is used to get/set the previous attribute.  The previous
 	   attribute is used to link together chains of responses.  You get
 	   chains of responses if the first response is redirect or
 	   unauthorized.  The value is "undef" if this is the first response
 	   in a chain.
 
-	   Note that the method $r->redirects is provided as a more convenient
+	   Note that the method $r-&gtredirects is provided as a more convenient
 	   way to access the response chain.
 
-       $r->status_line
-	   Returns the string "<code> <message>".  If the message attribute is
-	   not set then the official name of <code> (see HTTP::Status) is
+       $r-&gtstatus_line
+	   Returns the string "&ltcode&gt &ltmessage&gt".  If the message attribute is
+	   not set then the official name of &ltcode&gt (see HTTP::Status) is
 	   substituted.
 
-       $r->base
+       $r-&gtbase
 	   Returns the base URI for this response.  The return value will be a
 	   reference to a URI object.
 
 	   The base URI is obtained from one the following sources (in
 	   priority order):
 
-	   1.  Embedded in the document content, for instance <BASE
-	       HREF="..."> in HTML documents.
+	   1.  Embedded in the document content, for instance &ltBASE
+	       HREF="..."&gt in HTML documents.
 
 	   2.  A "Content-Base:" or a "Content-Location:" header in the
 	       response.
@@ -122,7 +124,7 @@ DESCRIPTION
 	       will also look for the "Base:" header.
 
 	   3.  The URI used to request this response. This might not be the
-	       original URI that was passed to $ua->request() method, because
+	       original URI that was passed to $ua-&gtrequest() method, because
 	       we might have received some redirect responses first.
 
 	   If none of these sources provide an absolute URI, undef is
@@ -134,7 +136,7 @@ DESCRIPTION
 	   method only performs the last 2 steps (the content is not always
 	   available either).
 
-       $r->filename
+       $r-&gtfilename
 	   Returns a filename for this response.  Note that doing sanity
 	   checks on the returned filename (eg. removing characters that
 	   cannot be used on the target filesystem where the filename would be
@@ -154,44 +156,44 @@ DESCRIPTION
 	   2.  A "Content-Location:" header in the response.
 
 	   3.  The URI used to request this response. This might not be the
-	       original URI that was passed to $ua->request() method, because
+	       original URI that was passed to $ua-&gtrequest() method, because
 	       we might have received some redirect responses first.
 
 	   If a filename cannot be derived from any of these sources, undef is
 	   returned.
 
-       $r->as_string
-       $r->as_string( $eol )
+       $r-&gtas_string
+       $r-&gtas_string( $eol )
 	   Returns a textual representation of the response.
 
-       $r->is_info
-       $r->is_success
-       $r->is_redirect
-       $r->is_error
+       $r-&gtis_info
+       $r-&gtis_success
+       $r-&gtis_redirect
+       $r-&gtis_error
 	   These methods indicate if the response was informational,
 	   successful, a redirection, or an error.  See HTTP::Status for the
 	   meaning of these.
 
-       $r->error_as_HTML
+       $r-&gterror_as_HTML
 	   Returns a string containing a complete HTML document indicating
 	   what error occurred.  This method should only be called when
-	   $r->is_error is TRUE.
+	   $r-&gtis_error is TRUE.
 
-       $r->redirects
+       $r-&gtredirects
 	   Returns the list of redirect responses that lead up to this
-	   response by following the $r->previous chain.  The list order is
+	   response by following the $r-&gtprevious chain.  The list order is
 	   oldest first.
 
 	   In scalar context return the number of redirect responses leading
 	   up to this one.
 
-       $r->current_age
+       $r-&gtcurrent_age
 	   Calculates the "current age" of the response as specified by RFC
 	   2616 section 13.2.3.  The age of a response is the time since it
 	   was sent by the origin server.  The returned value is a number
 	   representing the age in seconds.
 
-       $r->freshness_lifetime( %opt )
+       $r-&gtfreshness_lifetime( %opt )
 	   Calculates the "freshness lifetime" of the response as specified by
 	   RFC 2616 section 13.2.4.  The "freshness lifetime" is the length of
 	   time between the generation of a response and its expiration time.
@@ -202,28 +204,28 @@ DESCRIPTION
 	   on the "Last-Modified" header to determine a suitable lifetime.
 	   The following options might be passed to control the heuristics:
 
-	   heuristic_expiry => $bool
+	   heuristic_expiry =&gt $bool
 	       If passed as a FALSE value, don't apply heuristics and just
 	       return "undef" when "Expires" or "Cache-Control" is lacking.
 
-	   h_lastmod_fraction => $num
+	   h_lastmod_fraction =&gt $num
 	       This number represent the fraction of the difference since the
 	       "Last-Modified" timestamp to make the expiry time.  The default
 	       is 0.10, the suggested typical setting of 10% in RFC 2616.
 
-	   h_min => $sec
+	   h_min =&gt $sec
 	       This is the lower limit of the heuristic expiry age to use.
 	       The default is 60 (1 minute).
 
-	   h_max => $sec
+	   h_max =&gt $sec
 	       This is the upper limit of the heuristic expiry age to use.
 	       The default is 86400 (24 hours).
 
-	   h_default => $sec
+	   h_default =&gt $sec
 	       This is the expiry age to use when nothing else applies.  The
 	       default is 3600 (1 hour) or "h_min" if greater.
 
-       $r->is_fresh( %opt )
+       $r-&gtis_fresh( %opt )
 	   Returns TRUE if the response is fresh, based on the values of
 	   freshness_lifetime() and current_age().  If the response is no
 	   longer fresh, then it has to be re-fetched or re-validated by the
@@ -232,7 +234,7 @@ DESCRIPTION
 	   Options might be passed to control expiry heuristics, see the
 	   description of freshness_lifetime().
 
-       $r->fresh_until( %opt )
+       $r-&gtfresh_until( %opt )
 	   Returns the time (seconds since epoch) when this entity is no
 	   longer fresh.
 
@@ -251,6 +253,6 @@ COPYRIGHT
 
 
 perl v5.12.4			  2011-03-07		     HTTP::Response(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

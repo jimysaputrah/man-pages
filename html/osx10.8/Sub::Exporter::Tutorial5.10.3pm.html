@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="What's an Exporter?..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Sub::Exporter::Tutorial - a friendly guide to exporting with</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Sub::Exporter::TutoriaUser Contributed Perl DocumentSub::Exporter::Tutorial(3)
 
 
@@ -24,7 +26,7 @@ DESCRIPTION
 
 	 use Module LIST;
 
-	 BEGIN { require Module; Module->import(LIST); }
+	 BEGIN { require Module; Module-&gtimport(LIST); }
 
        The import method is the module's exporter.
 
@@ -37,7 +39,7 @@ DESCRIPTION
 
 	 package Addition;
 	 use Sub::Exporter;
-	 Sub::Exporter::setup_exporter({ exports => [ qw(plus) ]});
+	 Sub::Exporter::setup_exporter({ exports =&gt [ qw(plus) ]});
 
 	 sub plus { my ($x, $y) = @_; return $x + $y; }
 
@@ -51,7 +53,7 @@ DESCRIPTION
        That syntax to set up the exporter, above, is a little verbose, so for
        the simple case of just naming some exports, you can write this:
 
-	 use Sub::Exporter -setup => { exports => [ qw(plus) ] };
+	 use Sub::Exporter -setup =&gt { exports =&gt [ qw(plus) ] };
 
        ...which is the same as the original example -- except that now the
        exporter is built and installed at compile time.  Well, that and you
@@ -64,11 +66,11 @@ DESCRIPTION
        configuration:
 
 	 package Food;
-	 use Sub::Exporter -setup => {
-	   exports => [ qw(apple banana beef fluff lox rabbit) ],
-	   groups  => {
-	     fauna  => [ qw(beef lox rabbit) ],
-	     flora  => [ qw(apple banana) ],
+	 use Sub::Exporter -setup =&gt {
+	   exports =&gt [ qw(apple banana beef fluff lox rabbit) ],
+	   groups  =&gt {
+	     fauna  =&gt [ qw(beef lox rabbit) ],
+	     flora  =&gt [ qw(apple banana) ],
 	   }
 	 };
 
@@ -99,23 +101,23 @@ DESCRIPTION
        If you wanted to import "lox" from the Food package, but you don't like
        the name, you could write this:
 
-	 use Food lox => { -as => 'salmon' };
+	 use Food lox =&gt { -as =&gt 'salmon' };
 
        Now you'd get the "lox" routine, but it would be called salmon in your
        package.  You can also rename entire groups by using the "prefix"
        option:
 
-	 use Food -fauna => { -prefix => 'cute_little_' };
+	 use Food -fauna =&gt { -prefix =&gt 'cute_little_' };
 
        Now you can call your "cute_little_rabbit" routine.  (You can also call
        "cute_little_beef", but that hardly seems as enticing.)
 
        When you define groups, you can include renaming.
 
-	 use Sub::Exporter -setup => {
-	   exports => [ qw(apple banana beef fluff lox rabbit) ],
-	   groups  => {
-	     fauna  => [ qw(beef lox), rabbit => { -as => 'coney' } ],
+	 use Sub::Exporter -setup =&gt {
+	   exports =&gt [ qw(apple banana beef fluff lox rabbit) ],
+	   groups  =&gt {
+	     fauna  =&gt [ qw(beef lox), rabbit =&gt { -as =&gt 'coney' } ],
 	   }
 	 };
 
@@ -123,23 +125,23 @@ DESCRIPTION
        useful to use a dash instead of a colon to indicate a group: you can
        put a fat arrow between the group and its arguments, then.
 
-	 use Food -fauna => { -prefix => 'lovely_' };
+	 use Food -fauna =&gt { -prefix =&gt 'lovely_' };
 
 	 eat( lovely_coney ); # this works
 
        Prefixes also apply recursively.  That means that this code works:
 
-	 use Sub::Exporter -setup => {
-	   exports => [ qw(apple banana beef fluff lox rabbit) ],
-	   groups  => {
-	     fauna   => [ qw(beef lox), rabbit => { -as => 'coney' } ],
-	     allowed => [ -fauna => { -prefix => 'willing_' }, 'banana' ],
+	 use Sub::Exporter -setup =&gt {
+	   exports =&gt [ qw(apple banana beef fluff lox rabbit) ],
+	   groups  =&gt {
+	     fauna   =&gt [ qw(beef lox), rabbit =&gt { -as =&gt 'coney' } ],
+	     allowed =&gt [ -fauna =&gt { -prefix =&gt 'willing_' }, 'banana' ],
 	   }
 	 };
 
 	 ...
 
-	 use Food -allowed => { -prefix => 'any_' };
+	 use Food -allowed =&gt { -prefix =&gt 'any_' };
 
 	 $dinner = any_willing_coney; # yum!
 
@@ -161,9 +163,9 @@ DESCRIPTION
        unique incrementor; here's how you'd do that with Sub::Exporter;
 
 	 package Package::Counter;
-	 use Sub::Exporter -setup => {
-	   exports => [ counter => sub { my $i = 0; sub { $i++ } } ],
-	   groups  => { default => [ qw(counter) ] },
+	 use Sub::Exporter -setup =&gt {
+	   exports =&gt [ counter =&gt sub { my $i = 0; sub { $i++ } } ],
+	   groups  =&gt { default =&gt [ qw(counter) ] },
 	 };
 
        Now anyone can use your Package::Counter module and he'll receive a
@@ -179,19 +181,19 @@ DESCRIPTION
 	 sub _build_counter {
 	   my ($class, $arg) = @_;
 	   $arg ||= {};
-	   my $i = $arg->{start} || 0;
+	   my $i = $arg-&gt{start} || 0;
 	   return sub { $i++ };
 	 }
 
-	 use Sub::Exporter -setup => {
-	   exports => [ counter => \'_build_counter' ],
-	   groups  => { default => [ qw(counter) ] },
+	 use Sub::Exporter -setup =&gt {
+	   exports =&gt [ counter =&gt \'_build_counter' ],
+	   groups  =&gt { default =&gt [ qw(counter) ] },
 	 };
 
        Now, the consumer can (if he wants) specify a starting value for his
        counter:
 
-	 use Package::Counter counter => { start => 10 };
+	 use Package::Counter counter =&gt { start =&gt 10 };
 
        Arguments to a group are passed along to the generators of routines in
        that group, but Sub::Exporter arguments -- anything beginning with a
@@ -222,22 +224,22 @@ DESCRIPTION
        you specify collectors, like this:
 
 	 use Menu::Airline
-	 use Sub::Exporter -setup => {
-	   exports =>  ... ,
-	   groups  =>  ... ,
-	   collectors => [ qw(allergies ethics) ],
+	 use Sub::Exporter -setup =&gt {
+	   exports =&gt  ... ,
+	   groups  =&gt  ... ,
+	   collectors =&gt [ qw(allergies ethics) ],
 	 };
 
        Collectors look like normal exports in the import call, but they don't
        do anything but collect data which can later be passed to generators.
        If the module was used like this:
 
-	 use Menu::Airline allergies => [ qw(peanuts) ], ethics => [ qw(vegan) ];
+	 use Menu::Airline allergies =&gt [ qw(peanuts) ], ethics =&gt [ qw(vegan) ];
 
        ...the consumer would get a salad.  Also, all the generators would be
        passed, as their fourth argument, something like this:
 
-	 { allerges => [ qw(peanuts) ], ethics => [ qw(vegan) ] }
+	 { allerges =&gt [ qw(peanuts) ], ethics =&gt [ qw(vegan) ] }
 
        Generators may have arguments in their definition, as well.  These must
        be code refs that perform validation of the collected values.  They are
@@ -253,7 +255,7 @@ DESCRIPTION
        arguments.
 
 AUTHOR
-       Ricardo SIGNES, "<rjbs@cpan.org>"
+       Ricardo SIGNES, "&ltrjbs@cpan.org&gt"
 
 SEE ALSO
        o   Sub::Exporter for complete documentation and references to other
@@ -266,6 +268,6 @@ COPYRIGHT
 
 
 perl v5.10.1			  2008-11-21	    Sub::Exporter::Tutorial(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

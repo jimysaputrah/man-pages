@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""TAP::Parser" is designed to produce a proper parse of TAP output. For..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>TAP::Parser - Parse TAP output</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 TAP::Parser(3pm)       Perl Programmers Reference Guide       TAP::Parser(3pm)
 
 
@@ -21,10 +23,10 @@ VERSION
 SYNOPSIS
 	   use TAP::Parser;
 
-	   my $parser = TAP::Parser->new( { source => $source } );
+	   my $parser = TAP::Parser-&gtnew( { source =&gt $source } );
 
-	   while ( my $result = $parser->next ) {
-	       print $result->as_string;
+	   while ( my $result = $parser-&gtnext ) {
+	       print $result-&gtas_string;
 	   }
 
 DESCRIPTION
@@ -34,17 +36,17 @@ DESCRIPTION
 
        There's a wiki dedicated to the Test Anything Protocol:
 
-       <http://testanything.org>
+       &lthttp://testanything.org&gt
 
        It includes the TAP::Parser Cookbook:
 
-       <http://testanything.org/wiki/index.php/TAP::Parser_Cookbook>
+       &lthttp://testanything.org/wiki/index.php/TAP::Parser_Cookbook&gt
 
 METHODS
    Class Methods
        "new"
 
-	my $parser = TAP::Parser->new(\%args);
+	my $parser = TAP::Parser-&gtnew(\%args);
 
        Returns a new "TAP::Parser" object.
 
@@ -69,7 +71,7 @@ METHODS
 	   the parser.
 
 	    foreach my $file ( @test_files ) {
-		my $parser = TAP::Parser->new( { source => $file } );
+		my $parser = TAP::Parser-&gtnew( { source =&gt $file } );
 		# do stuff with the parser
 	    }
 
@@ -84,7 +86,7 @@ METHODS
 	   TAP::Parser::Iterator::Source, using the array reference strings as
 	   the command arguments to IPC::Open3::open3:
 
-	    exec => [ '/usr/bin/ruby', 't/my_test.rb' ]
+	    exec =&gt [ '/usr/bin/ruby', 't/my_test.rb' ]
 
 	   Note that "source" and "exec" are mutually exclusive.
 
@@ -97,23 +99,23 @@ METHODS
 	   used:
 
 	    my %callbacks = (
-		test	=> \&test_callback,
-		plan	=> \&plan_callback,
-		comment => \&comment_callback,
-		bailout => \&bailout_callback,
-		unknown => \&unknown_callback,
+		test	=&gt \&test_callback,
+		plan	=&gt \&plan_callback,
+		comment =&gt \&comment_callback,
+		bailout =&gt \&bailout_callback,
+		unknown =&gt \&unknown_callback,
 	    );
 
-	    my $aggregator = TAP::Parser::Aggregator->new;
+	    my $aggregator = TAP::Parser::Aggregator-&gtnew;
 	    foreach my $file ( @test_files ) {
-		my $parser = TAP::Parser->new(
+		my $parser = TAP::Parser-&gtnew(
 		    {
-			source	  => $file,
-			callbacks => \%callbacks,
+			source	  =&gt $file,
+			callbacks =&gt \%callbacks,
 		    }
 		);
-		$parser->run;
-		$aggregator->add( $file, $parser );
+		$parser-&gtrun;
+		$aggregator-&gtadd( $file, $parser );
 	    }
 
        o   "switches"
@@ -121,9 +123,9 @@ METHODS
 	   If using a Perl file as a source, optional switches may be passed
 	   which will be used when invoking the perl executable.
 
-	    my $parser = TAP::Parser->new( {
-		source	 => $test_file,
-		switches => '-Ilib',
+	    my $parser = TAP::Parser-&gtnew( {
+		source	 =&gt $test_file,
+		switches =&gt '-Ilib',
 	    } );
 
        o   "test_args"
@@ -190,9 +192,9 @@ METHODS
    Instance Methods
        "next"
 
-	 my $parser = TAP::Parser->new( { source => $file } );
-	 while ( my $result = $parser->next ) {
-	     print $result->as_string, "\n";
+	 my $parser = TAP::Parser-&gtnew( { source =&gt $file } );
+	 while ( my $result = $parser-&gtnext ) {
+	     print $result-&gtas_string, "\n";
 	 }
 
        This method returns the results of the parsing, one result at a time.
@@ -206,7 +208,7 @@ METHODS
 
        "run"
 
-	 $parser->run;
+	 $parser-&gtrun;
 
        This method merely runs the parser and parses all of the TAP.
 
@@ -250,8 +252,8 @@ METHODS
 INDIVIDUAL RESULTS
        If you've read this far in the docs, you've seen this:
 
-	   while ( my $result = $parser->next ) {
-	       print $result->as_string;
+	   while ( my $result = $parser-&gtnext ) {
+	       print $result-&gtas_string;
 	   }
 
        Each result returned is a TAP::Parser::Result subclass, referred to as
@@ -339,35 +341,35 @@ INDIVIDUAL RESULTS
 
        "is_ok"
 
-	 if ( $result->is_ok ) { ... }
+	 if ( $result-&gtis_ok ) { ... }
 
        Reports whether or not a given result has passed.  Anything which is
        not a test result returns true.	This is merely provided as a
        convenient shortcut which allows you to do this:
 
-	my $parser = TAP::Parser->new( { source => $source } );
-	while ( my $result = $parser->next ) {
+	my $parser = TAP::Parser-&gtnew( { source =&gt $source } );
+	while ( my $result = $parser-&gtnext ) {
 	    # only print failing results
-	    print $result->as_string unless $result->is_ok;
+	    print $result-&gtas_string unless $result-&gtis_ok;
 	}
 
    "plan" methods
-	if ( $result->is_plan ) { ... }
+	if ( $result-&gtis_plan ) { ... }
 
        If the above evaluates as true, the following methods will be available
        on the $result object.
 
        "plan"
 
-	 if ( $result->is_plan ) {
-	    print $result->plan;
+	 if ( $result-&gtis_plan ) {
+	    print $result-&gtplan;
 	 }
 
        This is merely a synonym for "as_string".
 
        "directive"
 
-	my $directive = $result->directive;
+	my $directive = $result-&gtdirective;
 
        If a SKIP directive is included with the plan, this method will return
        it.
@@ -376,13 +378,13 @@ INDIVIDUAL RESULTS
 
        "explanation"
 
-	my $explanation = $result->explanation;
+	my $explanation = $result-&gtexplanation;
 
        If a SKIP directive was included with the plan, this method will return
        the explanation, if any.
 
    "pragma" methods
-	if ( $result->is_pragma ) { ... }
+	if ( $result-&gtis_pragma ) { ... }
 
        If the above evaluates as true, the following methods will be available
        on the $result object.
@@ -393,28 +395,28 @@ INDIVIDUAL RESULTS
        pragma name.
 
    "commment" methods
-	if ( $result->is_comment ) { ... }
+	if ( $result-&gtis_comment ) { ... }
 
        If the above evaluates as true, the following methods will be available
        on the $result object.
 
        "comment"
 
-	 if ( $result->is_comment ) {
-	     my $comment = $result->comment;
+	 if ( $result-&gtis_comment ) {
+	     my $comment = $result-&gtcomment;
 	     print "I have something to say:  $comment";
 	 }
 
    "bailout" methods
-	if ( $result->is_bailout ) { ... }
+	if ( $result-&gtis_bailout ) { ... }
 
        If the above evaluates as true, the following methods will be available
        on the $result object.
 
        "explanation"
 
-	 if ( $result->is_bailout ) {
-	     my $explanation = $result->explanation;
+	 if ( $result-&gtis_bailout ) {
+	     my $explanation = $result-&gtexplanation;
 	     print "We bailed out because ($explanation)";
 	 }
 
@@ -423,46 +425,46 @@ INDIVIDUAL RESULTS
        mystical "Bail out!" words which appear in the tap output.
 
    "unknown" methods
-	if ( $result->is_unknown ) { ... }
+	if ( $result-&gtis_unknown ) { ... }
 
        There are no unique methods for unknown results.
 
    "test" methods
-	if ( $result->is_test ) { ... }
+	if ( $result-&gtis_test ) { ... }
 
        If the above evaluates as true, the following methods will be available
        on the $result object.
 
        "ok"
 
-	 my $ok = $result->ok;
+	 my $ok = $result-&gtok;
 
        Returns the literal text of the "ok" or "not ok" status.
 
        "number"
 
-	 my $test_number = $result->number;
+	 my $test_number = $result-&gtnumber;
 
        Returns the number of the test, even if the original TAP output did not
        supply that number.
 
        "description"
 
-	 my $description = $result->description;
+	 my $description = $result-&gtdescription;
 
        Returns the description of the test, if any.  This is the portion after
        the test number but before the directive.
 
        "directive"
 
-	 my $directive = $result->directive;
+	 my $directive = $result-&gtdirective;
 
        Returns either "TODO" or "SKIP" if either directive was present for a
        test line.
 
        "explanation"
 
-	 my $explanation = $result->explanation;
+	 my $explanation = $result-&gtexplanation;
 
        If a test had either a "TODO" or "SKIP" directive, this method will
        return the accompanying explantion, if present.
@@ -473,7 +475,7 @@ INDIVIDUAL RESULTS
 
        "is_ok"
 
-	 if ( $result->is_ok ) { ... }
+	 if ( $result-&gtis_ok ) { ... }
 
        Returns a boolean value indicating whether or not the test passed.
        Remember that for TODO tests, the test always passes.
@@ -483,7 +485,7 @@ INDIVIDUAL RESULTS
 
        "is_actual_ok"
 
-	 if ( $result->is_actual_ok ) { ... }
+	 if ( $result-&gtis_actual_ok ) { ... }
 
        Returns a boolean value indicating whether or not the test passed,
        regardless of its TODO status.
@@ -493,7 +495,7 @@ INDIVIDUAL RESULTS
 
        "is_unplanned"
 
-	 if ( $test->is_unplanned ) { ... }
+	 if ( $test-&gtis_unplanned ) { ... }
 
        If a test number is greater than the number of planned tests, this
        method will return true.  Unplanned tests will always return false for
@@ -502,14 +504,14 @@ INDIVIDUAL RESULTS
 
        "has_skip"
 
-	 if ( $result->has_skip ) { ... }
+	 if ( $result-&gthas_skip ) { ... }
 
        Returns a boolean value indicating whether or not this test had a SKIP
        directive.
 
        "has_todo"
 
-	 if ( $result->has_todo ) { ... }
+	 if ( $result-&gthas_todo ) { ... }
 
        Returns a boolean value indicating whether or not this test had a TODO
        directive.
@@ -519,7 +521,7 @@ INDIVIDUAL RESULTS
 
        "in_todo"
 
-	 if ( $parser->in_todo ) { ... }
+	 if ( $parser-&gtin_todo ) { ... }
 
        True while the most recent result was a TODO. Becomes true before the
        TODO result is returned and stays true until just before the next non-
@@ -534,16 +536,16 @@ TOTAL RESULTS
 
        "passed"
 
-	my @passed = $parser->passed; # the test numbers which passed
-	my $passed = $parser->passed; # the number of tests which passed
+	my @passed = $parser-&gtpassed; # the test numbers which passed
+	my $passed = $parser-&gtpassed; # the number of tests which passed
 
        This method lets you know which (or how many) tests passed.  If a test
        failed but had a TODO directive, it will be counted as a passed test.
 
        "failed"
 
-	my @failed = $parser->failed; # the test numbers which failed
-	my $failed = $parser->failed; # the number of tests which failed
+	my @failed = $parser-&gtfailed; # the test numbers which failed
+	my $failed = $parser-&gtfailed; # the number of tests which failed
 
        This method lets you know which (or how many) tests failed.  If a test
        passed but had a TODO directive, it will NOT be counted as a failed
@@ -552,10 +554,10 @@ TOTAL RESULTS
        "actual_passed"
 
 	# the test numbers which actually passed
-	my @actual_passed = $parser->actual_passed;
+	my @actual_passed = $parser-&gtactual_passed;
 
 	# the number of tests which actually passed
-	my $actual_passed = $parser->actual_passed;
+	my $actual_passed = $parser-&gtactual_passed;
 
        This method lets you know which (or how many) tests actually passed,
        regardless of whether or not a TODO directive was found.
@@ -567,18 +569,18 @@ TOTAL RESULTS
        "actual_failed"
 
 	# the test numbers which actually failed
-	my @actual_failed = $parser->actual_failed;
+	my @actual_failed = $parser-&gtactual_failed;
 
 	# the number of tests which actually failed
-	my $actual_failed = $parser->actual_failed;
+	my $actual_failed = $parser-&gtactual_failed;
 
        This method lets you know which (or how many) tests actually failed,
        regardless of whether or not a TODO directive was found.
 
        "todo"
 
-	my @todo = $parser->todo; # the test numbers with todo directives
-	my $todo = $parser->todo; # the number of tests with todo directives
+	my @todo = $parser-&gttodo; # the test numbers with todo directives
+	my $todo = $parser-&gttodo; # the number of tests with todo directives
 
        This method lets you know which (or how many) tests had TODO
        directives.
@@ -586,10 +588,10 @@ TOTAL RESULTS
        "todo_passed"
 
 	# the test numbers which unexpectedly succeeded
-	my @todo_passed = $parser->todo_passed;
+	my @todo_passed = $parser-&gttodo_passed;
 
 	# the number of tests which unexpectedly succeeded
-	my $todo_passed = $parser->todo_passed;
+	my $todo_passed = $parser-&gttodo_passed;
 
        This method lets you know which (or how many) tests actually passed but
        were declared as "TODO" tests.
@@ -604,8 +606,8 @@ TOTAL RESULTS
 
        "skipped"
 
-	my @skipped = $parser->skipped; # the test numbers with SKIP directives
-	my $skipped = $parser->skipped; # the number of tests with SKIP directives
+	my @skipped = $parser-&gtskipped; # the test numbers with SKIP directives
+	my $skipped = $parser-&gtskipped; # the number of tests with SKIP directives
 
        This method lets you know which (or how many) tests had SKIP
        directives.
@@ -615,19 +617,19 @@ TOTAL RESULTS
 
        Get or set a pragma. To get the state of a pragma:
 
-	 if ( $p->pragma('strict') ) {
+	 if ( $p-&gtpragma('strict') ) {
 	     # be strict
 	 }
 
        To set the state of a pragma:
 
-	 $p->pragma('strict', 1); # enable strict mode
+	 $p-&gtpragma('strict', 1); # enable strict mode
 
        "pragmas"
 
        Get a list of all the currently enabled pragmas:
 
-	 my @pragmas_enabled = $p->pragmas;
+	 my @pragmas_enabled = $p-&gtpragmas;
 
    Summary Results
        These results are "meta" information about the total results of an
@@ -635,7 +637,7 @@ TOTAL RESULTS
 
        "plan"
 
-	my $plan = $parser->plan;
+	my $plan = $parser-&gtplan;
 
        Returns the test plan, if found.
 
@@ -645,7 +647,7 @@ TOTAL RESULTS
 
        "is_good_plan"
 
-	 if ( $parser->is_good_plan ) { ... }
+	 if ( $parser-&gtis_good_plan ) { ... }
 
        Returns a boolean value indicating whether or not the number of tests
        planned matches the number of tests run.
@@ -657,17 +659,17 @@ TOTAL RESULTS
 
        "tests_planned"
 
-	 print $parser->tests_planned;
+	 print $parser-&gttests_planned;
 
        Returns the number of tests planned, according to the plan.  For
        example, a plan of '1..17' will mean that 17 tests were planned.
 
        "tests_run"
 
-	 print $parser->tests_run;
+	 print $parser-&gttests_run;
 
        Returns the number of tests which actually were run.  Hopefully this
-       will match the number of "$parser->tests_planned".
+       will match the number of "$parser-&gttests_planned".
 
        "skip_all"
 
@@ -684,7 +686,7 @@ TOTAL RESULTS
 
        "has_problems"
 
-	 if ( $parser->has_problems ) {
+	 if ( $parser-&gthas_problems ) {
 	     ...
 	 }
 
@@ -694,7 +696,7 @@ TOTAL RESULTS
 
        "version"
 
-	 $parser->version;
+	 $parser-&gtversion;
 
        Once the parser is done, this will return the version number for the
        parsed TAP. Version numbers were introduced with TAP version 13 so if
@@ -702,21 +704,21 @@ TOTAL RESULTS
 
        "exit"
 
-	 $parser->exit;
+	 $parser-&gtexit;
 
        Once the parser is done, this will return the exit status.  If the
        parser ran an executable, it returns the exit status of the executable.
 
        "wait"
 
-	 $parser->wait;
+	 $parser-&gtwait;
 
        Once the parser is done, this will return the wait status.  If the
        parser ran an executable, it returns the wait status of the executable.
        Otherwise, this mererely returns the "exit" status.
 
    "ignore_exit"
-	 $parser->ignore_exit(1);
+	 $parser-&gtignore_exit(1);
 
        Tell the parser to ignore the exit status from the test when
        determining whether the test passed. Normally tests with non-zero exit
@@ -726,8 +728,8 @@ TOTAL RESULTS
 
        "parse_errors"
 
-	my @errors = $parser->parse_errors; # the parser errors
-	my $errors = $parser->parse_errors; # the number of parser_errors
+	my @errors = $parser-&gtparse_errors; # the parser errors
+	my $errors = $parser-&gtparse_errors; # the number of parser_errors
 
        Fortunately, all TAP output is perfect.	In the event that it is not,
        this method will return parser errors.  Note that a junk line which the
@@ -789,7 +791,7 @@ TOTAL RESULTS
 
        Delete and return the spool.
 
-	 my $fh = $parser->delete_spool;
+	 my $fh = $parser-&gtdelete_spool;
 
 CALLBACKS
        As mentioned earlier, a "callback" key may be added to the
@@ -800,60 +802,60 @@ CALLBACKS
        result as its argument.
 
 	my %callbacks = (
-	    test    => \&test_callback,
-	    plan    => \&plan_callback,
-	    comment => \&comment_callback,
-	    bailout => \&bailout_callback,
-	    unknown => \&unknown_callback,
+	    test    =&gt \&test_callback,
+	    plan    =&gt \&plan_callback,
+	    comment =&gt \&comment_callback,
+	    bailout =&gt \&bailout_callback,
+	    unknown =&gt \&unknown_callback,
 	);
 
-	my $aggregator = TAP::Parser::Aggregator->new;
+	my $aggregator = TAP::Parser::Aggregator-&gtnew;
 	foreach my $file ( @test_files ) {
-	    my $parser = TAP::Parser->new(
+	    my $parser = TAP::Parser-&gtnew(
 		{
-		    source    => $file,
-		    callbacks => \%callbacks,
+		    source    =&gt $file,
+		    callbacks =&gt \%callbacks,
 		}
 	    );
-	    $parser->run;
-	    $aggregator->add( $file, $parser );
+	    $parser-&gtrun;
+	    $aggregator-&gtadd( $file, $parser );
 	}
 
        Callbacks may also be added like this:
 
-	$parser->callback( test => \&test_callback );
-	$parser->callback( plan => \&plan_callback );
+	$parser-&gtcallback( test =&gt \&test_callback );
+	$parser-&gtcallback( plan =&gt \&plan_callback );
 
        The following keys allowed for callbacks. These keys are case-
        sensitive.
 
        o   "test"
 
-	   Invoked if "$result->is_test" returns true.
+	   Invoked if "$result-&gtis_test" returns true.
 
        o   "version"
 
-	   Invoked if "$result->is_version" returns true.
+	   Invoked if "$result-&gtis_version" returns true.
 
        o   "plan"
 
-	   Invoked if "$result->is_plan" returns true.
+	   Invoked if "$result-&gtis_plan" returns true.
 
        o   "comment"
 
-	   Invoked if "$result->is_comment" returns true.
+	   Invoked if "$result-&gtis_comment" returns true.
 
        o   "bailout"
 
-	   Invoked if "$result->is_unknown" returns true.
+	   Invoked if "$result-&gtis_unknown" returns true.
 
        o   "yaml"
 
-	   Invoked if "$result->is_yaml" returns true.
+	   Invoked if "$result-&gtis_yaml" returns true.
 
        o   "unknown"
 
-	   Invoked if "$result->is_unknown" returns true.
+	   Invoked if "$result-&gtis_unknown" returns true.
 
        o   "ELSE"
 
@@ -869,30 +871,30 @@ CALLBACKS
 	   your test output:
 
 	    my %callbacks = (
-		test => sub {
+		test =&gt sub {
 		    my $test = shift;
-		    if ( $test->is_ok && not $test->directive ) {
+		    if ( $test-&gtis_ok && not $test-&gtdirective ) {
 			# normal passing test
 			print color 'green';
 		    }
-		    elsif ( !$test->is_ok ) {	 # even if it's TODO
+		    elsif ( !$test-&gtis_ok ) {	 # even if it's TODO
 			print color 'white on_red';
 		    }
-		    elsif ( $test->has_skip ) {
+		    elsif ( $test-&gthas_skip ) {
 			print color 'white on_blue';
 
 		    }
-		    elsif ( $test->has_todo ) {
+		    elsif ( $test-&gthas_todo ) {
 			print color 'white';
 		    }
 		},
-		ELSE => sub {
+		ELSE =&gt sub {
 		    # plan, comment, and so on (anything which isn't a test line)
 		    print color 'black on_white';
 		},
-		ALL => sub {
+		ALL =&gt sub {
 		    # now print them
-		    print shift->as_string;
+		    print shift-&gtas_string;
 		    print color 'reset';
 		    print "\n";
 		},
@@ -1083,25 +1085,25 @@ ACKNOWLEDGEMENTS
        o   Alex Vandiver
 
 AUTHORS
-       Curtis "Ovid" Poe <ovid@cpan.org>
+       Curtis "Ovid" Poe &ltovid@cpan.org&gt
 
-       Andy Armstong <andy@hexten.net>
+       Andy Armstong &ltandy@hexten.net&gt
 
-       Eric Wilhelm @ <ewilhelm at cpan dot org>
+       Eric Wilhelm @ &ltewilhelm at cpan dot org&gt
 
-       Michael Peters <mpeters at plusthree dot com>
+       Michael Peters &ltmpeters at plusthree dot com&gt
 
-       Leif Eriksen <leif dot eriksen at bigpond dot com>
+       Leif Eriksen &ltleif dot eriksen at bigpond dot com&gt
 
-       Steve Purkis <spurkis@cpan.org>
+       Steve Purkis &ltspurkis@cpan.org&gt
 
-       Nicholas Clark <nick@ccl4.org>
+       Nicholas Clark &ltnick@ccl4.org&gt
 
 BUGS
        Please report any bugs or feature requests to
        "bug-test-harness@rt.cpan.org", or through the web interface at
        http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-Harness
-       <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-Harness>.  We will
+       &lthttp://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-Harness&gt.  We will
        be notified, and then you'll automatically be notified of progress on
        your bug as we make changes.
 
@@ -1119,6 +1121,6 @@ COPYRIGHT & LICENSE
 
 
 perl v5.12.4			  2011-06-07		      TAP::Parser(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

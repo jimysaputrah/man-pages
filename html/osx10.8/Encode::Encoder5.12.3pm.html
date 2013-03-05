@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Here is how to use this module...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Encode::Encoder -- Object Oriented Encoder</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Encode::Encoder(3pm)   Perl Programmers Reference Guide   Encode::Encoder(3pm)
 
 
@@ -18,18 +20,18 @@ NAME
 SYNOPSIS
 	 use Encode::Encoder;
 	 # Encode::encode("ISO-8859-1", $data);
-	 Encode::Encoder->new($data)->iso_8859_1; # OOP way
+	 Encode::Encoder-&gtnew($data)-&gtiso_8859_1; # OOP way
 	 # shortcut
 	 use Encode::Encoder qw(encoder);
-	 encoder($data)->iso_8859_1;
+	 encoder($data)-&gtiso_8859_1;
 	 # you can stack them!
-	 encoder($data)->iso_8859_1->base64;  # provided base64() is defined
+	 encoder($data)-&gtiso_8859_1-&gtbase64;  # provided base64() is defined
 	 # you can use it as a decoder as well
-	 encoder($base64)->bytes('base64')->latin1;
+	 encoder($base64)-&gtbytes('base64')-&gtlatin1;
 	 # stringified
-	 print encoder($data)->utf8->latin1;  # prints the string in latin1
+	 print encoder($data)-&gtutf8-&gtlatin1;  # prints the string in latin1
 	 # numified
-	 encoder("\x{abcd}\x{ef}g")->utf8 == 6; # true. bytes::length($data)
+	 encoder("\x{abcd}\x{ef}g")-&gtutf8 == 6; # true. bytes::length($data)
 
 ABSTRACT
        Encode::Encoder allows you to use Encode in an object-oriented style.
@@ -37,7 +39,7 @@ ABSTRACT
        handier when you want to stack encodings.  Suppose you want your UTF-8
        string converted to Latin1 then Base64: you can simply say
 
-	 my $base64 = encoder($utf8)->latin1->base64;
+	 my $base64 = encoder($utf8)-&gtlatin1-&gtbase64;
 
        instead of
 
@@ -58,14 +60,14 @@ Description
 	   the encoding and encodes the instance data with encoding.  If
 	   successful, the instance encoding is set accordingly.
 
-       o   You can retrieve the result via ->data but usually you don't have
+       o   You can retrieve the result via -&gtdata but usually you don't have
 	   to because the stringify operator ("") is overridden to do exactly
 	   that.
 
    Predefined Methods
        This module predefines the methods below:
 
-       $e = Encode::Encoder->new([$data, $encoding]);
+       $e = Encode::Encoder-&gtnew([$data, $encoding]);
 	   returns an encoder object.  Its data is initialized with $data if
 	   present, and its encoding is set to $encoding if present.
 
@@ -73,20 +75,20 @@ Description
 	   in utf8 or "" (empty string) otherwise.
 
        encoder()
-	   is an alias of Encode::Encoder->new().  This one is exported on
+	   is an alias of Encode::Encoder-&gtnew().  This one is exported on
 	   demand.
 
-       $e->data([$data])
+       $e-&gtdata([$data])
 	   When $data is present, sets the instance data to $data and returns
 	   the object itself.  Otherwise, the current instance data is
 	   returned.
 
-       $e->encoding([$encoding])
+       $e-&gtencoding([$encoding])
 	   When $encoding is present, sets the instance encoding to $encoding
 	   and returns the object itself.  Otherwise, the current instance
 	   encoding is returned.
 
-       $e->bytes([$encoding])
+       $e-&gtbytes([$encoding])
 	   decodes instance data from $encoding, or the instance encoding if
 	   omitted.  If the conversion is successful, the instance encoding
 	   will be set to "".
@@ -102,7 +104,7 @@ Description
 
 	 package Encode::Base64;
 	 use base 'Encode::Encoding';
-	 __PACKAGE__->Define('base64');
+	 __PACKAGE__-&gtDefine('base64');
 	 use MIME::Base64;
 	 sub encode{
 	     my ($obj, $data) = @_;
@@ -122,8 +124,8 @@ Description
 
 	 # now you can really do the following
 
-	 encoder($data)->iso_8859_1->base64;
-	 encoder($base64)->bytes('base64')->latin1;
+	 encoder($data)-&gtiso_8859_1-&gtbase64;
+	 encoder($base64)-&gtbytes('base64')-&gtlatin1;
 
    Operator Overloading
        This module overloads two operators, stringify ("") and numify (0+).
@@ -140,6 +142,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-01		  Encode::Encoder(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

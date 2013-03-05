@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="MIME messages can be very long (e.g., tar files, MPEGs, etc.) or very..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MIME::Body - the body of a MIME message</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MIME::Body(3)	      User Contributed Perl Documentation	 MIME::Body(3)
 
 
@@ -24,7 +26,7 @@ SYNOPSIS
 
    Obtaining bodies
 	  ### Get the bodyhandle of a MIME::Entity object:
-	  $body = $entity->bodyhandle;
+	  $body = $entity-&gtbodyhandle;
 
 	  ### Create a body which stores data in a disk file:
 	  $body = new MIME::Body::File "/path/to/file";
@@ -34,38 +36,38 @@ SYNOPSIS
 
    Opening, closing, and using IO handles
 	  ### Write data to the body:
-	  $IO = $body->open("w")      || die "open body: $!";
-	  $IO->print($message);
-	  $IO->close		      || die "close I/O handle: $!";
+	  $IO = $body-&gtopen("w")      || die "open body: $!";
+	  $IO-&gtprint($message);
+	  $IO-&gtclose		      || die "close I/O handle: $!";
 
 	  ### Read data from the body (in this case, line by line):
-	  $IO = $body->open("r")      || die "open body: $!";
-	  while (defined($_ = $IO->getline)) {
+	  $IO = $body-&gtopen("r")      || die "open body: $!";
+	  while (defined($_ = $IO-&gtgetline)) {
 	      ### do stuff
 	  }
-	  $IO->close		      || die "close I/O handle: $!";
+	  $IO-&gtclose		      || die "close I/O handle: $!";
 
    Other I/O
 	  ### Dump the ENCODED body data to a filehandle:
-	  $body->print(\*STDOUT);
+	  $body-&gtprint(\*STDOUT);
 
 	  ### Slurp all the UNENCODED data in, and put it in a scalar:
-	  $string = $body->as_string;
+	  $string = $body-&gtas_string;
 
 	  ### Slurp all the UNENCODED data in, and put it in an array of lines:
-	  @lines = $body->as_lines;
+	  @lines = $body-&gtas_lines;
 
    Working directly with paths to underlying files
 	  ### Where's the data?
-	  if (defined($body->path)) {	### data is on disk:
-	      print "data is stored externally, in ", $body->path;
+	  if (defined($body-&gtpath)) {	### data is on disk:
+	      print "data is stored externally, in ", $body-&gtpath;
 	  }
 	  else {			### data is in core:
-	      print "data is already in core, and is...\n", $body->as_string;
+	      print "data is already in core, and is...\n", $body-&gtas_string;
 	  }
 
 	  ### Get rid of anything on disk:
-	  $body->purge;
+	  $body-&gtpurge;
 
 DESCRIPTION
        MIME messages can be very long (e.g., tar files, MPEGs, etc.) or very
@@ -204,9 +206,9 @@ SUBCLASSES
        In this case, the "path()" method would return the given path, so you
        could say:
 
-	   if (defined($body->path)) {
-	       open BODY, $body->path or die "open: $!";
-	       while (<BODY>) {
+	   if (defined($body-&gtpath)) {
+	       open BODY, $body-&gtpath or die "open: $!";
+	       while (&ltBODY&gt) {
 		   ### do stuff
 	       }
 	       close BODY;
@@ -290,12 +292,12 @@ NOTES
        code like this...
 
 	  ### Get body handle from this MIME message, and read its data:
-	  $body = $entity->bodyhandle;
-	  $IO = $body->open("r");
-	  while (defined($_ = $IO->getline)) {
+	  $body = $entity-&gtbodyhandle;
+	  $IO = $body-&gtopen("r");
+	  while (defined($_ = $IO-&gtgetline)) {
 	      print STDOUT $_;
 	  }
-	  $IO->close;
+	  $IO-&gtclose;
 
        ...without requiring that they know anything more about how the $body
        object is actually storing its data (disk file, scalar variable, array
@@ -325,6 +327,6 @@ AUTHOR
 
 
 perl v5.10.1			  2008-06-30			 MIME::Body(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

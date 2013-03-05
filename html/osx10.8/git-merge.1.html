@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Incorporates changes from the named commits (since the time their..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>git-merge - Join two or more development histories together</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 GIT-MERGE(1)			  Git Manual			  GIT-MERGE(1)
 
 
@@ -17,9 +19,9 @@ NAME
 
 SYNOPSIS
        git merge [-n] [--stat] [--no-commit] [--squash] [--[no-]edit]
-	       [-s <strategy>] [-X <strategy-option>]
-	       [--[no-]rerere-autoupdate] [-m <msg>] [<commit>...]
-       git merge <msg> HEAD <commit>...
+	       [-s &ltstrategy&gt] [-X &ltstrategy-option&gt]
+	       [--[no-]rerere-autoupdate] [-m &ltmsg&gt] [&ltcommit&gt...]
+       git merge &ltmsg&gt HEAD &ltcommit&gt...
        git merge --abort
 
 
@@ -48,9 +50,9 @@ DESCRIPTION
 	       D---E---F---G---H master
 
 
-       The second syntax (<msg> HEAD <commit>...) is supported for historical
+       The second syntax (&ltmsg&gt HEAD &ltcommit&gt...) is supported for historical
        reasons. Do not use it from the command line or in new scripts. It is
-       the same as git merge -m <msg> <commit>....
+       the same as git merge -m &ltmsg&gt &ltcommit&gt....
 
        The third syntax ("git merge --abort") can only be run after the merge
        has resulted in conflicts. git merge --abort will abort the merge
@@ -102,9 +104,9 @@ OPTIONS
 	   HEAD is already up-to-date or the merge can be resolved as a
 	   fast-forward.
 
-       --log[=<n>], --no-log
+       --log[=&ltn&gt], --no-log
 	   In addition to branch names, populate the log message with one-line
-	   descriptions from at most <n> actual commits that are being merged.
+	   descriptions from at most &ltn&gt actual commits that are being merged.
 	   See also git-fmt-merge-msg(1).
 
 	   With --no-log do not list one-line descriptions from the actual
@@ -129,14 +131,14 @@ OPTIONS
 	   With --no-squash perform the merge and commit the result. This
 	   option can be used to override --squash.
 
-       -s <strategy>, --strategy=<strategy>
+       -s &ltstrategy&gt, --strategy=&ltstrategy&gt
 	   Use the given merge strategy; can be supplied more than once to
 	   specify them in the order they should be tried. If there is no -s
 	   option, a built-in list of strategies is used instead (git
 	   merge-recursive when merging a single head, git merge-octopus
 	   otherwise).
 
-       -X <option>, --strategy-option=<option>
+       -X &ltoption&gt, --strategy-option=&ltoption&gt
 	   Pass merge strategy specific option through to the merge strategy.
 
        --summary, --no-summary
@@ -154,7 +156,7 @@ OPTIONS
 	   is shown if standard error is connected to a terminal. Note that
 	   not all merge strategies may support progress reporting.
 
-       -m <msg>
+       -m &ltmsg&gt
 	   Set the commit message to be used for the merge commit (in case one
 	   is created).
 
@@ -180,7 +182,7 @@ OPTIONS
 	   git merge --abort is equivalent to git reset --merge when
 	   MERGE_HEAD is present.
 
-       <commit>...
+       &ltcommit&gt...
 	   Commits, usually other branch heads, to merge into our branch.
 	   Specifying more than one commit will create a merge with more than
 	   two parents (affectionately called an Octopus merge).
@@ -243,7 +245,7 @@ TRUE MERGE
 	   HEAD, and stage 3 from MERGE_HEAD (you can inspect the stages with
 	   git ls-files -u). The working tree files contain the result of the
 	   "merge" program; i.e. 3-way merge results with familiar conflict
-	   markers <<< === >>>.
+	   markers &lt&lt&lt === &gt&gt&gt.
 
 	5. No other changes are made. In particular, the local modifications
 	   you had before you started merge will stay the same and the index
@@ -268,17 +270,17 @@ HOW CONFLICTS ARE PRESENTED
 
 	   Here are lines that are either unchanged from the common
 	   ancestor, or cleanly resolved because only one side changed.
-	   <<<<<<< yours:sample.txt
+	   &lt&lt&lt&lt&lt&lt&lt yours:sample.txt
 	   Conflict resolution is hard;
 	   let's go shopping.
 	   =======
 	   Git makes conflict resolution easy.
-	   >>>>>>> theirs:sample.txt
+	   &gt&gt&gt&gt&gt&gt&gt theirs:sample.txt
 	   And here is another line that is cleanly resolved or unmodified.
 
 
        The area where a pair of conflicting changes happened is marked with
-       markers <<<<<<<, =======, and >>>>>>>. The part before the ======= is
+       markers &lt&lt&lt&lt&lt&lt&lt, =======, and &gt&gt&gt&gt&gt&gt&gt. The part before the ======= is
        typically your side, and the part afterwards is typically their side.
 
        The default format does not show what the original said in the
@@ -293,18 +295,18 @@ HOW CONFLICTS ARE PRESENTED
 
 	   Here are lines that are either unchanged from the common
 	   ancestor, or cleanly resolved because only one side changed.
-	   <<<<<<< yours:sample.txt
+	   &lt&lt&lt&lt&lt&lt&lt yours:sample.txt
 	   Conflict resolution is hard;
 	   let's go shopping.
 	   |||||||
 	   Conflict resolution is hard.
 	   =======
 	   Git makes conflict resolution easy.
-	   >>>>>>> theirs:sample.txt
+	   &gt&gt&gt&gt&gt&gt&gt theirs:sample.txt
 	   And here is another line that is cleanly resolved or unmodified.
 
 
-       In addition to the <<<<<<<, =======, and >>>>>>> markers, it uses
+       In addition to the &lt&lt&lt&lt&lt&lt&lt, =======, and &gt&gt&gt&gt&gt&gt&gt markers, it uses
        another ||||||| marker that is followed by the original text. You can
        tell that the original just stated a fact, and your side simply gave in
        to that statement and gave up, while the other side tried to have a
@@ -331,7 +333,7 @@ HOW TO RESOLVE CONFLICTS
        o   Look at the diffs.  git diff will show a three-way diff,
 	   highlighting changes from both the HEAD and MERGE_HEAD versions.
 
-       o   Look at the diffs from each branch.	git log --merge -p <path> will
+       o   Look at the diffs from each branch.	git log --merge -p &ltpath&gt will
 	   show diffs first for the HEAD version and then the MERGE_HEAD
 	   version.
 
@@ -368,7 +370,7 @@ MERGE STRATEGIES
        The merge mechanism (git-merge and git-pull commands) allows the
        backend merge strategies to be chosen with -s option. Some strategies
        can also take their own options, which can be passed by giving
-       -X<option> arguments to git-merge and/or git-pull.
+       -X&ltoption&gt arguments to git-merge and/or git-pull.
 
        resolve
 	   This can only resolve two heads (i.e. the current branch and
@@ -437,11 +439,11 @@ MERGE STRATEGIES
 	       Disables the renormalize option. This overrides the
 	       merge.renormalize configuration variable.
 
-	   rename-threshold=<n>
+	   rename-threshold=&ltn&gt
 	       Controls the similarity threshold used for rename detection.
 	       See also git-diff(1) -M.
 
-	   subtree[=<path>]
+	   subtree[=&ltpath&gt]
 	       This option is a more advanced form of subtree strategy, where
 	       the strategy makes a guess on how two trees must be shifted to
 	       match with each other when merging. Instead, the specified path
@@ -473,8 +475,8 @@ CONFIGURATION
        merge.conflictstyle
 	   Specify the style in which conflicted hunks are written out to
 	   working tree files upon merge. The default is "merge", which shows
-	   a <<<<<<< conflict marker, changes made by one side, a =======
-	   marker, changes made by the other side, and then a >>>>>>> marker.
+	   a &lt&lt&lt&lt&lt&lt&lt conflict marker, changes made by one side, a =======
+	   marker, changes made by the other side, and then a &gt&gt&gt&gt&gt&gt&gt marker.
 	   An alternate style, "diff3", adds a ||||||| marker and the original
 	   text before the ======= marker.
 
@@ -482,9 +484,9 @@ CONFIGURATION
 	   If merge is called without any commit argument, merge the upstream
 	   branches configured for the current branch by using their last
 	   observed values stored in their remote tracking branches. The
-	   values of the branch.<current branch>.merge that name the branches
-	   at the remote named by branch.<current branch>.remote are
-	   consulted, and then they are mapped via remote.<remote>.fetch to
+	   values of the branch.&ltcurrent branch&gt.merge that name the branches
+	   at the remote named by branch.&ltcurrent branch&gt.remote are
+	   consulted, and then they are mapped via remote.&ltremote&gt.fetch to
 	   their corresponding remote tracking branches, and the tips of these
 	   tracking branches are merged.
 
@@ -527,7 +529,7 @@ CONFIGURATION
 	   "diffuse", "ecmerge", "emerge", "gvimdiff", "kdiff3", "meld",
 	   "opendiff", "p4merge", "tkdiff", "tortoisemerge", "vimdiff" and
 	   "xxdiff". Any other value is treated is custom merge tool and there
-	   must be a corresponding mergetool.<tool>.cmd option.
+	   must be a corresponding mergetool.&lttool&gt.cmd option.
 
        merge.verbosity
 	   Controls the amount of output shown by the recursive merge
@@ -537,21 +539,21 @@ CONFIGURATION
 	   information. The default is level 2. Can be overridden by the
 	   GIT_MERGE_VERBOSITY environment variable.
 
-       merge.<driver>.name
+       merge.&ltdriver&gt.name
 	   Defines a human-readable name for a custom low-level merge driver.
 	   See gitattributes(5) for details.
 
-       merge.<driver>.driver
+       merge.&ltdriver&gt.driver
 	   Defines the command that implements a custom low-level merge
 	   driver. See gitattributes(5) for details.
 
-       merge.<driver>.recursive
+       merge.&ltdriver&gt.recursive
 	   Names a low-level merge driver to be used when performing an
 	   internal merge between common ancestors. See gitattributes(5) for
 	   details.
 
-       branch.<name>.mergeoptions
-	   Sets default options for merging into branch <name>. The syntax and
+       branch.&ltname&gt.mergeoptions
+	   Sets default options for merging into branch &ltname&gt. The syntax and
 	   supported options are the same as those of git merge, but option
 	   values containing whitespace characters are currently not
 	   supported.
@@ -566,6 +568,6 @@ GIT
 
 
 Git 1.7.12			  08/19/2012			  GIT-MERGE(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

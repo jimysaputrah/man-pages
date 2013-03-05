@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Gitweb provides a web interface to git repositories. Its features..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>gitweb - Git web interface (web frontend to Git repositories)</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 GITWEB(1)			  Git Manual			     GITWEB(1)
 
 
@@ -104,10 +106,10 @@ CONFIGURATION
 
        o   Currently recognized fields are:
 
-	   <repository path>
+	   &ltrepository path&gt
 	       path to repository GIT_DIR, relative to $projectroot
 
-	   <repository owner>
+	   &ltrepository owner&gt
 	       displayed as repository owner, preferably full name, or email,
 	       or both
 
@@ -117,8 +119,8 @@ CONFIGURATION
 
        Example contents:
 
-	   foo.git	 Joe+R+Hacker+<joe@example.com>
-	   foo/bar.git	 O+W+Ner+<owner@example.org>
+	   foo.git	 Joe+R+Hacker+&ltjoe@example.com&gt
+	   foo/bar.git	 O+W+Ner+&ltowner@example.org&gt
 
 
        By default this file controls only which projects are visible on
@@ -197,12 +199,12 @@ CONFIGURATION
 
 	       $export_auth_hook = sub {
 		       use Apache2::SubRequest ();
-		       use Apache2::Const -compile => qw(HTTP_OK);
+		       use Apache2::Const -compile =&gt qw(HTTP_OK);
 		       my $path = "$_[0]/HEAD";
-		       my $r	= Apache2::RequestUtil->request;
-		       my $sub	= $r->lookup_file($path);
-		       return $sub->filename eq $path
-			   && $sub->status == Apache2::Const::HTTP_OK;
+		       my $r	= Apache2::RequestUtil-&gtrequest;
+		       my $sub	= $r-&gtlookup_file($path);
+		       return $sub-&gtfilename eq $path
+			   && $sub-&gtstatus == Apache2::Const::HTTP_OK;
 	       };
 
 
@@ -215,7 +217,7 @@ CONFIGURATION
 
        README.html
 	   A html file (HTML fragment) which is included on the gitweb project
-	   "summary" page inside <div> block element. You can use it for
+	   "summary" page inside &ltdiv&gt block element. You can use it for
 	   longer description of a project, to provide links (for example to
 	   project's homepage), etc. This is recognized only if XSS prevention
 	   is off ($prevent_xss is false, see gitweb.conf(5)); a way to
@@ -278,7 +280,7 @@ ACTIONS, AND URLS
        necessary information via query parameters. The typical gitweb URLs are
        broken down in to five components:
 
-	   .../gitweb.cgi/<repo>/<action>/<revision>:/<path>?<arguments>
+	   .../gitweb.cgi/&ltrepo&gt/&ltaction&gt/&ltrevision&gt:/&ltpath&gt?&ltarguments&gt
 
 
        repo
@@ -295,7 +297,7 @@ ACTIONS, AND URLS
 	   Revision shown. Defaults to HEAD.
 
        path
-	   The path within the <repository> that the action is performed on,
+	   The path within the &ltrepository&gt that the action is performed on,
 	   for those actions that require it.
 
        arguments
@@ -305,7 +307,7 @@ ACTIONS, AND URLS
        even two pathnames. In most general form such path_info (component)
        based gitweb URL looks like this:
 
-	   .../gitweb.cgi/<repo>/<action>/<revision_from>:/<path_from>..<revision_to>:/<path_to>?<arguments>
+	   .../gitweb.cgi/&ltrepo&gt/&ltaction&gt/&ltrevision_from&gt:/&ltpath_from&gt..&ltrevision_to&gt:/&ltpath_to&gt?&ltarguments&gt
 
 
        Each action is implemented as a subroutine, and must be present in
@@ -403,12 +405,12 @@ WEBSERVER CONFIGURATION
 
 	   ScriptAlias /cgi-bin/ "/var/www/cgi-bin/"
 
-	   <Directory "/var/www/cgi-bin">
+	   &ltDirectory "/var/www/cgi-bin"&gt
 	       Options Indexes FollowSymlinks ExecCGI
 	       AllowOverride None
 	       Order allow,deny
 	       Allow from all
-	   </Directory>
+	   &lt/Directory&gt
 
 
        With that configuration the full path to browse repositories would be:
@@ -425,7 +427,7 @@ WEBSERVER CONFIGURATION
 
 	   Alias /perl "/var/www/perl"
 
-	   <Directory "/var/www/perl">
+	   &ltDirectory "/var/www/perl"&gt
 	       SetHandler perl-script
 	       PerlResponseHandler ModPerl::Registry
 	       PerlOptions +ParseHeaders
@@ -433,7 +435,7 @@ WEBSERVER CONFIGURATION
 	       AllowOverride None
 	       Order allow,deny
 	       Allow from all
-	   </Directory>
+	   &lt/Directory&gt
 
 
        With that configuration the full path to browse repositories would be:
@@ -450,9 +452,9 @@ WEBSERVER CONFIGURATION
 	   ScriptAlias /gitweb /usr/share/gitweb/gitweb.cgi
 
 	   Alias /gitweb/static /usr/share/gitweb/static
-	   <Directory /usr/share/gitweb/static>
+	   &ltDirectory /usr/share/gitweb/static&gt
 	       SetHandler default-handler
-	   </Directory>
+	   &lt/Directory&gt
 
 
        With that configuration the full path to browse repositories would be:
@@ -467,7 +469,7 @@ ADVANCED WEB SERVER SETUP
        If you want to have one URL for both gitweb and your http://
        repositories, you can configure Apache like this:
 
-	   <VirtualHost *:80>
+	   &ltVirtualHost *:80&gt
 	       ServerName    git.example.org
 	       DocumentRoot  /pub/git
 	       SetEnv	     GITWEB_CONFIG   /etc/gitweb.conf
@@ -481,7 +483,7 @@ ADVANCED WEB SERVER SETUP
 	       # make access for "dumb clients" work
 	       RewriteRule ^/(.*\.git/(?!/?(HEAD|info|objects|refs)).*)?$ \
 			   /cgi-bin/gitweb.cgi%{REQUEST_URI}  [L,PT]
-	   </VirtualHost>
+	   &lt/VirtualHost&gt
 
 
        The above configuration expects your public repositories to live under
@@ -520,7 +522,7 @@ ADVANCED WEB SERVER SETUP
        The virtual host configuration (in Apache configuration file) should
        look like this:
 
-	   <VirtualHost *:80>
+	   &ltVirtualHost *:80&gt
 	       ServerName    git.example.org
 	       DocumentRoot  /pub/git
 	       SetEnv	     GITWEB_CONFIG  /etc/gitweb.conf
@@ -532,15 +534,15 @@ ADVANCED WEB SERVER SETUP
 	       RewriteRule ^/$	/cgi-bin/gitweb.cgi  [QSA,L,PT]
 
 	       # look for a public_git folder in unix users' home
-	       # http://git.example.org/~<user>/
+	       # http://git.example.org/~&ltuser&gt/
 	       RewriteRule ^/\~([^\/]+)(/|/gitweb.cgi)?$   /cgi-bin/gitweb.cgi \
 			   [QSA,E=GITWEB_PROJECTROOT:/home/$1/public_git/,L,PT]
 
-	       # http://git.example.org/+<user>/
+	       # http://git.example.org/+&ltuser&gt/
 	       #RewriteRule ^/\+([^\/]+)(/|/gitweb.cgi)?$  /cgi-bin/gitweb.cgi \
 			    [QSA,E=GITWEB_PROJECTROOT:/home/$1/public_git/,L,PT]
 
-	       # http://git.example.org/user/<user>/
+	       # http://git.example.org/user/&ltuser&gt/
 	       #RewriteRule ^/user/([^\/]+)/(gitweb.cgi)?$ /cgi-bin/gitweb.cgi \
 			    [QSA,E=GITWEB_PROJECTROOT:/home/$1/public_git/,L,PT]
 
@@ -553,7 +555,7 @@ ADVANCED WEB SERVER SETUP
 	       # make access for "dumb clients" work
 	       RewriteRule ^/(.*\.git/(?!/?(HEAD|info|objects|refs)).*)?$ \
 			   /cgi-bin/gitweb.cgi%{REQUEST_URI}  [L,PT]
-	   </VirtualHost>
+	   &lt/VirtualHost&gt
 
 
        Here actual project root is passed to gitweb via GITWEB_PROJECT_ROOT
@@ -568,11 +570,11 @@ ADVANCED WEB SERVER SETUP
        $per_request_config must be false, or the above must be put in code
        referenced by $per_request_config;
 
-       These configurations enable two things. First, each unix user (<user>)
+       These configurations enable two things. First, each unix user (&ltuser&gt)
        of the server will be able to browse through gitweb git repositories
        found in ~/public_git/ with the following url:
 
-	   http://git.example.org/~<user>/
+	   http://git.example.org/~&ltuser&gt/
 
        If you do not want this feature on your server just remove the second
        rewrite rule.
@@ -603,12 +605,12 @@ ADVANCED WEB SERVER SETUP
        DocumentRoot of your webserver, contains the gitweb.cgi script and
        complementary static files (stylesheet, favicon, JavaScript):
 
-	   <VirtualHost *:80>
+	   &ltVirtualHost *:80&gt
 		   ServerAlias git.example.com
 
 		   DocumentRoot /var/www/gitweb
 
-		   <Directory /var/www/gitweb>
+		   &ltDirectory /var/www/gitweb&gt
 			   Options ExecCGI
 			   AddHandler cgi-script cgi
 
@@ -618,8 +620,8 @@ ADVANCED WEB SERVER SETUP
 			   RewriteCond %{REQUEST_FILENAME} !-f
 			   RewriteCond %{REQUEST_FILENAME} !-d
 			   RewriteRule ^.* /gitweb.cgi/$0 [L,PT]
-		   </Directory>
-	   </VirtualHost>
+		   &lt/Directory&gt
+	   &lt/VirtualHost&gt
 
 
        The rewrite rule guarantees that existing static files will be properly
@@ -634,13 +636,13 @@ ADVANCED WEB SERVER SETUP
        named without a .git extension (e.g. /pub/git/project instead of
        /pub/git/project.git) and configure Apache as follows:
 
-	   <VirtualHost *:80>
+	   &ltVirtualHost *:80&gt
 		   ServerAlias git.example.com
 
 		   DocumentRoot /var/www/gitweb
 
 		   AliasMatch ^(/.*?)(\.git)(/.*)?$ /pub/git$1$3
-		   <Directory /var/www/gitweb>
+		   &ltDirectory /var/www/gitweb&gt
 			   Options ExecCGI
 			   AddHandler cgi-script cgi
 
@@ -650,8 +652,8 @@ ADVANCED WEB SERVER SETUP
 			   RewriteCond %{REQUEST_FILENAME} !-f
 			   RewriteCond %{REQUEST_FILENAME} !-d
 			   RewriteRule ^.* /gitweb.cgi/$0 [L,PT]
-		   </Directory>
-	   </VirtualHost>
+		   &lt/Directory&gt
+	   &lt/VirtualHost&gt
 
 
        The additional AliasMatch makes it so that
@@ -692,6 +694,6 @@ NOTES
 
 
 Git 1.7.12			  08/19/2012			     GITWEB(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>bind - Arrange for X events to invoke Tcl scripts</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 bind(n) 		     Tk Built-In Commands		       bind(n)
 
 
@@ -63,10 +65,10 @@ EVENT PATTERNS
        terns, with optional white space between the patterns.  Each event pat-
        tern  may take one of three forms.  In the simplest case it is a single
        printing ASCII character, such as a or [.  The character may not  be  a
-       space  character  or  the  character <.	This form of pattern matches a
+       space  character  or  the  character &lt.	This form of pattern matches a
        KeyPress event for the particular character.  The second form  of  pat-
        tern is longer but more general.  It has the following syntax:
-	      <modifier-modifier-type-detail>
+	      &ltmodifier-modifier-type-detail&gt
        The  entire  event pattern is surrounded by angle brackets.  Inside the
        angle brackets are zero or more modifiers, an event type, and an  extra
        piece  of  information  (detail)  identifying  a  particular  button or
@@ -76,7 +78,7 @@ EVENT PATTERNS
 
        The third form of pattern is used to specify a user-defined, named vir-
        tual event.  It has the following syntax:
-	      <<name>>
+	      &lt&ltname&gt&gt
        The  entire  virtual event pattern is surrounded by double angle brack-
        ets.  Inside the angle brackets is the user-defined name of the virtual
        event.  Modifiers, such as Shift or Control, may not be combined with a
@@ -110,8 +112,8 @@ EVENT PATTERNS
        event  must  include  all  of those specified in the event pattern.  An
        event may also contain additional modifiers not specified in the  bind-
        ing.   For  example, if button 1 is pressed while the shift and control
-       keys are down, the pattern <Control-Button-1> will match the event, but
-       <Mod1-Button-1> will not.  If no modifiers are specified, then any com-
+       keys are down, the pattern &ltControl-Button-1&gt will match the event, but
+       &ltMod1-Button-1&gt will not.  If no modifiers are specified, then any com-
        bination of modifiers may be present in the event.
 
        Meta and M refer to whichever of the M1 through M5 modifiers is associ-
@@ -127,8 +129,8 @@ EVENT PATTERNS
        time and space requirement on the sequence: for a sequence of events to
        match  a  Double,  Triple  or Quadruple pattern, all of the events must
        occur close together in time and without substantial  mouse  motion  in
-       between.    For	example,  <Double-Button-1>  is  equivalent  to  <But-
-       ton-1><Button-1> with the extra time and space requirement.
+       between.    For	example,  &ltDouble-Button-1&gt  is  equivalent  to  &ltBut-
+       ton-1&gt&ltButton-1&gt with the extra time and space requirement.
 
        The Command and Option modifiers are equivalents of  Mod1  resp.  Mod2,
        they correspond to Macintosh-specific modifier keys.
@@ -326,8 +328,8 @@ EVENT PATTERNS
        to a button being pressed or released, while in the second it refers to
        some other button that is already depressed  when  the  matching  event
        occurs.	If a button number is given then type may be omitted:  if will
-       default to ButtonPress.	For example, the specifier <1>	is  equivalent
-       to <ButtonPress-1>.
+       default to ButtonPress.	For example, the specifier &lt1&gt	is  equivalent
+       to &ltButtonPress-1&gt.
 
        If  the event type is KeyPress or KeyRelease, then detail may be speci-
        fied in the form of an X keysym.  Keysyms  are  textual	specifications
@@ -342,7 +344,7 @@ EVENT PATTERNS
        sary,  you  can	use  the  %K notation described below to print out the
        keysym name for a particular key.  If a keysym detail  is  given,  then
        the type field may be omitted;  it will default to KeyPress.  For exam-
-       ple, <Control-comma> is equivalent to <Control-KeyPress-comma>.
+       ple, &ltControl-comma&gt is equivalent to &ltControl-KeyPress-comma&gt.
 
 BINDING SCRIPTS AND SUBSTITUTIONS
        The script argument to bind is a Tcl script,  which  will  be  executed
@@ -565,14 +567,14 @@ MULTIPLE MATCHES
        the  same  sequence,  and both of those virtual events are bound to the
        same window tag, then only one of the virtual events will be triggered,
        and it will be picked at random:
-	      event add <<Paste>> <Control-y>
-	      event add <<Paste>> <Button-2>
-	      event add <<Scroll>> <Button-2>
-	      bind Entry <<Paste>> {puts Paste}
-	      bind Entry <<Scroll>> {puts Scroll}
-       If the user types Control-y, the <<Paste>> binding will be invoked, but
-       if the user presses button 2 then one of either the  <<Paste>>  or  the
-       <<Scroll>> bindings will be invoked, but exactly which one gets invoked
+	      event add &lt&ltPaste&gt&gt &ltControl-y&gt
+	      event add &lt&ltPaste&gt&gt &ltButton-2&gt
+	      event add &lt&ltScroll&gt&gt &ltButton-2&gt
+	      bind Entry &lt&ltPaste&gt&gt {puts Paste}
+	      bind Entry &lt&ltScroll&gt&gt {puts Scroll}
+       If the user types Control-y, the &lt&ltPaste&gt&gt binding will be invoked, but
+       if the user presses button 2 then one of either the  &lt&ltPaste&gt&gt  or  the
+       &lt&ltScroll&gt&gt bindings will be invoked, but exactly which one gets invoked
        is undefined.
 
        If an X event does not match any of the	existing  bindings,  then  the
@@ -583,11 +585,11 @@ MULTI-EVENT SEQUENCES AND IGNORED EVENTS
        event pattern, then its script is executed whenever the	recent	events
        (leading  up  to  and  including  the  current  event)  match the given
        sequence.  This means, for example, that if button 1 is clicked repeat-
-       edly  the  sequence <Double-ButtonPress-1> will match each button press
+       edly  the  sequence &ltDouble-ButtonPress-1&gt will match each button press
        but the first.  If extraneous events that would prevent a  match  occur
        in  the	middle	of  an	event  sequence then the extraneous events are
        ignored unless they are KeyPress or ButtonPress events.	 For  example,
-       <Double-ButtonPress-1>  will  match  a sequence of presses of button 1,
+       &ltDouble-ButtonPress-1&gt  will  match  a sequence of presses of button 1,
        even though there will be ButtonRelease	events	(and  possibly	Motion
        events)	between the ButtonPress events.  Furthermore, a KeyPress event
        may be preceded by any number of other  KeyPress  events  for  modifier
@@ -606,7 +608,7 @@ ERRORS
 EXAMPLES
        Arrange for a string describing the motion of the mouse to  be  printed
        out when the mouse is double-clicked:
-	      bind . <Double-1> {
+	      bind . &ltDouble-1&gt {
 		  puts "hi from (%x,%y)"
 	      }
 
@@ -614,7 +616,7 @@ EXAMPLES
        is:
 	      set keysym "Press any key"
 	      pack [label .l -textvariable keysym -padx 2m -pady 1m]
-	      bind . <Key> {
+	      bind . &ltKey&gt {
 		  set keysym "You pressed %K"
 	      }
 
@@ -627,6 +629,6 @@ KEYWORDS
 
 
 Tk				      8.0			       bind(n)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

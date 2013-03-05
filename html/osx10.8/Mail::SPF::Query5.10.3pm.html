@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="There are two ways to use Mail::SPF::Query.  Your choice depends on..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Mail::SPF::Query - query Sender Policy Framework for an IP,email,helo</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Mail::SPF::Query(3)   User Contributed Perl Documentation  Mail::SPF::Query(3)
 
 
@@ -19,12 +21,12 @@ VERSION
        1.999.1
 
 SYNOPSIS
-	   my $query = new Mail::SPF::Query (ip => "127.0.0.1", sender=>'foo@example.com', helo=>"somehost.example.com", trusted=>0, guess=>0);
+	   my $query = new Mail::SPF::Query (ip =&gt "127.0.0.1", sender=&gt'foo@example.com', helo=&gt"somehost.example.com", trusted=&gt0, guess=&gt0);
 	   my ($result, 	  # pass | fail | softfail | neutral | none | error | unknown [mechanism]
 	       $smtp_comment,	  # "please see http://www.openspf.org/why.html?..."  when rejecting, return this string to the SMTP client
-	       $header_comment,   # prepend_header("Received-SPF" => "$result ($header_comment)")
+	       $header_comment,   # prepend_header("Received-SPF" =&gt "$result ($header_comment)")
 	       $spf_record,	  # "v=spf1 ..." original SPF record for the domain
-	      ) = $query->result();
+	      ) = $query-&gtresult();
 
 	   if	 ($result eq "pass") { "Domain is not forged. Apply RHSBL and content filters." }
 	   elsif ($result eq "fail") { "Domain is forged. Reject or save to spambox." }
@@ -39,7 +41,7 @@ DESCRIPTION
        whether the domains your server is an MX for have secondary MXes which
        your server doesn't know about.
 
-       The first and more common style, calling ->result(), is suitable when
+       The first and more common style, calling -&gtresult(), is suitable when
        all mail is received directly from the originator's MTA.  If the
        domains you receive do not have secondary MX entries, this is
        appropriate.  This style of use is outlined in the SYNOPSIS above.
@@ -58,8 +60,8 @@ DESCRIPTION
        You can try out Mail::SPF::Query on the command line with the following
        command:
 
-	   perl -MMail::SPF::Query -le 'print for Mail::SPF::Query->new(
-	       helo => shift, ipv4 => shift, sender => shift)->result' \
+	   perl -MMail::SPF::Query -le 'print for Mail::SPF::Query-&gtnew(
+	       helo =&gt shift, ipv4 =&gt shift, sender =&gt shift)-&gtresult' \
 	       helohost.example.com 1.2.3.4 user@example.com
 
 BUGS
@@ -95,43 +97,43 @@ NON-STANDARD FEATURES
        results.
 
 METHODS
-   "Mail::SPF::Query->new()"
+   "Mail::SPF::Query-&gtnew()"
 	   my $query = eval { new Mail::SPF::Query (
-	       ip	   => '127.0.0.1',
-	       sender	   => 'foo@example.com',
-	       helo	   => 'host.example.com',
+	       ip	   =&gt '127.0.0.1',
+	       sender	   =&gt 'foo@example.com',
+	       helo	   =&gt 'host.example.com',
 
 	       # Optional parameters:
-	       debug	   => 1, debuglog => sub { print STDERR "@_\n" },
-	       local	   => 'extra mechanisms',
-	       trusted	   => 1,		   # do trusted forwarder processing
-	       guess	   => 1,		   # do best guess if no SPF record
-	       default_explanation => 'Please see http://spf.my.isp/spferror.html for details',
-	       max_lookup_count    => 10,	   # total number of SPF includes/redirects
-	       sanitize    => 0,		   # do not sanitize all returned strings
-	       myhostname  => 'foo.example.com',   # prepended to header_comment
-	       override    => {   'example.net' => 'v=spf1 a mx -all',
-				'*.example.net' => 'v=spf1 a mx -all' },
-	       fallback    => {   'example.org' => 'v=spf1 a mx -all',
-				'*.example.org' => 'v=spf1 a mx -all' }
+	       debug	   =&gt 1, debuglog =&gt sub { print STDERR "@_\n" },
+	       local	   =&gt 'extra mechanisms',
+	       trusted	   =&gt 1,		   # do trusted forwarder processing
+	       guess	   =&gt 1,		   # do best guess if no SPF record
+	       default_explanation =&gt 'Please see http://spf.my.isp/spferror.html for details',
+	       max_lookup_count    =&gt 10,	   # total number of SPF includes/redirects
+	       sanitize    =&gt 0,		   # do not sanitize all returned strings
+	       myhostname  =&gt 'foo.example.com',   # prepended to header_comment
+	       override    =&gt {   'example.net' =&gt 'v=spf1 a mx -all',
+				'*.example.net' =&gt 'v=spf1 a mx -all' },
+	       fallback    =&gt {   'example.org' =&gt 'v=spf1 a mx -all',
+				'*.example.org' =&gt 'v=spf1 a mx -all' }
 	   ) };
 
 	   if ($@) { warn "bad input to Mail::SPF::Query: $@" }
 
-       Set "trusted=>1" to turned on "trusted-forwarder.org" accreditation
+       Set "trusted=&gt1" to turned on "trusted-forwarder.org" accreditation
        checking.  The mechanism "include:spf.trusted-forwarder.org" is used
        just before a "-all" or "?all".	The precise circumstances are somewhat
        more complicated, but it does get the case of "v=spf1 -all" right --
        i.e.  "trusted-forwarder.org" is not checked.  This is a non-standard
        feature.
 
-       Set "guess=>1" to turned on automatic best guess processing.  This will
+       Set "guess=&gt1" to turned on automatic best guess processing.  This will
        use the best_guess SPF record when one cannot be found in the DNS.
        Note that this can only return "pass" or "neutral".  The "trusted" and
        "local" flags also operate when the best_guess is being used.  This is
        a non-standard feature.
 
-       Set "local=>'include:local.domain'" to include some extra processing
+       Set "local=&gt'include:local.domain'" to include some extra processing
        just before a "-all" or "?all".	The local processing happens just
        before the trusted forwarder processing.  This is a non-standard
        feature.
@@ -150,7 +152,7 @@ METHODS
        string argument and return a single string which contains the sanitized
        result.
 
-       Set "debug=>1" to watch the queries happen.
+       Set "debug=&gt1" to watch the queries happen.
 
        Set "override" to define SPF records for domains that do publish but
        which you want to override anyway.  Wildcards are supported.  This is a
@@ -163,8 +165,8 @@ METHODS
        Note: domain name arguments to override and fallback need to be in all
        lowercase.
 
-   "$query->result()"
-	   my ($result, $smtp_comment, $header_comment, $spf_record, $detail) = $query->result();
+   "$query-&gtresult()"
+	   my ($result, $smtp_comment, $header_comment, $spf_record, $detail) = $query-&gtresult();
 
        $result will be one of "pass", "fail", "softfail", "neutral", "none",
        "error" or "unknown [...]":
@@ -202,7 +204,7 @@ METHODS
 	   "/^unknown/" rather than "eq "unknown"".
 
        Results are cached internally for a default of 120 seconds.  You can
-       call "->result()" repeatedly; subsequent lookups won't hit your DNS.
+       call "-&gtresult()" repeatedly; subsequent lookups won't hit your DNS.
 
        "smtp_comment" should be displayed to the SMTP client.
 
@@ -245,8 +247,8 @@ METHODS
 	   spf_record
 	   modifiers
 
-   "$query->result2()"
-	   my ($result, $smtp_comment, $header_comment, $spf_record) = $query->result2('recipient@domain', 'recipient2@domain');
+   "$query-&gtresult2()"
+	   my ($result, $smtp_comment, $header_comment, $spf_record) = $query-&gtresult2('recipient@domain', 'recipient2@domain');
 
        "result2()" does everything that "result()" does, but it first checks
        to see if the sending system is a recognized MX secondary for the
@@ -272,26 +274,26 @@ METHODS
 
        For example:
 
-	   my $query = new Mail::SPF::Query (ip => "127.0.0.1",
-					     sender=>'foo@example.com',
-					     helo=>"somehost.example.com");
+	   my $query = new Mail::SPF::Query (ip =&gt "127.0.0.1",
+					     sender=&gt'foo@example.com',
+					     helo=&gt"somehost.example.com");
 
 	   ...
 
 	   my ($result, $smtp_comment, $header_comment);
 
-	   ($result, $smtp_comment, $header_comment) = $query->result2('recip1@example.com');
+	   ($result, $smtp_comment, $header_comment) = $query-&gtresult2('recip1@example.com');
 	   # return suitable error code based on $result eq 'fail' or not
 
-	   ($result, $smtp_comment, $header_comment) = $query->result2('recip2@example.org');
+	   ($result, $smtp_comment, $header_comment) = $query-&gtresult2('recip2@example.org');
 	   # return suitable error code based on $result eq 'fail' or not
 
-	   ($result, $smtp_comment, $header_comment) = $query->message_result2();
+	   ($result, $smtp_comment, $header_comment) = $query-&gtmessage_result2();
 	   # return suitable error if $result eq 'fail'
 	   # prefix message with "Received-SPF: $result ($header_comment)"
 
-   "$query->message_result2()"
-	   my ($result, $smtp_comment, $header_comment, $spf_record) = $query->message_result2();
+   "$query-&gtmessage_result2()"
+	   my ($result, $smtp_comment, $header_comment, $spf_record) = $query-&gtmessage_result2();
 
        "message_result2()" returns an overall status for the message after
        zero or more calls to "result2()".  It will always be the last status
@@ -301,8 +303,8 @@ METHODS
        $result will be one of "pass", "fail", "neutral [...]", or "error".
        See "result()" above for meanings.
 
-   "$query->best_guess()"
-	   my ($result, $smtp_comment, $header_comment) = $query->best_guess();
+   "$query-&gtbest_guess()"
+	   my ($result, $smtp_comment, $header_comment) = $query-&gtbest_guess();
 
        When a domain does not publish an SPF record, this library can produce
        an educated guess anyway.
@@ -315,13 +317,13 @@ METHODS
        That default set will return either "pass" or "neutral".
 
        If you want to experiment with a different default, you can pass it as
-       an argument: "$query->best_guess("a mx ptr")"
+       an argument: "$query-&gtbest_guess("a mx ptr")"
 
        This is a non-standard feature.	This method is also deprecated.  You
-       should set "guess=>1" on the "new()" method instead.
+       should set "guess=&gt1" on the "new()" method instead.
 
-   "$query->trusted_forwarder()"
-	   my ($result, $smtp_comment, $header_comment) = $query->best_guess();
+   "$query-&gttrusted_forwarder()"
+	   my ($result, $smtp_comment, $header_comment) = $query-&gtbest_guess();
 
        It is possible that the message is coming through a known-good relay
        like "acm.org" or "pobox.com".  During the transitional period, many
@@ -336,11 +338,11 @@ METHODS
        This will return either "pass" or "neutral".
 
        This is a non-standard feature.	This method is also deprecated.  You
-       should set "trusted=>1" on the "new()" method instead.
+       should set "trusted=&gt1" on the "new()" method instead.
 
-   "$query->sanitize('string')"
+   "$query-&gtsanitize('string')"
        This applies the sanitization rules for the particular query object.
-       These rules are controlled by the "sanitize" parameter to the c<new()>
+       These rules are controlled by the "sanitize" parameter to the c&ltnew()&gt
        method.
 
    "strict_sanitize('string')"
@@ -354,11 +356,11 @@ METHODS
 
        This function is not a class method.
 
-   "$query->debuglog()"
+   "$query-&gtdebuglog()"
        Subclasses may override this with their own debug logger.
        "Log::Dispatch" is recommended.
 
-       Alternatively, pass the "new()" constructor a "debuglog => sub { ... }"
+       Alternatively, pass the "new()" constructor a "debuglog =&gt sub { ... }"
        callback, and we'll pass debugging lines to that.
 
 WARNINGS
@@ -371,20 +373,20 @@ WARNINGS
        MXes.
 
 AUTHORS
-       Meng Weng Wong <mengwong+spf@pobox.com>, Philip Gladstone, Julian
-       Mehnle <julian@mehnle.net>
+       Meng Weng Wong &ltmengwong+spf@pobox.com&gt, Philip Gladstone, Julian
+       Mehnle &ltjulian@mehnle.net&gt
 
 SEE ALSO
-       About SPF: <http://www.openspf.org>
+       About SPF: &lthttp://www.openspf.org&gt
 
-       Mail::SPF::Query: <http://search.cpan.org/dist/Mail-SPF-Query>
+       Mail::SPF::Query: &lthttp://search.cpan.org/dist/Mail-SPF-Query&gt
 
        The latest release of the SPF specification:
-       <http://www.openspf.org/spf-classic-current.txt>
+       &lthttp://www.openspf.org/spf-classic-current.txt&gt
 
 
 
 perl v5.10.1			  2006-02-26		   Mail::SPF::Query(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>XML::SAX::Intro - An Introduction to SAX Parsing with Perl</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 SAX::Intro(3)	      User Contributed Perl Documentation	 SAX::Intro(3)
 
 
@@ -37,7 +39,7 @@ Replacing XML::Parser
 	 sub handle_start {
 	   my ($e, $el, %attrs) = @_;
 	   if ($el eq 'foo') {
-	     $e->{inside_foo}++; # BAD! $e is an XML::Parser::Expat object.
+	     $e-&gt{inside_foo}++; # BAD! $e is an XML::Parser::Expat object.
 	   }
 	 }
 
@@ -51,8 +53,8 @@ Replacing XML::Parser
        The only way currently with XML::Parser to safely maintain state is to
        use a closure:
 
-	 my $state = MyState->new();
-	 $parser->setHandlers(Start => sub { handle_start($state, @_) });
+	 my $state = MyState-&gtnew();
+	 $parser-&gtsetHandlers(Start =&gt sub { handle_start($state, @_) });
 
        This closure traps the $state variable, which now gets passed as the
        first parameter to your callback. Unfortunately very few people use
@@ -72,11 +74,11 @@ Introducing SAX
 	 use XML::SAX;
 	 use MySAXHandler;
 
-	 my $parser = XML::SAX::ParserFactory->parser(
-	       Handler => MySAXHandler->new
+	 my $parser = XML::SAX::ParserFactory-&gtparser(
+	       Handler =&gt MySAXHandler-&gtnew
 	 );
 
-	 $parser->parse_uri("foo.xml");
+	 $parser-&gtparse_uri("foo.xml");
 
        The important concept to grasp here is that SAX uses a factory class
        called XML::SAX::ParserFactory to create a new parser instance. The
@@ -114,7 +116,7 @@ Introducing SAX
        called as method calls, so this would be the equivalent of directly
        calling:
 
-	 $object->start_element($el);
+	 $object-&gtstart_element($el);
 
        Notice how this is different to XML::Parser's calling style, which
        calls:
@@ -139,10 +141,10 @@ Introducing SAX
        You can use a constructor parameter as we saw above, or we can pass the
        handler directly in the call to one of the parse methods:
 
-	 $parser->parse(Handler => $handler,
-			Source => { SystemId => "foo.xml" });
+	 $parser-&gtparse(Handler =&gt $handler,
+			Source =&gt { SystemId =&gt "foo.xml" });
 	 # or...
-	 $parser->parse_file($fh, Handler => $handler);
+	 $parser-&gtparse_file($fh, Handler =&gt $handler);
 
        This flexibility allows for one parser to be used in many different
        scenarios throughout your script (though one shouldn't feel pressure to
@@ -273,7 +275,7 @@ Callback Parameters
        Data
 	   The text data in the processing instruction. Can be an empty string
 	   for a processing instruction that has no data element.  For example
-	   <?wiggle?> is a perfectly valid processing instruction.
+	   &lt?wiggle?&gt is a perfectly valid processing instruction.
 
 Tip of the iceberg
        What we have discussed above is really the tip of the SAX iceberg. And
@@ -310,12 +312,12 @@ Tip of the iceberg
        acts as a base class for all SAX parsers and filters. It provides an
        abstraction away from calling the handler methods, that makes sure your
        filter or parser does the right thing, and it does it FAST. So, if you
-       ever need to write a SAX filter, which if you're processing XML -> XML,
-       or XML -> HTML, then you probably do, then you need to be writing it as
+       ever need to write a SAX filter, which if you're processing XML -&gt XML,
+       or XML -&gt HTML, then you probably do, then you need to be writing it as
        a subclass of XML::SAX::Base. Really - this is advice not to ignore
        lightly. I will not go into the details of writing a SAX filter here.
        Kip Hampton, the author of XML::SAX::Base has covered this nicely in
-       his article on XML.com here <URI>.
+       his article on XML.com here &ltURI&gt.
 
        To construct SAX pipelines, Barrie Slaymaker, a long time Perl hacker
        whose modules you will probably have heard of or used, wrote a very
@@ -331,12 +333,12 @@ Tip of the iceberg
 	 use XML::SAX::Writer;
 
 	 my $output_string;
-	 my $writer = XML::SAX::Writer->new(Output => \$output_string);
-	 my $filter2 = XML::SAX::Filter2->new(Handler => $writer);
-	 my $filter1 = XML::SAX::Filter1->new(Handler => $filter2);
-	 my $parser = XML::SAX::ParserFactory->parser(Handler => $filter1);
+	 my $writer = XML::SAX::Writer-&gtnew(Output =&gt \$output_string);
+	 my $filter2 = XML::SAX::Filter2-&gtnew(Handler =&gt $writer);
+	 my $filter1 = XML::SAX::Filter1-&gtnew(Handler =&gt $filter2);
+	 my $parser = XML::SAX::ParserFactory-&gtparser(Handler =&gt $filter1);
 
-	 $parser->parse_uri("foo.xml");
+	 $parser-&gtparse_uri("foo.xml");
 
        This is a lot easier with XML::SAX::Machines:
 
@@ -344,10 +346,10 @@ Tip of the iceberg
 
 	 my $output_string;
 	 my $parser = Pipeline(
-	       XML::SAX::Filter1 => XML::SAX::Filter2 => \$output_string
+	       XML::SAX::Filter1 =&gt XML::SAX::Filter2 =&gt \$output_string
 	       );
 
-	 $parser->parse_uri("foo.xml");
+	 $parser-&gtparse_uri("foo.xml");
 
        One of the main benefits of XML::SAX::Machines is that the pipelines
        are constructed in natural order, rather than the reverse order we saw
@@ -362,7 +364,7 @@ Tip of the iceberg
        will allow you to dump the SAX stream of events as it goes by. Usage is
        really very simple just call your perl script that uses SAX as follows:
 
-	 $ perl -d:TraceSAX <scriptname>
+	 $ perl -d:TraceSAX &ltscriptname&gt
 
        And preferably pipe the output to a pager of some sort, such as more or
        less. The output is extremely verbose, but should help clear some
@@ -376,6 +378,6 @@ AUTHOR
 
 
 perl v5.10.1			  2008-08-04			 SAX::Intro(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

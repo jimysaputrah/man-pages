@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""Mac::Glue does AppleScript so you don't have to."..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Mac::Glue - Control Mac apps with Apple event terminology</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Glue(3) 	      User Contributed Perl Documentation	       Glue(3)
 
 
@@ -17,8 +19,8 @@ NAME
 
 SYNOPSIS
 	       use Mac::Glue;
-	       my $glue = Mac::Glue->new('Finder');
-	       $glue->prop('System Folder')->open;
+	       my $glue = Mac::Glue-&gtnew('Finder');
+	       $glue-&gtprop('System Folder')-&gtopen;
 	       # see rest of docs for lots more info
 
 DESCRIPTION
@@ -76,8 +78,8 @@ DESCRIPTION
 
        Cool Mac::Glue method
 		   use Mac::Glue;
-		   my $glue = Mac::Glue->new('Finder');
-		   $glue->open( $glue->prop('System Folder') );
+		   my $glue = Mac::Glue-&gtnew('Finder');
+		   $glue-&gtopen( $glue-&gtprop('System Folder') );
 
        The latter is much simpler to understand, to read, to write.  It
        leverages the user's understanding of AppleScript.  And it is just more
@@ -143,35 +145,35 @@ DESCRIPTION
        the name of the glue (you may include or omit underscores in the name
        if you like).
 
-	       my $glue = Mac::Glue->new('My App');  # or My_App
+	       my $glue = Mac::Glue-&gtnew('My App');  # or My_App
 
        You can also pass in additional parameters for the type of target to
        use.
 
        o   Bundle ID (Mac OS X only)
 
-		   Mac::Glue->new('My App', bundle => 'com.example.MyApp');
+		   Mac::Glue-&gtnew('My App', bundle =&gt 'com.example.MyApp');
 
        o   Process Serial Number
 
-		   Mac::Glue->new('My App', psn => $psn);
+		   Mac::Glue-&gtnew('My App', psn =&gt $psn);
 
        o   Process ID (Mac OS X only)
 
-		   Mac::Glue->new('My App', pid => $pid);
+		   Mac::Glue-&gtnew('My App', pid =&gt $pid);
 
        o   Application path
 
-		   Mac::Glue->new('My App', path => $path_to_file_or_bundle);
+		   Mac::Glue-&gtnew('My App', path =&gt $path_to_file_or_bundle);
 
        o   AppleTalk (Mac OS only)
 
-		   Mac::Glue->new('My App', ppc => 'My App Name',
+		   Mac::Glue-&gtnew('My App', ppc =&gt 'My App Name',
 			   'Server Name', 'Zone');
 
        o   Application URL
 
-		   Mac::Glue->new('My App', eppc => 'My App Name', 'mac.example.com',
+		   Mac::Glue-&gtnew('My App', eppc =&gt 'My App Name', 'mac.example.com',
 			   $uid, $pid, $user, $pass);
 
 	   UID, PID, user, pass are optional (and ignored entirely for Mac OS
@@ -184,12 +186,12 @@ DESCRIPTION
 
        Addresses can be changed after the fact:
 
-	       $glue->ADDRESS(eppc => 'My App Name', 'mac.example.com');
+	       $glue-&gtADDRESS(eppc =&gt 'My App Name', 'mac.example.com');
 
        And to reset the address to the default, call the method with no
        parameters:
 
-	       $glue->ADDRESS;
+	       $glue-&gtADDRESS;
 
        Once you have your glue set up, you start calling events, as they are
        documented in the POD file for the glue.  The events can be called
@@ -199,11 +201,11 @@ DESCRIPTION
        be called case-insensitively except for all caps.  e.g., for an event
        named "reply", it could be called with:
 
-	       $glue->Reply;
-	       $glue->reply;
-	       $glue->RePLY;
+	       $glue-&gtReply;
+	       $glue-&gtreply;
+	       $glue-&gtRePLY;
 
-       However, it could not be called with "$glue->REPLY", since that is
+       However, it could not be called with "$glue-&gtREPLY", since that is
        reserved.
 
        All applications respond to events differently.	Something that works
@@ -216,13 +218,13 @@ DESCRIPTION
        object parameter.  In your event call, pass the data for that parameter
        first:
 
-	       $glue->open($file);
+	       $glue-&gtopen($file);
 
        Other parameters must be named and must be provided as key-value pairs,
        with the key as the name of the parameter, and the value as the
        parameter's data:
 
-	       $glue->open($file, using => $myapp);
+	       $glue-&gtopen($file, using =&gt $myapp);
 
        Note that the direct object parameter is the only parameter that
        doesn't need a name in front of it, and must come first in the list if
@@ -236,7 +238,7 @@ DESCRIPTION
        "open" expects an alias ("typeAlias"), but you want to pass text, you
        can do:
 
-	       $glue->open( param_type(typeChar, $path) );
+	       $glue-&gtopen( param_type(typeChar, $path) );
 
        Each datum can be a simple scalar as above, an AEDesc object, an
        Mac::AEObjDesc object (returned by "obj", "prop", and event methods),
@@ -246,8 +248,8 @@ DESCRIPTION
        the hashref, so the AE list is a datum for one of the keys in the AE
        record:
 
-	       $glue->make(new => 'window', with_properties =>
-		       { name => "New Window", position => [100, 200] });
+	       $glue-&gtmake(new =&gt 'window', with_properties =&gt
+		       { name =&gt "New Window", position =&gt [100, 200] });
 
        The words "name" and "position" will be changed into the proper
        corresponding AE IDs.  And on return, record keys will be changed back
@@ -258,41 +260,41 @@ DESCRIPTION
        records and lists are turned into Perl hashes and arrays (recursively,
        for nested lists), etc.
 
-	       my @urls = $sherlock->search_internet('AltaVista',
-		       for => 'Mac::Glue');
+	       my @urls = $sherlock-&gtsearch_internet('AltaVista',
+		       for =&gt 'Mac::Glue');
 
        AE objects (which will be discussed later) are returned as
        "Mac::AEObjDesc" objects, so they may be used again by being passed
        back to another event.
 
-	       my $window_object = $glue->get( window => 1 );
-	       $glue->save($window_object);
+	       my $window_object = $glue-&gtget( window =&gt 1 );
+	       $glue-&gtsave($window_object);
 
        This allows AppleScript-like loops:
 
-	       my @selection = $glue->get( $glue->prop(selection => of => window) );
+	       my @selection = $glue-&gtget( $glue-&gtprop(selection =&gt of =&gt window) );
 	       my @owners;
 	       for my $item (@selection) {
-		       push @owners, $glue->get( $glue->obj(cell => 'Owners' => $item) );
+		       push @owners, $glue-&gtget( $glue-&gtobj(cell =&gt 'Owners' =&gt $item) );
 	       }
 
        Some objects may allow an easy way to get a human-readable form, with
        the "as" parameter:
 
-	       my $item = $glue->get( file => 1, as => 'string' );
+	       my $item = $glue-&gtget( file =&gt 1, as =&gt 'string' );
 
        Errors are returned in the special variable $^E, which should be
        checked immediately after an event call (for portability with Mac OS X,
        use $MacError instead for the value):
 
-	       $glue->close(window => 1);
+	       $glue-&gtclose(window =&gt 1);
 	       if ($^E) {
 		       warn "Couldn't close window: $MacError\n";
 	       }
 
        Or, if a value is expected and none is returned:
 
-	       my $file = $glue->choose_file('Select a file, please.')
+	       my $file = $glue-&gtchoose_file('Select a file, please.')
 		       or die "No file chosen: $MacError";
 
        Checking $^E only works if the error returned is an error number.  If
@@ -322,7 +324,7 @@ DESCRIPTION
        order of the key-value pairs: each pair is contained by the pair or
        object that follows it.
 
-	       my $obj = $glue->obj(file => 'foo', folder => 'bar', disk => 'buz');
+	       my $obj = $glue-&gtobj(file =&gt 'foo', folder =&gt 'bar', disk =&gt 'buz');
 
        So you have three pairs.  The key of each pair ("file", "folder",
        "disk") is the class.  The value of each pair ("foo", "bar", "baz") is
@@ -350,26 +352,26 @@ DESCRIPTION
 
 	       use Mac::Glue ':glue';
 
-	       $obj1 = $glue->obj(window =>
+	       $obj1 = $glue-&gtobj(window =&gt
 		       obj_form(formAbsolutePostion, typeLongInteger, 1));
 
-	       $obj2 = $glue->obj(window => 1);
+	       $obj2 = $glue-&gtobj(window =&gt 1);
 
        Special constants are exported that specify relative positions and
        absolute positions.
 
-	       $first  = $glue->obj(file => gFirst, property => 'Desktop');
-	       $second = $glue->obj(file => gNext, $first);
+	       $first  = $glue-&gtobj(file =&gt gFirst, property =&gt 'Desktop');
+	       $second = $glue-&gtobj(file =&gt gNext, $first);
 
 	       for ($first, $second) {
-		       print $glue->get($_, as => 'string');
+		       print $glue-&gtget($_, as =&gt 'string');
 	       }
 
        "of" and "in" are synonyms of "property":
 
-	       $glue->obj(file => gFirst, property => 'Desktop');
-	       $glue->obj(file => gFirst, of => 'Desktop');
-	       $glue->obj(file => gFirst, in => 'Desktop');
+	       $glue-&gtobj(file =&gt gFirst, property =&gt 'Desktop');
+	       $glue-&gtobj(file =&gt gFirst, of =&gt 'Desktop');
+	       $glue-&gtobj(file =&gt gFirst, in =&gt 'Desktop');
 
        The "as" parameter above has a form of type, such as:
 
@@ -381,8 +383,8 @@ DESCRIPTION
        A special method called "prop" is for specifying properties.  These are
        equivalent:
 
-	       $glue->obj(property => 'Desktop');
-	       $glue->prop('Desktop');
+	       $glue-&gtobj(property =&gt 'Desktop');
+	       $glue-&gtprop('Desktop');
 
    Descriptor types for object specifier records
        Property IDs
@@ -402,26 +404,26 @@ DESCRIPTION
 
        Absolute position
 	   As discussed above, if it is an index number, you can just pass the
-	   number, as in "window => 1", or you can explicitly mark it with
-	   "window => obj_form(formAbsolutePosition, typeLongInteger, 1)".
+	   number, as in "window =&gt 1", or you can explicitly mark it with
+	   "window =&gt obj_form(formAbsolutePosition, typeLongInteger, 1)".
 
-	   For other absolutes, you may use constants, such as "window =>
+	   For other absolutes, you may use constants, such as "window =&gt
 	   gLast".  Choices are "gFirst", "gMiddle", "gLast", "gAny", "gAll".
 
 	   These are just shortcuts for explicit forms like
 	   "obj_form(formAbsolutePosition, typeAbsoluteOrdinal, kAEAll)".
 
 	   Note that if there is a plural form of the class name, you may use
-	   it to mean the same thing as "class => gAll".  These are all the
+	   it to mean the same thing as "class =&gt gAll".  These are all the
 	   same:
 
-		   $f->obj(files => of => 'System Folder');
-		   $f->obj(files => gAll, of => 'System Folder');
-		   $f->obj(file => gAll, of => 'System Folder');
+		   $f-&gtobj(files =&gt of =&gt 'System Folder');
+		   $f-&gtobj(files =&gt gAll, of =&gt 'System Folder');
+		   $f-&gtobj(file =&gt gAll, of =&gt 'System Folder');
 
        Relative position
 	   Similar to absolute position, but an additional object must be
-	   specified, such as "file =" gNext, file => gMiddle>, which would
+	   specified, such as "file =" gNext, file =&gt gMiddle&gt, which would
 	   return the file after the middle file.  Available constants are
 	   "gNext" and "gPrevious".
 
@@ -440,48 +442,48 @@ DESCRIPTION
 	   string, or another data type passed with "obj_form".  Here are a
 	   few ways to specify files in the System Folder:
 
-		   $f->obj(files => range(1, 5), of => 'System Folder');
-		   $f->obj(files => range(1, "System"), of => 'System Folder');
-		   $f->obj(files => range("Finder", "System"), of => 'System Folder');
-		   $f->obj(files => range(gFirst, "System"), of => 'System Folder');
+		   $f-&gtobj(files =&gt range(1, 5), of =&gt 'System Folder');
+		   $f-&gtobj(files =&gt range(1, "System"), of =&gt 'System Folder');
+		   $f-&gtobj(files =&gt range("Finder", "System"), of =&gt 'System Folder');
+		   $f-&gtobj(files =&gt range(gFirst, "System"), of =&gt 'System Folder');
 
        Whose tests
 	   The "whose" function accepts either logical records or comparison
 	   records.
 
 		   # comparison record
-		   $f->obj(CLASS => whose(CLASS => VALUE, OPERATOR, VALUE));
-		   $f->obj(CLASS => whose(PROPERTY, OPERATOR, VALUE));
+		   $f-&gtobj(CLASS =&gt whose(CLASS =&gt VALUE, OPERATOR, VALUE));
+		   $f-&gtobj(CLASS =&gt whose(PROPERTY, OPERATOR, VALUE));
 
 	   (See EXPORT.)
 
-	   PROPERTY and CLASS => VALUE work like prop() and obj().  The
-	   PROPERTY form is the same as "property => VALUE".
+	   PROPERTY and CLASS =&gt VALUE work like prop() and obj().  The
+	   PROPERTY form is the same as "property =&gt VALUE".
 
 	   OPERATOR is "contains", "equals", "begins_with", "ends_with",
 	   "l_t", "l_e", "g_t", or "g_e".  VALUE is the value to compare to.
 
 		   # files whose name begins with "foo"
-		   $f->obj(files => whose(name => begins_with => 'foo'));
+		   $f-&gtobj(files =&gt whose(name =&gt begins_with =&gt 'foo'));
 
 		   # rows whose first cell equals "bar"
-		   $f->obj(rows => whose(cell => 1 => equals => 'bar'));
+		   $f-&gtobj(rows =&gt whose(cell =&gt 1 =&gt equals =&gt 'bar'));
 
 	   Then there is the logical record type, for use when more than one
 	   comparison record is needed.
 
 		   # logical record
-		   $f->obj(CLASS => whose(OPERATOR, LIST));
+		   $f-&gtobj(CLASS =&gt whose(OPERATOR, LIST));
 
 	   OPERATOR is "AND", "OR", or "NOT".  LIST is any number of other
 	   logical records or comparison records, contained in anonymous
 	   arrays.  So you can join any number of records together:
 
 		   # words where it contains "e" and it begins with "p" and it does not end with "s"
-		   $aw->obj(
-			   words => whose(AND =>
-				   [it => contains => 'e'], [it => begins_with => 'p'],
-				   [NOT => [it => ends_with => 's']]
+		   $aw-&gtobj(
+			   words =&gt whose(AND =&gt
+				   [it =&gt contains =&gt 'e'], [it =&gt begins_with =&gt 'p'],
+				   [NOT =&gt [it =&gt ends_with =&gt 's']]
 			   ), $text)
 
 	   Note how each logical record and comparison record following each
@@ -504,16 +506,16 @@ DESCRIPTION
        object if not supplied.
 
 	       my $aw = new Mac::Glue 'AppleWorks';
-	       my $text = $aw->prop(text_body => document => 1);
-	       $aw->activate;
+	       my $text = $aw-&gtprop(text_body =&gt document =&gt 1);
+	       $aw-&gtactivate;
 
 	       # note null object in location()
-	       $aw->make(new => 'document', at => location('front'));
-	       $aw->set($text, to => "foo bar buz baz.");
+	       $aw-&gtmake(new =&gt 'document', at =&gt location('front'));
+	       $aw-&gtset($text, to =&gt "foo bar buz baz.");
 
-	       $aw->move(
-		       $aw->obj(word => 4 => $text),
-		       to => location(after => $aw->obj(word => 2 => $text))
+	       $aw-&gtmove(
+		       $aw-&gtobj(word =&gt 4 =&gt $text),
+		       to =&gt location(after =&gt $aw-&gtobj(word =&gt 2 =&gt $text))
 	       );
 
    Shortcuts for object specifier records
@@ -521,18 +523,18 @@ DESCRIPTION
        method from the record's parent glue, and it will be passed to that
        method as the direct object.  Examples:
 
-	       $tracks = $itunes->obj(tracks => $library);
-	       $tracks = $library->obj('tracks');
+	       $tracks = $itunes-&gtobj(tracks =&gt $library);
+	       $tracks = $library-&gtobj('tracks');
 
-	       @tracks = $itunes->get($tracks);
-	       @tracks = $tracks->get;
+	       @tracks = $itunes-&gtget($tracks);
+	       @tracks = $tracks-&gtget;
 
-	       $itunes->play($tracks[0]);
-	       $tracks[0]->play;
+	       $itunes-&gtplay($tracks[0]);
+	       $tracks[0]-&gtplay;
 
        In the first example, the record $library is the direct object in the
        obj() method, and so it can be flipped around with
-       "$library-"obj('tracks')>.
+       "$library-"obj('tracks')&gt.
 
        Then, in the second example, the resulting record, $tracks, is called
        as the direct object of get().
@@ -553,16 +555,16 @@ DESCRIPTION
        Example:
 
 	       # how it should work
-	       my $sel = $iphoto->prop('selection');
-	       for my $photo ($sel->get) {
+	       my $sel = $iphoto-&gtprop('selection');
+	       for my $photo ($sel-&gtget) {
 		       # ... do stuff with $photo
 	       }
 
 	       # how it works
-	       my $sel = $iphoto->prop('selection');
-	       for my $photo ($sel->get) {
-		       my $id = $photo->getdata; # get data in usable form
-		       my $newphoto = $iphoto->obj(photo =>
+	       my $sel = $iphoto-&gtprop('selection');
+	       for my $photo ($sel-&gtget) {
+		       my $id = $photo-&gtgetdata; # get data in usable form
+		       my $newphoto = $iphoto-&gtobj(photo =&gt
 			       obj_form(formUniqueID, typeFloat, $id)
 		       );
 		       # ... do stuff with $newphoto
@@ -570,7 +572,7 @@ DESCRIPTION
 
        Another workaround is to merely act on the object without fetching it.
 
-	       my $sel = $iphoto->prop('selection');
+	       my $sel = $iphoto-&gtprop('selection');
 	       # ... do stuff with $sel
 
        Results may vary.
@@ -581,8 +583,8 @@ DESCRIPTION
        (affecting only the one event), or called as methods (which affect
        every call made from that object).  They are all upper case.
 
-	       $glue->REPLY(1); 	       # wait for reply on all events
-	       $glue->close(REPLY => 0);       # don't wait for this one event
+	       $glue-&gtREPLY(1); 	       # wait for reply on all events
+	       $glue-&gtclose(REPLY =&gt 0);       # don't wait for this one event
 
        REPLY
 	   Boolean, for whether or not to wait for a reply.  Default is to
@@ -596,7 +598,7 @@ DESCRIPTION
 	   Switch to the application being called.  Usually more efficient to
 	   use the "activate" event:
 
-		   $glue->activate;
+		   $glue-&gtactivate;
 
        PRIORITY
 	   Set the event priority.  Default is "kAENormalPriority".
@@ -636,20 +638,20 @@ DESCRIPTION
 		   sub error_handler {
 			   my($err, @args) = @_;
 			   my $args = join ', ', @args;
-			   warn sprintf("%s->%s(%s) event failed:\n%s (%d)\n%s\n",
-				   $err->{glue}, $err->{event}, $args,
-				   $err->{errc}, $err->{errn}, $err->{errs}
+			   warn sprintf("%s-&gt%s(%s) event failed:\n%s (%d)\n%s\n",
+				   $err-&gt{glue}, $err-&gt{event}, $args,
+				   $err-&gt{errc}, $err-&gt{errn}, $err-&gt{errs}
 			   );
 		   }
 
-		   $finder->open(
-			   $finder->obj( item => 'HD' ), # nothing named HD in Finder
-			   ERRORS => \&error_handler
+		   $finder-&gtopen(
+			   $finder-&gtobj( item =&gt 'HD' ), # nothing named HD in Finder
+			   ERRORS =&gt \&error_handler
 		   );
 
 	   Result:
 
-		   Finder->(DOBJ, Mac::AEObjDesc=HASH(0xb0dc30)) event failed (-1728):
+		   Finder-&gt(DOBJ, Mac::AEObjDesc=HASH(0xb0dc30)) event failed (-1728):
 		   errAENoSuchObject
 		   e.g.,: specifier asked for the 3rd, but there are only 2. Basically,
 		   this indicates a run-time resolution error.
@@ -669,7 +671,7 @@ DESCRIPTION
 	   System_Events" for more information.  Example to hide the
 	   application:
 
-		   $glue->app_process->prop('visible')->set(to => 0);
+		   $glue-&gtapp_process-&gtprop('visible')-&gtset(to =&gt 0);
 
    Editing a Glue
        There is an included droplet, glueedit, for editing glues.  Drop a
@@ -697,8 +699,8 @@ TIPS
 	       use Mac::Glue;
 	       use Mac::Apps::Launch;
 	       $a = new Mac::Glue 'Acrobat Exchange';
-	       $a->launch;
-	       Hide($a->{ID});
+	       $a-&gtlaunch;
+	       Hide($a-&gt{ID});
 
 	       # now do your thing ...
 
@@ -731,7 +733,7 @@ GOTCHAS
 	   VERSIONS OF MACPERL.  Thank you.  :-)
 
        o   Do NOT send an event to the MacPerl application itself and expect a
-	   reply.  Instead, try "$macperlglue->REPLY(0)".  Similarly, do not
+	   reply.  Instead, try "$macperlglue-&gtREPLY(0)".  Similarly, do not
 	   drop MacPerl onto gluemac.  Instead, you can make a copy of the
 	   MacPerl application, and drop that on gluemac.
 
@@ -762,7 +764,7 @@ TODO / BUGS
        o   Handlers (on foo ...) ?
 
        o   Callbacks (some support exists, Cameron Ashby
-	   <cameron@evolution.com>, see Mac::AppleEvents::Simple) ?
+	   &ltcameron@evolution.com&gt, see Mac::AppleEvents::Simple) ?
 
        o   Add dynamic fetching of glues?
 
@@ -778,7 +780,7 @@ TODO / BUGS
        o   Update glueedit
 
 AUTHOR
-       Chris Nandor <pudge@pobox.com>, http://pudge.net/
+       Chris Nandor &ltpudge@pobox.com&gt, http://pudge.net/
 
        Copyright (c) 1998-2005 Chris Nandor.  All rights reserved.  This
        program is free software; you can redistribute it and/or modify it
@@ -805,6 +807,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2007-01-03			       Glue(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

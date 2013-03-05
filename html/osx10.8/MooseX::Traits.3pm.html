@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Often you want to create components that can be added to a class..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MooseX::Traits - automatically apply roles at object creation time</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MooseX::Traits(3)     User Contributed Perl Documentation    MooseX::Traits(3)
 
 
@@ -20,7 +22,7 @@ SYNOPSIS
 
 	 package Role;
 	 use Moose::Role;
-	 has foo => ( is => 'ro', isa => 'Int' required => 1 );
+	 has foo =&gt ( is =&gt 'ro', isa =&gt 'Int' required =&gt 1 );
 
        And a class:
 
@@ -30,13 +32,13 @@ SYNOPSIS
 
        Apply the roles to the class at "new" time:
 
-	 my $class = Class->with_traits('Role')->new( foo => 42 );
+	 my $class = Class-&gtwith_traits('Role')-&gtnew( foo =&gt 42 );
 
        Then use your customized class:
 
-	 $class->isa('Class'); # true
-	 $class->does('Role'); # true
-	 $class->foo; # 42
+	 $class-&gtisa('Class'); # true
+	 $class-&gtdoes('Role'); # true
+	 $class-&gtfoo; # 42
 
 DESCRIPTION
        Often you want to create components that can be added to a class
@@ -50,29 +52,29 @@ DESCRIPTION
        reasons.  It accepts a "traits" parameter, creates a new class with
        those traits, and then insantiates it.
 
-	  Class->new_with_traits( traits => [qw/Foo Bar/], foo => 42, bar => 1 )
+	  Class-&gtnew_with_traits( traits =&gt [qw/Foo Bar/], foo =&gt 42, bar =&gt 1 )
 
        returns exactly the same object as
 
-	  Class->with_traits(qw/Foo Bar/)->new( foo => 42, bar => 1 )
+	  Class-&gtwith_traits(qw/Foo Bar/)-&gtnew( foo =&gt 42, bar =&gt 1 )
 
        would.  But you can also store the result of "with_traits", and call
        other methods:
 
-	  my $c = Class->with_traits(qw/Foo Bar/);
-	  $c->new( foo => 42 );
-	  $c->whatever( foo => 1234 );
+	  my $c = Class-&gtwith_traits(qw/Foo Bar/);
+	  $c-&gtnew( foo =&gt 42 );
+	  $c-&gtwhatever( foo =&gt 1234 );
 
        And so on.
 
 METHODS
-       $class->with_traits( @traits )
+       $class-&gtwith_traits( @traits )
 	   Return a new class with the traits applied.	Use like:
 
-       $class->new_with_traits(%args, traits => \@traits)
+       $class-&gtnew_with_traits(%args, traits =&gt \@traits)
 	   "new_with_traits" can also take a hashref, e.g.:
 
-	     my $instance = $class->new_with_traits({ traits => \@traits, foo => 'bar' });
+	     my $instance = $class-&gtnew_with_traits({ traits =&gt \@traits, foo =&gt 'bar' });
 
 ATTRIBUTES YOUR CLASS GETS
        This role will add the following attributes to the consuming class.
@@ -86,53 +88,53 @@ ATTRIBUTES YOUR CLASS GETS
 
 	 package Another::Trait;
 	 use Moose::Role;
-	 has 'bar' => (
-	     is       => 'ro',
-	     isa      => 'Str',
-	     required => 1,
+	 has 'bar' =&gt (
+	     is       =&gt 'ro',
+	     isa      =&gt 'Str',
+	     required =&gt 1,
 	 );
 
 	 package Another::Class;
 	 use Moose;
 	 with 'MooseX::Traits';
-	 has '+_trait_namespace' => ( default => 'Another' );
+	 has '+_trait_namespace' =&gt ( default =&gt 'Another' );
 
-	 my $instance = Another::Class->new_with_traits(
-	     traits => ['Trait'], # "Another::Trait", not "Trait"
-	     bar    => 'bar',
+	 my $instance = Another::Class-&gtnew_with_traits(
+	     traits =&gt ['Trait'], # "Another::Trait", not "Trait"
+	     bar    =&gt 'bar',
 	 );
-	 $instance->does('Trait')	   # false
-	 $instance->does('Another::Trait') # true
+	 $instance-&gtdoes('Trait')	   # false
+	 $instance-&gtdoes('Another::Trait') # true
 
-	 my $instance2 = Another::Class->new_with_traits(
-	     traits => ['+Trait'], # "Trait", not "Another::Trait"
+	 my $instance2 = Another::Class-&gtnew_with_traits(
+	     traits =&gt ['+Trait'], # "Trait", not "Another::Trait"
 	 );
-	 $instance2->does('Trait')	    # true
-	 $instance2->does('Another::Trait') # false
+	 $instance2-&gtdoes('Trait')	    # true
+	 $instance2-&gtdoes('Another::Trait') # false
 
 AUTHORS and CONTRIBUTORS
-       Jonathan Rockway "<jrockway@cpan.org>"
+       Jonathan Rockway "&ltjrockway@cpan.org&gt"
 
-       Stevan Little "<stevan.little@iinteractive.com>"
+       Stevan Little "&ltstevan.little@iinteractive.com&gt"
 
-       Tomas Doran "<bobtfish@bobtfish.net>"
+       Tomas Doran "&ltbobtfish@bobtfish.net&gt"
 
-       Matt S. Trout "<mst@shadowcatsystems.co.uk>"
+       Matt S. Trout "&ltmst@shadowcatsystems.co.uk&gt"
 
-       Jesse Luehrs "<doy at tozt dot net>"
+       Jesse Luehrs "&ltdoy at tozt dot net&gt"
 
-       Shawn Moore "<sartak@bestpractical.com>"
+       Shawn Moore "&ltsartak@bestpractical.com&gt"
 
-       Florian Ragwitz "<rafl@debian.org>"
+       Florian Ragwitz "&ltrafl@debian.org&gt"
 
-       Chris Prather "<chris@prather.org>"
+       Chris Prather "&ltchris@prather.org&gt"
 
-       Yuval Kogman "<nothingmuch@woobling.org>"
+       Yuval Kogman "&ltnothingmuch@woobling.org&gt"
 
 COPYRIGHT AND LICENSE
        Copyright 2008 Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -140,6 +142,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2010-05-13		     MooseX::Traits(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

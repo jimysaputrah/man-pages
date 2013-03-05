@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Subroutine declarations and definitions may optionally have attribute..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>attributes - get/set subroutine or variable attributes</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 attributes(3pm)        Perl Programmers Reference Guide        attributes(3pm)
 
 
@@ -40,9 +42,9 @@ DESCRIPTION
 
 	   use attributes ();
 	   my ($x,@y,%z);
-	   attributes::->import(__PACKAGE__, \$x, 'Bent');
-	   attributes::->import(__PACKAGE__, \@y, 'Bent');
-	   attributes::->import(__PACKAGE__, \%z, 'Bent');
+	   attributes::-&gtimport(__PACKAGE__, \$x, 'Bent');
+	   attributes::-&gtimport(__PACKAGE__, \@y, 'Bent');
+	   attributes::-&gtimport(__PACKAGE__, \%z, 'Bent');
 	   ($x,@y,%z) = 1;
 
        Yes, that's a lot of expansion.
@@ -88,20 +90,20 @@ DESCRIPTION
        compile time with these parameters: 'attributes', the caller's package
        name, the reference to the code and 'method'.
 
-	 attributes->import( __PACKAGE__, \&foo, 'method' );
+	 attributes-&gtimport( __PACKAGE__, \&foo, 'method' );
 
        So you want to know what "import" actually does?
 
        First of all "import" gets the type of the third parameter ('CODE' in
        this case).  "attributes.pm" checks if there is a subroutine called
-       "MODIFY_<reftype>_ATTRIBUTES" in the caller's namespace (here: 'main').
+       "MODIFY_&ltreftype&gt_ATTRIBUTES" in the caller's namespace (here: 'main').
        In this case a subroutine "MODIFY_CODE_ATTRIBUTES" is required. Then
        this method is called to check if you have used a "bad attribute".  The
        subroutine call in this example would look like
 
 	 MODIFY_CODE_ATTRIBUTES( 'main', \&foo, 'method' );
 
-       "MODIFY_<reftype>_ATTRIBUTES" has to return a list of all "bad
+       "MODIFY_&ltreftype&gt_ATTRIBUTES" has to return a list of all "bad
        attributes".  If there are any bad attributes "import" croaks.
 
        (See "Package-specific Attribute Handling" below.)
@@ -252,7 +254,7 @@ EXAMPLES
 	   Effect:
 
 	       use attributes ();
-	       attributes::->import(Canine => \$spot, "Watchful");
+	       attributes::-&gtimport(Canine =&gt \$spot, "Watchful");
 
        2.  Code:
 
@@ -262,7 +264,7 @@ EXAMPLES
 	   Effect:
 
 	       use attributes ();
-	       attributes::->import(Felis => \$cat, "Nervous");
+	       attributes::-&gtimport(Felis =&gt \$cat, "Nervous");
 
        3.  Code:
 
@@ -271,7 +273,7 @@ EXAMPLES
 
 	   Effect:
 
-	       use attributes X => \&foo, "lvalue";
+	       use attributes X =&gt \&foo, "lvalue";
 
        4.  Code:
 
@@ -280,7 +282,7 @@ EXAMPLES
 
 	   Effect:
 
-	       use attributes Y => \&Y::x, "lvalue";
+	       use attributes Y =&gt \&Y::x, "lvalue";
 
        5.  Code:
 
@@ -295,7 +297,7 @@ EXAMPLES
 
 	   Effect:
 
-	       use attributes X => \&X::foo, "lvalue";
+	       use attributes X =&gt \&X::foo, "lvalue";
 
        This last example is purely for purposes of completeness.  You should
        not be trying to mess with the attributes of something in a package
@@ -348,6 +350,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-06-07		       attributes(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""APR::URI" allows you to parse URI strings, manipulate each of the URI..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>APR::URI - Perl API for URI manipulations</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apache_mod_perlapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::APR::URI(3)
 
 
@@ -21,32 +23,32 @@ Synopsis
 	 my $url = 'http://user:pass@example.com:80/foo?bar#item5';
 
 	 # parse and break the url into components
-	 my $parsed = APR::URI->parse($r->pool, $url);
-	 print $parsed->scheme;
-	 print $parsed->user;
-	 print $parsed->password;
-	 print $parsed->hostname;
-	 print $parsed->port;
-	 print $parsed->path;
-	 print $parsed->rpath;
-	 print $parsed->query;
-	 print $parsed->fragment;
+	 my $parsed = APR::URI-&gtparse($r-&gtpool, $url);
+	 print $parsed-&gtscheme;
+	 print $parsed-&gtuser;
+	 print $parsed-&gtpassword;
+	 print $parsed-&gthostname;
+	 print $parsed-&gtport;
+	 print $parsed-&gtpath;
+	 print $parsed-&gtrpath;
+	 print $parsed-&gtquery;
+	 print $parsed-&gtfragment;
 
 	 # reconstruct the url, after changing some components and completely
 	 # removing other
-	 $parsed->scheme($new_scheme);
-	 $parsed->user(undef);
-	 $parsed->password(undef);
-	 $parsed->hostname($new_hostname);
-	 $parsed->port($new_port);
-	 $parsed->path($new_path);
-	 $parsed->query(undef);
-	 $parsed->fragment(undef);
-	 print $parsed->unparse;
+	 $parsed-&gtscheme($new_scheme);
+	 $parsed-&gtuser(undef);
+	 $parsed-&gtpassword(undef);
+	 $parsed-&gthostname($new_hostname);
+	 $parsed-&gtport($new_port);
+	 $parsed-&gtpath($new_path);
+	 $parsed-&gtquery(undef);
+	 $parsed-&gtfragment(undef);
+	 print $parsed-&gtunparse;
 
 	 # get the password field too (by default it's not revealed)
-	 use APR::Const -compile => qw(URI_UNP_REVEALPASSWORD);
-	 print $parsed->unparse(APR::Const::URI_UNP_REVEALPASSWORD);
+	 use APR::Const -compile =&gt qw(URI_UNP_REVEALPASSWORD);
+	 print $parsed-&gtunparse(APR::Const::URI_UNP_REVEALPASSWORD);
 
 	 # what the default port for the ftp protocol?
 	 my $ftp_port = APR::URI::port_of_scheme("ftp");
@@ -61,17 +63,17 @@ Description
        was:
 
 	 my $uri = 'http://example.com/foo?bar#item5';
-	 my $parsed = APR::URI->parse($r->pool, $uri);
+	 my $parsed = APR::URI-&gtparse($r-&gtpool, $uri);
 
        Now you no longer want to the query and fragment components in the
        final url. If you do:
 
-	 $parsed->fragment('');
-	 $parsed->query('');
+	 $parsed-&gtfragment('');
+	 $parsed-&gtquery('');
 
        followed by:
 
-	 my $new_uri = parsed->unparse;
+	 my $new_uri = parsed-&gtunparse;
 
        the resulting URI will be:
 
@@ -81,12 +83,12 @@ Description
        rid of the separators, you must completely unset the fields you don't
        want to see. So, if you do:
 
-	 $parsed->fragment(undef);
-	 $parsed->query(undef);
+	 $parsed-&gtfragment(undef);
+	 $parsed-&gtquery(undef);
 
        followed by:
 
-	 my $new_uri = parsed->unparse;
+	 my $new_uri = parsed-&gtunparse;
 
        the resulting URI will be:
 
@@ -95,8 +97,8 @@ Description
        As mentioned earlier the same goes for return values, so continuing
        this example:
 
-	 my $new_fragment = $parsed->fragment();
-	 my $new_query	  = $parsed->query();
+	 my $new_fragment = $parsed-&gtfragment();
+	 my $new_query	  = $parsed-&gtquery();
 
        Both values now contain "undef", therefore you must be careful when
        using the return values, when you use them, as you may get warnings.
@@ -110,7 +112,7 @@ API
    "fragment"
        Get/set trailing "#fragment" string
 
-	 $oldval = $parsed->fragment($newval);
+	 $oldval = $parsed-&gtfragment($newval);
 
        obj: $parsed ( "APR::URI object" )
        opt arg1: $newval ( string or undef )
@@ -120,7 +122,7 @@ API
    "hostinfo"
        Get/set combined "[user[:password]@]host[:port]"
 
-	 $oldval = $parsed->hostinfo($newval);
+	 $oldval = $parsed-&gthostinfo($newval);
 
        obj: $parsed ( "APR::URI object" )
        opt arg1: $newval ( string or undef )
@@ -136,7 +138,7 @@ API
    "hostname"
        Get/set hostname
 
-	 $oldval = $parsed->hostname($newval);
+	 $oldval = $parsed-&gthostname($newval);
 
        obj: $parsed ( "APR::URI object" )
        opt arg1: $newval ( string or undef )
@@ -146,7 +148,7 @@ API
    "password"
        Get/set password (as in http://user:password@host:port/)
 
-	 $oldval = $parsed->password($newval);
+	 $oldval = $parsed-&gtpassword($newval);
 
        obj: $parsed ( "APR::URI object" )
        opt arg1: $newval ( string or undef )
@@ -156,7 +158,7 @@ API
    "parse"
        Parse the URI string into URI components
 
-	 $parsed = APR::URI->parse($pool, $uri);
+	 $parsed = APR::URI-&gtparse($pool, $uri);
 
        obj: $parsed ( "APR::URI object or class" )
        arg1: $pool ( string ) ( "APR::Pool object" )
@@ -177,7 +179,7 @@ API
    "path"
        Get/set the request path
 
-	 $oldval = $parsed->path($newval);
+	 $oldval = $parsed-&gtpath($newval);
 
        obj: $parsed ( "APR::URI object" )
        opt arg1: $newval ( string or undef )
@@ -189,7 +191,7 @@ API
    "rpath"
        Gets the "path" minus the "path_info"
 
-	 $rpath =  $parsed->rpath();
+	 $rpath =  $parsed-&gtrpath();
 
        obj: $parsed ( "APR::URI object" )
        opt arg1: $newval ( string or undef )
@@ -201,7 +203,7 @@ API
    "port"
        Get/set port number
 
-	 $oldval = $parsed->port($newval);
+	 $oldval = $parsed-&gtport($newval);
 
        obj: $parsed ( "APR::URI object" )
        opt arg1: $newval ( number or string or undef )
@@ -230,7 +232,7 @@ API
        Get/set the query string (the part starting after '?' and all the way
        till the end or the '#fragment' part if the latter exists).
 
-	 $oldval = $parsed->query($newval);
+	 $oldval = $parsed-&gtquery($newval);
 
        obj: $parsed ( "APR::URI object" )
        opt arg1: $newval ( string or undef )
@@ -240,7 +242,7 @@ API
    "scheme"
        Get/set the protocol scheme ("http", "ftp", ...)
 
-	 $oldval = $parsed->scheme($newval);
+	 $oldval = $parsed-&gtscheme($newval);
 
        obj: $parsed ( "APR::URI object" )
        opt arg1: $newval ( string or undef )
@@ -250,7 +252,7 @@ API
    "user"
        Get/set user name (as in http://user:password@host:port/)
 
-	 $oldval = $parsed->user($newval);
+	 $oldval = $parsed-&gtuser($newval);
 
        obj: $parsed ( "APR::URI object" )
        opt arg1: $newval ( string or undef )
@@ -260,8 +262,8 @@ API
    "unparse"
        Unparse the URI components back into a URI string
 
-	 $new_uri = $parsed->unparse();
-	 $new_uri = $parsed->unparse($flags);
+	 $new_uri = $parsed-&gtunparse();
+	 $new_uri = $parsed-&gtunparse($flags);
 
        obj: $parsed ( "APR::URI object" )
        opt arg1: $flags ( the APR::Const :uri constants )
@@ -281,7 +283,7 @@ API
 
        To import all URI constants you could do:
 
-	 use APR::Const -compile => qw(:uri);
+	 use APR::Const -compile =&gt qw(:uri);
 
        but there is a significant amount of them, most irrelevant to this
        method. Therefore you probably don't want to do that. Instead specify
@@ -327,14 +329,14 @@ API
 
 	 use APR::URI ();
 	 my $url = 'http://user:pass@example.com:80/foo?bar#item5';
-	 my $parsed = APR::URI->parse($r->pool, $url);
+	 my $parsed = APR::URI-&gtparse($r-&gtpool, $url);
 
        deparse it back including and excluding parts, using different values
        for the optional "flags" argument:
 
        o   Show all but the "password" fields:
 
-	     print $parsed->unparse;
+	     print $parsed-&gtunparse;
 
 	   Prints:
 
@@ -345,8 +347,8 @@ API
 
        o   Include the "password" field (by default it's not revealed)
 
-	     use APR::Const -compile => qw(URI_UNP_REVEALPASSWORD);
-	     print $parsed->unparse(APR::Const::URI_UNP_REVEALPASSWORD);
+	     use APR::Const -compile =&gt qw(URI_UNP_REVEALPASSWORD);
+	     print $parsed-&gtunparse(APR::Const::URI_UNP_REVEALPASSWORD);
 
 	   Prints:
 
@@ -354,9 +356,9 @@ API
 
        o   Show all fields but the last three, "path", "query" and "fragment":
 
-	     use APR::Const -compile => qw(URI_UNP_REVEALPASSWORD
+	     use APR::Const -compile =&gt qw(URI_UNP_REVEALPASSWORD
 					   APR::Const::URI_UNP_OMITPATHINFO);
-	     print $parsed->unparse(
+	     print $parsed-&gtunparse(
 		 APR::Const::URI_UNP_REVEALPASSWORD|URI_UNP_OMITPATHINFO);
 
 	   Prints:
@@ -376,6 +378,6 @@ Authors
 
 
 perl v5.12.4   apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::APR::URI(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

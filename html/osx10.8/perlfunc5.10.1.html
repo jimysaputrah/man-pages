@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The functions in this section can serve as terms in an expression...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlfunc - Perl builtin functions</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLFUNC(1)	       Perl Programmers Reference Guide 	   PERLFUNC(1)
 
 
@@ -281,7 +283,7 @@ DESCRIPTION
 
 	       Example:
 
-		   while (<>) {
+		   while (&lt&gt) {
 		       chomp;
 		       next unless -f $_;      # ignore specials
 		       #...
@@ -325,7 +327,7 @@ DESCRIPTION
 	       The "-T" and "-B" switches work as follows.  The first block or
 	       so of the file is examined for odd characters such as strange
 	       control codes or characters with the high bit set.  If too many
-	       strange characters (>30%) are found, it's a "-B" file;
+	       strange characters (&gt30%) are found, it's a "-B" file;
 	       otherwise it's a "-T" file.  Also, any file containing null in
 	       the first block is considered a binary file.  If "-T" or "-B"
 	       is used on a filehandle, the current IO buffer is examined
@@ -613,7 +615,7 @@ DESCRIPTION
 	       Be aware that the optimizer might have optimized call frames
 	       away before "caller" had a chance to get the information.  That
 	       means that caller(N) might not return information about the
-	       call frame you expect it do, for "N > 1".  In particular,
+	       call frame you expect it do, for "N &gt 1".  In particular,
 	       @DB::args might have information from the previous time
 	       "caller" was called.
 
@@ -653,7 +655,7 @@ DESCRIPTION
 	       handles must be passed as globs or references to be recognized.
 	       Barewords are considered file names.
 
-		   open(my $fh, "<", "foo");
+		   open(my $fh, "&lt", "foo");
 		   my $perm = (stat $fh)[2] & 07777;
 		   chmod($perm | 0600, $fh);
 
@@ -679,7 +681,7 @@ DESCRIPTION
 	       integer or the like, see perlvar) chomp() won't remove
 	       anything.  If VARIABLE is omitted, it chomps $_.  Example:
 
-		   while (<>) {
+		   while (&lt&gt) {
 		       chomp;  # avoid \n on last field
 		       @array = split(/:/);
 		       # ...
@@ -692,7 +694,7 @@ DESCRIPTION
 	       assignment:
 
 		   chomp($cwd = `pwd`);
-		   chomp($answer = <STDIN>);
+		   chomp($answer = &ltSTDIN&gt);
 
 	       If you chomp a list, each element is chomped, and the total
 	       number of characters removed is returned.
@@ -743,9 +745,9 @@ DESCRIPTION
 	       file:
 
 		   print "User: ";
-		   chomp($user = <STDIN>);
+		   chomp($user = &ltSTDIN&gt);
 		   print "Files: ";
-		   chomp($pattern = <STDIN>);
+		   chomp($pattern = &ltSTDIN&gt);
 
 		   ($login,$pass,$uid,$gid) = getpwnam($user)
 		       or die "$user not in passwd file";
@@ -822,7 +824,7 @@ DESCRIPTION
 
 	       Example:
 
-		   open(OUTPUT, '|sort >foo')  # pipe to sort
+		   open(OUTPUT, '|sort &gtfoo')  # pipe to sort
 		       or die "Can't start sort: $!";
 		   #... 		       # print stuff to output
 		   close OUTPUT 	       # wait for sort to finish
@@ -939,11 +941,11 @@ DESCRIPTION
 	       Here's an example that makes sure that whoever runs this
 	       program knows their password:
 
-		   $pwd = (getpwuid($<))[1];
+		   $pwd = (getpwuid($&lt))[1];
 
 		   system "stty -echo";
 		   print "Password: ";
-		   chomp($word = <STDIN>);
+		   chomp($word = &ltSTDIN&gt);
 		   print "\n";
 		   system "stty echo";
 
@@ -1094,7 +1096,7 @@ DESCRIPTION
 	       get the value of the last element deleted (or the undefined
 	       value if that element did not exist).
 
-		   %hash = (foo => 11, bar => 22, baz => 33);
+		   %hash = (foo =&gt 11, bar =&gt 22, baz =&gt 33);
 		   $scalar = delete $hash{foo}; 	    # $scalar is 11
 		   $scalar = delete @hash{qw(foo bar)};     # $scalar is 22
 		   @array  = delete @hash{qw(foo bar baz)}; # @array  is (undef,undef,33)
@@ -1141,17 +1143,17 @@ DESCRIPTION
 	       the final operation is a hash element, array element,  hash
 	       slice, or array slice lookup:
 
-		   delete $ref->[$x][$y]{$key};
-		   delete @{$ref->[$x][$y]}{$key1, $key2, @morekeys};
+		   delete $ref-&gt[$x][$y]{$key};
+		   delete @{$ref-&gt[$x][$y]}{$key1, $key2, @morekeys};
 
-		   delete $ref->[$x][$y][$index];
-		   delete @{$ref->[$x][$y]}[$index1, $index2, @moreindices];
+		   delete $ref-&gt[$x][$y][$index];
+		   delete @{$ref-&gt[$x][$y]}[$index1, $index2, @moreindices];
 
        die LIST
 	       Outside an "eval", prints the value of LIST to "STDERR" and
 	       exits with the current value of $! (errno).  If $! is 0, exits
-	       with the value of "($? >> 8)" (backtick `command` status).  If
-	       "($? >> 8)" is 0, exits with 255.  Inside an "eval()," the
+	       with the value of "($? &gt&gt 8)" (backtick `command` status).  If
+	       "($? &gt&gt 8)" is 0, exits with 255.  Inside an "eval()," the
 	       error message is stuffed into $@ and the "eval" is terminated
 	       with the undefined value.  This makes "die" the way to raise an
 	       exception.
@@ -1193,7 +1195,7 @@ DESCRIPTION
 	       If LIST is empty and $@ contains an object reference that has a
 	       "PROPAGATE" method, that method will be called with additional
 	       file and line number parameters.  The return value replaces the
-	       value in $@.  i.e. as if "$@ = eval { $@->PROPAGATE(__FILE__,
+	       value in $@.  i.e. as if "$@ = eval { $@-&gtPROPAGATE(__FILE__,
 	       __LINE__) };" were called.
 
 	       If $@ is empty then the string "Died" is used.
@@ -1213,9 +1215,9 @@ DESCRIPTION
 
 		   use Scalar::Util 'blessed';
 
-		   eval { ... ; die Some::Module::Exception->new( FOO => "bar" ) };
+		   eval { ... ; die Some::Module::Exception-&gtnew( FOO =&gt "bar" ) };
 		   if (my $ev_err = $@) {
-		       if (blessed($ev_err) && $ev_err->isa("Some::Module::Exception")) {
+		       if (blessed($ev_err) && $ev_err-&gtisa("Some::Module::Exception")) {
 			   # handle Some::Module::Exception
 		       }
 		       else {
@@ -1377,20 +1379,20 @@ DESCRIPTION
 	       An "eof" without an argument uses the last file read.  Using
 	       "eof()" with empty parentheses is very different.  It refers to
 	       the pseudo file formed from the files listed on the command
-	       line and accessed via the "<>" operator.  Since "<>" isn't
+	       line and accessed via the "&lt&gt" operator.  Since "&lt&gt" isn't
 	       explicitly opened, as a normal filehandle is, an "eof()" before
-	       "<>" has been used will cause @ARGV to be examined to determine
-	       if input is available.	Similarly, an "eof()" after "<>" has
+	       "&lt&gt" has been used will cause @ARGV to be examined to determine
+	       if input is available.	Similarly, an "eof()" after "&lt&gt" has
 	       returned end-of-file will assume you are processing another
 	       @ARGV list, and if you haven't set @ARGV, will read input from
 	       "STDIN"; see "I/O Operators" in perlop.
 
-	       In a "while (<>)" loop, "eof" or "eof(ARGV)" can be used to
+	       In a "while (&lt&gt)" loop, "eof" or "eof(ARGV)" can be used to
 	       detect the end of each file, "eof()" will only detect the end
 	       of the last file.  Examples:
 
 		   # reset line numbering on each input file
-		   while (<>) {
+		   while (&lt&gt) {
 		       next if /^\s*#/;        # skip comments
 		       print "$.\t$_";
 		   } continue {
@@ -1398,7 +1400,7 @@ DESCRIPTION
 		   }
 
 		   # insert dashes just before last line of last file
-		   while (<>) {
+		   while (&lt&gt) {
 		       if (eof()) {	       # check for end of last file
 			   print "--------------\n";
 		       }
@@ -1670,23 +1672,23 @@ DESCRIPTION
 	       the final operation is a hash or array key lookup or subroutine
 	       name:
 
-		   if (exists $ref->{A}->{B}->{$key})  { }
+		   if (exists $ref-&gt{A}-&gt{B}-&gt{$key})  { }
 		   if (exists $hash{A}{B}{$key})       { }
 
-		   if (exists $ref->{A}->{B}->[$ix])   { }
+		   if (exists $ref-&gt{A}-&gt{B}-&gt[$ix])   { }
 		   if (exists $hash{A}{B}[$ix])        { }
 
-		   if (exists &{$ref->{A}{B}{$key}})   { }
+		   if (exists &{$ref-&gt{A}{B}{$key}})   { }
 
 	       Although the deepest nested array or hash will not spring into
 	       existence just because its existence was tested, any
-	       intervening ones will.  Thus "$ref->{"A"}" and
-	       "$ref->{"A"}->{"B"}" will spring into existence due to the
+	       intervening ones will.  Thus "$ref-&gt{"A"}" and
+	       "$ref-&gt{"A"}-&gt{"B"}" will spring into existence due to the
 	       existence test for the $key element above.  This happens
 	       anywhere the arrow operator is used, including even:
 
 		   undef $ref;
-		   if (exists $ref->{"Some key"})      { }
+		   if (exists $ref-&gt{"Some key"})      { }
 		   print $ref;		   # prints HASH(0x80d3d5c)
 
 	       This surprising autovivification in what does not at first--or
@@ -1703,7 +1705,7 @@ DESCRIPTION
        exit    Evaluates EXPR and exits immediately with that value.
 	       Example:
 
-		   $ans = <STDIN>;
+		   $ans = &ltSTDIN&gt;
 		   exit 0 if $ans =~ /^[Xx]/;
 
 	       See also "die".	If EXPR is omitted, exits with 0 status.  The
@@ -1852,7 +1854,7 @@ DESCRIPTION
 		       flock($fh, LOCK_UN) or die "Cannot unlock mailbox - $!\n";
 		   }
 
-		   open(my $mbox, ">>", "/usr/spool/mail/$ENV{'USER'}")
+		   open(my $mbox, "&gt&gt", "/usr/spool/mail/$ENV{'USER'}")
 			   or die "Can't open mailbox: $!";
 
 		   lock($mbox);
@@ -1899,7 +1901,7 @@ DESCRIPTION
 	       example:
 
 		   format Something =
-		       Test: @<<<<<<<< @||||| @>>>>>
+		       Test: @&lt&lt&lt&lt&lt&lt&lt&lt @||||| @&gt&gt&gt&gt&gt
 			     $str,     $%,    '$' . int($num)
 		   .
 
@@ -1940,7 +1942,7 @@ DESCRIPTION
 	       something more like:
 
 		   if ($BSD_STYLE) {
-		       system "stty cbreak </dev/tty >/dev/tty 2>&1";
+		       system "stty cbreak &lt/dev/tty &gt/dev/tty 2&gt&1";
 		   }
 		   else {
 		       system "stty", '-icanon', 'eol', "\001";
@@ -1949,7 +1951,7 @@ DESCRIPTION
 		   $key = getc(STDIN);
 
 		   if ($BSD_STYLE) {
-		       system "stty -cbreak </dev/tty >/dev/tty 2>&1";
+		       system "stty -cbreak &lt/dev/tty &gt/dev/tty 2&gt&1";
 		   }
 		   else {
 		       system "stty", 'icanon', 'eol', '^@'; # ASCII null
@@ -1969,7 +1971,7 @@ DESCRIPTION
 	       on most systems returns the current login from /etc/utmp, if
 	       any.  If null, use "getpwuid".
 
-		   $login = getlogin || getpwuid($<) || "Kilroy";
+		   $login = getlogin || getpwuid($&lt) || "Kilroy";
 
 	       Do not consider "getlogin" for authentication: it is not as
 	       secure as "getpwuid".
@@ -2129,7 +2131,7 @@ DESCRIPTION
 		       $ip_address = inet_ntoa($packed_ip);
 		   }
 
-	       Make sure <gethostbyname()> is called in SCALAR context and
+	       Make sure &ltgethostbyname()&gt is called in SCALAR context and
 	       that its return value is checked for definedness.
 
 	       If you get tired of remembering which element of the return
@@ -2142,7 +2144,7 @@ DESCRIPTION
 
 		  use File::stat;
 		  use User::pwent;
-		  $is_his = (stat($filename)->uid == pwent($whoever)->uid);
+		  $is_his = (stat($filename)-&gtuid == pwent($whoever)-&gtuid);
 
 	       Even though it looks like they're the same method calls (uid),
 	       they aren't, because a "File::stat" object is different from a
@@ -2200,8 +2202,8 @@ DESCRIPTION
 	       /bin/csh would do. In scalar context, glob iterates through
 	       such filename expansions, returning undef when the list is
 	       exhausted. This is the internal function implementing the
-	       "<*.c>" operator, but you can use it directly. If EXPR is
-	       omitted, $_ is used.  The "<*.c>" operator is discussed in more
+	       "&lt*.c&gt" operator, but you can use it directly. If EXPR is
+	       omitted, $_ is used.  The "&lt*.c&gt" operator is discussed in more
 	       detail in "I/O Operators" in perlop.
 
 	       Note that "glob" will split its arguments on whitespace,
@@ -2357,7 +2359,7 @@ DESCRIPTION
 	       to get the correct function definitions.  If sys/ioctl.ph
 	       doesn't exist or doesn't have the correct definitions you'll
 	       have to roll your own, based on your C header files such as
-	       <sys/ioctl.h>.  (There is a Perl script called h2ph that comes
+	       &ltsys/ioctl.h&gt.  (There is a Perl script called h2ph that comes
 	       with the Perl kit that may help you in this, but it's
 	       nontrivial.)  SCALAR will be read and/or written depending on
 	       the FUNCTION--a pointer to the string value of SCALAR will be
@@ -2432,7 +2434,7 @@ DESCRIPTION
 	       To sort a hash by value, you'll need to use a "sort" function.
 	       Here's a descending numeric sort of a hash by its values:
 
-		   foreach $key (sort { $hash{$b} <=> $hash{$a} } keys %hash) {
+		   foreach $key (sort { $hash{$b} &lt=&gt $hash{$a} } keys %hash) {
 		       printf "%4d %s\n", $hash{$key}, $key;
 		   }
 
@@ -2485,7 +2487,7 @@ DESCRIPTION
 	       LABEL is omitted, the command refers to the innermost enclosing
 	       loop.  The "continue" block, if any, is not executed:
 
-		   LINE: while (<STDIN>) {
+		   LINE: while (&ltSTDIN&gt) {
 		       last LINE if /^$/;      # exit when done with header
 		       #...
 		   }
@@ -2684,7 +2686,7 @@ DESCRIPTION
 	       translates a list of numbers to the corresponding characters.
 	       And
 
-		   %hash = map { get_a_key_for($_) => $_ } @array;
+		   %hash = map { get_a_key_for($_) =&gt $_ } @array;
 
 	       is just a funny way to write
 
@@ -2815,7 +2817,7 @@ DESCRIPTION
        next    The "next" command is like the "continue" statement in C; it
 	       starts the next iteration of the loop:
 
-		   LINE: while (<STDIN>) {
+		   LINE: while (&ltSTDIN&gt) {
 		       next LINE if /^#/;      # discard comments
 		       #...
 		   }
@@ -2873,11 +2875,11 @@ DESCRIPTION
 
 	       Simple examples to open a file for reading:
 
-		   open(my $fh, '<', "input.txt") or die $!;
+		   open(my $fh, '&lt', "input.txt") or die $!;
 
 	       and for writing:
 
-		   open(my $fh, '>', "output.txt") or die $!;
+		   open(my $fh, '&gt', "output.txt") or die $!;
 
 	       (The following is a comprehensive reference to open(): for a
 	       gentler introduction you may consider perlopentut.)
@@ -2896,15 +2898,15 @@ DESCRIPTION
 	       open.)
 
 	       If three or more arguments are specified then the mode of
-	       opening and the file name are separate. If MODE is '<' or
-	       nothing, the file is opened for input.  If MODE is '>', the
+	       opening and the file name are separate. If MODE is '&lt' or
+	       nothing, the file is opened for input.  If MODE is '&gt', the
 	       file is truncated and opened for output, being created if
-	       necessary.  If MODE is '>>', the file is opened for appending,
+	       necessary.  If MODE is '&gt&gt', the file is opened for appending,
 	       again being created if necessary.
 
-	       You can put a '+' in front of the '>' or '<' to indicate that
-	       you want both read and write access to the file; thus '+<' is
-	       almost always preferred for read/write updates--the '+>' mode
+	       You can put a '+' in front of the '&gt' or '&lt' to indicate that
+	       you want both read and write access to the file; thus '+&lt' is
+	       almost always preferred for read/write updates--the '+&gt' mode
 	       would clobber the file first.  You can't usually use either
 	       read-write mode for updating textfiles, since they have
 	       variable length records.  See the -i switch in perlrun for a
@@ -2917,7 +2919,7 @@ DESCRIPTION
 	       In the 2-arguments (and 1-argument) form of the call the mode
 	       and filename should be concatenated (in this order), possibly
 	       separated by spaces.  It is possible to omit the mode in these
-	       forms if the mode is '<'.
+	       forms if the mode is '&lt'.
 
 	       If the filename begins with '|', the filename is interpreted as
 	       a command to which output is to be piped, and if the filename
@@ -2946,14 +2948,14 @@ DESCRIPTION
 	       "layers" may give extra LIST arguments meaning.
 
 	       In the 2-arguments (and 1-argument) form opening '-' opens
-	       STDIN and opening '>-' opens STDOUT.
+	       STDIN and opening '&gt-' opens STDOUT.
 
 	       You may use the three-argument form of open to specify IO
 	       "layers" (sometimes also referred to as "disciplines") to be
 	       applied to the handle that affect how the input and output are
 	       processed (see open and PerlIO for more details). For example
 
-		 open(my $fh, "<:encoding(UTF-8)", "file")
+		 open(my $fh, "&lt:encoding(UTF-8)", "file")
 
 	       will open the UTF-8 encoded file containing Unicode characters,
 	       see perluniintro. Note that if layers are specified in the
@@ -2986,10 +2988,10 @@ DESCRIPTION
 	       As a special case the 3-arg form with a read/write mode and the
 	       third argument being "undef":
 
-		   open(my $tmp, "+>", undef) or die ...
+		   open(my $tmp, "+&gt", undef) or die ...
 
 	       opens a filehandle to an anonymous temporary file.  Also using
-	       "+<" works for symmetry, but you really should consider writing
+	       "+&lt" works for symmetry, but you really should consider writing
 	       something to the temporary file first.  You will need to seek()
 	       to do the reading.
 
@@ -2997,40 +2999,40 @@ DESCRIPTION
 	       you've changed this (i.e. Configure -Uuseperlio), you can open
 	       file handles to "in memory" files held in Perl scalars via:
 
-		   open($fh, '>', \$variable) || ..
+		   open($fh, '&gt', \$variable) || ..
 
 	       Though if you try to re-open "STDOUT" or "STDERR" as an "in
 	       memory" file, you have to close it first:
 
 		   close STDOUT;
-		   open STDOUT, '>', \$variable or die "Can't open STDOUT: $!";
+		   open STDOUT, '&gt', \$variable or die "Can't open STDOUT: $!";
 
 	       Examples:
 
 		   $ARTICLE = 100;
 		   open ARTICLE or die "Can't find article $ARTICLE: $!\n";
-		   while (<ARTICLE>) {...
+		   while (&ltARTICLE&gt) {...
 
-		   open(LOG, '>>/usr/spool/news/twitlog');     # (log is reserved)
+		   open(LOG, '&gt&gt/usr/spool/news/twitlog');     # (log is reserved)
 		   # if the open fails, output is discarded
 
-		   open(my $dbase, '+<', 'dbase.mine')	       # open for update
+		   open(my $dbase, '+&lt', 'dbase.mine')	       # open for update
 		       or die "Can't open 'dbase.mine' for update: $!";
 
-		   open(my $dbase, '+<dbase.mine')		       # ditto
+		   open(my $dbase, '+&ltdbase.mine')		       # ditto
 		       or die "Can't open 'dbase.mine' for update: $!";
 
-		   open(ARTICLE, '-|', "caesar <$article")     # decrypt article
+		   open(ARTICLE, '-|', "caesar &lt$article")     # decrypt article
 		       or die "Can't start caesar: $!";
 
-		   open(ARTICLE, "caesar <$article |")	       # ditto
+		   open(ARTICLE, "caesar &lt$article |")	       # ditto
 		       or die "Can't start caesar: $!";
 
-		   open(EXTRACT, "|sort >Tmp$$")	       # $$ is our process id
+		   open(EXTRACT, "|sort &gtTmp$$")	       # $$ is our process id
 		       or die "Can't start sort: $!";
 
 		   # in memory files
-		   open(MEMORY,'>', \$var)
+		   open(MEMORY,'&gt', \$var)
 		       or die "Can't open memory file: $!";
 		   print MEMORY "foo!\n";		       # output will end up in $var
 
@@ -3049,7 +3051,7 @@ DESCRIPTION
 		       }
 
 		       local $_;
-		       while (<$input>) {	       # note use of indirection
+		       while (&lt$input&gt) {	       # note use of indirection
 			   if (/^#include "(.*)"/) {
 			       process($1, $input);
 			       next;
@@ -3061,10 +3063,10 @@ DESCRIPTION
 	       See perliol for detailed info on PerlIO.
 
 	       You may also, in the Bourne shell tradition, specify an EXPR
-	       beginning with '>&', in which case the rest of the string is
+	       beginning with '&gt&', in which case the rest of the string is
 	       interpreted as the name of a filehandle (or file descriptor, if
 	       numeric) to be duped (as dup(2)) and opened.  You may use "&"
-	       after ">", ">>", "<", "+>", "+>>", and "+<".  The mode you
+	       after "&gt", "&gt&gt", "&lt", "+&gt", "+&gt&gt", and "+&lt".  The mode you
 	       specify should match the mode of the original filehandle.
 	       (Duping a filehandle does not take into account any existing
 	       contents of IO buffers.) If you use the 3-arg form then you can
@@ -3075,11 +3077,11 @@ DESCRIPTION
 	       and "STDERR" using various methods:
 
 		   #!/usr/bin/perl
-		   open my $oldout, ">&STDOUT"	   or die "Can't dup STDOUT: $!";
-		   open OLDERR,     ">&", \*STDERR or die "Can't dup STDERR: $!";
+		   open my $oldout, "&gt&STDOUT"	   or die "Can't dup STDOUT: $!";
+		   open OLDERR,     "&gt&", \*STDERR or die "Can't dup STDERR: $!";
 
-		   open STDOUT, '>', "foo.out" or die "Can't redirect STDOUT: $!";
-		   open STDERR, ">&STDOUT"     or die "Can't dup STDOUT: $!";
+		   open STDOUT, '&gt', "foo.out" or die "Can't redirect STDOUT: $!";
+		   open STDERR, "&gt&STDOUT"     or die "Can't dup STDOUT: $!";
 
 		   select STDERR; $| = 1;      # make unbuffered
 		   select STDOUT; $| = 1;      # make unbuffered
@@ -3087,39 +3089,39 @@ DESCRIPTION
 		   print STDOUT "stdout 1\n";  # this works for
 		   print STDERR "stderr 1\n";  # subprocesses too
 
-		   open STDOUT, ">&", $oldout or die "Can't dup \$oldout: $!";
-		   open STDERR, ">&OLDERR"    or die "Can't dup OLDERR: $!";
+		   open STDOUT, "&gt&", $oldout or die "Can't dup \$oldout: $!";
+		   open STDERR, "&gt&OLDERR"    or die "Can't dup OLDERR: $!";
 
 		   print STDOUT "stdout 2\n";
 		   print STDERR "stderr 2\n";
 
-	       If you specify '<&=X', where "X" is a file descriptor number or
+	       If you specify '&lt&=X', where "X" is a file descriptor number or
 	       a filehandle, then Perl will do an equivalent of C's "fdopen"
 	       of that file descriptor (and not call dup(2)); this is more
 	       parsimonious of file descriptors.  For example:
 
 		   # open for input, reusing the fileno of $fd
-		   open(FILEHANDLE, "<&=$fd")
+		   open(FILEHANDLE, "&lt&=$fd")
 
 	       or
 
-		   open(FILEHANDLE, "<&=", $fd)
+		   open(FILEHANDLE, "&lt&=", $fd)
 
 	       or
 
 		   # open for append, using the fileno of OLDFH
-		   open(FH, ">>&=", OLDFH)
+		   open(FH, "&gt&gt&=", OLDFH)
 
 	       or
 
-		   open(FH, ">>&=OLDFH")
+		   open(FH, "&gt&gt&=OLDFH")
 
 	       Being parsimonious on filehandles is also useful (besides being
 	       parsimonious) for example when something is dependent on file
 	       descriptors, like for example locking using flock().  If you do
-	       just "open(A, '>>&B')", the filehandle A will not have the same
+	       just "open(A, '&gt&gt&B')", the filehandle A will not have the same
 	       file descriptor as B, and therefore flock(A) will not flock(B),
-	       and vice versa.	But with "open(A, '>>&=B')" the filehandles
+	       and vice versa.	But with "open(A, '&gt&gt&=B')" the filehandles
 	       will share the same file descriptor.
 
 	       Note that if you are using Perls older than 5.8.0, Perl will be
@@ -3185,19 +3187,19 @@ DESCRIPTION
 	       user could specify a filename of "rsh cat file |", or you could
 	       change certain filenames as needed:
 
-		   $filename =~ s/(.*\.gz)\s*$/gzip -dc < $1|/;
+		   $filename =~ s/(.*\.gz)\s*$/gzip -dc &lt $1|/;
 		   open(FH, $filename) or die "Can't open $filename: $!";
 
 	       Use 3-argument form to open a file with arbitrary weird
 	       characters in it,
 
-		   open(FOO, '<', $file);
+		   open(FOO, '&lt', $file);
 
 	       otherwise it's necessary to protect any leading and trailing
 	       whitespace:
 
 		   $file =~ s#^(\s)#./$1#;
-		   open(FOO, "< $file\0");
+		   open(FOO, "&lt $file\0");
 
 	       (this may not work on some bizarre filesystems).  One should
 	       conscientiously choose between the magic and 3-arguments form
@@ -3209,7 +3211,7 @@ DESCRIPTION
 	       file |", but will not work on a filename which happens to have
 	       a trailing space, while
 
-		   open IN, '<', $ARGV[0];
+		   open IN, '&lt', $ARGV[0];
 
 	       will have exactly the opposite restrictions.
 
@@ -3225,7 +3227,7 @@ DESCRIPTION
 		   $oldfh = select(HANDLE); $| = 1; select($oldfh);
 		   print HANDLE "stuff $$\n";
 		   seek(HANDLE, 0, 0);
-		   print "File contains: ", <HANDLE>;
+		   print "File contains: ", &ltHANDLE&gt;
 
 	       Using the constructor from the "IO::Handle" package (or one of
 	       its subclasses, such as "IO::File" or "IO::Socket"), you can
@@ -3237,12 +3239,12 @@ DESCRIPTION
 		   #...
 		   sub read_myfile_munged {
 		       my $ALL = shift;
-		       my $handle = IO::File->new;
+		       my $handle = IO::File-&gtnew;
 		       open($handle, "myfile") or die "myfile: $!";
-		       $first = <$handle>
+		       $first = &lt$handle&gt
 			   or return ();     # Automatically closed here.
 		       mung $first or die "mung failed";       # Or here.
-		       return $first, <$handle> if $ALL;       # Or here.
+		       return $first, &lt$handle&gt if $ALL;       # Or here.
 		       $first;				       # Or here.
 		   }
 
@@ -3429,13 +3431,13 @@ DESCRIPTION
 				  representation of the packed string. Efficient but
 				  dangerous.
 
-		   >   sSiIlLqQ   Force big-endian byte-order on the type.
+		   &gt   sSiIlLqQ   Force big-endian byte-order on the type.
 		       jJfFdDpP   (The "big end" touches the construct.)
 
-		   <   sSiIlLqQ   Force little-endian byte-order on the type.
+		   &lt   sSiIlLqQ   Force little-endian byte-order on the type.
 		       jJfFdDpP   (The "little end" touches the construct.)
 
-	       The ">" and "<" modifiers can also be used on "()"-groups, in
+	       The "&gt" and "&lt" modifiers can also be used on "()"-groups, in
 	       which case they force a certain byte-order on all components of
 	       that group, including subgroups.
 
@@ -3447,7 +3449,7 @@ DESCRIPTION
 		       pack function will gobble up that many values from the
 		       LIST.  A "*" for the repeat count means to use however
 		       many items are left, except for "@", "x", "X", where it
-		       is equivalent to 0, for <.> where it means relative to
+		       is equivalent to 0, for &lt.&gt where it means relative to
 		       string start and "u", where it is equivalent to 1 (or
 		       45, which is the same).	A numeric repeat count may
 		       optionally be enclosed in brackets, as in "pack
@@ -3688,12 +3690,12 @@ DESCRIPTION
 
 		       If you want portable packed integers you can either use
 		       the formats "n", "N", "v", and "V", or you can use the
-		       ">" and "<" modifiers.  These modifiers are only
+		       "&gt" and "&lt" modifiers.  These modifiers are only
 		       available as of perl 5.9.2.  See also perlport.
 
 	       o       All integer and floating point formats as well as "p"
-		       and "P" and "()"-groups may be followed by the ">" or
-		       "<" modifiers to force big- or little- endian byte-
+		       and "P" and "()"-groups may be followed by the "&gt" or
+		       "&lt" modifiers to force big- or little- endian byte-
 		       order, respectively.  This is especially useful, since
 		       "n", "N", "v" and "V" don't cover signed integers,
 		       64-bit integers and floating point values.  However,
@@ -3704,7 +3706,7 @@ DESCRIPTION
 		       format.	Most platforms store signed integers in two's
 		       complement, so usually this is not an issue.
 
-		       The ">" or "<" modifiers can only be used on floating
+		       The "&gt" or "&lt" modifiers can only be used on floating
 		       point formats on big- or little-endian machines.
 		       Otherwise, attempting to do so will result in a fatal
 		       error.
@@ -3714,13 +3716,13 @@ DESCRIPTION
 		       platforms are using the same binary representation
 		       (e.g. IEEE floating point format).  Even if all
 		       platforms are using IEEE, there may be subtle
-		       differences.  Being able to use ">" or "<" on floating
+		       differences.  Being able to use "&gt" or "&lt" on floating
 		       point values can be very useful, but also very
 		       dangerous if you don't know exactly what you're doing.
 		       It is definitely not a general way to portably store
 		       floating point values.
 
-		       When using ">" or "<" on an "()"-group, this will
+		       When using "&gt" or "&lt" on an "()"-group, this will
 		       affect all types inside the group that accept the byte-
 		       order modifiers, including all subgroups.  It will
 		       silently be ignored for all other types.  You are not
@@ -3739,7 +3741,7 @@ DESCRIPTION
 		       perlport.
 
 		       If you know exactly what you're doing, you can use the
-		       ">" or "<" modifiers to force big- or little-endian
+		       "&gt" or "&lt" modifiers to force big- or little-endian
 		       byte-order on floating point values.
 
 		       Note that Perl uses doubles (or long doubles, if
@@ -3865,11 +3867,11 @@ DESCRIPTION
 
 		   $foo = pack('nN', 42, 4711);
 		   # pack big-endian 16- and 32-bit unsigned integers
-		   $foo = pack('S>L>', 42, 4711);
+		   $foo = pack('S&gtL&gt', 42, 4711);
 		   # exactly the same
-		   $foo = pack('s<l<', -42, 4711);
+		   $foo = pack('s&ltl&lt', -42, 4711);
 		   # pack little-endian 16- and 32-bit signed integers
-		   $foo = pack('(sl)<', -42, 4711);
+		   $foo = pack('(sl)&lt', -42, 4711);
 		   # exactly the same
 
 	       The same template may generally also be used in unpack().
@@ -4107,11 +4109,11 @@ DESCRIPTION
 	       (i.e. file slurp mode), and when an empty file is read, it
 	       returns '' the first time, followed by "undef" subsequently.
 
-	       This is the internal function implementing the "<EXPR>"
-	       operator, but you can use it directly.  The "<EXPR>" operator
+	       This is the internal function implementing the "&ltEXPR&gt"
+	       operator, but you can use it directly.  The "&ltEXPR&gt" operator
 	       is discussed in more detail in "I/O Operators" in perlop.
 
-		   $line = <STDIN>;
+		   $line = &ltSTDIN&gt;
 		   $line = readline(*STDIN);	       # same thing
 
 	       If readline encounters an operating system error, $! will be
@@ -4123,7 +4125,7 @@ DESCRIPTION
 
 		   for (;;) {
 		       undef $!;
-		       unless (defined( $line = <> )) {
+		       unless (defined( $line = &lt&gt )) {
 			   last if eof;
 			   die $! if $!;
 		       }
@@ -4179,12 +4181,12 @@ DESCRIPTION
 
 		   # a simpleminded Pascal comment stripper
 		   # (warning: assumes no { or } in strings)
-		   LINE: while (<STDIN>) {
+		   LINE: while (&ltSTDIN&gt) {
 		       while (s|({.*}.*){.*}|$1 |) {}
 		       s|{.*}| |;
 		       if (s|{.*| |) {
 			   $front = $_;
-			   while (<STDIN>) {
+			   while (&ltSTDIN&gt) {
 			       if (/}/) {      # end of comment?
 				   s|^|$front\{|;
 				   redo LINE;
@@ -4432,7 +4434,7 @@ DESCRIPTION
 		   }
 
 		   # In the main program
-		   push @INC, Foo->new(...);
+		   push @INC, Foo-&gtnew(...);
 
 	       Note that these hooks are also permitted to set the %INC entry
 	       corresponding to the files they have loaded. See "%INC" in
@@ -4595,14 +4597,14 @@ DESCRIPTION
 	       you hit EOF on your read, and then sleep for a while, you might
 	       have to stick in a seek() to reset things.  The "seek" doesn't
 	       change the current position, but it does clear the end-of-file
-	       condition on the handle, so that the next "<FILE>" makes Perl
+	       condition on the handle, so that the next "&ltFILE&gt" makes Perl
 	       try again to read something.  We hope.
 
 	       If that doesn't work (some IO implementations are particularly
 	       cantankerous), then you may need something more like this:
 
 		   for (;;) {
-		       for ($curpos = tell(FILE); $_ = <FILE>;
+		       for ($curpos = tell(FILE); $_ = &ltFILE&gt;
 			    $curpos = tell(FILE)) {
 			   # search for some stuff and put it into files
 		       }
@@ -4640,7 +4642,7 @@ DESCRIPTION
 	       with methods, preferring to write the last example as:
 
 		   use IO::Handle;
-		   STDERR->autoflush(1);
+		   STDERR-&gtautoflush(1);
 
        select RBITS,WBITS,EBITS,TIMEOUT
 	       This calls the select(2) system call with the bit masks
@@ -4702,7 +4704,7 @@ DESCRIPTION
 	       select(2) and fcntl(2) for further details.
 
 	       WARNING: One should not attempt to mix buffered I/O (like
-	       "read" or <FH>) with "select", except as permitted by POSIX,
+	       "read" or &ltFH&gt) with "select", except as permitted by POSIX,
 	       and even then only on POSIX systems.  You have to use "sysread"
 	       instead.
 
@@ -4942,7 +4944,7 @@ DESCRIPTION
 	       comparison order.  If SUBNAME is specified, it gives the name
 	       of a subroutine that returns an integer less than, equal to, or
 	       greater than 0, depending on how the elements of the list are
-	       to be ordered.  (The "<=>" and "cmp" operators are extremely
+	       to be ordered.  (The "&lt=&gt" and "cmp" operators are extremely
 	       useful in such routines.)  SUBNAME may be a scalar variable
 	       name (unsubscripted), in which case the value provides the name
 	       of (or a reference to) the actual subroutine to use.  In place
@@ -5004,18 +5006,18 @@ DESCRIPTION
 		   @articles = sort {$b cmp $a} @files;
 
 		   # sort numerically ascending
-		   @articles = sort {$a <=> $b} @files;
+		   @articles = sort {$a &lt=&gt $b} @files;
 
 		   # sort numerically descending
-		   @articles = sort {$b <=> $a} @files;
+		   @articles = sort {$b &lt=&gt $a} @files;
 
 		   # this sorts the %age hash by value instead of key
 		   # using an in-line function
-		   @eldest = sort { $age{$b} <=> $age{$a} } keys %age;
+		   @eldest = sort { $age{$b} &lt=&gt $age{$a} } keys %age;
 
 		   # sort using explicit subroutine name
 		   sub byage {
-		       $age{$a} <=> $age{$b};  # presuming numeric
+		       $age{$a} &lt=&gt $age{$b};  # presuming numeric
 		   }
 		   @sortedclass = sort byage @class;
 
@@ -5034,7 +5036,7 @@ DESCRIPTION
 		   # whole record case-insensitively otherwise
 
 		   @new = sort {
-		       ($b =~ /=(\d+)/)[0] <=> ($a =~ /=(\d+)/)[0]
+		       ($b =~ /=(\d+)/)[0] &lt=&gt ($a =~ /=(\d+)/)[0]
 					   ||
 				   uc($a)  cmp	uc($b)
 		   } @old;
@@ -5049,17 +5051,17 @@ DESCRIPTION
 		   }
 
 		   @new = @old[ sort {
-				       $nums[$b] <=> $nums[$a]
+				       $nums[$b] &lt=&gt $nums[$a]
 						||
 				       $caps[$a] cmp $caps[$b]
 				      } 0..$#old
 			      ];
 
 		   # same thing, but without any temps
-		   @new = map { $_->[0] }
-			  sort { $b->[1] <=> $a->[1]
+		   @new = map { $_-&gt[0] }
+			  sort { $b-&gt[1] &lt=&gt $a-&gt[1]
 					  ||
-				 $a->[2] cmp $b->[2]
+				 $a-&gt[2] cmp $b-&gt[2]
 			  } map { [$_, /=(\d+)/, uc($_)] } @old;
 
 		   # using a prototype allows you to use any comparison subroutine
@@ -5099,27 +5101,27 @@ DESCRIPTION
 	       lexicals.  They are package globals.  That means that if you're
 	       in the "main" package and type
 
-		   @articles = sort {$b <=> $a} @files;
+		   @articles = sort {$b &lt=&gt $a} @files;
 
 	       then $a and $b are $main::a and $main::b (or $::a and $::b),
 	       but if you're in the "FooPack" package, it's the same as typing
 
-		   @articles = sort {$FooPack::b <=> $FooPack::a} @files;
+		   @articles = sort {$FooPack::b &lt=&gt $FooPack::a} @files;
 
 	       The comparison function is required to behave.  If it returns
 	       inconsistent results (sometimes saying $x[1] is less than $x[2]
 	       and sometimes saying the opposite, for example) the results are
 	       not well-defined.
 
-	       Because "<=>" returns "undef" when either operand is "NaN"
+	       Because "&lt=&gt" returns "undef" when either operand is "NaN"
 	       (not-a-number), and because "sort" will trigger a fatal error
 	       unless the result of a comparison is defined, when sorting with
-	       a comparison function like "$a <=> $b", be careful about lists
+	       a comparison function like "$a &lt=&gt $b", be careful about lists
 	       that might contain a "NaN".  The following example takes
 	       advantage of the fact that "NaN != NaN" to eliminate any "NaN"s
 	       from the input.
 
-		   @result = sort { $a <=> $b } grep { $_ == $_ } @input;
+		   @result = sort { $a &lt=&gt $b } grep { $_ == $_ } @input;
 
        splice ARRAY,OFFSET,LENGTH,LIST
        splice ARRAY,OFFSET,LENGTH
@@ -5138,7 +5140,7 @@ DESCRIPTION
 	       removes everything. If OFFSET is past the end of the array,
 	       perl issues a warning, and splices at the end of the array.
 
-	       The following equivalences hold (assuming "$[ == 0 and $#a >=
+	       The following equivalences hold (assuming "$[ == 0 and $#a &gt=
 	       $i" )
 
 		   push(@a,$x,$y)      splice(@a,@a,0,$x,$y)
@@ -5252,7 +5254,7 @@ DESCRIPTION
 	       this way:
 
 		   $header =~ s/\n(?=\s)//g;  # fix continuation lines
-		   %hdrs   =  (UNIX_FROM => split /^(\S*?):\s*/m, $header);
+		   %hdrs   =  (UNIX_FROM =&gt split /^(\S*?):\s*/m, $header);
 
 	       The pattern "/PATTERN/" may be replaced with an expression to
 	       specify patterns that vary at runtime.  (To do runtime
@@ -5273,7 +5275,7 @@ DESCRIPTION
 	       Example:
 
 		   open(PASSWD, '/etc/passwd');
-		   while (<PASSWD>) {
+		   while (&ltPASSWD&gt) {
 		       chomp;
 		       ($login, $passwd, $uid, $gid,
 			$gcos, $home, $shell) = split(/:/);
@@ -5382,30 +5384,30 @@ DESCRIPTION
 
 		   For example:
 
-		     printf '<% d>',  12;   # prints "< 12>"
-		     printf '<%+d>',  12;   # prints "<+12>"
-		     printf '<%6s>',  12;   # prints "<    12>"
-		     printf '<%-6s>', 12;   # prints "<12    >"
-		     printf '<%06s>', 12;   # prints "<000012>"
-		     printf '<%#o>',  12;   # prints "<014>"
-		     printf '<%#x>',  12;   # prints "<0xc>"
-		     printf '<%#X>',  12;   # prints "<0XC>"
-		     printf '<%#b>',  12;   # prints "<0b1100>"
-		     printf '<%#B>',  12;   # prints "<0B1100>"
+		     printf '&lt% d&gt',  12;   # prints "&lt 12&gt"
+		     printf '&lt%+d&gt',  12;   # prints "&lt+12&gt"
+		     printf '&lt%6s&gt',  12;   # prints "&lt    12&gt"
+		     printf '&lt%-6s&gt', 12;   # prints "&lt12    &gt"
+		     printf '&lt%06s&gt', 12;   # prints "&lt000012&gt"
+		     printf '&lt%#o&gt',  12;   # prints "&lt014&gt"
+		     printf '&lt%#x&gt',  12;   # prints "&lt0xc&gt"
+		     printf '&lt%#X&gt',  12;   # prints "&lt0XC&gt"
+		     printf '&lt%#b&gt',  12;   # prints "&lt0b1100&gt"
+		     printf '&lt%#B&gt',  12;   # prints "&lt0B1100&gt"
 
 		   When a space and a plus sign are given as the flags at
 		   once, a plus sign is used to prefix a positive number.
 
-		     printf '<%+ d>', 12;   # prints "<+12>"
-		     printf '<% +d>', 12;   # prints "<+12>"
+		     printf '&lt%+ d&gt', 12;   # prints "&lt+12&gt"
+		     printf '&lt% +d&gt', 12;   # prints "&lt+12&gt"
 
 		   When the # flag and a precision are given in the %o
 		   conversion, the precision is incremented if it's necessary
 		   for the leading "0".
 
-		     printf '<%#.5o>', 012;	 # prints "<00012>"
-		     printf '<%#.5o>', 012345;	 # prints "<012345>"
-		     printf '<%#.0o>', 0;	 # prints "<0>"
+		     printf '&lt%#.5o&gt', 012;	 # prints "&lt00012&gt"
+		     printf '&lt%#.5o&gt', 012345;	 # prints "&lt012345&gt"
+		     printf '&lt%#.0o&gt', 0;	 # prints "&lt0&gt"
 
 	       vector flag
 		   This flag tells perl to interpret the supplied string as a
@@ -5436,11 +5438,11 @@ DESCRIPTION
 		   next argument (with "*") or from a specified argument (with
 		   e.g. "*2$"):
 
-		     printf '<%s>', "a";       # prints "<a>"
-		     printf '<%6s>', "a";      # prints "<     a>"
-		     printf '<%*s>', 6, "a";   # prints "<     a>"
-		     printf '<%*2$s>', "a", 6; # prints "<     a>"
-		     printf '<%2s>', "long";   # prints "<long>" (does not truncate)
+		     printf '&lt%s&gt', "a";       # prints "&lta&gt"
+		     printf '&lt%6s&gt', "a";      # prints "&lt     a&gt"
+		     printf '&lt%*s&gt', 6, "a";   # prints "&lt     a&gt"
+		     printf '&lt%*2$s&gt', "a", 6; # prints "&lt     a&gt"
+		     printf '&lt%2s&gt', "long";   # prints "&ltlong&gt" (does not truncate)
 
 		   If a field width obtained through "*" is negative, it has
 		   the same effect as the "-" flag: left-justification.
@@ -5453,72 +5455,72 @@ DESCRIPTION
 		   decimal places to show (the default being 6), e.g.:
 
 		     # these examples are subject to system-specific variation
-		     printf '<%f>', 1;	  # prints "<1.000000>"
-		     printf '<%.1f>', 1;  # prints "<1.0>"
-		     printf '<%.0f>', 1;  # prints "<1>"
-		     printf '<%e>', 10;   # prints "<1.000000e+01>"
-		     printf '<%.1e>', 10; # prints "<1.0e+01>"
+		     printf '&lt%f&gt', 1;	  # prints "&lt1.000000&gt"
+		     printf '&lt%.1f&gt', 1;  # prints "&lt1.0&gt"
+		     printf '&lt%.0f&gt', 1;  # prints "&lt1&gt"
+		     printf '&lt%e&gt', 10;   # prints "&lt1.000000e+01&gt"
+		     printf '&lt%.1e&gt', 10; # prints "&lt1.0e+01&gt"
 
 		   For 'g' and 'G', this specifies the maximum number of
 		   digits to show, including prior to the decimal point as
 		   well as after it, e.g.:
 
 		     # these examples are subject to system-specific variation
-		     printf '<%g>', 1;	      # prints "<1>"
-		     printf '<%.10g>', 1;     # prints "<1>"
-		     printf '<%g>', 100;      # prints "<100>"
-		     printf '<%.1g>', 100;    # prints "<1e+02>"
-		     printf '<%.2g>', 100.01; # prints "<1e+02>"
-		     printf '<%.5g>', 100.01; # prints "<100.01>"
-		     printf '<%.4g>', 100.01; # prints "<100>"
+		     printf '&lt%g&gt', 1;	      # prints "&lt1&gt"
+		     printf '&lt%.10g&gt', 1;     # prints "&lt1&gt"
+		     printf '&lt%g&gt', 100;      # prints "&lt100&gt"
+		     printf '&lt%.1g&gt', 100;    # prints "&lt1e+02&gt"
+		     printf '&lt%.2g&gt', 100.01; # prints "&lt1e+02&gt"
+		     printf '&lt%.5g&gt', 100.01; # prints "&lt100.01&gt"
+		     printf '&lt%.4g&gt', 100.01; # prints "&lt100&gt"
 
 		   For integer conversions, specifying a precision implies
 		   that the output of the number itself should be zero-padded
 		   to this width, where the 0 flag is ignored:
 
-		     printf '<%.6d>', 1;      # prints "<000001>"
-		     printf '<%+.6d>', 1;     # prints "<+000001>"
-		     printf '<%-10.6d>', 1;   # prints "<000001    >"
-		     printf '<%10.6d>', 1;    # prints "<    000001>"
-		     printf '<%010.6d>', 1;   # prints "<    000001>"
-		     printf '<%+10.6d>', 1;   # prints "<   +000001>"
+		     printf '&lt%.6d&gt', 1;      # prints "&lt000001&gt"
+		     printf '&lt%+.6d&gt', 1;     # prints "&lt+000001&gt"
+		     printf '&lt%-10.6d&gt', 1;   # prints "&lt000001    &gt"
+		     printf '&lt%10.6d&gt', 1;    # prints "&lt    000001&gt"
+		     printf '&lt%010.6d&gt', 1;   # prints "&lt    000001&gt"
+		     printf '&lt%+10.6d&gt', 1;   # prints "&lt   +000001&gt"
 
-		     printf '<%.6x>', 1;      # prints "<000001>"
-		     printf '<%#.6x>', 1;     # prints "<0x000001>"
-		     printf '<%-10.6x>', 1;   # prints "<000001    >"
-		     printf '<%10.6x>', 1;    # prints "<    000001>"
-		     printf '<%010.6x>', 1;   # prints "<    000001>"
-		     printf '<%#10.6x>', 1;   # prints "<  0x000001>"
+		     printf '&lt%.6x&gt', 1;      # prints "&lt000001&gt"
+		     printf '&lt%#.6x&gt', 1;     # prints "&lt0x000001&gt"
+		     printf '&lt%-10.6x&gt', 1;   # prints "&lt000001    &gt"
+		     printf '&lt%10.6x&gt', 1;    # prints "&lt    000001&gt"
+		     printf '&lt%010.6x&gt', 1;   # prints "&lt    000001&gt"
+		     printf '&lt%#10.6x&gt', 1;   # prints "&lt  0x000001&gt"
 
 		   For string conversions, specifying a precision truncates
 		   the string to fit in the specified width:
 
-		     printf '<%.5s>', "truncated";   # prints "<trunc>"
-		     printf '<%10.5s>', "truncated"; # prints "<     trunc>"
+		     printf '&lt%.5s&gt', "truncated";   # prints "&lttrunc&gt"
+		     printf '&lt%10.5s&gt', "truncated"; # prints "&lt     trunc&gt"
 
 		   You can also get the precision from the next argument using
 		   ".*":
 
-		     printf '<%.6x>', 1;       # prints "<000001>"
-		     printf '<%.*x>', 6, 1;    # prints "<000001>"
+		     printf '&lt%.6x&gt', 1;       # prints "&lt000001&gt"
+		     printf '&lt%.*x&gt', 6, 1;    # prints "&lt000001&gt"
 
 		   If a precision obtained through "*" is negative, it has the
 		   same effect as no precision.
 
-		     printf '<%.*s>',  7, "string";   # prints "<string>"
-		     printf '<%.*s>',  3, "string";   # prints "<str>"
-		     printf '<%.*s>',  0, "string";   # prints "<>"
-		     printf '<%.*s>', -1, "string";   # prints "<string>"
+		     printf '&lt%.*s&gt',  7, "string";   # prints "&ltstring&gt"
+		     printf '&lt%.*s&gt',  3, "string";   # prints "&ltstr&gt"
+		     printf '&lt%.*s&gt',  0, "string";   # prints "&lt&gt"
+		     printf '&lt%.*s&gt', -1, "string";   # prints "&ltstring&gt"
 
-		     printf '<%.*d>',  1, 0;   # prints "<0>"
-		     printf '<%.*d>',  0, 0;   # prints "<>"
-		     printf '<%.*d>', -1, 0;   # prints "<0>"
+		     printf '&lt%.*d&gt',  1, 0;   # prints "&lt0&gt"
+		     printf '&lt%.*d&gt',  0, 0;   # prints "&lt&gt"
+		     printf '&lt%.*d&gt', -1, 0;   # prints "&lt0&gt"
 
 		   You cannot currently get the precision from a specified
 		   number, but it is intended that this will be possible in
 		   the future using e.g. ".*2$":
 
-		     printf '<%.*2$x>', 1, 6;	# INVALID, but in future will print "<000001>"
+		     printf '&lt%.*2$x&gt', 1, 6;	# INVALID, but in future will print "&lt000001&gt"
 
 	       size
 		   For numeric conversions, you can specify the size to
@@ -5542,7 +5544,7 @@ DESCRIPTION
 		   whether your Perl supports quads via Config:
 
 			   use Config;
-			   ($Config{use64bitint} eq 'define' || $Config{longsize} >= 8) &&
+			   ($Config{use64bitint} eq 'define' || $Config{longsize} &gt= 8) &&
 				   print "quads\n";
 
 		   For floating point conversions ("e f g E F G"), numbers are
@@ -5588,12 +5590,12 @@ DESCRIPTION
 
 		   So:
 
-		     printf '<%*.*s>', $a, $b, $c;
+		     printf '&lt%*.*s&gt', $a, $b, $c;
 
 		   would use $a for the width, $b for the precision and $c as
 		   the value to format, while:
 
-		     printf '<%*1$.*s>', $a, $b;
+		     printf '&lt%*1$.*s&gt', $a, $b;
 
 		   would use $a for the width and the precision, and $b as the
 		   value to format.
@@ -5655,7 +5657,7 @@ DESCRIPTION
 	       In versions of Perl prior to 5.004 the default seed was just
 	       the current "time".  This isn't a particularly good seed, so
 	       many old programs supply their own seed value (often "time ^
-	       $$" or "time ^ ($$ + ($$ << 15))"), but that isn't necessary
+	       $$" or "time ^ ($$ + ($$ &lt&lt 15))"), but that isn't necessary
 	       any more.
 
 	       For cryptographic purposes, however, you need something much
@@ -5719,7 +5721,7 @@ DESCRIPTION
 	       stat structure from the last "stat", "lstat", or filetest are
 	       returned.  Example:
 
-		   if (-x $file && (($d) = stat(_)) && $d < 0) {
+		   if (-x $file && (($d) = stat(_)) && $d &lt 0) {
 		       print "$file is executable NFS file\n";
 		   }
 
@@ -5743,8 +5745,8 @@ DESCRIPTION
 		   use File::stat;
 		   $sb = stat($filename);
 		   printf "File is %s, size is %s, perm %04o, mtime %s\n",
-		       $filename, $sb->size, $sb->mode & 07777,
-		       scalar localtime $sb->mtime;
+		       $filename, $sb-&gtsize, $sb-&gtmode & 07777,
+		       scalar localtime $sb-&gtmtime;
 
 	       You can import symbolic mode constants ("S_IF*") and functions
 	       ("S_IS*") from the Fcntl module:
@@ -5753,8 +5755,8 @@ DESCRIPTION
 
 		   $mode = (stat($filename))[2];
 
-		   $user_rwx	  = ($mode & S_IRWXU) >> 6;
-		   $group_read	  = ($mode & S_IRGRP) >> 3;
+		   $user_rwx	  = ($mode & S_IRWXU) &gt&gt 6;
+		   $group_read	  = ($mode & S_IRGRP) &gt&gt 3;
 		   $other_execute =  $mode & S_IXOTH;
 
 		   printf "Permissions are %04o\n", S_IMODE($mode), "\n";
@@ -5843,7 +5845,7 @@ DESCRIPTION
 	       For example, here is a loop that inserts index producing
 	       entries before any line containing a certain pattern:
 
-		   while (<>) {
+		   while (&lt&gt) {
 		       study;
 		       print ".IX foo\n"       if /\bfoo\b/;
 		       print ".IX bar\n"       if /\bbar\b/;
@@ -5867,7 +5869,7 @@ DESCRIPTION
 	       (@files) for a list of words (@words), and prints out the names
 	       of those files that contain a match:
 
-		   $search = 'while (<>) { study;';
+		   $search = 'while (&lt&gt) { study;';
 		   foreach $word (@words) {
 		       $search .= "++\$seen{\$ARGV} if /\\b$word\\b/;\n";
 		   }
@@ -6107,7 +6109,7 @@ DESCRIPTION
 	       sysseek() very slow).
 
 	       sysseek() bypasses normal buffered IO, so mixing this with
-	       reads (other than "sysread", for example "<>" or read())
+	       reads (other than "sysread", for example "&lt&gt" or read())
 	       "print", "write", "seek", "tell", or "eof" may cause confusion.
 
 	       For WHENCE, you may also use the constants "SEEK_SET",
@@ -6183,7 +6185,7 @@ DESCRIPTION
 			   ($? & 127),	($? & 128) ? 'with' : 'without';
 		   }
 		   else {
-		       printf "child exited with value %d\n", $? >> 8;
+		       printf "child exited with value %d\n", $? &gt&gt 8;
 		   }
 
 	       Alternatively you might inspect the value of
@@ -6446,7 +6448,7 @@ DESCRIPTION
 	       cookies, .rhosts files, and so on.
 
 	       If umask(2) is not implemented on your system and you are
-	       trying to restrict access for yourself (i.e., (EXPR & 0700) >
+	       trying to restrict access for yourself (i.e., (EXPR & 0700) &gt
 	       0), produces a fatal error at run time.	If umask(2) is not
 	       implemented and you are not trying to restrict access for
 	       yourself, returns "undef".
@@ -6485,7 +6487,7 @@ DESCRIPTION
 
 		   $cnt = unlink 'a', 'b', 'c';
 		   unlink @goners;
-		   unlink <*.bak>;
+		   unlink &lt*.bak&gt;
 
 	       Note: "unlink" will not attempt to delete directories unless
 	       you are superuser and the -U flag is supplied to Perl.  Even if
@@ -6522,7 +6524,7 @@ DESCRIPTION
 		   sub ordinal { unpack("W",$_[0]); } # same as ord()
 
 	       In addition to fields allowed in pack(), you may prefix a field
-	       with a %<number> to indicate that you want a <number>-bit
+	       with a %&ltnumber&gt to indicate that you want a &ltnumber&gt-bit
 	       checksum of the items instead of the items themselves.  Default
 	       is a 16-bit checksum.  Checksum is calculated by summing
 	       numeric values of expanded values (for string fields the sum of
@@ -6534,7 +6536,7 @@ DESCRIPTION
 
 		   $checksum = do {
 		       local $/;  # slurp!
-		       unpack("%32W*",<>) % 65535;
+		       unpack("%32W*",&lt&gt) % 65535;
 		   };
 
 	       The following efficiently counts the number of set bits in a
@@ -6582,7 +6584,7 @@ DESCRIPTION
 	       module, generally by aliasing certain subroutine or variable
 	       names into your package.  It is exactly equivalent to
 
-		   BEGIN { require Module; Module->import( LIST ); }
+		   BEGIN { require Module; Module-&gtimport( LIST ); }
 
 	       except that Module must be a bareword.
 
@@ -6830,7 +6832,7 @@ DESCRIPTION
 
 		   #!/usr/bin/perl -wl
 
-		   print <<'EOT';
+		   print &lt&lt'EOT';
 						     0	       1	 2	   3
 				      unpack("V",$_) 01234567890123456789012345678901
 		   ------------------------------------------------------------------
@@ -6838,10 +6840,10 @@ DESCRIPTION
 
 		   for $w (0..3) {
 		       $width = 2**$w;
-		       for ($shift=0; $shift < $width; ++$shift) {
-			   for ($off=0; $off < 32/$width; ++$off) {
+		       for ($shift=0; $shift &lt $width; ++$shift) {
+			   for ($off=0; $off &lt 32/$width; ++$off) {
 			       $str = pack("B*", "0"x32);
-			       $bits = (1<<$shift);
+			       $bits = (1&lt&lt$shift);
 			       vec($str, $off, $width) = $bits;
 			       $res = unpack("b*",$str);
 			       $val = unpack("V", $str);
@@ -6851,7 +6853,7 @@ DESCRIPTION
 		   }
 
 		   format STDOUT =
-		   vec($_,@#,@#) = @<< == @######### @>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		   vec($_,@#,@#) = @&lt&lt == @######### @&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt&gt
 		   $off, $width, $bits, $val, $res
 		   .
 		   __END__
@@ -7009,7 +7011,7 @@ DESCRIPTION
 		   #...
 		   do {
 		       $kid = waitpid(-1, WNOHANG);
-		   } while $kid > 0;
+		   } while $kid &gt 0;
 
 	       then you can do a non-blocking wait for all pending zombie
 	       processes.  Non-blocking wait is available on machines
@@ -7120,6 +7122,6 @@ DESCRIPTION
 
 
 perl v5.10.1			  2009-08-12			   PERLFUNC(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

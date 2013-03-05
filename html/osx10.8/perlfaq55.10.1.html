@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This section deals with I/O and the "f" issues: filehandles, flushing,..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlfaq5 - Files and Formats</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLFAQ5(1)	       Perl Programmers Reference Guide 	   PERLFAQ5(1)
 
 
@@ -34,7 +36,7 @@ DESCRIPTION
        once:
 
 	       # long wait, then row of dots all at once
-	       while( <> ) {
+	       while( &lt&gt ) {
 		       print ".";
 		       print "\n" unless ++$count % 50;
 
@@ -48,7 +50,7 @@ DESCRIPTION
 	       $|++;
 
 	       # dot shown immediately
-	       while( <> ) {
+	       while( &lt&gt ) {
 		       print ".";
 		       print "\n" unless ++$count % 50;
 
@@ -95,13 +97,13 @@ DESCRIPTION
        the "autoflush" method to change the settings of the filehandle:
 
 	       use IO::Handle;
-	       open my( $io_fh ), ">", "output.txt";
-	       $io_fh->autoflush(1);
+	       open my( $io_fh ), "&gt", "output.txt";
+	       $io_fh-&gtautoflush(1);
 
        The "IO::Handle" objects also have a "flush" method. You can flush the
        buffer any time you want without auto-buffering
 
-	       $io_fh->flush;
+	       $io_fh-&gtflush;
 
    How do I change, delete, or insert a line in a file, or append to the
        beginning of a file?
@@ -117,10 +119,10 @@ DESCRIPTION
        A Perl program to do these tasks takes the basic form of opening a
        file, printing its lines, then closing the file:
 
-	       open my $in,  '<',  $file      or die "Can't read old file: $!";
-	       open my $out, '>', "$file.new" or die "Can't write new file: $!";
+	       open my $in,  '&lt',  $file      or die "Can't read old file: $!";
+	       open my $out, '&gt', "$file.new" or die "Can't write new file: $!";
 
-	       while( <$in> )
+	       while( &lt$in&gt )
 		       {
 		       print $out $_;
 		       }
@@ -133,12 +135,12 @@ DESCRIPTION
        To prepend lines to the beginning, print those lines before you enter
        the loop that prints the existing lines.
 
-	       open my $in,  '<',  $file      or die "Can't read old file: $!";
-	       open my $out, '>', "$file.new" or die "Can't write new file: $!";
+	       open my $in,  '&lt',  $file      or die "Can't read old file: $!";
+	       open my $out, '&gt', "$file.new" or die "Can't write new file: $!";
 
-	       print $out "# Add this line to the top\n"; # <--- HERE'S THE MAGIC
+	       print $out "# Add this line to the top\n"; # &lt--- HERE'S THE MAGIC
 
-	       while( <$in> )
+	       while( &lt$in&gt )
 		       {
 		       print $out $_;
 		       }
@@ -150,12 +152,12 @@ DESCRIPTION
        of "perl" and uppercases them. The happens for every line, so be sure
        that you're supposed to do that on every line!
 
-	       open my $in,  '<',  $file      or die "Can't read old file: $!";
-	       open my $out, '>', "$file.new" or die "Can't write new file: $!";
+	       open my $in,  '&lt',  $file      or die "Can't read old file: $!";
+	       open my $out, '&gt', "$file.new" or die "Can't write new file: $!";
 
 	       print $out "# Add this line to the top\n";
 
-	       while( <$in> )
+	       while( &lt$in&gt )
 		       {
 		       s/\b(perl)\b/Perl/g;
 		       print $out $_;
@@ -168,17 +170,17 @@ DESCRIPTION
        read the single line you want to change, change it, and print it. After
        that, read the rest of the lines and print those:
 
-	       while( <$in> )	# print the lines before the change
+	       while( &lt$in&gt )	# print the lines before the change
 		       {
 		       print $out $_;
 		       last if $. == 4; # line number before change
 		       }
 
-	       my $line = <$in>;
+	       my $line = &lt$in&gt;
 	       $line =~ s/\b(perl)\b/Perl/g;
 	       print $out $line;
 
-	       while( <$in> )	# print the rest of the lines
+	       while( &lt$in&gt )	# print the rest of the lines
 		       {
 		       print $out $_;
 		       }
@@ -187,7 +189,7 @@ DESCRIPTION
        skips comment lines, and the "last" stops all processing once it
        encounters either "__END__" or "__DATA__".
 
-	       while( <$in> )
+	       while( &lt$in&gt )
 		       {
 		       next if /^\s+#/; 	    # skip comment lines
 		       last if /^__(END|DATA)__$/;  # stop at end of code marker
@@ -198,7 +200,7 @@ DESCRIPTION
        to skip the lines you don't want to show up in the output. This example
        skips every fifth line:
 
-	       while( <$in> )
+	       while( &lt$in&gt )
 		       {
 		       next unless $. % 5;
 		       print $out $_;
@@ -208,10 +210,10 @@ DESCRIPTION
        rather than processing line by line, you can slurp it in (as long as
        you can fit the whole thing in memory!):
 
-	       open my $in,  '<',  $file      or die "Can't read old file: $!"
-	       open my $out, '>', "$file.new" or die "Can't write new file: $!";
+	       open my $in,  '&lt',  $file      or die "Can't read old file: $!"
+	       open my $out, '&gt', "$file.new" or die "Can't write new file: $!";
 
-	       my @lines = do { local $/; <$in> }; # slurp!
+	       my @lines = do { local $/; &lt$in&gt }; # slurp!
 
 		       # do your magic here
 
@@ -284,14 +286,14 @@ DESCRIPTION
 
    How can I use Perl's "-i" option from within a program?
        "-i" sets the value of Perl's $^I variable, which in turn affects the
-       behavior of "<>"; see perlrun for more details.	By modifying the
+       behavior of "&lt&gt"; see perlrun for more details.	By modifying the
        appropriate variables directly, you can get the same behavior within a
        larger program.	For example:
 
 	       # ...
 	       {
 	       local($^I, @ARGV) = ('.orig', glob("*.c"));
-	       while (<>) {
+	       while (&lt&gt) {
 		       if ($. == 1) {
 			       print "This line should appear at the top of each file\n";
 		       }
@@ -326,18 +328,18 @@ DESCRIPTION
        with "undef" in place of the file name.	In Perl 5.8 or later, the
        "open()" function creates an anonymous temporary file:
 
-	       open my $tmp, '+>', undef or die $!;
+	       open my $tmp, '+&gt', undef or die $!;
 
        Otherwise, you can use the File::Temp module.
 
 	       use File::Temp qw/ tempfile tempdir /;
 
-	       $dir = tempdir( CLEANUP => 1 );
-	       ($fh, $filename) = tempfile( DIR => $dir );
+	       $dir = tempdir( CLEANUP =&gt 1 );
+	       ($fh, $filename) = tempfile( DIR =&gt $dir );
 
 	       # or if you don't need to know the filename
 
-	       $fh = tempfile( DIR => $dir );
+	       $fh = tempfile( DIR =&gt $dir );
 
        The File::Temp has been a standard module since Perl 5.6.1.  If you
        don't have a modern enough Perl installed, use the "new_tmpfile" class
@@ -345,7 +347,7 @@ DESCRIPTION
        and writing.  Use it if you don't need to know the file's name:
 
 	       use IO::File;
-	       $fh = IO::File->new_tmpfile()
+	       $fh = IO::File-&gtnew_tmpfile()
 	       or die "Unable to make new temporary file: $!";
 
        If you're committed to creating a temporary file by hand, use the
@@ -360,7 +362,7 @@ DESCRIPTION
 	       sub temp_file {
 		       local *FH;
 		       my $count = 0;
-		       until( defined(fileno(FH)) || $count++ > 100 ) {
+		       until( defined(fileno(FH)) || $count++ &gt 100 ) {
 			       $base_name =~ s/-(\d+)$/"-" . (1 + $1)/e;
 			       # O_EXCL is required for security reasons.
 			       sysopen FH, $base_name, O_WRONLY|O_EXCL|O_CREAT;
@@ -389,13 +391,13 @@ DESCRIPTION
 	       #   15158 p5  T	    0:00 perl /home/tchrist/scripts/now-what
 	       my $PS_T = 'A6 A4 A7 A5 A*';
 	       open my $ps, '-|', 'ps';
-	       print scalar <$ps>;
+	       print scalar &lt$ps&gt;
 	       my @fields = qw( pid tt stat time command );
-	       while (<$ps>) {
+	       while (&lt$ps&gt) {
 		       my %process;
 		       @process{@fields} = unpack($PS_T, $_);
 	       for my $field ( @fields ) {
-		       print "$field: <$process{$field}>\n";
+		       print "$field: &lt$process{$field}&gt\n";
 	       }
 	       print 'line=', pack($PS_T, @process{@fields} ), "\n";
 	       }
@@ -429,14 +431,14 @@ DESCRIPTION
 
 	       my @fhs = ( $fh1, $fh2, $fh3 );
 
-	       for( $i = 0; $i <= $#fhs; $i++ ) {
+	       for( $i = 0; $i &lt= $#fhs; $i++ ) {
 		       print {$fhs[$i]} "just another Perl answer, \n";
 		       }
 
        Before perl5.6, you had to deal with various typeglob idioms which you
        may see in older code.
 
-	       open FILE, "> $filename";
+	       open FILE, "&gt $filename";
 	       process_typeglob(   *FILE );
 	       process_reference( \*FILE );
 
@@ -462,18 +464,18 @@ DESCRIPTION
        use it as though it were a normal filehandle.
 
 	       use IO::Handle;			   # 5.004 or higher
-	       $fh = IO::Handle->new();
+	       $fh = IO::Handle-&gtnew();
 
        Then use any of those as you would a normal filehandle.	Anywhere that
        Perl is expecting a filehandle, an indirect filehandle may be used
        instead. An indirect filehandle is just a scalar variable that contains
-       a filehandle.  Functions like "print", "open", "seek", or the "<FH>"
+       a filehandle.  Functions like "print", "open", "seek", or the "&ltFH&gt"
        diamond operator will accept either a named filehandle or a scalar
        variable containing one:
 
 	       ($ifh, $ofh, $efh) = (*STDIN, *STDOUT, *STDERR);
 	       print $ofh "Type it: ";
-	       $got = <$ifh>
+	       $got = &lt$ifh&gt
 	       print $efh "What was that: $got";
 
        If you're passing a filehandle to a function, you can write the
@@ -507,7 +509,7 @@ DESCRIPTION
 
 	       @fd = (*STDIN, *STDOUT, *STDERR);
 	       print $fd[1] "Type it: ";			   # WRONG
-	       $got = <$fd[0]>					   # WRONG
+	       $got = &lt$fd[0]&gt					   # WRONG
 	       print $fd[2] "What was that: $got";		   # WRONG
 
        With "print" and "printf", you get around this by using a block and an
@@ -530,7 +532,7 @@ DESCRIPTION
        real operator, not just a function with a comma-less argument.
        Assuming you've been storing typeglobs in your structure as we did
        above, you can use the built-in function named "readline" to read a
-       record just as "<>" does.  Given the initialization shown above for
+       record just as "&lt&gt" does.  Given the initialization shown above for
        @fd, this would work, but only because readline() requires a typeglob.
        It doesn't work with objects or strings, which might be a bug we
        haven't fixed yet.
@@ -557,12 +559,12 @@ DESCRIPTION
        calling open with a reference to that string instead of the filename.
        This file handle can then be used to read from or write to the string:
 
-	       open(my $fh, '>', \$string) or die "Could not open string for writing";
+	       open(my $fh, '&gt', \$string) or die "Could not open string for writing";
 	       print $fh "foo\n";
 	       print $fh "bar\n";      # $string now contains "foo\nbar\n"
 
-	       open(my $fh, '<', \$string) or die "Could not open string for reading";
-	       my $x = <$fh>;  # $x now contains "foo\n"
+	       open(my $fh, '&lt', \$string) or die "Could not open string for reading";
+	       my $x = &lt$fh&gt;  # $x now contains "foo\n"
 
        With older versions of Perl, the "IO::String" module provides similar
        functionality.
@@ -584,7 +586,7 @@ DESCRIPTION
 
        This regex from Benjamin Goldberg will add commas to numbers:
 
-	       s/(^[-+]?\d+?(?=(?>(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/$1,/g;
+	       s/(^[-+]?\d+?(?=(?&gt(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/$1,/g;
 
        It is easier to see with comments:
 
@@ -592,7 +594,7 @@ DESCRIPTION
 		       ^[-+]?		  # beginning of number.
 		       \d+?		  # first digits before first comma
 		       (?=		  # followed by, (but not included in the match) :
-			       (?>(?:\d{3})+) # some positive multiple of three digits.
+			       (?&gt(?:\d{3})+) # some positive multiple of three digits.
 			       (?!\d)	      # an *exact* multiple, not x * 3 + 1 or whatever.
 		       )
 		       |		  # or:
@@ -601,7 +603,7 @@ DESCRIPTION
 	       )/$1,/xg;
 
    How can I translate tildes (~) in a filename?
-       Use the <> ("glob()") operator, documented in perlfunc.	Versions of
+       Use the &lt&gt ("glob()") operator, documented in perlfunc.	Versions of
        Perl older than 5.6 require that you have a shell installed that groks
        tildes.	Later versions of Perl have this feature built in. The
        "File::KGlob" module (available from CPAN) gives more portable glob
@@ -625,14 +627,14 @@ DESCRIPTION
        Because you're using something like this, which truncates the file and
        then gives you read-write access:
 
-	       open(FH, "+> /path/name");	       # WRONG (almost always)
+	       open(FH, "+&gt /path/name");	       # WRONG (almost always)
 
        Whoops.	You should instead use this, which will fail if the file
        doesn't exist.
 
-	       open(FH, "+< /path/name");      # open for update
+	       open(FH, "+&lt /path/name");      # open for update
 
-       Using ">" always clobbers or creates.  Using "<" never does either.
+       Using "&gt" always clobbers or creates.  Using "&lt" never does either.
        The "+" doesn't change this.
 
        Here are examples of many kinds of file opens.  Those using sysopen()
@@ -642,13 +644,13 @@ DESCRIPTION
 
        To open file for reading:
 
-	       open(FH, "< $path")				   || die $!;
+	       open(FH, "&lt $path")				   || die $!;
 	       sysopen(FH, $path, O_RDONLY)			   || die $!;
 
        To open file for writing, create new file if needed or else truncate
        old file:
 
-	       open(FH, "> $path") || die $!;
+	       open(FH, "&gt $path") || die $!;
 	       sysopen(FH, $path, O_WRONLY|O_TRUNC|O_CREAT)	   || die $!;
 	       sysopen(FH, $path, O_WRONLY|O_TRUNC|O_CREAT, 0666)  || die $!;
 
@@ -659,7 +661,7 @@ DESCRIPTION
 
        To open file for appending, create if necessary:
 
-	       open(FH, ">> $path") || die $!;
+	       open(FH, "&gt&gt $path") || die $!;
 	       sysopen(FH, $path, O_WRONLY|O_APPEND|O_CREAT)	   || die $!;
 	       sysopen(FH, $path, O_WRONLY|O_APPEND|O_CREAT, 0666) || die $!;
 
@@ -669,7 +671,7 @@ DESCRIPTION
 
        To open file for update, file must exist:
 
-	       open(FH, "+< $path")				   || die $!;
+	       open(FH, "+&lt $path")				   || die $!;
 	       sysopen(FH, $path, O_RDWR)			   || die $!;
 
        To open file for update, create file if necessary:
@@ -694,8 +696,8 @@ DESCRIPTION
 
        See also the new perlopentut if you have it (new for 5.6).
 
-   Why do I sometimes get an "Argument list too long" when I use <*>?
-       The "<>" operator performs a globbing operation (see above).  In Perl
+   Why do I sometimes get an "Argument list too long" when I use &lt*&gt?
+       The "&lt&gt" operator performs a globbing operation (see above).  In Perl
        versions earlier than v5.6.0, the internal glob() operator forks csh(1)
        to do the actual glob expansion, but csh can't handle more than 127
        items and so gives the error message "Argument list too long".  People
@@ -712,7 +714,7 @@ DESCRIPTION
        you may cause a memory leak and/or unpredictable behavior.  It's best
        therefore to use glob() only in list context.
 
-   How can I open a file with a leading ">" or trailing blanks?
+   How can I open a file with a leading "&gt" or trailing blanks?
        (contributed by Brian McCauley)
 
        The special two argument form of Perl's open() function ignores
@@ -724,8 +726,8 @@ DESCRIPTION
        should use the three argument form of open() which does not treat any
        characters in the filename as special.
 
-	       open FILE, "<", "  file	";  # filename is "   file   "
-	       open FILE, ">", ">file";     # filename is ">file"
+	       open FILE, "&lt", "  file	";  # filename is "   file   "
+	       open FILE, "&gt", "&gtfile";     # filename is "&gtfile"
 
    How can I reliably rename a file?
        If your operating system supports a proper mv(1) utility or its
@@ -778,11 +780,11 @@ DESCRIPTION
 	   For more information on file locking, see also "File Locking" in
 	   perlopentut if you have it (new for 5.6).
 
-   Why can't I just open(FH, ">file.lock")?
+   Why can't I just open(FH, "&gtfile.lock")?
        A common bit of code NOT TO USE is this:
 
 	       sleep(3) while -e "file.lock";  # PLEASE DO NOT USE
-	       open(LCK, "> file.lock");	       # THIS BROKEN CODE
+	       open(LCK, "&gt file.lock");	       # THIS BROKEN CODE
 
        This is a classic race condition: you take two steps to do something
        which must be done in one.  That's why computer hardware provides an
@@ -808,7 +810,7 @@ DESCRIPTION
 	       use Fcntl qw(:DEFAULT :flock);
 	       sysopen(FH, "numfile", O_RDWR|O_CREAT)	or die "can't open numfile: $!";
 	       flock(FH, LOCK_EX)				or die "can't flock numfile: $!";
-	       $num = <FH> || 0;
+	       $num = &ltFH&gt || 0;
 	       seek(FH, 0, 0)				or die "can't rewind numfile: $!";
 	       truncate(FH, 0)					or die "can't truncate numfile: $!";
 	       (print FH $num+1, "\n")			or die "can't write numfile: $!";
@@ -861,7 +863,7 @@ DESCRIPTION
 
 	       $RECSIZE = 220; # size of record, in bytes
 	       $recno	= 37;  # which record to update
-	       open(FH, "+<somewhere") || die "can't update somewhere: $!";
+	       open(FH, "+&ltsomewhere") || die "can't update somewhere: $!";
 	       seek(FH, $recno * $RECSIZE, 0);
 	       read(FH, $record, $RECSIZE) == $RECSIZE || die "can't read record $recno: $!";
 	       # munge the record
@@ -895,7 +897,7 @@ DESCRIPTION
 	       # error checking left as an exercise for reader.
 	       use File::stat;
 	       use Time::localtime;
-	       $date_string = ctime(stat($file)->mtime);
+	       $date_string = ctime(stat($file)-&gtmtime);
 	       print "file $file updated at $date_string\n";
 
        The POSIX::strftime() approach has the benefit of being, in theory,
@@ -906,7 +908,7 @@ DESCRIPTION
        of example, here's a little program that copies the read and write
        times from its first argument to all the rest of them.
 
-	       if (@ARGV < 2) {
+	       if (@ARGV &lt 2) {
 		       die "usage: cptimes timestamp_file other_files ...\n";
 		       }
 	       $timestamp = shift;
@@ -945,7 +947,7 @@ DESCRIPTION
        to do so one line at a time:
 
 	       open (INPUT, $file)     || die "can't open $file: $!";
-	       while (<INPUT>) {
+	       while (&ltINPUT&gt) {
 		       chomp;
 		       # do something with $_
 		       }
@@ -956,7 +958,7 @@ DESCRIPTION
        time, which is often--if not almost always--the wrong approach.
        Whenever you see someone do this:
 
-	       @lines = <INPUT>;
+	       @lines = &ltINPUT&gt;
 
        you should think long and hard about why you need everything loaded at
        once.  It's just not a scalable solution.  You might also find it more
@@ -970,14 +972,14 @@ DESCRIPTION
 	       {
 	       local(*INPUT, $/);
 	       open (INPUT, $file)     || die "can't open $file: $!";
-	       $var = <INPUT>;
+	       $var = &ltINPUT&gt;
 	       }
 
        That temporarily undefs your record separator, and will automatically
        close the file at block exit.  If the file is already open, just use
        this:
 
-	       $var = do { local $/; <INPUT> };
+	       $var = do { local $/; &ltINPUT&gt };
 
        For ordinary files you can also use the read function.
 
@@ -1012,7 +1014,7 @@ DESCRIPTION
 		       my $got;
 		       print "gimme: ";
 		       $got = getone();
-		       print "--> $got\n";
+		       print "--&gt $got\n";
 		       }
 	   exit;
 
@@ -1023,23 +1025,23 @@ DESCRIPTION
 
 	       $fd_stdin = fileno(STDIN);
 
-	       $term	 = POSIX::Termios->new();
-	       $term->getattr($fd_stdin);
-	       $oterm	  = $term->getlflag();
+	       $term	 = POSIX::Termios-&gtnew();
+	       $term-&gtgetattr($fd_stdin);
+	       $oterm	  = $term-&gtgetlflag();
 
 	       $echo	 = ECHO | ECHOK | ICANON;
 	       $noecho	 = $oterm & ~$echo;
 
 	       sub cbreak {
-		       $term->setlflag($noecho);
-		       $term->setcc(VTIME, 1);
-		       $term->setattr($fd_stdin, TCSANOW);
+		       $term-&gtsetlflag($noecho);
+		       $term-&gtsetcc(VTIME, 1);
+		       $term-&gtsetattr($fd_stdin, TCSANOW);
 		       }
 
 	       sub cooked {
-		       $term->setlflag($oterm);
-		       $term->setcc(VTIME, 0);
-		       $term->setattr($fd_stdin, TCSANOW);
+		       $term-&gtsetlflag($oterm);
+		       $term-&gtsetcc(VTIME, 0);
+		       $term-&gtsetattr($fd_stdin, TCSANOW);
 		       }
 
 	       sub getone {
@@ -1058,7 +1060,7 @@ DESCRIPTION
        versions include also support for non-portable systems as well.
 
 	       use Term::ReadKey;
-	       open(TTY, "</dev/tty");
+	       open(TTY, "&lt/dev/tty");
 	       print "Gimme a char: ";
 	       ReadMode "raw";
 	       $key = ReadKey 0, *TTY;
@@ -1103,8 +1105,8 @@ DESCRIPTION
 
        Or write a small C program using the editor of champions:
 
-	       % cat > fionread.c
-	       #include <sys/ioctl.h>
+	       % cat &gt fionread.c
+	       #include &ltsys/ioctl.h&gt
 	       main() {
 		   printf("%#08x\n", FIONREAD);
 	       }
@@ -1132,13 +1134,13 @@ DESCRIPTION
 
        The statement "seek(GWFILE, 0, 1)" doesn't change the current position,
        but it does clear the end-of-file condition on the handle, so that the
-       next "<GWFILE>" makes Perl try again to read something.
+       next "&ltGWFILE&gt" makes Perl try again to read something.
 
        If that doesn't work (it relies on features of your stdio
        implementation), then you need something more like this:
 
 	       for (;;) {
-		 for ($curpos = tell(GWFILE); <GWFILE>; $curpos = tell(GWFILE)) {
+		 for ($curpos = tell(GWFILE); &ltGWFILE&gt; $curpos = tell(GWFILE)) {
 		   # search for some stuff and put it into files
 		 }
 		 # sleep for a while
@@ -1155,15 +1157,15 @@ DESCRIPTION
        If you check "open" in perlfunc, you'll see that several of the ways to
        call open() should do the trick.  For example:
 
-	       open(LOG, ">>/foo/logfile");
-	       open(STDERR, ">&LOG");
+	       open(LOG, "&gt&gt/foo/logfile");
+	       open(STDERR, "&gt&LOG");
 
        Or even with a literal numeric descriptor:
 
 	  $fd = $ENV{MHCONTEXTFD};
-	  open(MHCONTEXT, "<&=$fd");   # like fdopen(3S)
+	  open(MHCONTEXT, "&lt&=$fd");   # like fdopen(3S)
 
-       Note that "<&STDIN" makes a copy, but "<&=STDIN" make an alias.	That
+       Note that "&lt&STDIN" makes a copy, but "&lt&=STDIN" make an alias.	That
        means if you close an aliased handle, all aliases become inaccessible.
        This is not true with a copied one.
 
@@ -1190,7 +1192,7 @@ DESCRIPTION
        Or, just use the fdopen(3S) feature of "open()":
 
 	       {
-	       open my( $fh ), "<&=$fd" or die "Cannot reopen fd=$fd: $!";
+	       open my( $fh ), "&lt&=$fd" or die "Cannot reopen fd=$fd: $!";
 	       close $fh;
 	       }
 
@@ -1238,7 +1240,7 @@ DESCRIPTION
        Here's a reservoir-sampling algorithm from the Camel Book:
 
 	       srand;
-	       rand($.) < 1 && ($line = $_) while <>;
+	       rand($.) &lt 1 && ($line = $_) while &lt&gt;
 
        This has a significant advantage in space over reading the whole file
        in.  You can find a proof of this method in The Art of Computer
@@ -1321,18 +1323,18 @@ DESCRIPTION
 	       use File::Find;
 	       use File::Finder;
 
-	       my $deep_dirs = File::Finder->depth->type('d')->ls->exec('rmdir','{}');
+	       my $deep_dirs = File::Finder-&gtdepth-&gttype('d')-&gtls-&gtexec('rmdir','{}');
 
-	       find( $deep_dirs->as_options, @places );
+	       find( $deep_dirs-&gtas_options, @places );
 
        The "File::Find::Rule" module, which you can download from CPAN, has a
        similar interface, but does the traversal for you too:
 
 	       use File::Find::Rule;
 
-	       my @files = File::Find::Rule->file()
-								->name( '*.pm' )
-								->in( @INC );
+	       my @files = File::Find::Rule-&gtfile()
+								-&gtname( '*.pm' )
+								-&gtin( @INC );
 
    How do I delete a directory tree?
        (contributed by brian d foy)
@@ -1384,6 +1386,6 @@ AUTHOR AND COPYRIGHT
 
 
 perl v5.10.1			  2009-08-15			   PERLFAQ5(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

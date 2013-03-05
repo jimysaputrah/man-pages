@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module figures out the type of DateTime::Format::* class to..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::InflateColumn::DateTime - Auto-create DateTime objects</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::InflateCoUser:Contributed)DBIx::Class::InflateColumn::DateTime(3)
 
 
@@ -23,38 +25,38 @@ SYNOPSIS
 	 package Event;
 	 use base 'DBIx::Class::Core';
 
-	 __PACKAGE__->load_components(qw/InflateColumn::DateTime/);
-	 __PACKAGE__->add_columns(
-	   starts_when => { data_type => 'datetime' }
-	   create_date => { data_type => 'date' }
+	 __PACKAGE__-&gtload_components(qw/InflateColumn::DateTime/);
+	 __PACKAGE__-&gtadd_columns(
+	   starts_when =&gt { data_type =&gt 'datetime' }
+	   create_date =&gt { data_type =&gt 'date' }
 	 );
 
        Then you can treat the specified column as a DateTime object.
 
 	 print "This event starts the month of ".
-	   $event->starts_when->month_name();
+	   $event-&gtstarts_when-&gtmonth_name();
 
        If you want to set a specific timezone and locale for that field, use:
 
-	 __PACKAGE__->add_columns(
-	   starts_when => { data_type => 'datetime', timezone => "America/Chicago", locale => "de_DE" }
+	 __PACKAGE__-&gtadd_columns(
+	   starts_when =&gt { data_type =&gt 'datetime', timezone =&gt "America/Chicago", locale =&gt "de_DE" }
 	 );
 
        If you want to inflate no matter what data_type your column is, use
        inflate_datetime or inflate_date:
 
-	 __PACKAGE__->add_columns(
-	   starts_when => { data_type => 'varchar', inflate_datetime => 1 }
+	 __PACKAGE__-&gtadd_columns(
+	   starts_when =&gt { data_type =&gt 'varchar', inflate_datetime =&gt 1 }
 	 );
 
-	 __PACKAGE__->add_columns(
-	   starts_when => { data_type => 'varchar', inflate_date => 1 }
+	 __PACKAGE__-&gtadd_columns(
+	   starts_when =&gt { data_type =&gt 'varchar', inflate_date =&gt 1 }
 	 );
 
        It's also possible to explicitly skip inflation:
 
-	 __PACKAGE__->add_columns(
-	   starts_when => { data_type => 'datetime', inflate_datetime => 0 }
+	 __PACKAGE__-&gtadd_columns(
+	   starts_when =&gt { data_type =&gt 'datetime', inflate_datetime =&gt 0 }
 	 );
 
        NOTE: Don't rely on "InflateColumn::DateTime" to parse date strings for
@@ -65,7 +67,7 @@ SYNOPSIS
        "DateTime::Format::ISO8601" thusly:
 
 	 use DateTime::Format::ISO8601;
-	 my $dt = DateTime::Format::ISO8601->parse_datetime('YYYY-MM-DD');
+	 my $dt = DateTime::Format::ISO8601-&gtparse_datetime('YYYY-MM-DD');
 
 DESCRIPTION
        This module figures out the type of DateTime::Format::* class to
@@ -99,10 +101,10 @@ DESCRIPTION
 
 	   "broken_date",
 	   {
-	       data_type => "datetime",
-	       default_value => '0000-00-00',
-	       is_nullable => 1,
-	       datetime_undef_if_invalid => 1
+	       data_type =&gt "datetime",
+	       default_value =&gt '0000-00-00',
+	       is_nullable =&gt 1,
+	       datetime_undef_if_invalid =&gt 1
 	   }
 
 USAGE NOTES
@@ -112,12 +114,12 @@ USAGE NOTES
        is a very good chance this will not have the result you expect). For
        example:
 
-	 __PACKAGE__->add_columns(
-	   starts_when => { data_type => 'datetime', timezone => "America/Chicago" }
+	 __PACKAGE__-&gtadd_columns(
+	   starts_when =&gt { data_type =&gt 'datetime', timezone =&gt "America/Chicago" }
 	 );
 
-	 my $event = $schema->resultset('EventTZ')->create({
-	   starts_at => DateTime->new(year=>2007, month=>12, day=>31, ),
+	 my $event = $schema-&gtresultset('EventTZ')-&gtcreate({
+	   starts_at =&gt DateTime-&gtnew(year=&gt2007, month=&gt12, day=&gt31, ),
 	 });
 
        The warning can be avoided in several ways:
@@ -128,13 +130,13 @@ USAGE NOTES
 	   conversion takes place. It is always a good idea to be supply
 	   explicit times to the database:
 
-	     my $event = $schema->resultset('EventTZ')->create({
-	       starts_at => DateTime->new(year=>2007, month=>12, day=>31, time_zone => "America/Chicago" ),
+	     my $event = $schema-&gtresultset('EventTZ')-&gtcreate({
+	       starts_at =&gt DateTime-&gtnew(year=&gt2007, month=&gt12, day=&gt31, time_zone =&gt "America/Chicago" ),
 	     });
 
        Suppress the check on per-column basis
-	     __PACKAGE__->add_columns(
-	       starts_when => { data_type => 'datetime', timezone => "America/Chicago", floating_tz_ok => 1 }
+	     __PACKAGE__-&gtadd_columns(
+	       starts_when =&gt { data_type =&gt 'datetime', timezone =&gt "America/Chicago", floating_tz_ok =&gt 1 }
 	     );
 
        Suppress the check globally
@@ -142,7 +144,7 @@ USAGE NOTES
 	   value.
 
        Putting extra attributes like timezone, locale or floating_tz_ok into
-       extra => {} has been DEPRECATED because this gets you into trouble
+       extra =&gt {} has been DEPRECATED because this gets you into trouble
        using DBIx::Class::Schema::Versioned.  Instead put it directly into the
        columns definition like in the examples above. If you still use the old
        way you'll see a warning - please fix your code then!
@@ -151,13 +153,13 @@ SEE ALSO
        More information about the add_columns method, and column metadata, can
        be found in the documentation for DBIx::Class::ResultSource.
        Further discussion of problems inherent to the Floating timezone:
-       Floating DateTimes and $dt->set_time_zone
+       Floating DateTimes and $dt-&gtset_time_zone
 
 AUTHOR
-       Matt S. Trout <mst@shadowcatsystems.co.uk>
+       Matt S. Trout &ltmst@shadowcatsystems.co.uk&gt
 
 CONTRIBUTORS
-       Aran Deltac <bluefeet@cpan.org>
+       Aran Deltac &ltbluefeet@cpan.org&gt
 
 LICENSE
        You may distribute this code under the same terms as Perl itself.
@@ -165,6 +167,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-DBIx::Class::InflateColumn::DateTime(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

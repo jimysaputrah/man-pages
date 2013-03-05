@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""HTML::Element" provides a method "traverse" that traverses the tree..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>HTML::Element::traverse - discussion of HTML::Element's traverse method</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 HTML::Element::traversUser Contributed Perl DocumentHTML::Element::traverse(3)
 
 
@@ -16,7 +18,7 @@ NAME
        HTML::Element::traverse - discussion of HTML::Element's traverse method
 
 SYNOPSIS
-	 # $element->traverse is unnecessary and obscure.
+	 # $element-&gttraverse is unnecessary and obscure.
 	 #   Don't use it in new code.
 
 DESCRIPTION
@@ -35,12 +37,12 @@ EXAMPLES
 
 	 {
 	   my $counter = 'x0000';
-	   $start_node->traverse(
+	   $start_node-&gttraverse(
 	     [ # Callbacks;
 	       # pre-order callback:
 	       sub {
 		 my $x = $_[0];
-		 $x->attr('id', $counter++) unless defined $x->attr('id');
+		 $x-&gtattr('id', $counter++) unless defined $x-&gtattr('id');
 		 return HTML::Element::OK; # keep traversing
 	       },
 	       # post-order callback:
@@ -58,8 +60,8 @@ EXAMPLES
 	   my $counter = 'x0000';
 	   sub give_id {
 	     my $x = $_[0];
-	     $x->attr('id', $counter++) unless defined $x->attr('id');
-	     foreach my $c ($x->content_list) {
+	     $x-&gtattr('id', $counter++) unless defined $x-&gtattr('id');
+	     foreach my $c ($x-&gtcontent_list) {
 	       give_id($c) if ref $c; # ignore text nodes
 	     }
 	   };
@@ -75,9 +77,9 @@ THE TRAVERSE METHOD
        tree or subtree and calling user-specified callbacks.  It accepts the
        following syntaxes:
 
-       $h->traverse(\&callback)
-       or $h->traverse(\&callback, $ignore_text)
-       or $h->traverse( [\&pre_callback,\&post_callback] , $ignore_text)
+       $h-&gttraverse(\&callback)
+       or $h-&gttraverse(\&callback, $ignore_text)
+       or $h-&gttraverse( [\&pre_callback,\&post_callback] , $ignore_text)
 
        These all mean to traverse the element and all of its children.	That
        is, this method starts at node $h, "pre-order visits" $h, traverses its
@@ -110,21 +112,21 @@ THE TRAVERSE METHOD
        Note that you can specify that the pre-order routine can be a different
        routine from the post-order one:
 
-	   $h->traverse( [\&pre_callback,\&post_callback], ...);
+	   $h-&gttraverse( [\&pre_callback,\&post_callback], ...);
 
        You can also specify that no post-order calls are to be made, by
        providing a false value as the post-order routine:
 
-	   $h->traverse([ \&pre_callback,0 ], ...);
+	   $h-&gttraverse([ \&pre_callback,0 ], ...);
 
        And similarly for suppressing pre-order callbacks:
 
-	   $h->traverse([ 0,\&post_callback ], ...);
+	   $h-&gttraverse([ 0,\&post_callback ], ...);
 
        Note that these two syntaxes specify the same operation:
 
-	   $h->traverse([\&foo,\&foo], ...);
-	   $h->traverse( \&foo	     , ...);
+	   $h-&gttraverse([\&foo,\&foo], ...);
+	   $h-&gttraverse( \&foo	     , ...);
 
        The return values from calls to your pre- or post-order routines are
        significant, and are used to control recursion into the tree.
@@ -188,12 +190,12 @@ THE TRAVERSE METHOD
 	   my $give_id;
 	   $give_id = sub {
 	     my $x = $_[0];
-	     $x->attr('id', $counter++) unless defined $x->attr('id');
-	     foreach my $c ($x->content_list) {
-	       $give_id->($c) if ref $c; # ignore text nodes
+	     $x-&gtattr('id', $counter++) unless defined $x-&gtattr('id');
+	     foreach my $c ($x-&gtcontent_list) {
+	       $give_id-&gt($c) if ref $c; # ignore text nodes
 	     }
 	   };
-	   $give_id->($start_node);
+	   $give_id-&gt($start_node);
 	   undef $give_id;
 	 }
 
@@ -219,7 +221,7 @@ THE TRAVERSE METHOD
 	  # nor...
 	   $give_id = \$give_id;
 	  # nor...
-	   $give_id = { 'pie' => \$give_id, 'mode' => 'a la' };
+	   $give_id = { 'pie' =&gt \$give_id, 'mode' =&gt 'a la' };
 
    Doing Recursive Things Iteratively
        Note that you may at times see an iterative implementation of pre-order
@@ -231,10 +233,10 @@ THE TRAVERSE METHOD
 	      my $this = shift @to_do;
 
 	      # "Visit" the node:
-	      $this->attr('id', $counter++)
-	       unless defined $this->attr('id');
+	      $this-&gtattr('id', $counter++)
+	       unless defined $this-&gtattr('id');
 
-	      unshift @to_do, grep ref $_, $this->content_list;
+	      unshift @to_do, grep ref $_, $this-&gtcontent_list;
 	       # Put children on the stack -- they'll be visited next
 	    }
 	  }
@@ -262,7 +264,7 @@ THE TRAVERSE METHOD
 	 }
 	 eval { thing($node) };
 	 if($@) {
-	   if($@ =~ m<^ABORT_TRAV>) {
+	   if($@ =~ m&lt^ABORT_TRAV&gt) {
 	     ...it died (aborted) on $died_on...
 	   } else {
 	     die $@; # some REAL error happened
@@ -275,7 +277,7 @@ THE TRAVERSE METHOD
 	 sub thing {
 	   ... visits $_[0]...
 	   ... maybe set $abort_flag = 1; $died_on = $_[0]; return;
-	   foreach my $c ($_[0]->content_list) {
+	   foreach my $c ($_[0]-&gtcontent_list) {
 	     thing($c);
 	     return if $abort_flag;
 	   }
@@ -293,15 +295,15 @@ SEE ALSO
 COPYRIGHT
        Copyright 2000,2001 Sean M. Burke
 
-AUTHOR Current Author: Jeff Fearn "<jfearn@cpan.org>".
+AUTHOR Current Author: Jeff Fearn "&ltjfearn@cpan.org&gt".
        Original HTML-Tree author:      Gisle Aas.
 
        Former Authors:	    Sean M. Burke.	 Andy Lester.	    Pete
-       Krawczyk "<petek@cpan.org>".
+       Krawczyk "&ltpetek@cpan.org&gt".
 
 
 
 perl v5.12.4			  2012-06-20	    HTML::Element::traverse(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="I list here some of the most important methods in "Module::Build"...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Module::Build::API - API Reference for Module Authors</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Module::Build::API(3pm)Perl Programmers Reference GuideModule::Build::API(3pm)
 
 
@@ -35,13 +37,13 @@ DESCRIPTION
 	   then use their answer during a regression test:
 
 	     # In Build.PL:
-	     my $color = $build->prompt("What is your favorite color?");
-	     $build->notes(color => $color);
+	     my $color = $build-&gtprompt("What is your favorite color?");
+	     $build-&gtnotes(color =&gt $color);
 
 	     # In t/colortest.t:
 	     use Module::Build;
-	     my $build = Module::Build->current;
-	     my $color = $build->notes('color');
+	     my $build = Module::Build-&gtcurrent;
+	     my $color = $build-&gtnotes('color');
 	     ...
 
 	   The way the "current()" method is currently implemented, there may
@@ -86,19 +88,19 @@ DESCRIPTION
 	       optionally use either MySQL or PostgreSQL databases, you might
 	       use "auto_features" like this:
 
-		 my $build = Module::Build->new
+		 my $build = Module::Build-&gtnew
 		   (
 		    ...other stuff here...
-		    auto_features => {
-		      pg_support    => {
-					description => "Interface with Postgres databases",
-					requires    => { 'DBD::Pg' => 23.3,
-							 'DateTime::Format::Pg' => 0 },
+		    auto_features =&gt {
+		      pg_support    =&gt {
+					description =&gt "Interface with Postgres databases",
+					requires    =&gt { 'DBD::Pg' =&gt 23.3,
+							 'DateTime::Format::Pg' =&gt 0 },
 				       },
-		      mysql_support => {
-					description => "Interface with MySQL databases",
-					requires    => { 'DBD::mysql' => 17.9,
-							 'DateTime::Format::MySQL' => 0 },
+		      mysql_support =&gt {
+					description =&gt "Interface with MySQL databases",
+					requires    =&gt { 'DBD::mysql' =&gt 17.9,
+							 'DateTime::Format::MySQL' =&gt 0 },
 				       },
 		    }
 		   );
@@ -234,7 +236,7 @@ DESCRIPTION
 	   dist_author
 	       [version 0.20]
 
-	       This should be something like "John Doe <jdoe@example.com>", or
+	       This should be something like "John Doe &ltjdoe@example.com&gt", or
 	       if there are multiple authors, an anonymous array of strings
 	       may be specified.  This is used when generating metadata for
 	       META.yml and PPD files.	If this is not specified, then
@@ -310,21 +312,21 @@ DESCRIPTION
 	       For example, to tell the compiler that your code is C++, you
 	       might do:
 
-		 my $build = Module::Build->new
+		 my $build = Module::Build-&gtnew
 		   (
-		    module_name 	 => 'Foo::Bar',
-		    extra_compiler_flags => ['-x', 'c++'],
+		    module_name 	 =&gt 'Foo::Bar',
+		    extra_compiler_flags =&gt ['-x', 'c++'],
 		   );
 
 	       To link your XS code against glib you might write something
 	       like:
 
-		 my $build = Module::Build->new
+		 my $build = Module::Build-&gtnew
 		   (
-		    module_name 	 => 'Foo::Bar',
-		    dynamic_config	 => 1,
-		    extra_compiler_flags => scalar `glib-config --cflags`,
-		    extra_linker_flags	 => scalar `glib-config --libs`,
+		    module_name 	 =&gt 'Foo::Bar',
+		    dynamic_config	 =&gt 1,
+		    extra_compiler_flags =&gt scalar `glib-config --cflags`,
+		    extra_linker_flags	 =&gt scalar `glib-config --libs`,
 		   );
 
 	   get_options
@@ -367,20 +369,20 @@ DESCRIPTION
 	       also be stored in the hash returned by "args()".  For example:
 
 		 my $loud = 0;
-		 my $build = Module::Build->new
+		 my $build = Module::Build-&gtnew
 		   (
-		    module_name => 'Foo::Bar',
-		    get_options => {
-				    loud =>	{ store => \$loud },
-				    dbd  =>	{ type	=> '=s'   },
-				    quantity => { type	=> '+'	  },
+		    module_name =&gt 'Foo::Bar',
+		    get_options =&gt {
+				    loud =&gt	{ store =&gt \$loud },
+				    dbd  =&gt	{ type	=&gt '=s'   },
+				    quantity =&gt { type	=&gt '+'	  },
 				   }
 		   );
 
 		 print STDERR "HEY, ARE YOU LISTENING??\n" if $loud;
-		 print "We'll use the ", $build->args('dbd'), " DBI driver\n";
+		 print "We'll use the ", $build-&gtargs('dbd'), " DBI driver\n";
 		 print "Are you sure you want that many?\n"
-		   if $build->args('quantity') > 2;
+		   if $build-&gtargs('quantity') &gt 2;
 
 	       The arguments for such a specification can be called like so:
 
@@ -407,12 +409,12 @@ DESCRIPTION
 	       You can set paths for individual installable elements by using
 	       the "install_path" parameter:
 
-		 my $build = Module::Build->new
+		 my $build = Module::Build-&gtnew
 		   (
 		    ...other stuff here...
-		    install_path => {
-				     lib  => '/foo/lib',
-				     arch => '/foo/lib/arch',
+		    install_path =&gt {
+				     lib  =&gt '/foo/lib',
+				     arch =&gt '/foo/lib/arch',
 				    }
 		   );
 
@@ -432,7 +434,7 @@ DESCRIPTION
 
 	       apache
 		   The distribution is licensed under the Apache Software
-		   License (<http://opensource.org/licenses/apachepl.php>).
+		   License (&lthttp://opensource.org/licenses/apachepl.php&gt).
 
 	       artistic
 		   The distribution is licensed under the Artistic License, as
@@ -441,32 +443,32 @@ DESCRIPTION
 
 	       artistic_2
 		   The distribution is licensed under the Artistic 2.0 License
-		   (<http://opensource.org/licenses/artistic-license-2.0.php>.)
+		   (&lthttp://opensource.org/licenses/artistic-license-2.0.php&gt.)
 
 	       bsd The distribution is licensed under the BSD License
-		   (<http://www.opensource.org/licenses/bsd-license.php>).
+		   (&lthttp://www.opensource.org/licenses/bsd-license.php&gt).
 
 	       gpl The distribution is licensed under the terms of the GNU
 		   General Public License
-		   (<http://www.opensource.org/licenses/gpl-license.php>).
+		   (&lthttp://www.opensource.org/licenses/gpl-license.php&gt).
 
 	       lgpl
 		   The distribution is licensed under the terms of the GNU
 		   Lesser General Public License
-		   (<http://www.opensource.org/licenses/lgpl-license.php>).
+		   (&lthttp://www.opensource.org/licenses/lgpl-license.php&gt).
 
 	       mit The distribution is licensed under the MIT License
-		   (<http://opensource.org/licenses/mit-license.php>).
+		   (&lthttp://opensource.org/licenses/mit-license.php&gt).
 
 	       mozilla
 		   The distribution is licensed under the Mozilla Public
-		   License.  (<http://opensource.org/licenses/mozilla1.0.php>
-		   or <http://opensource.org/licenses/mozilla1.1.php>)
+		   License.  (&lthttp://opensource.org/licenses/mozilla1.0.php&gt
+		   or &lthttp://opensource.org/licenses/mozilla1.1.php&gt)
 
 	       open_source
 		   The distribution is licensed under some other Open Source
 		   Initiative-approved license listed at
-		   <http://www.opensource.org/licenses/>.
+		   &lthttp://www.opensource.org/licenses/&gt.
 
 	       perl
 		   The distribution may be copied and redistributed under the
@@ -554,11 +556,11 @@ DESCRIPTION
 	       The files are specified with the ".PL" files as hash keys, and
 	       the file(s) they generate as hash values, like so:
 
-		 my $build = Module::Build->new
+		 my $build = Module::Build-&gtnew
 		   (
-		    module_name => 'Foo::Bar',
+		    module_name =&gt 'Foo::Bar',
 		    ...
-		    PL_files => { 'lib/Foo/Bar.pm.PL' => 'lib/Foo/Bar.pm' },
+		    PL_files =&gt { 'lib/Foo/Bar.pm.PL' =&gt 'lib/Foo/Bar.pm' },
 		   );
 
 	       Note that the path specifications are always given in Unix-like
@@ -569,18 +571,18 @@ DESCRIPTION
 	       files, you can indicate that so that Module::Build can properly
 	       handle these created files:
 
-		 PL_files => {
-			      'lib/Foo/Bar.pm.PL' => 'lib/Foo/Bar.pm',
-			      'lib/something.PL'  => ['/lib/something', '/lib/else'],
-			      'lib/funny.PL'	  => [],
+		 PL_files =&gt {
+			      'lib/Foo/Bar.pm.PL' =&gt 'lib/Foo/Bar.pm',
+			      'lib/something.PL'  =&gt ['/lib/something', '/lib/else'],
+			      'lib/funny.PL'	  =&gt [],
 			     }
 
 	       Here's an example of a simple PL file.
 
 		   my $output_file = shift;
-		   open my $fh, ">", $output_file or die "Can't open $output_file: $!";
+		   open my $fh, "&gt", $output_file or die "Can't open $output_file: $!";
 
-		   print $fh <<'END';
+		   print $fh &lt&lt'END';
 		   #!/usr/bin/perl
 
 		   print "Hello, world!\n";
@@ -605,11 +607,11 @@ DESCRIPTION
 	       level of the distribution, you could specify your layout in
 	       your "Build.PL" like this:
 
-		 my $build = Module::Build->new
+		 my $build = Module::Build-&gtnew
 		   (
-		    module_name => 'Foo::Bar',
+		    module_name =&gt 'Foo::Bar',
 		    ...
-		    pm_files => { 'Bar.pm' => 'lib/Foo/Bar.pm' },
+		    pm_files =&gt { 'Bar.pm' =&gt 'lib/Foo/Bar.pm' },
 		   );
 
 	       Note that the values should include "lib/", because this is
@@ -767,7 +769,7 @@ DESCRIPTION
 	   resulting "Module::Build" object to the caller.  Any key-value
 	   arguments given to "new_from_context()" are essentially like
 	   command line arguments given to the Build.PL script, so for example
-	   you could pass "verbose => 1" to this method to turn on verbosity.
+	   you could pass "verbose =&gt 1" to this method to turn on verbosity.
 
        resume()
 	   [version 0.03]
@@ -794,14 +796,14 @@ DESCRIPTION
 
 	     package 'My::Build';
 	     use base 'Module::Build';
-	     __PACKAGE__->add_property( 'pedantic' );
-	     __PACKAGE__->add_property( answer => 42 );
-	     __PACKAGE__->add_property(
+	     __PACKAGE__-&gtadd_property( 'pedantic' );
+	     __PACKAGE__-&gtadd_property( answer =&gt 42 );
+	     __PACKAGE__-&gtadd_property(
 		'epoch',
-		 default => sub { time },
-		 check	 => sub {
+		 default =&gt sub { time },
+		 check	 =&gt sub {
 		     return 1 if /^\d+$/;
-		     shift->property_error( "'$_' is not an epoch time" );
+		     shift-&gtproperty_error( "'$_' is not an epoch time" );
 		     return 0;
 		 },
 	     );
@@ -822,7 +824,7 @@ DESCRIPTION
 	       the code reference will be used.  If you need the default to be
 	       a code reference, just use a code reference to return it, e.g.:
 
-		     default => sub { sub { ... } },
+		     default =&gt sub { sub { ... } },
 
 	   "check"
 	       A code reference that checks that a value specified for the
@@ -836,29 +838,29 @@ DESCRIPTION
 	   Module::Build class, and an accessor will be built to allow the
 	   property to be get or set on the build object.
 
-	     print $build->pedantic, $/;
-	     $build->pedantic(0);
+	     print $build-&gtpedantic, $/;
+	     $build-&gtpedantic(0);
 
 	   If the default value is a hash reference, this generates a special-
 	   case accessor method, wherein individual key/value pairs may be set
 	   or fetched:
 
-	     print "stuff{foo} is: ", $build->stuff( 'foo' ), $/;
-	     $build->stuff( foo => 'bar' );
-	     print $build->stuff( 'foo' ), $/; # Outputs "bar"
+	     print "stuff{foo} is: ", $build-&gtstuff( 'foo' ), $/;
+	     $build-&gtstuff( foo =&gt 'bar' );
+	     print $build-&gtstuff( 'foo' ), $/; # Outputs "bar"
 
 	   Of course, you can still set the entire hash reference at once, as
 	   well:
 
-	     $build->stuff( { foo => 'bar', baz => 'yo' } );
+	     $build-&gtstuff( { foo =&gt 'bar', baz =&gt 'yo' } );
 
 	   In either case, if a "check" has been specified for the property,
 	   it will be applied to the entire hash. So the check code reference
 	   should look something like:
 
-		 check => sub {
-		       return 1 if defined $_ && exists $_->{foo};
-		       shift->property_error(qq{Property "stuff" needs "foo"});
+		 check =&gt sub {
+		       return 1 if defined $_ && exists $_-&gt{foo};
+		       shift-&gtproperty_error(qq{Property "stuff" needs "foo"});
 		       return 0;
 		 },
 
@@ -881,7 +883,7 @@ DESCRIPTION
        add_to_cleanup(@files)
 	   [version 0.03]
 
-	   You may call "$self->add_to_cleanup(@patterns)" to tell
+	   You may call "$self-&gtadd_to_cleanup(@patterns)" to tell
 	   "Module::Build" that certain files should be removed when the user
 	   performs the "Build clean" action.  The arguments to the method are
 	   patterns suitable for passing to Perl's "glob()" function,
@@ -900,10 +902,10 @@ DESCRIPTION
        args()
 	   [version 0.26]
 
-	     my $args_href = $build->args;
-	     my %args = $build->args;
-	     my $arg_value = $build->args($key);
-	     $build->args($key, $value);
+	     my $args_href = $build-&gtargs;
+	     my %args = $build-&gtargs;
+	     my $arg_value = $build-&gtargs($key);
+	     $build-&gtargs($key, $value);
 
 	   This method is the preferred interface for retrieving the arguments
 	   passed via command line options to Build.PL or Build, minus the
@@ -966,22 +968,22 @@ DESCRIPTION
 	   The returned hash reference has the following structure:
 
 	     {
-	      ok => $whether_the_dependency_is_satisfied,
-	      have => $version_already_installed,
-	      need => $version_requested, # Same as incoming $version argument
-	      message => $informative_error_message,
+	      ok =&gt $whether_the_dependency_is_satisfied,
+	      have =&gt $version_already_installed,
+	      need =&gt $version_requested, # Same as incoming $version argument
+	      message =&gt $informative_error_message,
 	     }
 
 	   If no version of $module is currently installed, the "have" value
-	   will be the string "<none>".  Otherwise the "have" value will
+	   will be the string "&ltnone&gt".  Otherwise the "have" value will
 	   simply be the version of the installed module.  Note that this
 	   means that if $module is installed but doesn't define a version
 	   number, the "have" value will be "undef" - this is why we don't use
 	   "undef" for the case when $module isn't installed at all.
 
 	   This method may be called either as an object method
-	   ("$build->check_installed_status($module, $version)") or as a class
-	   method ("Module::Build->check_installed_status($module,
+	   ("$build-&gtcheck_installed_status($module, $version)") or as a class
+	   method ("Module::Build-&gtcheck_installed_status($module,
 	   $version)").
 
        check_installed_version($module, $version)
@@ -995,7 +997,7 @@ DESCRIPTION
 	   $module installed on the system.  This allows you to do the
 	   following:
 
-	     my $installed = $build->check_installed_version('DBI', '1.15');
+	     my $installed = $build-&gtcheck_installed_version('DBI', '1.15');
 	     if ($installed) {
 	       print "Congratulations, version $installed of DBI is installed.\n";
 	     } else {
@@ -1019,7 +1021,7 @@ DESCRIPTION
 	   [version 0.28]
 
 	   Compares two module versions $v1 and $v2 using the operator $op,
-	   which should be one of Perl's numeric operators like "!=" or ">="
+	   which should be one of Perl's numeric operators like "!=" or "&gt="
 	   or the like.  We do at least a halfway-decent job of handling
 	   versions that aren't strictly numeric, like "0.27_02", but exotic
 	   stuff will likely cause problems.
@@ -1044,7 +1046,7 @@ DESCRIPTION
 	   resource hog and violates encapsulation.
 
        config_data($name)
-       config_data($name => $value)
+       config_data($name =&gt $value)
 	   [version 0.26]
 
 	   With a single argument, returns the value of the configuration
@@ -1054,12 +1056,12 @@ DESCRIPTION
 	   write a module that can use a MySQL or PostgreSQL back-end, you
 	   might create configuration variables called "mysql_connect" and
 	   "postgres_connect", and set each to an array of connection
-	   parameters for "DBI->connect()".
+	   parameters for "DBI-&gtconnect()".
 
 	   Configuration values set in this way using the Module::Build object
 	   will be available for querying during the build/test process and
 	   after installation via the generated "...::ConfigData" module, as
-	   "...::ConfigData->config($name)".
+	   "...::ConfigData-&gtconfig($name)".
 
 	   The feature() and "config_data()" methods represent Module::Build's
 	   main support for configuration of installed modules.  See also
@@ -1120,7 +1122,7 @@ DESCRIPTION
 	   custom runtime code in the _build/prereqs file, leave it as a
 	   static declaration containing only strings and numbers.  Similarly,
 	   do not alter the structure of the internal
-	   "$self->{properties}{requires}" (etc.)  data members, because
+	   "$self-&gt{properties}{requires}" (etc.)  data members, because
 	   that's where this data comes from.
 
        current_action()
@@ -1177,7 +1179,7 @@ DESCRIPTION
 	   Custom options that have not been registered must be passed in as a
 	   hash reference in a key named "args":
 
-	     $build->dispatch('foo', verbose => 1, args => { my_option => 'value' });
+	     $build-&gtdispatch('foo', verbose =&gt 1, args =&gt { my_option =&gt 'value' });
 
 	   This method is intended to be used to programmatically invoke build
 	   actions, e.g. by applications controlling Module::Build-based
@@ -1226,7 +1228,7 @@ DESCRIPTION
 	   executed directly.
 
        feature($name)
-       feature($name => $value)
+       feature($name =&gt $value)
 	   [version 0.26]
 
 	   With a single argument, returns true if the given feature is set.
@@ -1241,7 +1243,7 @@ DESCRIPTION
 	   Features set in this way using the Module::Build object will be
 	   available for querying during the build/test process and after
 	   installation via the generated "...::ConfigData" module, as
-	   "...::ConfigData->feature($name)".
+	   "...::ConfigData-&gtfeature($name)".
 
 	   The "feature()" and "config_data()" methods represent
 	   Module::Build's main support for configuration of installed
@@ -1259,7 +1261,7 @@ DESCRIPTION
 	   not be changed.
 
 	   For an explanation of shebang lines, see
-	   <http://en.wikipedia.org/wiki/Shebang_%28Unix%29>.
+	   &lthttp://en.wikipedia.org/wiki/Shebang_%28Unix%29&gt.
 
        have_c_compiler()
 	   [version 0.21]
@@ -1271,7 +1273,7 @@ DESCRIPTION
 
        install_base_relpaths()
        install_base_relpaths($type)
-       install_base_relpaths($type => $path)
+       install_base_relpaths($type =&gt $path)
 	   [version 0.28]
 
 	   Set or retrieve the relative paths that are appended to
@@ -1304,7 +1306,7 @@ DESCRIPTION
 
        install_path()
        install_path($type)
-       install_path($type => $path)
+       install_path($type =&gt $path)
 	   [version 0.28]
 
 	   Set or retrieve paths for specific installable elements. This is
@@ -1350,7 +1352,7 @@ DESCRIPTION
 
        notes()
        notes($key)
-       notes($key => $value)
+       notes($key =&gt $value)
 	   [version 0.20]
 
 	   The "notes()" value allows you to store your own persistent
@@ -1401,7 +1403,7 @@ DESCRIPTION
        prefix_relpaths()
        prefix_relpaths($installdirs)
        prefix_relpaths($installdirs, $type)
-       prefix_relpaths($installdirs, $type => $path)
+       prefix_relpaths($installdirs, $type =&gt $path)
 	   [version 0.28]
 
 	   Set or retrieve the relative paths that are appended to "prefix"
@@ -1441,8 +1443,8 @@ DESCRIPTION
 
 	     sub prepare_metadata {
 	       my $self = shift;
-	       my $node = $self->SUPER::prepare_metadata( shift );
-	       $node->{custom_field} = 'foo';
+	       my $node = $self-&gtSUPER::prepare_metadata( shift );
+	       $node-&gt{custom_field} = 'foo';
 	       return $node;
 	     }
 
@@ -1462,17 +1464,17 @@ DESCRIPTION
 	   example:
 
 	     {
-	      have => '0.42',
-	      need => '0.59',
-	      message => 'Version 0.42 is installed, but we need version 0.59',
+	      have =&gt '0.42',
+	      need =&gt '0.59',
+	      message =&gt 'Version 0.42 is installed, but we need version 0.59',
 	     }
 
 	   or
 
 	     {
-	      have => '<none>',
-	      need => '0.59',
-	      message => 'Prerequisite Foo isn't installed',
+	      have =&gt '&ltnone&gt',
+	      need =&gt '0.59',
+	      message =&gt 'Prerequisite Foo isn't installed',
 	     }
 
 	   This hash has the same structure as the hash returned by the
@@ -1483,16 +1485,16 @@ DESCRIPTION
 	   Examples:
 
 	     # Check a required dependency on Foo::Bar
-	     if ( $build->prereq_failures->{requires}{Foo::Bar} ) { ...
+	     if ( $build-&gtprereq_failures-&gt{requires}{Foo::Bar} ) { ...
 
 	     # Check whether there were any failures
-	     if ( $build->prereq_failures ) { ...
+	     if ( $build-&gtprereq_failures ) { ...
 
 	     # Show messages for all failures
-	     my $failures = $build->prereq_failures;
+	     my $failures = $build-&gtprereq_failures;
 	     while (my ($type, $list) = each %$failures) {
 	       while (my ($name, $hash) = each %$list) {
-		 print "Failure for $name: $hash->{message}\n";
+		 print "Failure for $name: $hash-&gt{message}\n";
 	       }
 	     }
 
@@ -1568,13 +1570,13 @@ DESCRIPTION
 	   Examples:
 
 	    # All the *.pm files in lib/
-	    $m->rscan_dir('lib', qr/\.pm$/)
+	    $m-&gtrscan_dir('lib', qr/\.pm$/)
 
 	    # All the files in blib/ that aren't *.html files
-	    $m->rscan_dir('blib', sub {-f $_ and not /\.html$/});
+	    $m-&gtrscan_dir('blib', sub {-f $_ and not /\.html$/});
 
 	    # All the files in t/
-	    $m->rscan_dir('t');
+	    $m-&gtrscan_dir('t');
 
        runtime_params()
        runtime_params($key)
@@ -1713,7 +1715,7 @@ MODULE METADATA
        If you would like to add other useful metadata, "Module::Build"
        supports this with the "meta_add" and "meta_merge" arguments to "new".
        The authoritative list of supported metadata can be found at
-       <http://module-build.sourceforge.net/META-spec-current.html>, but for
+       &lthttp://module-build.sourceforge.net/META-spec-current.html&gt, but for
        convenience - here are a few of the more useful ones:
 
        keywords
@@ -1721,7 +1723,7 @@ MODULE METADATA
 	   to make CPAN.org indexing and search more efficient and useful.
 
 	   See
-	   <http://module-build.sourceforge.net/META-spec-current.html#keywords>.
+	   &lthttp://module-build.sourceforge.net/META-spec-current.html#keywords&gt.
 
        resources
 	   A list of additional resources available for users of the
@@ -1730,10 +1732,10 @@ MODULE METADATA
 	   the distribution mailing list.
 
 	   See
-	   <http://module-build.sourceforge.net/META-spec-current.html#resources>.
+	   &lthttp://module-build.sourceforge.net/META-spec-current.html#resources&gt.
 
 AUTHOR
-       Ken Williams <kwilliams@cpan.org>
+       Ken Williams &ltkwilliams@cpan.org&gt
 
 COPYRIGHT
        Copyright (c) 2001-2006 Ken Williams.  All rights reserved.
@@ -1746,11 +1748,11 @@ SEE ALSO
        Module::Build::Cookbook(3), ExtUtils::MakeMaker(3), YAML(3)
 
        META.yml Specification:
-       <http://module-build.sourceforge.net/META-spec-current.html>
+       &lthttp://module-build.sourceforge.net/META-spec-current.html&gt
 
 
 
 perl v5.10.1			  2009-07-27	       Module::Build::API(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

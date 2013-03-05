@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="CGI.pm is a stable, complete and mature solution for processing and..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>CGI - Handle Common Gateway Interface requests and responses</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 CGI(3)		      User Contributed Perl Documentation		CGI(3)
 
 
@@ -18,29 +20,29 @@ NAME
 SYNOPSIS
 	   use CGI;
 
-	   my $q = CGI->new;
+	   my $q = CGI-&gtnew;
 
 	   # Process an HTTP request
-	    @values  = $q->param('form_field');
+	    @values  = $q-&gtparam('form_field');
 
-	    $fh      = $q->upload('file_field');
+	    $fh      = $q-&gtupload('file_field');
 
-	    $riddle  = $query->cookie('riddle_name');
-	    %answers = $query->cookie('answers');
+	    $riddle  = $query-&gtcookie('riddle_name');
+	    %answers = $query-&gtcookie('answers');
 
 	   # Prepare various HTTP responses
-	   print $q->header();
-	   print $q->header('application/json');
+	   print $q-&gtheader();
+	   print $q-&gtheader('application/json');
 
-	       $cookie1 = $q->cookie(-name=>'riddle_name', -value=>"The Sphynx's Question");
-	       $cookie2 = $q->cookie(-name=>'answers', -value=>\%answers);
-	   print $q->header(
-	       -type	=> 'image/gif',
-	       -expires => '+3d',
-	       -cookie	=> [$cookie1,$cookie2]
+	       $cookie1 = $q-&gtcookie(-name=&gt'riddle_name', -value=&gt"The Sphynx's Question");
+	       $cookie2 = $q-&gtcookie(-name=&gt'answers', -value=&gt\%answers);
+	   print $q-&gtheader(
+	       -type	=&gt 'image/gif',
+	       -expires =&gt '+3d',
+	       -cookie	=&gt [$cookie1,$cookie2]
 	       );
 
-	  print  $q->redirect('http://somewhere.else/in/movie/land');
+	  print  $q-&gtredirect('http://somewhere.else/in/movie/land');
 
 DESCRIPTION
        CGI.pm is a stable, complete and mature solution for processing and
@@ -75,11 +77,11 @@ DESCRIPTION
 
 	  #!/usr/local/bin/perl -w
 	  use CGI;			       # load CGI routines
-	  $q = CGI->new;			# create new CGI object
-	  print $q->header,		       # create the HTTP header
-		$q->start_html('hello world'), # start the HTML
-		$q->h1('hello world'),	       # level 1 header
-		$q->end_html;		       # end the HTML
+	  $q = CGI-&gtnew;			# create new CGI object
+	  print $q-&gtheader,		       # create the HTTP header
+		$q-&gtstart_html('hello world'), # start the HTML
+		$q-&gth1('hello world'),	       # level 1 header
+		$q-&gtend_html;		       # end the HTML
 
        In the function-oriented style, there is one default CGI object that
        you rarely deal with directly.  Instead you just call functions to
@@ -107,7 +109,7 @@ DESCRIPTION
        optional ones!  To simplify this interface, all routines use a named
        argument calling style that looks like this:
 
-	  print $q->header(-type=>'image/gif',-expires=>'+3d');
+	  print $q-&gtheader(-type=&gt'image/gif',-expires=&gt'+3d');
 
        Each argument name is preceded by a dash.  Neither case nor order
        matters in the argument list.  -type, -Type, and -TYPE are all
@@ -120,7 +122,7 @@ DESCRIPTION
        argument name.  header() happens to be one of these routines.  In this
        case, the single argument is the document type.
 
-	  print $q->header('text/html');
+	  print $q-&gtheader('text/html');
 
        Other such routines are documented below.
 
@@ -130,8 +132,8 @@ DESCRIPTION
        For example, the param() routine is used to set a CGI parameter to a
        single or a multi-valued value.	The two cases are shown below:
 
-	  $q->param(-name=>'veggie',-value=>'tomato');
-	  $q->param(-name=>'veggie',-value=>['tomato','tomahto','potato','potahto']);
+	  $q-&gtparam(-name=&gt'veggie',-value=&gt'tomato');
+	  $q-&gtparam(-name=&gt'veggie',-value=&gt['tomato','tomahto','potato','potahto']);
 
        A large number of routines in CGI.pm actually aren't specifically
        defined in the module, but are generated automatically as needed.
@@ -145,10 +147,10 @@ DESCRIPTION
 
 	  Code				 Generated HTML
 	  ----				 --------------
-	  h1()				 <h1>
-	  h1('some','contents');	 <h1>some contents</h1>
-	  h1({-align=>left});		 <h1 align="LEFT">
-	  h1({-align=>left},'contents'); <h1 align="LEFT">contents</h1>
+	  h1()				 &lth1&gt
+	  h1('some','contents');	 &lth1&gtsome contents&lt/h1&gt
+	  h1({-align=&gtleft});		 &lth1 align="LEFT"&gt
+	  h1({-align=&gtleft},'contents'); &lth1 align="LEFT"&gtcontents&lt/h1&gt
 
        HTML tags are described in more detail later.
 
@@ -161,7 +163,7 @@ DESCRIPTION
        braces when calling any routine that takes named arguments.  For
        example:
 
-	  print $q->header( {-type=>'image/gif',-expires=>'+3d'} );
+	  print $q-&gtheader( {-type=&gt'image/gif',-expires=&gt'+3d'} );
 
        If you use the -w switch, you will be warned that some CGI.pm argument
        names conflict with built-in Perl functions.  The most frequent of
@@ -180,10 +182,10 @@ DESCRIPTION
        doesn't recognize.  For example, you can produce non-standard HTTP
        header fields by providing them as named arguments:
 
-	 print $q->header(-type  =>  'text/html',
-			  -cost  =>  'Three smackers',
-			  -annoyance_level => 'high',
-			  -complaints_to   => 'bit bucket');
+	 print $q-&gtheader(-type  =&gt  'text/html',
+			  -cost  =&gt  'Three smackers',
+			  -annoyance_level =&gt 'high',
+			  -complaints_to   =&gt 'bit bucket');
 
        This will produce the following nonstandard HTTP header:
 
@@ -201,7 +203,7 @@ DESCRIPTION
        HTML "standards".
 
    CREATING A NEW QUERY OBJECT (OBJECT-ORIENTED STYLE):
-	    $query = CGI->new;
+	    $query = CGI-&gtnew;
 
        This will parse the input (from both POST and GET methods) and store it
        into a perl5 object called $query.
@@ -210,7 +212,7 @@ DESCRIPTION
        beginning of the file.
 
    CREATING A NEW QUERY OBJECT FROM AN INPUT FILE
-	    $query = CGI->new(INPUTFILE);
+	    $query = CGI-&gtnew(INPUTFILE);
 
        If you provide a file handle to the new() method, it will read
        parameters from the file (or STDIN, or whatever).  The file can be in
@@ -223,7 +225,7 @@ DESCRIPTION
        references to file handles, or even references to filehandle globs,
        which is the "official" way to pass a filehandle:
 
-	   $query = CGI->new(\*STDIN);
+	   $query = CGI-&gtnew(\*STDIN);
 
        You can also initialize the CGI object with a FileHandle or IO::File
        object.
@@ -239,44 +241,44 @@ DESCRIPTION
 
        You can also initialize the query object from a hash reference:
 
-	   $query = CGI->new( {'dinosaur'=>'barney',
-			      'song'=>'I love you',
-			      'friends'=>[qw/Jessica George Nancy/]}
+	   $query = CGI-&gtnew( {'dinosaur'=&gt'barney',
+			      'song'=&gt'I love you',
+			      'friends'=&gt[qw/Jessica George Nancy/]}
 			   );
 
        or from a properly formatted, URL-escaped query string:
 
-	   $query = CGI->new('dinosaur=barney&color=purple');
+	   $query = CGI-&gtnew('dinosaur=barney&color=purple');
 
        or from a previously existing CGI object (currently this clones the
        parameter list, but none of the other object-specific fields, such as
        autoescaping):
 
-	   $old_query = CGI->new;
-	   $new_query = CGI->new($old_query);
+	   $old_query = CGI-&gtnew;
+	   $new_query = CGI-&gtnew($old_query);
 
        To create an empty query, initialize it from an empty string or hash:
 
-	  $empty_query = CGI->new("");
+	  $empty_query = CGI-&gtnew("");
 
 	      -or-
 
-	  $empty_query = CGI->new({});
+	  $empty_query = CGI-&gtnew({});
 
    FETCHING A LIST OF KEYWORDS FROM THE QUERY:
-	    @keywords = $query->keywords
+	    @keywords = $query-&gtkeywords
 
-       If the script was invoked as the result of an <ISINDEX> search, the
+       If the script was invoked as the result of an &ltISINDEX&gt search, the
        parsed keywords can be obtained as an array using the keywords()
        method.
 
    FETCHING THE NAMES OF ALL THE PARAMETERS PASSED TO YOUR SCRIPT:
-	    @names = $query->param
+	    @names = $query-&gtparam
 
        If the script was invoked with a parameter list (e.g.
        "name1=value1&name2=value2&name3=value3"), the param() method will
        return the parameter names as a list.  If the script was invoked as an
-       <ISINDEX> script and contains a string without ampersands (e.g.
+       &ltISINDEX&gt script and contains a string without ampersands (e.g.
        "value1+value2+value3") , there will be a single parameter named
        "keywords" containing the "+"-delimited keywords.
 
@@ -287,11 +289,11 @@ DESCRIPTION
        guaranteed).
 
    FETCHING THE VALUE OR VALUES OF A SINGLE NAMED PARAMETER:
-	   @values = $query->param('foo');
+	   @values = $query-&gtparam('foo');
 
 		     -or-
 
-	   $value = $query->param('foo');
+	   $value = $query-&gtparam('foo');
 
        Pass the param() method a single argument to fetch the value of the
        named parameter. If the parameter is multivalued (e.g. from multiple
@@ -305,7 +307,7 @@ DESCRIPTION
        in a scalar context, and the empty list in a list context.
 
    SETTING THE VALUE(S) OF A NAMED PARAMETER:
-	   $query->param('foo','an','array','of','values');
+	   $query-&gtparam('foo','an','array','of','values');
 
        This sets the value for the named parameter 'foo' to an array of
        values.	This is one way to change the value of a field AFTER the
@@ -316,14 +318,14 @@ DESCRIPTION
        param() also recognizes a named parameter style of calling described in
        more detail later:
 
-	   $query->param(-name=>'foo',-values=>['an','array','of','values']);
+	   $query-&gtparam(-name=&gt'foo',-values=&gt['an','array','of','values']);
 
 				     -or-
 
-	   $query->param(-name=>'foo',-value=>'the value');
+	   $query-&gtparam(-name=&gt'foo',-value=&gt'the value');
 
    APPENDING ADDITIONAL VALUES TO A NAMED PARAMETER:
-	  $query->append(-name=>'foo',-values=>['yet','more','values']);
+	  $query-&gtappend(-name=&gt'foo',-values=&gt['yet','more','values']);
 
        This adds a value or list of values to the named parameter.  The values
        are appended to the end of the parameter if it already exists.
@@ -331,7 +333,7 @@ DESCRIPTION
        recognizes the named argument calling syntax.
 
    IMPORTING ALL PARAMETERS INTO A NAMESPACE:
-	  $query->import_names('R');
+	  $query-&gtimport_names('R');
 
        This creates a series of variables in the 'R' namespace.  For example,
        $R::foo, @R:foo.  For keyword lists, a variable @R::keywords will
@@ -349,7 +351,7 @@ DESCRIPTION
        with the built-in Perl module import operator.
 
    DELETING A PARAMETER COMPLETELY:
-	   $query->delete('foo','bar','baz');
+	   $query-&gtdelete('foo','bar','baz');
 
        This completely clears a list of parameters.  It sometimes useful for
        resetting parameters that you don't want passed down between script
@@ -359,7 +361,7 @@ DESCRIPTION
        avoid conflicts with Perl's built-in delete operator.
 
    DELETING ALL PARAMETERS:
-	  $query->delete_all();
+	  $query-&gtdelete_all();
 
        This clears the CGI object completely.  It might be useful to ensure
        that all the defaults are taken when you create a fill-out form.
@@ -372,19 +374,19 @@ DESCRIPTION
        instead be returned as-is in a parameter named POSTDATA.  To retrieve
        it, use code like this:
 
-	  my $data = $query->param('POSTDATA');
+	  my $data = $query-&gtparam('POSTDATA');
 
        Likewise if PUTed data can be retrieved with code like this:
 
-	  my $data = $query->param('PUTDATA');
+	  my $data = $query-&gtparam('PUTDATA');
 
        (If you don't know what the preceding means, don't worry about it.  It
        only affects people trying to use CGI for XML processing and other
        specialized tasks.)
 
    DIRECT ACCESS TO THE PARAMETER LIST:
-	  $q->param_fetch('address')->[1] = '1313 Mockingbird Lane';
-	  unshift @{$q->param_fetch(-name=>'address')},'George Munster';
+	  $q-&gtparam_fetch('address')-&gt[1] = '1313 Mockingbird Lane';
+	  unshift @{$q-&gtparam_fetch(-name=&gt'address')},'George Munster';
 
        If you need access to the parameter list in a way that isn't covered by
        the methods given in the previous sections, you can obtain a direct
@@ -395,10 +397,10 @@ DESCRIPTION
        You can also use a named argument style using the -name argument.
 
    FETCHING THE PARAMETER LIST AS A HASH:
-	   $params = $q->Vars;
-	   print $params->{'address'};
-	   @foo = split("\0",$params->{'foo'});
-	   %params = $q->Vars;
+	   $params = $q-&gtVars;
+	   print $params-&gt{'address'};
+	   @foo = split("\0",$params-&gt{'foo'});
+	   %params = $q-&gtVars;
 
 	   use CGI ':cgi-lib';
 	   $params = Vars;
@@ -424,7 +426,7 @@ DESCRIPTION
        function calls (also see the section on CGI-LIB compatibility).
 
    SAVING THE STATE OF THE SCRIPT TO A FILE:
-	   $query->save(\*FILEHANDLE)
+	   $query-&gtsave(\*FILEHANDLE)
 
        This will write the current state of the form to the provided
        filehandle.  You can read it back in by providing a filehandle to the
@@ -449,20 +451,20 @@ DESCRIPTION
 
 	  use CGI;
 
-	  open (OUT,'>>','test.out') || die;
+	  open (OUT,'&gt&gt','test.out') || die;
 	  $records = 5;
 	  for (0..$records) {
-	      my $q = CGI->new;
-	      $q->param(-name=>'counter',-value=>$_);
-	      $q->save(\*OUT);
+	      my $q = CGI-&gtnew;
+	      $q-&gtparam(-name=&gt'counter',-value=&gt$_);
+	      $q-&gtsave(\*OUT);
 	  }
 	  close OUT;
 
 	  # reopen for reading
-	  open (IN,'<','test.out') || die;
+	  open (IN,'&lt','test.out') || die;
 	  while (!eof(IN)) {
-	      my $q = CGI->new(\*IN);
-	      print $q->param('counter'),"\n";
+	      my $q = CGI-&gtnew(\*IN);
+	      print $q-&gtparam('counter'),"\n";
 	  }
 
        The file format used for save/restore is identical to that used by the
@@ -485,12 +487,12 @@ DESCRIPTION
        incorporate the error text into an HTML page, or use it as the value of
        the HTTP status:
 
-	   my $error = $q->cgi_error;
+	   my $error = $q-&gtcgi_error;
 	   if ($error) {
-	       print $q->header(-status=>$error),
-		     $q->start_html('Problems'),
-		     $q->h2('Request not processed'),
-		     $q->strong($error);
+	       print $q-&gtheader(-status=&gt$error),
+		     $q-&gtstart_html('Problems'),
+		     $q-&gth2('Request not processed'),
+		     $q-&gtstrong($error);
 	       exit 0;
 	   }
 
@@ -504,7 +506,7 @@ DESCRIPTION
        There is a small overhead associated with this importation, but it
        isn't much.
 
-	  use CGI <list of methods>;
+	  use CGI &ltlist of methods&gt;
 
        The listed methods will be imported into the current package; you can
        call them directly without creating a CGI object first.	This example
@@ -533,14 +535,14 @@ DESCRIPTION
 
        :html3
 	   Import all methods that generate HTML 3.0 elements (such as
-	   <table>, <super> and <sub>).
+	   &lttable&gt, &ltsuper&gt and &ltsub&gt).
 
        :html4
-	   Import all methods that generate HTML 4 elements (such as <abbrev>,
-	   <acronym> and <thead>).
+	   Import all methods that generate HTML 4 elements (such as &ltabbrev&gt,
+	   &ltacronym&gt and &ltthead&gt).
 
        :netscape
-	   Import the <blink>, <fontsize> and <center> tags.
+	   Import the &ltblink&gt, &ltfontsize&gt and &ltcenter&gt tags.
 
        :html
 	   Import all HTML-generating shortcuts (i.e. 'html2', 'html3',
@@ -558,13 +560,13 @@ DESCRIPTION
        will treat it as a new HTML tag and generate the appropriate
        subroutine.  You can then use it like any other HTML tag.  This is to
        provide for the rapidly-evolving HTML "standard."  For example, say
-       Microsoft comes out with a new tag called <gradient> (which causes the
+       Microsoft comes out with a new tag called &ltgradient&gt (which causes the
        user's desktop to be flooded with a rotating gradient fill until his
        machine reboots).  You don't need to wait for a new version of CGI.pm
        to start using it immediately:
 
 	  use CGI qw/:standard :html3 gradient/;
-	  print gradient({-start=>'red',-end=>'blue'});
+	  print gradient({-start=&gt'red',-end=&gt'blue'});
 
        Note that in the interests of execution speed CGI.pm does not use the
        standard Exporter syntax for specifying load symbols.  This may change
@@ -586,12 +588,12 @@ DESCRIPTION
 	      start_form,
 	      "What's your name? ",textfield('name'),p,
 	      "What's the combination?",
-	      checkbox_group(-name=>'words',
-			     -values=>['eenie','meenie','minie','moe'],
-			     -defaults=>['eenie','moe']),p,
+	      checkbox_group(-name=&gt'words',
+			     -values=&gt['eenie','meenie','minie','moe'],
+			     -defaults=&gt['eenie','moe']),p,
 	      "What's your favorite color?",
-	      popup_menu(-name=>'color',
-			 -values=>['red','green','blue','chartreuse']),p,
+	      popup_menu(-name=&gt'color',
+			 -values=&gt['red','green','blue','chartreuse']),p,
 	      submit,
 	      end_form,
 	      hr,"\n";
@@ -623,10 +625,10 @@ DESCRIPTION
 	   you go wild with new and unsupported tags:
 
 	      use CGI qw(-any);
-	      $q=CGI->new;
-	      print $q->gradient({speed=>'fast',start=>'red',end=>'blue'});
+	      $q=CGI-&gtnew;
+	      print $q-&gtgradient({speed=&gt'fast',start=&gt'red',end=&gt'blue'});
 
-	   Since using <cite>any</cite> causes any mistyped method name to be
+	   Since using &ltcite&gtany&lt/cite&gt causes any mistyped method name to be
 	   interpreted as an HTML tag, use it with care or not at all.
 
        -compile
@@ -649,7 +651,7 @@ DESCRIPTION
 	   compile() method instead:
 
 	      use CGI();
-	      CGI->compile();
+	      CGI-&gtcompile();
 
 	   This is particularly useful in a mod_perl environment, in which you
 	   might want to precompile all CGI routines in a startup script, and
@@ -679,7 +681,7 @@ DESCRIPTION
        -no_xhtml
 	   By default, CGI.pm versions 2.69 and higher emit XHTML
 	   (http://www.w3.org/TR/xhtml1/).  The -no_xhtml pragma disables this
-	   feature.  Thanks to Michalis Kabrianis <kabrianis@hellug.gr> for
+	   feature.  Thanks to Michalis Kabrianis &ltkabrianis@hellug.gr&gt for
 	   this feature.
 
 	   If start_html()'s -dtd parameter specifies an HTML 2.0, 3.2, 4.0 or
@@ -693,7 +695,7 @@ DESCRIPTION
 	   to return utf-8 strings and convert them using code like this:
 
 	    use Encode;
-	    my $arg = decode utf8=>param('foo');
+	    my $arg = decode utf8=&gtparam('foo');
 
        -nph
 	   This makes CGI.pm produce a header appropriate for an NPH (no
@@ -783,7 +785,7 @@ DESCRIPTION
 
        produces
 
-	 <h1>Level 1 Header</h1>
+	 &lth1&gtLevel 1 Header&lt/h1&gt
 
        There will be some times when you want to produce the start and end
        tags yourself.  In this case, you can use the form start_tag_name and
@@ -805,10 +807,10 @@ DESCRIPTION
        In this example, the following functions are generated in addition to
        the standard ones:
 
-       1. start_table() (generates a <table> tag)
-       2. end_table() (generates a </table> tag)
-       3. start_ul() (generates a <ul> tag)
-       4. end_ul() (generates a </ul> tag)
+       1. start_table() (generates a &lttable&gt tag)
+       2. end_table() (generates a &lt/table&gt tag)
+       3. start_ul() (generates a &ltul&gt tag)
+       4. end_ul() (generates a &lt/ul&gt tag)
 
 GENERATING DYNAMIC DOCUMENTS
        Most of CGI.pm's functions deal with creating documents on the fly.
@@ -841,14 +843,14 @@ GENERATING DYNAMIC DOCUMENTS
 
 		    -or-
 
-	       print header(-type=>'image/gif',
-				    -nph=>1,
-				    -status=>'402 Payment required',
-				    -expires=>'+3d',
-				    -cookie=>$cookie,
-				    -charset=>'utf-7',
-				    -attachment=>'foo.gif',
-				    -Cost=>'$2.00');
+	       print header(-type=&gt'image/gif',
+				    -nph=&gt1,
+				    -status=&gt'402 Payment required',
+				    -expires=&gt'+3d',
+				    -cookie=&gt$cookie,
+				    -charset=&gt'utf-7',
+				    -attachment=&gt'foo.gif',
+				    -Cost=&gt'$2.00');
 
        header() returns the Content-type: header.  You can provide your own
        MIME type if you choose, otherwise it defaults to text/html.  An
@@ -863,7 +865,7 @@ GENERATING DYNAMIC DOCUMENTS
        allowing you to specify any HTTP header you desire.  Internal
        underscores will be turned into hyphens:
 
-	   print header(-Content_length=>3002);
+	   print header(-Content_length=&gt3002);
 
        Most browsers will not cache the output from CGI scripts.  Every time
        the browser reloads the page, the script is invoked anew.  You can
@@ -906,8 +908,8 @@ GENERATING DYNAMIC DOCUMENTS
        parameter can be an arrayref or a space-delimited string of P3P tags.
        For example:
 
-	  print header(-p3p=>[qw(CAO DSP LAW CURa)]);
-	  print header(-p3p=>'CAO DSP LAW CURa');
+	  print header(-p3p=&gt[qw(CAO DSP LAW CURa)]);
+	  print header(-p3p=&gt'CAO DSP LAW CURa');
 
        In either case, the outgoing header will be formatted as:
 
@@ -917,7 +919,7 @@ GENERATING DYNAMIC DOCUMENTS
        will be added to each new line that doesn't already have one as
        specified by RFC2616 section 4.2.  For example:
 
-	   print header( -ingredients => "ham\neggs\nbacon" );
+	   print header( -ingredients =&gt "ham\neggs\nbacon" );
 
        will generate
 
@@ -926,7 +928,7 @@ GENERATING DYNAMIC DOCUMENTS
 	    bacon
 
    GENERATING A REDIRECTION HEADER
-	  print $q->redirect('http://somewhere.else/in/movie/land');
+	  print $q-&gtredirect('http://somewhere.else/in/movie/land');
 
        Sometimes you don't want to produce a document yourself, but simply
        redirect the browser elsewhere, perhaps choosing a URL based on the
@@ -940,10 +942,10 @@ GENERATING DYNAMIC DOCUMENTS
 
        You can also use named arguments:
 
-	   print $q->redirect(
-	       -uri=>'http://somewhere.else/in/movie/land',
-		   -nph=>1,
-		-status=>301);
+	   print $q-&gtredirect(
+	       -uri=&gt'http://somewhere.else/in/movie/land',
+		   -nph=&gt1,
+		-status=&gt301);
 
        All names arguments recognized by header() are also recognized by
        redirect(). However, most HTTP headers, including those generated by
@@ -967,30 +969,30 @@ GENERATING DYNAMIC DOCUMENTS
        will probably break redirection.
 
    CREATING THE HTML DOCUMENT HEADER
-	  print start_html(-title=>'Secrets of the Pyramids',
-				   -author=>'fred@capricorn.org',
-				   -base=>'true',
-				   -target=>'_blank',
-				   -meta=>{'keywords'=>'pharaoh secret mummy',
-					   'copyright'=>'copyright 1996 King Tut'},
-				   -style=>{'src'=>'/styles/style1.css'},
-				   -BGCOLOR=>'blue');
+	  print start_html(-title=&gt'Secrets of the Pyramids',
+				   -author=&gt'fred@capricorn.org',
+				   -base=&gt'true',
+				   -target=&gt'_blank',
+				   -meta=&gt{'keywords'=&gt'pharaoh secret mummy',
+					   'copyright'=&gt'copyright 1996 King Tut'},
+				   -style=&gt{'src'=&gt'/styles/style1.css'},
+				   -BGCOLOR=&gt'blue');
 
        The start_html() routine creates the top of the page, along with a lot
        of optional information that controls the page's appearance and
        behavior.
 
-       This method returns a canned HTML header and the opening <body> tag.
+       This method returns a canned HTML header and the opening &ltbody&gt tag.
        All parameters are optional.  In the named parameter form, recognized
        parameters are -title, -author, -base, -xbase, -dtd, -lang and -target
        (see below for the explanation).  Any additional parameters you
        provide, such as the unofficial BGCOLOR attribute, are added to the
-       <body> tag.  Additional parameters must be proceeded by a hyphen.
+       &ltbody&gt tag.  Additional parameters must be proceeded by a hyphen.
 
-       The argument -xbase allows you to provide an HREF for the <base> tag
+       The argument -xbase allows you to provide an HREF for the &ltbase&gt tag
        different from the current location, as in
 
-	   -xbase=>"http://home.mcom.com/"
+	   -xbase=&gt"http://home.mcom.com/"
 
        All relative links will be interpreted relative to this tag.
 
@@ -998,32 +1000,32 @@ GENERATING DYNAMIC DOCUMENTS
        all the links and fill-out forms on the page.  This is a non-standard
        HTTP feature which only works with some browsers!
 
-	   -target=>"answer_window"
+	   -target=&gt"answer_window"
 
        All relative links will be interpreted relative to this tag.  You add
        arbitrary meta information to the header with the -meta argument.  This
        argument expects a reference to a hash containing name/value pairs of
-       meta information.  These will be turned into a series of header <meta>
+       meta information.  These will be turned into a series of header &ltmeta&gt
        tags that look something like this:
 
-	   <meta name="keywords" content="pharaoh secret mummy">
-	   <meta name="description" content="copyright 1996 King Tut">
+	   &ltmeta name="keywords" content="pharaoh secret mummy"&gt
+	   &ltmeta name="description" content="copyright 1996 King Tut"&gt
 
-       To create an HTTP-EQUIV type of <meta> tag, use -head, described below.
+       To create an HTTP-EQUIV type of &ltmeta&gt tag, use -head, described below.
 
        The -style argument is used to incorporate cascading stylesheets into
        your code.  See the section on CASCADING STYLESHEETS for more
        information.
 
        The -lang argument is used to incorporate a language attribute into the
-       <html> tag.  For example:
+       &lthtml&gt tag.  For example:
 
-	   print $q->start_html(-lang=>'fr-CA');
+	   print $q-&gtstart_html(-lang=&gt'fr-CA');
 
        The default if not specified is "en-US" for US English, unless the -dtd
        parameter specifies an HTML 2.0 or 3.2 DTD, in which case the lang
        attribute is left off.  You can force the lang attribute to left off in
-       other cases by passing an empty string (-lang=>'').
+       other cases by passing an empty string (-lang=&gt'').
 
        The -encoding argument can be used to specify the character set for
        XHTML.  It defaults to iso-8859-1 if not specified.
@@ -1031,52 +1033,52 @@ GENERATING DYNAMIC DOCUMENTS
        The -dtd argument can be used to specify a public DTD identifier
        string. For example:
 
-	   -dtd => '-//W3C//DTD HTML 4.01 Transitional//EN')
+	   -dtd =&gt '-//W3C//DTD HTML 4.01 Transitional//EN')
 
        Alternatively, it can take public and system DTD identifiers as an
        array:
 
-	   dtd => [ '-//W3C//DTD HTML 4.01 Transitional//EN', 'http://www.w3.org/TR/html4/loose.dtd' ]
+	   dtd =&gt [ '-//W3C//DTD HTML 4.01 Transitional//EN', 'http://www.w3.org/TR/html4/loose.dtd' ]
 
        For the public DTD identifier to be considered, it must be valid.
        Otherwise it will be replaced by the default DTD. If the public DTD
        contains 'XHTML', CGI.pm will emit XML.
 
        The -declare_xml argument, when used in conjunction with XHTML, will
-       put a <?xml> declaration at the top of the HTML header. The sole
+       put a &lt?xml&gt declaration at the top of the HTML header. The sole
        purpose of this declaration is to declare the character set encoding.
-       In the absence of -declare_xml, the output HTML will contain a <meta>
+       In the absence of -declare_xml, the output HTML will contain a &ltmeta&gt
        tag that specifies the encoding, allowing the HTML to pass most
        validators.  The default for -declare_xml is false.
 
-       You can place other arbitrary HTML elements to the <head> section with
-       the -head tag.  For example, to place a <link> element in the head
+       You can place other arbitrary HTML elements to the &lthead&gt section with
+       the -head tag.  For example, to place a &ltlink&gt element in the head
        section, use this:
 
-	   print start_html(-head=>Link({-rel=>'shortcut icon',
-					 -href=>'favicon.ico'}));
+	   print start_html(-head=&gtLink({-rel=&gt'shortcut icon',
+					 -href=&gt'favicon.ico'}));
 
-       To incorporate multiple HTML elements into the <head> section, just
+       To incorporate multiple HTML elements into the &lthead&gt section, just
        pass an array reference:
 
-	   print start_html(-head=>[
-				    Link({-rel=>'next',
-					  -href=>'http://www.capricorn.com/s2.html'}),
-				    Link({-rel=>'previous',
-					  -href=>'http://www.capricorn.com/s1.html'})
+	   print start_html(-head=&gt[
+				    Link({-rel=&gt'next',
+					  -href=&gt'http://www.capricorn.com/s2.html'}),
+				    Link({-rel=&gt'previous',
+					  -href=&gt'http://www.capricorn.com/s1.html'})
 				    ]
 			    );
 
-       And here's how to create an HTTP-EQUIV <meta> tag:
+       And here's how to create an HTTP-EQUIV &ltmeta&gt tag:
 
-	     print start_html(-head=>meta({-http_equiv => 'Content-Type',
-					   -content    => 'text/html'}))
+	     print start_html(-head=&gtmeta({-http_equiv =&gt 'Content-Type',
+					   -content    =&gt 'text/html'}))
 
        JAVASCRIPTING: The -script, -noScript, -onLoad, -onMouseOver,
        -onMouseOut and -onUnload parameters are used to add JavaScript calls
        to your pages.  -script should point to a block of text containing
        JavaScript function definitions.  This block will be placed within a
-       <script> block inside the HTML (not HTTP) header.  The block is placed
+       &ltscript&gt block inside the HTML (not HTTP) header.  The block is placed
        in the header in order to give your page a fighting chance of having
        all its JavaScript functions in place even if the user presses the stop
        button before the page has loaded completely.  CGI.pm attempts to
@@ -1089,9 +1091,9 @@ GENERATING DYNAMIC DOCUMENTS
        browser.  Usually these parameters are calls to functions defined in
        the -script field:
 
-	     $query = CGI->new;
+	     $query = CGI-&gtnew;
 	     print header;
-	     $JSCRIPT=<<END;
+	     $JSCRIPT=&lt&ltEND;
 	     // Ask a silly question
 	     function riddle_me_this() {
 		var r = prompt("What walks on four legs in the morning, " +
@@ -1107,46 +1109,46 @@ GENERATING DYNAMIC DOCUMENTS
 		   alert("Wrong!  Guess again.");
 	     }
 	     END
-	     print start_html(-title=>'The Riddle of the Sphinx',
-				      -script=>$JSCRIPT);
+	     print start_html(-title=&gt'The Riddle of the Sphinx',
+				      -script=&gt$JSCRIPT);
 
        Use the -noScript parameter to pass some HTML text that will be
        displayed on browsers that do not have JavaScript (or browsers where
        JavaScript is turned off).
 
-       The <script> tag, has several attributes including "type", "charset"
+       The &ltscript&gt tag, has several attributes including "type", "charset"
        and "src".  "src" allows you to keep JavaScript code in an external
        file. To use these attributes pass a HASH reference in the -script
        parameter containing one or more of -type, -src, or -code:
 
-	   print $q->start_html(-title=>'The Riddle of the Sphinx',
-				-script=>{-type=>'JAVASCRIPT',
-					  -src=>'/javascript/sphinx.js'}
+	   print $q-&gtstart_html(-title=&gt'The Riddle of the Sphinx',
+				-script=&gt{-type=&gt'JAVASCRIPT',
+					  -src=&gt'/javascript/sphinx.js'}
 				);
 
-	   print $q->(-title=>'The Riddle of the Sphinx',
-		      -script=>{-type=>'PERLSCRIPT',
-				-code=>'print "hello world!\n;"'}
+	   print $q-&gt(-title=&gt'The Riddle of the Sphinx',
+		      -script=&gt{-type=&gt'PERLSCRIPT',
+				-code=&gt'print "hello world!\n;"'}
 		      );
 
-       A final feature allows you to incorporate multiple <script> sections
+       A final feature allows you to incorporate multiple &ltscript&gt sections
        into the header.  Just pass the list of script sections as an array
        reference.  this allows you to specify different source files for
        different dialects of JavaScript.  Example:
 
-	    print $q->start_html(-title=>'The Riddle of the Sphinx',
-				 -script=>[
-					   { -type => 'text/javascript',
-					     -src      => '/javascript/utilities10.js'
+	    print $q-&gtstart_html(-title=&gt'The Riddle of the Sphinx',
+				 -script=&gt[
+					   { -type =&gt 'text/javascript',
+					     -src      =&gt '/javascript/utilities10.js'
 					   },
-					   { -type => 'text/javascript',
-					     -src      => '/javascript/utilities11.js'
+					   { -type =&gt 'text/javascript',
+					     -src      =&gt '/javascript/utilities11.js'
 					   },
-					   { -type => 'text/jscript',
-					     -src      => '/javascript/utilities12.js'
+					   { -type =&gt 'text/jscript',
+					     -src      =&gt '/javascript/utilities12.js'
 					   },
-					   { -type => 'text/ecmascript',
-					     -src      => '/javascript/utilities219.js'
+					   { -type =&gt 'text/ecmascript',
+					     -src      =&gt '/javascript/utilities219.js'
 					   }
 					]
 				    );
@@ -1159,27 +1161,27 @@ GENERATING DYNAMIC DOCUMENTS
        Parameters:
        1.  The title
 
-       2.  The author's e-mail address (will create a <link rev="MADE"> tag if
+       2.  The author's e-mail address (will create a &ltlink rev="MADE"&gt tag if
 	   present
 
-       3.  A 'true' flag if you want to include a <base> tag in the header.
+       3.  A 'true' flag if you want to include a &ltbase&gt tag in the header.
 	   This helps resolve relative addresses to absolute ones when the
 	   document is moved, but makes the document hierarchy non-portable.
 	   Use with care!
 
        4, 5, 6...
-	   Any other parameters you want to include in the <body> tag.	This
+	   Any other parameters you want to include in the &ltbody&gt tag.	This
 	   is a good place to put HTML extensions, such as colors and
 	   wallpaper patterns.
 
    ENDING THE HTML DOCUMENT:
 	       print end_html
 
-       This ends an HTML document by printing the </body></html> tags.
+       This ends an HTML document by printing the &lt/body&gt&lt/html&gt tags.
 
    CREATING A SELF-REFERENCING URL THAT PRESERVES STATE INFORMATION:
 	   $myself = self_url;
-	   print q(<a href="$myself">I'm talking to myself.</a>);
+	   print q(&lta href="$myself"&gtI'm talking to myself.&lt/a&gt);
 
        self_url() will return a URL, that, when selected, will reinvoke this
        script with all its state information intact.  This is most useful when
@@ -1188,9 +1190,9 @@ GENERATING DYNAMIC DOCUMENTS
        Something like this will do the trick.
 
 	    $myself = self_url;
-	    print "<a href=\"$myself#table1\">See table 1</a>";
-	    print "<a href=\"$myself#table2\">See table 2</a>";
-	    print "<a href=\"$myself#yourself\">See for yourself</a>";
+	    print "&lta href=\"$myself#table1\"&gtSee table 1&lt/a&gt";
+	    print "&lta href=\"$myself#table2\"&gtSee table 2&lt/a&gt";
+	    print "&lta href=\"$myself#yourself\"&gtSee for yourself&lt/a&gt";
 
        If you want more control over what's returned, using the url() method
        instead.
@@ -1201,12 +1203,12 @@ GENERATING DYNAMIC DOCUMENTS
 
    OBTAINING THE SCRIPT'S URL
 	   $full_url	  = url();
-	   $full_url	  = url(-full=>1);  #alternative syntax
-	   $relative_url  = url(-relative=>1);
-	   $absolute_url  = url(-absolute=>1);
-	   $url_with_path = url(-path_info=>1);
-	   $url_with_path_and_query = url(-path_info=>1,-query=>1);
-	   $netloc	  = url(-base => 1);
+	   $full_url	  = url(-full=&gt1);  #alternative syntax
+	   $relative_url  = url(-relative=&gt1);
+	   $absolute_url  = url(-absolute=&gt1);
+	   $url_with_path = url(-path_info=&gt1);
+	   $url_with_path_and_query = url(-path_info=&gt1,-query=&gt1);
+	   $netloc	  = url(-base =&gt 1);
 
        url() returns the script's URL in a variety of formats.	Called without
        any arguments, it returns the full form of the URL, including host name
@@ -1248,8 +1250,8 @@ GENERATING DYNAMIC DOCUMENTS
        -rewrite
 	   If Apache's mod_rewrite is turned on, then the script name and path
 	   info probably won't match the request that the user sent. Set
-	   -rewrite=>1 (default) to return URLs that match what the user sent
-	   (the original request URI). Set -rewrite=>0 to return URLs that
+	   -rewrite=&gt1 (default) to return URLs that match what the user sent
+	   (the original request URI). Set -rewrite=&gt0 to return URLs that
 	   match the URL after mod_rewrite's rules have run. Because the
 	   additional path information only makes sense in the context of the
 	   rewritten URL, -rewrite is set to false when you request path info
@@ -1277,23 +1279,23 @@ CREATING STANDARD HTML ELEMENTS:
        shortcuts are named after a single HTML element and return a fragment
        of HTML text. Example:
 
-	  print $q->blockquote(
+	  print $q-&gtblockquote(
 			    "Many years ago on the island of",
-			    $q->a({href=>"http://crete.org/"},"Crete"),
+			    $q-&gta({href=&gt"http://crete.org/"},"Crete"),
 			    "there lived a Minotaur named",
-			    $q->strong("Fred."),
+			    $q-&gtstrong("Fred."),
 			   ),
-	      $q->hr;
+	      $q-&gthr;
 
        This results in the following HTML code (extra newlines have been added
        for readability):
 
-	  <blockquote>
+	  &ltblockquote&gt
 	  Many years ago on the island of
-	  <a href="http://crete.org/">Crete</a> there lived
-	  a minotaur named <strong>Fred.</strong>
-	  </blockquote>
-	  <hr>
+	  &lta href="http://crete.org/"&gtCrete&lt/a&gt there lived
+	  a minotaur named &ltstrong&gtFred.&lt/strong&gt
+	  &lt/blockquote&gt
+	  &lthr&gt
 
        If you find the syntax for calling the HTML shortcuts awkward, you can
        import them into your namespace and dispense with the object syntax
@@ -1302,7 +1304,7 @@ CREATING STANDARD HTML ELEMENTS:
 	  use CGI ':standard';
 	  print blockquote(
 	     "Many years ago on the island of",
-	     a({href=>"http://crete.org/"},"Crete"),
+	     a({href=&gt"http://crete.org/"},"Crete"),
 	     "there lived a minotaur named",
 	     strong("Fred."),
 	     ),
@@ -1312,43 +1314,43 @@ CREATING STANDARD HTML ELEMENTS:
        The HTML methods will accept zero, one or multiple arguments.  If you
        provide no arguments, you get a single tag:
 
-	  print hr;    #  <hr>
+	  print hr;    #  &lthr&gt
 
        If you provide one or more string arguments, they are concatenated
        together with spaces and placed between opening and closing tags:
 
-	  print h1("Chapter","1"); # <h1>Chapter 1</h1>"
+	  print h1("Chapter","1"); # &lth1&gtChapter 1&lt/h1&gt"
 
        If the first argument is a hash reference, then the keys and values of
        the hash become the HTML tag's attributes:
 
-	  print a({-href=>'fred.html',-target=>'_new'},
+	  print a({-href=&gt'fred.html',-target=&gt'_new'},
 	     "Open a new frame");
 
-		   <a href="fred.html",target="_new">Open a new frame</a>
+		   &lta href="fred.html",target="_new"&gtOpen a new frame&lt/a&gt
 
        You may dispense with the dashes in front of the attribute names if you
        prefer:
 
-	  print img {src=>'fred.gif',align=>'LEFT'};
+	  print img {src=&gt'fred.gif',align=&gt'LEFT'};
 
-		  <img align="LEFT" src="fred.gif">
+		  &ltimg align="LEFT" src="fred.gif"&gt
 
        Sometimes an HTML tag attribute has no argument.  For example, ordered
        lists can be marked as COMPACT.	The syntax for this is an argument
        that that points to an undef string:
 
-	  print ol({compact=>undef},li('one'),li('two'),li('three'));
+	  print ol({compact=&gtundef},li('one'),li('two'),li('three'));
 
        Prior to CGI.pm version 2.41, providing an empty ('') string as an
        attribute argument was the same as providing undef.  However, this has
        changed in order to accommodate those who want to create tags of the
-       form <img alt="">.  The difference is shown in these two pieces of
+       form &ltimg alt=""&gt.  The difference is shown in these two pieces of
        code:
 
 	  CODE			 RESULT
-	  img({alt=>undef})	 <img alt>
-	  img({alt=>''})	 <img alt="">
+	  img({alt=&gtundef})	 &ltimg alt&gt
+	  img({alt=&gt''})	 &ltimg alt=""&gt
 
    THE DISTRIBUTIVE PROPERTY OF HTML SHORTCUTS
        One of the cool features of the HTML shortcuts is that they are
@@ -1357,23 +1359,23 @@ CREATING STANDARD HTML ELEMENTS:
        For example, here's one way to make an ordered list:
 
 	  print ul(
-		    li({-type=>'disc'},['Sneezy','Doc','Sleepy','Happy'])
+		    li({-type=&gt'disc'},['Sneezy','Doc','Sleepy','Happy'])
 		  );
 
        This example will result in HTML output that looks like this:
 
-	  <ul>
-	    <li type="disc">Sneezy</li>
-	    <li type="disc">Doc</li>
-	    <li type="disc">Sleepy</li>
-	    <li type="disc">Happy</li>
-	  </ul>
+	  &ltul&gt
+	    &ltli type="disc"&gtSneezy&lt/li&gt
+	    &ltli type="disc"&gtDoc&lt/li&gt
+	    &ltli type="disc"&gtSleepy&lt/li&gt
+	    &ltli type="disc"&gtHappy&lt/li&gt
+	  &lt/ul&gt
 
        This is extremely useful for creating tables.  For example:
 
-	  print table({-border=>undef},
+	  print table({-border=&gtundef},
 		  caption('When Should You Eat Your Vegetables?'),
-		  Tr({-align=>'CENTER',-valign=>'TOP'},
+		  Tr({-align=&gt'CENTER',-valign=&gt'TOP'},
 		  [
 		     th(['Vegetable', 'Breakfast','Lunch','Dinner']),
 		     td(['Tomatoes' , 'no', 'yes', 'yes']),
@@ -1390,7 +1392,7 @@ CREATING STANDARD HTML ELEMENTS:
 
        It will ordinarily return the string that you probably expect, namely:
 
-	  <blockquote><em>Hi</em> mom!</blockquote>
+	  &ltblockquote&gt&ltem&gtHi&lt/em&gt mom!&lt/blockquote&gt
 
        Note the space between the element "Hi" and the element "mom!".	CGI.pm
        puts the extra space there using array interpolation, which is
@@ -1411,7 +1413,7 @@ CREATING STANDARD HTML ELEMENTS:
    NON-STANDARD HTML SHORTCUTS
        A few HTML tags don't follow the standard pattern for various reasons.
 
-       comment() generates an HTML comment (<!-- comment -->).	Call it like
+       comment() generates an HTML comment (&lt!-- comment --&gt).	Call it like
 
 	   print comment('here is my comment');
 
@@ -1437,8 +1439,8 @@ CREATING STANDARD HTML ELEMENTS:
 	   Escape HTML formatting characters in a string.
 
        Provided that you have specified a character set of ISO-8859-1 (the
-       default), the standard HTML escaping rules will be used.  The "<"
-       character becomes "&lt;", ">" becomes "&gt;", "&" becomes "&amp;", and
+       default), the standard HTML escaping rules will be used.  The "&lt"
+       character becomes "&lt;", "&gt" becomes "&gt;", "&" becomes "&amp;", and
        the quote character becomes "&quot;".  In addition, the hexadecimal
        0x8b and 0x9b characters, which some browsers incorrectly interpret as
        the left and right angle-bracket characters, are replaced by their
@@ -1496,22 +1498,22 @@ CREATING FILL-OUT FORMS:
        version 2.15).  This forces the default value to be used, regardless of
        the previous value:
 
-	  print textfield(-name=>'field_name',
-				  -default=>'starting value',
-				  -override=>1,
-				  -size=>50,
-				  -maxlength=>80);
+	  print textfield(-name=&gt'field_name',
+				  -default=&gt'starting value',
+				  -override=&gt1,
+				  -size=&gt50,
+				  -maxlength=&gt80);
 
        Yet another note By default, the text and labels of form elements are
        escaped according to HTML rules.  This means that you can safely use
-       "<CLICK ME>" as the label for a button.	However, it also interferes
+       "&ltCLICK ME&gt" as the label for a button.	However, it also interferes
        with your ability to incorporate special HTML character sequences, such
        as &Aacute;, into your fields.  If you wish to turn off automatic
        escaping, call the autoEscape() method with a false value immediately
        after creating the CGI object:
 
-	  $query = CGI->new;
-	  $query->autoEscape(0);
+	  $query = CGI-&gtnew;
+	  $query-&gtautoEscape(0);
 
        Note that autoEscape() is exclusively used to effect the behavior of
        how some CGI.pm HTML generation functions handle escaping. Calling
@@ -1529,33 +1531,33 @@ CREATING FILL-OUT FORMS:
        end_form() produces several tags, and only the first of them will be
        printed because the format only expects one value.
 
-       <p>
+       &ltp&gt
 
    CREATING AN ISINDEX TAG
-	  print isindex(-action=>$action);
+	  print isindex(-action=&gt$action);
 
 		-or-
 
 	  print isindex($action);
 
-       Prints out an <isindex> tag.  Not very exciting.  The parameter -action
+       Prints out an &ltisindex&gt tag.  Not very exciting.  The parameter -action
        specifies the URL of the script to process the query.  The default is
        to process the query with the current script.
 
    STARTING AND ENDING A FORM
-	   print start_form(-method=>$method,
-			   -action=>$action,
-			   -enctype=>$encoding);
-	     <... various form stuff ...>
+	   print start_form(-method=&gt$method,
+			   -action=&gt$action,
+			   -enctype=&gt$encoding);
+	     &lt... various form stuff ...&gt
 	   print end_form;
 
 	       -or-
 
 	   print start_form($method,$action,$encoding);
-	     <... various form stuff ...>
+	     &lt... various form stuff ...&gt
 	   print end_form;
 
-       start_form() will return a <form> tag with the optional method, action
+       start_form() will return a &ltform&gt tag with the optional method, action
        and form encoding that you specify.  The defaults are:
 
 	   method: POST
@@ -1563,7 +1565,7 @@ CREATING FILL-OUT FORMS:
 	   enctype: application/x-www-form-urlencoded for non-XHTML
 		    multipart/form-data for XHTML, see multipart/form-data below.
 
-       end_form() returns the closing </form> tag.
+       end_form() returns the closing &lt/form&gt tag.
 
        Start_form()'s enctype argument tells the browser how to package the
        various fields of the form before sending the form to the server.  Two
@@ -1609,7 +1611,7 @@ CREATING FILL-OUT FORMS:
        things up yourself.  You can abort the submission by returning false
        from this function.
 
-       Usually the bulk of JavaScript functions are defined in a <script>
+       Usually the bulk of JavaScript functions are defined in a &ltscript&gt
        block in the HTML header and -onSubmit points to one of these function
        call.  See start_html() for details.
 
@@ -1652,10 +1654,10 @@ CREATING FILL-OUT FORMS:
        supported.
 
    CREATING A TEXT FIELD
-	   print textfield(-name=>'field_name',
-			   -value=>'starting value',
-			   -size=>50,
-			   -maxlength=>80);
+	   print textfield(-name=&gt'field_name',
+			   -value=&gt'starting value',
+			   -size=&gt50,
+			   -maxlength=&gt80);
 	       -or-
 
 	   print textfield('field_name','starting value',50,80);
@@ -1687,10 +1689,10 @@ CREATING FILL-OUT FORMS:
 	      param('foo',"I'm taking over this value!");
 
    CREATING A BIG TEXT FIELD
-	  print textarea(-name=>'foo',
-				 -default=>'starting value',
-				 -rows=>10,
-				 -columns=>50);
+	  print textarea(-name=&gt'foo',
+				 -default=&gt'starting value',
+				 -rows=&gt10,
+				 -columns=&gt50);
 
 	       -or
 
@@ -1701,10 +1703,10 @@ CREATING FILL-OUT FORMS:
        value for the field, which can be long and contain multiple lines.
 
    CREATING A PASSWORD FIELD
-	  print password_field(-name=>'secret',
-				       -value=>'starting value',
-				       -size=>50,
-				       -maxlength=>80);
+	  print password_field(-name=&gt'secret',
+				       -value=&gt'starting value',
+				       -size=&gt50,
+				       -maxlength=&gt80);
 	       -or-
 
 	  print password_field('secret','starting value',50,80);
@@ -1713,10 +1715,10 @@ CREATING FILL-OUT FORMS:
        will be starred out on the web page.
 
    CREATING A FILE UPLOAD FIELD
-	   print filefield(-name=>'uploaded_file',
-				   -default=>'starting value',
-				   -size=>50,
-				   -maxlength=>80);
+	   print filefield(-name=&gt'uploaded_file',
+				   -default=&gt'starting value',
+				   -size=&gt50,
+				   -maxlength=&gt80);
 	       -or-
 
 	   print filefield('uploaded_file','starting value',50,80);
@@ -1756,15 +1758,15 @@ CREATING FILL-OUT FORMS:
        When the form is processed, you can retrieve an IO::Handle compatible
        handle for a file upload field like this:
 
-	 $lightweight_fh  = $q->upload('field_name');
+	 $lightweight_fh  = $q-&gtupload('field_name');
 
 	 # undef may be returned if it's not a valid file handle
 	 if (defined $lightweight_fh) {
 	   # Upgrade the handle to one compatible with IO::Handle:
-	   my $io_handle = $lightweight_fh->handle;
+	   my $io_handle = $lightweight_fh-&gthandle;
 
-	   open (OUTFILE,'>>','/usr/local/web/users/feedback');
-	   while ($bytesread = $io_handle->read($buffer,1024)) {
+	   open (OUTFILE,'&gt&gt','/usr/local/web/users/feedback');
+	   while ($bytesread = $io_handle-&gtread($buffer,1024)) {
 	     print OUTFILE $buffer;
 	   }
 	 }
@@ -1776,7 +1778,7 @@ CREATING FILL-OUT FORMS:
        If you want the entered file name for the file, you can just call
        param():
 
-	 $filename = $q->param('field_name');
+	 $filename = $q-&gtparam('field_name');
 
        Different browsers will return slightly different things for the name.
        Some browsers return the filename only.	Others return the full path to
@@ -1791,8 +1793,8 @@ CREATING FILL-OUT FORMS:
        call uploadInfo().  It returns a reference to a hash containing all the
        document headers.
 
-	      $filename = $q->param('uploaded_file');
-	      $type = $q->uploadInfo($filename)->{'Content-Type'};
+	      $filename = $q-&gtparam('uploaded_file');
+	      $type = $q-&gtuploadInfo($filename)-&gt{'Content-Type'};
 	      unless ($type eq 'text/html') {
 	       die "HTML FILES ONLY!";
 	      }
@@ -1811,8 +1813,8 @@ CREATING FILL-OUT FORMS:
        can access the temp file for a file upload by passing the file name to
        the tmpFileName() method:
 
-	      $filename = $query->param('uploaded_file');
-	      $tmpfilename = $query->tmpFileName($filename);
+	      $filename = $query-&gtparam('uploaded_file');
+	      $tmpfilename = $query-&gttmpFileName($filename);
 
        The temporary file will be deleted automatically when your program
        exits unless you manually rename it. On some operating systems (such as
@@ -1830,9 +1832,9 @@ CREATING FILL-OUT FORMS:
        you can incorporate it into a status code to be sent to the browser.
        Example:
 
-	  $file = $q->upload('uploaded_file');
-	  if (!$file && $q->cgi_error) {
-	     print $q->header(-status=>$q->cgi_error);
+	  $file = $q-&gtupload('uploaded_file');
+	  if (!$file && $q-&gtcgi_error) {
+	     print $q-&gtheader(-status=&gt$q-&gtcgi_error);
 	     exit 0;
 	  }
 
@@ -1850,7 +1852,7 @@ CREATING FILL-OUT FORMS:
        Apache::Request, with the exception that the first argument to the
        callback is an Apache::Upload object, here it's the remote filename.
 
-	$q = CGI->new(\&hook [,$data [,$use_tempfile]]);
+	$q = CGI-&gtnew(\&hook [,$data [,$use_tempfile]]);
 
 	sub hook {
 	       my ($filename, $buffer, $bytes_read, $data) = @_;
@@ -1863,7 +1865,7 @@ CREATING FILL-OUT FORMS:
        The $use_tempfile field is a flag that lets you turn on and off
        CGI.pm's use of a temporary disk-based file during file upload. If you
        set this to a FALSE value (default true) then
-       $q->param('uploaded_file') will no longer work, and the only way to get
+       $q-&gtparam('uploaded_file') will no longer work, and the only way to get
        at the uploaded data is via the hook you provide.
 
        If using the function-oriented interface, call the CGI::upload_hook()
@@ -1912,21 +1914,21 @@ CREATING FILL-OUT FORMS:
 
 	     -or-
 
-	  %labels = ('eenie'=>'your first choice',
-		     'meenie'=>'your second choice',
-		     'minie'=>'your third choice');
-	  %attributes = ('eenie'=>{'class'=>'class of first choice'});
+	  %labels = ('eenie'=&gt'your first choice',
+		     'meenie'=&gt'your second choice',
+		     'minie'=&gt'your third choice');
+	  %attributes = ('eenie'=&gt{'class'=&gt'class of first choice'});
 	  print popup_menu('menu_name',
 				   ['eenie','meenie','minie'],
 		 'meenie',\%labels,\%attributes);
 
 	       -or (named parameter style)-
 
-	  print popup_menu(-name=>'menu_name',
-				   -values=>['eenie','meenie','minie'],
-				   -default=>['meenie','minie'],
-		 -labels=>\%labels,
-		 -attributes=>\%attributes);
+	  print popup_menu(-name=&gt'menu_name',
+				   -values=&gt['eenie','meenie','minie'],
+				   -default=&gt['meenie','minie'],
+		 -labels=&gt\%labels,
+		 -attributes=&gt\%attributes);
 
        popup_menu() creates a menu.
 
@@ -1962,22 +1964,22 @@ CREATING FILL-OUT FORMS:
    CREATING AN OPTION GROUP
        Named parameter style
 
-	 print popup_menu(-name=>'menu_name',
-			 -values=>[qw/eenie meenie minie/,
-				   optgroup(-name=>'optgroup_name',
-						    -values => ['moe','catch'],
-						    -attributes=>{'catch'=>{'class'=>'red'}})],
-			 -labels=>{'eenie'=>'one',
-				   'meenie'=>'two',
-				   'minie'=>'three'},
-			 -default=>'meenie');
+	 print popup_menu(-name=&gt'menu_name',
+			 -values=&gt[qw/eenie meenie minie/,
+				   optgroup(-name=&gt'optgroup_name',
+						    -values =&gt ['moe','catch'],
+						    -attributes=&gt{'catch'=&gt{'class'=&gt'red'}})],
+			 -labels=&gt{'eenie'=&gt'one',
+				   'meenie'=&gt'two',
+				   'minie'=&gt'three'},
+			 -default=&gt'meenie');
 
 	 Old style
 	 print popup_menu('menu_name',
 			 ['eenie','meenie','minie',
 			  optgroup('optgroup_name', ['moe', 'catch'],
-					  {'catch'=>{'class'=>'red'}})],'meenie',
-			 {'eenie'=>'one','meenie'=>'two','minie'=>'three'});
+					  {'catch'=&gt{'class'=&gt'red'}})],'meenie',
+			 {'eenie'=&gt'one','meenie'=&gt'two','minie'=&gt'three'});
 
        optgroup() creates an option group within a popup menu.
 
@@ -2019,7 +2021,7 @@ CREATING FILL-OUT FORMS:
    CREATING A SCROLLING LIST
 	  print scrolling_list('list_name',
 				       ['eenie','meenie','minie','moe'],
-	       ['eenie','moe'],5,'true',{'moe'=>{'class'=>'red'}});
+	       ['eenie','moe'],5,'true',{'moe'=&gt{'class'=&gt'red'}});
 	     -or-
 
 	  print scrolling_list('list_name',
@@ -2029,13 +2031,13 @@ CREATING FILL-OUT FORMS:
 
 	       -or-
 
-	  print scrolling_list(-name=>'list_name',
-				       -values=>['eenie','meenie','minie','moe'],
-				       -default=>['eenie','moe'],
-				       -size=>5,
-				       -multiple=>'true',
-	       -labels=>\%labels,
-	       -attributes=>\%attributes);
+	  print scrolling_list(-name=&gt'list_name',
+				       -values=&gt['eenie','meenie','minie','moe'],
+				       -default=&gt['eenie','moe'],
+				       -size=&gt5,
+				       -multiple=&gt'true',
+	       -labels=&gt\%labels,
+	       -attributes=&gt\%attributes);
 
        scrolling_list() creates a scrolling list.
 
@@ -2073,24 +2075,24 @@ CREATING FILL-OUT FORMS:
 		 @selected = param('list_name');
 
    CREATING A GROUP OF RELATED CHECKBOXES
-	  print checkbox_group(-name=>'group_name',
-				       -values=>['eenie','meenie','minie','moe'],
-				       -default=>['eenie','moe'],
-				       -linebreak=>'true',
-				       -disabled => ['moe'],
-	       -labels=>\%labels,
-	       -attributes=>\%attributes);
+	  print checkbox_group(-name=&gt'group_name',
+				       -values=&gt['eenie','meenie','minie','moe'],
+				       -default=&gt['eenie','moe'],
+				       -linebreak=&gt'true',
+				       -disabled =&gt ['moe'],
+	       -labels=&gt\%labels,
+	       -attributes=&gt\%attributes);
 
 	  print checkbox_group('group_name',
 				       ['eenie','meenie','minie','moe'],
 	       ['eenie','moe'],'true',\%labels,
-	       {'moe'=>{'class'=>'red'}});
+	       {'moe'=&gt{'class'=&gt'red'}});
 
 	  HTML3-COMPATIBLE BROWSERS ONLY:
 
-	  print checkbox_group(-name=>'group_name',
-				       -values=>['eenie','meenie','minie','moe'],
-				       -rows=2,-columns=>2);
+	  print checkbox_group(-name=&gt'group_name',
+				       -values=&gt['eenie','meenie','minie','moe'],
+				       -rows=2,-columns=&gt2);
 
        checkbox_group() creates a list of checkboxes that are related by the
        same name.
@@ -2140,12 +2142,12 @@ CREATING FILL-OUT FORMS:
        in which the hash keys are the radio button values and the values are
        the tab indexes of each button.	Examples:
 
-	 -tabindex => 100    #	this group starts at index 100 and counts up
-	 -tabindex => ['moe','minie','eenie','meenie']	# tab in this order
-	 -tabindex => {meenie=>100,moe=>101,minie=>102,eenie=>200} # tab in this order
+	 -tabindex =&gt 100    #	this group starts at index 100 and counts up
+	 -tabindex =&gt ['moe','minie','eenie','meenie']	# tab in this order
+	 -tabindex =&gt {meenie=&gt100,moe=&gt101,minie=&gt102,eenie=&gt200} # tab in this order
 
        The optional -labelattributes argument will contain attributes attached
-       to the <label> element that surrounds each button.
+       to the &ltlabel&gt element that surrounds each button.
 
        When the form is processed, all checked boxes will be returned as a
        list under the parameter name 'group_name'.  The values of the "on"
@@ -2157,14 +2159,14 @@ CREATING FILL-OUT FORMS:
        elements.  You can capture them and use them within tables, lists, or
        in other creative ways:
 
-	   @h = checkbox_group(-name=>'group_name',-values=>\@values);
+	   @h = checkbox_group(-name=&gt'group_name',-values=&gt\@values);
 	   &use_in_creative_way(@h);
 
    CREATING A STANDALONE CHECKBOX
-	   print checkbox(-name=>'checkbox_name',
-				  -checked=>1,
-				  -value=>'ON',
-				  -label=>'CLICK ME');
+	   print checkbox(-name=&gt'checkbox_name',
+				  -checked=&gt1,
+				  -value=&gt'ON',
+				  -label=&gt'CLICK ME');
 
 	       -or-
 
@@ -2194,12 +2196,12 @@ CREATING FILL-OUT FORMS:
 	   $turned_on = param('checkbox_name');
 
    CREATING A RADIO BUTTON GROUP
-	  print radio_group(-name=>'group_name',
-				    -values=>['eenie','meenie','minie'],
-				    -default=>'meenie',
-				    -linebreak=>'true',
-		  -labels=>\%labels,
-		  -attributes=>\%attributes);
+	  print radio_group(-name=&gt'group_name',
+				    -values=&gt['eenie','meenie','minie'],
+				    -default=&gt'meenie',
+				    -linebreak=&gt'true',
+		  -labels=&gt\%labels,
+		  -attributes=&gt\%attributes);
 
 	       -or-
 
@@ -2209,9 +2211,9 @@ CREATING FILL-OUT FORMS:
 
 	  HTML3-COMPATIBLE BROWSERS ONLY:
 
-	  print radio_group(-name=>'group_name',
-				    -values=>['eenie','meenie','minie','moe'],
-				    -rows=2,-columns=>2);
+	  print radio_group(-name=&gt'group_name',
+				    -values=&gt['eenie','meenie','minie','moe'],
+				    -rows=2,-columns=&gt2);
 
        radio_group() creates a set of logically-related radio buttons (turning
        one member of the group on turns the others off)
@@ -2262,9 +2264,9 @@ CREATING FILL-OUT FORMS:
        in which the hash keys are the radio button values and the values are
        the tab indexes of each button.	Examples:
 
-	 -tabindex => 100    #	this group starts at index 100 and counts up
-	 -tabindex => ['moe','minie','eenie','meenie']	# tab in this order
-	 -tabindex => {meenie=>100,moe=>101,minie=>102,eenie=>200} # tab in this order
+	 -tabindex =&gt 100    #	this group starts at index 100 and counts up
+	 -tabindex =&gt ['moe','minie','eenie','meenie']	# tab in this order
+	 -tabindex =&gt {meenie=&gt100,moe=&gt101,minie=&gt102,eenie=&gt200} # tab in this order
 
        The optional -attributes argument is provided to assign any of the
        common HTML attributes to an individual menu item. It's a pointer to a
@@ -2272,7 +2274,7 @@ CREATING FILL-OUT FORMS:
        the key and the attribute's value as the value.
 
        The optional -labelattributes argument will contain attributes attached
-       to the <label> element that surrounds each button.
+       to the &ltlabel&gt element that surrounds each button.
 
        When the form is processed, the selected radio button can be retrieved
        using:
@@ -2283,12 +2285,12 @@ CREATING FILL-OUT FORMS:
        elements.  You can capture them and use them within tables, lists, or
        in other creative ways:
 
-	   @h = radio_group(-name=>'group_name',-values=>\@values);
+	   @h = radio_group(-name=&gt'group_name',-values=&gt\@values);
 	   &use_in_creative_way(@h);
 
    CREATING A SUBMIT BUTTON
-	  print submit(-name=>'button_name',
-			       -value=>'value');
+	  print submit(-name=&gt'button_name',
+			       -value=&gt'value');
 
 	       -or-
 
@@ -2333,8 +2335,8 @@ CREATING FILL-OUT FORMS:
        user ever made.
 
    CREATING A HIDDEN FIELD
-	       print hidden(-name=>'hidden_name',
-				    -default=>['value1','value2'...]);
+	       print hidden(-name=&gt'hidden_name',
+				    -default=&gt['value1','value2'...]);
 
 		       -or-
 
@@ -2364,9 +2366,9 @@ CREATING FILL-OUT FORMS:
 	    param('hidden_name','new','values','here');
 
    CREATING A CLICKABLE IMAGE BUTTON
-	    print image_button(-name=>'button_name',
-				       -src=>'/source/URL',
-				       -align=>'MIDDLE');
+	    print image_button(-name=&gt'button_name',
+				       -src=&gt'/source/URL',
+				       -align=&gt'MIDDLE');
 
 	       -or-
 
@@ -2390,15 +2392,15 @@ CREATING FILL-OUT FORMS:
 	    $y = param('button_name.y');
 
    CREATING A JAVASCRIPT ACTION BUTTON
-	    print button(-name=>'button_name',
-				 -value=>'user visible label',
-				 -onClick=>"do_something()");
+	    print button(-name=&gt'button_name',
+				 -value=&gt'user visible label',
+				 -onClick=&gt"do_something()");
 
 	       -or-
 
 	    print button('button_name',"user visible value","do_something()");
 
-       button() produces an "<input>" tag with "type="button"".  When it's
+       button() produces an "&ltinput&gt" tag with "type="button"".  When it's
        pressed the fragment of JavaScript code pointed to by the -onClick
        parameter will be executed.
 
@@ -2453,13 +2455,13 @@ HTTP COOKIES
 
        The interface to HTTP cookies is the cookie() method:
 
-	   $cookie = cookie(-name=>'sessionID',
-				    -value=>'xyzzy',
-				    -expires=>'+1h',
-				    -path=>'/cgi-bin/database',
-				    -domain=>'.capricorn.org',
-				    -secure=>1);
-	   print header(-cookie=>$cookie);
+	   $cookie = cookie(-name=&gt'sessionID',
+				    -value=&gt'xyzzy',
+				    -expires=&gt'+1h',
+				    -path=&gt'/cgi-bin/database',
+				    -domain=&gt'.capricorn.org',
+				    -secure=&gt1);
+	   print header(-cookie=&gt$cookie);
 
        cookie() creates a new cookie.  Its parameters include:
 
@@ -2474,8 +2476,8 @@ HTTP COOKIES
 	   reference, or even hash reference.  For example, you can store an
 	   entire hash into a cookie this way:
 
-		   $cookie=cookie(-name=>'family information',
-					  -value=>\%childrens_ages);
+		   $cookie=cookie(-name=&gt'family information',
+					  -value=&gt\%childrens_ages);
 
        -path
 	   The optional partial path for which this cookie will be valid, as
@@ -2499,24 +2501,24 @@ HTTP COOKIES
        header within the string returned by the header() method:
 
 	       use CGI ':standard';
-	       print header(-cookie=>$my_cookie);
+	       print header(-cookie=&gt$my_cookie);
 
        To create multiple cookies, give header() an array reference:
 
-	       $cookie1 = cookie(-name=>'riddle_name',
-					 -value=>"The Sphynx's Question");
-	       $cookie2 = cookie(-name=>'answers',
-					 -value=>\%answers);
-	       print header(-cookie=>[$cookie1,$cookie2]);
+	       $cookie1 = cookie(-name=&gt'riddle_name',
+					 -value=&gt"The Sphynx's Question");
+	       $cookie2 = cookie(-name=&gt'answers',
+					 -value=&gt\%answers);
+	       print header(-cookie=&gt[$cookie1,$cookie2]);
 
        To retrieve a cookie, request it by name by calling cookie() method
        without the -value parameter. This example uses the object-oriented
        form:
 
 	       use CGI;
-	       $query = CGI->new;
-	       $riddle = $query->cookie('riddle_name');
-	       %answers = $query->cookie('answers');
+	       $query = CGI-&gtnew;
+	       $riddle = $query-&gtcookie('riddle_name');
+	       %answers = $query-&gtcookie('answers');
 
        Cookies created with a single scalar value, such as the "riddle_name"
        cookie, will be returned in that form.  Cookies with array and hash
@@ -2528,9 +2530,9 @@ HTTP COOKIES
        simple to turn a CGI parameter into a cookie, and vice-versa:
 
 	  # turn a CGI parameter into a cookie
-	  $c=cookie(-name=>'answers',-value=>[param('answers')]);
+	  $c=cookie(-name=&gt'answers',-value=&gt[param('answers')]);
 	  # vice-versa
-	  param(-name=>'answers',-value=>[cookie('answers')]);
+	  param(-name=&gt'answers',-value=&gt[cookie('answers')]);
 
        If you call cookie() without any parameters, it will return a list of
        the names of all cookies passed to your script:
@@ -2545,33 +2547,33 @@ WORKING WITH FRAMES
        and windows using the HTML 4 frame mechanism.  There are three
        techniques for defining new frames programmatically:
 
-       1. Create a <Frameset> document
+       1. Create a &ltFrameset&gt document
 	   After writing out the HTTP header, instead of creating a standard
-	   HTML document using the start_html() call, create a <frameset>
+	   HTML document using the start_html() call, create a &ltframeset&gt
 	   document that defines the frames on the page.  Specify your
 	   script(s) (with appropriate parameters) as the SRC for each of the
 	   frames.
 
-	   There is no specific support for creating <frameset> sections in
+	   There is no specific support for creating &ltframeset&gt sections in
 	   CGI.pm, but the HTML is very simple to write.
 
        2. Specify the destination for the document in the HTTP header
 	   You may provide a -target parameter to the header() method:
 
-	       print header(-target=>'ResultsWindow');
+	       print header(-target=&gt'ResultsWindow');
 
 	   This will tell the browser to load the output of your script into
 	   the frame named "ResultsWindow".  If a frame of that name doesn't
 	   already exist, the browser will pop up a new window and load your
 	   script's document into that.  There are a number of magic names
-	   that you can use for targets.  See the HTML "<frame>" documentation
+	   that you can use for targets.  See the HTML "&ltframe&gt" documentation
 	   for details.
 
-       3. Specify the destination for the document in the <form> tag
+       3. Specify the destination for the document in the &ltform&gt tag
 	   You can specify the frame to load in the FORM tag itself.  With
 	   CGI.pm it looks like this:
 
-	       print start_form(-target=>'ResultsWindow');
+	       print start_form(-target=&gt'ResultsWindow');
 
 	   When your script is reinvoked by the form, its output will be
 	   loaded into the frame named "ResultsWindow".  If one doesn't
@@ -2583,7 +2585,7 @@ WORKING WITH FRAMES
 
 SUPPORT FOR JAVASCRIPT
        The usual way to use JavaScript is to define a set of functions in a
-       <SCRIPT> block inside the HTML header and then to register event
+       &ltSCRIPT&gt block inside the HTML header and then to register event
        handlers in the various elements of the page. Events include such
        things as the mouse passing over a form element, a button being
        clicked, the contents of a text field changing, or a form being
@@ -2591,7 +2593,7 @@ SUPPORT FOR JAVASCRIPT
        registered an event handler, its associated JavaScript code gets
        called.
 
-       The elements that can register event handlers include the <BODY> of an
+       The elements that can register event handlers include the &ltBODY&gt of an
        HTML document, hypertext links, all the various elements of a fill-out
        form, and the form itself. There are a large number of events, and each
        applies only to the elements for which it is relevant. Here is a
@@ -2600,12 +2602,12 @@ SUPPORT FOR JAVASCRIPT
        onLoad
 	   The browser is loading the current document. Valid in:
 
-		+ The HTML <BODY> section only.
+		+ The HTML &ltBODY&gt section only.
 
        onUnload
 	   The browser is closing the current page or frame. Valid for:
 
-		+ The HTML <BODY> section only.
+		+ The HTML &ltBODY&gt section only.
 
        onSubmit
 	   The user has pressed the submit button of a form. This event
@@ -2688,16 +2690,16 @@ SUPPORT FOR JAVASCRIPT
        executed every time the textfield named "age" changes, generate the
        field like this:
 
-	print textfield(-name=>'age',-onChange=>"validateAge(this)");
+	print textfield(-name=&gt'age',-onChange=&gt"validateAge(this)");
 
        This example assumes that you've already declared the validateAge()
-       function by incorporating it into a <SCRIPT> block. The CGI.pm
+       function by incorporating it into a &ltSCRIPT&gt block. The CGI.pm
        start_html() method provides a convenient way to create this section.
 
        Similarly, you can create a form that checks itself over for
        consistency and alerts the user if some essential value is missing by
        creating it this way:
-	 print start_form(-onSubmit=>"validateMe(this)");
+	 print start_form(-onSubmit=&gt"validateMe(this)");
 
        See the javascript.cgi script for a demonstration of how this all
        works.
@@ -2710,7 +2712,7 @@ LIMITED SUPPORT FOR CASCADING STYLE SHEETS
        stylesheet, or it may be a hash reference.  In the latter case you
        should provide the hash with one or more of -src or -code.  -src points
        to a URL where an externally-defined stylesheet can be found.  -code
-       points to a scalar value to be incorporated into a <style> section.
+       points to a scalar value to be incorporated into a &ltstyle&gt section.
        Style definitions in -code override similarly-named ones in -src, hence
        the name "cascading."
 
@@ -2721,16 +2723,16 @@ LIMITED SUPPORT FOR CASCADING STYLE SHEETS
        To refer to a style within the body of your document, add the -class
        parameter to any HTML element:
 
-	   print h1({-class=>'Fancy'},'Welcome to the Party');
+	   print h1({-class=&gt'Fancy'},'Welcome to the Party');
 
        Or define styles on the fly with the -style parameter:
 
-	   print h1({-style=>'Color: red;'},'Welcome to Hell');
+	   print h1({-style=&gt'Color: red;'},'Welcome to Hell');
 
        You may also use the new span() element to apply a style to a section
        of text:
 
-	   print span({-style=>'Color: red;'},
+	   print span({-style=&gt'Color: red;'},
 		      h1('Welcome to Hell'),
 		      "Where did that handbasket get to?"
 		      );
@@ -2743,8 +2745,8 @@ LIMITED SUPPORT FOR CASCADING STYLE SHEETS
 	   use CGI qw/:standard :html3/;
 
 	   #here's a stylesheet incorporated directly into the page
-	   $newStyle=<<END;
-	   <!--
+	   $newStyle=&lt&ltEND;
+	   &lt!--
 	   P.Tip {
 	       margin-right: 50pt;
 	       margin-left: 50pt;
@@ -2755,17 +2757,17 @@ LIMITED SUPPORT FOR CASCADING STYLE SHEETS
 	       font-family: sans-serif;
 	     color: red;
 	   }
-	   -->
+	   --&gt
 	   END
 	   print header();
-	   print start_html( -title=>'CGI with Style',
-			     -style=>{-src=>'http://www.capricorn.com/style/st1.css',
-				      -code=>$newStyle}
+	   print start_html( -title=&gt'CGI with Style',
+			     -style=&gt{-src=&gt'http://www.capricorn.com/style/st1.css',
+				      -code=&gt$newStyle}
 			    );
 	   print h1('CGI with Style'),
-		 p({-class=>'Tip'},
+		 p({-class=&gt'Tip'},
 		   "Better read the cascading style sheet spec before playing with this!"),
-		 span({-style=>'color: magenta'},
+		 span({-style=&gt'color: magenta'},
 		      "Look Mom, no hands!",
 		      p(),
 		      "Whooo wee!"
@@ -2779,43 +2781,43 @@ LIMITED SUPPORT FOR CASCADING STYLE SHEETS
        arbitrary formatting in the header, you may pass a -verbatim tag to the
        -style hash, as follows:
 
-       print start_html (-style  =>  {-verbatim => '@import
+       print start_html (-style  =&gt  {-verbatim =&gt '@import
        url("/server-common/css/'.$cssFile.'");',
-			 -src	 =>  '/server-common/css/core.css'});
+			 -src	 =&gt  '/server-common/css/core.css'});
 
        This will generate an HTML header that contains this:
 
-	<link rel="stylesheet" type="text/css"	href="/server-common/css/core.css">
-	  <style type="text/css">
+	&ltlink rel="stylesheet" type="text/css"	href="/server-common/css/core.css"&gt
+	  &ltstyle type="text/css"&gt
 	  @import url("/server-common/css/main.css");
-	  </style>
+	  &lt/style&gt
 
        Any additional arguments passed in the -style value will be
-       incorporated into the <link> tag.  For example:
+       incorporated into the &ltlink&gt tag.  For example:
 
-	start_html(-style=>{-src=>['/styles/print.css','/styles/layout.css'],
-				 -media => 'all'});
+	start_html(-style=&gt{-src=&gt['/styles/print.css','/styles/layout.css'],
+				 -media =&gt 'all'});
 
        This will give:
 
-	<link rel="stylesheet" type="text/css" href="/styles/print.css" media="all"/>
-	<link rel="stylesheet" type="text/css" href="/styles/layout.css" media="all"/>
+	&ltlink rel="stylesheet" type="text/css" href="/styles/print.css" media="all"/&gt
+	&ltlink rel="stylesheet" type="text/css" href="/styles/layout.css" media="all"/&gt
 
-       <p>
+       &ltp&gt
 
-       To make more complicated <link> tags, use the Link() function and pass
+       To make more complicated &ltlink&gt tags, use the Link() function and pass
        it to start_html() in the -head argument, as in:
 
-	 @h = (Link({-rel=>'stylesheet',-type=>'text/css',-src=>'/ss/ss.css',-media=>'all'}),
-	       Link({-rel=>'stylesheet',-type=>'text/css',-src=>'/ss/fred.css',-media=>'paper'}));
-	 print start_html({-head=>\@h})
+	 @h = (Link({-rel=&gt'stylesheet',-type=&gt'text/css',-src=&gt'/ss/ss.css',-media=&gt'all'}),
+	       Link({-rel=&gt'stylesheet',-type=&gt'text/css',-src=&gt'/ss/fred.css',-media=&gt'paper'}));
+	 print start_html({-head=&gt\@h})
 
        To create primary and  "alternate" stylesheet, use the -alternate
        option:
 
-	start_html(-style=>{-src=>[
-				  {-src=>'/styles/print.css'},
-				  {-src=>'/styles/alt.css',-alternate=>1}
+	start_html(-style=&gt{-src=&gt[
+				  {-src=&gt'/styles/print.css'},
+				  {-src=&gt'/styles/alt.css',-alternate=&gt1}
 				  ]
 			   });
 
@@ -2867,23 +2869,23 @@ DEBUGGING
 
        Produces something that looks like:
 
-	   <ul>
-	   <li>name1
-	       <ul>
-	       <li>value1
-	       <li>value2
-	       </ul>
-	   <li>name2
-	       <ul>
-	       <li>value1
-	       </ul>
-	   </ul>
+	   &ltul&gt
+	   &ltli&gtname1
+	       &ltul&gt
+	       &ltli&gtvalue1
+	       &ltli&gtvalue2
+	       &lt/ul&gt
+	   &ltli&gtname2
+	       &ltul&gt
+	       &ltli&gtvalue1
+	       &lt/ul&gt
+	   &lt/ul&gt
 
        As a shortcut, you can interpolate the entire CGI object into a string
        and it will be replaced with the a nice HTML dump shown above:
 
-	   $query=CGI->new;
-	   print "<h2>Current Values</h2> $query\n";
+	   $query=CGI-&gtnew;
+	   print "&lth2&gtCurrent Values&lt/h2&gt $query\n";
 
 FETCHING ENVIRONMENT VARIABLES
        Some of the more useful environment variables can be fetched through
@@ -3050,17 +3052,17 @@ USING NPH SCRIPTS
 	   Call nph() with a non-zero parameter at any point after using
 	   CGI.pm in your program.
 
-		 CGI->nph(1)
+		 CGI-&gtnph(1)
 
        By using -nph parameters
 	   in the header() and redirect()  statements:
 
-		 print header(-nph=>1);
+		 print header(-nph=&gt1);
 
 Server Push
        CGI.pm provides four simple functions for producing multipart documents
        of the type needed to implement server push.  These functions were
-       graciously provided by Ed Jordan <ed@fidalgo.net>.  To import these
+       graciously provided by Ed Jordan &lted@fidalgo.net&gt.  To import these
        into your namespace, you must import the ":push" set.  You are also
        advised to put the script into NPH mode and to set $| to 1 to avoid
        buffering problems.
@@ -3070,11 +3072,11 @@ Server Push
 	 #!/usr/local/bin/perl
 	 use CGI qw/:push -nph/;
 	 $| = 1;
-	 print multipart_init(-boundary=>'----here we go!');
+	 print multipart_init(-boundary=&gt'----here we go!');
 	 for (0 .. 4) {
-	     print multipart_start(-type=>'text/plain'),
+	     print multipart_start(-type=&gt'text/plain'),
 		   "The current time is ",scalar(localtime),"\n";
-	     if ($_ < 4) {
+	     if ($_ &lt 4) {
 		     print multipart_end;
 	     } else {
 		     print multipart_final;
@@ -3090,14 +3092,14 @@ Server Push
        with multipart_final() rather than with multipart_end().
 
        multipart_init()
-	     multipart_init(-boundary=>$boundary);
+	     multipart_init(-boundary=&gt$boundary);
 
 	   Initialize the multipart system.  The -boundary argument specifies
 	   what MIME boundary string to use to separate parts of the document.
 	   If not provided, CGI.pm chooses a reasonable boundary for you.
 
        multipart_start()
-	     multipart_start(-type=>$type)
+	     multipart_start(-type=&gt$type)
 
 	   Start a new part of the multipart document using the specified MIME
 	   type.  If not specified, text/html is assumed.
@@ -3179,7 +3181,7 @@ Avoiding Denial of Service Attacks
        An attempt to send a POST larger than $POST_MAX bytes will cause
        param() to return an empty CGI parameter list.  You can test for this
        event by checking cgi_error(), either after you create the CGI object
-       or, if you are using the function-oriented interface, call <param()>
+       or, if you are using the function-oriented interface, call &ltparam()&gt
        for the first time.  If the POST was intercepted, then cgi_error() will
        return the message "413 POST too large".
 
@@ -3189,7 +3191,7 @@ Avoiding Denial of Service Attacks
 
 	  $uploaded_file = param('upload');
 	  if (!$uploaded_file && cgi_error()) {
-	     print header(-status=>cgi_error());
+	     print header(-status=&gtcgi_error());
 	     exit 0;
 	  }
 
@@ -3223,8 +3225,8 @@ COMPATIBILITY WITH CGI-LIB.PL
        way:
 
 	   $q = $in{CGI};
-	   print $q->textfield(-name=>'wow',
-		   -value=>'does this really work?');
+	   print $q-&gttextfield(-name=&gt'wow',
+		   -value=&gt'does this really work?');
 
        This allows you to start using the more interesting features of CGI.pm
        without rewriting your old scripts from scratch.
@@ -3235,7 +3237,7 @@ COMPATIBILITY WITH CGI-LIB.PL
 	use CGI qw(:cgi-lib :standard);
 	&ReadParse;
 	print "The price of your purchase is $in{price}.\n";
-	print textfield(-name=>'price', -default=>'$1.99');
+	print textfield(-name=&gt'price', -default=&gt'$1.99');
 
    Cgi-lib functions that are available in CGI.pm
        In compatability mode, the following cgi-lib.pl functions are available
@@ -3270,7 +3272,7 @@ COMPATIBILITY WITH CGI-LIB.PL
 	      just print out the CGI object:
 
 	      use CGI qw(:standard);
-	      $q = CGI->new;
+	      $q = CGI-&gtnew;
 	      print h1("The Variables Are"),$q;
 
 	 * PrintEnv()
@@ -3292,7 +3294,7 @@ CREDITS
 
        Matt Heffron (heffron@falstaff.css.beckman.com)
        James Taylor (james.taylor@srs.gov)
-       Scott Anguish <sanguish@digifix.com>
+       Scott Anguish &ltsanguish@digifix.com&gt
        Mike Jewell (mlj3u@virginia.edu)
        Timothy Shimmin (tes@kbs.citri.edu.au)
        Joergen Haegg (jh@axis.se)
@@ -3320,7 +3322,7 @@ A COMPLETE EXAMPLE OF A SIMPLE FORM-BASED SCRIPT
 
 	       print header;
 	       print start_html("Example CGI.pm Form");
-	       print "<h1> Example CGI.pm Form</h1>\n";
+	       print "&lth1&gt Example CGI.pm Form&lt/h1&gt\n";
 	       print_prompt();
 	       do_work();
 	       print_tail();
@@ -3328,66 +3330,66 @@ A COMPLETE EXAMPLE OF A SIMPLE FORM-BASED SCRIPT
 
 	       sub print_prompt {
 		  print start_form;
-		  print "<em>What's your name?</em><br>";
+		  print "&ltem&gtWhat's your name?&lt/em&gt&ltbr&gt";
 		  print textfield('name');
 		  print checkbox('Not my real name');
 
-		  print "<p><em>Where can you find English Sparrows?</em><br>";
+		  print "&ltp&gt&ltem&gtWhere can you find English Sparrows?&lt/em&gt&ltbr&gt";
 		  print checkbox_group(
-					-name=>'Sparrow locations',
-					-values=>[England,France,Spain,Asia,Hoboken],
-					-linebreak=>'yes',
-					-defaults=>[England,Asia]);
+					-name=&gt'Sparrow locations',
+					-values=&gt[England,France,Spain,Asia,Hoboken],
+					-linebreak=&gt'yes',
+					-defaults=&gt[England,Asia]);
 
-		  print "<p><em>How far can they fly?</em><br>",
+		  print "&ltp&gt&ltem&gtHow far can they fly?&lt/em&gt&ltbr&gt",
 		       radio_group(
-			       -name=>'how far',
-			       -values=>['10 ft','1 mile','10 miles','real far'],
-			       -default=>'1 mile');
+			       -name=&gt'how far',
+			       -values=&gt['10 ft','1 mile','10 miles','real far'],
+			       -default=&gt'1 mile');
 
-		  print "<p><em>What's your favorite color?</em>  ";
-		  print popup_menu(-name=>'Color',
-					   -values=>['black','brown','red','yellow'],
-					   -default=>'red');
+		  print "&ltp&gt&ltem&gtWhat's your favorite color?&lt/em&gt  ";
+		  print popup_menu(-name=&gt'Color',
+					   -values=&gt['black','brown','red','yellow'],
+					   -default=&gt'red');
 
 		  print hidden('Reference','Monty Python and the Holy Grail');
 
-		  print "<p><em>What have you got there?</em><br>";
+		  print "&ltp&gt&ltem&gtWhat have you got there?&lt/em&gt&ltbr&gt";
 		  print scrolling_list(
-				-name=>'possessions',
-				-values=>['A Coconut','A Grail','An Icon',
+				-name=&gt'possessions',
+				-values=&gt['A Coconut','A Grail','An Icon',
 					  'A Sword','A Ticket'],
-				-size=>5,
-				-multiple=>'true');
+				-size=&gt5,
+				-multiple=&gt'true');
 
-		  print "<p><em>Any parting comments?</em><br>";
-		  print textarea(-name=>'Comments',
-					 -rows=>10,
-					 -columns=>50);
+		  print "&ltp&gt&ltem&gtAny parting comments?&lt/em&gt&ltbr&gt";
+		  print textarea(-name=&gt'Comments',
+					 -rows=&gt10,
+					 -columns=&gt50);
 
-		  print "<p>",reset;
+		  print "&ltp&gt",reset;
 		  print submit('Action','Shout');
 		  print submit('Action','Scream');
 		  print end_form;
-		  print "<hr>\n";
+		  print "&lthr&gt\n";
 	       }
 
 	       sub do_work {
 
-		  print "<h2>Here are the current settings in this form</h2>";
+		  print "&lth2&gtHere are the current settings in this form&lt/h2&gt";
 
 		  for my $key (param) {
-		     print "<strong>$key</strong> -> ";
+		     print "&ltstrong&gt$key&lt/strong&gt -&gt ";
 		     my @values = param($key);
-		     print join(", ",@values),"<br>\n";
+		     print join(", ",@values),"&ltbr&gt\n";
 		 }
 	       }
 
 	       sub print_tail {
-		  print <<END;
-	       <hr>
-	       <address>Lincoln D. Stein</address><br>
-	       <a href="/">Home Page</a>
+		  print &lt&ltEND;
+	       &lthr&gt
+	       &ltaddress&gtLincoln D. Stein&lt/address&gt&ltbr&gt
+	       &lta href="/"&gtHome Page&lt/a&gt
 	       END
 	       }
 
@@ -3406,6 +3408,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2011-01-05				CGI(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

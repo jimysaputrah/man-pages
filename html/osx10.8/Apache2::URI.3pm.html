@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="While "APR::URI" provides a generic API to dissect, adjust and put..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Apache2::URI - Perl API for manipulating URIs</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 apache_mod_apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::URI(3)
 
 
@@ -18,18 +20,18 @@ NAME
 Synopsis
 	 use Apache2::URI ();
 
-	 $hostport = $r->construct_server();
-	 $hostport = $r->construct_server($hostname);
-	 $hostport = $r->construct_server($hostname, $port);
-	 $hostport = $r->construct_server($hostname, $port, $pool);
+	 $hostport = $r-&gtconstruct_server();
+	 $hostport = $r-&gtconstruct_server($hostname);
+	 $hostport = $r-&gtconstruct_server($hostname, $port);
+	 $hostport = $r-&gtconstruct_server($hostname, $port, $pool);
 
-	 $url = $r->construct_url();
-	 $url = $r->construct_url($rel_uri);
-	 $url = $r->construct_url($rel_uri, $pool);
+	 $url = $r-&gtconstruct_url();
+	 $url = $r-&gtconstruct_url($rel_uri);
+	 $url = $r-&gtconstruct_url($rel_uri, $pool);
 
-	 $parsed_uri = $r->parse_uri($uri);
+	 $parsed_uri = $r-&gtparse_uri($uri);
 
-	 $parsed_uri = $r->parsed_uri();
+	 $parsed_uri = $r-&gtparsed_uri();
 
 	 $url = join '%20', qw(one two three);
 	 Apache2::URI::unescape_url($url);
@@ -47,10 +49,10 @@ API
    "construct_server"
        Construct a string made of hostname and port
 
-	 $hostport = $r->construct_server();
-	 $hostport = $r->construct_server($hostname);
-	 $hostport = $r->construct_server($hostname, $port);
-	 $hostport = $r->construct_server($hostname, $port, $pool);
+	 $hostport = $r-&gtconstruct_server();
+	 $hostport = $r-&gtconstruct_server($hostname);
+	 $hostport = $r-&gtconstruct_server($hostname, $port);
+	 $hostport = $r-&gtconstruct_server($hostname, $port, $pool);
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request object
@@ -58,17 +60,17 @@ API
        opt arg1: $hostname ( string )
 	   The hostname of the server.
 
-	   If that argument is not passed, "$r->get_server_name" is used.
+	   If that argument is not passed, "$r-&gtget_server_name" is used.
 
        opt arg2: $port ( string )
 	   The port the server is running on.
 
-	   If that argument is not passed, "$r->get_server_port" is used.
+	   If that argument is not passed, "$r-&gtget_server_port" is used.
 
        opt arg3: $pool ( "APR::Pool object" )
 	   The pool to allocate the string from.
 
-	   If that argument is not passed, "$r->pool" is used.
+	   If that argument is not passed, "$r-&gtpool" is used.
 
        ret: $hostport ( string )
 	   The server's hostport string
@@ -79,12 +81,12 @@ API
 
        o   Assuming that:
 
-	     $r->get_server_name == "localhost";
-	     $r->get_server_port == 8001;
+	     $r-&gtget_server_name == "localhost";
+	     $r-&gtget_server_port == 8001;
 
 	   The code:
 
-	     $hostport = $r->construct_server();
+	     $hostport = $r-&gtconstruct_server();
 
 	   returns a string:
 
@@ -92,7 +94,7 @@ API
 
        o   The following code sets the values explicitly:
 
-	     $hostport = $r->construct_server("my.example.com", 8888);
+	     $hostport = $r-&gtconstruct_server("my.example.com", 8888);
 
 	   and it returns a string:
 
@@ -102,9 +104,9 @@ API
        Build a fully qualified URL from the uri and information in the request
        rec:
 
-	 $url = $r->construct_url();
-	 $url = $r->construct_url($rel_uri);
-	 $url = $r->construct_url($rel_uri, $pool);
+	 $url = $r-&gtconstruct_url();
+	 $url = $r-&gtconstruct_url($rel_uri);
+	 $url = $r-&gtconstruct_url($rel_uri, $pool);
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request object
@@ -113,12 +115,12 @@ API
 	   The path to the requested file (it may include a concatenation of
 	   path, query and fragment components).
 
-	   If that argument is not passed, "$r->uri" is used.
+	   If that argument is not passed, "$r-&gturi" is used.
 
        opt arg2: $pool ( "APR::Pool object" )
 	   The pool to allocate the URL from
 
-	   If that argument is not passed, "$r->pool" is used.
+	   If that argument is not passed, "$r-&gtpool" is used.
 
        ret: $url ( string )
 	   A fully qualified URL
@@ -133,7 +135,7 @@ API
 
 	   The code:
 
-	     my $url = $r->construct_url;
+	     my $url = $r-&gtconstruct_url;
 
 	   returns the string:
 
@@ -149,7 +151,7 @@ API
 	   The code:
 
 	     my $rel_uri = "/foo/bar?tar";
-	     my $url = $r->construct_url($rel_uri);
+	     my $url = $r-&gtconstruct_url($rel_uri);
 
 	   returns the string:
 
@@ -158,7 +160,7 @@ API
    "parse_uri"
        Break apart URI (affecting the current request's uri components)
 
-	 $r->parse_uri($uri);
+	 $r-&gtparse_uri($uri);
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request object
@@ -174,18 +176,18 @@ API
 
        This method call has the following side-effects:
 
-       1.  sets "$r->args" to the rest after '?' if such exists in the passed
+       1.  sets "$r-&gtargs" to the rest after '?' if such exists in the passed
 	   $uri, otherwise sets it to "undef".
 
-       2.  sets "$r->uri" to the passed $uri without the "$r->args" part.
+       2.  sets "$r-&gturi" to the passed $uri without the "$r-&gtargs" part.
 
-       3.  sets "$r->hostname" (if not set already) using the
+       3.  sets "$r-&gthostname" (if not set already) using the
 	   ("scheme://host:port") parts of the passed $uri.
 
    "parsed_uri"
        Get the current request's parsed uri object
 
-	 my $uri = $r->parsed_uri();
+	 my $uri = $r-&gtparsed_uri();
 
        obj: $r ( "Apache2::RequestRec object" )
 	   The current request object
@@ -231,6 +233,6 @@ Authors
 
 
 perl v5.12.apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::Apache2::URI(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

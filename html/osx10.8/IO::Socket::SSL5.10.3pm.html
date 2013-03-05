@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module is a true drop-in replacement for IO::Socket::INET that..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>IO::Socket::SSL -- Nearly transparent SSL encapsulation for</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 SSL(3)		      User Contributed Perl Documentation		SSL(3)
 
 
@@ -20,13 +22,13 @@ SYNOPSIS
 	       use strict;
 	       use IO::Socket::SSL;
 
-	       my $client = IO::Socket::SSL->new("www.example.com:https")
+	       my $client = IO::Socket::SSL-&gtnew("www.example.com:https")
 		       || warn "I encountered a problem: ".IO::Socket::SSL::errstr();
-	       $client->verify_hostname( 'www.example.com','http' )
+	       $client-&gtverify_hostname( 'www.example.com','http' )
 		       || die "hostname verification failed";
 
 	       print $client "GET / HTTP/1.0\r\n\r\n";
-	       print <$client>;
+	       print &lt$client&gt;
 
 DESCRIPTION
        This module is a true drop-in replacement for IO::Socket::INET that
@@ -71,7 +73,7 @@ METHODS
 	     If this option is set the cipher list for the connection will be
 	     set to the given value, e.g. something like 'ALL:!LOW:!EXP:!ADH'.
 	     Look into the OpenSSL documentation
-	     (<http://www.openssl.org/docs/apps/ciphers.html#CIPHER_STRINGS>)
+	     (&lthttp://www.openssl.org/docs/apps/ciphers.html#CIPHER_STRINGS&gt)
 	     for more details.	If this option is not used the openssl builtin
 	     default is used which is suitable for most cases.
 
@@ -186,7 +188,7 @@ METHODS
 	     name caan be determined.
 
 	     Using PeerHost or PeerAddr works only if you create the
-	     connection directly with "IO::Socket::SSL->new", if an
+	     connection directly with "IO::Socket::SSL-&gtnew", if an
 	     IO::Socket::INET object is upgraded with start_SSL the name has
 	     to be given in SSL_verifycn_name.
 
@@ -196,7 +198,7 @@ METHODS
 	     will search for the CRL in your SSL_ca_path, or use the file
 	     specified by SSL_crl_file.  See the Net::SSLeay documentation for
 	     more details.  Note that this functionality appears to be broken
-	     with OpenSSL < v0.9.7b, so its use with lower versions will
+	     with OpenSSL &lt v0.9.7b, so its use with lower versions will
 	     result in an error.
 
 	   SSL_crl_file
@@ -239,7 +241,7 @@ METHODS
 	     context.
 
 	     A session cache object can be created using
-	     "IO::Socket::SSL::Session_Cache->new( cachesize )".
+	     "IO::Socket::SSL::Session_Cache-&gtnew( cachesize )".
 
 	     Use set_default_session_cache() to set a global cache object.
 
@@ -263,7 +265,7 @@ METHODS
 	   if you try to close a copy of a socket (as in a forking server) you
 	   will affect the original socket as well.  To get around these
 	   problems, call close with an object-oriented syntax (e.g.
-	   $socket->close(SSL_no_shutdown => 1)) and one or more of the
+	   $socket-&gtclose(SSL_no_shutdown =&gt 1)) and one or more of the
 	   following parameters:
 
 	   SSL_no_shutdown
@@ -317,11 +319,11 @@ METHODS
 	   owner (alias subject)
 		   The owner of the certificate.
 
-	   commonName (alias cn) - only for Net::SSLeay version >=1.30
+	   commonName (alias cn) - only for Net::SSLeay version &gt=1.30
 		   The common name, usually the server name for SSL
 		   certificates.
 
-	   subjectAltNames - only for Net::SSLeay version >=1.33
+	   subjectAltNames - only for Net::SSLeay version &gt=1.33
 		   Alternative names for the subject, usually different names
 		   for the same server, like example.org, example.com,
 		   *.example.com.
@@ -409,16 +411,16 @@ METHODS
 	   and -1 if the underlying IO::Handle is open, but the SSL handshake
 	   failed.
 
-       IO::Socket::SSL->start_SSL($socket, ... )
+       IO::Socket::SSL-&gtstart_SSL($socket, ... )
 	   This will convert a glob reference or a socket that you provide to
 	   an IO::Socket::SSL object.	 You may also pass parameters to
 	   specify context or connection options as with a call to new().  If
 	   you are using this function on an accept()ed socket, you must set
 	   the parameter "SSL_server" to 1, i.e.
-	   IO::Socket::SSL->start_SSL($socket, SSL_server => 1).  If you have
+	   IO::Socket::SSL-&gtstart_SSL($socket, SSL_server =&gt 1).  If you have
 	   a class that inherits from IO::Socket::SSL and you want the $socket
 	   to be blessed into your own class instead, use
-	   MyClass->start_SSL($socket) to achieve the desired effect.
+	   MyClass-&gtstart_SSL($socket) to achieve the desired effect.
 
 	   Note that if start_SSL() fails in SSL negotiation, $socket will
 	   remain blessed in its original class.      For non-blocking sockets
@@ -445,11 +447,11 @@ METHODS
 	   the call should be retried again with the same arguments once the
 	   socket is ready is until it succeeds.
 
-       IO::Socket::SSL->new_from_fd($fd, ...)
+       IO::Socket::SSL-&gtnew_from_fd($fd, ...)
 	   This will convert a socket identified via a file descriptor into an
 	   SSL socket.	Note that the argument list does not include a "MODE"
 	   argument; if you supply one, it will be thoughtfully ignored (for
-	   compatibility with IO::Socket::INET).  Instead, a mode of '+<' is
+	   compatibility with IO::Socket::INET).  Instead, a mode of '+&lt' is
 	   assumed, and the file descriptor passed must be able to handle such
 	   I/O because the initial SSL handshake requires bidirectional
 	   communication.
@@ -521,7 +523,7 @@ RETURN VALUES
        but for all functions, the return value on error is now an empty
        list.	Therefore, the return value will be false in all contexts, but
        those who have been using the return values as arguments to subroutines
-       (like "mysub(IO::Socket::SSL(...)-"new, ...)>) may run into problems.
+       (like "mysub(IO::Socket::SSL(...)-"new, ...)&gt) may run into problems.
        The moral of the story: always check the return values of these
        functions before using them in any way that you consider meaningful.
 
@@ -586,7 +588,7 @@ DEPRECATIONS
 	 use the SSL_reuse_ctx option if you want to re-use a context
 
        socketToSSL() and socket_to_SSL()
-	 use IO::Socket::SSL->start_SSL() instead
+	 use IO::Socket::SSL-&gtstart_SSL() instead
 
        kill_socket()
 	 use close() instead
@@ -614,12 +616,12 @@ SEE ALSO
        IO::Socket::INET, IO::Socket::INET6, Net::SSLeay.
 
 AUTHORS
-       Steffen Ullrich, <steffen at genua.de> is the current maintainer.
+       Steffen Ullrich, &ltsteffen at genua.de&gt is the current maintainer.
 
-       Peter Behroozi, <behrooz at fas.harvard.edu> (Note the lack of an "i"
+       Peter Behroozi, &ltbehrooz at fas.harvard.edu&gt (Note the lack of an "i"
        at the end of "behrooz")
 
-       Marko Asplund, <marko.asplund at kronodoc.fi>, was the original author
+       Marko Asplund, &ltmarko.asplund at kronodoc.fi&gt, was the original author
        of IO::Socket::SSL.
 
        Patches incorporated from various people, see file Changes.
@@ -639,7 +641,7 @@ Appendix: Using SSL
        If you are unfamiliar with the way OpenSSL works, good references may
        be found in both the book "Network Security with OpenSSL" (Oreilly &
        Assoc.) and the web site
-       <http://www.tldp.org/HOWTO/SSL-Certificates-HOWTO/>.  Read on for a
+       &lthttp://www.tldp.org/HOWTO/SSL-Certificates-HOWTO/&gt.  Read on for a
        quick overview.
 
    The Long of It (Detail)
@@ -684,11 +686,11 @@ Appendix: Using SSL
        you can start serving people. For clients, you will not need anything
        unless the server wants validation, in which case you will also need a
        private key and a real certificate.     For more information about how
-       to get these, see <http://www.modssl.org/docs/2.8/ssl_faq.html#ToC24>.
+       to get these, see &lthttp://www.modssl.org/docs/2.8/ssl_faq.html#ToC24&gt.
 
 
 
 perl v5.10.1			  2010-12-05				SSL(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

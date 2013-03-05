@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Functions..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Date::Calendar::Year - Implements embedded "year" objects for</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Date::Calendar::Year(3User Contributed Perl DocumentatiDate::Calendar::Year(3)
 
 
@@ -27,47 +29,47 @@ SYNOPSIS
 	 use Date::Calendar::Year qw( check_year empty_period );
 	 use Date::Calendar::Year qw( :all ); # same as above
 
-	 check_year(YEAR|DATE); # dies if year < 1583 or year > 2299
+	 check_year(YEAR|DATE); # dies if year &lt 1583 or year &gt 2299
 	 empty_period();	# warns about empty interval if $^W is set
 
-	 $index = $year->date2index(YEAR,MONTH,DAY|DATE);
-	 $date	= $year->index2date(INDEX);
+	 $index = $year-&gtdate2index(YEAR,MONTH,DAY|DATE);
+	 $date	= $year-&gtindex2date(INDEX);
 
 	 use Date::Calendar::Profiles qw( $Profiles );
-	 $year_2000_US_FL = Date::Calendar::Year->new( 2000, $Profiles->{'US-FL'} [,LANG[,WEEKEND]] );
-	 $year_2001_DE_NW = Date::Calendar::Year->new( 2001, $Profiles->{'DE-NW'} [,LANG[,WEEKEND]] );
+	 $year_2000_US_FL = Date::Calendar::Year-&gtnew( 2000, $Profiles-&gt{'US-FL'} [,LANG[,WEEKEND]] );
+	 $year_2001_DE_NW = Date::Calendar::Year-&gtnew( 2001, $Profiles-&gt{'DE-NW'} [,LANG[,WEEKEND]] );
 
-	 $year = Date::Calendar::Year->new( 2001, {} );
-	 $year->init( 2002, $Profiles->{'DE-SN'} [,LANG[,WEEKEND]] );
+	 $year = Date::Calendar::Year-&gtnew( 2001, {} );
+	 $year-&gtinit( 2002, $Profiles-&gt{'DE-SN'} [,LANG[,WEEKEND]] );
 
-	 $vector = $year->vec_full(); # vector of full holidays
-	 $vector = $year->vec_half(); # vector of half holidays
-	 $vector = $year->vec_work(); # NOT a vector of workdays but a workspace!
-	 $size	 = $year->val_days(); # number of days in that year, size of vectors
-	 $base	 = $year->val_base(); # number of days for [year,1,1] since [1,1,1]
-	 $number = $year->val_year(); # the year's number itself
-	 $number = $year->year();     # alias for val_year()
+	 $vector = $year-&gtvec_full(); # vector of full holidays
+	 $vector = $year-&gtvec_half(); # vector of half holidays
+	 $vector = $year-&gtvec_work(); # NOT a vector of workdays but a workspace!
+	 $size	 = $year-&gtval_days(); # number of days in that year, size of vectors
+	 $base	 = $year-&gtval_base(); # number of days for [year,1,1] since [1,1,1]
+	 $number = $year-&gtval_year(); # the year's number itself
+	 $number = $year-&gtyear();     # alias for val_year()
 
-	 @names    = $year->labels(YEAR,MONTH,DAY|DATE);
-	 @holidays = $year->labels();
-	 $holidays = $year->labels();
+	 @names    = $year-&gtlabels(YEAR,MONTH,DAY|DATE);
+	 @holidays = $year-&gtlabels();
+	 $holidays = $year-&gtlabels();
 
-	 @dates    = $year->search(PATTERN);
-	 $dates    = $year->search(PATTERN);
+	 @dates    = $year-&gtsearch(PATTERN);
+	 $dates    = $year-&gtsearch(PATTERN);
 
-	 $hashref  = $year->tags(YEAR,MONTH,DAY|DATE);
-	 $hashref  = $year->tags(INDEX);
+	 $hashref  = $year-&gttags(YEAR,MONTH,DAY|DATE);
+	 $hashref  = $year-&gttags(INDEX);
 
-	 $days	   = $year->delta_workdays(YEAR,MONTH1,DAY1|DATE1
+	 $days	   = $year-&gtdelta_workdays(YEAR,MONTH1,DAY1|DATE1
 					  ,YEAR,MONTH2,DAY2|DATE2
 					  ,FLAG1,FLAG2);
 
-	 ($date,$rest,$sign) = $year->add_delta_workdays(YEAR,MONTH,DAY|DATE
+	 ($date,$rest,$sign) = $year-&gtadd_delta_workdays(YEAR,MONTH,DAY|DATE
 							,DELTA,SIGN);
 
-	 $flag	   = $year->is_full(YEAR,MONTH,DAY|DATE);
-	 $flag	   = $year->is_half(YEAR,MONTH,DAY|DATE);
-	 $flag	   = $year->is_work(YEAR,MONTH,DAY|DATE);
+	 $flag	   = $year-&gtis_full(YEAR,MONTH,DAY|DATE);
+	 $flag	   = $year-&gtis_half(YEAR,MONTH,DAY|DATE);
+	 $flag	   = $year-&gtis_work(YEAR,MONTH,DAY|DATE);
 
 INTERFACE
        Note that whenever a year number, a date, a time or a combined date and
@@ -79,25 +81,25 @@ INTERFACE
 
        So instead of calling a given method like this:
 
-	 $object->method1( $year,$month,$day );
-	 $object->method2( $year1,$month1,$day1, $year2,$month2,$day2 );
-	 $object->method3( $year1, $year2, $year3 );
+	 $object-&gtmethod1( $year,$month,$day );
+	 $object-&gtmethod2( $year1,$month1,$day1, $year2,$month2,$day2 );
+	 $object-&gtmethod3( $year1, $year2, $year3 );
 
        You can also call it like so:
 
-	 $object->method1( $date );
-	 $object->method1( [1964,1,3] );
+	 $object-&gtmethod1( $date );
+	 $object-&gtmethod1( [1964,1,3] );
 
-	 $object->method2( $year1,$month1,$day1, $date2 );
-	 $object->method2( $date1, $year2,$month2,$day2 );
-	 $object->method2( $date1, $date2 );
-	 $object->method2( $year1,$month1,$day1, [2001,3,17] );
-	 $object->method2( [1964,1,3], $year2,$month2,$day2 );
-	 $object->method2( [1964,1,3], [2001,3,17] );
-	 $object->method2( $date1, [2001,3,17] );
-	 $object->method2( [1964,1,3], $date2 );
+	 $object-&gtmethod2( $year1,$month1,$day1, $date2 );
+	 $object-&gtmethod2( $date1, $year2,$month2,$day2 );
+	 $object-&gtmethod2( $date1, $date2 );
+	 $object-&gtmethod2( $year1,$month1,$day1, [2001,3,17] );
+	 $object-&gtmethod2( [1964,1,3], $year2,$month2,$day2 );
+	 $object-&gtmethod2( [1964,1,3], [2001,3,17] );
+	 $object-&gtmethod2( $date1, [2001,3,17] );
+	 $object-&gtmethod2( [1964,1,3], $date2 );
 
-	 $object->method3( $year1, $date2, [2001,3,17] );
+	 $object-&gtmethod3( $year1, $date2, [2001,3,17] );
 
        And similarly if a time or a combined date and time are expected.
 
@@ -175,7 +177,7 @@ DESCRIPTION
 
        Methods
 
-       o "$index = $year->date2index(YEAR,MONTH,DAY|DATE);"
+       o "$index = $year-&gtdate2index(YEAR,MONTH,DAY|DATE);"
 
 	 This method converts a given date into the number of the day in that
 	 year (this is sometimes also referred to as the "julian" date), i.e.,
@@ -198,7 +200,7 @@ DESCRIPTION
 	 do not constitute a valid date, or ("given year out of range
 	 [1583..2299]") if the given year lies outside of the permitted range.
 
-       o "$date = $year->index2date(INDEX);"
+       o "$date = $year-&gtindex2date(INDEX);"
 
 	 This method converts an index (or "julian date") for the given year
 	 back into a date.
@@ -209,13 +211,13 @@ DESCRIPTION
 
 	 Note that this method returns a Date::Calc OBJECT!
 
-       o "$year_2000_US_FL = Date::Calendar::Year->new( 2000,
-	 $Profiles->{'US-FL'} [,LANG[,WEEKEND]] );"
+       o "$year_2000_US_FL = Date::Calendar::Year-&gtnew( 2000,
+	 $Profiles-&gt{'US-FL'} [,LANG[,WEEKEND]] );"
 
-	 "$year_2001_DE_NW = Date::Calendar::Year->new( 2001,
-	 $Profiles->{'DE-NW'} [,LANG[,WEEKEND]] );"
+	 "$year_2001_DE_NW = Date::Calendar::Year-&gtnew( 2001,
+	 $Profiles-&gt{'DE-NW'} [,LANG[,WEEKEND]] );"
 
-	 "$year = Date::Calendar::Year->new( 2001, {} );"
+	 "$year = Date::Calendar::Year-&gtnew( 2001, {} );"
 
 	 This is the constructor method. Call it to create a new
 	 Date::Calendar::Year object.
@@ -259,7 +261,7 @@ DESCRIPTION
 	 This can be used to switch off this feature and to have no regularly
 	 recurring holidays at all when for instance a zero is given.
 
-       o "$year->init( 2002, $Profiles->{'DE-SN'} [,LANG[,WEEKEND]] );"
+       o "$year-&gtinit( 2002, $Profiles-&gt{'DE-SN'} [,LANG[,WEEKEND]] );"
 
 	 This method is called by the "new()" constructor method, internally,
 	 and has the same arguments as the latter.
@@ -328,55 +330,55 @@ DESCRIPTION
 
 	  -  Fixed dates:
 
-	     "Christmas"  =>  "24.12",	 # European format (day, month)
-	     "Christmas"  =>  "24.12.",
+	     "Christmas"  =&gt  "24.12",	 # European format (day, month)
+	     "Christmas"  =&gt  "24.12.",
 
-	     "Christmas"  =>  "24Dec",
-	     "Christmas"  =>  "24.Dec",
-	     "Christmas"  =>  "24Dec.",
-	     "Christmas"  =>  "24.Dec.",
+	     "Christmas"  =&gt  "24Dec",
+	     "Christmas"  =&gt  "24.Dec",
+	     "Christmas"  =&gt  "24Dec.",
+	     "Christmas"  =&gt  "24.Dec.",
 
-	     "Christmas"  =>  "24-12",
-	     "Christmas"  =>  "24-12-",
+	     "Christmas"  =&gt  "24-12",
+	     "Christmas"  =&gt  "24-12-",
 
-	     "Christmas"  =>  "24-Dec",
-	     "Christmas"  =>  "24-Dec-",
+	     "Christmas"  =&gt  "24-Dec",
+	     "Christmas"  =&gt  "24-Dec-",
 
-	     "Christmas"  =>  "12/25",	 # American format (month, day)
-	     "Christmas"  =>  "Dec25",
-	     "Christmas"  =>  "Dec/25",
+	     "Christmas"  =&gt  "12/25",	 # American format (month, day)
+	     "Christmas"  =&gt  "Dec25",
+	     "Christmas"  =&gt  "Dec/25",
 
 	  -  Dates relative to Easter Sunday:
 
-	     "Ladies' Carnival"  =>  "-52",
-	     "Carnival Monday"	 =>  "-48",
-	     "Mardi Gras"	 =>  "-47",
-	     "Ash Wednesday"	 =>  "-46",
-	     "Palm Sunday"	 =>   "-7",
-	     "Maundy Thursday"	 =>   "-3",
-	     "Good Friday"	 =>   "-2",
-	     "Easter Sunday"	 =>   "+0",
-	     "Easter Monday"	 =>   "+1",
-	     "Ascension"	 =>  "+39",
-	     "Whitsunday"	 =>  "+49",
-	     "Whitmonday"	 =>  "+50",
-	     "Corpus Christi"	 =>  "+60",
+	     "Ladies' Carnival"  =&gt  "-52",
+	     "Carnival Monday"	 =&gt  "-48",
+	     "Mardi Gras"	 =&gt  "-47",
+	     "Ash Wednesday"	 =&gt  "-46",
+	     "Palm Sunday"	 =&gt   "-7",
+	     "Maundy Thursday"	 =&gt   "-3",
+	     "Good Friday"	 =&gt   "-2",
+	     "Easter Sunday"	 =&gt   "+0",
+	     "Easter Monday"	 =&gt   "+1",
+	     "Ascension"	 =&gt  "+39",
+	     "Whitsunday"	 =&gt  "+49",
+	     "Whitmonday"	 =&gt  "+50",
+	     "Corpus Christi"	 =&gt  "+60",
 
 	  -  The 1st, 2nd, 3rd, 4th or last day of week:
 
-	     "Thanksgiving"	 =>  "4Thu11",
-	     "Thanksgiving"	 =>  "4/Thu/Nov",
-	     "Columbus Day"	 =>  "2/Mon/Oct",
-	     "Columbus Day"	 =>  "2/Mon/10",
-	     "Columbus Day"	 =>  "2/1/Oct",
-	     "Columbus Day"	 =>  "2/1/10",
-	     "Memorial Day"	 =>  "5/Mon/May", # LAST Monday of May
+	     "Thanksgiving"	 =&gt  "4Thu11",
+	     "Thanksgiving"	 =&gt  "4/Thu/Nov",
+	     "Columbus Day"	 =&gt  "2/Mon/Oct",
+	     "Columbus Day"	 =&gt  "2/Mon/10",
+	     "Columbus Day"	 =&gt  "2/1/Oct",
+	     "Columbus Day"	 =&gt  "2/1/10",
+	     "Memorial Day"	 =&gt  "5/Mon/May", # LAST Monday of May
 
 	 Remember that each of these date formula strings may also be prefixed
 	 with either "#" or ":":
 
-	     "Christmas"	 =>  ":24.12.", # only half a day off
-	     "Valentine's Day"	 =>  "#Feb/14", # not an official holiday
+	     "Christmas"	 =&gt  ":24.12.", # only half a day off
+	     "Valentine's Day"	 =&gt  "#Feb/14", # not an official holiday
 
 	 Note that the name of the month or day of week may have any length
 	 you like, it just must specify the intended month or day of week
@@ -396,8 +398,8 @@ DESCRIPTION
 	 will overwrite previous ones! I.e.,
 
 	     ...
-	     "My special holiday" => "01-11",
-	     "My special holiday" => "02-11",
+	     "My special holiday" =&gt "01-11",
+	     "My special holiday" =&gt "02-11",
 	     ...
 
 	 will NOT set two holidays of the same name, one on November first,
@@ -411,16 +413,16 @@ DESCRIPTION
 
 	     $defaults =
 	     {
-		 "Holiday #1" => "01-01",
-		 "Holiday #2" => "02-02",
-		 "Holiday #3" => "03-03"
+		 "Holiday #1" =&gt "01-01",
+		 "Holiday #2" =&gt "02-02",
+		 "Holiday #3" =&gt "03-03"
 	     };
 
 	     $variant1 =
 	     {
 		 %$defaults,
-		 "Holiday #2" => "09-02",
-		 "Holiday #4" => "04-04"
+		 "Holiday #2" =&gt "09-02",
+		 "Holiday #4" =&gt "04-04"
 	     };
 
 	 This is because of the way hashes work in Perl.
@@ -482,7 +484,7 @@ DESCRIPTION
 	 Date::Calc(3) module, provided you give the "init()" method a clue
 	 (the third parameter) which language to expect.
 
-       o "$vector = $year->vec_full();"
+       o "$vector = $year-&gtvec_full();"
 
 	 This method returns a reference to the bit vector in the given year
 	 object which contains all "full" holidays.
@@ -493,7 +495,7 @@ DESCRIPTION
 	 You should usually only read from this bit vector, or use it as an
 	 operand in bit vector operations - but never as an lvalue.
 
-       o "$vector = $year->vec_half();"
+       o "$vector = $year-&gtvec_half();"
 
 	 This method returns a reference to the bit vector in the given year
 	 object which contains all "half" holidays.
@@ -504,7 +506,7 @@ DESCRIPTION
 	 You should usually only read from this bit vector, or use it as an
 	 operand in bit vector operations - but never as an lvalue.
 
-       o "$vector = $year->vec_work();"
+       o "$vector = $year-&gtvec_work();"
 
 	 This method returns a reference to the "workspace" bit vector in the
 	 given year object.
@@ -519,18 +521,18 @@ DESCRIPTION
 	 are hard to predict (depending on the calculations being performed).
 
 	 The size of this bit vector can be determined through either ""$days
-	 = $vector->Size();"" or ""$days = $year->val_days();"".
+	 = $vector-&gtSize();"" or ""$days = $year-&gtval_days();"".
 
-       o "$size = $year->val_days();"
+       o "$size = $year-&gtval_days();"
 
 	 This method returns the number of days in the given year object,
 	 i.e., either 365 or 366. This is also the size (number of bits) of
 	 the three bit vectors contained in the given year object.
 
-       o "$base = $year->val_base();"
+       o "$base = $year-&gtval_base();"
 
 	 This method returns the value of the expression
-	 ""Date_to_Days($year->val_year(),1,1)"", or in other words, the
+	 ""Date_to_Days($year-&gtval_year(),1,1)"", or in other words, the
 	 number of days between January 1st of the year 1 and January 1st of
 	 the given year, plus one.
 
@@ -541,9 +543,9 @@ DESCRIPTION
 	 then stored in one of the year object's attributes, of which this
 	 method just returns the value.
 
-       o "$number = $year->val_year();"
+       o "$number = $year-&gtval_year();"
 
-	 "$number = $year->year();"
+	 "$number = $year-&gtyear();"
 
 	 These two methods are identical, the latter being a shortcut of the
 	 former.
@@ -558,11 +560,11 @@ DESCRIPTION
 	 in the methods of the Date::Calendar and Date::Calendar::Year
 	 modules.
 
-       o "@names = $year->labels(YEAR,MONTH,DAY|DATE);"
+       o "@names = $year-&gtlabels(YEAR,MONTH,DAY|DATE);"
 
-	 "@holidays = $year->labels();"
+	 "@holidays = $year-&gtlabels();"
 
-	 "$holidays = $year->labels();"
+	 "$holidays = $year-&gtlabels();"
 
 	 If any arguments are given, they are supposed to represent a date. In
 	 that case, a list of all labels (= names of holidays) associated with
@@ -576,9 +578,9 @@ DESCRIPTION
 	 In list context, the resulting list itself is returned. In scalar
 	 context, the number of items in the resulting list is returned.
 
-       o "@dates = $year->search(PATTERN);"
+       o "@dates = $year-&gtsearch(PATTERN);"
 
-	 "$dates = $year->search(PATTERN);"
+	 "$dates = $year-&gtsearch(PATTERN);"
 
 	 This method searches through all the labels of the given year and
 	 returns a list of date objects with all dates whose labels match the
@@ -592,19 +594,19 @@ DESCRIPTION
 	 In scalar context, only the number of items in the resulting list is
 	 returned, instead of the resulting list itself (as in list context).
 
-       o "$hashref  = $year->tags(YEAR,MONTH,DAY|DATE);"
+       o "$hashref  = $year-&gttags(YEAR,MONTH,DAY|DATE);"
 
-	 "$hashref  = $year->tags(INDEX);"
+	 "$hashref  = $year-&gttags(INDEX);"
 
 	 This method returns a hash reference for the given calendar and date
 	 (or index). The hash it refers to is a copy of the calendar profile's
 	 internal hash which contains the names for the given date as keys and
 	 0, 1, 2, or 3 as their corresponding values meaning the following:
 
-	     0	  =>	commemorative day
-	     1	  =>	"half" holiday
-	     2	  =>	"full" holiday
-	     3	  =>	both a "half" and a "full" holiday
+	     0	  =&gt	commemorative day
+	     1	  =&gt	"half" holiday
+	     2	  =&gt	"full" holiday
+	     3	  =&gt	both a "half" and a "full" holiday
 
 	 The value "3" should only occur if a date has been redefined by the
 	 underlying profile using the same key (i.e., the same name) but with
@@ -615,10 +617,10 @@ DESCRIPTION
 	 object in order to speed up processing (= no need to calculate it
 	 internally).
 
-       o "$days = $year->delta_workdays(YEAR,MONTH1,DAY1, YEAR,MONTH2,DAY2,
+       o "$days = $year-&gtdelta_workdays(YEAR,MONTH1,DAY1, YEAR,MONTH2,DAY2,
 	 FLAG1,FLAG2);"
 
-	 "$days = $year->delta_workdays(DATE1,DATE2,FLAG1,FLAG2);"
+	 "$days = $year-&gtdelta_workdays(DATE1,DATE2,FLAG1,FLAG2);"
 
 	 This method calculates the number of work days (i.e., the number of
 	 days, but excluding all holidays) between two dates.
@@ -656,10 +658,10 @@ DESCRIPTION
 	 An exception ("invalid date") is also raised if either of the two
 	 date arguments does not constitute a valid date.
 
-       o "($date,$rest,$sign) = $year->add_delta_workdays(YEAR,MONTH,DAY,
+       o "($date,$rest,$sign) = $year-&gtadd_delta_workdays(YEAR,MONTH,DAY,
 	 DELTA, SIGN);"
 
-	 "($date,$rest,$sign) = $year->add_delta_workdays(DATE,DELTA,SIGN);"
+	 "($date,$rest,$sign) = $year-&gtadd_delta_workdays(DATE,DELTA,SIGN);"
 
 	 This method is the equivalent of the "Add_Delta_Days()" function from
 	 the Date::Calc module, except that it adds work days and skips
@@ -714,7 +716,7 @@ DESCRIPTION
 	 However, it works correctly and as documented above when going
 	 forward in time.
 
-       o "$flag = $year->is_full(YEAR,MONTH,DAY|DATE);"
+       o "$flag = $year-&gtis_full(YEAR,MONTH,DAY|DATE);"
 
 	 This method returns "true" ("1") if the bit corresponding to the
 	 given date is set in the bit vector representing "full" holidays, and
@@ -724,7 +726,7 @@ DESCRIPTION
 	 (according to the calendar profile associated with the given year
 	 object).
 
-       o "$flag = $year->is_half(YEAR,MONTH,DAY|DATE);"
+       o "$flag = $year-&gtis_half(YEAR,MONTH,DAY|DATE);"
 
 	 This method returns "true" ("1") if the bit corresponding to the
 	 given date is set in the bit vector representing "half" holidays, and
@@ -738,7 +740,7 @@ DESCRIPTION
 	 even if you try to do so in your calendar profile, on purpose or by
 	 accident.
 
-       o "$flag = $year->is_work(YEAR,MONTH,DAY|DATE);"
+       o "$flag = $year-&gtis_work(YEAR,MONTH,DAY|DATE);"
 
 	 This method returns "true" ("1") if the bit corresponding to the
 	 given date is set in the bit vector used to perform all sorts of
@@ -764,8 +766,8 @@ DESCRIPTION
 
 	 The number of bits in this bit vector is the same as the number of
 	 days in the given year "$year", which you can retrieve through either
-	 ""$days = $year->vec_work->Size();"" or ""$days =
-	 $year->val_days();"".
+	 ""$days = $year-&gtvec_work-&gtSize();"" or ""$days =
+	 $year-&gtval_days();"".
 
 	 See also Bit::Vector(3) for more details.
 
@@ -815,6 +817,6 @@ DISCLAIMER
 
 
 perl v5.12.4			  2009-10-30	       Date::Calendar::Year(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

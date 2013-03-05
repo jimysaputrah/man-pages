@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This recipe shows how various advanced attribute features can be used..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Cookbook::Basics::Recipe3 - A lazy BinaryTree example</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Cookbook::BasicUsereContributed PerlMoose::Cookbook::Basics::Recipe3(3)
 
 
@@ -19,40 +21,40 @@ SYNOPSIS
 	 package BinaryTree;
 	 use Moose;
 
-	 has 'node' => ( is => 'rw', isa => 'Any' );
+	 has 'node' =&gt ( is =&gt 'rw', isa =&gt 'Any' );
 
-	 has 'parent' => (
-	     is        => 'rw',
-	     isa       => 'BinaryTree',
-	     predicate => 'has_parent',
-	     weak_ref  => 1,
+	 has 'parent' =&gt (
+	     is        =&gt 'rw',
+	     isa       =&gt 'BinaryTree',
+	     predicate =&gt 'has_parent',
+	     weak_ref  =&gt 1,
 	 );
 
-	 has 'left' => (
-	     is        => 'rw',
-	     isa       => 'BinaryTree',
-	     predicate => 'has_left',
-	     lazy      => 1,
-	     default   => sub { BinaryTree->new( parent => $_[0] ) },
-	     trigger   => \&_set_parent_for_child
+	 has 'left' =&gt (
+	     is        =&gt 'rw',
+	     isa       =&gt 'BinaryTree',
+	     predicate =&gt 'has_left',
+	     lazy      =&gt 1,
+	     default   =&gt sub { BinaryTree-&gtnew( parent =&gt $_[0] ) },
+	     trigger   =&gt \&_set_parent_for_child
 	 );
 
-	 has 'right' => (
-	     is        => 'rw',
-	     isa       => 'BinaryTree',
-	     predicate => 'has_right',
-	     lazy      => 1,
-	     default   => sub { BinaryTree->new( parent => $_[0] ) },
-	     trigger   => \&_set_parent_for_child
+	 has 'right' =&gt (
+	     is        =&gt 'rw',
+	     isa       =&gt 'BinaryTree',
+	     predicate =&gt 'has_right',
+	     lazy      =&gt 1,
+	     default   =&gt sub { BinaryTree-&gtnew( parent =&gt $_[0] ) },
+	     trigger   =&gt \&_set_parent_for_child
 	 );
 
 	 sub _set_parent_for_child {
 	     my ( $self, $child ) = @_;
 
 	     confess "You cannot insert a tree which already has a parent"
-		 if $child->has_parent;
+		 if $child-&gthas_parent;
 
-	     $child->parent($self);
+	     $child-&gtparent($self);
 	 }
 
 DESCRIPTION
@@ -68,7 +70,7 @@ DESCRIPTION
 
        Let's take a look at the "node" attribute:
 
-	 has 'node' => ( is => 'rw', isa => 'Any' );
+	 has 'node' =&gt ( is =&gt 'rw', isa =&gt 'Any' );
 
        Moose generates a read-write accessor for this attribute. The type
        constraint is "Any", which literally means it can contain anything.
@@ -78,11 +80,11 @@ DESCRIPTION
 
        Next, let's move on to the "parent" attribute:
 
-	 has 'parent' => (
-	     is        => 'rw',
-	     isa       => 'BinaryTree',
-	     predicate => 'has_parent',
-	     weak_ref  => 1,
+	 has 'parent' =&gt (
+	     is        =&gt 'rw',
+	     isa       =&gt 'BinaryTree',
+	     predicate =&gt 'has_parent',
+	     weak_ref  =&gt 1,
 	 );
 
        Again, we have a read-write accessor. This time, the "isa" option says
@@ -105,13 +107,13 @@ DESCRIPTION
        essentially identical except for their names, so we'll just look at
        "left":
 
-	 has 'left' => (
-	     is        => 'rw',
-	     isa       => 'BinaryTree',
-	     predicate => 'has_left',
-	     lazy      => 1,
-	     default   => sub { BinaryTree->new( parent => $_[0] ) },
-	     trigger   => \&_set_parent_for_child
+	 has 'left' =&gt (
+	     is        =&gt 'rw',
+	     isa       =&gt 'BinaryTree',
+	     predicate =&gt 'has_left',
+	     lazy      =&gt 1,
+	     default   =&gt sub { BinaryTree-&gtnew( parent =&gt $_[0] ) },
+	     trigger   =&gt \&_set_parent_for_child
 	 );
 
        There are three new options here, "lazy", "default", and "trigger". The
@@ -130,13 +132,13 @@ DESCRIPTION
        As a workaround, we use an anonymous subroutine to generate a new
        reference every time the default is called.
 
-	 has 'foo' => ( is => 'rw', default => sub { [] } );
+	 has 'foo' =&gt ( is =&gt 'rw', default =&gt sub { [] } );
 
        In fact, using a non-subroutine reference as a default is illegal in
        Moose.
 
 	 # will fail
-	 has 'foo' => ( is => 'rw', default => [] );
+	 has 'foo' =&gt ( is =&gt 'rw', default =&gt [] );
 
        This will blow up, so don't do it.
 
@@ -173,9 +175,9 @@ DESCRIPTION
 	     my ( $self, $child ) = @_;
 
 	     confess "You cannot insert a tree which already has a parent"
-		 if $child->has_parent;
+		 if $child-&gthas_parent;
 
-	     $child->parent($self);
+	     $child-&gtparent($self);
 	 }
 
        This trigger does two things. First, it ensures that the new child node
@@ -211,14 +213,14 @@ FOOTNOTES
 	   Moose::Cookbook::Basics::Recipe8 for details.
 
 AUTHORS
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
-       Dave Rolsky <autarch@urth.org>
+       Dave Rolsky &ltautarch@urth.org&gt
 
 COPYRIGHT AND LICENSE
        Copyright 2006-2010 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -226,6 +228,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2010-02-2Moose::Cookbook::Basics::Recipe3(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

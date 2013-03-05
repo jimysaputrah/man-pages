@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The "Digest::MD5" module allows you to use the RSA Data Security Inc...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Digest::MD5 - Perl interface to the MD5 Algorithm</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Digest::MD5(3pm)       Perl Programmers Reference Guide       Digest::MD5(3pm)
 
 
@@ -26,14 +28,14 @@ SYNOPSIS
 	# OO style
 	use Digest::MD5;
 
-	$ctx = Digest::MD5->new;
+	$ctx = Digest::MD5-&gtnew;
 
-	$ctx->add($data);
-	$ctx->addfile(*FILE);
+	$ctx-&gtadd($data);
+	$ctx-&gtaddfile(*FILE);
 
-	$digest = $ctx->digest;
-	$digest = $ctx->hexdigest;
-	$digest = $ctx->b64digest;
+	$digest = $ctx-&gtdigest;
+	$digest = $ctx-&gthexdigest;
+	$digest = $ctx-&gtb64digest;
 
 DESCRIPTION
        The "Digest::MD5" module allows you to use the RSA Data Security Inc.
@@ -88,30 +90,30 @@ METHODS
 
        The following methods are provided:
 
-       $md5 = Digest::MD5->new
+       $md5 = Digest::MD5-&gtnew
 	   The constructor returns a new "Digest::MD5" object which
 	   encapsulate the state of the MD5 message-digest algorithm.
 
-	   If called as an instance method (i.e. $md5->new) it will just reset
+	   If called as an instance method (i.e. $md5-&gtnew) it will just reset
 	   the state the object to the state of a newly created object.  No
 	   new object is created in this case.
 
-       $md5->reset
-	   This is just an alias for $md5->new.
+       $md5-&gtreset
+	   This is just an alias for $md5-&gtnew.
 
-       $md5->clone
+       $md5-&gtclone
 	   This a copy of the $md5 object. It is useful when you do not want
 	   to destroy the digests state, but need an intermediate value of the
 	   digest, e.g. when calculating digests iteratively on a continuous
 	   data stream.  Example:
 
-	       my $md5 = Digest::MD5->new;
-	       while (<>) {
-		   $md5->add($_);
-		   print "Line $.: ", $md5->clone->hexdigest, "\n";
+	       my $md5 = Digest::MD5-&gtnew;
+	       while (&lt&gt) {
+		   $md5-&gtadd($_);
+		   print "Line $.: ", $md5-&gtclone-&gthexdigest, "\n";
 	       }
 
-       $md5->add($data,...)
+       $md5-&gtadd($data,...)
 	   The $data provided as argument are appended to the message we
 	   calculate the digest for.  The return value is the $md5 object
 	   itself.
@@ -119,12 +121,12 @@ METHODS
 	   All these lines will have the same effect on the state of the $md5
 	   object:
 
-	       $md5->add("a"); $md5->add("b"); $md5->add("c");
-	       $md5->add("a")->add("b")->add("c");
-	       $md5->add("a", "b", "c");
-	       $md5->add("abc");
+	       $md5-&gtadd("a"); $md5-&gtadd("b"); $md5-&gtadd("c");
+	       $md5-&gtadd("a")-&gtadd("b")-&gtadd("c");
+	       $md5-&gtadd("a", "b", "c");
+	       $md5-&gtadd("abc");
 
-       $md5->addfile($io_handle)
+       $md5-&gtaddfile($io_handle)
 	   The $io_handle will be read until EOF and its content appended to
 	   the message we calculate the digest for.  The return value is the
 	   $md5 object itself.
@@ -138,31 +140,31 @@ METHODS
 	   In most cases you want to make sure that the $io_handle is in
 	   "binmode" before you pass it as argument to the addfile() method.
 
-       $md5->add_bits($data, $nbits)
-       $md5->add_bits($bitstring)
+       $md5-&gtadd_bits($data, $nbits)
+       $md5-&gtadd_bits($bitstring)
 	   Since the MD5 algorithm is byte oriented you might only add bits as
 	   multiples of 8, so you probably want to just use add() instead.
 	   The add_bits() method is provided for compatibility with other
 	   digest implementations.  See Digest for description of the
 	   arguments that add_bits() take.
 
-       $md5->digest
+       $md5-&gtdigest
 	   Return the binary digest for the message.  The returned string will
 	   be 16 bytes long.
 
 	   Note that the "digest" operation is effectively a destructive,
 	   read-once operation. Once it has been performed, the "Digest::MD5"
 	   object is automatically "reset" and can be used to calculate
-	   another digest value.  Call $md5->clone->digest if you want to
+	   another digest value.  Call $md5-&gtclone-&gtdigest if you want to
 	   calculate the digest without resetting the digest state.
 
-       $md5->hexdigest
-	   Same as $md5->digest, but will return the digest in hexadecimal
+       $md5-&gthexdigest
+	   Same as $md5-&gtdigest, but will return the digest in hexadecimal
 	   form. The length of the returned string will be 32 and it will only
 	   contain characters from this set: '0'..'9' and 'a'..'f'.
 
-       $md5->b64digest
-	   Same as $md5->digest, but will return the digest as a base64
+       $md5-&gtb64digest
+	   Same as $md5-&gtdigest, but will return the digest as a base64
 	   encoded string.  The length of the returned string will be 22 and
 	   it will only contain characters from this set: 'A'..'Z', 'a'..'z',
 	   '0'..'9', '+' and '/'.
@@ -187,10 +189,10 @@ EXAMPLES
 
 	   use Digest::MD5;
 
-	   $md5 = Digest::MD5->new;
-	   $md5->add('foo', 'bar');
-	   $md5->add('baz');
-	   $digest = $md5->hexdigest;
+	   $md5 = Digest::MD5-&gtnew;
+	   $md5-&gtadd('foo', 'bar');
+	   $md5-&gtadd('baz');
+	   $digest = $md5-&gthexdigest;
 
 	   print "Digest is $digest\n";
 
@@ -206,12 +208,12 @@ EXAMPLES
 	   open(FILE, $file) or die "Can't open '$file': $!";
 	   binmode(FILE);
 
-	   $md5 = Digest::MD5->new;
-	   while (<FILE>) {
-	       $md5->add($_);
+	   $md5 = Digest::MD5-&gtnew;
+	   while (&ltFILE&gt) {
+	       $md5-&gtadd($_);
 	   }
 	   close(FILE);
-	   print $md5->b64digest, " $file\n";
+	   print $md5-&gtb64digest, " $file\n";
 
        Or we can use the addfile method for more efficient reading of the
        file:
@@ -222,7 +224,7 @@ EXAMPLES
 	   open(FILE, $file) or die "Can't open '$file': $!";
 	   binmode(FILE);
 
-	   print Digest::MD5->new->addfile(*FILE)->hexdigest, " $file\n";
+	   print Digest::MD5-&gtnew-&gtaddfile(*FILE)-&gthexdigest, " $file\n";
 
        Perl 5.8 support Unicode characters in strings.	Since the MD5
        algorithm is only defined for strings of bytes, it can not be used on
@@ -301,11 +303,11 @@ AUTHORS
        ("N.Winton@axion.bt.co.uk").
 
        The "Digest::MD5" module is written by Gisle Aas
-       <gisle@ActiveState.com>.
+       &ltgisle@ActiveState.com&gt.
 
 
 
 perl v5.12.4			  2011-06-07		      Digest::MD5(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

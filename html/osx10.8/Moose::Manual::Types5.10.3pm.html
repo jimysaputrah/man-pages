@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Manual::Types - Moose's type system</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Manual::Types(3User Contributed Perl DocumentatiMoose::Manual::Types(3)
 
 
@@ -109,9 +111,9 @@ WHAT IS A TYPE?
 
        Now you can use 'MyApp::User' as a type name:
 
-	 has creator => (
-	     is  => 'ro',
-	     isa => 'MyApp::User',
+	 has creator =&gt (
+	     is  =&gt 'ro',
+	     isa =&gt 'MyApp::User',
 	 );
 
        However, for non-Moose classes there's no magic. You may have to
@@ -119,22 +121,22 @@ WHAT IS A TYPE?
        assumes that any unknown type name passed as the "isa" value for an
        attribute is a class. So this works:
 
-	 has 'birth_date' => (
-	     is  => 'ro',
-	     isa => 'DateTime',
+	 has 'birth_date' =&gt (
+	     is  =&gt 'ro',
+	     isa =&gt 'DateTime',
 	 );
 
        In general, when Moose is presented with an unknown name, it assumes
        that the name is a class:
 
 	 subtype 'ModernDateTime'
-	     => as 'DateTime'
-	     => where { $_->year() >= 1980 }
-	     => message { 'The date you provided is not modern enough' };
+	     =&gt as 'DateTime'
+	     =&gt where { $_-&gtyear() &gt= 1980 }
+	     =&gt message { 'The date you provided is not modern enough' };
 
-	 has 'valid_dates' => (
-	     is  => 'ro',
-	     isa => 'ArrayRef[DateTime]',
+	 has 'valid_dates' =&gt (
+	     is  =&gt 'ro',
+	     isa =&gt 'ArrayRef[DateTime]',
 	 );
 
        Moose will assume that "DateTime" is a class name in both of these
@@ -161,9 +163,9 @@ SUBTYPES
        Here's a simple (and useful) subtype example:
 
 	 subtype 'PositiveInt'
-	     => as 'Int'
-	     => where { $_ > 0 }
-	     => message { "The number you provided, $_, was not a positive number" }
+	     =&gt as 'Int'
+	     =&gt where { $_ &gt 0 }
+	     =&gt message { "The number you provided, $_, was not a positive number" }
 
        Note that the sugar functions for working with types are all exported
        by Moose::Util::TypeConstraints.
@@ -171,7 +173,7 @@ SUBTYPES
    Creating a new type (that isn't a subtype)
        You can also create new top-level types:
 
-	 type 'FourCharacters' => where { defined $_ && length $_ == 4 };
+	 type 'FourCharacters' =&gt where { defined $_ && length $_ == 4 };
 
        In practice, this example is more or less the same as subtyping "Str",
        except you have to check definedness yourself.
@@ -202,11 +204,11 @@ TYPE NAMES
        and can export your types as perl constants so that you can refer to
        them as just
 
-	 has 'counter' => (is => 'rw', isa => PositiveInt);
+	 has 'counter' =&gt (is =&gt 'rw', isa =&gt PositiveInt);
 
        rather than needing to fully qualify them everywhere. It also allows
 
-	 has 'counts' => (is => 'ro', isa => HashRef[PositiveInt]);
+	 has 'counts' =&gt (is =&gt 'ro', isa =&gt HashRef[PositiveInt]);
 
        and similarly for the union and other syntax discussed below, which
        will compile time check your use of names and is generally more robust
@@ -217,11 +219,11 @@ COERCION
        coercions. A coercion is a way to convert from one type to another.
 
 	 subtype 'ArrayRefOfInts'
-	     => as 'ArrayRef[Int]';
+	     =&gt as 'ArrayRef[Int]';
 
 	 coerce 'ArrayRefOfInts'
-	     => from 'Int'
-	     => via { [ $_ ] };
+	     =&gt from 'Int'
+	     =&gt via { [ $_ ] };
 
        You'll note that we had to create a subtype rather than coercing
        "ArrayRef[Int]" directly. This is just a quirk of how Moose works.
@@ -233,13 +235,13 @@ COERCION
 
 	 package Foo;
 
-	 has 'sizes' => (
-	     is     => 'ro',
-	     isa    => 'ArrayRefOfInts',
-	     coerce => 1,
+	 has 'sizes' =&gt (
+	     is     =&gt 'ro',
+	     isa    =&gt 'ArrayRefOfInts',
+	     coerce =&gt 1,
 	 );
 
-	 Foo->new( sizes => 42 );
+	 Foo-&gtnew( sizes =&gt 42 );
 
        This code example will do the right thing, and the newly created object
        will have "[ 42 ]" as its "sizes" attribute.
@@ -249,17 +251,17 @@ COERCION
        types. Let's take these types as an example:
 
 	 subtype 'HexNum'
-	     => as 'Str'
-	     => where { /[a-f0-9]/i };
+	     =&gt as 'Str'
+	     =&gt where { /[a-f0-9]/i };
 
 	 coerce 'Int'
-	     => from 'HexNum'
-	     => via { hex $_ };
+	     =&gt from 'HexNum'
+	     =&gt via { hex $_ };
 
-	 has 'sizes' => (
-	     is     => 'ro',
-	     isa    => 'ArrayRef[Int]',
-	     coerce => 1,
+	 has 'sizes' =&gt (
+	     is     =&gt 'ro',
+	     isa    =&gt 'ArrayRef[Int]',
+	     coerce =&gt 1,
 	 );
 
        If we try passing an array reference of hex numbers for the "sizes"
@@ -269,16 +271,16 @@ COERCION
        two parameterized types.
 
 	 subtype 'ArrayRefOfHexNums'
-	     => as 'ArrayRef[HexNum]';
+	     =&gt as 'ArrayRef[HexNum]';
 
 	 subtype 'ArrayRefOfInts'
-	     => as 'ArrayRef[Int]';
+	     =&gt as 'ArrayRef[Int]';
 
 	 coerce 'ArrayRefOfInts'
-	     => from 'ArrayRefOfHexNums'
-	     => via { [ map { hex } @{$_} ] };
+	     =&gt from 'ArrayRefOfHexNums'
+	     =&gt via { [ map { hex } @{$_} ] };
 
-	 Foo->new( sizes => [ 'a1', 'ff', '22' ] );
+	 Foo-&gtnew( sizes =&gt [ 'a1', 'ff', '22' ] );
 
        Now Moose will coerce the hex numbers to integers.
 
@@ -287,8 +289,8 @@ COERCION
        coercion:
 
 	 coerce 'ArrayRefOfInts'
-	     => from 'HexNum'
-	     => via { [ hex $_ ] };
+	     =&gt from 'HexNum'
+	     =&gt via { [ hex $_ ] };
 
        Yes, this can all get verbose, but coercion is tricky magic, and we
        think it's best to make it explicit.
@@ -298,9 +300,9 @@ TYPE UNIONS
        disparate types. For example, we might allow an "Object" or
        "FileHandle":
 
-	 has 'output' => (
-	     is  => 'rw',
-	     isa => 'Object | FileHandle',
+	 has 'output' =&gt (
+	     is  =&gt 'rw',
+	     isa =&gt 'Object | FileHandle',
 	 );
 
        Moose actually parses that string and recognizes that you are creating
@@ -315,8 +317,8 @@ TYPE UNIONS
        that output be an object with a "print" method:
 
 	 subtype 'CanPrint'
-	     => as 'Object'
-	     => where { $_->can('print') };
+	     =&gt as 'Object'
+	     =&gt where { $_-&gtcan('print') };
 
        We can coerce file handles to an object that satisfies this condition
        with a simple wrapper class:
@@ -325,14 +327,14 @@ TYPE UNIONS
 
 	 use Moose;
 
-	 has 'handle' => (
-	     is  => 'rw',
-	     isa => 'FileHandle',
+	 has 'handle' =&gt (
+	     is  =&gt 'rw',
+	     isa =&gt 'FileHandle',
 	 );
 
 	 sub print {
 	     my $self = shift;
-	     my $fh   = $self->handle();
+	     my $fh   = $self-&gthandle();
 
 	     print $fh @_;
 	 }
@@ -340,13 +342,13 @@ TYPE UNIONS
        Now we can define a coercion from "FileHandle" to our wrapper class:
 
 	 coerce 'CanPrint'
-	     => from 'FileHandle'
-	     => via { FHWrapper->new( handle => $_ ) };
+	     =&gt from 'FileHandle'
+	     =&gt via { FHWrapper-&gtnew( handle =&gt $_ ) };
 
-	 has 'output' => (
-	     is     => 'rw',
-	     isa    => 'CanPrint',
-	     coerce => 1,
+	 has 'output' =&gt (
+	     is     =&gt 'rw',
+	     isa    =&gt 'CanPrint',
+	     coerce =&gt 1,
 	 );
 
        This pattern of using a coercion instead of a type union will help make
@@ -360,7 +362,7 @@ TYPE CREATION HELPERS
        One helper worth noting is "enum", which allows you to create a subtype
        of "Str" that only allows the specified values:
 
-	 enum 'RGB' => qw( red green blue );
+	 enum 'RGB' =&gt qw( red green blue );
 
        This creates a type named "RGB".
 
@@ -369,9 +371,9 @@ ANONYMOUS TYPES
        object can be used wherever you would use a type name, as a parent
        type, or as the value for an attribute's "isa" option:
 
-	 has 'size' => (
-	     is => 'ro',
-	     isa => subtype('Int' => where { $_ > 0 }),
+	 has 'size' =&gt (
+	     is =&gt 'ro',
+	     isa =&gt subtype('Int' =&gt where { $_ &gt 0 }),
 	 );
 
        This is handy when you want to create a one-off type and don't want to
@@ -392,7 +394,7 @@ VALIDATING METHOD PARAMETERS
 	     my $self	= shift;
 	     my %params = validated_hash(
 		 \@_,
-		 bar => { isa => 'Str', default => 'Moose' },
+		 bar =&gt { isa =&gt 'Str', default =&gt 'Moose' },
 	     );
 	     ...
 	 }
@@ -405,7 +407,7 @@ VALIDATING METHOD PARAMETERS
        keyword.
 
 	 method morning (Str $name) {
-	     $self->say("Good morning ${name}!");
+	     $self-&gtsay("Good morning ${name}!");
 	 }
 
 LOAD ORDER ISSUES
@@ -428,12 +430,12 @@ LOAD ORDER ISSUES
        you work around load order issues.
 
 AUTHOR
-       Dave Rolsky <autarch@urth.org>
+       Dave Rolsky &ltautarch@urth.org&gt
 
 COPYRIGHT AND LICENSE
        Copyright 2009 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -441,6 +443,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2010-03-25	       Moose::Manual::Types(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The "Digest::SHA1" module allows you to use the NIST SHA-1 message..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Digest::SHA1 - Perl interface to the SHA-1 algorithm</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 SHA1(3) 	      User Contributed Perl Documentation	       SHA1(3)
 
 
@@ -28,17 +30,17 @@ SYNOPSIS
 	# OO style
 	use Digest::SHA1;
 
-	$sha1 = Digest::SHA1->new;
+	$sha1 = Digest::SHA1-&gtnew;
 
-	$sha1->add($data);
-	$sha1->addfile(*FILE);
+	$sha1-&gtadd($data);
+	$sha1-&gtaddfile(*FILE);
 
-	$sha1_copy = $sha1->clone;
+	$sha1_copy = $sha1-&gtclone;
 
-	$digest = $sha1->digest;
-	$digest = $sha1->hexdigest;
-	$digest = $sha1->b64digest;
-	$digest = $sha1->transform;
+	$digest = $sha1-&gtdigest;
+	$digest = $sha1-&gthexdigest;
+	$digest = $sha1-&gtb64digest;
+	$digest = $sha1-&gttransform;
 
 DESCRIPTION
        The "Digest::SHA1" module allows you to use the NIST SHA-1 message
@@ -96,30 +98,30 @@ METHODS
 
        The following methods are provided:
 
-       $sha1 = Digest::SHA1->new
+       $sha1 = Digest::SHA1-&gtnew
 	   The constructor returns a new "Digest::SHA1" object which
 	   encapsulate the state of the SHA-1 message-digest algorithm.
 
-	   If called as an instance method (i.e. $sha1->new) it will just
+	   If called as an instance method (i.e. $sha1-&gtnew) it will just
 	   reset the state the object to the state of a newly created object.
 	   No new object is created in this case.
 
-       $sha1->reset
-	   This is just an alias for $sha1->new.
+       $sha1-&gtreset
+	   This is just an alias for $sha1-&gtnew.
 
-       $sha1->clone
+       $sha1-&gtclone
 	   This a copy of the $sha1 object. It is useful when you do not want
 	   to destroy the digests state, but need an intermediate value of the
 	   digest, e.g. when calculating digests iteratively on a continuous
 	   data stream.  Example:
 
-	       my $sha1 = Digest::SHA1->new;
-	       while (<>) {
-		   $sha1->add($_);
-		   print "Line $.: ", $sha1->clone->hexdigest, "\n";
+	       my $sha1 = Digest::SHA1-&gtnew;
+	       while (&lt&gt) {
+		   $sha1-&gtadd($_);
+		   print "Line $.: ", $sha1-&gtclone-&gthexdigest, "\n";
 	       }
 
-       $sha1->add($data,...)
+       $sha1-&gtadd($data,...)
 	   The $data provided as argument are appended to the message we
 	   calculate the digest for.  The return value is the $sha1 object
 	   itself.
@@ -127,12 +129,12 @@ METHODS
 	   All these lines will have the same effect on the state of the $sha1
 	   object:
 
-	       $sha1->add("a"); $sha1->add("b"); $sha1->add("c");
-	       $sha1->add("a")->add("b")->add("c");
-	       $sha1->add("a", "b", "c");
-	       $sha1->add("abc");
+	       $sha1-&gtadd("a"); $sha1-&gtadd("b"); $sha1-&gtadd("c");
+	       $sha1-&gtadd("a")-&gtadd("b")-&gtadd("c");
+	       $sha1-&gtadd("a", "b", "c");
+	       $sha1-&gtadd("abc");
 
-       $sha1->addfile($io_handle)
+       $sha1-&gtaddfile($io_handle)
 	   The $io_handle will be read until EOF and its content appended to
 	   the message we calculate the digest for.  The return value is the
 	   $sha1 object itself.
@@ -146,8 +148,8 @@ METHODS
 	   In most cases you want to make sure that the $io_handle is in
 	   "binmode" before you pass it as argument to the addfile() method.
 
-       $sha1->add_bits($data, $nbits)
-       $sha1->add_bits($bitstring)
+       $sha1-&gtadd_bits($data, $nbits)
+       $sha1-&gtadd_bits($bitstring)
 	   This implementation of SHA-1 only supports byte oriented input so
 	   you might only add bits as multiples of 8.  If you need bit level
 	   support please consider using the "Digest::SHA" module instead.
@@ -155,23 +157,23 @@ METHODS
 	   digest implementations.  See Digest for description of the
 	   arguments that add_bits() take.
 
-       $sha1->digest
+       $sha1-&gtdigest
 	   Return the binary digest for the message.  The returned string will
 	   be 20 bytes long.
 
 	   Note that the "digest" operation is effectively a destructive,
 	   read-once operation. Once it has been performed, the "Digest::SHA1"
 	   object is automatically "reset" and can be used to calculate
-	   another digest value.  Call $sha1->clone->digest if you want to
+	   another digest value.  Call $sha1-&gtclone-&gtdigest if you want to
 	   calculate the digest without reseting the digest state.
 
-       $sha1->hexdigest
-	   Same as $sha1->digest, but will return the digest in hexadecimal
+       $sha1-&gthexdigest
+	   Same as $sha1-&gtdigest, but will return the digest in hexadecimal
 	   form. The length of the returned string will be 40 and it will only
 	   contain characters from this set: '0'..'9' and 'a'..'f'.
 
-       $sha1->b64digest
-	   Same as $sha1->digest, but will return the digest as a base64
+       $sha1-&gtb64digest
+	   Same as $sha1-&gtdigest, but will return the digest as a base64
 	   encoded string.  The length of the returned string will be 27 and
 	   it will only contain characters from this set: 'A'..'Z', 'a'..'z',
 	   '0'..'9', '+' and '/'.
@@ -196,12 +198,12 @@ COPYRIGHT
 	Copyright 1997 Uwe Hollerbach.
 
 AUTHORS
-       Peter C. Gutmann, Uwe Hollerbach <uh@alumni.caltech.edu>, Gisle Aas
-       <gisle@aas.no>
+       Peter C. Gutmann, Uwe Hollerbach &ltuh@alumni.caltech.edu&gt, Gisle Aas
+       &ltgisle@aas.no&gt
 
 
 
 perl v5.10.1			  2009-05-23			       SHA1(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

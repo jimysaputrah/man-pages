@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Manual::FAQ - Frequently asked questions about Moose</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Manual::FAQ(3) User Contributed Perl DocumentationMoose::Manual::FAQ(3)
 
 
@@ -23,7 +25,7 @@ FREQUENTLY ASKED QUESTIONS
        traffic services. Countless others are using Moose in production.
 
        As of this writing, Moose is a dependency of several hundred CPAN
-       modules. <http://cpants.perl.org/dist/used_by/Moose>
+       modules. &lthttp://cpants.perl.org/dist/used_by/Moose&gt
 
        Is Moose's API stable?
 
@@ -55,7 +57,7 @@ FREQUENTLY ASKED QUESTIONS
        construction) is pretty significant. This can be done with the
        following code:
 
-	 MyClass->meta->make_immutable();
+	 MyClass-&gtmeta-&gtmake_immutable();
 
        We are regularly converting the hotspots of Class::MOP to XS.  Florian
        Ragwitz and Yuval Kogman are currently working on a way to compile your
@@ -114,10 +116,10 @@ FREQUENTLY ASKED QUESTIONS
        The easiest way to accomplish this is to use the "reader" and "writer"
        attribute options:
 
-	 has 'bar' => (
-	     isa    => 'Baz',
-	     reader => 'get_bar',
-	     writer => 'set_bar',
+	 has 'bar' =&gt (
+	     isa    =&gt 'Baz',
+	     reader =&gt 'get_bar',
+	     writer =&gt 'set_bar',
 	 );
 
        Moose will still take advantage of type constraints, triggers, etc.
@@ -127,9 +129,9 @@ FREQUENTLY ASKED QUESTIONS
        your classes, please see MooseX::FollowPBP. This extension will allow
        you to write:
 
-	 has 'bar' => (
-	     isa => 'Baz',
-	     is  => 'rw',
+	 has 'bar' =&gt (
+	     isa =&gt 'Baz',
+	     is  =&gt 'rw',
 	 );
 
        Moose will create separate "get_bar" and "set_bar" methods instead of a
@@ -153,10 +155,10 @@ FREQUENTLY ASKED QUESTIONS
 	 class_type 'DateTime';
 
 	 coerce 'DateTime'
-	     => from 'Str'
-	     => via { DateTime::Format::MySQL->parse_datetime($_) };
+	     =&gt from 'Str'
+	     =&gt via { DateTime::Format::MySQL-&gtparse_datetime($_) };
 
-	 has 'timestamp' => (is => 'rw', isa => 'DateTime', coerce => 1);
+	 has 'timestamp' =&gt (is =&gt 'rw', isa =&gt 'DateTime', coerce =&gt 1);
 
        This creates a custom type for DateTime objects, then attaches a
        coercion to that type. The "timestamp" attribute is then told to expect
@@ -172,17 +174,17 @@ FREQUENTLY ASKED QUESTIONS
 
 	 # a timestamp which stores as
 	 # seconds from the epoch
-	 has 'timestamp' => (is => 'rw', isa => 'Int');
+	 has 'timestamp' =&gt (is =&gt 'rw', isa =&gt 'Int');
 
-	 around 'timestamp' => sub {
+	 around 'timestamp' =&gt sub {
 	     my $next = shift;
 	     my $self = shift;
 
-	     return $self->$next unless @_;
+	     return $self-&gt$next unless @_;
 
 	     # assume we get a DateTime object ...
 	     my $timestamp = shift;
-	     return $self->$next( $timestamp->epoch );
+	     return $self-&gt$next( $timestamp-&gtepoch );
 	 };
 
        It is also possible to do deflation using coercion, but this tends to
@@ -199,11 +201,11 @@ FREQUENTLY ASKED QUESTIONS
        Accessors are not created implicitly, you must ask Moose to create them
        for you. My guess is that you have this:
 
-	 has 'foo' => (isa => 'Bar');
+	 has 'foo' =&gt (isa =&gt 'Bar');
 
        when what you really want to say is:
 
-	 has 'foo' => (isa => 'Bar', is => 'rw');
+	 has 'foo' =&gt (isa =&gt 'Bar', is =&gt 'rw');
 
        The reason this is so is because it is a perfectly valid use case to
        not have an accessor. The simplest one is that you want to write your
@@ -233,13 +235,13 @@ FREQUENTLY ASKED QUESTIONS
        modifier is the only modifier which can gracefully prevent execution of
        the main method. Here is an example:
 
-	   around 'baz' => sub {
+	   around 'baz' =&gt sub {
 	       my $next = shift;
 	       my ($self, %options) = @_;
-	       unless ($options->{bar} eq 'foo') {
+	       unless ($options-&gt{bar} eq 'foo') {
 		   return 'bar';
 	       }
-	       $self->$next(%options);
+	       $self-&gt$next(%options);
 	   };
 
        By choosing not to call the $next method, you can stop the execution of
@@ -255,10 +257,10 @@ FREQUENTLY ASKED QUESTIONS
        with "before" I recommend using an "around" modifier instead.  Here is
        some sample code:
 
-	 around 'foo' => sub {
+	 around 'foo' =&gt sub {
 	     my $next = shift;
 	     my ($self, @args) = @_;
-	     my @rv = $next->($self, @args);
+	     my @rv = $next-&gt($self, @args);
 	     # do something silly with the return values
 	     return reverse @rv;
 	 };
@@ -269,9 +271,9 @@ FREQUENTLY ASKED QUESTIONS
        Use the "message" option when building the subtype:
 
 	 subtype 'NaturalLessThanTen'
-	     => as 'Natural'
-	     => where { $_ < 10 }
-	     => message { "This number ($_) is not less than ten!" };
+	     =&gt as 'Natural'
+	     =&gt where { $_ &lt 10 }
+	     =&gt message { "This number ($_) is not less than ten!" };
 
        This "message" block will be called when a value fails to pass the
        "NaturalLessThanTen" constraint check.
@@ -286,15 +288,15 @@ FREQUENTLY ASKED QUESTIONS
        original constraint passed. This has caused some edge cases to fail
        where people were doing something like
 
-	   subtype Address => as 'Str';
-	   coerce Address => from Str => via { get_address($_) };
+	   subtype Address =&gt as 'Str';
+	   coerce Address =&gt from Str =&gt via { get_address($_) };
 
        Which is not what they intended. The Type Constraint "Address" is too
        loose in this case, it is saying that all Strings are Addresses, which
        is obviously not the case. The solution is to provide a where clause
        that properly restricts the Type Constraint.
 
-	   subtype Address => as Str => where { looks_like_address($_) };
+	   subtype Address =&gt as Str =&gt where { looks_like_address($_) };
 
        This will allow the coercion to apply only to strings that fail to look
        like an Address.
@@ -306,7 +308,7 @@ FREQUENTLY ASKED QUESTIONS
        roles are not order sensitive. Roles are composed in such a way that
        the order of composition does not matter (for information on the deeper
        theory of this read the original traits papers here
-       <http://www.iam.unibe.ch/~scg/Research/Traits/>).
+       &lthttp://www.iam.unibe.ch/~scg/Research/Traits/&gt).
 
        Because roles are essentially unordered, it would be impossible to
        determine the order in which to execute the "BUILD" methods.
@@ -331,13 +333,13 @@ FREQUENTLY ASKED QUESTIONS
 	 package My::Role;
 	 use Moose::Role;
 
-	 has 'height' => (
-	     is      => 'rw',
-	     isa     => 'Int',
-	     lazy    => 1,
-	     default => sub {
+	 has 'height' =&gt (
+	     is      =&gt 'rw',
+	     isa     =&gt 'Int',
+	     lazy    =&gt 1,
+	     default =&gt sub {
 		 my $self = shift;
-		 $self->init_height;
+		 $self-&gtinit_height;
 	     }
 	 );
 
@@ -382,12 +384,12 @@ FREQUENTLY ASKED QUESTIONS
 	 sub foo : Bar(27) { ... }
 
 AUTHOR
-       Stevan Little <stevan@iinteractive.com>
+       Stevan Little &ltstevan@iinteractive.com&gt
 
 COPYRIGHT AND LICENSE
        Copyright 2006-2010 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -395,6 +397,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2010-02-27		 Moose::Manual::FAQ(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="DBIx::Class is faster than older ORMs like Class::DBI but it still..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::ResultClass::HashRefInflator - Get raw hashrefs from a</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::ResultClaUserHContribDBIx::Class::ResultClass::HashRefInflator(3)
 
 
@@ -19,18 +21,18 @@ NAME
 SYNOPSIS
 	use DBIx::Class::ResultClass::HashRefInflator;
 
-	my $rs = $schema->resultset('CD');
-	$rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
-	while (my $hashref = $rs->next) {
+	my $rs = $schema-&gtresultset('CD');
+	$rs-&gtresult_class('DBIx::Class::ResultClass::HashRefInflator');
+	while (my $hashref = $rs-&gtnext) {
 	  ...
 	}
 
 	 OR as an attribute:
 
-	my $rs = $schema->resultset('CD')->search({}, {
-	  result_class => 'DBIx::Class::ResultClass::HashRefInflator',
+	my $rs = $schema-&gtresultset('CD')-&gtsearch({}, {
+	  result_class =&gt 'DBIx::Class::ResultClass::HashRefInflator',
 	});
-	while (my $hashref = $rs->next) {
+	while (my $hashref = $rs-&gtnext) {
 	  ...
 	}
 
@@ -39,15 +41,15 @@ DESCRIPTION
        isn't designed primarily for speed. Sometimes you need to quickly
        retrieve the data from a massive resultset, while skipping the creation
        of fancy row objects.  Specifying this class as a "result_class" for a
-       resultset will change "$rs->next" to return a plain data hash-ref (or a
-       list of such hash-refs if "$rs->all" is used).
+       resultset will change "$rs-&gtnext" to return a plain data hash-ref (or a
+       list of such hash-refs if "$rs-&gtall" is used).
 
        There are two ways of applying this class to a resultset:
 
-       o   Specify "$rs->result_class" on a specific resultset to affect only
+       o   Specify "$rs-&gtresult_class" on a specific resultset to affect only
 	   that resultset (and any chained off of it); or
 
-       o   Specify "__PACKAGE__->result_class" on your source object to force
+       o   Specify "__PACKAGE__-&gtresult_class" on your source object to force
 	   all uses of that result source to be inflated to hash-refs - this
 	   approach is not recommended.
 
@@ -60,11 +62,11 @@ CAVEATS
        o   This will not work for relationships that have been prefetched.
 	   Consider the following:
 
-	    my $artist = $artitsts_rs->search({}, {prefetch => 'cds' })->first;
+	    my $artist = $artitsts_rs-&gtsearch({}, {prefetch =&gt 'cds' })-&gtfirst;
 
-	    my $cds = $artist->cds;
-	    $cds->result_class('DBIx::Class::ResultClass::HashRefInflator');
-	    my $first = $cds->first;
+	    my $cds = $artist-&gtcds;
+	    $cds-&gtresult_class('DBIx::Class::ResultClass::HashRefInflator');
+	    my $first = $cds-&gtfirst;
 
 	   $first will not be a hashref, it will be a normal CD row since
 	   HashRefInflator only affects resultsets at inflation time, and
@@ -78,6 +80,6 @@ CAVEATS
 
 
 perl v5.12.4			  DBIx::Class::ResultClass::HashRefInflator(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="A Perl program consists of a sequence of declarations and statements..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>perlsyn - Perl syntax</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 PERLSYN(1)	       Perl Programmers Reference Guide 	    PERLSYN(1)
 
 
@@ -134,7 +136,7 @@ DESCRIPTION
        "unless" is the opposite, it executes the statement unless the
        condition is true (i.e., if the condition is false).
 
-	   print "Basset hounds got long ears" if length $ear >= 10;
+	   print "Basset hounds got long ears" if length $ear &gt= 10;
 	   go_outside() and play() unless $is_raining;
 
        The "foreach" modifier is an iterator: it executes the statement once
@@ -147,8 +149,8 @@ DESCRIPTION
        (or while the condition is false):
 
 	   # Both of these count from 0 to 10.
-	   print $i++ while $i <= 10;
-	   print $j++ until $j >  10;
+	   print $i++ while $i &lt= 10;
+	   print $j++ until $j &gt  10;
 
        The "while" and "until" modifiers have the usual ""while" loop"
        semantics (conditional evaluated first), except when applied to a
@@ -157,7 +159,7 @@ DESCRIPTION
        is so that you can write loops like:
 
 	   do {
-	       $line = <STDIN>;
+	       $line = &ltSTDIN&gt;
 	       ...
 	   } until $line  eq ".\n";
 
@@ -170,7 +172,7 @@ DESCRIPTION
 	   do {{
 	       next if $x == $y;
 	       # do something here
-	   }} until $x++ > $z;
+	   }} until $x++ &gt $z;
 
        For "last", you have to be more elaborate:
 
@@ -178,7 +180,7 @@ DESCRIPTION
 		   do {
 		       last if $x = $y**2;
 		       # do something here
-		   } while $x++ <= $z;
+		   } while $x++ &lt= $z;
 	   }
 
        NOTE: The behaviour of a "my" statement modified with a statement
@@ -247,7 +249,7 @@ DESCRIPTION
    Loop Control
        The "next" command starts the next iteration of the loop:
 
-	   LINE: while (<STDIN>) {
+	   LINE: while (&ltSTDIN&gt) {
 	       next LINE if /^#/;      # discard comments
 	       ...
 	   }
@@ -255,7 +257,7 @@ DESCRIPTION
        The "last" command immediately exits the loop in question.  The
        "continue" block, if any, is not executed:
 
-	   LINE: while (<STDIN>) {
+	   LINE: while (&ltSTDIN&gt) {
 	       last LINE if /^$/;      # exit when done with header
 	       ...
 	   }
@@ -269,10 +271,10 @@ DESCRIPTION
        lines might end in backslashes to indicate continuation, you want to
        skip ahead and get the next record.
 
-	   while (<>) {
+	   while (&lt&gt) {
 	       chomp;
 	       if (s/\\$//) {
-		   $_ .= <>;
+		   $_ .= &lt&gt;
 		   redo unless eof();
 	       }
 	       # now process $_
@@ -280,10 +282,10 @@ DESCRIPTION
 
        which is Perl short-hand for the more explicitly written version:
 
-	   LINE: while (defined($line = <ARGV>)) {
+	   LINE: while (defined($line = &ltARGV&gt)) {
 	       chomp($line);
 	       if ($line =~ s/\\$//) {
-		   $line .= <ARGV>;
+		   $line .= &ltARGV&gt;
 		   redo LINE unless eof(); # not eof(ARGV)!
 	       }
 	       # now process $line
@@ -295,7 +297,7 @@ DESCRIPTION
        or "?pat?" one-time matches:
 
 	   # inspired by :1,$g/fred/s//WILMA/
-	   while (<>) {
+	   while (&lt&gt) {
 	       ?(fred)?    && s//WILMA $1 WILMA/;
 	       ?(barney)?  && s//BETTY $1 BETTY/;
 	       ?(homer)?   && s//MARGE $1 MARGE/;
@@ -329,14 +331,14 @@ DESCRIPTION
        Perl's C-style "for" loop works like the corresponding "while" loop;
        that means that this:
 
-	   for ($i = 1; $i < 10; $i++) {
+	   for ($i = 1; $i &lt 10; $i++) {
 	       ...
 	   }
 
        is the same as this:
 
 	   $i = 1;
-	   while ($i < 10) {
+	   while ($i &lt 10) {
 	       ...
 	   } continue {
 	       $i++;
@@ -354,15 +356,15 @@ DESCRIPTION
 
 	   $on_a_tty = -t STDIN && -t STDOUT;
 	   sub prompt { print "yes? " if $on_a_tty }
-	   for ( prompt(); <STDIN>; prompt() ) {
+	   for ( prompt(); &ltSTDIN&gt; prompt() ) {
 	       # do something
 	   }
 
-       Using "readline" (or the operator form, "<EXPR>") as the conditional of
+       Using "readline" (or the operator form, "&ltEXPR&gt") as the conditional of
        a "for" loop is shorthand for the following.  This behaviour is the
        same as a "while" loop conditional.
 
-	   for ( prompt(); defined( $_ = <STDIN> ); prompt() ) {
+	   for ( prompt(); defined( $_ = &ltSTDIN&gt ); prompt() ) {
 	       # do something
 	   }
 
@@ -415,9 +417,9 @@ DESCRIPTION
 
        Here's how a C programmer might code up a particular algorithm in Perl:
 
-	   for (my $i = 0; $i < @ary1; $i++) {
-	       for (my $j = 0; $j < @ary2; $j++) {
-		   if ($ary1[$i] > $ary2[$j]) {
+	   for (my $i = 0; $i &lt @ary1; $i++) {
+	       for (my $j = 0; $j &lt @ary2; $j++) {
+		   if ($ary1[$i] &gt $ary2[$j]) {
 		       last; # can't go to outer :-(
 		   }
 		   $ary1[$i] += $ary2[$j];
@@ -430,7 +432,7 @@ DESCRIPTION
 
 	   OUTER: for my $wid (@ary1) {
 	   INNER:   for my $jet (@ary2) {
-		       next OUTER if $wid > $jet;
+		       next OUTER if $wid &gt $jet;
 		       $wid += $jet;
 		    }
 		 }
@@ -494,7 +496,7 @@ DESCRIPTION
 		   say '$foo is an odd digit';
 		   continue; # Fall through
 	       }
-	       when ($_ < 100) {
+	       when ($_ &lt 100) {
 		   say '$foo is numerically less than 100';
 	       }
 	       when (\&complicated_check) {
@@ -532,7 +534,7 @@ DESCRIPTION
 	   a negated regular expression match ("!/REGEX/" or "$foo !~
 	   /REGEX/").
 
-       o   a comparison such as "$_ < 10" or "$x eq "abc"" (or of course "$_
+       o   a comparison such as "$_ &lt 10" or "$x eq "abc"" (or of course "$_
 	   ~~ $c")
 
        o   "defined(...)", "exists(...)", or "eof(...)"
@@ -559,7 +561,7 @@ DESCRIPTION
        These rules look complicated, but usually they will do what you want.
        For example you could write:
 
-	   when (/^\d+$/ && $_ < 75) { ... }
+	   when (/^\d+$/ && $_ &lt 75) { ... }
 
        Another useful shortcut is that, if you use a literal array or hash as
        the argument to "given", it is turned into a reference. So
@@ -624,17 +626,17 @@ DESCRIPTION
 
 	   Any	   Object    invokes ~~ overloading on $object, or dies
 
-	   Hash    CodeRef   sub truth for each key[1] !grep { !$b->($_) } keys %$a
-	   Array   CodeRef   sub truth for each elt[1] !grep { !$b->($_) } @$a
-	   Any	   CodeRef   scalar sub truth	       $b->($a)
+	   Hash    CodeRef   sub truth for each key[1] !grep { !$b-&gt($_) } keys %$a
+	   Array   CodeRef   sub truth for each elt[1] !grep { !$b-&gt($_) } @$a
+	   Any	   CodeRef   scalar sub truth	       $b-&gt($a)
 
 	   Hash    Hash      hash keys identical (every key is found in both hashes)
-	   Array   Hash      hash slice existence     grep { exists $b->{$_} } @$a
+	   Array   Hash      hash slice existence     grep { exists $b-&gt{$_} } @$a
 	   Regex   Hash      hash key grep	      grep /$a/, keys %$b
 	   undef   Hash      always false (undef can't be a key)
-	   Any	   Hash      hash entry existence     exists $b->{$a}
+	   Any	   Hash      hash entry existence     exists $b-&gt{$a}
 
-	   Hash    Array     hash slice existence     grep { exists $a->{$_} } @$b
+	   Hash    Array     hash slice existence     grep { exists $a-&gt{$_} } @$b
 	   Array   Array     arrays are comparable[2]
 	   Regex   Array     array grep 	      grep /$a/, @$b
 	   undef   Array     array contains undef     grep !defined, @$b
@@ -838,6 +840,6 @@ DESCRIPTION
 
 
 perl v5.10.1			  2009-08-22			    PERLSYN(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

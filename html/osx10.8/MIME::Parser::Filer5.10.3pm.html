@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="How this class is used when parsing..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MIME::Parser::Filer - manage file-output of the parser</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MIME::Parser::Filer(3)User Contributed Perl DocumentatioMIME::Parser::Filer(3)
 
 
@@ -25,26 +27,26 @@ SYNOPSIS
 
    Public interface
 	   ### Create a "filer" of the desired class:
-	   my $filer = MIME::Parser::FileInto->new($dir);
-	   my $filer = MIME::Parser::FileUnder->new($basedir);
+	   my $filer = MIME::Parser::FileInto-&gtnew($dir);
+	   my $filer = MIME::Parser::FileUnder-&gtnew($basedir);
 	   ...
 
 	   ### Want added security?  Don't let outsiders name your files:
-	   $filer->ignore_filename(1);
+	   $filer-&gtignore_filename(1);
 
 	   ### Prepare for the parsing of a new top-level message:
-	   $filer->init_parse;
+	   $filer-&gtinit_parse;
 
 	   ### Return the path where this message's data should be placed:
-	   $path = $filer->output_path($head);
+	   $path = $filer-&gtoutput_path($head);
 
    Semi-public interface
        These methods might be overriden or ignored in some subclasses, so they
        don't all make sense in all circumstances:
 
 	   ### Tweak the mapping from content-type to extension:
-	   $emap = $filer->output_extension_map;
-	   $emap->{"text/html"} = ".htm";
+	   $emap = $filer-&gtoutput_extension_map;
+	   $emap-&gt{"text/html"} = ".htm";
 
 DESCRIPTION
    How this class is used when parsing
@@ -55,30 +57,30 @@ DESCRIPTION
        Every parser has a single Filer object, which it uses for all parsing.
        You can get the Filer for a given $parser like this:
 
-	   $filer = $parser->filer;
+	   $filer = $parser-&gtfiler;
 
        At the beginning of each "parse()", the filer's internal state is reset
        by the parser:
 
-	   $parser->filer->init_parse;
+	   $parser-&gtfiler-&gtinit_parse;
 
        The parser can then get a path for each entity in the message by
        handing that entity's header (a MIME::Head) to the filer and having it
        do the work, like this:
 
-	   $new_file = $parser->filer->output_path($head);
+	   $new_file = $parser-&gtfiler-&gtoutput_path($head);
 
        Since it's nice to be able to clean up after a parse (especially a
        failed parse), the parser tells the filer when it has actually used a
        path:
 
-	   $parser->filer->purgeable($new_file);
+	   $parser-&gtfiler-&gtpurgeable($new_file);
 
        Then, if you want to clean up the files which were created for a
        particular parse (and also any directories that the Filer created), you
        would do this:
 
-	   $parser->filer->purge;
+	   $parser-&gtfiler-&gtpurge;
 
    Writing your own subclasses
        There are two standard "Filer" subclasses (see below):
@@ -89,7 +91,7 @@ DESCRIPTION
 
        The only method you have to override is output_path():
 
-	   $filer->output_path($head);
+	   $filer-&gtoutput_path($head);
 
        This method is invoked by MIME::Parser when it wants to put a decoded
        message body in an output file.	The method should return a path to the
@@ -104,8 +106,8 @@ DESCRIPTION
        named, you can use the default output_path() method and just override
        one of its components:
 
-	   $dir  = $filer->output_dir($head);
-	   $name = $filer->output_filename($head);
+	   $dir  = $filer-&gtoutput_dir($head);
+	   $name = $filer-&gtoutput_filename($head);
 	   ...
 
 PUBLIC INTERFACE
@@ -241,11 +243,11 @@ PUBLIC INTERFACE
 	   default output_filename() for mapping from content-types to
 	   extensions when there is no default extension to use.
 
-	       $emap = $filer->output_typemap;
-	       $emap->{'text/plain'} = '.txt';
-	       $emap->{'text/html'}  = '.html';
-	       $emap->{'text/*'}     = '.txt';
-	       $emap->{'*/*'}	     = '.dat';
+	       $emap = $filer-&gtoutput_typemap;
+	       $emap-&gt{'text/plain'} = '.txt';
+	       $emap-&gt{'text/html'}  = '.html';
+	       $emap-&gt{'text/*'}     = '.txt';
+	       $emap-&gt{'*/*'}	     = '.dat';
 
 	   Note: subclasses of MIME::Parser::Filer which override
 	   output_path() or output_filename() might not consult this hash;
@@ -261,16 +263,16 @@ PUBLIC INTERFACE
 	   implementers really should try to just override its components
 	   instead of the whole thing.	It works basically as follows:
 
-	       $directory = $self->output_dir($head);
+	       $directory = $self-&gtoutput_dir($head);
 
-	       $filename = $head->recommended_filename();
+	       $filename = $head-&gtrecommended_filename();
 	       if (!$filename or
-		    $self->ignore_filename() or
-		    $self->evil_filename($filename)) {
-		   $filename = $self->output_filename($head);
+		    $self-&gtignore_filename() or
+		    $self-&gtevil_filename($filename)) {
+		   $filename = $self-&gtoutput_filename($head);
 	       }
 
-	       return $self->find_unused_path($directory, $filename);
+	       return $self-&gtfind_unused_path($directory, $filename);
 
 	   Note: There are many, many, many ways you might want to control the
 	   naming of files, based on your application.	If you don't like the
@@ -352,10 +354,10 @@ PUBLIC INTERFACE
 
 	       use File::Path;
 
-	       $parser->output_under("/tmp");
-	       $ent = eval { $parser->parse_open($msg); };   ### parse
+	       $parser-&gtoutput_under("/tmp");
+	       $ent = eval { $parser-&gtparse_open($msg); };   ### parse
 	       if (!$ent) {	    ### parse failed
-		   rmtree($parser->output_dir);
+		   rmtree($parser-&gtoutput_dir);
 		   die "parse failed: $@";
 	       }
 	       else {		    ### parse succeeded
@@ -374,6 +376,6 @@ AUTHOR
 
 
 perl v5.10.1			  2008-06-30		MIME::Parser::Filer(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

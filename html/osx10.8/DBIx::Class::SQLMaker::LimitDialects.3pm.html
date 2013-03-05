@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module replicates a lot of the functionality originally found in..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::SQLMaker::LimitDialects - SQL::Abstract::Limit-like</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::SQLMaker:UseriContributed)DBIx::Class::SQLMaker::LimitDialects(3)
 
 
@@ -52,7 +54,7 @@ SQL LIMIT DIALECTS
 	) WHERE RNO__ROW__INDEX BETWEEN ($offset+1) AND ($limit+$offset)
 
        ANSI standard Limit/Offset implementation. Supported by DB2 and MSSQL
-       >= 2005.
+       &gt= 2005.
 
    SkipFirst
 	SELECT SKIP $offset FIRST $limit * FROM ...
@@ -74,8 +76,8 @@ SQL LIMIT DIALECTS
 	SELECT * FROM (
 	 SELECT *, ROWNUM rownum__index FROM (
 	  SELECT ...
-	 ) WHERE ROWNUM <= ($limit+$offset)
-	) WHERE rownum__index >= ($offset+1)
+	 ) WHERE ROWNUM &lt= ($limit+$offset)
+	) WHERE rownum__index &gt= ($offset+1)
 
        or
 
@@ -89,7 +91,7 @@ SQL LIMIT DIALECTS
 
 	SELECT * FROM (
 	   SELECT ...
-	 ) WHERE ROWNUM <= ($limit+1)
+	 ) WHERE ROWNUM &lt= ($limit+1)
 
        Supported by Oracle.
 
@@ -102,12 +104,12 @@ SQL LIMIT DIALECTS
 	 ) ORDER BY $reversed_original_order
 	) ORDER BY $original_order
 
-       Unreliable Top-based implementation, supported by MSSQL < 2005.
+       Unreliable Top-based implementation, supported by MSSQL &lt 2005.
 
        CAVEAT
 
        Due to its implementation, this limit dialect returns incorrect results
-       when $limit+$offset > total amount of rows in the resultset.
+       when $limit+$offset &gt total amount of rows in the resultset.
 
    FetchFirst
 	SELECT * FROM
@@ -121,13 +123,13 @@ SQL LIMIT DIALECTS
 	  FETCH FIRST $limit ROWS ONLY
 	)
 
-       Unreliable FetchFirst-based implementation, supported by IBM DB2 <=
+       Unreliable FetchFirst-based implementation, supported by IBM DB2 &lt=
        V5R3.
 
        CAVEAT
 
        Due to its implementation, this limit dialect returns incorrect results
-       when $limit+$offset > total amount of rows in the resultset.
+       when $limit+$offset &gt total amount of rows in the resultset.
 
    RowCountOrGenericSubQ
        This is not exactly a limit dialect, but more of a proxy for Sybase
@@ -144,7 +146,7 @@ SQL LIMIT DIALECTS
 	 SELECT ...
 	)
 	WHERE (
-	 SELECT COUNT(*) FROM $original_table cnt WHERE cnt.id < $original_table.id
+	 SELECT COUNT(*) FROM $original_table cnt WHERE cnt.id &lt $original_table.id
 	) BETWEEN $offset AND ($offset+$rows-1)
 
        This is the most evil limit "dialect" (more of a hack) for really
@@ -165,6 +167,6 @@ LICENSE
 
 
 perl v5.12.4			  2011-DBIx::Class::SQLMaker::LimitDialects(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

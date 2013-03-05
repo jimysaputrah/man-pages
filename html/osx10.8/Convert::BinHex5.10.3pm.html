@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="BinHex is a format used by Macintosh for transporting Mac files safely..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Convert::BinHex - extract data from Macintosh BinHex files</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Convert::BinHex(3)    User Contributed Perl Documentation   Convert::BinHex(3)
 
 
@@ -35,56 +37,56 @@ SYNOPSIS
        state:
 
 	   # Create and use a "translator" object:
-	   my $H2B = Convert::BinHex->hex2bin;	  # get a converter object
-	   while (<STDIN>) {
-	       print $STDOUT $H2B->next($_);	    # convert some more input
+	   my $H2B = Convert::BinHex-&gthex2bin;	  # get a converter object
+	   while (&ltSTDIN&gt) {
+	       print $STDOUT $H2B-&gtnext($_);	    # convert some more input
 	   }
-	   print $STDOUT $H2B->done;		  # no more input: finish up
+	   print $STDOUT $H2B-&gtdone;		  # no more input: finish up
 
        Hex to bin, OO interface.  The following operations must be done in the
        order shown!
 
 	   # Read data in piecemeal:
-	   $HQX = Convert::BinHex->open(FH=>\*STDIN) || die "open: $!";
-	   $HQX->read_header;		       # read header info
-	   @data = $HQX->read_data;	       # read in all the data
-	   @rsrc = $HQX->read_resource;        # read in all the resource
+	   $HQX = Convert::BinHex-&gtopen(FH=&gt\*STDIN) || die "open: $!";
+	   $HQX-&gtread_header;		       # read header info
+	   @data = $HQX-&gtread_data;	       # read in all the data
+	   @rsrc = $HQX-&gtread_resource;        # read in all the resource
 
        Bin to hex, low-level interface.  Conversion is actually done via an
        object ("Convert::BinHex::Bin2Hex") which keeps internal conversion
        state:
 
 	   # Create and use a "translator" object:
-	   my $B2H = Convert::BinHex->bin2hex;	  # get a converter object
-	   while (<STDIN>) {
-	       print $STDOUT $B2H->next($_);	    # convert some more input
+	   my $B2H = Convert::BinHex-&gtbin2hex;	  # get a converter object
+	   while (&ltSTDIN&gt) {
+	       print $STDOUT $B2H-&gtnext($_);	    # convert some more input
 	   }
-	   print $STDOUT $B2H->done;		  # no more input: finish up
+	   print $STDOUT $B2H-&gtdone;		  # no more input: finish up
 
        Bin to hex, file interface.  Yes, you can convert to BinHex as well as
        from it!
 
 	   # Create new, empty object:
-	   my $HQX = Convert::BinHex->new;
+	   my $HQX = Convert::BinHex-&gtnew;
 
 	   # Set header attributes:
-	   $HQX->filename("logo.gif");
-	   $HQX->type("GIFA");
-	   $HQX->creator("CNVS");
+	   $HQX-&gtfilename("logo.gif");
+	   $HQX-&gttype("GIFA");
+	   $HQX-&gtcreator("CNVS");
 
 	   # Give it the data and resource forks (either can be absent):
-	   $HQX->data(Path => "/path/to/data");       # here, data is on disk
-	   $HQX->resource(Data => $resourcefork);     # here, resource is in core
+	   $HQX-&gtdata(Path =&gt "/path/to/data");       # here, data is on disk
+	   $HQX-&gtresource(Data =&gt $resourcefork);     # here, resource is in core
 
 	   # Output as a BinHex stream, complete with leading comment:
-	   $HQX->encode(\*STDOUT);
+	   $HQX-&gtencode(\*STDOUT);
 
        PLANNED!!!! Bin to hex, "CAP" interface.  Thanks to Ken Lunde for
        suggesting this.
 
 	   # Create new, empty object from CAP tree:
-	   my $HQX = Convert::BinHex->from_cap("/path/to/root/file");
-	   $HQX->encode(\*STDOUT);
+	   my $HQX = Convert::BinHex-&gtfrom_cap("/path/to/root/file");
+	   $HQX-&gtencode(\*STDOUT);
 
 DESCRIPTION
        BinHex is a format used by Macintosh for transporting Mac files safely
@@ -140,7 +142,7 @@ FUNCTIONS
 	   one chunk at a time.  That is:
 
 	       $crc = 0;
-	       while (<STDIN>) {
+	       while (&ltSTDIN&gt) {
 		   $crc = macbinary_crc($_, $crc);
 	       }
 
@@ -155,7 +157,7 @@ FUNCTIONS
 	   at a time.  That is:
 
 	       $crc = 0;
-	       while (<STDIN>) {
+	       while (&ltSTDIN&gt) {
 		   $crc = binhex_crc($_, $crc);
 	       }
 
@@ -184,9 +186,9 @@ OO INTERFACE
 	   Parameters in the PARAMHASH are the same as header-oriented method
 	   names, and may be used to set attributes:
 
-	       $HQX = new Convert::BinHex filename => "icon.gif",
-					  type	  => "GIFB",
-					  creator => "CNVS";
+	       $HQX = new Convert::BinHex filename =&gt "icon.gif",
+					  type	  =&gt "GIFB",
+					  creator =&gt "CNVS";
 
        open PARAMHASH
 	   Class method, constructor.  Return a handle on a new BinHex'ed
@@ -254,7 +256,7 @@ OO INTERFACE
 
 	   In this case, after parsing in the comment, the code:
 
-	       $HQX->requires;
+	       $HQX-&gtrequires;
 
 	   would get back "4.0".
 
@@ -295,11 +297,11 @@ OO INTERFACE
 	   Instance method.  Read information from the data fork.  Use it in
 	   an array context to slurp all the data into an array of scalars:
 
-	       @data = $HQX->read_data;
+	       @data = $HQX-&gtread_data;
 
 	   Or use it in a scalar context to get the data piecemeal:
 
-	       while (defined($data = $HQX->read_data)) {
+	       while (defined($data = $HQX-&gtread_data)) {
 		  # do stuff with $data
 	       }
 
@@ -324,15 +326,15 @@ SUBMODULES
        function repeatedly.  Use it like this:
 
 	   # Create and use a "translator" object:
-	   my $B2H = Convert::BinHex->bin2hex;	  # get a converter object
-	   while (<STDIN>) {
-	       print STDOUT $B2H->next($_);	     # convert some more input
+	   my $B2H = Convert::BinHex-&gtbin2hex;	  # get a converter object
+	   while (&ltSTDIN&gt) {
+	       print STDOUT $B2H-&gtnext($_);	     # convert some more input
 	   }
-	   print STDOUT $B2H->done;		  # no more input: finish up
+	   print STDOUT $B2H-&gtdone;		  # no more input: finish up
 
 	   # Re-use the object:
-	   $B2H->rewind;		 # ready for more action!
-	   while (<MOREIN>) { ...
+	   $B2H-&gtrewind;		 # ready for more action!
+	   while (&ltMOREIN&gt) { ...
 
        On each iteration, "next()" (and "done()") may return either a decent-
        sized non-empty string (indicating that more converted data is ready
@@ -348,8 +350,8 @@ SUBMODULES
        own, serving you stuff line by line:
 
 	   # Someday, maybe...
-	   my $B2H = Convert::BinHex->bin2hex(\*STDIN);
-	   while (defined($_ = $B2H->getline)) {
+	   my $B2H = Convert::BinHex-&gtbin2hex(\*STDIN);
+	   while (defined($_ = $B2H-&gtgetline)) {
 	       print STDOUT $_;
 	   }
 
@@ -361,15 +363,15 @@ SUBMODULES
        function repeatedly.  Use it like this:
 
 	   # Create and use a "translator" object:
-	   my $H2B = Convert::BinHex->hex2bin;	  # get a converter object
-	   while (<STDIN>) {
-	       print STDOUT $H2B->next($_);	     # convert some more input
+	   my $H2B = Convert::BinHex-&gthex2bin;	  # get a converter object
+	   while (&ltSTDIN&gt) {
+	       print STDOUT $H2B-&gtnext($_);	     # convert some more input
 	   }
-	   print STDOUT $H2B->done;		  # no more input: finish up
+	   print STDOUT $H2B-&gtdone;		  # no more input: finish up
 
 	   # Re-use the object:
-	   $H2B->rewind;		 # ready for more action!
-	   while (<MOREIN>) { ...
+	   $H2B-&gtrewind;		 # ready for more action!
+	   while (&ltMOREIN&gt) { ...
 
        On each iteration, "next()" (and "done()") may return either a decent-
        sized non-empty string (indicating that more converted data is ready
@@ -387,30 +389,30 @@ SUBMODULES
        A fork in a Macintosh file.
 
 	   # How to get them...
-	   $data_fork = $HQX->data;	 # get the data fork
-	   $rsrc_fork = $HQX->resource;  # get the resource fork
+	   $data_fork = $HQX-&gtdata;	 # get the data fork
+	   $rsrc_fork = $HQX-&gtresource;  # get the resource fork
 
 	   # Make a new fork:
-	   $FORK = Convert::BinHex::Fork->new(Path => "/tmp/file.data");
-	   $FORK = Convert::BinHex::Fork->new(Data => $scalar);
-	   $FORK = Convert::BinHex::Fork->new(Data => \@array_of_scalars);
+	   $FORK = Convert::BinHex::Fork-&gtnew(Path =&gt "/tmp/file.data");
+	   $FORK = Convert::BinHex::Fork-&gtnew(Data =&gt $scalar);
+	   $FORK = Convert::BinHex::Fork-&gtnew(Data =&gt \@array_of_scalars);
 
 	   # Get/set the length of the data fork:
-	   $len = $FORK->length;
-	   $FORK->length(170);	      # this overrides the REAL value: be careful!
+	   $len = $FORK-&gtlength;
+	   $FORK-&gtlength(170);	      # this overrides the REAL value: be careful!
 
 	   # Get/set the path to the underlying data (if in a disk file):
-	   $path = $FORK->path;
-	   $FORK->path("/tmp/file.data");
+	   $path = $FORK-&gtpath;
+	   $FORK-&gtpath("/tmp/file.data");
 
 	   # Get/set the in-core data itself, which may be a scalar or an arrayref:
-	   $data = $FORK->data;
-	   $FORK->data($scalar);
-	   $FORK->data(\@array_of_scalars);
+	   $data = $FORK-&gtdata;
+	   $FORK-&gtdata($scalar);
+	   $FORK-&gtdata(\@array_of_scalars);
 
 	   # Get/set the CRC:
-	   $crc = $FORK->crc;
-	   $FORK->crc($crc);
+	   $crc = $FORK-&gtcrc;
+	   $FORK-&gtcrc($crc);
 
 UNDER THE HOOD
    Design issues
@@ -432,7 +434,7 @@ UNDER THE HOOD
 	   cannot have code like this:
 
 	       #### NO! #### NO! #### NO! #### NO! #### NO! ####
-	       while (<STDIN>) {	    # read HEX
+	       while (&ltSTDIN&gt) {	    # read HEX
 		   print hexbin($_);	      # convert and write BIN
 	       }
 
@@ -500,7 +502,7 @@ WARNINGS
        probably want to do this to the data:
 
 	   # Get the data, and output it according to normal conventions:
-	   foreach ($HQX->read_data) { s/\r/\n/g; print }
+	   foreach ($HQX-&gtread_data) { s/\r/\n/g; print }
 
 CHANGE LOG
        Current version: $Id: BinHex.pm,v 1.119 1997/06/28 05:12:42 eryq Exp $
@@ -546,6 +548,6 @@ TERMS AND CONDITIONS
 
 
 perl v5.10.1			  1997-06-27		    Convert::BinHex(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

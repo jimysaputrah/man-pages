@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="tcsh  is  an enhanced but completely compatible version of the Berkeley..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>tcsh - C shell with file name completion and command line editing</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 TCSH(1) 							       TCSH(1)
 
 
@@ -144,7 +146,7 @@ DESCRIPTION
        not found, ~/.cshrc'.
 
        In the normal case, the shell begins reading commands from  the	termi-
-       nal,  prompting with `> '.  (Processing of arguments and the use of the
+       nal,  prompting with `&gt '.  (Processing of arguments and the use of the
        shell to process files containing command scripts are described later.)
        The  shell  repeatedly  reads  a  line of command input, breaks it into
        words, places it on the command history list, parses  it  and  executes
@@ -239,17 +241,17 @@ DESCRIPTION
        lists  the  possible completions using the ls-F builtin (q.v.)  and re-
        prints the prompt and unfinished command line, for example:
 
-	   > ls /usr/l[^D]
+	   &gt ls /usr/l[^D]
 	   lbin/       lib/	   local/      lost+found/
-	   > ls /usr/l
+	   &gt ls /usr/l
 
        If the autolist shell variable is set, the shell  lists	the  remaining
        choices (if any) whenever completion fails:
 
-	   > set autolist
-	   > nm /usr/lib/libt[tab]
+	   &gt set autolist
+	   &gt nm /usr/lib/libt[tab]
 	   libtermcap.a@ libtermlib.a@
-	   > nm /usr/lib/libterm
+	   &gt nm /usr/lib/libterm
 
        If autolist is set to `ambiguous', choices are listed only when comple-
        tion fails and adds no new characters to the word being completed.
@@ -259,18 +261,18 @@ DESCRIPTION
        directory stack entries abbreviated with `=' (see Directory stack  sub-
        stitution).  For example,
 
-	   > ls ~k[^D]
+	   &gt ls ~k[^D]
 	   kahn    kas	   kellogg
-	   > ls ~ke[tab]
-	   > ls ~kellogg/
+	   &gt ls ~ke[tab]
+	   &gt ls ~kellogg/
 
        or
 
-	   > set local = /usr/local
-	   > ls $lo[tab]
-	   > ls $local/[^D]
+	   &gt set local = /usr/local
+	   &gt ls $lo[tab]
+	   &gt ls $local/[^D]
 	   bin/ etc/ lib/ man/ src/
-	   > ls $local/
+	   &gt ls $local/
 
        Note  that  variables  can also be expanded explicitly with the expand-
        variables editor command.
@@ -292,15 +294,15 @@ DESCRIPTION
        The shell variable fignore can be set to  a  list  of  suffixes	to  be
        ignored by completion.  Consider the following:
 
-	   > ls
+	   &gt ls
 	   Makefile	   condiments.h~   main.o	   side.c
 	   README	   main.c	   meal 	   side.o
 	   condiments.h    main.c~
-	   > set fignore = (.o \~)
-	   > emacs ma[^D]
+	   &gt set fignore = (.o \~)
+	   &gt emacs ma[^D]
 	   main.c   main.c~  main.o
-	   > emacs ma[tab]
-	   > emacs main.c
+	   &gt emacs ma[tab]
+	   &gt emacs main.c
 
        `main.c~'  and  `main.o'  are  ignored by completion (but not listing),
        because they end in suffixes in fignore.  Note that a `\' was needed in
@@ -331,16 +333,16 @@ DESCRIPTION
        recexact can be set to complete on the shortest possible unique	match,
        even if more typing might result in a longer match:
 
-	   > ls
+	   &gt ls
 	   fodder   foo      food     foonly
-	   > set recexact
-	   > rm fo[tab]
+	   &gt set recexact
+	   &gt rm fo[tab]
 
        just beeps, because `fo' could expand to `fod' or `foo', but if we type
        another `o',
 
-	   > rm foo[tab]
-	   > rm foo
+	   &gt rm foo[tab]
+	   &gt rm foo
 
        the completion completes on `foo', even though `food' and `foonly' also
        match.	autoexpand can be set to run the expand-history editor command
@@ -378,9 +380,9 @@ DESCRIPTION
        thinks that any part of the command line is misspelled, it prompts with
        the corrected line:
 
-	   > set correct = cmd
-	   > lz /usr/bin
-	   CORRECT>ls /usr/bin (y|n|e|a)?
+	   &gt set correct = cmd
+	   &gt lz /usr/bin
+	   CORRECT&gtls /usr/bin (y|n|e|a)?
 
        One can answer `y' or space to execute the corrected line, `e' to leave
        the uncorrected command in the input buffer, `a' to abort  the  command
@@ -665,8 +667,8 @@ DESCRIPTION
 
    Lexical structure
        The shell splits input lines into words at blanks and tabs.   The  spe-
-       cial  characters  `&', `|', `;', `<', `>', `(', and `)' and the doubled
-       characters `&&', `||', `<<' and `>>' are always separate words, whether
+       cial  characters  `&', `|', `;', `&lt', `&gt', `(', and `)' and the doubled
+       characters `&&', `||', `&lt&lt' and `&gt&gt' are always separate words, whether
        or not they are surrounded by whitespace.
 
        When the shell's input is not a terminal, the character `#' is taken to
@@ -902,10 +904,10 @@ DESCRIPTION
        In csh, the result would be `wumpus.1:r'.  A substitution followed by a
        colon may need to be insulated from it with braces:
 
-	   > mv a.out /usr/games/wumpus
-	   > setenv PATH !$:h:$PATH
+	   &gt mv a.out /usr/games/wumpus
+	   &gt setenv PATH !$:h:$PATH
 	   Bad ! modifier: $.
-	   > setenv PATH !{-2$:h}:$PATH
+	   &gt setenv PATH !{-2$:h}:$PATH
 	   setenv PATH /usr/games:/bin:/usr/bin:.
 
        The first attempt would succeed in csh but fails in tcsh, because  tcsh
@@ -1058,10 +1060,10 @@ DESCRIPTION
        $!      Substitutes the (decimal) process number of the last background
 	       process started by this shell.  (+)
        $_      Substitutes the command line of the last command executed.  (+)
-       $<      Substitutes  a  line  from  the standard input, with no further
+       $&lt      Substitutes  a  line  from  the standard input, with no further
 	       interpretation thereafter.  It can be used  to  read  from  the
-	       keyboard in a shell script.  (+) While csh always quotes $<, as
-	       if it were equivalent to `$<:q', tcsh does  not.   Furthermore,
+	       keyboard in a shell script.  (+) While csh always quotes $&lt, as
+	       if it were equivalent to `$&lt:q', tcsh does  not.   Furthermore,
 	       when  tcsh  is waiting for a line to be typed the user may type
 	       an interrupt to interrupt the sequence into which the  line  is
 	       to be substituted, but csh does not allow this.
@@ -1114,9 +1116,9 @@ DESCRIPTION
 
        An entire glob-pattern can also be negated with `^':
 
-	   > echo *
+	   &gt echo *
 	   bang crash crunch ouch
-	   > echo ^cr*
+	   &gt echo ^cr*
 	   bang ouch
 
        Glob-patterns which do not use `?', `*', or `[]' or which use  `{}'  or
@@ -1170,15 +1172,15 @@ DESCRIPTION
        the  directory stack.  The special case `=-' expands to the last direc-
        tory in the stack.  For example,
 
-	   > dirs -v
+	   &gt dirs -v
 	   0	   /usr/bin
 	   1	   /usr/spool/uucp
 	   2	   /usr/accts/sys
-	   > echo =1
+	   &gt echo =1
 	   /usr/spool/uucp
-	   > echo =0/calendar
+	   &gt echo =0/calendar
 	   /usr/bin/calendar
-	   > echo =-
+	   &gt echo =-
 	   /usr/accts/sys
 
        The noglob and nonomatch shell variables  and  the  expand-glob	editor
@@ -1276,9 +1278,9 @@ DESCRIPTION
        The  standard  input and standard output of a command may be redirected
        with the following syntax:
 
-       < name  Open file name (which is first variable, command  and  filename
+       &lt name  Open file name (which is first variable, command  and  filename
 	       expanded) as the standard input.
-       << word Read  the  shell input up to a line which is identical to word.
+       &lt&lt word Read  the  shell input up to a line which is identical to word.
 	       word is not subjected to variable, filename or command  substi-
 	       tution, and each input line is compared to word before any sub-
 	       stitutions are done on this input line.	Unless a quoting  `\',
@@ -1289,10 +1291,10 @@ DESCRIPTION
 	       newline	which  is dropped.  The resultant text is placed in an
 	       anonymous temporary file which is given to the command as stan-
 	       dard input.
-       > name
-       >! name
-       >& name
-       >&! name
+       &gt name
+       &gt! name
+       &gt& name
+       &gt&! name
 	       The file name is used as standard output.  If the file does not
 	       exist then it is created; if the file exists, it is  truncated,
 	       its previous contents being lost.
@@ -1305,12 +1307,12 @@ DESCRIPTION
 
 	       The  forms  involving  `&' route the diagnostic output into the
 	       specified file  as  well  as  the  standard  output.   name  is
-	       expanded in the same way as `<' input filenames are.
-       >> name
-       >>& name
-       >>! name
-       >>&! name
-	       Like  `>', but appends output to the end of name.  If the shell
+	       expanded in the same way as `&lt' input filenames are.
+       &gt&gt name
+       &gt&gt& name
+       &gt&gt! name
+       &gt&gt&! name
+	       Like  `&gt', but appends output to the end of name.  If the shell
 	       variable noclobber is set, then it is an error for the file not
 	       to exist, unless one of the `!' forms is given.
 
@@ -1319,7 +1321,7 @@ DESCRIPTION
        in  a pipeline.	Thus, unlike some previous shells, commands run from a
        file of shell commands have no access to the text of  the  commands  by
        default;  rather they receive the original standard input of the shell.
-       The `<<' mechanism should be used to present inline data.  This permits
+       The `&lt&lt' mechanism should be used to present inline data.  This permits
        shell command scripts to function as components of pipelines and allows
        the shell to block read its input.   Note  that	the  default  standard
        input  for  a command run detached is not the empty file /dev/null, but
@@ -1331,7 +1333,7 @@ DESCRIPTION
        put.  Simply use the form `|&' rather than just `|'.
 
        The  shell  cannot  presently  redirect	diagnostic output without also
-       redirecting standard output, but `(command  >  output-file)  >&	error-
+       redirecting standard output, but `(command  &gt  output-file)  &gt&	error-
        file'  is often an acceptable workaround.  Either output-file or error-
        file may be `/dev/tty' to send output to the terminal.
 
@@ -1365,11 +1367,11 @@ DESCRIPTION
        These operators are similar to those of C and have the same precedence.
        They include
 
-	   ||  &&  |  ^  &  ==	!=  =~	!~  <=	>=
-	   <  > <<  >>	+  -  *  /  %  !  ~  (	)
+	   ||  &&  |  ^  &  ==	!=  =~	!~  &lt=	&gt=
+	   &lt  &gt &lt&lt  &gt&gt	+  -  *  /  %  !  ~  (	)
 
        Here the precedence increases to the right, `==' `!='  `=~'  and  `!~',
-       `<='  `>='  `<'	and  `>',  `<<' and `>>', `+' and `-', `*' `/' and `%'
+       `&lt='  `&gt='  `&lt'	and  `&gt',  `&lt&lt' and `&gt&gt', `+' and `-', `*' `/' and `%'
        being, in groups, at the same level.  The `==' `!=' `=~' and `!~' oper-
        ators  compare  their  arguments as strings; all others operate on num-
        bers.  The operators `=~' and `!~' are like `!=' and `=='  except  that
@@ -1382,7 +1384,7 @@ DESCRIPTION
        expressions are strings, which represent decimal numbers.  It is impor-
        tant to note that no two components of an expression can appear in  the
        same  word; except when adjacent to components of expressions which are
-       syntactically significant to the parser (`&' `|' `<' `>' `(' `)')  they
+       syntactically significant to the parser (`&' `|' `&lt' `&gt' `(' `)')  they
        should be surrounded by spaces.
 
    Command exit status
@@ -1746,7 +1748,7 @@ REFERENCE
 	       name; both name and its index'th component must already	exist.
 
 	       expr  may  contain  the	operators `*', `+', etc., as in C.  If
-	       expr contains `<', `>', `&' or `' then at least	that  part  of
+	       expr contains `&lt', `&gt', `&' or `' then at least	that  part  of
 	       expr  must be placed within `()'.  Note that the syntax of expr
 	       has nothing to do with that described under Expressions.
 
@@ -1962,30 +1964,30 @@ REFERENCE
 	       Now for some examples.  Some commands take only directories  as
 	       arguments, so there's no point completing plain files.
 
-		   > complete cd 'p/1/d/'
+		   &gt complete cd 'p/1/d/'
 
 	       completes  only	the  first  word following `cd' (`p/1') with a
 	       directory.  p-type completion can also be used to  narrow  down
 	       command completion:
 
-		   > co[^D]
+		   &gt co[^D]
 		   complete compress
-		   > complete -co* 'p/0/(compress)/'
-		   > co[^D]
-		   > compress
+		   &gt complete -co* 'p/0/(compress)/'
+		   &gt co[^D]
+		   &gt compress
 
 	       This completion completes commands (words in position 0, `p/0')
 	       which begin with `co' (thus matching `co*') to `compress'  (the
 	       only  word  in  the list).  The leading `-' indicates that this
 	       completion is to be used with only ambiguous commands.
 
-		   > complete find 'n/-user/u/'
+		   &gt complete find 'n/-user/u/'
 
 	       is an example of n-type completion.  Any word following	`find'
 	       and immediately following `-user' is completed from the list of
 	       users.
 
-		   > complete cc 'c/-I/d/'
+		   &gt complete cc 'c/-I/d/'
 
 	       demonstrates c-type completion.	Any word  following  `cc'  and
 	       beginning  with	`-I' is completed as a directory.  `-I' is not
@@ -1993,10 +1995,10 @@ REFERENCE
 
 	       Different lists are useful with different commands.
 
-		   > complete alias 'p/1/a/'
-		   > complete man 'p/*/c/'
-		   > complete set 'p/1/s/'
-		   > complete true 'p/1/x:Truth has no options./'
+		   &gt complete alias 'p/1/a/'
+		   &gt complete man 'p/*/c/'
+		   &gt complete set 'p/1/s/'
+		   &gt complete true 'p/1/x:Truth has no options./'
 
 	       These complete words following `alias' with aliases, `man' with
 	       commands,  and `set' with shell variables.  `true' doesn't have
@@ -2010,20 +2012,20 @@ REFERENCE
 	       Words  can be completed from a variable evaluated at completion
 	       time,
 
-		   > complete ftp 'p/1/$hostnames/'
-		   > set hostnames = (rtfm.mit.edu tesla.ee.cornell.edu)
-		   > ftp [^D]
+		   &gt complete ftp 'p/1/$hostnames/'
+		   &gt set hostnames = (rtfm.mit.edu tesla.ee.cornell.edu)
+		   &gt ftp [^D]
 		   rtfm.mit.edu tesla.ee.cornell.edu
-		   > ftp [^C]
-		   >  set  hostnames  =   (rtfm.mit.edu   tesla.ee.cornell.edu
+		   &gt ftp [^C]
+		   &gt  set  hostnames  =   (rtfm.mit.edu   tesla.ee.cornell.edu
 		   uunet.uu.net)
-		   > ftp [^D]
+		   &gt ftp [^D]
 		   rtfm.mit.edu tesla.ee.cornell.edu uunet.uu.net
 
 	       or from a command run at completion time:
 
-		   > complete kill 'p/*/`ps | awk \{print\ \$1\}`/'
-		   > kill -9 [^D]
+		   &gt complete kill 'p/*/`ps | awk \{print\ \$1\}`/'
+		   &gt kill -9 [^D]
 		   23113 23377 23380 23406 23429 23529 23530 PID
 
 	       Note  that the complete command does not itself quote its argu-
@@ -2032,7 +2034,7 @@ REFERENCE
 
 	       One command can have multiple completions:
 
-		   > complete dbx 'p/2/(core)/' 'p/*/c/'
+		   &gt complete dbx 'p/2/(core)/' 'p/*/c/'
 
 	       completes the second argument to `dbx' with the word `core' and
 	       all other arguments with commands.  Note  that  the  positional
@@ -2045,14 +2047,14 @@ REFERENCE
 	       The  select  pattern  is useful when a command takes files with
 	       only particular forms as arguments.  For example,
 
-		   > complete cc 'p/*/f:*.[cao]/'
+		   &gt complete cc 'p/*/f:*.[cao]/'
 
 	       completes `cc' arguments to files ending in only `.c', `.a', or
 	       `.o'.  select can also exclude files, using negation of a glob-
 	       pattern as described under Filename  substitution.   One  might
 	       use
 
-		   > complete rm 'p/*/f:^*.{c,h,cc,C,tex,1,man,l,y}/'
+		   &gt complete rm 'p/*/f:^*.{c,h,cc,C,tex,1,man,l,y}/'
 
 	       to  exclude  precious  source  code  from  `rm' completion.  Of
 	       course, one could still type excluded names manually  or  over-
@@ -2065,7 +2067,7 @@ REFERENCE
 	       lar path prefix.  For example, the Elm mail program uses `=' as
 	       an abbreviation for one's mail directory.  One might use
 
-		   > complete elm c@=@F:$HOME/Mail/@
+		   &gt complete elm c@=@F:$HOME/Mail/@
 
 	       to complete `elm -f =' as if it were `elm  -f  ~/Mail/'.   Note
 	       that  we  used  `@'  instead of `/' to avoid confusion with the
@@ -2076,7 +2078,7 @@ REFERENCE
 	       suffix is used to add a nonstandard suffix (not	space  or  `/'
 	       for directories) to completed words.
 
-		   > complete finger 'c/*@/$hostnames/' 'p/1/u/@'
+		   &gt complete finger 'c/*@/$hostnames/' 'p/1/u/@'
 
 	       completes arguments to `finger' from the list of users, appends
 	       an `@', and then completes after the `@' from  the  `hostnames'
@@ -2085,7 +2087,7 @@ REFERENCE
 
 	       Finally, here's a complex example for inspiration:
 
-		   > complete find \
+		   &gt complete find \
 		   'n/-name/f/' 'n/-newer/f/' 'n/-{,n}cpio/f/' \
 		   'n/-exec/c/' 'n/-ok/c/' 'n/-user/u/' \
 		   'n/-group/g/' 'n/-fstype/(nfs 4.2)/' \
@@ -2167,17 +2169,17 @@ REFERENCE
 	       slow  terminals, or limit command output to the number of lines
 	       on the screen:
 
-		   > set history=`echotc lines`
-		   > @ history--
+		   &gt set history=`echotc lines`
+		   &gt @ history--
 
 	       Termcap strings may contain wildcards which will not echo  cor-
 	       rectly.	 One  should  use  double  quotes when setting a shell
 	       variable to a terminal capability string, as in	the  following
 	       example that places the date in the status line:
 
-		   > set tosl="`echotc ts 0`"
-		   > set frsl="`echotc fs`"
-		   > echo -n "$tosl";date; echo -n "$frsl"
+		   &gt set tosl="`echotc ts 0`"
+		   &gt set frsl="`echotc fs`"
+		   &gt echo -n "$tosl";date; echo -n "$frsl"
 
 	       With  -s,  nonexistent  capabilities  return  the  empty string
 	       rather than causing an error.  With -v, messages are verbose.
@@ -2452,7 +2454,7 @@ REFERENCE
 	       course):
 
 	       @   Symbolic link to a non-directory
-	       >   Symbolic link to a directory
+	       &gt   Symbolic link to a directory
 	       &   Symbolic link to nowhere
 
 	       listlinks also slows down ls-F and  causes  partitions  holding
@@ -2582,26 +2584,26 @@ REFERENCE
 	       scheduled-event list is printed.  The second form adds  command
 	       to the scheduled-event list.  For example,
 
-		   > sched 11:00 echo It\'s eleven o\'clock.
+		   &gt sched 11:00 echo It\'s eleven o\'clock.
 
 	       causes  the shell to echo `It's eleven o'clock.' at 11 AM.  The
 	       time may be in 12-hour AM/PM format
 
-		   > sched 5pm set prompt='[%h] It\'s after 5; go home: >'
+		   &gt sched 5pm set prompt='[%h] It\'s after 5; go home: &gt'
 
 	       or may be relative to the current time:
 
-		   > sched +2:15 /usr/lib/uucp/uucico -r1 -sother
+		   &gt sched +2:15 /usr/lib/uucp/uucico -r1 -sother
 
 	       A relative time specification may not use  AM/PM  format.   The
 	       third form removes item n from the event list:
 
-		   > sched
+		   &gt sched
 			1  Wed Apr  4 15:42  /usr/lib/uucp/uucico -r1 -sother
 			2   Wed Apr  4 17:00  set prompt=[%h] It's after 5; go
-		   home: >
-		   > sched -2
-		   > sched
+		   home: &gt
+		   &gt sched -2
+		   &gt sched
 			1  Wed Apr  4 15:42  /usr/lib/uucp/uucico -r1 -sother
 
 	       A command in the scheduled-event list is executed  just	before
@@ -2846,13 +2848,13 @@ REFERENCE
 	       re-parenting window manager that supports title	bars  such  as
 	       twm(1) and does
 
-		   > alias cwdcmd  'echo -n "^[]2;${HOST}:$cwd ^G"'
+		   &gt alias cwdcmd  'echo -n "^[]2;${HOST}:$cwd ^G"'
 
 	       then the shell will change the title of the running xterm(1) to
 	       be the name of the host, a colon, and the full current  working
 	       directory.  A fancier way to do that is
 
-		   >	      alias	     cwdcmd	     'echo	    -n
+		   &gt	      alias	     cwdcmd	     'echo	    -n
 		   "^[]2;${HOST}:$cwd^G^[]1;${HOST}^G"'
 
 	       This will put the hostname and working directory on  the  title
@@ -2866,7 +2868,7 @@ REFERENCE
 	       changes state.  This is similar to postcmd,  but  it  does  not
 	       print builtins.
 
-		   > alias jobcmd  'echo -n "^[]2\;\!#:q^G"'
+		   &gt alias jobcmd  'echo -n "^[]2\;\!#:q^G"'
 
 	       then  executing	vi  foo.c  will  put the command string in the
 	       xterm title bar.
@@ -2876,7 +2878,7 @@ REFERENCE
 	       which  help is sought is passed as sole argument.  For example,
 	       if one does
 
-		   > alias helpcommand '\!:1 --help'
+		   &gt alias helpcommand '\!:1 --help'
 
 	       then the help display of the command itself  will  be  invoked,
 	       using  the  GNU help calling convention.  Currently there is no
@@ -2888,8 +2890,8 @@ REFERENCE
 	       for checking on common but infrequent changes such as new mail.
 	       For example, if one does
 
-		   > set tperiod = 30
-		   > alias periodic checknews
+		   &gt set tperiod = 30
+		   &gt alias periodic checknews
 
 	       then the checknews(1) program runs every 30 minutes.  If  peri-
 	       odic  is set but tperiod is unset or set to 0, periodic behaves
@@ -2898,7 +2900,7 @@ REFERENCE
        precmd  Runs just before each prompt is printed.  For example,  if  one
 	       does
 
-		   > alias precmd date
+		   &gt alias precmd date
 
 	       then  date(1)  runs just before the shell prompts for each com-
 	       mand.  There are no limits on what precmd can be set to do, but
@@ -2906,7 +2908,7 @@ REFERENCE
 
        postcmd Runs before each command gets executed.
 
-		   > alias postcmd  'echo -n "^[]2\;\!#:q^G"'
+		   &gt alias postcmd  'echo -n "^[]2\;\!#:q^G"'
 
 	       then  executing	vi  foo.c  will  put the command string in the
 	       xterm title bar.
@@ -3023,7 +3025,7 @@ REFERENCE
        continue_args (+)
 	       Same as continue, but the shell will execute:
 
-		   echo `pwd` $argv > ~/.<cmd>_pause; %<cmd>
+		   echo `pwd` $argv &gt ~/.&ltcmd&gt_pause; %&ltcmd&gt
 
        correct (+)
 	       If set to `cmd', commands are automatically spelling-corrected.
@@ -3067,7 +3069,7 @@ REFERENCE
 	       following format, it enables display and  editing  of  original
 	       multi-byte code format:
 
-		   > set dspmbyte = 0000....(256 bytes)....0000
+		   &gt set dspmbyte = 0000....(256 bytes)....0000
 
 	       The table requires just 256 bytes.  Each character of 256 char-
 	       acters corresponds (from left to  right)  to  the  ASCII  codes
@@ -3135,7 +3137,7 @@ REFERENCE
        ellipsis (+)
 	       If set, the `%c'/`%.' and `%C' prompt sequences (see the prompt
 	       shell variable) indicate skipped directories with  an  ellipsis
-	       (`...')	instead of `/<skipped>'.
+	       (`...')	instead of `/&ltskipped&gt'.
 
        fignore (+)
 	       Lists file name suffixes to be ignored by completion.
@@ -3318,7 +3320,7 @@ REFERENCE
 
        noclobber
 	       If set, restrictions are placed on output redirection to insure
-	       that  files  are not accidentally destroyed and that `>>' redi-
+	       that  files  are not accidentally destroyed and that `&gt&gt' redi-
 	       rections  refer	to  existing  files,  as  described   in   the
 	       Input/output section.
 
@@ -3393,7 +3395,7 @@ REFERENCE
 		   The trailing component of the current working directory, or
 		   n  trailing	components if a digit n is given.  If n begins
 		   with `0', the number  of  skipped  components  precede  the
-		   trailing  component(s)  in the format `/<skipped>trailing'.
+		   trailing  component(s)  in the format `/&ltskipped&gttrailing'.
 		   If the ellipsis shell variable is set,  skipped  components
 		   are	represented  by  an  ellipsis  so  the	whole  becomes
 		   `...trailing'.  `~' substitution is done as in `%~'	above,
@@ -3434,7 +3436,7 @@ REFERENCE
 		   the end of the line.
 	       %$  Expands the shell or environment variable name  immediately
 		   after the `$'.
-	       %#  `>'	(or the first character of the promptchars shell vari-
+	       %#  `&gt'	(or the first character of the promptchars shell vari-
 		   able) for normal users, `#' (or  the  second  character  of
 		   promptchars) for the superuser.
 	       %{string%}
@@ -3453,7 +3455,7 @@ REFERENCE
 	       The  bold,  standout  and underline sequences are often used to
 	       distinguish a superuser shell.  For example,
 
-		   > set prompt = "%m [%h] %B[%@]%b [%/] you rang? "
+		   &gt set prompt = "%m [%h] %B[%@]%b [%/] you rang? "
 		   tut [37] [2:54pm] [/usr/accts/sys] you rang? _
 
 	       If `%t', `%@', `%T', `%p', or `%P' is used, and noding  is  not
@@ -3472,7 +3474,7 @@ REFERENCE
 	       The  string  with  which  to  prompt  when confirming automatic
 	       spelling correction.  The same format sequences may be used  as
 	       in  prompt  (q.v.);  note the variable meaning of `%R'.	Set by
-	       default to `CORRECT>%R (y|n|e|a)? ' in interactive shells.
+	       default to `CORRECT&gt%R (y|n|e|a)? ' in interactive shells.
 
        promptchars (+)
 	       If  set	(to  a	two-character  string),  the  `%#'  formatting
@@ -3571,44 +3573,44 @@ REFERENCE
 	       Some examples are in order.  First,  let's  set	up  some  play
 	       directories:
 
-		   > cd /tmp
-		   > mkdir from from/src to
-		   > ln -s from/src to/dst
+		   &gt cd /tmp
+		   &gt mkdir from from/src to
+		   &gt ln -s from/src to/dst
 
 	       Here's the behavior with symlinks unset,
 
-		   > cd /tmp/to/dst; echo $cwd
+		   &gt cd /tmp/to/dst; echo $cwd
 		   /tmp/to/dst
-		   > cd ..; echo $cwd
+		   &gt cd ..; echo $cwd
 		   /tmp/from
 
 	       here's the behavior with symlinks set to `chase',
 
-		   > cd /tmp/to/dst; echo $cwd
+		   &gt cd /tmp/to/dst; echo $cwd
 		   /tmp/from/src
-		   > cd ..; echo $cwd
+		   &gt cd ..; echo $cwd
 		   /tmp/from
 
 	       here's the behavior with symlinks set to `ignore',
 
-		   > cd /tmp/to/dst; echo $cwd
+		   &gt cd /tmp/to/dst; echo $cwd
 		   /tmp/to/dst
-		   > cd ..; echo $cwd
+		   &gt cd ..; echo $cwd
 		   /tmp/to
 
 	       and here's the behavior with symlinks set to `expand'.
 
-		   > cd /tmp/to/dst; echo $cwd
+		   &gt cd /tmp/to/dst; echo $cwd
 		   /tmp/to/dst
-		   > cd ..; echo $cwd
+		   &gt cd ..; echo $cwd
 		   /tmp/to
-		   > cd /tmp/to/dst; echo $cwd
+		   &gt cd /tmp/to/dst; echo $cwd
 		   /tmp/to/dst
-		   > cd ".."; echo $cwd
+		   &gt cd ".."; echo $cwd
 		   /tmp/from
-		   > /bin/echo ..
+		   &gt /bin/echo ..
 		   /tmp/to
-		   > /bin/echo ".."
+		   &gt /bin/echo ".."
 		   ..
 
 	       Note  that  `expand'  expansion 1) works just like `ignore' for
@@ -3713,7 +3715,7 @@ REFERENCE
 	       kan   Kanji is used if appropriate  according  to  locale  set-
 		     tings, unless the nokanji shell variable is set
 	       sm    The system's malloc(3) is used
-	       hb    The `#!<program> <args>' convention is emulated when exe-
+	       hb    The `#!&ltprogram&gt &ltargs&gt' convention is emulated when exe-
 		     cuting shell scripts
 	       ng    The newgrp builtin is available
 	       rh    The shell attempts  to  set  the  REMOTEHOST  environment
@@ -3854,9 +3856,9 @@ ENVIRONMENT
 	       Delete.	In addition, the ^[ escape character can  be  used  to
 	       override the default interpretation of ^[, ^, : and =.
 
-	       Each  file will be written as <lc> <color-code> <rc> <filename>
-	       <ec>.  If the <ec> code is undefined, the  sequence  <lc>  <no>
-	       <rc>  will  be used instead.  This is generally more convenient
+	       Each  file will be written as &ltlc&gt &ltcolor-code&gt &ltrc&gt &ltfilename&gt
+	       &ltec&gt.  If the &ltec&gt code is undefined, the  sequence  &ltlc&gt  &ltno&gt
+	       &ltrc&gt  will  be used instead.  This is generally more convenient
 	       to use, but less general.  The left, right and  end  codes  are
 	       provided  so  you don't have to type common parts over and over
 	       again and to support weird terminals; you  will	generally  not
@@ -3971,7 +3973,7 @@ FILES
 		       its equivalent.
        /bin/sh	       Used to interpret shell scripts	not  starting  with  a
 		       `#'.
-       /tmp/sh*        Temporary file for `<<'.
+       /tmp/sh*        Temporary file for `&lt&lt'.
        /etc/passwd     Source of home directories for `~name' substitutions.
 
        The  order  in which startup files are read may differ if the shell was
@@ -4267,6 +4269,6 @@ THANKS TO
 
 
 Astron 6.17.00			 10 July 2009			       TCSH(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

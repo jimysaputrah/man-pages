@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This document describes the interface of DBI::DBD::SqlEngine for DBD..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBI::DBD::SqlEngine::Developers - Developers documentation for</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBI::DBD::SqlEngine::DUseroContributed Perl DBI::DBD::SqlEngine::Developers(3)
 
 
@@ -24,9 +26,9 @@ SYNOPSIS
 	   sub driver
 	   {
 	       ...
-	       my $drh = $proto->SUPER::driver($attr);
+	       my $drh = $proto-&gtSUPER::driver($attr);
 	       ...
-	       return $drh->{class};
+	       return $drh-&gt{class};
 	   }
 
 	   sub CLONE { ... }
@@ -103,7 +105,7 @@ CLASSES
 	   Driver package, contains the methods DBI calls indirectly via DBI
 	   interface:
 
-	     DBI->connect ('DBI:DBM:', undef, undef, {})
+	     DBI-&gtconnect ('DBI:DBM:', undef, undef, {})
 
 	     # invokes
 	     package DBD::DBM::dr;
@@ -125,9 +127,9 @@ CLASSES
 	   Contains the methods which are called through DBI database handles
 	   ($dbh). e.g.,
 
-	     $sth = $dbh->prepare ("select * from foo");
+	     $sth = $dbh-&gtprepare ("select * from foo");
 	     # returns the f_encoding setting for table foo
-	     $dbh->csv_get_meta ("foo", "f_encoding");
+	     $dbh-&gtcsv_get_meta ("foo", "f_encoding");
 
 	   DBI::DBD::SqlEngine provides the typical methods required here.
 	   Developers who write DBI drivers based on DBI::DBD::SqlEngine need
@@ -136,7 +138,7 @@ CLASSES
        DBI::DBD::SqlEngine::st
 	   Contains the methods to deal with prepared statement handles. e.g.,
 
-	     $sth->execute () or die $sth->errstr;
+	     $sth-&gtexecute () or die $sth-&gterrstr;
 
    DBI::DBD::SqlEngine
        This is the main package containing the routines to initialize
@@ -152,7 +154,7 @@ CLASSES
 	 {
 	     my ( $class, $attr ) = @_;
 	     ...
-	     my $drh = $class->SUPER::driver( $attr );
+	     my $drh = $class-&gtSUPER::driver( $attr );
 	     ...
 	     return $drh;
 	 }
@@ -198,10 +200,10 @@ CLASSES
 	   prefix, the driver prefix (written as $drv_prefix) is added.
 
 	   The driver prefix is extracted from the attribute name and verified
-	   against "$dbh->{ $drv_prefix . "valid_attrs" }" (when it exists).
+	   against "$dbh-&gt{ $drv_prefix . "valid_attrs" }" (when it exists).
 	   If the requested attribute value is not listed as a valid
 	   attribute, this method croaks. If the attribute is valid and
-	   readonly (listed in "$dbh->{ $drv_prefix . "readonly_attrs" }" when
+	   readonly (listed in "$dbh-&gt{ $drv_prefix . "readonly_attrs" }" when
 	   it exists), a real copy of the attribute value is returned. So it's
 	   not possible to modify "f_valid_attrs" from outside of
 	   DBI::DBD::SqlEngine::db or a derived class.
@@ -251,9 +253,9 @@ CLASSES
 	   "sql_statement_version" when SQL::Statement is available.
 
 	   When the derived implementor class provides the attribute to
-	   validate attributes (e.g. "$dbh->{dbm_valid_attrs} = {...};") or
+	   validate attributes (e.g. "$dbh-&gt{dbm_valid_attrs} = {...};") or
 	   the attribute containing the immutable attributes (e.g.
-	   "$dbh->{dbm_readonly_attrs} = {...};"), the attributes
+	   "$dbh-&gt{dbm_readonly_attrs} = {...};"), the attributes
 	   "drv_valid_attrs", "drv_readonly_attrs" and "drv_version" are added
 	   (when available) to the list of valid and immutable attributes
 	   (where "drv_" is interpreted as the driver prefix).
@@ -276,8 +278,8 @@ CLASSES
 	   "get_${drv_prefix}versions", this is invoked and the return value
 	   of it is associated to the derived driver name:
 
-	       if (my $dgv = $dbh->{ImplementorClass}->can ("get_" . $drv_prefix . "versions") {
-		   (my $derived_driver = $dbh->{ImplementorClass}) =~ s/::db$//;
+	       if (my $dgv = $dbh-&gt{ImplementorClass}-&gtcan ("get_" . $drv_prefix . "versions") {
+		   (my $derived_driver = $dbh-&gt{ImplementorClass}) =~ s/::db$//;
 		   $versions{$derived_driver} = &$dgv ($dbh, $table);
 	       }
 
@@ -382,8 +384,8 @@ CLASSES
 AUTHOR
        The module DBI::DBD::SqlEngine is currently maintained by
 
-       H.Merijn Brand < h.m.brand at xs4all.nl > and Jens Rehsack  < rehsack
-       at googlemail.com >
+       H.Merijn Brand &lt h.m.brand at xs4all.nl &gt and Jens Rehsack  &lt rehsack
+       at googlemail.com &gt
 
 COPYRIGHT AND LICENSE
        Copyright (C) 2010 by H.Merijn Brand & Jens Rehsack
@@ -397,6 +399,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2010-08-30DBI::DBD::SqlEngine::Developers(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

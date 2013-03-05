@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="A class for parsing in and manipulating RFC-822 message headers, with..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>MIME::Head - MIME message header (a subclass of Mail::Header)</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 MIME::Head(3)	      User Contributed Perl Documentation	 MIME::Head(3)
 
 
@@ -24,70 +26,70 @@ SYNOPSIS
 
    Construction
 	   ### Create a new, empty header, and populate it manually:
-	   $head = MIME::Head->new;
-	   $head->replace('content-type', 'text/plain; charset=US-ASCII');
-	   $head->replace('content-length', $len);
+	   $head = MIME::Head-&gtnew;
+	   $head-&gtreplace('content-type', 'text/plain; charset=US-ASCII');
+	   $head-&gtreplace('content-length', $len);
 
 	   ### Parse a new header from a filehandle:
-	   $head = MIME::Head->read(\*STDIN);
+	   $head = MIME::Head-&gtread(\*STDIN);
 
 	   ### Parse a new header from a file, or a readable pipe:
-	   $testhead = MIME::Head->from_file("/tmp/test.hdr");
-	   $a_b_head = MIME::Head->from_file("cat a.hdr b.hdr |");
+	   $testhead = MIME::Head-&gtfrom_file("/tmp/test.hdr");
+	   $a_b_head = MIME::Head-&gtfrom_file("cat a.hdr b.hdr |");
 
    Output
 	   ### Output to filehandle:
-	   $head->print(\*STDOUT);
+	   $head-&gtprint(\*STDOUT);
 
 	   ### Output as string:
-	   print STDOUT $head->as_string;
-	   print STDOUT $head->stringify;
+	   print STDOUT $head-&gtas_string;
+	   print STDOUT $head-&gtstringify;
 
    Getting field contents
 	   ### Is this a reply?
-	   $is_reply = 1 if ($head->get('Subject') =~ /^Re: /);
+	   $is_reply = 1 if ($head-&gtget('Subject') =~ /^Re: /);
 
 	   ### Get receipt information:
-	   print "Last received from: ", $head->get('Received', 0);
-	   @all_received = $head->get('Received');
+	   print "Last received from: ", $head-&gtget('Received', 0);
+	   @all_received = $head-&gtget('Received');
 
 	   ### Print the subject, or the empty string if none:
-	   print "Subject: ", $head->get('Subject',0);
+	   print "Subject: ", $head-&gtget('Subject',0);
 
 	   ### Too many hops?  Count 'em and see!
-	   if ($head->count('Received') > 5) { ...
+	   if ($head-&gtcount('Received') &gt 5) { ...
 
 	   ### Test whether a given field exists
-	   warn "missing subject!" if (! $head->count('subject'));
+	   warn "missing subject!" if (! $head-&gtcount('subject'));
 
    Setting field contents
 	   ### Declare this to be an HTML header:
-	   $head->replace('Content-type', 'text/html');
+	   $head-&gtreplace('Content-type', 'text/html');
 
    Manipulating field contents
 	   ### Get rid of internal newlines in fields:
-	   $head->unfold;
+	   $head-&gtunfold;
 
 	   ### Decode any Q- or B-encoded-text in fields (DEPRECATED):
-	   $head->decode;
+	   $head-&gtdecode;
 
    Getting high-level MIME information
 	   ### Get/set a given MIME attribute:
-	   unless ($charset = $head->mime_attr('content-type.charset')) {
-	       $head->mime_attr("content-type.charset" => "US-ASCII");
+	   unless ($charset = $head-&gtmime_attr('content-type.charset')) {
+	       $head-&gtmime_attr("content-type.charset" =&gt "US-ASCII");
 	   }
 
 	   ### The content type (e.g., "text/html"):
-	   $mime_type	  = $head->mime_type;
+	   $mime_type	  = $head-&gtmime_type;
 
 	   ### The content transfer encoding (e.g., "quoted-printable"):
-	   $mime_encoding = $head->mime_encoding;
+	   $mime_encoding = $head-&gtmime_encoding;
 
 	   ### The recommended name when extracted:
-	   $file_name	  = $head->recommended_filename;
+	   $file_name	  = $head-&gtrecommended_filename;
 
 	   ### The boundary text, for multipart messages:
-	   $boundary	  = $head->multipart_boundary;
+	   $boundary	  = $head-&gtmultipart_boundary;
 
 DESCRIPTION
        A class for parsing in and manipulating RFC-822 message headers, with
@@ -108,13 +110,13 @@ PUBLIC INTERFACE
 	   filehandle.	The "file" will be opened, read, and then closed:
 
 	       ### Create a new header by parsing in a file:
-	       my $head = MIME::Head->from_file("/tmp/test.hdr");
+	       my $head = MIME::Head-&gtfrom_file("/tmp/test.hdr");
 
 	   Since this method can function as either a class constructor or an
 	   instance initializer, the above is exactly equivalent to:
 
 	       ### Create a new header by parsing in a file:
-	       my $head = MIME::Head->new->from_file("/tmp/test.hdr");
+	       my $head = MIME::Head-&gtnew-&gtfrom_file("/tmp/test.hdr");
 
 	   On success, the object will be returned; on failure, the undefined
 	   value.
@@ -135,7 +137,7 @@ PUBLIC INTERFACE
 	   "\*STDIN":
 
 	       ### Create a new header by parsing in STDIN:
-	       $head->read(\*STDIN);
+	       $head-&gtread(\*STDIN);
 
 	   On success, the self object will be returned; on failure, a false
 	   value.
@@ -159,7 +161,7 @@ PUBLIC INTERFACE
 	   TAG, given by TEXT:
 
 	       ### Add the trace information:
-	       $head->add('Received',
+	       $head-&gtadd('Received',
 			  'from eryq.pr.mcs.net by gonzo.net with smtp');
 
 	   Normally, the new occurence will be appended to the existing
@@ -178,7 +180,7 @@ PUBLIC INTERFACE
 	   exists:
 
 	       ### Was a "Subject:" field given?
-	       $subject_was_given = $head->count('subject');
+	       $subject_was_given = $head-&gtcount('subject');
 
 	   The TAG is treated in a case-insensitive manner.  This method
 	   returns some false value if the field doesn't exist, and some true
@@ -206,9 +208,9 @@ PUBLIC INTERFACE
 	   What this method does.  For an example, let's consider a valid
 	   email header you might get:
 
-	       From: =?US-ASCII?Q?Keith_Moore?= <moore@cs.utk.edu>
-	       To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld@dkuug.dk>
-	       CC: =?ISO-8859-1?Q?Andr=E9_?= Pirard <PIRARD@vm1.ulg.ac.be>
+	       From: =?US-ASCII?Q?Keith_Moore?= &ltmoore@cs.utk.edu&gt
+	       To: =?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= &ltkeld@dkuug.dk&gt
+	       CC: =?ISO-8859-1?Q?Andr=E9_?= Pirard &ltPIRARD@vm1.ulg.ac.be&gt
 	       Subject: =?ISO-8859-1?B?SWYgeW91IGNhbiByZWFkIHRoaXMgeW8=?=
 		=?ISO-8859-2?B?dSB1bmRlcnN0YW5kIHRoZSBleGFtcGxlLg==?=
 		=?US-ASCII?Q?.._cool!?=
@@ -216,9 +218,9 @@ PUBLIC INTERFACE
 	   That basically decodes to (sorry, I can only approximate the Latin
 	   characters with 7 bit sequences /o and 'e):
 
-	       From: Keith Moore <moore@cs.utk.edu>
-	       To: Keld J/orn Simonsen <keld@dkuug.dk>
-	       CC: Andr'e  Pirard <PIRARD@vm1.ulg.ac.be>
+	       From: Keith Moore &ltmoore@cs.utk.edu&gt
+	       To: Keld J/orn Simonsen &ltkeld@dkuug.dk&gt
+	       CC: Andr'e  Pirard &ltPIRARD@vm1.ulg.ac.be&gt
 	       Subject: If you can read this you understand the example... cool!
 
 	   Note: currently, the decodings are done without regard to the
@@ -243,8 +245,8 @@ PUBLIC INTERFACE
 	   named TAG.
 
 	       ### Remove some MIME information:
-	       $head->delete('MIME-Version');
-	       $head->delete('Content-type');
+	       $head-&gtdelete('MIME-Version');
+	       $head-&gtdelete('Content-type');
 
        get TAG,[INDEX]
 	   Instance method, inherited.	Get the contents of field TAG.
@@ -253,20 +255,20 @@ PUBLIC INTERFACE
 	   or undef if not present:
 
 	       ### Print the first and last 'Received:' entries (explicitly):
-	       print "First, or most recent: ", $head->get('received', 0);
-	       print "Last, or least recent: ", $head->get('received',-1);
+	       print "First, or most recent: ", $head-&gtget('received', 0);
+	       print "Last, or least recent: ", $head-&gtget('received',-1);
 
 	   If no INDEX is given, but invoked in a scalar context, then INDEX
 	   simply defaults to 0:
 
 	       ### Get the first 'Received:' entry (implicitly):
-	       my $most_recent = $head->get('received');
+	       my $most_recent = $head-&gtget('received');
 
 	   If no INDEX is given, and invoked in an array context, then all
 	   occurences of the field are returned:
 
 	       ### Get all 'Received:' entries:
-	       my @all_received = $head->get('received');
+	       my @all_received = $head-&gtget('received');
 
 	   NOTE: The header(s) returned may end with a newline.  If you don't
 	   want this, then chomp the return value.
@@ -276,13 +278,13 @@ PUBLIC INTERFACE
 	   or the empty list if the field is not present:
 
 	       ### How did it get here?
-	       @history = $head->get_all('Received');
+	       @history = $head-&gtget_all('Received');
 
 	   Note: I had originally experimented with having "get()" return all
 	   occurences when invoked in an array context... but that causes a
 	   lot of accidents when you get careless and do stuff like this:
 
-	       print "\u$field: ", $head->get($field);
+	       print "\u$field: ", $head-&gtget($field);
 
 	   It also made the intuitive behaviour unclear if the INDEX argument
 	   was given in an array context.  So I opted for an explicit approach
@@ -335,9 +337,9 @@ PUBLIC INTERFACE
 	   A quick-and-easy interface to set/get the attributes in structured
 	   MIME fields:
 
-	       $head->mime_attr("content-type"	       => "text/html");
-	       $head->mime_attr("content-type.charset" => "US-ASCII");
-	       $head->mime_attr("content-type.name"    => "homepage.html");
+	       $head-&gtmime_attr("content-type"	       =&gt "text/html");
+	       $head-&gtmime_attr("content-type.charset" =&gt "US-ASCII");
+	       $head-&gtmime_attr("content-type.name"    =&gt "homepage.html");
 
 	   This would cause the final output to look something like this:
 
@@ -349,13 +351,13 @@ PUBLIC INTERFACE
 	   Giving VALUE as undefined will cause the contents of the named
 	   subfield to be deleted:
 
-	       $head->mime_attr("content-type.charset" => undef);
+	       $head-&gtmime_attr("content-type.charset" =&gt undef);
 
 	   Supplying no VALUE argument just returns the attribute's value, or
 	   undefined if it isn't there:
 
-	       $type = $head->mime_attr("content-type");      ### text/html
-	       $name = $head->mime_attr("content-type.name"); ### homepage.html
+	       $type = $head-&gtmime_attr("content-type");      ### text/html
+	       $name = $head-&gtmime_attr("content-type.name"); ### homepage.html
 
 	   In all cases, the new/current value is returned.
 
@@ -430,9 +432,9 @@ NOTES
 	       like [email] headers; so to speak, the MIME::Head [simply stores]
 	       the attributes of a complex object, e.g.:
 
-		   new MIME::Head type => "text/plain",
-				  charset => ...,
-				  disposition => ..., ... ;
+		   new MIME::Head type =&gt "text/plain",
+				  charset =&gt ...,
+				  disposition =&gt ..., ... ;
 
 	   I agree in principle, but (alas and dammit) RFC 2045 says
 	   otherwise.  RFC 2045 [MIME] headers are a syntactic subset of
@@ -441,9 +443,9 @@ NOTES
 	   In my mind's eye, I see an abstract class, call it MIME::Attrs,
 	   which does what Achim suggests... so you could say:
 
-		my $attrs = new MIME::Attrs type => "text/plain",
-					    charset => ...,
-					    disposition => ..., ... ;
+		my $attrs = new MIME::Attrs type =&gt "text/plain",
+					    charset =&gt ...,
+					    disposition =&gt ..., ... ;
 
 	   We could even make it a superclass of MIME::Head: that way,
 	   MIME::Head would have to implement its interface, and allow itself
@@ -474,8 +476,8 @@ NOTES
 		    (8.6.12/8.6.12) id RAA28069;
 		    Thu, 21 Dec 1995 17:27:54 -0500
 	       Date: Thu, 21 Dec 1995 17:27:54 -0500
-	       From: Eryq <eryq@rhine.gsfc.nasa.gov>
-	       Message-Id: <199512212227.RAA28069@rhine.gsfc.nasa.gov>
+	       From: Eryq &lteryq@rhine.gsfc.nasa.gov&gt
+	       Message-Id: &lt199512212227.RAA28069@rhine.gsfc.nasa.gov&gt
 	       To: eryq@eryq.pr.mcs.net
 	       Subject: Stuff and things
 
@@ -506,6 +508,6 @@ AUTHOR
 
 
 perl v5.12.4			  2011-03-08			 MIME::Head(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

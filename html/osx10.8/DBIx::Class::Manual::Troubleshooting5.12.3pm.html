@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>DBIx::Class::Manual::Troubleshooting - Got a problem? Shoot it.</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 DBIx::Class::Manual::TUserlContributed)DBIx::Class::Manual::Troubleshooting(3)
 
 
@@ -17,7 +19,7 @@ NAME
 
    "Can't locate storage blabla"
        You're trying to make a query on a non-connected schema. Make sure you
-       got the current resultset from $schema->resultset('Artist') on a schema
+       got the current resultset from $schema-&gtresultset('Artist') on a schema
        object you got back from connect().
 
    Tracing SQL
@@ -26,13 +28,13 @@ NAME
 
 	 export DBIC_TRACE=1
 
-       Alternatively use the "storage->debug" class method:-
+       Alternatively use the "storage-&gtdebug" class method:-
 
-	 $schema->storage->debug(1);
+	 $schema-&gtstorage-&gtdebug(1);
 
        To send the output somewhere else set debugfh:-
 
-	 $schema->storage->debugfh(IO::File->new('/tmp/trace.out', 'w');
+	 $schema-&gtstorage-&gtdebugfh(IO::File-&gtnew('/tmp/trace.out', 'w');
 
        Alternatively you can do this with the environment variable, too:-
 
@@ -61,31 +63,31 @@ NAME
        declaration is correct. For example, for a schema " MySchema " you need
        to specify a fully qualified namespace: " package MySchema::MyTable; ".
 
-   syntax error at or near "<something>" ...
+   syntax error at or near "&ltsomething&gt" ...
        This can happen if you have a relation whose name is a word reserved by
        your database, e.g. "user":
 
 	 package My::Schema::User;
 	 ...
-	 __PACKAGE__->table('users');
-	 __PACKAGE__->add_columns(qw/ id name /);
-	 __PACKAGE__->set_primary_key('id');
+	 __PACKAGE__-&gttable('users');
+	 __PACKAGE__-&gtadd_columns(qw/ id name /);
+	 __PACKAGE__-&gtset_primary_key('id');
 	 ...
 	 1;
 
 	 package My::Schema::ACL;
 	 ...
-	 __PACKAGE__->table('acl');
-	 __PACKAGE__->add_columns(qw/ user_id /);
-	 __PACKAGE__->belongs_to( 'user' => 'My::Schema::User', 'user_id' );
+	 __PACKAGE__-&gttable('acl');
+	 __PACKAGE__-&gtadd_columns(qw/ user_id /);
+	 __PACKAGE__-&gtbelongs_to( 'user' =&gt 'My::Schema::User', 'user_id' );
 	 ...
 	 1;
 
-	 $schema->resultset('ACL')->search(
+	 $schema-&gtresultset('ACL')-&gtsearch(
 	   {},
 	   {
-	     join => [qw/ user /],
-	     '+select' => [ 'user.name' ]
+	     join =&gt [qw/ user /],
+	     '+select' =&gt [ 'user.name' ]
 	   }
 	 );
 
@@ -110,12 +112,12 @@ NAME
        This can happen if you are still using the obsolete order hack, and
        also happen to turn on SQL-quoting.
 
-	 $rs->search( {}, { order_by => [ 'name DESC' ] } );
+	 $rs-&gtsearch( {}, { order_by =&gt [ 'name DESC' ] } );
 
-       Since DBIx::Class >= 0.08100 and SQL::Abstract >= 1.50 the above should
+       Since DBIx::Class &gt= 0.08100 and SQL::Abstract &gt= 1.50 the above should
        be written as:
 
-	 $rs->search( {}, { order_by => { -desc => 'name' } } );
+	 $rs-&gtsearch( {}, { order_by =&gt { -desc =&gt 'name' } } );
 
        For more ways to express order clauses refer to "ORDER_BY_CLAUSES" in
        SQL::Abstract
@@ -149,10 +151,10 @@ NAME
        suite, in the "t/99rh_perl_perf_bug.t" file.
 
        Further information on this issue can be found in
-       <https://bugzilla.redhat.com/show_bug.cgi?id=379791>,
-       <https://bugzilla.redhat.com/show_bug.cgi?id=460308> and
+       &lthttps://bugzilla.redhat.com/show_bug.cgi?id=379791&gt,
+       &lthttps://bugzilla.redhat.com/show_bug.cgi?id=460308&gt and
        http://rhn.redhat.com/errata/RHBA-2008-0876.html
-       <http://rhn.redhat.com/errata/RHBA-2008-0876.html>
+       &lthttp://rhn.redhat.com/errata/RHBA-2008-0876.html&gt
 
    Excessive Memory Allocation with TEXT/BLOB/etc. Columns and Large
        LongReadLen
@@ -168,6 +170,6 @@ NAME
 
 
 perl v5.12.4			  2010-DBIx::Class::Manual::Troubleshooting(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

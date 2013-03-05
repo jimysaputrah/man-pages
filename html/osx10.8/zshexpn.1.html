@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The  following types of expansions are performed in the indicated order..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>zshexpn - zsh expansion and substitution</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 ZSHEXPN(1)							    ZSHEXPN(1)
 
 
@@ -298,8 +300,8 @@ HISTORY EXPANSION
 	      the `:'; opening parentheses are handled specially, see above.
 
 PROCESS SUBSTITUTION
-       Each  part  of  a  command  argument  that  takes  the  form `<(list)',
-       `>(list)' or `=(list)' is subject to process substitution.  The expres-
+       Each  part  of  a  command  argument  that  takes  the  form `&lt(list)',
+       `&gt(list)' or `=(list)' is subject to process substitution.  The expres-
        sion may be preceeded or followed by other strings except that, to pre-
        vent clashes with commonly occurring strings  and  patterns,  the  last
        form  must  occur at the start of a command argument, and the forms are
@@ -307,38 +309,38 @@ PROCESS SUBSTITUTION
        Process	substitutions  may be used following redirection operators; in
        this case, the substitution must appear with no trailing string.
 
-       In the case of the < or > forms, the shell runs the commands in list as
+       In the case of the &lt or &gt forms, the shell runs the commands in list as
        a  subprocess of the job executing the shell command line.  If the sys-
        tem supports the /dev/fd mechanism, the command argument is the name of
        the  device  file corresponding to a file descriptor; otherwise, if the
        system supports named pipes (FIFOs), the command  argument  will  be  a
-       named  pipe.   If the form with > is selected then writing on this spe-
-       cial file will provide input for list.  If < is	used,  then  the  file
+       named  pipe.   If the form with &gt is selected then writing on this spe-
+       cial file will provide input for list.  If &lt is	used,  then  the  file
        passed  as  an  argument  will  be  connected to the output of the list
        process.  For example,
 
-	      paste <(cut -f1 file1) <(cut -f3 file2) |
-	      tee >(process1) >(process2) >/dev/null
+	      paste &lt(cut -f1 file1) &lt(cut -f3 file2) |
+	      tee &gt(process1) &gt(process2) &gt/dev/null
 
        cuts fields 1 and 3 from the files file1 and file2 respectively, pastes
        the  results  together,	and  sends  it	to  the processes process1 and
        process2.
 
-       If =(...) is used instead of <(...), then the file passed as  an  argu-
+       If =(...) is used instead of &lt(...), then the file passed as  an  argu-
        ment  will be the name of a temporary file containing the output of the
-       list process.  This may be used instead of the <  form  for  a  program
+       list process.  This may be used instead of the &lt  form  for  a  program
        that expects to lseek (see lseek(2)) on the input file.
 
-       There is an optimisation for substitutions of the form =(<<<arg), where
-       arg is a single-word argument to the here-string redirection <<<.  This
+       There is an optimisation for substitutions of the form =(&lt&lt&ltarg), where
+       arg is a single-word argument to the here-string redirection &lt&lt&lt.  This
        form produces a file name containing the value of arg after any substi-
        tutions have been performed.  This is handled entirely within the  cur-
        rent  shell.   This  is	effectively  the  reverse  of the special form
-       $(<arg) which treats arg as a file name and replaces it with the file's
+       $(&ltarg) which treats arg as a file name and replaces it with the file's
        contents.
 
        The = form is useful as both the /dev/fd and the named pipe implementa-
-       tion of <(...) have drawbacks.  In the former case, some programmes may
+       tion of &lt(...) have drawbacks.  In the former case, some programmes may
        automatically  close  the  file descriptor in question before examining
        the file on the command line, particularly if  this  is	necessary  for
        security  reasons such as when the programme is running setuid.	In the
@@ -352,25 +354,25 @@ PROCESS SUBSTITUTION
        Also note that the previous example can be  more  compactly  and  effi-
        ciently written (provided the MULTIOS option is set) as:
 
-	      paste <(cut -f1 file1) <(cut -f3 file2) \
-	      > >(process1) > >(process2)
+	      paste &lt(cut -f1 file1) &lt(cut -f3 file2) \
+	      &gt &gt(process1) &gt &gt(process2)
 
        The  shell  uses  pipes	instead  of  FIFOs to implement the latter two
        process substitutions in the above example.
 
-       There is an additional problem with >(process); when this  is  attached
+       There is an additional problem with &gt(process); when this  is  attached
        to  an  external command, the parent shell does not wait for process to
        finish and hence an immediately following command cannot  rely  on  the
        results	being  complete.   The	problem  and  solution are the same as
        described in the section MULTIOS in zshmisc(1).	Hence in a  simplified
        version of the example above:
 
-	      paste <(cut -f1 file1) <(cut -f3 file2) > >(process)
+	      paste &lt(cut -f1 file1) &lt(cut -f3 file2) &gt &gt(process)
 
        (note that no MULTIOS are involved), process will be run asynchronously
        as far as the parent shell is concerned.  The workaround is:
 
-	      { paste <(cut -f1 file1) <(cut -f3 file2) } > >(process)
+	      { paste &lt(cut -f1 file1) &lt(cut -f3 file2) } &gt &gt(process)
 
        The extra processes here are spawned from the parent shell  which  will
        wait for their completion.
@@ -854,7 +856,7 @@ PARAMETER EXPANSION
 
        The following flags (except p) are followed by one or more arguments as
        shown.  Any character, or the matching pairs `(...)', `{...}', `[...]',
-       or `<...>', may be used in place of a colon  as	delimiters,  but  note
+       or `&lt...&gt', may be used in place of a colon  as	delimiters,  but  note
        that when a flag takes more than one argument, a matched pair of delim-
        iters must surround each argument.
 
@@ -1174,9 +1176,9 @@ PARAMETER EXPANSION
 
    Examples
        The  flag  f  is  useful  to split a double-quoted substitution line by
-       line.  For example, ${(f)"$(<file)"} substitutes the contents  of  file
+       line.  For example, ${(f)"$(&ltfile)"} substitutes the contents  of  file
        divided	so  that each line is an element of the resulting array.  Com-
-       pare this with the effect of $(<file) alone, which divides the file  up
+       pare this with the effect of $(&ltfile) alone, which divides the file  up
        by words, or the same inside double quotes, which makes the entire con-
        tent of the file a single string.
 
@@ -1219,7 +1221,7 @@ COMMAND SUBSTITUTION
        its  standard  output, with any trailing newlines deleted.  If the sub-
        stitution is not enclosed in double quotes, the output is  broken  into
        words  using  the  IFS parameter.  The substitution `$(cat foo)' may be
-       replaced by the equivalent but faster `$(<foo)'.  In  either  case,  if
+       replaced by the equivalent but faster `$(&ltfoo)'.  In  either  case,  if
        the  option GLOB_SUBST is set, the output is eligible for filename gen-
        eration.
 
@@ -1418,7 +1420,7 @@ FILENAME EXPANSION
 
 FILENAME GENERATION
        If  a  word contains an unquoted instance of one of the characters `*',
-       `(', `|', `<', `[', or `?', it is regarded as a	pattern  for  filename
+       `(', `|', `&lt', `[', or `?', it is regarded as a	pattern  for  filename
        generation,  unless  the  GLOB  option  is unset.  If the EXTENDED_GLOB
        option is set, the `^' and `#' characters also denote a pattern; other-
        wise they are not treated specially by the shell.
@@ -1519,19 +1521,19 @@ FILENAME GENERATION
        [!...] Like [...], except that it matches any character which is not in
 	      the given set.
 
-       <[x]-[y]>
+       &lt[x]-[y]&gt
 	      Matches any number in the range x to y,  inclusive.   Either  of
 	      the  numbers  may be omitted to make the range open-ended; hence
-	      `<->' matches any number.  To match individual digits, the [...]
+	      `&lt-&gt' matches any number.  To match individual digits, the [...]
 	      form is more efficient.
 
 	      Be  careful  when  using other wildcards adjacent to patterns of
-	      this form; for example, <0-9>* will actually  match  any	number
-	      whatsoever  at  the  start of the string, since the `<0-9>' will
+	      this form; for example, &lt0-9&gt* will actually  match  any	number
+	      whatsoever  at  the  start of the string, since the `&lt0-9&gt' will
 	      match the first digit, and the `*' will match any others.   This
 	      is  a  trap  for the unwary, but is in fact an inevitable conse-
 	      quence of the rule that the longest possible match  always  suc-
-	      ceeds.   Expressions  such  as  `<0-9>[^[:digit:]]*' can be used
+	      ceeds.   Expressions  such  as  `&lt0-9&gt[^[:digit:]]*' can be used
 	      instead.
 
        (...)  Matches the enclosed pattern.  This is used  for	grouping.   If
@@ -1600,7 +1602,7 @@ FILENAME GENERATION
        The precedence of the operators given above is (highest) `^', `/', `~',
        `|'  (lowest);  the remaining operators are simply treated from left to
        right as part of a string, with `#' and `##' applying to  the  shortest
-       possible  preceding unit (i.e. a character, `?', `[...]', `<...>', or a
+       possible  preceding unit (i.e. a character, `?', `[...]', `&lt...&gt', or a
        parenthesised expression).  As mentioned above, a `/' used as a	direc-
        tory  separator	may not appear inside parentheses, while a `|' must do
        so; in patterns used in other contexts than  filename  generation  (for
@@ -1942,8 +1944,8 @@ FILENAME GENERATION
 	      with `='.
 
 	      If the qualifier `f' is followed by any other character anything
-	      up  to the next matching character (`[', `{', and `<' match `]',
-	      `}', and `>' respectively, any other character  matches  itself)
+	      up  to the next matching character (`[', `{', and `&lt' match `]',
+	      `}', and `&gt' respectively, any other character  matches  itself)
 	      is  taken  as a list of comma-separated sub-specs. Each sub-spec
 	      may be either an octal number as described above or  a  list  of
 	      any of the characters `u', `g', `o', and `a', followed by a `=',
@@ -1977,8 +1979,8 @@ FILENAME GENERATION
 
 	      In  the  first  form,  the first character after the `e' will be
 	      used as a separator and anything up to the next matching separa-
-	      tor  will  be taken  as the string; `[', `{', and `<' match `]',
-	      `}', and `>', respectively, while any  other  character  matches
+	      tor  will  be taken  as the string; `[', `{', and `&lt' match `]',
+	      `}', and `&gt', respectively, while any  other  character  matches
 	      itself.  Note  that  expansions  must be quoted in the string to
 	      prevent them  from  being  expanded  before  globbing  is  done.
 	      string  is  then executed as shell code.	The string globqual is
@@ -2025,7 +2027,7 @@ FILENAME GENERATION
 	      specifies a user name: the character after the `u' will be taken
 	      as a separator and the string between it and the	next  matching
 	      separator will be taken as a user name.  The starting separators
-	      `[', `{', and `<' match the final separators `]', `}', and  `>',
+	      `[', `{', and `&lt' match the final separators `]', `}', and  `&gt',
 	      respectively;  any other character matches itself.  The selected
 	      files are those owned by this user.  For	example,  `u:foo:'  or
 	      `u[foo]' selects files owned by user `foo'.
@@ -2191,6 +2193,6 @@ FILENAME GENERATION
 
 
 zsh 4.3.11		       December 20, 2010		    ZSHEXPN(1)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

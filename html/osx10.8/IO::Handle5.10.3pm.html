@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content=""IO::Handle" is the base class for all other IO handle classes. It is..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>IO::Handle - supply object methods for I/O handles</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 IO::Handle(3pm)        Perl Programmers Reference Guide        IO::Handle(3pm)
 
 
@@ -19,19 +21,19 @@ SYNOPSIS
 	   use IO::Handle;
 
 	   $io = new IO::Handle;
-	   if ($io->fdopen(fileno(STDIN),"r")) {
-	       print $io->getline;
-	       $io->close;
+	   if ($io-&gtfdopen(fileno(STDIN),"r")) {
+	       print $io-&gtgetline;
+	       $io-&gtclose;
 	   }
 
 	   $io = new IO::Handle;
-	   if ($io->fdopen(fileno(STDOUT),"w")) {
-	       $io->print("Some text\n");
+	   if ($io-&gtfdopen(fileno(STDOUT),"w")) {
+	       $io-&gtprint("Some text\n");
 	   }
 
 	   # setvbuf is not available by default on Perls 5.8.0 and later.
 	   use IO::Handle '_IOLBF';
-	   $io->setvbuf($buffer_var, _IOLBF, 1024);
+	   $io-&gtsetvbuf($buffer_var, _IOLBF, 1024);
 
 	   undef $io;	    # automatically closes the file if it's open
 
@@ -62,92 +64,92 @@ METHODS
        supported "IO::Handle" methods, which are just front ends for the
        corresponding built-in functions:
 
-	   $io->close
-	   $io->eof
-	   $io->fcntl( FUNCTION, SCALAR )
-	   $io->fileno
-	   $io->format_write( [FORMAT_NAME] )
-	   $io->getc
-	   $io->ioctl( FUNCTION, SCALAR )
-	   $io->read ( BUF, LEN, [OFFSET] )
-	   $io->print ( ARGS )
-	   $io->printf ( FMT, [ARGS] )
-	   $io->say ( ARGS )
-	   $io->stat
-	   $io->sysread ( BUF, LEN, [OFFSET] )
-	   $io->syswrite ( BUF, [LEN, [OFFSET]] )
-	   $io->truncate ( LEN )
+	   $io-&gtclose
+	   $io-&gteof
+	   $io-&gtfcntl( FUNCTION, SCALAR )
+	   $io-&gtfileno
+	   $io-&gtformat_write( [FORMAT_NAME] )
+	   $io-&gtgetc
+	   $io-&gtioctl( FUNCTION, SCALAR )
+	   $io-&gtread ( BUF, LEN, [OFFSET] )
+	   $io-&gtprint ( ARGS )
+	   $io-&gtprintf ( FMT, [ARGS] )
+	   $io-&gtsay ( ARGS )
+	   $io-&gtstat
+	   $io-&gtsysread ( BUF, LEN, [OFFSET] )
+	   $io-&gtsyswrite ( BUF, [LEN, [OFFSET]] )
+	   $io-&gttruncate ( LEN )
 
        See perlvar for complete descriptions of each of the following
        supported "IO::Handle" methods.	All of them return the previous value
        of the attribute and takes an optional single argument that when given
        will set the value.  If no argument is given the previous value is
-       unchanged (except for $io->autoflush will actually turn ON autoflush by
+       unchanged (except for $io-&gtautoflush will actually turn ON autoflush by
        default).
 
-	   $io->autoflush ( [BOOL] )			     $|
-	   $io->format_page_number( [NUM] )		     $%
-	   $io->format_lines_per_page( [NUM] )		     $=
-	   $io->format_lines_left( [NUM] )		     $-
-	   $io->format_name( [STR] )			     $~
-	   $io->format_top_name( [STR] )		     $^
-	   $io->input_line_number( [NUM])		     $.
+	   $io-&gtautoflush ( [BOOL] )			     $|
+	   $io-&gtformat_page_number( [NUM] )		     $%
+	   $io-&gtformat_lines_per_page( [NUM] )		     $=
+	   $io-&gtformat_lines_left( [NUM] )		     $-
+	   $io-&gtformat_name( [STR] )			     $~
+	   $io-&gtformat_top_name( [STR] )		     $^
+	   $io-&gtinput_line_number( [NUM])		     $.
 
        The following methods are not supported on a per-filehandle basis.
 
-	   IO::Handle->format_line_break_characters( [STR] ) $:
-	   IO::Handle->format_formfeed( [STR])		     $^L
-	   IO::Handle->output_field_separator( [STR] )	     $,
-	   IO::Handle->output_record_separator( [STR] )      $\
+	   IO::Handle-&gtformat_line_break_characters( [STR] ) $:
+	   IO::Handle-&gtformat_formfeed( [STR])		     $^L
+	   IO::Handle-&gtoutput_field_separator( [STR] )	     $,
+	   IO::Handle-&gtoutput_record_separator( [STR] )      $\
 
-	   IO::Handle->input_record_separator( [STR] )	     $/
+	   IO::Handle-&gtinput_record_separator( [STR] )	     $/
 
        Furthermore, for doing normal I/O you might need these:
 
-       $io->fdopen ( FD, MODE )
+       $io-&gtfdopen ( FD, MODE )
 	   "fdopen" is like an ordinary "open" except that its first parameter
 	   is not a filename but rather a file handle name, an IO::Handle
 	   object, or a file descriptor number.  (For the documentation of the
 	   "open" method, see IO::File.)
 
-       $io->opened
+       $io-&gtopened
 	   Returns true if the object is currently a valid file descriptor,
 	   false otherwise.
 
-       $io->getline
-	   This works like <$io> described in "I/O Operators" in perlop except
+       $io-&gtgetline
+	   This works like &lt$io&gt described in "I/O Operators" in perlop except
 	   that it's more readable and can be safely called in a list context
 	   but still returns just one line.  If used as the conditional
 	   +within a "while" or C-style "for" loop, however, you will need to
-	   +emulate the functionality of <$io> with "defined($_ =
-	   $io->getline)".
+	   +emulate the functionality of &lt$io&gt with "defined($_ =
+	   $io-&gtgetline)".
 
-       $io->getlines
-	   This works like <$io> when called in a list context to read all the
+       $io-&gtgetlines
+	   This works like &lt$io&gt when called in a list context to read all the
 	   remaining lines in a file, except that it's more readable.  It will
 	   also croak() if accidentally called in a scalar context.
 
-       $io->ungetc ( ORD )
+       $io-&gtungetc ( ORD )
 	   Pushes a character with the given ordinal value back onto the given
 	   handle's input stream.  Only one character of pushback per handle
 	   is guaranteed.
 
-       $io->write ( BUF, LEN [, OFFSET ] )
+       $io-&gtwrite ( BUF, LEN [, OFFSET ] )
 	   This "write" is like "write" found in C, that is it is the opposite
 	   of read. The wrapper for the perl "write" function is called
 	   "format_write".
 
-       $io->error
+       $io-&gterror
 	   Returns a true value if the given handle has experienced any errors
 	   since it was opened or since the last call to "clearerr", or if the
 	   handle is invalid. It only returns false for a valid handle with no
 	   outstanding errors.
 
-       $io->clearerr
+       $io-&gtclearerr
 	   Clear the given handle's error indicator. Returns -1 if the handle
 	   is invalid, 0 otherwise.
 
-       $io->sync
+       $io-&gtsync
 	   "sync" synchronizes a file's in-memory state  with  that  on the
 	   physical medium. "sync" does not operate at the perlio api level,
 	   but operates on the file descriptor (similar to sysread, sysseek
@@ -157,18 +159,18 @@ METHODS
 	   implemented on all platforms. Returns "0 but true" on success,
 	   "undef" on error, "undef" for an invalid handle. See fsync(3c).
 
-       $io->flush
+       $io-&gtflush
 	   "flush" causes perl to flush any buffered data at the perlio api
 	   level.  Any unread data in the buffer will be discarded, and any
 	   unwritten data will be written to the underlying file descriptor.
 	   Returns "0 but true" on success, "undef" on error.
 
-       $io->printflush ( ARGS )
+       $io-&gtprintflush ( ARGS )
 	   Turns on autoflush, print ARGS and then restores the autoflush
 	   status of the "IO::Handle" object. Returns the return value from
 	   print.
 
-       $io->blocking ( [ BOOL ] )
+       $io-&gtblocking ( [ BOOL ] )
 	   If called with an argument "blocking" will turn on non-blocking IO
 	   if "BOOL" is false, and turn it off if "BOOL" is true.
 
@@ -202,7 +204,7 @@ METHODS
        Lastly, there is a special method for working under -T and setuid/gid
        scripts:
 
-       $io->untaint
+       $io-&gtuntaint
 	   Marks the object as taint-clean, and as such data read from it will
 	   also be considered taint-clean. Note that this is a very trusting
 	   action to take, and appropriate consideration for the data source
@@ -229,11 +231,11 @@ BUGS
        "IO::Handle" and inherit those methods.
 
 HISTORY
-       Derived from FileHandle.pm by Graham Barr <gbarr@pobox.com>
+       Derived from FileHandle.pm by Graham Barr &ltgbarr@pobox.com&gt
 
 
 
 perl v5.10.1			  2009-06-23		       IO::Handle(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

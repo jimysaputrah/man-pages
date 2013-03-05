@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Instances of the "Net::DNS::Resolver" class represent resolver objects...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Net::DNS::Resolver - DNS resolver class</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Net::DNS::Resolver(3) User Contributed Perl DocumentationNet::DNS::Resolver(3)
 
 
@@ -18,20 +20,20 @@ NAME
 SYNOPSIS
 	 use Net::DNS;
 
-	 my $res = Net::DNS::Resolver->new;
+	 my $res = Net::DNS::Resolver-&gtnew;
 
 	 # Perform a lookup, using the searchlist if appropriate.
-	 my $answer = $res->search('example.com');
+	 my $answer = $res-&gtsearch('example.com');
 
 	 # Perform a lookup, without the searchlist
-	 my $answer = $res->query('example.com', 'MX');
+	 my $answer = $res-&gtquery('example.com', 'MX');
 
 	 # Perform a lookup, without pre or post-processing
-	 my $answer = $res->send('example.com', 'MX', 'CH');
+	 my $answer = $res-&gtsend('example.com', 'MX', 'CH');
 
 	 # Send a prebuilt packet
-	 my $packet = Net::DNS::Packet->new(...);
-	 my $answer = $res->send($packet);
+	 my $packet = Net::DNS::Packet-&gtnew(...);
+	 my $answer = $res-&gtsend($packet);
 
 DESCRIPTION
        Instances of the "Net::DNS::Resolver" class represent resolver objects.
@@ -42,16 +44,16 @@ DESCRIPTION
 METHODS
    new
 	 # Use the system defaults
-	 my $res = Net::DNS::Resolver->new;
+	 my $res = Net::DNS::Resolver-&gtnew;
 
 	 # Use my own configuration file
-	 my $res = Net::DNS::Resolver->new(config_file => '/my/dns.conf');
+	 my $res = Net::DNS::Resolver-&gtnew(config_file =&gt '/my/dns.conf');
 
 	 # Set options in the constructor
-	 my $res = Net::DNS::Resolver->new(
-	       nameservers => [qw(10.1.1.128 10.1.2.128)],
-	       recurse	   => 0,
-	       debug	   => 1,
+	 my $res = Net::DNS::Resolver-&gtnew(
+	       nameservers =&gt [qw(10.1.1.128 10.1.2.128)],
+	       recurse	   =&gt 0,
+	       debug	   =&gt 1,
 	 );
 
        Returns a resolver object.  If given no arguments, "new()" returns an
@@ -86,7 +88,7 @@ METHODS
        resolver object:
 
 	# Use my own configuration file
-	my $res = Net::DNS::Resolver->new(config_file => '/my/dns.conf');
+	my $res = Net::DNS::Resolver-&gtnew(config_file =&gt '/my/dns.conf');
 
        This is supported on both UNIX and Windows.  Values pulled from a
        custom configuration file override the the system's defaults, but can
@@ -125,11 +127,11 @@ METHODS
        of the same name.
 
    search
-	   $packet = $res->search('mailhost');
-	   $packet = $res->search('mailhost.example.com');
-	   $packet = $res->search('192.168.1.1');
-	   $packet = $res->search('example.com', 'MX');
-	   $packet = $res->search('user.passwd.example.com', 'TXT', 'HS');
+	   $packet = $res-&gtsearch('mailhost');
+	   $packet = $res-&gtsearch('mailhost.example.com');
+	   $packet = $res-&gtsearch('192.168.1.1');
+	   $packet = $res-&gtsearch('example.com', 'MX');
+	   $packet = $res-&gtsearch('user.passwd.example.com', 'TXT', 'HS');
 
        Performs a DNS query for the given name, applying the searchlist if
        appropriate.  The search algorithm is as follows:
@@ -150,11 +152,11 @@ METHODS
        any answers or not, use the send() method instead.
 
    query
-	   $packet = $res->query('mailhost');
-	   $packet = $res->query('mailhost.example.com');
-	   $packet = $res->query('192.168.1.1');
-	   $packet = $res->query('example.com', 'MX');
-	   $packet = $res->query('user.passwd.example.com', 'TXT', 'HS');
+	   $packet = $res-&gtquery('mailhost');
+	   $packet = $res-&gtquery('mailhost.example.com');
+	   $packet = $res-&gtquery('192.168.1.1');
+	   $packet = $res-&gtquery('example.com', 'MX');
+	   $packet = $res-&gtquery('user.passwd.example.com', 'TXT', 'HS');
 
        Performs a DNS query for the given name; the search list is not
        applied.  If the name doesn't contain any dots and defnames is true
@@ -169,10 +171,10 @@ METHODS
        any answers or not, use the send() method instead.
 
    send
-	   $packet = $res->send($packet_object);
-	   $packet = $res->send('mailhost.example.com');
-	   $packet = $res->send('example.com', 'MX');
-	   $packet = $res->send('user.passwd.example.com', 'TXT', 'HS');
+	   $packet = $res-&gtsend($packet_object);
+	   $packet = $res-&gtsend('mailhost.example.com');
+	   $packet = $res-&gtsend('example.com', 'MX');
+	   $packet = $res-&gtsend('user.passwd.example.com', 'TXT', 'HS');
 
        Performs a DNS query for the given name.  Neither the searchlist nor
        the default domain will be appended.
@@ -183,14 +185,14 @@ METHODS
        appropriate PTR query will be performed.
 
        Returns a "Net::DNS::Packet" object whether there were any answers or
-       not.  Use "$packet->header->ancount" or "$packet->answer" to find out
+       not.  Use "$packet-&gtheader-&gtancount" or "$packet-&gtanswer" to find out
        if there were any records in the answer section.  Returns "undef" if
        there was an error.
 
    axfr
-	   @zone = $res->axfr;
-	   @zone = $res->axfr('example.com');
-	   @zone = $res->axfr('passwd.example.com', 'HS');
+	   @zone = $res-&gtaxfr;
+	   @zone = $res-&gtaxfr('example.com');
+	   @zone = $res-&gtaxfr('passwd.example.com', 'HS');
 
        Performs a zone transfer from the first nameserver listed in
        "nameservers".  If the zone is omitted, it defaults to the first zone
@@ -207,21 +209,21 @@ METHODS
 
        Here's an example that uses a timeout:
 
-	   $res->tcp_timeout(10);
-	   my @zone = $res->axfr('example.com');
+	   $res-&gttcp_timeout(10);
+	   my @zone = $res-&gtaxfr('example.com');
 
 	   if (@zone) {
 	       foreach my $rr (@zone) {
-		   $rr->print;
+		   $rr-&gtprint;
 	       }
 	   } else {
-	       print 'Zone transfer failed: ', $res->errorstring, "\n";
+	       print 'Zone transfer failed: ', $res-&gterrorstring, "\n";
 	   }
 
    axfr_start
-	   $res->axfr_start;
-	   $res->axfr_start('example.com');
-	   $res->axfr_start('example.com', 'HS');
+	   $res-&gtaxfr_start;
+	   $res-&gtaxfr_start('example.com');
+	   $res-&gtaxfr_start('example.com', 'HS');
 
        Starts a zone transfer from the first nameserver listed in
        "nameservers".  If the zone is omitted, it defaults to the first zone
@@ -238,10 +240,10 @@ METHODS
        Use "axfr_next" to read the zone records one at a time.
 
    axfr_next
-	   $res->axfr_start('example.com');
+	   $res-&gtaxfr_start('example.com');
 
-	   while (my $rr = $res->axfr_next) {
-		   $rr->print;
+	   while (my $rr = $res-&gtaxfr_next) {
+		   $rr-&gtprint;
 	   }
 
        Reads records from a zone transfer one at a time.
@@ -252,61 +254,61 @@ METHODS
        See also "axfr".
 
    nameservers
-	   @nameservers = $res->nameservers;
-	   $res->nameservers('192.168.1.1', '192.168.2.2', '192.168.3.3');
+	   @nameservers = $res-&gtnameservers;
+	   $res-&gtnameservers('192.168.1.1', '192.168.2.2', '192.168.3.3');
 
        Gets or sets the nameservers to be queried.
 
        Also see the IPv6 transport notes below
 
    print
-	   $res->print;
+	   $res-&gtprint;
 
        Prints the resolver state on the standard output.
 
    string
-	   print $res->string;
+	   print $res-&gtstring;
 
        Returns a string representation of the resolver state.
 
    searchlist
-	   @searchlist = $res->searchlist;
-	   $res->searchlist('example.com', 'a.example.com', 'b.example.com');
+	   @searchlist = $res-&gtsearchlist;
+	   $res-&gtsearchlist('example.com', 'a.example.com', 'b.example.com');
 
        Gets or sets the resolver search list.
 
    port
-	   print 'sending queries to port ', $res->port, "\n";
-	   $res->port(9732);
+	   print 'sending queries to port ', $res-&gtport, "\n";
+	   $res-&gtport(9732);
 
        Gets or sets the port to which we send queries.	This can be useful for
        testing a nameserver running on a non-standard port.  The default is
        port 53.
 
    srcport
-	   print 'sending queries from port ', $res->srcport, "\n";
-	   $res->srcport(5353);
+	   print 'sending queries from port ', $res-&gtsrcport, "\n";
+	   $res-&gtsrcport(5353);
 
        Gets or sets the port from which we send queries.  The default is 0,
        meaning any port.
 
    srcaddr
-	   print 'sending queries from address ', $res->srcaddr, "\n";
-	   $res->srcaddr('192.168.1.1');
+	   print 'sending queries from address ', $res-&gtsrcaddr, "\n";
+	   $res-&gtsrcaddr('192.168.1.1');
 
        Gets or sets the source address from which we send queries.  Convenient
        for forcing queries out a specific interfaces on a multi-homed host.
        The default is 0.0.0.0, meaning any local address.
 
    bgsend
-	   $socket = $res->bgsend($packet_object) || die " $res->errorstring";
+	   $socket = $res-&gtbgsend($packet_object) || die " $res-&gterrorstring";
 
-	   $socket = $res->bgsend('mailhost.example.com');
-	   $socket = $res->bgsend('example.com', 'MX');
-	   $socket = $res->bgsend('user.passwd.example.com', 'TXT', 'HS');
+	   $socket = $res-&gtbgsend('mailhost.example.com');
+	   $socket = $res-&gtbgsend('example.com', 'MX');
+	   $socket = $res-&gtbgsend('user.passwd.example.com', 'TXT', 'HS');
 
        Performs a background DNS query for the given name, i.e., sends a query
-       packet to the first nameserver listed in "$res->nameservers" and
+       packet to the first nameserver listed in "$res-&gtnameservers" and
        returns immediately without waiting for a response.  The program can
        then perform other tasks while waiting for a response from the
        nameserver.
@@ -321,14 +323,14 @@ METHODS
        method.
 
        The program must determine when the socket is ready for reading and
-       call "$res->bgread" to get the response packet.	You can use
-       "$res->bgisready" or "IO::Select" to find out if the socket is ready
+       call "$res-&gtbgread" to get the response packet.	You can use
+       "$res-&gtbgisready" or "IO::Select" to find out if the socket is ready
        before reading it.
 
        bgsend does not support persistent sockets.
 
    bgread
-	   $packet = $res->bgread($socket);
+	   $packet = $res-&gtbgread($socket);
 	   undef $socket;
 
        Reads the answer from a background query (see "bgsend").  The argument
@@ -340,30 +342,30 @@ METHODS
        it.
 
    bgisready
-	   $socket = $res->bgsend('foo.example.com');
-	   until ($res->bgisready($socket)) {
+	   $socket = $res-&gtbgsend('foo.example.com');
+	   until ($res-&gtbgisready($socket)) {
 	       # do some other processing
 	   }
-	   $packet = $res->bgread($socket);
+	   $packet = $res-&gtbgread($socket);
 	   $socket = undef;
 
        Determines whether a socket is ready for reading.  The argument is an
-       "IO::Socket" object returned by "$res->bgsend".
+       "IO::Socket" object returned by "$res-&gtbgsend".
 
        Returns true if the socket is ready, false if not.
 
    tsig
-	   my $tsig = $res->tsig;
+	   my $tsig = $res-&gttsig;
 
-	   $res->tsig(Net::DNS::RR->new("$key_name TSIG $key"));
+	   $res-&gttsig(Net::DNS::RR-&gtnew("$key_name TSIG $key"));
 
-	   $tsig = Net::DNS::RR->new("$key_name TSIG $key");
-	   $tsig->fudge(60);
-	   $res->tsig($tsig);
+	   $tsig = Net::DNS::RR-&gtnew("$key_name TSIG $key");
+	   $tsig-&gtfudge(60);
+	   $res-&gttsig($tsig);
 
-	   $res->tsig($key_name, $key);
+	   $res-&gttsig($key_name, $key);
 
-	   $res->tsig(0);
+	   $res-&gttsig(0);
 
        Get or set the TSIG record used to automatically sign outgoing queries
        and updates.  Call with an argument of 0 or '' to turn off automatic
@@ -379,73 +381,73 @@ METHODS
        would add automatically.
 
    retrans
-	   print 'retrans interval: ', $res->retrans, "\n";
-	   $res->retrans(3);
+	   print 'retrans interval: ', $res-&gtretrans, "\n";
+	   $res-&gtretrans(3);
 
        Get or set the retransmission interval.	The default is 5.
 
    retry
-	   print 'number of tries: ', $res->retry, "\n";
-	   $res->retry(2);
+	   print 'number of tries: ', $res-&gtretry, "\n";
+	   $res-&gtretry(2);
 
        Get or set the number of times to try the query.  The default is 4.
 
    recurse
-	   print 'recursion flag: ', $res->recurse, "\n";
-	   $res->recurse(0);
+	   print 'recursion flag: ', $res-&gtrecurse, "\n";
+	   $res-&gtrecurse(0);
 
        Get or set the recursion flag.  If this is true, nameservers will be
        requested to perform a recursive query.	The default is true.
 
    defnames
-	   print 'defnames flag: ', $res->defnames, "\n";
-	   $res->defnames(0);
+	   print 'defnames flag: ', $res-&gtdefnames, "\n";
+	   $res-&gtdefnames(0);
 
        Get or set the defnames flag.  If this is true, calls to query will
        append the default domain to names that contain no dots.  The default
        is true.
 
    dnsrch
-	   print 'dnsrch flag: ', $res->dnsrch, "\n";
-	   $res->dnsrch(0);
+	   print 'dnsrch flag: ', $res-&gtdnsrch, "\n";
+	   $res-&gtdnsrch(0);
 
        Get or set the dnsrch flag.  If this is true, calls to search will
        apply the search list.  The default is true.
 
    debug
-	   print 'debug flag: ', $res->debug, "\n";
-	   $res->debug(1);
+	   print 'debug flag: ', $res-&gtdebug, "\n";
+	   $res-&gtdebug(1);
 
        Get or set the debug flag.  If set, calls to search, query, and send
        will print debugging information on the standard output.  The default
        is false.
 
    usevc
-	   print 'usevc flag: ', $res->usevc, "\n";
-	   $res->usevc(1);
+	   print 'usevc flag: ', $res-&gtusevc, "\n";
+	   $res-&gtusevc(1);
 
        Get or set the usevc flag.  If true, then queries will be performed
        using virtual circuits (TCP) instead of datagrams (UDP).  The default
        is false.
 
    tcp_timeout
-	   print 'TCP timeout: ', $res->tcp_timeout, "\n";
-	   $res->tcp_timeout(10);
+	   print 'TCP timeout: ', $res-&gttcp_timeout, "\n";
+	   $res-&gttcp_timeout(10);
 
        Get or set the TCP timeout in seconds.  A timeout of "undef" means
        indefinite.  The default is 120 seconds (2 minutes).
 
    udp_timeout
-	   print 'UDP timeout: ', $res->udp_timeout, "\n";
-	   $res->udp_timeout(10);
+	   print 'UDP timeout: ', $res-&gtudp_timeout, "\n";
+	   $res-&gtudp_timeout(10);
 
        Get or set the UDP timeout in seconds.  A timeout of "undef" means the
        retry and retrans settings will be just utilized to perform the retries
        until they are exhausted.  The default is "undef".
 
    persistent_tcp
-	   print 'Persistent TCP flag: ', $res->persistent_tcp, "\n";
-	   $res->persistent_tcp(1);
+	   print 'Persistent TCP flag: ', $res-&gtpersistent_tcp, "\n";
+	   $res-&gtpersistent_tcp(1);
 
        Get or set the persistent TCP setting.  If set to true, Net::DNS will
        keep a TCP socket open for each host:port to which it connects.	This
@@ -456,41 +458,41 @@ METHODS
        Perl, in which case it defaults to true.
 
    persistent_udp
-	   print 'Persistent UDP flag: ', $res->persistent_udp, "\n";
-	   $res->persistent_udp(1);
+	   print 'Persistent UDP flag: ', $res-&gtpersistent_udp, "\n";
+	   $res-&gtpersistent_udp(1);
 
        Get or set the persistent UDP setting.  If set to true, Net::DNS will
        keep a single UDP socket open for all queries.  This is useful if
        you're using UDP and need to make a lot of queries or updates.
 
    igntc
-	   print 'igntc flag: ', $res->igntc, "\n";
-	   $res->igntc(1);
+	   print 'igntc flag: ', $res-&gtigntc, "\n";
+	   $res-&gtigntc(1);
 
        Get or set the igntc flag.  If true, truncated packets will be ignored.
        If false, truncated packets will cause the query to be retried using
        TCP.  The default is false.
 
    errorstring
-	   print 'query status: ', $res->errorstring, "\n";
+	   print 'query status: ', $res-&gterrorstring, "\n";
 
        Returns a string containing the status of the most recent query.
 
    answerfrom
-	   print 'last answer was from: ', $res->answerfrom, "\n";
+	   print 'last answer was from: ', $res-&gtanswerfrom, "\n";
 
        Returns the IP address from which we received the last answer in
        response to a query.
 
    answersize
-	   print 'size of last answer: ', $res->answersize, "\n";
+	   print 'size of last answer: ', $res-&gtanswersize, "\n";
 
        Returns the size in bytes of the last answer we received in response to
        a query.
 
    dnssec
-	   print "dnssec flag: ", $res->dnssec, "\n";
-	   $res->dnssec(0);
+	   print "dnssec flag: ", $res-&gtdnssec, "\n";
+	   $res-&gtdnssec(0);
 
        Enabled DNSSEC this will set the checking disabled flag in the query
        header and add EDNS0 data as in RFC2671 and RFC3225
@@ -503,8 +505,8 @@ METHODS
        big for your environement you should call the udppacketsize() method
        immeditatly after.
 
-	  $res->dnssec(1);    # turns on DNSSEC and sets udp packetsize to 2048
-	  $res->udppacketsize(1028);   # lowers the UDP pakcet size
+	  $res-&gtdnssec(1);    # turns on DNSSEC and sets udp packetsize to 2048
+	  $res-&gtudppacketsize(1028);   # lowers the UDP pakcet size
 
        The method will Croak::croak with the message "You called the
        Net::DNS::Resolver::dnssec() method but do not have Net::DNS::SEC
@@ -512,26 +514,26 @@ METHODS
        @INC path.
 
    cdflag
-	   print "checking disabled flag: ", $res->dnssec, "\n";
-	   $res->dnssec(1);
-	   $res->cdflag(1);
+	   print "checking disabled flag: ", $res-&gtdnssec, "\n";
+	   $res-&gtdnssec(1);
+	   $res-&gtcdflag(1);
 
        Sets or gets the CD bit for a dnssec query.  This bit is always zero
        for non dnssec queries. When the dnssec is enabled the flag defaults to
        0 can be set to 1.
 
    adflag
-	   print "checking disabled flag: ", $res->dnssec, "\n";
-	   $res->dnssec(1);
-	   $res->adflag(1);
+	   print "checking disabled flag: ", $res-&gtdnssec, "\n";
+	   $res-&gtdnssec(1);
+	   $res-&gtadflag(1);
 
        Sets or gets the AD bit for a dnssec query.  This bit is always zero
        for non dnssec queries. When the dnssec is enabled the flag defaults to
        1.
 
    udppacketsize
-	   print "udppacketsize: ", $res->udppacketsize, "\n";
-	   $res->udppacketsize(2048);
+	   print "udppacketsize: ", $res-&gtudppacketsize, "\n";
+	   $res-&gtudppacketsize(2048);
 
        udppacketsize will set or get the packet size. If set to a value
        greater than Net::DNS::PACKETSZ() an EDNS extension will be added
@@ -554,7 +556,7 @@ CUSTOMIZING
 	sub search {
 	       my ($self, @args) = @_;
 
-	       return $cache{@args} ||= $self->SUPER::search(@args);
+	       return $cache{@args} ||= $self-&gtSUPER::search(@args);
 	}
 
 IPv6 transport
@@ -573,9 +575,9 @@ IPv6 transport
 
        For example
 
-	   $res->nameservers('192.168.1.1', '192.168.2.2', '2001:610:240:0:53:0:0:3');
-	   $res->force_v4(1);
-	   print join (" ",$res->nameserver());
+	   $res-&gtnameservers('192.168.1.1', '192.168.2.2', '2001:610:240:0:53:0:0:3');
+	   $res-&gtforce_v4(1);
+	   print join (" ",$res-&gtnameserver());
 
        Will print: 192.168.1.1 192.168.2.2
 
@@ -649,6 +651,6 @@ SEE ALSO
 
 
 perl v5.12.4			  2009-12-30		 Net::DNS::Resolver(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

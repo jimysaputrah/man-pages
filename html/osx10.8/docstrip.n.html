@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Docstrip  is a tool created to support a brand of Literate Programming...." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>docstrip - Docstrip style source code extraction</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 docstrip(n)		   Literate programming tool		   docstrip(n)
 
 
@@ -121,19 +123,19 @@ FILE FORMAT
        also gives some support for doctools-like markup.
 
        Besides	the  basic code and comment lines, there are also guard lines,
-       which begin with the two characters '%<', and meta-comment lines, which
+       which begin with the two characters '%&lt', and meta-comment lines, which
        begin  with  the  two characters '%%'. Within guard lines there is fur-
        thermore the distinction between verbatim guard lines, which begin with
-       '%<<',  and  ordinary  guard  lines,  where the '%<' is not followed by
-       another '<'. The last category is by far the most common.
+       '%&lt&lt',  and  ordinary  guard  lines,  where the '%&lt' is not followed by
+       another '&lt'. The last category is by far the most common.
 
        Ordinary guard lines conditions extraction of  the  code  line(s)  they
        guard  by  the value of a boolean expression; the guarded block of code
        lines will only be included if the expression evaluates to  true.   The
        syntax of an ordinary guard line is one of
 
-	   '%' '<' STARSLASH EXPRESSION '>'
-	   '%' '<' PLUSMINUS EXPRESSION '>' CODE
+	   '%' '&lt' STARSLASH EXPRESSION '&gt'
+	   '%' '&lt' PLUSMINUS EXPRESSION '&gt' CODE
 
        where
 
@@ -147,7 +149,7 @@ FILE FORMAT
 
        Comma  and  vertical  bar  both	denote	'or'. Ampersand denotes 'and'.
        Exclamation mark denotes 'not'. A TERMINAL can be any  nonempty	string
-       of  characters  not  containing	'>',  '&',  '|',  comma,  '(', or ')',
+       of  characters  not  containing	'&gt',  '&',  '|',  comma,  '(', or ')',
        although the docstrip manual is a bit restrictive and  only  guarantees
        proper  operation  for strings of letters (although even the LaTeX core
        sources make heavy use also of digits in TERMINALs).  The second  argu-
@@ -155,27 +157,27 @@ FILE FORMAT
        count as having the value 'true'; all other TERMINALs  count  as  being
        'false' when guard expressions are evaluated.
 
-       In  the	case  of  a  '%<*EXPRESSION>' guard, the lines guarded are all
-       lines up to the next '%</EXPRESSION>' guard with  the  same  EXPRESSION
+       In  the	case  of  a  '%&lt*EXPRESSION&gt' guard, the lines guarded are all
+       lines up to the next '%&lt/EXPRESSION&gt' guard with  the  same  EXPRESSION
        (compared as strings). The blocks of code delimited by such '*' and '/'
        guard lines must be properly nested.
 
 	  set text [join {
 	     {begin}
-	     {%<*foo>}
+	     {%&lt*foo&gt}
 	     {1}
-	     {%<*bar>}
+	     {%&lt*bar&gt}
 	     {2}
-	     {%</bar>}
-	     {%<*!bar>}
+	     {%&lt/bar&gt}
+	     {%&lt*!bar&gt}
 	     {3}
-	     {%</!bar>}
+	     {%&lt/!bar&gt}
 	     {4}
-	     {%</foo>}
+	     {%&lt/foo&gt}
 	     {5}
-	     {%<*bar>}
+	     {%&lt*bar&gt}
 	     {6}
-	     {%</bar>}
+	     {%&lt/bar&gt}
 	     {end}
 	  } \n]
 	  set res [docstrip::extract $text foo]
@@ -204,11 +206,11 @@ FILE FORMAT
 	     {end} ""
 	  } \n
 
-       In guard lines without a '*', '/', '+', or '-' modifier after the '%<',
-       the  guard  applies  only  to the CODE following the '>' on that single
+       In guard lines without a '*', '/', '+', or '-' modifier after the '%&lt',
+       the  guard  applies  only  to the CODE following the '&gt' on that single
        line. A '+' modifier is equivalent to no modifier. A  '-'  modifier  is
        like  the  case	with  no  modifier,  but  the expression is implicitly
-       negated, i.e., the CODE of a '%<-' guard line is only included  if  the
+       negated, i.e., the CODE of a '%&lt-' guard line is only included  if  the
        expression evaluates to false.
 
        Metacomment  lines  are	"comment  lines  which	should not be stripped
@@ -220,14 +222,14 @@ FILE FORMAT
 
 	  set text [join {
 	     {begin}
-	     {%<foo> foo}
-	     {%<+foo>plusfoo}
-	     {%<-foo>minusfoo}
+	     {%&ltfoo&gt foo}
+	     {%&lt+foo&gtplusfoo}
+	     {%&lt-foo&gtminusfoo}
 	     {middle}
 	     {%% some metacomment}
-	     {%<*foo>}
+	     {%&lt*foo&gt}
 	     {%%another metacomment}
-	     {%</foo>}
+	     {%&lt/foo&gt}
 	     {end}
 	  } \n]
 	  set res [docstrip::extract $text foo -metaprefix {# }]
@@ -252,22 +254,22 @@ FILE FORMAT
 
        Verbatim guards can be used to force  code  line  interpretation  of  a
        block  of lines even if some of them happen to look like any other type
-       of lines to docstrip. A verbatim guard has the  form  '%<<END-TAG'  and
+       of lines to docstrip. A verbatim guard has the  form  '%&lt&ltEND-TAG'  and
        the  verbatim  block  is  terminated  by the first line that is exactly
        '%END-TAG'.
 
 	  set text [join {
 	     {begin}
-	     {%<*myblock>}
+	     {%&lt*myblock&gt}
 	     {some stupid()}
-	     {	 #computer<program>}
-	     {%<<QQQ-98765}
+	     {	 #computer&ltprogram&gt}
+	     {%&lt&ltQQQ-98765}
 	     {% These three lines are copied verbatim (including percents}
 	     {%% even if -metaprefix is something different than %%).}
-	     {%</myblock>}
+	     {%&lt/myblock&gt}
 	     {%QQQ-98765}
-	     {	 using*strange@programming<language>}
-	     {%</myblock>}
+	     {	 using*strange@programming&ltlanguage&gt}
+	     {%&lt/myblock&gt}
 	     {end}
 	  } \n]
 	  set res [docstrip::extract $text myblock -metaprefix {# }]
@@ -278,11 +280,11 @@ FILE FORMAT
 	  join {
 	     {begin}
 	     {some stupid()}
-	     {	 #computer<program>}
+	     {	 #computer&ltprogram&gt}
 	     {% These three lines are copied verbatim (including percents}
 	     {%% even if -metaprefix is something different than %%).}
-	     {%</myblock>}
-	     {	 using*strange@programming<language>}
+	     {%&lt/myblock&gt}
+	     {	 using*strange@programming&ltlanguage&gt}
 	     {end}
 	     {begin}
 	     {end} ""
@@ -376,12 +378,12 @@ DOCUMENT STRUCTURE
        files. This is achieved by beginning the file with the lines
 
 	  % \iffalse
-	  %<*driver>
+	  %&lt*driver&gt
 	  \documentclass{tclldoc}
 	  \begin{document}
 	  \DocInput{filename.dtx}
 	  \end{document}
-	  %</driver>
+	  %&lt/driver&gt
 	  % \fi
 
        or  some variation thereof. The trick is that the file gets read twice.
@@ -401,7 +403,7 @@ DOCUMENT STRUCTURE
        this  second  time through; this is similar to the "if 0 { ... }" idiom
        for block comments in Tcl code, and it is needed here because  (amongst
        other things) the \documentclass command may only be executed once. The
-       function of the <driver> guards is to prevent this short piece of LaTeX
+       function of the &ltdriver&gt guards is to prevent this short piece of LaTeX
        code  from  being  extracted by docstrip.  The total effect is that the
        file can function both as a LaTeX document and  as  a  docstrip	master
        source code file.
@@ -419,12 +421,12 @@ CATEGORY
        Documentation tools
 
 COPYRIGHT
-       Copyright (c) 2003-2005 Lars HellstrA9|m <Lars dot Hellstrom at residenset dot net>
+       Copyright (c) 2003-2005 Lars HellstrA9|m &ltLars dot Hellstrom at residenset dot net&gt
 
 
 
 
 docstrip			      1.2			   docstrip(n)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

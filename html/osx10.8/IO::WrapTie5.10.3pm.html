@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="Suppose you have a class "FooHandle", where......" />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>IO::WrapTie - wrap tieable objects in IO::Handle interface</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 IO::WrapTie(3)	      User Contributed Perl Documentation	IO::WrapTie(3)
 
 
@@ -28,14 +30,14 @@ SYNOPSIS
 	  use IO::WrapTie;
 	  use FooHandle;		  ### implements TIEHANDLE interface
 
-	  ### Suppose we want a "FooHandle->new(&FOO_RDWR, 2)".
+	  ### Suppose we want a "FooHandle-&gtnew(&FOO_RDWR, 2)".
 	  ### We can instead say...
 
 	  $FH = wraptie('FooHandle', &FOO_RDWR, 2);
 
 	  ### Now we can use...
 	  print $FH "Hello, ";		  ### traditional operator syntax...
-	  $FH->print("world!\n");	  ### ...and OO syntax as well!
+	  $FH-&gtprint("world!\n");	  ### ...and OO syntax as well!
 
        OO interface (preferred).  You can inherit from the IO::WrapTie::Slave
        mixin to get a nifty "new_tie()" constructor...
@@ -51,9 +53,9 @@ SYNOPSIS
 	  #------------------------------
 	  package main;
 
-	  $FH = FooHandle->new_tie(&FOO_RDWR, 2);   ### $FH is an IO::WrapTie::Master
+	  $FH = FooHandle-&gtnew_tie(&FOO_RDWR, 2);   ### $FH is an IO::WrapTie::Master
 	  print $FH "Hello, ";			    ### traditional operator syntax
-	  $FH->print("world!\n");		    ### OO syntax
+	  $FH-&gtprint("world!\n");		    ### OO syntax
 
        See IO::Scalar as an example.  It also shows you how to create classes
        which work both with and without 5.004.
@@ -86,14 +88,14 @@ DESCRIPTION
        But now with IO::WrapTie, you can say:
 
 	   $WT = wraptie('FooHandle', &FOO_RDWR, 2);
-	   $WT->print("Hello, world\n");   ### OO syntax
+	   $WT-&gtprint("Hello, world\n");   ### OO syntax
 	   print $WT "Yes!\n";		   ### Named operator syntax too!
-	   $WT->weird_stuff;		   ### Other methods!
+	   $WT-&gtweird_stuff;		   ### Other methods!
 
        And if you're authoring a class like FooHandle, just have it inherit
        from "IO::WrapTie::Slave" and that first line becomes even prettier:
 
-	   $WT = FooHandle->new_tie(&FOO_RDWR, 2);
+	   $WT = FooHandle-&gtnew_tie(&FOO_RDWR, 2);
 
        The bottom line: now, almost any class can look and work exactly like
        an IO::Handle... and be used both with OO and non-OO filehandle syntax.
@@ -107,7 +109,7 @@ HOW IT ALL WORKS
 
 	   $WT = wraptie('IO::Scalar',\$s);
 	   print $WT "Hello, ";
-	   $WT->print("world!\n");
+	   $WT-&gtprint("world!\n");
 
        In it, the wraptie() function creates a data structure as follows:
 
@@ -116,7 +118,7 @@ HOW IT ALL WORKS
 		      | 	 * You would do all your i/o with $WT directly.
 		      |
 		      |
-		      |     ,---isa--> IO::WrapTie::Master >--isa--> IO::Handle
+		      |     ,---isa--&gt IO::WrapTie::Master &gt--isa--&gt IO::Handle
 		      V    /
 	       .-------------.
 	       |	     |
@@ -126,7 +128,7 @@ HOW IT ALL WORKS
 	       |	     |	   slave.
 	       `-------------'
 		      |
-	   tied(*$WT) |     .---isa--> IO::WrapTie::Slave
+	   tied(*$WT) |     .---isa--&gt IO::WrapTie::Slave
 		      V    /
 	       .-------------.
 	       |	     |
@@ -184,7 +186,7 @@ HOW IT ALL WORKS
    How methods work (on the master)
        Consider using a method on the master:
 
-	   $WT->print("Hello, world!\n");
+	   $WT-&gtprint("Hello, world!\n");
 
        Since the master ($WT) is blessed into the class IO::WrapTie::Master,
        Perl first attempts to find a "print()" method there.  Failing that,
@@ -196,7 +198,7 @@ HOW IT ALL WORKS
        But let's suppose we're dealing with a method which isn't part of
        IO::Handle... for example:
 
-	   my $sref = $WT->sref;
+	   my $sref = $WT-&gtsref;
 
        In this case, the intuitive behavior is to have the master delegate the
        method invocation to the slave (now do you see where the designations
@@ -217,8 +219,8 @@ NOTES
        print(), and you may need to pass the object to a subroutine which will
        attempt to use those operators:
 
-	   $O = FooHandle->new(&FOO_RDWR, 2);
-	   $O->print("Hello, world\n");  ### OO syntax is okay, BUT....
+	   $O = FooHandle-&gtnew(&FOO_RDWR, 2);
+	   $O-&gtprint("Hello, world\n");  ### OO syntax is okay, BUT....
 
 	   sub nope { print $_[0] "Nope!\n" }
 	X  nope($O);			 ### ERROR!!! (not a glob ref)
@@ -232,9 +234,9 @@ NOTES
 	   tie *T, 'FooHandle', &FOO_RDWR, 2;
 	   print T "Hello, world\n";   ### Operator is okay, BUT...
 
-	   tied(*T)->other_stuff;      ### yuck! AND...
+	   tied(*T)-&gtother_stuff;      ### yuck! AND...
 
-	   sub nope { shift->print("Nope!\n") }
+	   sub nope { shift-&gtprint("Nope!\n") }
 	X  nope(\*T);		       ### ERROR!!! (method "print" on unblessed ref)
 
        Why a master and slave?
@@ -245,7 +247,7 @@ NOTES
        IO::Handle will work fine for the OO stuff, and fine with named
        operators if you tie()... but if you just attempt to say:
 
-	   $IO = FooHandle->new(&FOO_RDWR, 2);
+	   $IO = FooHandle-&gtnew(&FOO_RDWR, 2);
 	   print $IO "Hello!\n";
 
        you get a warning from Perl like:
@@ -257,7 +259,7 @@ NOTES
        which brings us right back to where we started!	At least the
        IO::WrapTie mixin lets us say:
 
-	   $IO = FooHandle->new_tie(&FOO_RDWR, 2);
+	   $IO = FooHandle-&gtnew_tie(&FOO_RDWR, 2);
 	   print $IO "Hello!\n";
 
        and so is not too bad.  ":-)"
@@ -299,6 +301,6 @@ POD ERRORS
 
 
 perl v5.10.1			  2005-02-10			IO::WrapTie(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

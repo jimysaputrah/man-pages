@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This is pragma to change Perl 5's standard method resolution order from..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Class::C3 - A pragma to use the C3 method resolution order algortihm</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Class::C3(3)	      User Contributed Perl Documentation	  Class::C3(3)
 
 
@@ -36,11 +38,11 @@ SYNOPSIS
 	   use Class::C3;
 
 	   # Classic Diamond MI pattern
-	   #	<A>
+	   #	&ltA&gt
 	   #   /   \
-	   # <B>   <C>
+	   # &ltB&gt   &ltC&gt
 	   #   \   /
-	   #	<D>
+	   #	&ltD&gt
 
 	   package main;
 
@@ -48,11 +50,11 @@ SYNOPSIS
 	   # (formerly called in INIT)
 	   Class::C3::initialize();
 
-	   print join ', ' => Class::C3::calculateMRO('Diamond_D') # prints D, B, C, A
+	   print join ', ' =&gt Class::C3::calculateMRO('Diamond_D') # prints D, B, C, A
 
-	   print D->hello() # prints 'C::hello' instead of the standard p5 'A::hello'
+	   print D-&gthello() # prints 'C::hello' instead of the standard p5 'A::hello'
 
-	   D->can('hello')->(); 	 # can() also works correctly
+	   D-&gtcan('hello')-&gt(); 	 # can() also works correctly
 	   UNIVERSAL::can('D', 'hello'); # as does UNIVERSAL::can()
 
 DESCRIPTION
@@ -61,7 +63,7 @@ DESCRIPTION
        C3 method resolution order.
 
        NOTE: YOU SHOULD NOT USE THIS MODULE DIRECTLY - The feature provided is
-       integrated into perl version >= 5.9.5, and you should use MRO::Compat
+       integrated into perl version &gt= 5.9.5, and you should use MRO::Compat
        instead, which will use the core implementation in newer perls, but
        fallback to using this implementation on older perls.
 
@@ -79,11 +81,11 @@ DESCRIPTION
        essentially means that no class will appear before any of its
        subclasses. Take the classic diamond inheritance pattern for instance:
 
-	    <A>
+	    &ltA&gt
 	   /   \
-	 <B>   <C>
+	 &ltB&gt   &ltC&gt
 	   \   /
-	    <D>
+	    &ltD&gt
 
        The standard Perl 5 MRO would be (D, B, A, C). The result being that A
        appears before C, even though C is the subclass of A. The C3 MRO
@@ -178,11 +180,11 @@ METHOD REDISPATCHING
        method along the C3 linearization. This is best shown with an example.
 
 	 # a classic diamond MI pattern ...
-	 #    <A>
+	 #    &ltA&gt
 	 #   /	 \
-	 # <B>	 <C>
+	 # &ltB&gt	 &ltC&gt
 	 #   \	 /
-	 #    <D>
+	 #    &ltD&gt
 
 	 package A;
 	 use c3;
@@ -191,19 +193,19 @@ METHOD REDISPATCHING
 	 package B;
 	 use base 'A';
 	 use c3;
-	 sub foo { 'B::foo => ' . (shift)->next::method() }
+	 sub foo { 'B::foo =&gt ' . (shift)-&gtnext::method() }
 
 	 package C;
 	 use base 'A';
 	 use c3;
-	 sub foo { 'C::foo => ' . (shift)->next::method() }
+	 sub foo { 'C::foo =&gt ' . (shift)-&gtnext::method() }
 
 	 package D;
 	 use base ('B', 'C');
 	 use c3;
-	 sub foo { 'D::foo => ' . (shift)->next::method() }
+	 sub foo { 'D::foo =&gt ' . (shift)-&gtnext::method() }
 
-	 print D->foo; # prints out "D::foo => B::foo => C::foo => A::foo"
+	 print D-&gtfoo; # prints out "D::foo =&gt B::foo =&gt C::foo =&gt A::foo"
 
        A few things to note. First, we do not require you to add on the method
        name to the "next::method" call (this is unlike "NEXT::" and "SUPER::"
@@ -219,13 +221,13 @@ METHOD REDISPATCHING
        it will throw an exception.  You can use "next::can" to see if
        "next::method" will succeed before you call it like so:
 
-	 $self->next::method(@_) if $self->next::can;
+	 $self-&gtnext::method(@_) if $self-&gtnext::can;
 
        Additionally, you can use "maybe::next::method" as a shortcut to only
        call the next method if it exists.  The previous example could be
        simply written as:
 
-	 $self->maybe::next::method(@_);
+	 $self-&gtmaybe::next::method(@_);
 
        There are some caveats about using "next::method", see below for those.
 
@@ -268,7 +270,7 @@ CAVEATS
 	   is called from. It sounds complicated, but it really isn't. Here is
 	   an example which will not work correctly:
 
-	     *Foo::foo = sub { (shift)->next::method(@_) };
+	     *Foo::foo = sub { (shift)-&gtnext::method(@_) };
 
 	   The problem exists because the anonymous subroutine being assigned
 	   to the glob *Foo::foo will show up in the call stack as being
@@ -281,7 +283,7 @@ CAVEATS
 	   anonymous subroutine for you. Simply do this:
 
 	     use Sub::Name 'subname';
-	     *Foo::foo = subname 'Foo::foo' => sub { (shift)->next::method(@_) };
+	     *Foo::foo = subname 'Foo::foo' =&gt sub { (shift)-&gtnext::method(@_) };
 
 	   and things will Just Work. Of course this is not always possible to
 	   do, but to be honest, I just can't manage to find a workaround for
@@ -314,24 +316,24 @@ CODE COVERAGE
 SEE ALSO
    The original Dylan paper
        http://www.webcom.com/haahr/dylan/linearization-oopsla96.html
-       <http://www.webcom.com/haahr/dylan/linearization-oopsla96.html>
+       &lthttp://www.webcom.com/haahr/dylan/linearization-oopsla96.html&gt
 
    The prototype Perl 6 Object Model uses C3
        http://svn.openfoundry.org/pugs/perl5/Perl6-MetaModel/
-       <http://svn.openfoundry.org/pugs/perl5/Perl6-MetaModel/>
+       &lthttp://svn.openfoundry.org/pugs/perl5/Perl6-MetaModel/&gt
 
    Parrot now uses C3
        http://aspn.activestate.com/ASPN/Mail/Message/perl6-internals/2746631
-       <http://aspn.activestate.com/ASPN/Mail/Message/perl6-internals/2746631>
-       <http://use.perl.org/~autrijus/journal/25768>
+       &lthttp://aspn.activestate.com/ASPN/Mail/Message/perl6-internals/2746631&gt
+       &lthttp://use.perl.org/~autrijus/journal/25768&gt
 
    Python 2.3 MRO related links
-       <http://www.python.org/2.3/mro.html>
-       <http://www.python.org/2.2.2/descrintro.html#mro>
+       &lthttp://www.python.org/2.3/mro.html&gt
+       &lthttp://www.python.org/2.2.2/descrintro.html#mro&gt
 
    C3 for TinyCLOS
        http://www.call-with-current-continuation.org/eggs/c3.html
-       <http://www.call-with-current-continuation.org/eggs/c3.html>
+       &lthttp://www.call-with-current-continuation.org/eggs/c3.html&gt
 
 ACKNOWLEGEMENTS
        Thanks to Matt S. Trout for using this module in his module DBIx::Class
@@ -342,14 +344,14 @@ ACKNOWLEGEMENTS
        "maybe::next::method".
 
 AUTHOR
-       Stevan Little, <stevan@iinteractive.com>
+       Stevan Little, &ltstevan@iinteractive.com&gt
 
-       Brandon L. Black, <blblack@gmail.com>
+       Brandon L. Black, &ltblblack@gmail.com&gt
 
 COPYRIGHT AND LICENSE
        Copyright 2005, 2006 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -357,6 +359,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2010-06-19			  Class::C3(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The packet filter modifies, drops or passes packets according to rules or..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>pf.conf -- packet filter configuration file</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 
 PF.CONF(5)		    BSD File Formats Manual		    PF.CONF(5)
 
@@ -119,9 +121,9 @@ TABLES
 
      For example,
 
-	   table <private> const { 10/8, 172.16/12, 192.168/16 }
-	   table <badhosts> persist
-	   block on fxp0 from { <private>, <badhosts> } to any
+	   table &ltprivate&gt const { 10/8, 172.16/12, 192.168/16 }
+	   table &ltbadhosts&gt persist
+	   block on fxp0 from { &ltprivate&gt, &ltbadhosts&gt } to any
 
      creates a table called private, to hold RFC 1918 private network blocks,
      and a table called badhosts, which is initially empty.  A filter rule is
@@ -136,8 +138,8 @@ TABLES
      A table can also be initialized with an address list specified in one or
      more external files, using the following syntax:
 
-	   table <spam> persist file "/etc/spammers" file "/etc/openrelays"
-	   block on fxp0 from <spam> to any
+	   table &ltspam&gt persist file "/etc/spammers" file "/etc/openrelays"
+	   block on fxp0 from &ltspam&gt to any
 
      The files /etc/spammers and /etc/openrelays list IP addresses, one per
      line.  Any lines beginning with a # are treated as comments and ignored.
@@ -386,7 +388,7 @@ OPTIONS
 
 		 set fingerprints "/etc/pf.os.devel"
 
-     set skip on <ifspec>
+     set skip on &ltifspec&gt
 	   List interfaces for which packets should not be filtered.  Packets
 	   passing in or out on such interfaces are passed as if pf was dis-
 	   abled, i.e. pf does not process them in any way.  This can be use-
@@ -427,10 +429,10 @@ TRAFFIC NORMALIZATION
 	   combination with the no-df modifier to ensure unique IP identi-
 	   fiers.
 
-     min-ttl <number>
+     min-ttl &ltnumber&gt
 	   Enforces a minimum TTL for matching IP packets.
 
-     max-mss <number>
+     max-mss &ltnumber&gt
 	   Enforces a maximum MSS for matching TCP packets.
 
      random-id
@@ -554,15 +556,15 @@ QUEUEING
      The interfaces on which queueing should be activated are declared using
      the altq on declaration.  altq on has the following keywords:
 
-     <interface>
+     &ltinterface&gt
 	   Queueing is enabled on the named interface.
 
-     <scheduler>
+     &ltscheduler&gt
 	   Specifies which queueing scheduler to use.  Currently supported
 	   values are cbq for Class Based Queueing, priq for Priority Queueing
 	   and hfsc for the Hierarchical Fair Service Curve scheduler.
 
-     bandwidth <bw>
+     bandwidth &ltbw&gt
 	   The maximum bitrate for all queues on an interface may be specified
 	   using the bandwidth keyword.  The value can be specified as an
 	   absolute value or as a percentage of the interface bandwidth.  When
@@ -573,16 +575,16 @@ QUEUEING
 	   take note that some interfaces do not know their bandwidth, or can
 	   adapt their bandwidth rates).
 
-     qlimit <limit>
+     qlimit &ltlimit&gt
 	   The maximum number of packets held in the queue.  The default is
 	   128.
 
-     tbrsize <size>
+     tbrsize &ltsize&gt
 	   Adjusts the size, in bytes, of the token bucket regulator.  If not
 	   specified, heuristics based on the interface bandwidth are used to
 	   determine the size.
 
-     queue <list>
+     queue &ltlist&gt
 	   Defines a list of subqueues to create on an interface.
 
      In the following example, the interface dc0 should queue up to 5 Mbit/s
@@ -597,11 +599,11 @@ QUEUEING
      except for the priq scheduler, in a parent queue declaration.  The fol-
      lowing keywords can be used:
 
-     on <interface>
+     on &ltinterface&gt
 	   Specifies the interface the queue operates on.  If not given, it
 	   operates on all matching interfaces.
 
-     bandwidth <bw>
+     bandwidth &ltbw&gt
 	   Specifies the maximum bitrate to be processed by the queue.	This
 	   value must not exceed the value of the parent queue and can be
 	   specified as an absolute value or a percentage of the parent
@@ -609,19 +611,19 @@ QUEUEING
 	   ent queue's bandwidth.  The priq scheduler does not support band-
 	   width specification.
 
-     priority <level>
+     priority &ltlevel&gt
 	   Between queues a priority level can be set.	For cbq and hfsc, the
 	   range is 0 to 7 and for priq, the range is 0 to 15.	The default
 	   for all is 1.  Priq queues with a higher priority are always served
 	   first.  Cbq and Hfsc queues with a higher priority are preferred in
 	   the case of overload.
 
-     qlimit <limit>
+     qlimit &ltlimit&gt
 	   The maximum number of packets held in the queue.  The default is
 	   128.
 
-     The scheduler can get additional parameters with <scheduler>
-     (<parameters>).  Parameters are as follows:
+     The scheduler can get additional parameters with &ltscheduler&gt
+     (&ltparameters&gt).  Parameters are as follows:
 
      default	 Packets not matched by another queue are assigned to this
 		 one.  Exactly one default queue is required.
@@ -644,16 +646,16 @@ QUEUEING
 
      The hfsc scheduler supports some additional options:
 
-     realtime <sc>
+     realtime &ltsc&gt
 		 The minimum required bandwidth for the queue.
 
-     upperlimit <sc>
+     upperlimit &ltsc&gt
 		 The maximum allowed bandwidth for the queue.
 
-     linkshare <sc>
+     linkshare &ltsc&gt
 		 The bandwidth share of a backlogged queue.
 
-     <sc> is an acronym for service curve.
+     &ltsc&gt is an acronym for service curve.
 
      The format for service curve specifications is (m1, d, m2).  m2 controls
      the bandwidth assigned to the queue.  m1 and d are optional and can be
@@ -736,9 +738,9 @@ TRANSLATION
 
      rdr   The packet is redirected to another destination and possibly a dif-
 	   ferent port.  rdr rules can optionally specify port ranges instead
-	   of single ports.  rdr ... port 2000:2999 -> ... port 4000 redirects
+	   of single ports.  rdr ... port 2000:2999 -&gt ... port 4000 redirects
 	   ports 2000 to 2999 (inclusive) to port 4000.  rdr ... port
-	   2000:2999 -> ... port 4000:* redirects port 2000 to 4000, 2001 to
+	   2000:2999 -&gt ... port 4000:* redirects port 2000 to 4000, 2001 to
 	   4001, ..., 2999 to 4999.
 
      In addition to modifying the address, some translation rules may modify
@@ -772,7 +774,7 @@ TRANSLATION
      Note that redirecting external incoming connections to the loopback
      address, as in
 
-	   rdr on ne3 inet proto tcp to port smtp -> 127.0.0.1 port spamd
+	   rdr on ne3 inet proto tcp to port smtp -&gt 127.0.0.1 port spamd
 
      will effectively allow an external host to connect to daemons bound
      solely to the loopback address, circumventing the traditional blocking of
@@ -908,7 +910,7 @@ PARAMETERS
 	   from or destined to (depending on which socket is local).  This is
 	   in addition to the normal information logged.
 
-     log (to <interface>)
+     log (to &ltinterface&gt)
 	   Send logs to the specified pflog(4) interface instead of pflog0.
 
      quick
@@ -916,22 +918,22 @@ PARAMETERS
 	   rule is considered the last matching rule, and evaluation of subse-
 	   quent rules is skipped.
 
-     on <interface>
+     on &ltinterface&gt
 	   This rule applies only to packets coming in on, or going out
 	   through, this particular interface or interface group.  For more
 	   information on interface groups, see the group keyword in
 	   ifconfig(8).
 
-     <af>  This rule applies only to packets of this address family.  Sup-
+     &ltaf&gt  This rule applies only to packets of this address family.  Sup-
 	   ported values are inet and inet6.
 
-     proto <protocol>
+     proto &ltprotocol&gt
 	   This rule applies only to packets of this protocol.	Common proto-
 	   cols are icmp(4), icmp6(4), tcp(4), and udp(4).  For a list of all
 	   the protocol name to number mappings used by pfctl(8), see the file
 	   /etc/protocols.
 
-     from <source> port <source> os <source> to <dest> port <dest>
+     from &ltsource&gt port &ltsource&gt os &ltsource&gt to &ltdest&gt port &ltdest&gt
 	   This rule applies only to packets with the specified source and
 	   destination addresses and ports.
 
@@ -940,14 +942,14 @@ PARAMETERS
 	   or as any of the following keywords:
 
 	   any		   Any address.
-	   route <label>   Any address whose associated route has label
-			   <label>.  See route(4) and route(8).
+	   route &ltlabel&gt   Any address whose associated route has label
+			   &ltlabel&gt.  See route(4) and route(8).
 	   no-route	   Any address which is not currently routable.
 	   urpf-failed	   Any source address that fails a unicast reverse
 			   path forwarding (URPF) check, i.e. packets coming
 			   in on an interface other than that which holds the
 			   route back to the packet's source address.
-	   <table>	   Any address that matches the given table.
+	   &lttable&gt	   Any address that matches the given table.
 
 	   Ranges of addresses are specified by using the `-' operator.  For
 	   instance: ``10.1.1.10 - 10.1.1.12'' means all addresses from
@@ -985,27 +987,27 @@ PARAMETERS
 
 		 =	 (equal)
 		 !=	 (unequal)
-		 <	 (less than)
-		 <=	 (less than or equal)
-		 >	 (greater than)
-		 >=	 (greater than or equal)
+		 &lt	 (less than)
+		 &lt=	 (less than or equal)
+		 &gt	 (greater than)
+		 &gt=	 (greater than or equal)
 		 :	 (range including boundaries)
-		 ><	 (range excluding boundaries)
-		 <>	 (except range)
+		 &gt&lt	 (range excluding boundaries)
+		 &lt&gt	 (except range)
 
-	   `><', `<>' and `:' are binary operators (they take two arguments).
+	   `&gt&lt', `&lt&gt' and `:' are binary operators (they take two arguments).
 	   For instance:
 
 	   port 2000:2004
-		       means `all ports >= 2000 and <= 2004', hence ports
+		       means `all ports &gt= 2000 and &lt= 2004', hence ports
 		       2000, 2001, 2002, 2003 and 2004.
 
-	   port 2000 >< 2004
-		       means `all ports > 2000 and < 2004', hence ports 2001,
+	   port 2000 &gt&lt 2004
+		       means `all ports &gt 2000 and &lt 2004', hence ports 2001,
 		       2002 and 2003.
 
-	   port 2000 <> 2004
-		       means `all ports < 2000 or > 2004', hence ports 1-1999
+	   port 2000 &lt&gt 2004
+		       means `all ports &lt 2000 or &gt 2004', hence ports 1-1999
 		       and 2005-65535.
 
 	   The operating system of the source host can be specified in the
@@ -1017,20 +1019,20 @@ PARAMETERS
 
 		 pass in all
 		 pass in from any to any
-		 pass in proto tcp from any port <= 1024 to any
+		 pass in proto tcp from any port &lt= 1024 to any
 		 pass in proto tcp from any to any port 25
-		 pass in proto tcp from 10.0.0.0/8 port > 1024 \
+		 pass in proto tcp from 10.0.0.0/8 port &gt 1024 \
 		       to ! 10.1.2.3 port != ssh
 		 pass in proto tcp from any os "OpenBSD"
 		 pass in proto tcp from route "DTAG"
 
      all   This is equivalent to "from any to any".
 
-     group <group>
+     group &ltgroup&gt
 	   Similar to user, this rule only applies to packets of sockets owned
 	   by the specified group.
 
-     user <user>
+     user &ltuser&gt
 	   This rule only applies to packets of sockets owned by the specified
 	   user.  For outgoing connections initiated from the firewall, this
 	   is the user that opened the connection.  For incoming connections
@@ -1053,19 +1055,19 @@ PARAMETERS
 	   User and group IDs can be specified as either numbers or names.
 	   The syntax is similar to the one for ports.	The value unknown
 	   matches packets of forwarded connections.  unknown can only be used
-	   with the operators = and !=.  Other constructs like user >= unknown
+	   with the operators = and !=.  Other constructs like user &gt= unknown
 	   are invalid.  Forwarded packets with unknown user and group ID
 	   match only rules that explicitly compare against unknown with the
-	   operators = or !=.  For instance user >= 0 does not match forwarded
+	   operators = or !=.  For instance user &gt= 0 does not match forwarded
 	   packets.  The following example allows only selected users to open
 	   outgoing connections:
 
 		 block out proto { tcp, udp } all
-		 pass  out proto { tcp, udp } all user { < 1000, dhartmei }
+		 pass  out proto { tcp, udp } all user { &lt 1000, dhartmei }
 
-     flags <a> /<b> | /<b> | any
-	   This rule only applies to TCP packets that have the flags <a> set
-	   out of set <b>.  Flags not specified in <b> are ignored.  For
+     flags &lta&gt /&ltb&gt | /&ltb&gt | any
+	   This rule only applies to TCP packets that have the flags &lta&gt set
+	   out of set &ltb&gt.  Flags not specified in &ltb&gt are ignored.  For
 	   stateful connections, the default is flags S/SA.  To indicate that
 	   flags should not be checked at all, specify flags any.  The flags
 	   are: (F)IN, (S)YN, (R)ST, (P)USH, (A)CK, (U)RG, (E)CE, and C(W)R.
@@ -1095,16 +1097,16 @@ PARAMETERS
 	   with reassemble tcp will also not be recoverable from intermediate
 	   packets.  Such connections will stall and time out.
 
-     icmp-type <type> code <code>
+     icmp-type &lttype&gt code &ltcode&gt
 
-     icmp6-type <type> code <code>
+     icmp6-type &lttype&gt code &ltcode&gt
 	   This rule only applies to ICMP or ICMPv6 packets with the specified
 	   type and code.  Text names for ICMP types and codes are listed in
 	   icmp(4) and icmp6(4).  This parameter is only valid for rules that
 	   cover protocols ICMP or ICMP6.  The protocol and the ICMP type
 	   indicator (icmp-type or icmp6-type) must match.
 
-     tos <string> | <number>
+     tos &ltstring&gt | &ltnumber&gt
 	   This rule applies to packets with the specified TOS bits set.  TOS
 	   may be given as one of lowdelay, throughput, reliability, or as
 	   either hex or decimal.
@@ -1125,7 +1127,7 @@ PARAMETERS
 	   is used when a packet does not match any rules does not allow IP
 	   options.
 
-     label <string>
+     label &ltstring&gt
 	   Adds a label (name) to the rule, which can be used to identify the
 	   rule.  For instance, pfctl -s labels shows per-rule statistics for
 	   rules that have labels.
@@ -1144,19 +1146,19 @@ PARAMETERS
 
 		 ips = "{ 1.2.3.4, 1.2.3.5 }"
 		 pass in proto tcp from any to $ips \
-		       port > 1023 label "$dstaddr:$dstport"
+		       port &gt 1023 label "$dstaddr:$dstport"
 
 	   expands to
 
 		 pass in inet proto tcp from any to 1.2.3.4 \
-		       port > 1023 label "1.2.3.4:>1023"
+		       port &gt 1023 label "1.2.3.4:&gt1023"
 		 pass in inet proto tcp from any to 1.2.3.5 \
-		       port > 1023 label "1.2.3.5:>1023"
+		       port &gt 1023 label "1.2.3.5:&gt1023"
 
 	   The macro expansion for the label directive occurs only at configu-
 	   ration file parse time, not during runtime.
 
-     queue <queue> | (<queue>, <queue>)
+     queue &ltqueue&gt | (&ltqueue&gt, &ltqueue&gt)
 	   Packets matching this rule will be assigned to the specified queue.
 	   If two queues are given, packets which have a TOS of lowdelay and
 	   TCP ACKs with no data payload will be assigned to the second one.
@@ -1167,7 +1169,7 @@ PARAMETERS
 		 pass in proto tcp to port 25 queue mail
 		 pass in proto tcp to port 22 queue(ssh_bulk, ssh_prio)
 
-     tag <string>
+     tag &ltstring&gt
 	   Packets matching this rule will be tagged with the specified
 	   string.  The tag acts as an internal marker that can be used to
 	   identify these packets later on.  This can be used, for example, to
@@ -1180,18 +1182,18 @@ PARAMETERS
 	   during nat, rdr, or binat rules in addition to filter rules.  Tags
 	   take the same macros as labels (see above).
 
-     tagged <string>
+     tagged &ltstring&gt
 	   Used with filter or translation rules to specify that packets must
 	   already be tagged with the given tag in order to match the rule.
 	   Inverse tag matching can also be done by specifying the ! operator
 	   before the tagged keyword.
 
-     rtable <number>
+     rtable &ltnumber&gt
 	   Used to select an alternate routing table for the routing lookup.
 	   Only effective before the route lookup happened, i.e. when filter-
 	   ing inbound.
 
-     probability <number>
+     probability &ltnumber&gt
 	   A probability attribute can be attached to a rule, with a value set
 	   between 0 and 1, bounds not included.  In that case, the rule will
 	   be honoured using the given probability value only.	For example,
@@ -1334,11 +1336,11 @@ STATEFUL TRACKING OPTIONS
      options, and keep state must be specified explicitly to apply options to
      a rule.
 
-     max <number>
+     max &ltnumber&gt
 	   Limits the number of concurrent states the rule may create.	When
 	   this limit is reached, further packets that would create state will
 	   not match this rule until existing states time out.
-     <timeout> <seconds>
+     &lttimeout&gt &ltseconds&gt
 	   Changes the timeout values used for states created by this rule.
 	   For a list of all valid timeout names, see OPTIONS above.
 
@@ -1365,10 +1367,10 @@ STATEFUL TRACKING OPTIONS
 
      The following limits can be set:
 
-     max-src-nodes <number>
+     max-src-nodes &ltnumber&gt
 	   Limits the maximum number of source addresses which can simultane-
 	   ously have state table entries.
-     max-src-states <number>
+     max-src-states &ltnumber&gt
 	   Limits the maximum number of simultaneous state entries that a sin-
 	   gle source address can create with this rule.
 
@@ -1376,16 +1378,16 @@ STATEFUL TRACKING OPTIONS
      tions which have completed the TCP 3-way handshake) can also be enforced
      per source IP.
 
-     max-src-conn <number>
+     max-src-conn &ltnumber&gt
 	   Limits the maximum number of simultaneous TCP connections which
 	   have completed the 3-way handshake that a single host can make.
-     max-src-conn-rate <number> / <seconds>
+     max-src-conn-rate &ltnumber&gt / &ltseconds&gt
 	   Limit the rate of new connections over a time interval.  The con-
 	   nection rate is an approximation calculated as a moving average.
 
      Because the 3-way handshake ensures that the source address is not being
      spoofed, more aggressive action can be taken based on these limits.  With
-     the overload <table> state option, source IP addresses which hit either
+     the overload &lttable&gt state option, source IP addresses which hit either
      of the limits on established connections will be added to the named ta-
      ble.  This table can be used in the ruleset to block further activity
      from the offending host, redirect it to a tarpit process, or restrict its
@@ -1398,14 +1400,14 @@ STATEFUL TRACKING OPTIONS
 
      For example, the following rules will protect the webserver against hosts
      making more than 100 connections in 10 seconds.  Any host which connects
-     faster than this rate will have its address added to the <bad_hosts> ta-
+     faster than this rate will have its address added to the &ltbad_hosts&gt ta-
      ble and have all states originating from it flushed.  Any new packets
      arriving from this host will be dropped unconditionally by the block
      rule.
 
-	   block quick from <bad_hosts>
+	   block quick from &ltbad_hosts&gt
 	   pass in on $ext_if proto tcp to $webserver port www keep state \
-		   (max-src-conn-rate 100/10, overload <bad_hosts> flush global)
+		   (max-src-conn-rate 100/10, overload &ltbad_hosts&gt flush global)
 
 OPERATING SYSTEM FINGERPRINTING
      Passive OS Fingerprinting is a mechanism to inspect nuances of a TCP con-
@@ -1561,19 +1563,19 @@ ANCHORS
      An anchor can reference another anchor attachment point using the follow-
      ing kinds of rules:
 
-     nat-anchor <name>
+     nat-anchor &ltname&gt
 	   Evaluates the nat rules in the specified anchor.
 
-     rdr-anchor <name>
+     rdr-anchor &ltname&gt
 	   Evaluates the rdr rules in the specified anchor.
 
-     binat-anchor <name>
+     binat-anchor &ltname&gt
 	   Evaluates the binat rules in the specified anchor.
 
-     anchor <name>
+     anchor &ltname&gt
 	   Evaluates the filter rules in the specified anchor.
 
-     load anchor <name> from <file>
+     load anchor &ltname&gt from &ltfile&gt
 	   Loads the rules from the specified file into the anchor name.
 
      When evaluation of the main ruleset reaches an anchor rule, packet filter
@@ -1691,12 +1693,12 @@ TRANSLATION EXAMPLES
      ext_if = "ne3"
 
      # map daemon on 8080 to appear to be on 80
-     rdr on $ext_if proto tcp from any to any port 80 -> 127.0.0.1 port 8080
+     rdr on $ext_if proto tcp from any to any port 80 -&gt 127.0.0.1 port 8080
 
      If the pass modifier is given, packets matching the translation rule are
      passed without inspecting the filter rules:
 
-     rdr pass on $ext_if proto tcp from any to any port 80 -> 127.0.0.1 \
+     rdr pass on $ext_if proto tcp from any to any port 80 -&gt 127.0.0.1 \
 	   port 8080
 
      In the example below, vlan12 is configured as 192.168.168.1; the machine
@@ -1707,7 +1709,7 @@ TRANSLATION EXAMPLES
      face on the router except for the nodes on vlan12.  (Thus, 192.168.168.1
      can talk to the 192.168.168.0/24 nodes.)
 
-     nat on ! vlan12 from 192.168.168.0/24 to any -> 204.92.77.111
+     nat on ! vlan12 from 192.168.168.0/24 to any -&gt 204.92.77.111
 
      In the example below, the machine sits between a fake internal
      144.19.74.*  network, and a routable external IP of 204.92.77.100.  The
@@ -1715,7 +1717,7 @@ TRANSLATION EXAMPLES
 
      # NO NAT
      no nat on $ext_if proto ah from 144.19.74.0/24 to any
-     nat on $ext_if from 144.19.74.0/24 to any -> 204.92.77.100
+     nat on $ext_if from 144.19.74.0/24 to any -&gt 204.92.77.100
 
      In the example below, packets bound for one specific server, as well as
      those generated by the sysadmins are not proxied; all other connections
@@ -1724,7 +1726,7 @@ TRANSLATION EXAMPLES
      # NO RDR
      no rdr on $int_if proto { tcp, udp } from any to $server port 80
      no rdr on $int_if proto { tcp, udp } from $sysadmins to any port 80
-     rdr on $int_if proto { tcp, udp } from any to any port 80 -> 127.0.0.1 \
+     rdr on $int_if proto { tcp, udp } from any to any port 80 -&gt 127.0.0.1 \
 	   port 80
 
      This longer example uses both a NAT and a redirection.  The external
@@ -1736,33 +1738,33 @@ TRANSLATION EXAMPLES
      # NAT
      # Translate outgoing packets' source addresses (any protocol).
      # In this case, any address but the gateway's external address is mapped.
-     nat on $ext_if inet from ! ($ext_if) to any -> ($ext_if)
+     nat on $ext_if inet from ! ($ext_if) to any -&gt ($ext_if)
 
      # NAT PROXYING
      # Map outgoing packets' source port to an assigned proxy port instead of
      # an arbitrary port.
      # In this case, proxy outgoing isakmp with port 500 on the gateway.
-     nat on $ext_if inet proto udp from any port = isakmp to any -> ($ext_if) \
+     nat on $ext_if inet proto udp from any port = isakmp to any -&gt ($ext_if) \
 	   port 500
 
      # BINAT
      # Translate outgoing packets' source address (any protocol).
      # Translate incoming packets' destination address to an internal machine
      # (bidirectional).
-     binat on $ext_if from 10.1.2.150 to any -> $ext_if
+     binat on $ext_if from 10.1.2.150 to any -&gt $ext_if
 
      # RDR
      # Translate incoming packets' destination addresses.
      # As an example, redirect a TCP and UDP port to an internal machine.
      rdr on $ext_if inet proto tcp from any to ($ext_if) port 8080 \
-	   -> 10.1.2.151 port 22
+	   -&gt 10.1.2.151 port 22
      rdr on $ext_if inet proto udp from any to ($ext_if) port 8080 \
-	   -> 10.1.2.151 port 53
+	   -&gt 10.1.2.151 port 53
 
      # RDR
      # Translate outgoing ftp control connections to send them to localhost
      # for proxying with ftp-proxy(8) running on port 8021.
-     rdr on $int_if proto tcp from any to any port 21 -> 127.0.0.1 port 8021
+     rdr on $int_if proto tcp from any to any port 21 -&gt 127.0.0.1 port 8021
 
      In this example, a NAT gateway is set up to translate internal addresses
      using a pool of public addresses (192.0.2.16/28) and to redirect incoming
@@ -1772,13 +1774,13 @@ TRANSLATION EXAMPLES
      # Translate outgoing packets' source addresses using an address pool.
      # A given source address is always translated to the same pool address by
      # using the source-hash keyword.
-     nat on $ext_if inet from any to any -> 192.0.2.16/28 source-hash
+     nat on $ext_if inet from any to any -&gt 192.0.2.16/28 source-hash
 
      # RDR ROUND ROBIN
      # Translate incoming web server connections to a group of web servers on
      # the internal network.
      rdr on $ext_if proto tcp from any to any port 80 \
-	   -> { 10.1.2.155, 10.1.2.160, 10.1.2.161 } round-robin
+	   -&gt { 10.1.2.155, 10.1.2.160, 10.1.2.161 } round-robin
 
 FILTER EXAMPLES
      # The external interface is kue0
@@ -1870,8 +1872,8 @@ FILTER EXAMPLES
      # tag incoming packets as they are redirected to spamd(8). use the tag
      # to pass those packets through the packet filter.
 
-     rdr on $ext_if inet proto tcp from <spammers> to port smtp \
-	     tag SPAMD -> 127.0.0.1 port spamd
+     rdr on $ext_if inet proto tcp from &ltspammers&gt to port smtp \
+	     tag SPAMD -&gt 127.0.0.1 port spamd
 
      block in on $ext_if
      pass in on $ext_if inet proto tcp tagged SPAMD
@@ -1920,7 +1922,7 @@ GRAMMAR
      nat-rule	    = [ "no" ] "nat" [ "pass" [ "log" [ "(" logopts ")" ] ] ]
 		      [ "on" ifspec ] [ af ]
 		      [ protospec ] hosts [ "tag" string ] [ "tagged" string ]
-		      [ "->" ( redirhost | "{" redirhost-list "}" )
+		      [ "-&gt" ( redirhost | "{" redirhost-list "}" )
 		      [ portspec ] [ pooltype ] [ "static-port" ] ]
 
      binat-rule     = [ "no" ] "binat" [ "pass" [ "log" [ "(" logopts ")" ] ] ]
@@ -1928,18 +1930,18 @@ GRAMMAR
 		      [ "proto" ( proto-name | proto-number ) ]
 		      "from" address [ "/" mask-bits ] "to" ipspec
 		      [ "tag" string ] [ "tagged" string ]
-		      [ "->" address [ "/" mask-bits ] ]
+		      [ "-&gt" address [ "/" mask-bits ] ]
 
      rdr-rule	    = [ "no" ] "rdr" [ "pass" [ "log" [ "(" logopts ")" ] ] ]
 		      [ "on" ifspec ] [ af ]
 		      [ protospec ] hosts [ "tag" string ] [ "tagged" string ]
-		      [ "->" ( redirhost | "{" redirhost-list "}" )
+		      [ "-&gt" ( redirhost | "{" redirhost-list "}" )
 		      [ portspec ] [ pooltype ] ]
 
      antispoof-rule = "antispoof" [ "log" ] [ "quick" ]
 		      "for" ifspec [ af ] [ "label" string ]
 
-     table-rule     = "table" "<" string ">" [ tableopts-list ]
+     table-rule     = "table" "&lt" string "&gt" [ tableopts-list ]
      tableopts-list = tableopts-list tableopts | tableopts
      tableopts	    = "persist" | "const" | "file" string |
 		      "{" [ tableaddr-list ] "}"
@@ -1997,7 +1999,7 @@ GRAMMAR
 		      "{" host-list "}" | "route" string ) [ port ]
 
      ipspec	    = "any" | host | "{" host-list "}"
-     host	    = [ "!" ] ( address [ "/" mask-bits ] | "<" string ">" )
+     host	    = [ "!" ] ( address [ "/" mask-bits ] | "&lt" string "&gt" )
      redirhost	    = address [ "/" mask-bits ]
      routehost	    = "(" interface-name [ address [ "/" mask-bits ] ] ")"
      address	    = ( interface-name | interface-group |
@@ -2013,9 +2015,9 @@ GRAMMAR
      user	    = "user" ( unary-op | binary-op | "{" op-list "}" )
      group	    = "group" ( unary-op | binary-op | "{" op-list "}" )
 
-     unary-op	    = [ "=" | "!=" | "<" | "<=" | ">" | ">=" ]
+     unary-op	    = [ "=" | "!=" | "&lt" | "&lt=" | "&gt" | "&gt=" ]
 		      ( name | number )
-     binary-op	    = number ( "<>" | "><" | ":" ) number
+     binary-op	    = number ( "&lt&gt" | "&gt&lt" | ":" ) number
      op-list	    = ( unary-op | binary-op ) [ [ "," ] op-list ]
 
      os-name	    = operating-system-name
@@ -2040,7 +2042,7 @@ GRAMMAR
 		      "max-src-nodes" number | "max-src-states" number |
 		      "max-src-conn" number |
 		      "max-src-conn-rate" number "/" number |
-		      "overload" "<" string ">" [ "flush" ] |
+		      "overload" "&lt" string "&gt" [ "flush" ] |
 		      "if-bound" | "floating" )
 
      fragmentation  = [ "fragment reassemble" | "fragment crop" |
@@ -2092,6 +2094,6 @@ HISTORY
      The pf.conf file format first appeared in OpenBSD 3.0.
 
 BSD				 March 3, 2013				   BSD
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

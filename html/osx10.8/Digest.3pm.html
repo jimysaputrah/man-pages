@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="The "Digest::" modules calculate digests, also called "fingerprints" or..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Digest - Modules that calculate message digests</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Digest(3pm)	       Perl Programmers Reference Guide 	   Digest(3pm)
 
 
@@ -16,13 +18,13 @@ NAME
        Digest - Modules that calculate message digests
 
 SYNOPSIS
-	 $md5  = Digest->new("MD5");
-	 $sha1 = Digest->new("SHA-1");
-	 $sha256 = Digest->new("SHA-256");
-	 $sha384 = Digest->new("SHA-384");
-	 $sha512 = Digest->new("SHA-512");
+	 $md5  = Digest-&gtnew("MD5");
+	 $sha1 = Digest-&gtnew("SHA-1");
+	 $sha256 = Digest-&gtnew("SHA-256");
+	 $sha384 = Digest-&gtnew("SHA-384");
+	 $sha512 = Digest-&gtnew("SHA-512");
 
-	 $hmac = Digest->HMAC_MD5($key);
+	 $hmac = Digest-&gtHMAC_MD5($key);
 
 DESCRIPTION
        The "Digest::" modules calculate digests, also called "fingerprints" or
@@ -76,9 +78,9 @@ DESCRIPTION
 OO INTERFACE
        The following methods are available for all "Digest::" modules:
 
-       $ctx = Digest->XXX($arg,...)
-       $ctx = Digest->new(XXX => $arg,...)
-       $ctx = Digest::XXX->new($arg,...)
+       $ctx = Digest-&gtXXX($arg,...)
+       $ctx = Digest-&gtnew(XXX =&gt $arg,...)
+       $ctx = Digest::XXX-&gtnew($arg,...)
 	   The constructor returns some object that encapsulate the state of
 	   the message-digest algorithm.  You can add data to the object and
 	   finally ask for the digest.	The "XXX" should of course be replaced
@@ -90,20 +92,20 @@ OO INTERFACE
 	   identifiers, e.g. "SHA-1".  If no implementation for the given
 	   algorithm can be found, then an exception is raised.
 
-	   If new() is called as an instance method (i.e. $ctx->new) it will
+	   If new() is called as an instance method (i.e. $ctx-&gtnew) it will
 	   just reset the state the object to the state of a newly created
 	   object.  No new object is created in this case, and the return
 	   value is the reference to the object (i.e. $ctx).
 
-       $other_ctx = $ctx->clone
+       $other_ctx = $ctx-&gtclone
 	   The clone method creates a copy of the digest state object and
 	   returns a reference to the copy.
 
-       $ctx->reset
-	   This is just an alias for $ctx->new.
+       $ctx-&gtreset
+	   This is just an alias for $ctx-&gtnew.
 
-       $ctx->add( $data )
-       $ctx->add( $chunk1, $chunk2, ... )
+       $ctx-&gtadd( $data )
+       $ctx-&gtadd( $chunk1, $chunk2, ... )
 	   The string value of the $data provided as argument is appended to
 	   the message we calculate the digest for.  The return value is the
 	   $ctx object itself.
@@ -112,16 +114,16 @@ OO INTERFACE
 	   message, thus all these lines will have the same effect on the
 	   state of the $ctx object:
 
-	     $ctx->add("a"); $ctx->add("b"); $ctx->add("c");
-	     $ctx->add("a")->add("b")->add("c");
-	     $ctx->add("a", "b", "c");
-	     $ctx->add("abc");
+	     $ctx-&gtadd("a"); $ctx-&gtadd("b"); $ctx-&gtadd("c");
+	     $ctx-&gtadd("a")-&gtadd("b")-&gtadd("c");
+	     $ctx-&gtadd("a", "b", "c");
+	     $ctx-&gtadd("abc");
 
 	   Most algorithms are only defined for strings of bytes and this
 	   method might therefore croak if the provided arguments contain
 	   chars with ordinal number above 255.
 
-       $ctx->addfile( $io_handle )
+       $ctx-&gtaddfile( $io_handle )
 	   The $io_handle is read until EOF and the content is appended to the
 	   message we calculate the digest for.  The return value is the $ctx
 	   object itself.
@@ -135,8 +137,8 @@ OO INTERFACE
 	   In most cases you want to make sure that the $io_handle is in
 	   "binmode" before you pass it as argument to the addfile() method.
 
-       $ctx->add_bits( $data, $nbits )
-       $ctx->add_bits( $bitstring )
+       $ctx-&gtadd_bits( $data, $nbits )
+       $ctx-&gtadd_bits( $bitstring )
 	   The add_bits() method is an alternative to add() that allow partial
 	   bytes to be appended to the message.  Most users should just ignore
 	   this method as partial bytes is very unlikely to be of any
@@ -146,38 +148,38 @@ OO INTERFACE
 	   from $data.	For the last potentially partial byte only the high
 	   order "$nbits % 8" bits are used.  If $nbits is greater than
 	   "length($data) * 8", then this method would do the same as
-	   "$ctx->add($data)".
+	   "$ctx-&gtadd($data)".
 
 	   The one argument form of add_bits() takes a $bitstring of "1" and
 	   "0" chars as argument.  It's a shorthand for
-	   "$ctx->add_bits(pack("B*", $bitstring), length($bitstring))".
+	   "$ctx-&gtadd_bits(pack("B*", $bitstring), length($bitstring))".
 
 	   The return value is the $ctx object itself.
 
 	   This example shows two calls that should have the same effect:
 
-	      $ctx->add_bits("111100001010");
-	      $ctx->add_bits("\xF0\xA0", 12);
+	      $ctx-&gtadd_bits("111100001010");
+	      $ctx-&gtadd_bits("\xF0\xA0", 12);
 
 	   Most digest algorithms are byte based and for these it is not
 	   possible to add bits that are not a multiple of 8, and the
 	   add_bits() method will croak if you try.
 
-       $ctx->digest
+       $ctx-&gtdigest
 	   Return the binary digest for the message.
 
 	   Note that the "digest" operation is effectively a destructive,
 	   read-once operation. Once it has been performed, the $ctx object is
 	   automatically "reset" and can be used to calculate another digest
-	   value.  Call $ctx->clone->digest if you want to calculate the
+	   value.  Call $ctx-&gtclone-&gtdigest if you want to calculate the
 	   digest without resetting the digest state.
 
-       $ctx->hexdigest
-	   Same as $ctx->digest, but will return the digest in hexadecimal
+       $ctx-&gthexdigest
+	   Same as $ctx-&gtdigest, but will return the digest in hexadecimal
 	   form.
 
-       $ctx->b64digest
-	   Same as $ctx->digest, but will return the digest as a base64
+       $ctx-&gtb64digest
+	   Same as $ctx-&gtdigest, but will return the digest as a base64
 	   encoded string.
 
 Digest speed
@@ -225,7 +227,7 @@ SEE ALSO
        http://en.wikipedia.org/wiki/Cryptographic_hash_function
 
 AUTHOR
-       Gisle Aas <gisle@aas.no>
+       Gisle Aas &ltgisle@aas.no&gt
 
        The "Digest::" interface is based on the interface originally developed
        by Neil Winton for his "MD5" module.
@@ -239,6 +241,6 @@ AUTHOR
 
 
 perl v5.12.4			  2011-06-01			   Digest(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

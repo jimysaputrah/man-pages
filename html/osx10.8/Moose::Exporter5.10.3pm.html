@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module encapsulates the exporting of sugar functions in a..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>Moose::Exporter - make an import() and unimport() just like Moose.pm</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 Moose::Exporter(3)    User Contributed Perl Documentation   Moose::Exporter(3)
 
 
@@ -21,17 +23,17 @@ SYNOPSIS
 	 use Moose ();
 	 use Moose::Exporter;
 
-	 Moose::Exporter->setup_import_methods(
-	     with_meta => [ 'has_rw', 'sugar2' ],
-	     as_is     => [ 'sugar3', \&Some::Random::thing ],
-	     also      => 'Moose',
+	 Moose::Exporter-&gtsetup_import_methods(
+	     with_meta =&gt [ 'has_rw', 'sugar2' ],
+	     as_is     =&gt [ 'sugar3', \&Some::Random::thing ],
+	     also      =&gt 'Moose',
 	 );
 
 	 sub has_rw {
 	     my ( $meta, $name, %options ) = @_;
-	     $meta->add_attribute(
+	     $meta-&gtadd_attribute(
 		 $name,
-		 is => 'rw',
+		 is =&gt 'rw',
 		 %options,
 	     );
 	 }
@@ -66,7 +68,7 @@ DESCRIPTION
 METHODS
        This module provides two public methods:
 
-       Moose::Exporter->setup_import_methods(...)
+       Moose::Exporter-&gtsetup_import_methods(...)
 	   When you call this method, "Moose::Exporter" builds custom
 	   "import", "unimport", and "init_meta" methods for your module. The
 	   "import" method will export the functions you specify, and can also
@@ -91,7 +93,7 @@ METHODS
 
 	   This method accepts the following parameters:
 
-	   o	   with_meta => [ ... ]
+	   o	   with_meta =&gt [ ... ]
 
 		   This list of function names only will be wrapped and then
 		   exported. The wrapper will pass the metaclass object for
@@ -100,7 +102,7 @@ METHODS
 		   Many sugar functions will need to use this metaclass object
 		   to do something to the calling package.
 
-	   o	   as_is => [ ... ]
+	   o	   as_is =&gt [ ... ]
 
 		   This list of function names or sub references will be
 		   exported as-is. You can identify a subroutine by reference,
@@ -113,7 +115,7 @@ METHODS
 		   explicitly imported the sub themselves, and therefore wants
 		   to keep it.
 
-	   o	   also => $name or \@names
+	   o	   also =&gt $name or \@names
 
 		   This is a list of modules which contain functions that the
 		   caller wants to export. These modules must also use
@@ -133,7 +135,7 @@ METHODS
 	   parameters are "class_metaroles", "role_metaroles", and
 	   "base_object_roles".
 
-       Moose::Exporter->build_import_methods(...)
+       Moose::Exporter-&gtbuild_import_methods(...)
 	   Returns two or three code refs, one for "import", one for
 	   "unimport", and optionally one for "init_meta", if the appropriate
 	   options are passed in.
@@ -142,7 +144,7 @@ METHODS
 	   of method names to install into your exporting package. The valid
 	   options are "import", "unimport", and "init_meta". Calling
 	   "setup_import_methods" is equivalent to calling
-	   "build_import_methods" with "install => [qw(import unimport
+	   "build_import_methods" with "install =&gt [qw(import unimport
 	   init_meta)]" except that it doesn't also return the methods.
 
 	   Used by "setup_import_methods".
@@ -159,11 +161,11 @@ IMPORTING AND init_meta
        "for_class" parameter.
 
        Most of the time, your "init_meta" method will probably just call
-       "Moose->init_meta" to do the real work:
+       "Moose-&gtinit_meta" to do the real work:
 
 	 sub init_meta {
 	     shift; # our class name
-	     return Moose->init_meta( @_, metaclass => 'My::Metaclass' );
+	     return Moose-&gtinit_meta( @_, metaclass =&gt 'My::Metaclass' );
 	 }
 
        Keep in mind that "build_import_methods" will return an "init_meta"
@@ -171,14 +173,14 @@ IMPORTING AND init_meta
        "init_meta":
 
 	 my ( $import, $unimport, $init_meta ) =
-	     Moose::Exporter->build_import_methods( ... );
+	     Moose::Exporter-&gtbuild_import_methods( ... );
 
 	 sub import {
 	    my $class = shift;
 
 	    ...
 
-	    $class->$import(...);
+	    $class-&gt$import(...);
 
 	    ...
 	 }
@@ -190,7 +192,7 @@ IMPORTING AND init_meta
 
 	    ...
 
-	    $class->$init_meta(...);
+	    $class-&gt$init_meta(...);
 
 	    ...
 	 }
@@ -200,9 +202,9 @@ METACLASS TRAITS
        of your module to specify metaclass traits in a "-traits" parameter
        passed as part of the import:
 
-	 use Moose -traits => 'My::Meta::Trait';
+	 use Moose -traits =&gt 'My::Meta::Trait';
 
-	 use Moose -traits => [ 'My::Meta::Trait', 'My::Other::Trait' ];
+	 use Moose -traits =&gt [ 'My::Meta::Trait', 'My::Other::Trait' ];
 
        These traits will be applied to the caller's metaclass instance.
        Providing traits for an exporting class that does not create a
@@ -212,7 +214,7 @@ BUGS
        See "BUGS" in Moose for details on reporting bugs.
 
 AUTHOR
-       Dave Rolsky <autarch@urth.org>
+       Dave Rolsky &ltautarch@urth.org&gt
 
        This is largely a reworking of code in Moose.pm originally written by
        Stevan Little and others.
@@ -220,7 +222,7 @@ AUTHOR
 COPYRIGHT AND LICENSE
        Copyright 2009 by Infinity Interactive, Inc.
 
-       <http://www.iinteractive.com>
+       &lthttp://www.iinteractive.com&gt
 
        This library is free software; you can redistribute it and/or modify it
        under the same terms as Perl itself.
@@ -228,6 +230,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.10.1			  2010-03-26		    Moose::Exporter(3)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>

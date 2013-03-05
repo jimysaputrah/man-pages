@@ -3,11 +3,13 @@
     <head>
         <meta name="description" content="This module provides a Perl interface that allows writing compressed..." />
         <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
         <title>IO::Compress::RawDeflate - Write RFC 1951 files/buffers</title>
         <META NAME="robots" CONTENT="all" />
     </head>
     
-<body><pre>
+<content><pre>
+
 IO::Compress::RawDeflatPerlmProgrammers ReferenceIO::Compress::RawDeflate(3pm)
 
 
@@ -18,30 +20,30 @@ NAME
 SYNOPSIS
 	   use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
 
-	   my $status = rawdeflate $input => $output [,OPTS]
+	   my $status = rawdeflate $input =&gt $output [,OPTS]
 	       or die "rawdeflate failed: $RawDeflateError\n";
 
 	   my $z = new IO::Compress::RawDeflate $output [,OPTS]
 	       or die "rawdeflate failed: $RawDeflateError\n";
 
-	   $z->print($string);
-	   $z->printf($format, $string);
-	   $z->write($string);
-	   $z->syswrite($string [, $length, $offset]);
-	   $z->flush();
-	   $z->tell();
-	   $z->eof();
-	   $z->seek($position, $whence);
-	   $z->binmode();
-	   $z->fileno();
-	   $z->opened();
-	   $z->autoflush();
-	   $z->input_line_number();
-	   $z->newStream( [OPTS] );
+	   $z-&gtprint($string);
+	   $z-&gtprintf($format, $string);
+	   $z-&gtwrite($string);
+	   $z-&gtsyswrite($string [, $length, $offset]);
+	   $z-&gtflush();
+	   $z-&gttell();
+	   $z-&gteof();
+	   $z-&gtseek($position, $whence);
+	   $z-&gtbinmode();
+	   $z-&gtfileno();
+	   $z-&gtopened();
+	   $z-&gtautoflush();
+	   $z-&gtinput_line_number();
+	   $z-&gtnewStream( [OPTS] );
 
-	   $z->deflateParams();
+	   $z-&gtdeflateParams();
 
-	   $z->close() ;
+	   $z-&gtclose() ;
 
 	   $RawDeflateError ;
 
@@ -73,12 +75,12 @@ Functional Interface
 
 	   use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
 
-	   rawdeflate $input => $output [,OPTS]
+	   rawdeflate $input =&gt $output [,OPTS]
 	       or die "rawdeflate failed: $RawDeflateError\n";
 
        The functional interface needs Perl5.005 or better.
 
-   rawdeflate $input => $output [, OPTS]
+   rawdeflate $input =&gt $output [, OPTS]
        "rawdeflate" expects at least two parameters, $input and $output.
 
        The $input parameter
@@ -112,8 +114,8 @@ Functional Interface
 	    valid filenames before any data is compressed.
 
        An Input FileGlob string
-	    If $input is a string that is delimited by the characters "<" and
-	    ">" "rawdeflate" will assume that it is an input fileglob string.
+	    If $input is a string that is delimited by the characters "&lt" and
+	    "&gt" "rawdeflate" will assume that it is an input fileglob string.
 	    The input is the list of files that match the fileglob.
 
 	    If the fileglob does not match any files ...
@@ -146,8 +148,8 @@ Functional Interface
 	    pushed onto the array.
 
        An Output FileGlob
-	    If $output is a string that is delimited by the characters "<" and
-	    ">" "rawdeflate" will assume that it is an output fileglob string.
+	    If $output is a string that is delimited by the characters "&lt" and
+	    "&gt" "rawdeflate" will assume that it is an output fileglob string.
 	    The output is the list of files that match the fileglob.
 
 	    When $output is an fileglob string, $input must also be a fileglob
@@ -165,7 +167,7 @@ Functional Interface
        "OPTS", are the same as those used with the OO interface defined in the
        "Constructor Options" section below.
 
-       "AutoClose => 0|1"
+       "AutoClose =&gt 0|1"
 	    This option applies to any input or output data streams to
 	    "rawdeflate" that are filehandles.
 
@@ -175,13 +177,13 @@ Functional Interface
 
 	    This parameter defaults to 0.
 
-       "BinModeIn => 0|1"
+       "BinModeIn =&gt 0|1"
 	    When reading from a file or filehandle, set "binmode" before
 	    reading.
 
 	    Defaults to 0.
 
-       "Append => 0|1"
+       "Append =&gt 0|1"
 	    The behaviour of this option is dependent on the type of output
 	    data stream.
 
@@ -232,7 +234,7 @@ Functional Interface
 	   use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
 
 	   my $input = "file1.txt";
-	   rawdeflate $input => "$input.1951"
+	   rawdeflate $input =&gt "$input.1951"
 	       or die "rawdeflate failed: $RawDeflateError\n";
 
        To read from an existing Perl filehandle, $input, and write the
@@ -243,10 +245,10 @@ Functional Interface
 	   use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
 	   use IO::File ;
 
-	   my $input = new IO::File "<file1.txt"
+	   my $input = new IO::File "&ltfile1.txt"
 	       or die "Cannot open 'file1.txt': $!\n" ;
 	   my $buffer ;
-	   rawdeflate $input => \$buffer
+	   rawdeflate $input =&gt \$buffer
 	       or die "rawdeflate failed: $RawDeflateError\n";
 
        To compress all files in the directory "/my/home" that match "*.txt"
@@ -256,7 +258,7 @@ Functional Interface
 	   use warnings ;
 	   use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
 
-	   rawdeflate '</my/home/*.txt>' => '<*.1951>'
+	   rawdeflate '&lt/my/home/*.txt&gt' =&gt '&lt*.1951&gt'
 	       or die "rawdeflate failed: $RawDeflateError\n";
 
        and if you want to compress each file one at a time, this will do the
@@ -269,7 +271,7 @@ Functional Interface
 	   for my $input ( glob "/my/home/*.txt" )
 	   {
 	       my $output = "$input.1951" ;
-	       rawdeflate $input => $output
+	       rawdeflate $input =&gt $output
 		   or die "Error compressing '$input': $RawDeflateError\n";
 	   }
 
@@ -291,7 +293,7 @@ OO Interface
        carried out with $z.  For example, to write to a compressed file/buffer
        you can use either of these forms
 
-	   $z->print("hello world\n");
+	   $z-&gtprint("hello world\n");
 	   print $z "hello world\n";
 
        The mandatory parameter $output is used to control the destination of
@@ -317,7 +319,7 @@ OO Interface
    Constructor Options
        "OPTS" is any combination of the following options:
 
-       "AutoClose => 0|1"
+       "AutoClose =&gt 0|1"
 	    This option is only valid when the $output parameter is a
 	    filehandle. If specified, and the value is true, it will result in
 	    the $output being closed once either the "close" method is called
@@ -325,7 +327,7 @@ OO Interface
 
 	    This parameter defaults to 0.
 
-       "Append => 0|1"
+       "Append =&gt 0|1"
 	    Opens $output in append mode.
 
 	    The behaviour of this option is dependent on the type of $output.
@@ -353,7 +355,7 @@ OO Interface
 
 	    This parameter defaults to 0.
 
-       "Merge => 0|1"
+       "Merge =&gt 0|1"
 	    This option is used to compress input data and append it to an
 	    existing compressed data stream in $output. The end result is a
 	    single compressed data stream stored in $output.
@@ -403,7 +405,7 @@ OO Interface
 
 	    The default is Z_DEFAULT_STRATEGY.
 
-       "Strict => 0|1"
+       "Strict =&gt 0|1"
 	    This is a placeholder option.
 
    Examples
@@ -413,7 +415,7 @@ Methods
    print
        Usage is
 
-	   $z->print($data)
+	   $z-&gtprint($data)
 	   print $z $data
 
        Compresses and outputs the contents of the $data parameter. This has
@@ -424,7 +426,7 @@ Methods
    printf
        Usage is
 
-	   $z->printf($format, $data)
+	   $z-&gtprintf($format, $data)
 	   printf $z $format, $data
 
        Compresses and outputs the contents of the $data parameter.
@@ -434,9 +436,9 @@ Methods
    syswrite
        Usage is
 
-	   $z->syswrite $data
-	   $z->syswrite $data, $length
-	   $z->syswrite $data, $length, $offset
+	   $z-&gtsyswrite $data
+	   $z-&gtsyswrite $data, $length
+	   $z-&gtsyswrite $data, $length, $offset
 
        Compresses and outputs the contents of the $data parameter.
 
@@ -446,9 +448,9 @@ Methods
    write
        Usage is
 
-	   $z->write $data
-	   $z->write $data, $length
-	   $z->write $data, $length, $offset
+	   $z-&gtwrite $data
+	   $z-&gtwrite $data, $length
+	   $z-&gtwrite $data, $length, $offset
 
        Compresses and outputs the contents of the $data parameter.
 
@@ -458,8 +460,8 @@ Methods
    flush
        Usage is
 
-	   $z->flush;
-	   $z->flush($flush_type);
+	   $z-&gtflush;
+	   $z-&gtflush($flush_type);
 
        Flushes any pending compressed data to the output file/buffer.
 
@@ -477,7 +479,7 @@ Methods
    tell
        Usage is
 
-	   $z->tell()
+	   $z-&gttell()
 	   tell $z
 
        Returns the uncompressed file offset.
@@ -485,13 +487,13 @@ Methods
    eof
        Usage is
 
-	   $z->eof();
+	   $z-&gteof();
 	   eof($z);
 
        Returns true if the "close" method has been called.
 
    seek
-	   $z->seek($position, $whence);
+	   $z-&gtseek($position, $whence);
 	   seek($z, $position, $whence);
 
        Provides a sub-set of the "seek" functionality, with the restriction
@@ -509,19 +511,19 @@ Methods
    binmode
        Usage is
 
-	   $z->binmode
+	   $z-&gtbinmode
 	   binmode $z ;
 
        This is a noop provided for completeness.
 
    opened
-	   $z->opened()
+	   $z-&gtopened()
 
        Returns true if the object currently refers to a opened file/buffer.
 
    autoflush
-	   my $prev = $z->autoflush()
-	   my $prev = $z->autoflush(EXPR)
+	   my $prev = $z-&gtautoflush()
+	   my $prev = $z-&gtautoflush(EXPR)
 
        If the $z object is associated with a file or a filehandle, this method
        returns the current autoflush setting for the underlying filehandle. If
@@ -535,13 +537,13 @@ Methods
        autoflush setting.
 
    input_line_number
-	   $z->input_line_number()
-	   $z->input_line_number(EXPR)
+	   $z-&gtinput_line_number()
+	   $z-&gtinput_line_number(EXPR)
 
        This method always returns "undef" when compressing.
 
    fileno
-	   $z->fileno()
+	   $z-&gtfileno()
 	   fileno($z)
 
        If the $z object is associated with a file or a filehandle, "fileno"
@@ -552,7 +554,7 @@ Methods
        return "undef".
 
    close
-	   $z->close() ;
+	   $z-&gtclose() ;
 	   close $z ;
 
        Flushes any pending compressed data and then closes the output
@@ -579,7 +581,7 @@ Methods
    newStream([OPTS])
        Usage is
 
-	   $z->newStream( [OPTS] )
+	   $z-&gtnewStream( [OPTS] )
 
        Closes the current compressed data stream and starts a new one.
 
@@ -591,7 +593,7 @@ Methods
    deflateParams
        Usage is
 
-	   $z->deflateParams
+	   $z-&gtdeflateParams
 
        TODO
 
@@ -685,6 +687,6 @@ COPYRIGHT AND LICENSE
 
 
 perl v5.12.4			  2011-06-07	 IO::Compress::RawDeflate(3pm)
-    </pre><script type="text/javascript" src="../js/ga.js"></script></body>
+    </pre></body>
 
 </html>
