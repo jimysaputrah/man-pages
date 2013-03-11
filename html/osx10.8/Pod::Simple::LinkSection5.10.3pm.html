@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This class is not of interest to general users...." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Pod::Simple::LinkSection -- represent "section" attributes of L codes</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Pod::Simple::LinkSectioPerlmProgrammers ReferencePod::Simple::LinkSection(3pm)
+
+
+
+NAME
+       Pod::Simple::LinkSection -- represent "section" attributes of L codes
+
+SYNOPSIS
+	# a long story
+
+DESCRIPTION
+       This class is not of interest to general users.
+
+       Pod::Simple uses this class for representing the value of the "section"
+       attribute of "L" start-element events.  Most applications can just use
+       the normal stringification of objects of this class; they stringify to
+       just the text content of the section, such as "foo" for "L&ltStuff/foo&gt",
+       and "bar" for "L&ltStuff/bI&ltar&gt&gt".
+
+       However, anyone particularly interested in getting the full value of
+       the treelet, can just traverse the content of the treeleet
+       @$treelet_object.  To wit:
+
+	 % perl -MData::Dumper -e
+	   "use base qw(Pod::Simple::Methody);
+	    sub start_L { print Dumper($_[1]{'section'} ) }
+	    __PACKAGE__-&gtnew-&gtparse_string_document('=head1 L&ltFoo/bI&ltar&gtbaz&gt&gt')
+	   "
+       Output:
+	 $VAR1 = bless( [
+			  '',
+			  {},
+			  'b',
+			  bless( [
+				   'I',
+				   {},
+				   'ar'
+				 ], 'Pod::Simple::LinkSection' ),
+			  'baz'
+			], 'Pod::Simple::LinkSection' );
+
+       But stringify it and you get just the text content:
+
+	 % perl -MData::Dumper -e
+	   "use base qw(Pod::Simple::Methody);
+	    sub start_L { print Dumper( '' . $_[1]{'section'} ) }
+	    __PACKAGE__-&gtnew-&gtparse_string_document('=head1 L&ltFoo/bI&ltar&gtbaz&gt&gt')
+	   "
+       Output:
+	 $VAR1 = 'barbaz';
+
+SEE ALSO
+       Pod::Simple
+
+COPYRIGHT AND DISCLAIMERS
+       Copyright (c) 2002 Sean M. Burke.  All rights reserved.
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+       This program is distributed in the hope that it will be useful, but
+       without any warranty; without even the implied warranty of
+       merchantability or fitness for a particular purpose.
+
+AUTHOR
+       Sean M. Burke "sburke@cpan.org"
+
+
+
+perl v5.10.1			  2009-02-12	 Pod::Simple::LinkSection(3pm)
+    </pre></body>
+
+</html>

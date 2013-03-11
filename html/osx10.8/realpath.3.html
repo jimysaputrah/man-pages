@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The realpath() function resolves all symbolic links, extra ``/'' charac-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>realpath -- returns the canonicalized absolute pathname</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+REALPATH(3)		 BSD Library Functions Manual		   REALPATH(3)
+
+NAME
+     realpath -- returns the canonicalized absolute pathname
+
+SYNOPSIS
+     #include &ltstdlib.h&gt
+
+     char *
+     realpath(const char *restrict file_name, char *restrict resolved_name);
+
+DESCRIPTION
+     The realpath() function resolves all symbolic links, extra ``/'' charac-
+     ters, and references to /./ and /../ in file_name.  If the resolved_name
+     argument is non-NULL, the resulting absolute pathname is copied there (it
+     must refer to a buffer capable of storing at least PATH_MAX characters).
+
+     As a permitted extension to the standard, if resolved_name is NULL, mem-
+     ory is allocated for the resulting absolute pathname, and is returned by
+     realpath().  This memory should be freed by a call to free(3) when no
+     longer needed.
+
+     The realpath() function will resolve both absolute and relative paths and
+     return the absolute pathname corresponding to file_name.  All components
+     of file_name must exist when realpath() is called.
+
+RETURN VALUES
+     On success, the realpath() function returns the address of the resulting
+     absolute pathname, which is resolved_name if it was non-NULL, or the
+     address of newly allocated memory.  If an error occurs, realpath()
+     returns NULL.  If resolved_name was non-NULL, it will contains the path-
+     name which caused the problem.
+
+ERRORS
+     The function realpath() may fail and set the external variable errno for
+     any of the errors specified for the library functions alloca(3),
+     getattrlist(2), getcwd(3), lstat(2), readlink(2), stat(2), and strdup(3).
+
+LEGACY SYNOPSIS
+     #include &ltsys/param.h&gt
+     #include &ltstdlib.h&gt
+
+     The include file &ltsys/param.h&gt is necessary.
+
+LEGACY DESCRIPTION
+     In legacy mode, the last component of file_name does not need to exist
+     when realpath() is called.
+
+SEE ALSO
+     free(3), getcwd(3), compat(5)
+
+HISTORY
+     The realpath() function first appeared in 4.4BSD.
+
+BSD				 April 5, 2008				   BSD
+    </pre></body>
+
+</html>

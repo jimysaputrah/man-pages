@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="A type coercion object is basically a mapping of one or more type..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Moose::Meta::TypeCoercion - The Moose Type Coercion metaclass</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Moose::Meta::TypeCoercUser3Contributed Perl DocumeMoose::Meta::TypeCoercion(3)
+
+
+
+NAME
+       Moose::Meta::TypeCoercion - The Moose Type Coercion metaclass
+
+DESCRIPTION
+       A type coercion object is basically a mapping of one or more type
+       constraints and the associated coercions subroutines.
+
+       It's unlikely that you will need to instantiate an object of this class
+       directly, as it's part of the deep internals of Moose.
+
+METHODS
+       Moose::Meta::TypeCoercion-&gtnew(%options)
+	   Creates a new type coercion object, based on the options provided.
+
+	   o	   type_constraint
+
+		   This is the Moose::Meta::TypeConstraint object for the type
+		   that is being coerced to.
+
+       $coercion-&gttype_coercion_map
+	   This returns the map of type constraints to coercions as an array
+	   reference. The values of the array alternate between type names and
+	   subroutine references which implement the coercion.
+
+	   The value is an array reference because coercions are tried in the
+	   order they are added.
+
+       $coercion-&gttype_constraint
+	   This returns the Moose::Meta::TypeConstraint that was passed to the
+	   constructor.
+
+       $coercion-&gthas_coercion_for_type($type_name)
+	   Returns true if the coercion can coerce the named type.
+
+       $coercion-&gtadd_type_coercions( $type_name =&gt $sub, ... )
+	   This method takes a list of type names and subroutine references.
+	   If the coercion already has a mapping for a given type, it throws
+	   an exception.
+
+	   Coercions are actually
+
+       $coercion-&gtcoerce($value)
+	   This method takes a value and applies the first valid coercion it
+	   finds.
+
+	   This means that if the value could belong to more than type in the
+	   coercion object, the first coercion added is used.
+
+       Moose::Meta::TypeCoercion-&gtmeta
+	   This will return a Class::MOP::Class instance for this class.
+
+BUGS
+       See "BUGS" in Moose for details on reporting bugs.
+
+AUTHOR
+       Stevan Little &ltstevan@iinteractive.com&gt
+
+COPYRIGHT AND LICENSE
+       Copyright 2006-2010 by Infinity Interactive, Inc.
+
+       &lthttp://www.iinteractive.com&gt
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-03-26	  Moose::Meta::TypeCoercion(3)
+    </pre></body>
+
+</html>

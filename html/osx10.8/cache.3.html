@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="These functions operate on every cache line containing one of the len..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>sys_cache_control, sys_icache_invalidate, sys_dcache_flush -- cache con-</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+CACHE(3)		 BSD Library Functions Manual		      CACHE(3)
+
+NAME
+     sys_cache_control, sys_icache_invalidate, sys_dcache_flush -- cache con-
+     trol
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include &ltlibkern/OSCacheControl.h&gt
+
+     int
+     sys_cache_control(int function, void *start, size_t len);
+
+     void
+     sys_icache_invalidate(void *start, size_t len);
+
+     void
+     sys_dcache_flush(void *start, size_t len);
+
+DESCRIPTION
+     These functions operate on every cache line containing one of the len
+     bytes of memory pointed to by start.  Normally the operations apply to
+     every processor in the system, but the exact semantics of these opera-
+     tions is platform dependent.  They should be used with caution.
+
+     sys_cache_control() performs the operation specified by function.	Refer
+     to the header file for a list of currently supported functions.
+
+     sys_icache_invalidate() prepares memory for execution, typically by
+     invalidating the instruction cache for the indicated range.  This should
+     be called after writing machine instructions to memory, and before exe-
+     cuting them.  On IA32 processors this function is a NOP, because their
+     instruction caches are coherent.
+
+     sys_dcache_flush() writes modified data cache lines to main memory, and
+     then invalidates all lines in the range being operated on.  It can be
+     useful when dealing with cache incoherent devices or DMA.
+
+RETURN VALUES
+     sys_cache_control() returns zero on success, ENOTSUP if function is not
+     valid.
+
+SEE ALSO
+     atomic(3), barrier(3)
+
+HISTORY
+     These functions first appeared in Mac OS 10.5 (Leopard).
+
+Darwin			      September 21, 2006			Darwin
+    </pre></body>
+
+</html>

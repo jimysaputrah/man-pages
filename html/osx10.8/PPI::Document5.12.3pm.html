@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The "PPI::Document" class represents a single Perl "document". A..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>PPI::Document - Object representation of a Perl document</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+PPI::Document(3)      User Contributed Perl Documentation     PPI::Document(3)
+
+
+
+NAME
+       PPI::Document - Object representation of a Perl document
+
+INHERITANCE
+	 PPI::Document
+	 isa PPI::Node
+	     isa PPI::Element
+
+SYNOPSIS
+	 use PPI;
+
+	 # Load a document from a file
+	 my $Document = PPI::Document-&gtnew('My/Module.pm');
+
+	 # Strip out comments
+	 $Document-&gtprune('PPI::Token::Comment');
+
+	 # Find all the named subroutines
+	 my $sub_nodes = $Document-&gtfind(
+	       sub { $_[1]-&gtisa('PPI::Statement::Sub') and $_[1]-&gtname }
+	 );
+	 my @sub_names = map { $_-&gtname } @$sub_nodes;
+
+	 # Save the file
+	 $Document-&gtsave('My/Module.pm.stripped');
+
+DESCRIPTION
+       The "PPI::Document" class represents a single Perl "document". A
+       "PPI::Document" object acts as a root PPI::Node, with some additional
+       methods for loading and saving, and working with the line/column
+       locations of Elements within a file.
+
+       The exemption to its PPI::Node-like behavior this is that a
+       "PPI::Document" object can NEVER have a parent node, and is always the
+       root node in a tree.
+
+   Storable Support
+       "PPI::Document" implements the necessary "STORABLE_freeze" and
+       "STORABLE_thaw" hooks to provide native support for Storable, if you
+       have it installed.
+
+       However if you want to clone clone a Document, you are highly
+       recommended to use the internal "$Document-&gtclone" method rather than
+       Storable's "dclone" function (although "dclone" should still work).
+
+METHODS
+       Most of the things you are likely to want to do with a Document are
+       probably going to involve the methods from PPI::Node class, of which
+       this is a subclass.
+
+       The methods listed here are the remaining few methods that are truly
+       Document-specific.
+
+   new
+	 # Simple construction
+	 $doc = PPI::Document-&gtnew( $filename );
+	 $doc = PPI::Document-&gtnew( \$source  );
+
+	 # With the readonly attribute set
+	 $doc = PPI::Document-&gtnew( $filename,
+		 readonly =&gt 1,
+	 );
+
+       The "new" constructor takes as argument a variety of different sources
+       of Perl code, and creates a single cohesive Perl "PPI::Document" for
+       it.
+
+       If passed a file name as a normal string, it will attempt to load the
+       document from the file.
+
+       If passed a reference to a "SCALAR", this is taken to be source code
+       and parsed directly to create the document.
+
+       If passed zero arguments, a "blank" document will be created that
+       contains no content at all.
+
+       In all cases, the document is considered to be "anonymous" and not tied
+       back to where it was created from. Specifically, if you create a
+       PPI::Document from a filename, the document will not remember where it
+       was created from.
+
+       The constructor also takes attribute flags.
+
+       At this time, the only available attribute is the "readonly" flag.
+
+       Setting "readonly" to true will allow various systems to provide
+       additional optimisations and caching. Note that because "readonly" is
+       an optimisation flag, it is off by default and you will need to
+       explicitly enable it.
+
+       Returns a "PPI::Document" object, or "undef" if parsing fails.
+
+   set_cache $cache
+       As of PPI 1.100, "PPI::Document" supports parser caching.
+
+       The default cache class PPI::Cache provides a Storable-based caching or
+       the parsed document based on the MD5 hash of the document as a string.
+
+       The static "set_cache" method is used to set the cache object for
+       "PPI::Document" to use when loading documents. It takes as argument a
+       PPI::Cache object (or something that "isa" the same).
+
+       If passed "undef", this method will stop using the current cache, if
+       any.
+
+       For more information on caching, see PPI::Cache.
+
+       Returns true on success, or "undef" if not passed a valid param.
+
+   get_cache
+       If a document cache is currently set, the "get_cache" method will
+       return it.
+
+       Returns a PPI::Cache object, or "undef" if there is no cache currently
+       set for "PPI::Document".
+
+   readonly
+       The "readonly" attribute indicates if the document is intended to be
+       read-only, and will never be modified. This is an advisory flag, that
+       writers of PPI-related systems may or may not use to enable
+       optimisations and caches for your document.
+
+       Returns true if the document is read-only or false if not.
+
+   tab_width [ $width ]
+       In order to handle support for "location" correctly, "Documents" need
+       to understand the concept of tabs and tab width. The "tab_width" method
+       is used to get and set the size of the tab width.
+
+       At the present time, PPI only supports "naive" (width 1) tabs, but we
+       do plan on supporting arbitrary, default and auto-sensing tab widths
+       later.
+
+       Returns the tab width as an integer, or "die"s if you attempt to set
+       the tab width.
+
+   save
+	 $document-&gtsave( $file )
+
+       The "save" method serializes the "PPI::Document" object and saves the
+       resulting Perl document to a file. Returns "undef" on failure to open
+       or write to the file.
+
+   serialize
+       Unlike the "content" method, which shows only the immediate content
+       within an element, Document objects also have to be able to be written
+       out to a file again.
+
+       When doing this we need to take into account some additional factors.
+
+       Primarily, we need to handle here-docs correctly, so that are written
+       to the file in the expected place.
+
+       The "serialize" method generates the actual file content for a given
+       Document object. The resulting string can be written straight to a
+       file.
+
+       Returns the serialized document as a string.
+
+   hex_id
+       The "hex_id" method generates an unique identifier for the Perl
+       document.
+
+       This identifier is basically just the serialized document, with Unix-
+       specific newlines, passed through MD5 to produce a hexadecimal string.
+
+       This identifier is used by a variety of systems (such as PPI::Cache and
+       Perl::Metrics) as a unique key against which to store or cache
+       information about a document (or indeed, to cache the document itself).
+
+       Returns a 32 character hexadecimal string.
+
+   index_locations
+       Within a document, all PPI::Element objects can be considered to have a
+       "location", a line/column position within the document when considered
+       as a file. This position is primarily useful for debugging type
+       activities.
+
+       The method for finding the position of a single Element is a bit
+       laborious, and very slow if you need to do it a lot. So the
+       "index_locations" method will index and save the locations of every
+       Element within the Document in advance, making future calls to
+       &ltPPI::Element::location&gt virtually free.
+
+       Please note that this index should always be cleared using
+       "flush_locations" once you are finished with the locations. If content
+       is added to or removed from the file, these indexed locations will be
+       wrong.
+
+   flush_locations
+       When no longer needed, the "flush_locations" method clears all location
+       data from the tokens.
+
+   normalized
+       The "normalized" method is used to generate a "Layer 1"
+       PPI::Document::Normalized object for the current Document.
+
+       A "normalized" Perl Document is an arbitrary structure that removes any
+       irrelevant parts of the document and refactors out variations in style,
+       to attempt to approach something that is closer to the "true meaning"
+       of the Document.
+
+       See PPI::Normal for more information on document normalization and the
+       tasks for which it is useful.
+
+       Returns a PPI::Document::Normalized object, or "undef" on error.
+
+complete
+       The "complete" method is used to determine if a document is cleanly
+       structured, all braces are closed, the final statement is fully
+       terminated and all heredocs are fully entered.
+
+       Returns true if the document is complete or false if not.
+
+   errstr
+       For error that occur when loading and saving documents, you can use
+       "errstr", as either a static or object method, to access the error
+       message.
+
+       If a Document loads or saves without error, "errstr" will return false.
+
+TO DO
+       - May need to overload some methods to forcefully prevent Document
+       objects becoming children of another Node.
+
+SUPPORT
+       See the support section in the main module.
+
+AUTHOR
+       Adam Kennedy &ltadamk@cpan.org&gt
+
+SEE ALSO
+       PPI, &lthttp://ali.as/&gt
+
+COPYRIGHT
+       Copyright 2001 - 2011 Adam Kennedy.
+
+       This program is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+       The full text of the license can be found in the LICENSE file included
+       with this module.
+
+
+
+perl v5.12.4			  2011-02-25		      PPI::Document(3)
+    </pre></body>
+
+</html>

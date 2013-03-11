@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The Net::LDAP::Filter object lets you directly manipulate LDAP filters..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Net::LDAP::Filter - representation of LDAP filters</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Net::LDAP::Filter(3)  User Contributed Perl Documentation Net::LDAP::Filter(3)
+
+
+
+NAME
+       Net::LDAP::Filter - representation of LDAP filters
+
+SYNOPSIS
+	 use Net::LDAP::Filter;
+
+	 $filter = Net::LDAP::Filter-&gtnew( $filter_str );
+
+DESCRIPTION
+       The Net::LDAP::Filter object lets you directly manipulate LDAP filters
+       without worrying about the string representation and all the associated
+       escaping mechanisms.
+
+CONSTRUCTOR
+       new ( FILTER )
+	   Create a new object and parse FILTER.
+
+METHODS
+       parse ( FILTER )
+	   Parse FILTER. The next call to ber will return this filter encoded.
+
+       as_string
+	   Return the filter in text form.
+
+       print ( [ FH ] )
+	   Print the text representation of the filter to FH, or the currently
+	   selected output handle if FH is not given.
+
+FILTER SYNTAX
+       Below is the syntax for a filter given in RFC-2254
+       http://www.ietf.org/rfc/rfc2254.txt
+
+	filter	     = "(" filtercomp ")"
+	filtercomp   = and / or / not / item
+	and	     = "&" filterlist
+	or	     = "|" filterlist
+	not	     = "!" filter
+	filterlist   = 1*filter
+	item	     = simple / present / substring / extensible
+	simple	     = attr filtertype value
+	filtertype   = equal / approx / greater / less
+	equal	     = "="
+	approx	     = "~="
+	greater      = "&gt="
+	less	     = "&lt="
+	extensible   = attr [":dn"] [":" matchingrule] ":=" value
+		       / [":dn"] ":" matchingrule ":=" value
+	present      = attr "=*"
+	substring    = attr "=" [initial] any [final]
+	initial      = value
+	any	     = "*" *(value "*")
+	final	     = value
+	attr	     = AttributeDescription from Section 4.1.5 of RFC-2251
+	matchingrule = MatchingRuleId from Section 4.1.9 of RFC-2251
+	value	     = AttributeValue from Section 4.1.6 of RFC-2251
+
+
+	Special Character encodings
+	---------------------------
+	   *		   \2a, \*
+	   (		   \28, \(
+	   )		   \29, \)
+	   \		   \5c, \\
+	   NUL		   \00
+
+SEE ALSO
+       Net::LDAP, Other online documentation
+
+ACKNOWLEDGEMENTS
+       This document is based on a document originally written by Russell
+       Fulton &ltr.fulton@auckland.ac.nz&gt.
+
+AUTHOR
+       Graham Barr &ltgbarr@pobox.com&gt
+
+       Please report any bugs, or post any suggestions, to the perl-ldap
+       mailing list &ltperl-ldap@perl.org&gt.
+
+COPYRIGHT
+       Copyright (c) 1997-2004 Graham Barr. All rights reserved. This program
+       is free software; you can redistribute it and/or modify it under the
+       same terms as Perl itself.
+
+
+
+perl v5.10.1			  2008-06-30		  Net::LDAP::Filter(3)
+    </pre></body>
+
+</html>

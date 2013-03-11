@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="While Moose attributes provide a way to name your accessors, readers,..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Moose::Meta::Attribute::Native - Extend your attribute interfaces</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Moose::Meta::AttributeUsertContributed Perl DMoose::Meta::Attribute::Native(3)
+
+
+
+NAME
+       Moose::Meta::Attribute::Native - Extend your attribute interfaces
+
+SYNOPSIS
+	 package MyClass;
+	 use Moose;
+
+	 has 'mapping' =&gt (
+	     traits    =&gt [ 'Hash' ],
+	     is        =&gt 'rw',
+	     isa       =&gt 'HashRef[Str]',
+	     default   =&gt sub { {} },
+	     handles   =&gt {
+		 exists_in_mapping =&gt 'exists',
+		 ids_in_mapping    =&gt 'keys',
+		 get_mapping	   =&gt 'get',
+		 set_mapping	   =&gt 'set',
+		 set_quantity	   =&gt [ set =&gt 'quantity' ],
+	     },
+	 );
+
+
+	 # ...
+
+	 my $obj = MyClass-&gtnew;
+	 $obj-&gtset_quantity(10);      # quantity =&gt 10
+	 $obj-&gtset_mapping('foo', 4); # foo =&gt 4
+	 $obj-&gtset_mapping('bar', 5); # bar =&gt 5
+	 $obj-&gtset_mapping('baz', 6); # baz =&gt 6
+
+
+	 # prints 5
+	 print $obj-&gtget_mapping('bar') if $obj-&gtexists_in_mapping('bar');
+
+	 # prints 'quantity, foo, bar, baz'
+	 print join ', ', $obj-&gtids_in_mapping;
+
+DESCRIPTION
+       While Moose attributes provide a way to name your accessors, readers,
+       writers, clearers and predicates, this set of traits provides commonly
+       used attribute helper methods for more specific types of data.
+
+       As seen in the "SYNOPSIS", you specify the data structure via the
+       "trait" parameter. Available traits are below; see "METHOD PROVIDERS".
+
+       This module used to exist as the MooseX::AttributeHelpers extension. It
+       was very commonly used, so we moved it into core Moose. Since this gave
+       us a chance to change the interface, you will have to change your code
+       or continue using the MooseX::AttributeHelpers extension.
+       MooseX::AttributeHelpers should continue to work.
+
+PARAMETERS
+   handles
+       This is like "handles" in "has" in Moose, but only HASH references are
+       allowed.  Keys are method names that you want installed locally, and
+       values are methods from the method providers (below).  Currying with
+       delegated methods works normally for "handles".
+
+METHOD PROVIDERS
+       Number
+	   Common numerical operations.
+
+	       has 'integer' =&gt (
+		   traits    =&gt ['Number'],
+		   is	     =&gt 'ro',
+		   isa	     =&gt 'Int',
+		   default   =&gt 5,
+		   handles   =&gt {
+		       set =&gt 'set',
+		       add =&gt 'add',
+		       sub =&gt 'sub',
+		       mul =&gt 'mul',
+		       div =&gt 'div',
+		       mod =&gt 'mod',
+		       abs =&gt 'abs',
+		       # ...
+		   }
+	       );
+
+       String
+	   Common methods for string operations.
+
+	       has 'text' =&gt (
+		   traits    =&gt ['String'],
+		   is	     =&gt 'rw',
+		   isa	     =&gt 'Str',
+		   default   =&gt q{},
+		   handles   =&gt {
+		       add_text     =&gt 'append',
+		       replace_text =&gt 'replace',
+		       # ...
+		   }
+	       );
+
+       Counter
+	   Methods for incrementing and decrementing a counter attribute.
+
+	       has 'counter' =&gt (
+		   traits    =&gt ['Counter'],
+		   is	     =&gt 'ro',
+		   isa	     =&gt 'Num',
+		   default   =&gt 0,
+		   handles   =&gt {
+		       inc_counter   =&gt 'inc',
+		       dec_counter   =&gt 'dec',
+		       reset_counter =&gt 'reset',
+		       # ...
+		   }
+	       );
+
+       Bool
+	   Common methods for boolean values.
+
+	       has 'is_lit' =&gt (
+		   traits    =&gt ['Bool'],
+		   is	     =&gt 'rw',
+		   isa	     =&gt 'Bool',
+		   default   =&gt 0,
+		   handles   =&gt {
+		       illuminate  =&gt 'set',
+		       darken	   =&gt 'unset',
+		       flip_switch =&gt 'toggle',
+		       is_dark	   =&gt 'not',
+		       # ...
+		   }
+	       );
+
+       Hash
+	   Common methods for hash references.
+
+	       has 'options' =&gt (
+		   traits    =&gt ['Hash'],
+		   is	     =&gt 'ro',
+		   isa	     =&gt 'HashRef[Str]',
+		   default   =&gt sub { {} },
+		   handles   =&gt {
+		       set_option =&gt 'set',
+		       get_option =&gt 'get',
+		       has_option =&gt 'exists',
+		       # ...
+		   }
+	       );
+
+       Array
+	   Common methods for array references.
+
+	       has 'queue' =&gt (
+		   traits    =&gt ['Array'],
+		   is	     =&gt 'ro',
+		   isa	     =&gt 'ArrayRef[Str]',
+		   default   =&gt sub { [] },
+		   handles   =&gt {
+		       add_item  =&gt 'push',
+		       next_item =&gt 'shift',
+		       # ...
+		   }
+	       );
+
+       Code
+	   Common methods for code references.
+
+	       has 'callback' =&gt (
+		   traits    =&gt ['Code'],
+		   is	     =&gt 'ro',
+		   isa	     =&gt 'CodeRef',
+		   default   =&gt sub { sub { 'called' } },
+		   handles   =&gt {
+		       call =&gt 'execute',
+		       # ...
+		   }
+	       );
+
+BUGS
+       See "BUGS" in Moose for details on reporting bugs.
+
+AUTHOR
+       Stevan Little &ltstevan@iinteractive.com&gt
+
+       with contributions from:
+
+       Robert (rlb3) Boone
+
+       Paul (frodwith) Driver
+
+       Shawn (Sartak) Moore
+
+       Chris (perigrin) Prather
+
+       Robert (phaylon) Sedlacek
+
+       Tom (dec) Lanyon
+
+       Yuval Kogman
+
+       Jason May
+
+       Cory (gphat) Watson
+
+       Florian (rafl) Ragwitz
+
+       Evan Carroll
+
+       Jesse (doy) Luehrs
+
+       Jay Hannah
+
+       Robert Buels
+
+COPYRIGHT AND LICENSE
+       Copyright 2007-2009 by Infinity Interactive, Inc.
+
+       &lthttp://www.iinteractive.com&gt
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-03-26 Moose::Meta::Attribute::Native(3)
+    </pre></body>
+
+</html>

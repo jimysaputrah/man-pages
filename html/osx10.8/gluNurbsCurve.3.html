@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Use gluNurbsCurve to describe a NURBS curve...." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>gluNurbsCurve - define the shape of a NURBS curve</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLUNURBSCURVE(3G)					     GLUNURBSCURVE(3G)
+
+
+
+NAME
+       gluNurbsCurve - define the shape of a NURBS curve
+
+
+C SPECIFICATION
+       void gluNurbsCurve( GLUnurbs* nurb,
+			   GLint knotCount,
+			   GLfloat *knots,
+			   GLint stride,
+			   GLfloat *control,
+			   GLint order,
+			   GLenum type )
+
+
+PARAMETERS
+       nurb	  Specifies	the	NURBS	  object     (created	  with
+		  gluNewNurbsRenderer).
+
+       knotCount  Specifies the number of knots in  knots.   knotCount	equals
+		  the number of control points plus the order.
+
+       knots	  Specifies an array of knotCount nondecreasing knot values.
+
+       stride	  Specifies the offset (as a number of single-precision float-
+		  ing-point values) between successive curve control points.
+
+       control	  Specifies a pointer to an array of control points. The coor-
+		  dinates must agree with type, specified below.
+
+       order	  Specifies  the order of the NURBS curve. order equals degree
+		  + 1, hence a cubic curve has an order of 4.
+
+       type	  Specifies the type of the curve. If this  curve  is  defined
+		  within  a  gluBeginCurve/gluEndCurve pair, then the type can
+		  be any of the valid one-dimensional evaluator types (such as
+		  GL_MAP1_VERTEX_3     or    GL_MAP1_COLOR_4).	  Between    a
+		  gluBeginTrim/gluEndTrim  pair,  the  only  valid  types  are
+		  GLU_MAP1_TRIM_2 and GLU_MAP1_TRIM_3.
+
+DESCRIPTION
+       Use gluNurbsCurve to describe a NURBS curve.
+
+       When gluNurbsCurve appears between a gluBeginCurve/gluEndCurve pair, it
+       is used to describe a curve to be rendered.  Positional,  texture,  and
+       color  coordinates  are	associated  by	presenting  each as a separate
+       gluNurbsCurve between a gluBeginCurve/gluEndCurve pair.	No  more  than
+       one call to gluNurbsCurve for each of color, position, and texture data
+       can be made within a single gluBeginCurve/gluEndCurve pair. Exactly one
+       call  must  be  made  to  describe the position of the curve (a type of
+       GL_MAP1_VERTEX_3 or GL_MAP1_VERTEX_4).
+
+       When gluNurbsCurve appears between a gluBeginTrim/gluEndTrim  pair,  it
+       is  used  to  describe  a trimming curve on a NURBS surface. If type is
+       GLU_MAP1_TRIM_2, then it describes a curve in two-dimensional (u and v)
+       parameter space. If it is GLU_MAP1_TRIM_3, then it describes a curve in
+       two-dimensional homogeneous (u, v, and w)  parameter  space.   See  the
+       gluBeginTrim  reference page for more discussion about trimming curves.
+
+EXAMPLE
+       The following commands render a textured NURBS curve with normals:
+
+       gluBeginCurve(nobj);
+	  gluNurbsCurve(nobj, ..., GL_MAP1_TEXTURE_COORD_2);
+	  gluNurbsCurve(nobj, ..., GL_MAP1_NORMAL);
+	  gluNurbsCurve(nobj, ..., GL_MAP1_VERTEX_4); gluEndCurve(nobj);
+
+
+NOTES
+       To define trim curves which stitch well, use gluPwlCurve.
+
+SEE ALSO
+       gluBeginCurve, gluBeginTrim, gluNewNurbsRenderer, gluPwlCurve
+
+
+
+
+							     GLUNURBSCURVE(3G)
+    </pre></body>
+
+</html>

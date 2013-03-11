@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module implements a perl-based "Gettext" parser for..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Locale::Maketext::Lexicon::Gettext - PO and MO file parser for Maketext</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Locale::Maketext::LexiUser:Contributed PeLocale::Maketext::Lexicon::Gettext(3)
+
+
+
+NAME
+       Locale::Maketext::Lexicon::Gettext - PO and MO file parser for Maketext
+
+SYNOPSIS
+       Called via Locale::Maketext::Lexicon:
+
+	   package Hello::I18N;
+	   use base 'Locale::Maketext';
+	   use Locale::Maketext::Lexicon {
+	       de =&gt [Gettext =&gt 'hello/de.mo'],
+	   };
+
+       Directly calling "parse()":
+
+	   use Locale::Maketext::Lexicon::Gettext;
+	   my %Lexicon = %{ Locale::Maketext::Lexicon::Gettext-&gtparse(&ltDATA&gt) };
+	   __DATA__
+	   #: Hello.pm:10
+	   msgid "Hello, World!"
+	   msgstr "Hallo, Welt!"
+
+	   #: Hello.pm:11
+	   msgid "You have %quant(%1,piece) of mail."
+	   msgstr "Sie haben %quant(%1,Poststueck,Poststuecken)."
+
+DESCRIPTION
+       This module implements a perl-based "Gettext" parser for
+       Locale::Maketext. It transforms all %1, %2, &lt%*&gt... sequences to
+       "[_1]", "[_2]", "[_*]", and so on.  It accepts either plain PO file, or
+       a MO file which will be handled with a pure-perl parser adapted from
+       Imacat's "Locale::Maketext::Gettext".
+
+       Since version 0.03, this module also looks for "%function(args...)"  in
+       the lexicon strings, and transform it to "[function,args...]".  Any %1,
+       %2... sequences inside the args will have their percent signs ("%")
+       replaced by underscores ("_").
+
+       The name of function above should begin with a letter or underscore,
+       followed by any number of alphanumeric characters and/or underscores.
+       As an exception, the function name may also consist of a single
+       asterisk ("*") or pound sign ("#"), which are "Locale::Maketext"'s
+       shorthands for "quant" and "numf", respectively.
+
+       As an additional feature, this module also parses MIME-header style
+       metadata specified in the null msgstr (""), and add them to the
+       %Lexicon with a "__" prefix.  For example, the example above will set
+       "__Content-Type" to "text/plain; charset=iso8859-1", without the
+       newline or the colon.
+
+       Any normal entry that duplicates a metadata entry takes precedence.
+       Hence, a "msgid "__Content-Type"" line occurs anywhere should override
+       the above value.
+
+OPTIONS
+   use_fuzzy
+       When parsing PO files, fuzzy entries (entries marked with "#, fuzzy")
+       are silently ignored.  If you wish to use fuzzy entries, specify a true
+       value to the "_use_fuzzy" option:
+
+	   use Locale::Maketext::Lexicon {
+	       de =&gt [Gettext =&gt 'hello/de.mo'],
+	       _use_fuzzy =&gt 1,
+	   };
+
+   allow_empty
+       When parsing PO files, empty entries (entries with "msgstr """) are
+       silently ignored.  If you wish to allow empty entries, specify a true
+       value to the "_allow_empty" option:
+
+	   use Locale::Maketext::Lexicon {
+	       de =&gt [Gettext =&gt 'hello/de.mo'],
+	       _allow_empty =&gt 1,
+	   };
+
+SEE ALSO
+       Locale::Maketext, Locale::Maketext::Lexicon
+
+AUTHORS
+       Audrey Tang &ltcpan@audreyt.org&gt
+
+COPYRIGHT
+       Copyright 2002, 2003, 2004, 2007 by Audrey Tang &ltcpan@audreyt.org&gt.
+
+       This software is released under the MIT license cited below.
+
+   The "MIT" License
+       Permission is hereby granted, free of charge, to any person obtaining a
+       copy of this software and associated documentation files (the
+       "Software"), to deal in the Software without restriction, including
+       without limitation the rights to use, copy, modify, merge, publish,
+       distribute, sublicense, and/or sell copies of the Software, and to
+       permit persons to whom the Software is furnished to do so, subject to
+       the following conditions:
+
+       The above copyright notice and this permission notice shall be included
+       in all copies or substantial portions of the Software.
+
+       THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+       OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+       MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+       IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+       CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+       TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+       SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+perl v5.12.4			  2010-08Locale::Maketext::Lexicon::Gettext(3)
+    </pre></body>
+
+</html>

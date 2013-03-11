@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module implements XML::Parser's Tree style parser...." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>XML::Parser::Style::Tree</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Parser::Style::Tree(3)User Contributed Perl DocumentatioParser::Style::Tree(3)
+
+
+
+NAME
+       XML::Parser::Style::Tree
+
+SYNOPSIS
+	 use XML::Parser;
+	 my $p = XML::Parser-&gtnew(Style =&gt 'Tree');
+	 my $tree = $p-&gtparsefile('foo.xml');
+
+DESCRIPTION
+       This module implements XML::Parser's Tree style parser.
+
+       When parsing a document, "parse()" will return a parse tree for the
+       document. Each node in the tree takes the form of a tag, content pair.
+       Text nodes are represented with a pseudo-tag of "0" and the string that
+       is their content. For elements, the content is an array reference. The
+       first item in the array is a (possibly empty) hash reference containing
+       attributes. The remainder of the array is a sequence of tag-content
+       pairs representing the content of the element.
+
+       So for example the result of parsing:
+
+	 &ltfoo&gt&lthead id="a"&gtHello &ltem&gtthere&lt/em&gt&lt/head&gt&ltbar&gtHowdy&ltref/&gt&lt/bar&gtdo&lt/foo&gt
+
+       would be:
+		    Tag   Content
+	 ==================================================================
+	 [foo, [{}, head, [{id =&gt "a"}, 0, "Hello ",  em, [{}, 0, "there"]],
+		     bar, [	    {}, 0, "Howdy",  ref, [{}]],
+		       0, "do"
+	       ]
+	 ]
+
+       The root document "foo", has 3 children: a "head" element, a "bar"
+       element and the text "do". After the empty attribute hash, these are
+       represented in it's contents by 3 tag-content pairs.
+
+
+
+perl v5.12.4			  2011-05-24		Parser::Style::Tree(3)
+    </pre></body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The getfsent(), getfsspec(), and getfsfile() functions each return a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>getfsent, getfsspec, getfsfile, setfsent, endfsent -- get file system</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+GETFSENT(3)		 BSD Library Functions Manual		   GETFSENT(3)
+
+NAME
+     getfsent, getfsspec, getfsfile, setfsent, endfsent -- get file system
+     descriptor file entry
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include &ltfstab.h&gt
+
+     struct fstab *
+     getfsent(void);
+
+     struct fstab *
+     getfsspec(const char *spec);
+
+     struct fstab *
+     getfsfile(const char *file);
+
+     int
+     setfsent(void);
+
+     void
+     endfsent(void);
+
+DESCRIPTION
+     The getfsent(), getfsspec(), and getfsfile() functions each return a
+     pointer to an object with the following structure containing the broken-
+     out fields of a line in the file system description file, &ltfstab.h&gt.
+
+	   struct fstab {
+		   char    *fs_spec;	   /* block special device name */
+		   char    *fs_file;	   /* file system path prefix */
+		   char    *fs_vfstype;    /* File system type, ufs, nfs */
+		   char    *fs_mntops;	   /* Mount options ala -o */
+		   char    *fs_type;	   /* FSTAB_* from fs_mntops */
+		   int	   fs_freq;	   /* dump frequency, in days */
+		   int	   fs_passno;	   /* pass number on parallel fsck */
+	   };
+
+     The fields have meanings described in fstab(5).
+
+     The setfsent() function opens the file (closing any previously opened
+     file) or rewinds it if it is already open.
+
+     The endfsent() function closes the file.
+
+     The getfsspec() and getfsfile() functions search the entire file (opening
+     it if necessary) for a matching special file name or file system file
+     name.
+
+     For programs wishing to read the entire database, getfsent() reads the
+     next entry (opening the file if necessary).
+
+     All entries in the file with a type field equivalent to FSTAB_XX are
+     ignored.
+
+RETURN VALUES
+     The getfsent(), getfsspec(), and getfsfile() functions return a NULL
+     pointer on EOF or error.  The setfsent() function returns 0 on failure, 1
+     on success.  The endfsent() function returns nothing.
+
+FILES
+     /etc/fstab
+
+SEE ALSO
+     fstab(5)
+
+HISTORY
+     The getfsent() function appeared in 4.0BSD; the endfsent(), getfsfile(),
+     getfsspec(), and setfsent() functions appeared in 4.3BSD.
+
+BUGS
+     The data space used by these functions is thread-specific; if future use
+     requires the data, it should be copied before any subsequent calls to
+     these functions overwrite it.
+
+BSD				 April 7, 2003				   BSD
+    </pre></body>
+
+</html>

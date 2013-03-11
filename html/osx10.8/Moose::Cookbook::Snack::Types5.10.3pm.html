@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This is the Point example from Moose::Cookbook::Basics::Recipe1 with..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Moose::Cookbook::Snack::Types - Snippets of code for using Types and</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Moose::Cookbook::SnackUserpContributed Perl DoMoose::Cookbook::Snack::Types(3)
+
+
+
+NAME
+       Moose::Cookbook::Snack::Types - Snippets of code for using Types and
+       Type Constraints
+
+SYNOPSIS
+	 package Point;
+	 use Moose;
+
+	 has 'x' =&gt ( isa =&gt 'Int', is =&gt 'ro' );
+	 has 'y' =&gt ( isa =&gt 'Int', is =&gt 'rw' );
+
+	 package main;
+
+	 my $point = eval { Point-&gtnew( x =&gt 'fifty', y =&gt 'forty' ); };
+
+	 if ($@) {
+	     print "Oops: $@";
+	 }
+
+	 my $point;
+	 my $xval	      = 'forty-two';
+	 my $xattribute       = Point-&gtmeta-&gtfind_attribute_by_name('x');
+	 my $xtype_constraint = $xattribute-&gttype_constraint;
+
+	 if ( $xtype_constraint-&gtcheck($xval) ) {
+	     $point = Point-&gtnew( x =&gt $xval, y =&gt 0 );
+	 }
+	 else {
+	     print "Value: $xval is not an " . $xtype_constraint-&gtname . "\n";
+	 }
+
+DESCRIPTION
+       This is the Point example from Moose::Cookbook::Basics::Recipe1 with
+       type checking added.
+
+       If we try to assign a string value to an attribute that is an "Int",
+       Moose will die with an explicit error message. The error will include
+       the attribute name, as well as the type constraint name and the value
+       which failed the constraint check.
+
+       We use "eval" to catch this error message in $@.
+
+       Later, we get the Moose::Meta::TypeConstraint object from a
+       Moose::Meta::Attribute and use the Moose::Meta::TypeConstraint to check
+       a value directly.
+
+SEE ALSO
+       Moose::Cookbook::Basics::Recipe1
+       Moose::Utils::TypeConstraints
+       Moose::Meta::Attribute
+
+AUTHOR
+       Jess Robinson &ltcpan@desert-island.me.uk&gt
+
+COPYRIGHT AND LICENSE
+       Copyright 2006-2010 by Infinity Interactive, Inc.
+
+       &lthttp://www.iinteractive.com&gt
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-02-27  Moose::Cookbook::Snack::Types(3)
+    </pre></body>
+
+</html>

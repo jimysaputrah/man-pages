@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The unvis(), strunvis() and strunvisx() functions are used to decode a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>unvis, strunvis -- decode a visual representation of characters</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+UNVIS(3)		 BSD Library Functions Manual		      UNVIS(3)
+
+NAME
+     unvis, strunvis -- decode a visual representation of characters
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include &ltvis.h&gt
+
+     int
+     unvis(char *cp, int c, int *astate, int flag);
+
+     int
+     strunvis(char *dst, const char *src);
+
+     int
+     strunvisx(char *dst, const char *src, int flag);
+
+DESCRIPTION
+     The unvis(), strunvis() and strunvisx() functions are used to decode a
+     visual representation of characters, as produced by the vis(3) function,
+     back into the original form.  Unvis is called with successive characters
+     in c until a valid sequence is recognized, at which time the decoded
+     character is available at the character pointed to by cp.	Strunvis
+     decodes the characters pointed to by src into the buffer pointed to by
+     dst.
+
+     The strunvis() function simply copies src to dst, decoding any escape
+     sequences along the way, and returns the number of characters placed into
+     dst, or -1 if an invalid escape sequence was detected.  The size of dst
+     should be equal to the size of src (that is, no expansion takes place
+     during decoding).
+
+     The strunvisx() function does the same as the strunvis() function, but it
+     allows you to add a flag that specifies the style the string src is
+     encoded with.  Currently, the only supported flag is VIS_HTTPSTYLE.
+
+     The unvis() function implements a state machine that can be used to
+     decode an arbitrary stream of bytes.  All state associated with the bytes
+     being decoded is stored outside the unvis() function (that is, a pointer
+     to the state is passed in), so calls decoding different streams can be
+     freely intermixed.  To start decoding a stream of bytes, first initialize
+     an integer to zero.  Call unvis() with each successive byte, along with a
+     pointer to this integer, and a pointer to a destination character.  The
+     unvis() function has several return codes that must be handled properly.
+     They are:
+
+     0 (zero)	      Another character is necessary; nothing has been recog-
+		      nized yet.
+
+     UNVIS_VALID      A valid character has been recognized and is available
+		      at the location pointed to by cp.
+
+     UNVIS_VALIDPUSH  A valid character has been recognized and is available
+		      at the location pointed to by cp; however, the character
+		      currently passed in should be passed in again.
+
+     UNVIS_NOCHAR     A valid sequence was detected, but no character was pro-
+		      duced.  This return code is necessary to indicate a log-
+		      ical break between characters.
+
+     UNVIS_SYNBAD     An invalid escape sequence was detected, or the decoder
+		      is in an unknown state.  The decoder is placed into the
+		      starting state.
+
+     When all bytes in the stream have been processed, call unvis() one more
+     time with flag set to UNVIS_END to extract any remaining character (the
+     character passed in is ignored).
+
+     The flag argument is also used to specify the encoding style of the
+     source.  If set to VIS_HTTPSTYLE, unvis() will decode URI strings as
+     specified in RFC 1808.
+
+     The following code fragment illustrates a proper use of unvis().
+
+	   int state = 0;
+	   char out;
+
+	   while ((ch = getchar()) != EOF) {
+	   again:
+		   switch(unvis(&out, ch, &state, 0)) {
+		   case 0:
+		   case UNVIS_NOCHAR:
+			   break;
+		   case UNVIS_VALID:
+			   (void) putchar(out);
+			   break;
+		   case UNVIS_VALIDPUSH:
+			   (void) putchar(out);
+			   goto again;
+		   case UNVIS_SYNBAD:
+			   (void)fprintf(stderr, "bad sequence!\n");
+		   exit(1);
+		   }
+	   }
+	   if (unvis(&out, (char)0, &state, UNVIS_END) == UNVIS_VALID)
+		   (void) putchar(out);
+
+SEE ALSO
+     vis(1), vis(3)
+
+     R. Fielding, Relative Uniform Resource Locators, RFC1808.
+
+HISTORY
+     The unvis() function first appeared in 4.4BSD.
+
+BSD			       December 11, 1993			   BSD
+    </pre></body>
+
+</html>

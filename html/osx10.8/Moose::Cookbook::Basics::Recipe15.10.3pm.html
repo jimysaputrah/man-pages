@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This is the classic Point example. It is taken directly from the Perl 6..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Moose::Cookbook::Basics::Recipe1 - The (always classic) Point example.</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Moose::Cookbook::BasicUsereContributed PerlMoose::Cookbook::Basics::Recipe1(3)
+
+
+
+NAME
+       Moose::Cookbook::Basics::Recipe1 - The (always classic) Point example.
+
+SYNOPSIS
+	 package Point;
+	 use Moose;
+
+	 has 'x' =&gt (isa =&gt 'Int', is =&gt 'rw', required =&gt 1);
+	 has 'y' =&gt (isa =&gt 'Int', is =&gt 'rw', required =&gt 1);
+
+	 sub clear {
+	     my $self = shift;
+	     $self-&gtx(0);
+	     $self-&gty(0);
+	 }
+
+	 package Point3D;
+	 use Moose;
+
+	 extends 'Point';
+
+	 has 'z' =&gt (isa =&gt 'Int', is =&gt 'rw', required =&gt 1);
+
+	 after 'clear' =&gt sub {
+	     my $self = shift;
+	     $self-&gtz(0);
+	 };
+
+	 package main;
+
+	 # hash or hashrefs are ok for the constructor
+	 my $point1 = Point-&gtnew(x =&gt 5, y =&gt 7);
+	 my $point2 = Point-&gtnew({x =&gt 5, y =&gt 7});
+
+	 my $point3d = Point3D-&gtnew(x =&gt 5, y =&gt 42, z =&gt -5);
+
+DESCRIPTION
+       This is the classic Point example. It is taken directly from the Perl 6
+       Apocalypse 12 document, and is similar to the example found in the
+       classic K&R C book as well.
+
+       As with all Perl 5 classes, a Moose class is defined in a package.
+       Moose handles turning on "strict" and "warnings" for us, so all we need
+       to do is say "use Moose", and no kittens will die.
+
+       When Moose is loaded, it exports a set of sugar functions into our
+       package. This means that we import some functions which serve as Moose
+       "keywords". These aren't real language keywords, they're just Perl
+       functions exported into our package.
+
+       Moose automatically makes our package a subclass of Moose::Object.  The
+       Moose::Object class provides us with a constructor that respects our
+       attributes, as well other features. See Moose::Object for details.
+
+       Now, onto the keywords. The first one we see here is "has", which
+       defines an instance attribute in our class:
+
+	 has 'x' =&gt (isa =&gt 'Int', is =&gt 'rw', required =&gt 1);
+
+       This will create an attribute named "x". The "isa" parameter says that
+       we expect the value stored in this attribute to pass the type
+       constraint for "Int" (1). The accessor generated for this attribute
+       will be read-write.
+
+       The "requires =&gt 1" parameter means that this attribute must be
+       provided when a new object is created. A point object without
+       coordinates doesn't make much sense, so we don't allow it.
+
+       We have defined our attributes; next we define our methods. In Moose,
+       as with regular Perl 5 OO, a method is just a subroutine defined within
+       the package:
+
+	 sub clear {
+	     my $self = shift;
+	     $self-&gtx(0);
+	     $self-&gty(0);
+	 }
+
+       That concludes the Point class.
+
+       Next we have a subclass of Point, Point3D. To declare our superclass,
+       we use the Moose keyword "extends":
+
+	 extends 'Point';
+
+       The "extends" keyword works much like "use base". First, it will
+       attempt to load your class if needed. However, unlike "base", the
+       "extends" keyword will overwrite any previous values in your package's
+       @ISA, where "use base" will "push" values onto the package's @ISA.
+
+       It is my opinion that the behavior of "extends" is more intuitive.
+       (2).
+
+       Next we create a new attribute for Point3D called "z".
+
+	 has 'z' =&gt (isa =&gt 'Int', is =&gt 'rw', required =&gt 1);
+
+       This attribute is just like Point's "x" and "y" attributes.
+
+       The "after" keyword demonstrates a Moose feature called "method
+       modifiers" (or "advice" for the AOP inclined):
+
+	 after 'clear' =&gt sub {
+	     my $self = shift;
+	     $self-&gtz(0);
+	 };
+
+       When "clear" is called on a Point3D object, our modifier method gets
+       called as well. Unsurprisingly, the modifier is called after the real
+       method.
+
+       In this case, the real "clear" method is inherited from Point. Our
+       modifier method receives the same arguments as those passed to the
+       modified method (just $self here).
+
+       Of course, using the "after" modifier is not the only way to accomplish
+       this. This is Perl, right? You can get the same results with this code:
+
+	 sub clear {
+	     my $self = shift;
+	     $self-&gtSUPER::clear();
+	     $self-&gtz(0);
+	 }
+
+       You could also use another Moose method modifier, "override":
+
+	 override 'clear' =&gt sub {
+	     my $self = shift;
+	     super();
+	     $self-&gtz(0);
+	 };
+
+       The "override" modifier allows you to use the "super" keyword to
+       dispatch to the superclass's method in a very Ruby-ish style.
+
+       The choice of whether to use a method modifier, and which one to use,
+       is often a question of style as much as functionality.
+
+       Since Point inherits from Moose::Object, it will also inherit the
+       default Moose::Object constructor:
+
+	 my $point1 = Point-&gtnew(x =&gt 5, y =&gt 7);
+	 my $point2 = Point-&gtnew({x =&gt 5, y =&gt 7});
+
+	 my $point3d = Point3D-&gtnew(x =&gt 5, y =&gt 42, z =&gt -5);
+
+       The "new" constructor accepts a named argument pair for each attribute
+       defined by the class, which you can provide as a hash or hash
+       reference. In this particular example, the attributes are required, and
+       calling "new" without them will throw an error.
+
+	 my $point = Point-&gtnew( x =&gt 5 ); # no y, kaboom!
+
+       From here on, we can use $point and $point3d just as you would any
+       other Perl 5 object. For a more detailed example of what can be done,
+       you can refer to the t/000_recipes/moose_cookbook_basics_recipe1.t test
+       file.
+
+   Moose Objects are Just Hashrefs
+       While this all may appear rather magical, it's important to realize
+       that Moose objects are just hash references under the hood (3). For
+       example, you could pass $self to "Data::Dumper" and you'd get exactly
+       what you'd expect.
+
+       You could even poke around inside the object's data structure, but that
+       is strongly discouraged.
+
+       The fact that Moose objects are hashrefs means it is easy to use Moose
+       to extend non-Moose classes, as long as they too are hash references.
+       If you want to extend a non-hashref class, check out
+       "MooseX::InsideOut".
+
+CONCLUSION
+       This recipe demonstrates some basic Moose concepts, attributes,
+       subclassing, and a simple method modifier.
+
+FOOTNOTES
+       (1) Moose provides a number of builtin type constraints are provided
+	   by, of which "Int" is one. For more information on the type
+	   constraint system, see Moose::Util::TypeConstraints.
+
+       (2) The "extends" keyword support multiple inheritance. Simply pass all
+	   of your superclasses to "extends" as a list:
+
+	     extends 'Foo', 'Bar', 'Baz';
+
+       (3) Moose supports using instance structures other than blessed hash
+	   references (such as in a glob reference - see
+	   MooseX::GlobRef::Object).
+
+SEE ALSO
+       Method Modifiers
+	   The concept of method modifiers is directly ripped off from CLOS. A
+	   great explanation of them can be found by following this link.
+
+	   &lthttp://www.gigamonkeys.com/book/object-reorientation-generic-functions.html&gt
+
+AUTHORS
+       Stevan Little &ltstevan@iinteractive.com&gt
+
+       Dave Rolsky &ltautarch@urth.org&gt
+
+COPYRIGHT AND LICENSE
+       Copyright 2006-2010 by Infinity Interactive, Inc.
+
+       &lthttp://www.iinteractive.com&gt
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-02-2Moose::Cookbook::Basics::Recipe1(3)
+    </pre></body>
+
+</html>

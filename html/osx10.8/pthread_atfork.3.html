@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The pthread_atfork() function is used to register functions to be called..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>pthread_atfork -- register handlers to be called before and after fork()</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+PTHREAD_ATFORK(3)	 BSD Library Functions Manual	     PTHREAD_ATFORK(3)
+
+NAME
+     pthread_atfork -- register handlers to be called before and after fork()
+
+SYNOPSIS
+     #include &ltpthread.h&gt
+
+     int
+     pthread_atfork(void (*prepare)(void), void (*parent)(void),
+	 void (*child)(void));
+
+DESCRIPTION
+     The pthread_atfork() function is used to register functions to be called
+     before and after fork() The prepare handler is called before fork(),
+     while the parent and child handlers are called after fork() in the parent
+     and child process, respectively.  prepare handlers are called in reverse
+     order of their registration, while parent and child handlers are called
+     in the order in which they were registered. Any of the handlers may be
+     NULL.
+
+     Remember: only async-cancel-safe functions are allowed on the child side
+     of fork()
+
+RETURN VALUES
+     If successful, the pthread_atfork() function will return zero; otherwise
+     an error number will be returned to indicate the error.
+
+ERRORS
+     pthread_atfork() will fail if:
+
+     [ENOMEM]		The system lacked the necessary resources to add
+			another handler to the list.
+
+SEE ALSO
+     fork(2)
+
+STANDARDS
+     pthread_atfork() conforms to ISO/IEC 9945-1:1996 (``POSIX.1'').
+
+BSD				August 12, 2004 			   BSD
+    </pre></body>
+
+</html>

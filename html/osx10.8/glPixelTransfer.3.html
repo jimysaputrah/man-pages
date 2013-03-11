@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glPixelTransfer	sets pixel transfer modes that affect the operation of..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>glPixelTransferf, glPixelTransferi - set pixel transfer modes</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLPIXELTRANSFER(3G)					   GLPIXELTRANSFER(3G)
+
+
+
+NAME
+       glPixelTransferf, glPixelTransferi - set pixel transfer modes
+
+
+C SPECIFICATION
+       void glPixelTransferf( GLenum pname,
+			      GLfloat param )
+       void glPixelTransferi( GLenum pname,
+			      GLint param )
+
+
+PARAMETERS
+       pname  Specifies  the  symbolic name of the pixel transfer parameter to
+	      be  set.	 Must  be  one	 of   the   following:	 GL_MAP_COLOR,
+	      GL_MAP_STENCIL,  GL_INDEX_SHIFT,	GL_INDEX_OFFSET, GL_RED_SCALE,
+	      GL_RED_BIAS,   GL_GREEN_SCALE,   GL_GREEN_BIAS,	GL_BLUE_SCALE,
+	      GL_BLUE_BIAS,  GL_ALPHA_SCALE, GL_ALPHA_BIAS, GL_DEPTH_SCALE, or
+	      GL_DEPTH_BIAS.
+
+	      Additionally, if the GL_ARB_imaging extension is supported,  the
+	      following        symbolic        names	   are	     accepted:
+	      GL_POST_COLOR_MATRIX_RED_SCALE,
+	      GL_POST_COLOR_MATRIX_GREEN_SCALE,
+	      GL_POST_COLOR_MATRIX_BLUE_SCALE,
+	      GL_POST_COLOR_MATRIX_ALPHA_SCALE, GL_POST_COLOR_MATRIX_RED_BIAS,
+	      GL_POST_COLOR_MATRIX_GREEN_BIAS, GL_POST_COLOR_MATRIX_BLUE_BIAS,
+	      GL_POST_COLOR_MATRIX_ALPHA_BIAS,	GL_POST_CONVOLUTION_RED_SCALE,
+	      GL_POST_CONVOLUTION_GREEN_SCALE, GL_POST_CONVOLUTION_BLUE_SCALE,
+	      GL_POST_CONVOLUTION_ALPHA_SCALE,	 GL_POST_CONVOLUTION_RED_BIAS,
+	      GL_POST_CONVOLUTION_GREEN_BIAS,	GL_POST_CONVOLUTION_BLUE_BIAS,
+	      and GL_POST_CONVOLUTION_ALPHA_BIAS.
+
+       param  Specifies the value that pname is set to.
+
+DESCRIPTION
+       glPixelTransfer	sets pixel transfer modes that affect the operation of
+       subsequent    glCopyPixels,     glCopyTexImage1D,     glCopyTexImage2D,
+       glCopyTexSubImage1D,	 glCopyTexSubImage2D,	  glCopyTexSubImage3D,
+       glDrawPixels, glReadPixels, glTexImage1D,  glTexImage2D,  glTexImage3D,
+       glTexSubImage1D,  glTexSubImage2D, and glTexSubImage3D commands.  Addi-
+       tionally, if the  GL_ARB_imaging  subset  is  supported,  the  routines
+       glColorTable,	      glColorSubTable,		glConvolutionFilter1D,
+       glConvolutionFilter2D, glHistogram, glMinmax,  and  glSeparableFilter2D
+       are also affected.  The algorithms that are specified by pixel transfer
+       modes operate on pixels after they are read from the  frame  buffer  (-
+       glCopyPixels  glCopyTexImage1D,	glCopyTexImage2D, glCopyTexSubImage1D,
+       glCopyTexSubImage2D,   glCopyTexSubImage3D,   and   glReadPixels),   or
+       unpacked  from client memory (glDrawPixels, glTexImage1D, glTexImage2D,
+       glTexImage3D, glTexSubImage1D, glTexSubImage2D,	and  glTexSubImage3D).
+       Pixel  transfer	operations  happen  in the same order, and in the same
+       manner, regardless of the command that resulted in the pixel operation.
+       Pixel  storage modes (see glPixelStore) control the unpacking of pixels
+       being read from client memory, and the packing of pixels being  written
+       back into client memory.
+
+       Pixel  transfer	operations handle four fundamental pixel types: color,
+       color index, depth, and stencil.  Color pixels consist of  four	float-
+       ing-point  values  with unspecified mantissa and exponent sizes, scaled
+       such that 0 represents zero intensity and 1 represents full  intensity.
+       Color  indices  comprise  a  single fixed-point value, with unspecified
+       precision to the right of the binary point.  Depth  pixels  comprise  a
+       single  floating-point  value,  with  unspecified mantissa and exponent
+       sizes, scaled such that 0.0 represents the minimum depth buffer	value,
+       and  1.0  represents  the maximum depth buffer value.  Finally, stencil
+       pixels comprise a single fixed-point value, with unspecified  precision
+       to the right of the binary point.
+
+       The  pixel  transfer operations performed on the four basic pixel types
+       are as follows:
+
+       Color	   Each of the four color components is multiplied by a  scale
+		   factor, then added to a bias factor.  That is, the red com-
+		   ponent  is  multiplied  by  GL_RED_SCALE,  then  added   to
+		   GL_RED_BIAS;   the	green	component   is	multiplied  by
+		   GL_GREEN_SCALE, then added to GL_GREEN_BIAS; the blue  com-
+		   ponent  is  multiplied  by  GL_BLUE_SCALE,  then  added  to
+		   GL_BLUE_BIAS; and the  alpha  component  is	multiplied  by
+		   GL_ALPHA_SCALE,  then  added  to  GL_ALPHA_BIAS.  After all
+		   four color  components  are	scaled	and  biased,  each  is
+		   clamped  to	the  range  [0,1].  All color, scale, and bias
+		   values are specified with glPixelTransfer.
+
+		   If GL_MAP_COLOR is true, each color component is scaled  by
+		   the	size  of  the  corresponding  color-to-color map, then
+		   replaced by the contents of that map indexed by the	scaled
+		   component.	That  is,  the	red  component	is  scaled  by
+		   GL_PIXEL_MAP_R_TO_R_SIZE, then replaced by the contents  of
+		   GL_PIXEL_MAP_R_TO_R indexed by itself.  The green component
+		   is scaled by GL_PIXEL_MAP_G_TO_G_SIZE, then replaced by the
+		   contents  of  GL_PIXEL_MAP_G_TO_G  indexed  by itself.  The
+		   blue component is scaled by GL_PIXEL_MAP_B_TO_B_SIZE,  then
+		   replaced  by the contents of GL_PIXEL_MAP_B_TO_B indexed by
+		   itself.    And   the   alpha   component   is   scaled   by
+		   GL_PIXEL_MAP_A_TO_A_SIZE,  then replaced by the contents of
+		   GL_PIXEL_MAP_A_TO_A	indexed  by  itself.   All  components
+		   taken  from	the  maps are then clamped to the range [0,1].
+		   GL_MAP_COLOR is specified with glPixelTransfer.   The  con-
+		   tents of the various maps are specified with glPixelMap.
+
+		   If  the  GL_ARB_imaging extension is supported, each of the
+		   four color components may be scaled and biased after  tran-
+		   formation  by the color matrix.  That is, the red component
+		   is multiplied by GL_POST_COLOR_MATRIX_RED_SCALE, then added
+		   to  GL_POST_COLOR_MATRIX_RED_BIAS;  the  green component is
+		   multiplied by GL_POST_COLOR_MATRIX_GREEN_SCALE, then  added
+		   to  GL_POST_COLOR_MATRIX_GREEN_BIAS;  the blue component is
+		   multiplied by GL_POST_COLOR_MATRIX_BLUE_SCALE,  then  added
+		   to  GL_POST_COLOR_MATRIX_BLUE_BIAS; and the alpha component
+		   is  multiplied  by  GL_POST_COLOR_MATRIX_ALPHA_SCALE,  then
+		   added  to  GL_POST_COLOR_MATRIX_ALPHA_BIAS.	After all four
+		   color components are scaled and biased, each is clamped  to
+		   the range [0,1].
+
+		   Similiarly,	if  the GL_ARB_imaging extension is supported,
+		   each of the four color components may be scaled and	biased
+		   after  processing  by the enabled convolution filter.  That
+		   is,	  the	 red	component     is     multiplied     by
+		   GL_POST_CONVOLUTION_RED_SCALE,      then	 added	    to
+		   GL_POST_CONVOLUTION_RED_BIAS; the green component is multi-
+		   plied  by  GL_POST_CONVOLUTION_GREEN_SCALE,	then  added to
+		   GL_POST_CONVOLUTION_GREEN_BIAS; the blue component is  mul-
+		   tiplied  by	GL_POST_CONVOLUTION_BLUE_SCALE,  then added to
+		   GL_POST_CONVOLUTION_BLUE_BIAS; and the alpha  component  is
+		   multiplied  by  GL_POST_CONVOLUTION_ALPHA_SCALE, then added
+		   to GL_POST_CONVOLUTION_ALPHA_BIAS.  After  all  four  color
+		   components  are  scaled  and biased, each is clamped to the
+		   range [0,1].
+
+       Color index Each color index is shifted left  by  GL_INDEX_SHIFT  bits;
+		   any	bits beyond the number of fraction bits carried by the
+		   fixed-point index are filled with zeros.  If GL_INDEX_SHIFT
+		   is  negative, the shift is to the right, again zero filled.
+		   Then GL_INDEX_OFFSET is added to the index.	GL_INDEX_SHIFT
+		   and GL_INDEX_OFFSET are specified with
+		   glPixelTransfer.
+
+		   From  this  point,  operation  diverges  depending  on  the
+		   required  of the resulting pixels.  If the resulting pixels
+		   are	to  be written to a color index buffer, or if they are
+		   being read back to client memory in	GL_COLOR_INDEX	,  the
+		   pixels  continue to be treated as indices.  If GL_MAP_COLOR
+		   is true, each index	is  masked  by	(2^n)-1,  where  n  is
+		   GL_PIXEL_MAP_I_TO_I_SIZE,  then replaced by the contents of
+		   GL_PIXEL_MAP_I_TO_I	 indexed   by	the   masked	value.
+		   GL_MAP_COLOR  is  specified with glPixelTransfer.  The con-
+		   tents of the index map is specified with glPixelMap.
+
+		   If the resulting pixels are to be written to an RGBA  color
+		   buffer,  or	if  they  are  read back to client memory in a
+		   other than GL_COLOR_INDEX, the pixels  are  converted  from
+		   indices   to   colors   by	referencing   the   four  maps
+		   GL_PIXEL_MAP_I_TO_R, 		  GL_PIXEL_MAP_I_TO_G,
+		   GL_PIXEL_MAP_I_TO_B, and GL_PIXEL_MAP_I_TO_A.  Before being
+		   dereferenced, the index is masked by (2^n)-1,  where  n  is
+		   GL_PIXEL_MAP_I_TO_R_SIZE	 for	  the	  red	  map,
+		   GL_PIXEL_MAP_I_TO_G_SIZE	for	the	green	  map,
+		   GL_PIXEL_MAP_I_TO_B_SIZE    for    the    blue   map,   and
+		   GL_PIXEL_MAP_I_TO_A_SIZE for the alpha map.	All components
+		   taken  from	the  maps are then clamped to the range [0,1].
+		   The contents of the four maps is specified with glPixelMap.
+
+       Depth	   Each  depth value is multiplied by GL_DEPTH_SCALE, added to
+		   GL_DEPTH_BIAS, then clamped to the range [0,1].
+
+       Stencil	   Each index is shifted GL_INDEX_SHIFT bits just as  a  color
+		   index is, then added to GL_INDEX_OFFSET.  If GL_MAP_STENCIL
+		   is true, each index	is  masked  by	(2^n)-1,  where  n  is
+		   GL_PIXEL_MAP_S_TO_S_SIZE,  then replaced by the contents of
+		   GL_PIXEL_MAP_S_TO_S indexed by the masked value.
+
+       The following table gives the type, initial value, and range  of  valid
+       values  for  each  of  the  pixel transfer parameters that are set with
+       glPixelTransfer.
+
+	pname (Type, Initial Value, Valid Range)
+	GL_MAP_COLOR (boolean, false, true/false)
+	GL_MAP_STENCIL (boolean, false, true/false)
+	GL_INDEX_SHIFT (integer, 0, -inf/inf)
+	GL_INDEX_OFFSET (integer, 0, -inf/inf)
+	GL_RED_SCALE (float, 1, -inf/inf)
+	GL_GREEN_SCALE (float, 1, -inf/inf)
+	GL_BLUE_SCALE (float, 1, -inf/inf)
+	GL_ALPHA_SCALE (float, 1, -inf/inf)
+	GL_DEPTH_SCALE (float, 1, -inf/inf)
+	GL_RED_BIAS (float, 0, -inf/inf)
+	GL_GREEN_BIAS (float, 0, -inf/inf)
+	GL_BLUE_BIAS (float, 0, -inf/inf)
+	GL_ALPHA_BIAS (float, 0, -inf/inf)
+	GL_DEPTH_BIAS (float, 0, -inf/inf)
+	GL_POST_COLOR_MATRIX_RED_SCALE (float, 1, -inf/inf)
+	GL_POST_COLOR_MATRIX_GREEN_SCALE (float, 1, -inf/inf)
+	GL_POST_COLOR_MATRIX_BLUE_SCALE (float, 1, -inf/inf)
+	GL_POST_COLOR_MATRIX_ALPHA_SCALE (float, 1, -inf/inf)
+	GL_POST_COLOR_MATRIX_RED_BIAS (float, 0, -inf/inf)
+	GL_POST_COLOR_MATRIX_GREEN_BIAS (float, 0, -inf/inf)
+	GL_POST_COLOR_MATRIX_BLUE_BIAS (float, 0, -inf/inf)
+	GL_POST_COLOR_MATRIX_ALPHA_BIAS (float, 0, -inf/inf)
+	GL_POST_CONVOLUTION_RED_SCALE (float, 1, -inf/inf)
+	GL_POST_CONVOLUTION_GREEN_SCALE (float, 1, -inf/inf)
+	GL_POST_CONVOLUTION_BLUE_SCALE (float, 1, -inf/inf)
+	GL_POST_CONVOLUTION_ALPHA_SCALE (float, 1, -inf/inf)
+	GL_POST_CONVOLUTION_RED_BIAS (float, 0, -inf/inf)
+	GL_POST_CONVOLUTION_GREEN_BIAS (float, 0, -inf/inf)
+	GL_POST_CONVOLUTION_BLUE_BIAS (float, 0, -inf/inf)
+	GL_POST_CONVOLUTION_ALPHA_BIAS (float, 0, -inf/inf)
+
+
+       glPixelTransferf can be used to set any pixel transfer  parameter.   If
+       the  parameter  type  is  boolean,  0 implies false and any other value
+       implies true.  If pname is an integer parameter, param  is  rounded  to
+       the nearest integer.
+
+       Likewise, glPixelTransferi can be used to set any of the pixel transfer
+       parameters.  Boolean parameters are set to false if param is 0  and  to
+       true  otherwise.   param  is  converted	to floating point before being
+       assigned to real-valued parameters.
+
+NOTES
+       If    a	  glColorTable,    glColorSubTable,	glConvolutionFilter1D,
+       glConvolutionFilter2D,	       glCopyPixels,	     glCopyTexImage1D,
+       glCopyTexImage2D,       glCopyTexSubImage1D,	  glCopyTexSubImage2D,
+       glCopyTexSubImage3D,  glDrawPixels,  glReadPixels, glSeparableFilter2D,
+       glTexImage1D,	 glTexImage2D,	   glTexImage3D,      glTexSubImage1D,
+       glTexSubImage2D,  or  glTexSubImage3D.	command is placed in a display
+       list (see glNewList and glCallList), the pixel transfer	mode  settings
+       in effect when the display list is executed are the ones that are used.
+       They may be different from the settings when the command  was  compiled
+       into the display list.
+
+ERRORS
+       GL_INVALID_ENUM is generated if pname is not an accepted value.
+
+       GL_INVALID_OPERATION   is  generated  if  glPixelTransfer  is  executed
+       between the execution of glBegin and  the  corresponding  execution  of
+       glEnd.
+
+ASSOCIATED GETS
+       glGet with argument GL_MAP_COLOR
+       glGet with argument GL_MAP_STENCIL
+       glGet with argument GL_INDEX_SHIFT
+       glGet with argument GL_INDEX_OFFSET
+       glGet with argument GL_RED_SCALE
+       glGet with argument GL_RED_BIAS
+       glGet with argument GL_GREEN_SCALE
+       glGet with argument GL_GREEN_BIAS
+       glGet with argument GL_BLUE_SCALE
+       glGet with argument GL_BLUE_BIAS
+       glGet with argument GL_ALPHA_SCALE
+       glGet with argument GL_ALPHA_BIAS
+       glGet with argument GL_DEPTH_SCALE
+       glGet with argument GL_DEPTH_BIAS
+       glGet with argument GL_POST_COLOR_MATRIX_RED_SCALE
+       glGet with argument GL_POST_COLOR_MATRIX_RED_BIAS
+       glGet with argument GL_POST_COLOR_MATRIX_GREEN_SCALE
+       glGet with argument GL_POST_COLOR_MATRIX_GREEN_BIAS
+       glGet with argument GL_POST_COLOR_MATRIX_BLUE_SCALE
+       glGet with argument GL_POST_COLOR_MATRIX_BLUE_BIAS
+       glGet with argument GL_POST_COLOR_MATRIX_ALPHA_SCALE
+       glGet with argument GL_POST_COLOR_MATRIX_ALPHA_BIAS
+       glGet with argument GL_POST_CONVOLUTION_RED_SCALE
+       glGet with argument GL_POST_CONVOLUTION_RED_BIAS
+       glGet with argument GL_POST_CONVOLUTION_GREEN_SCALE
+       glGet with argument GL_POST_CONVOLUTION_GREEN_BIAS
+       glGet with argument GL_POST_CONVOLUTION_BLUE_SCALE
+       glGet with argument GL_POST_CONVOLUTION_BLUE_BIAS
+       glGet with argument GL_POST_CONVOLUTION_ALPHA_SCALE
+       glGet with argument GL_POST_CONVOLUTION_ALPHA_BIAS
+
+SEE ALSO
+       glCallList,   glColorTable,   glColorSubTable,	glConvolutionFilter1D,
+       glConvolutionFilter2D,	      glCopyPixels,	     glCopyTexImage1D,
+       glCopyTexImage2D,       glCopyTexSubImage1D,	  glCopyTexSubImage2D,
+       glCopyTexSubImage3D, glDrawPixels, glNewList, glPixelMap, glPixelStore,
+       glPixelZoom,  glReadPixels,  glTexImage1D,  glTexImage2D, glTexImage3D,
+       glTexSubImage1D, glTexSubImage2D, glTexSubImage3D
+
+
+
+							   GLPIXELTRANSFER(3G)
+    </pre></body>
+
+</html>

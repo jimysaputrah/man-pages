@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="reg provides access to the registers and memory within the machine, rang-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>reg -- hardware register and address space access</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+reg(1)			  BSD General Commands Manual			reg(1)
+
+NAME
+     reg -- hardware register and address space access
+
+SYNOPSIS
+     reg [--verbose[=BOOL]] list [THING]
+     reg [--verbose[=BOOL]] info [THING]
+     reg [--verbose[=BOOL]] [--format FORMAT] read THING
+     reg [--verbose[=BOOL]] [--format FORMAT] [--verify-writes[=BOOL]] write
+	 THING=VALUE
+     reg --help
+     reg --version
+
+DESCRIPTION
+     reg provides access to the registers and memory within the machine, rang-
+     ing from CPU registers to those in chipsets and PCI devices, to physical
+     memory and I/O space.  It is strictly a developer and engineering tool,
+     and is not for the feint of heart - misuse can very easily panic your
+     machine, or potentially even do permanent, physical damage.
+
+     You can run reg as any user, but results may be suboptimal, and you will
+     not be able to read or write anything.  In general you will always needs
+     to run reg as root, typically via sudo(1).
+
+OPTIONS
+     There are a handful of optional flags you may use, documented below.  All
+     flags may be specified, regardless of which commands you subsequently
+     use, excepting the special flags --help and --version which exit immedi-
+     ately after being processed.
+
+     Note that command line arguments are processed strictly in order.	That
+     is, any flags you specify affect only subsequent commands, and only until
+     overridden by a second use of those flags.  Since you may in fact use
+     multiple commands in a single invocation, this can be very useful as you
+     may specify different formats or options for differant commands.
+
+     -f FORMATS
+     --format FORMATS
+	      Specifies the format(s) to display values in.  This is a comma-
+	      separated list, where each entry is a format type, one of:
+
+	      default  Use the default format for the item.
+
+	      raw      Print the raw bytes straight to stdout.
+
+	      mnemonic
+		       Print the mnemonic of the value.  May be used at any
+		       time, but only the values of register fields may have
+		       mnemonics associated with them.	Prints an empty line
+		       if no mnemonic is known.
+
+	      name     Print the name of the value.  May be used at any time,
+		       but only the values of register fields may have names
+		       associated with them.  Prints an empty line if no name
+		       is known.
+
+	      data     Prints the value as 'data', that is each byte's value,
+		       in order, in hex.  A `@' suffix is included before the
+		       value to denote this particular format.	You may
+		       optionally append a number after the word `data',
+		       indicating how many bits of data to display between
+		       spaces. e.g. `data32' will print the data in four byte
+		       chunks such as `@0020ffee dd6590a1 0030dde0d'.
+
+	      ASCII    Prints the value as an ASCII string.  Characters which
+		       are not valid ASCII will be printed as periods.
+
+	      UTF8     Prints the value as a UTF-8 string.  Characters which
+		       are not valid UTF-8 will be printed as periods.
+
+	      UTF16    Prints the value as a UTF-16 string.  Characters which
+		       are not valid UTF-8 will be printed as periods.
+
+	      string   Prints the value as a string, using whatever encoding
+		       reg determines is most appropriate.  Characters which
+		       are not valid in the encoding chosen will be printed as
+		       periods.
+
+	      unsigned
+	      signed
+	      float    Prints the value as a number (or numbers, if the value
+		       is longer than the word size) in the specified type.
+		       You may abbreviated the types to just `u', `s' or `f',
+		       respectively.  You may also use `-' or `+' to indicate
+		       signed.
+
+		       You may use an `e' prefix before `float' (or, abbrevi-
+		       ated, just `e' by itself) to specify use of scientific
+		       notation.
+
+		       As unsigned is the default mode you may leave it out
+		       entirely.
+
+		       Following the number type you may specify the base,
+		       using any of `hexadecimal'/`hex'/`h',
+		       `decimal'/`dec'/`d', `octal'/`oct'/`o' or
+		       `binary'/`bin'/`b'`unsigned' and simply specify the
+		       base.
+
+		       Lastly, after the base you may specify the word width
+		       in bits, as a number. This can be used to divide up
+		       large values (e.g. a whole section of memory) into
+		       individual words, each one presented individually with
+		       appropriate markup (e.g. `0x' prefixes) and with space
+		       between them.
+
+		       Note that characters in the output, such as in prefixes
+		       or the letters A through F used in hexadecimal numbers,
+		       are by default lowercase unless the first character of
+		       either the number type or the number's base is
+		       uppercase. e.g. `uhex32' implies lowercase, `Uhex32' or
+		       `uHex32' implies uppercase.
+
+	      Note that each separate use of the --format option completely
+	      overrides any previous specifications.  Since argument ordering
+	      is strictly obeyed, this is useful as it lets you specify dif-
+	      ferent formats for different commands.
+
+     -h
+     --help   Prints brief usage information and exits.
+
+     --verbose[=BOOL]
+	      If used with no argument, enables verbose mode.  Otherwise
+	      enables or disables verbose mode based on BOOL, which may be any
+	      typical boolean specifier, e.g. `off', `true', `0', `yes', etc.
+
+	      In verbose mode additional information may be provided, or
+	      existing information provided in a more verbose fashion (e.g.
+	      with additional whitespace and other formatting niceties).  The
+	      most obvious example is the descriptions of things - by default
+	      only summaries are provided, if any, while in verbose mode the
+	      full description is shown if available.
+
+     -v[=BOOL]
+     --verify-writes[=BOOL]
+	      If used with no argument, turns on write verification.  Other-
+	      wise enables or disables write verification based on BOOL, which
+	      may be any typical boolean specifier, e.g. `off', `true', `0',
+	      `yes', etc.
+
+	      Write verification means that any values written are then imme-
+	      diately read back and compared, the write operation considered
+	      failed if the values differ in any way.  This can be useful in
+	      certain scenarios, though in general it's not something you want
+	      to use unequivocally - some registers simply don't read back the
+	      same as written, or intentionally change shortly after a write,
+	      or just generally over time, etc.  Also be aware that reads may
+	      have side-effects and so enabling verification may have unin-
+	      tended consequences for some registers.
+
+     -V
+     --version
+	      Prints version information and exits.
+
+COMMANDS
+     There are four commands you can use to perform actions with reg:
+
+     list     Lists all things matching THING (or, if THING is not specified,
+	      all devices and address spaces in the current system).  Listing
+	      is intended for perusing the contents of things and discovering
+	      what is available, not for providing specific information about
+	      items.  For that, use the `info' command.
+
+     info     Provides detailed information about all things matching THING.
+	      This information may include things like defined settings (if
+	      THING specifies register fields), names and mnemonics, descrip-
+	      tions or summaries (depending on verbosity settings), etc.
+
+	      Like the `list' command, `info' may be used without a THING
+	      parameter.  However, in that case it provides information about
+	      the system itself, not all the devices and address spaces within
+	      it.
+
+     read     Prints the value(s) of all things matching THING, whether regis-
+	      ters, register fields or sections of address spaces.  The
+	      value(s) are printed according to the format(s) specified by the
+	      most recent preceeding --format flag, or using the default for-
+	      mat if not explicitly defined.  The default format may vary
+	      based on many factors.  As such, if you are using reg program-
+	      matically you should always specify the desired format explic-
+	      itly, regardless of whether the default happens to be what you
+	      want at the current time.
+
+     write    Sets the value of all things matching THING to VALUE . The
+	      values set will be printed to stdout in a similar way to reading
+	      values using the `read' command.	If write verification has been
+	      enabled using --verify-writes, any verification failures will
+	      result in the actual value being printed immediately after the
+	      value that was (supposedly) written.
+
+     You may specify multiple commands, optionally interspersed with option
+     flags, that will be executed in left to right order.  Note however that
+     reg will stop and exit upon the first failure - including failures
+     related to printing of results or interpretation of input, not just the
+     raw hardware access itself - so be wary of sequences which might leave
+     hardware in a bad state if aborted midway.
+
+     The THING argument specifies what hardware to perform the operation on.
+     It is a potentially complex pattern that can match multiple entities, but
+     always homogenously - that is, you can select some number of devices, or
+     some number of registers, but not both devices and registers at once.  As
+     such, there are actually only several key modes:
+
+     System   This is a special case that applies only to the `info' command
+	      when you do not in fact provide a THING argument - in that case
+	      the target is assumed as the system as a whole, and information
+	      such as its manufacturer, model name and number, etc provided.
+
+     Devices  You may select devices in any of three ways:
+
+	      1.   Select all devices using an asterisk, i.e.  `*', or - for
+		   the `list' command only - by not providing a THING argu-
+		   ment.
+	      2.   Select a particular category of devices, listed below.
+	      3.   Select devices with names matching the provided argument,
+		   in which you may use asterisks, `*', as wildcards.
+
+	      When requesting a specific category of devices you can option-
+	      ally specify particular devices within those categories by pro-
+	      viding further matching information in square brackets.  The
+	      form of this information varies by category, as detailed in the
+	      category list below.
+
+	      Known categories are:
+
+	      cpu
+	      cpus     Logical processor cores.  You may use brackets to spec-
+		       ify the logical core index of the particular processor
+		       core of interest.
+
+			     e.g. cpu[0]
+
+	      pci      PCI devices.  You may use the brackets to specify the
+		       vendor ID, device ID, segment number, bus number,
+		       device number and function number, in that order.  Each
+		       number should be separated by a delimiter such as a
+		       comma, a slash, a hyphen, a vertical bar or a colon.
+		       You may intermingle delimiter styles however you wish.
+		       You are also not required to provide all six values -
+		       any not specified will simply be treated as if you'd
+		       specified `*', meaning of course to match any value for
+		       that attribute.
+
+			     e.g. pci[0x1048:0xa13, */*/3/5]
+				  pci[0x1048, 0xa13]
+
+	      os       Operating systems.  Today there will naturally be just
+		       one operating system, so the use of brackets is not
+		       supported with this category.
+
+	      memory   Physical memory.  Today there is just one physical mem-
+		       ory space, so the use of brackets is not supported with
+		       this category.
+
+	      io       I/O space.  Today there is just one I/O space, so the
+		       use of brackets is not supported with this category.
+
+	      model
+	      models   Models of arbitrary devices.  This allows you to look
+		       at any known type of device - that is, use the `list'
+		       and `info' commands.  Models are abstract - even if
+		       there are instances of that device in the current
+		       machine - and so cannot be used with the `read' or
+		       `write' commands.  You may specify the model of inter-
+		       est within square brackets.
+
+			     e.g. model[Core 2]
+				  model[Mac OS X 10.6]
+
+		       Note that you can only model devices, not address spa-
+		       ces - address spaces are a very low level abstraction
+		       and as such do not have any meaningful information in
+		       the abstract.
+
+     Registers
+	      You may select one or more registers within one or more devices
+	      by providing a device specifier as above, and then appending to
+	      that, separated by a period, the name of the register(s) of
+	      interest.  The name is in fact a glob pattern - that is, you may
+	      use an asterisk, `*', as a wildcard that matches any zero or
+	      more characters.
+
+	      You may also optionally select a specific bit range in square
+	      brackets.  Eventually this will mean the read or write operation
+	      applies only to that bit range, though today this does not work
+	      correctly.  It does however filter the fields that will match -
+	      only those fields that intersect the selected range will be con-
+	      sidered for further matching against the mnemonic/name pattern
+	      provided, if applicable.
+
+	      You may also enclose the pattern in double (or single) quotes in
+	      order to use spaces or prevent misinterpretation by your shell,
+	      as shown in the examples below.
+
+		    e.g. model[Core 2 (Penryn)].*
+			 cpu[3].IA32_PERF_CTL
+			 cpu[0].IA32_*
+			 pci[0x10de/0xa89].``Vendor Identifier''
+
+     Fields   In the same way as selected registers within a device, you may
+	      select fields within a register.	The same glob pattern seman-
+	      tics apply for matching names or mnemonics, and again you may
+	      wish to quote the pattern to prevent misinterpretation by your
+	      shell.
+
+	      Note also that, as documented in the Registers section above,
+	      you may restrict to set of fields matched to only those inter-
+	      sect a given bit range within the register.
+
+		    e.g. cpu[1].IA32_FIXED_CTR_CTRL.*
+			 cpu[15].IA32_FIXED_CTR_CTRL.EN*_OS
+			 cpu[7].IA32_FIXED_CTR_CTRL[0:7].*
+
+     Address ranges
+	      You may access the raw address spaces of a device or address
+	      space by using a colon, `': followed by the address range of
+	      interest.  There are two types of address space - flat ones,
+	      like physical memory, and indexed ones, like register address
+	      spaces underlying processors.  You can think of flat address
+	      spaces as one-dimensional: the range 0 to 10 selects 11 bytes.
+	      Indexed address spaces are in this sense two-dimensional: the
+	      range 0 to 10 selects 11 entries in the address space, where
+	      each entry is one or more bytes deep, such that the total is at
+	      least 11 bytes and likely much more.
+
+	      As such you need to be aware which you are using, as they behave
+	      slightly differently.  A flat address space will read (or write)
+	      as one big stream of bytes.  An indexed address space will read
+	      as multiple individual values, and when written to will use the
+	      same VALUE for each index independently.
+
+	      You may specify the range of interest in a variety of formats,
+	      the most common two being via boundaries or via a location and
+	      length pair. The former style sees the two end points separated
+	      by a delimiter such as a colon or a hyphen, while the later
+	      separates the location and the length via a comma. i.e.
+	      `0x1000-0x10ff', `0x1000:0x10ff' and `0x1000,0x100' are all
+	      equivalent.  You may also select just a single index by provid-
+	      ing just one number.  You may also use formal range notation
+	      using square brackets and parenthesis.
+
+		    e.g. memory:0x0-0x100
+			 memory:[0x100, 0x1ff]
+			 memory:{0x200, 0x100}
+			 memory:(0x300, 256)
+			 memory:[0x400, 0x500)
+			 cpu[3]:1280
+
+BUGS
+     While some address spaces can be accessed explicitly (memory, io) others
+     can only be accessed implicitly via their corresponding devices (e.g.
+     pci, cpu).  If those devices are missing, or not all such address spaces
+     are covered by a device, there is no way to access those orphaned address
+     spaces.
+
+     Input does not pay any attention to the current format options (though in
+     any case you should use appropriate prefixes like `0x' or `@' to remove
+     ambiguity).
+
+     You can provide raw input in an analagous way to raw output.  In a more
+     general sense, you cannot provide input via stdin rather than a command
+     line argument.
+
+Darwin			       October 13, 2009 			Darwin
+    </pre></body>
+
+</html>

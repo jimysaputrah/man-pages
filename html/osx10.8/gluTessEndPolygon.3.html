@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="gluTessBeginPolygon  and  gluTessEndPolygon delimit the definition of a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>gluTessEndPolygon - delimit a polygon description</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLUTESSENDPOLYGON(3G)					 GLUTESSENDPOLYGON(3G)
+
+
+
+NAME
+       gluTessEndPolygon - delimit a polygon description
+
+
+C SPECIFICATION
+       void gluTessEndPolygon( GLUtesselator* tess )
+
+
+PARAMETERS
+       tess  Specifies the tessellation object (created with gluNewTess).
+
+DESCRIPTION
+       gluTessBeginPolygon  and  gluTessEndPolygon delimit the definition of a
+       convex,	 concave   or	self-intersecting   polygon.	Within	  each
+       gluTessBeginPolygon/gluTessEndPolygon  pair,  there must be one or more
+       calls to gluTessBeginContour/gluTessEndContour.	Within	each  contour,
+       there  are  zero or more calls to gluTessVertex. The vertices specify a
+       closed contour (the last vertex of each contour is automatically linked
+       to   the   first).   See  the  gluTessVertex,  gluTessBeginContour  and
+       gluTessEndContour reference pages for more details.
+
+       Once gluTessEndPolygon is called, the polygon is tessellated,  and  the
+       resulting    triangles	 are   described   through   callbacks.    See
+       gluTessCallback for descriptions of the callback functions.
+
+EXAMPLE
+       A quadrilateral with a triangular hole in  it  can  be  described  like
+       this:
+
+       gluTessBeginPolygon(tobj, NULL);
+	gluTessBeginContour(tobj);
+	  gluTessVertex(tobj, v1, v1);
+	  gluTessVertex(tobj, v2, v2);
+	  gluTessVertex(tobj, v3, v3);
+	  gluTessVertex(tobj, v4, v4);
+	gluTessEndContour(tobj);
+	gluTessBeginContour(tobj);
+	  gluTessVertex(tobj, v5, v5);
+	  gluTessVertex(tobj, v6, v6);
+	  gluTessVertex(tobj, v7, v7);
+	gluTessEndContour(tobj); gluTessEndPolygon(tobj);
+       In  the above example the pointers, v1 through v7, should point to dif-
+       ferent addresses, since the values stored at these addresses  will  not
+       be read by the tesselator until gluTessEndPolygon is called.
+
+SEE ALSO
+       gluNewTess,    gluTessBeginContour,   gluTessVertex,   gluTessCallback,
+       gluTessProperty, gluTessNormal, gluTessBeginPolygon
+
+
+
+							 GLUTESSENDPOLYGON(3G)
+    </pre></body>
+
+</html>

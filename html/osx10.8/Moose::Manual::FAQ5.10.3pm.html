@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Moose::Manual::FAQ - Frequently asked questions about Moose</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Moose::Manual::FAQ(3) User Contributed Perl DocumentationMoose::Manual::FAQ(3)
+
+
+
+NAME
+       Moose::Manual::FAQ - Frequently asked questions about Moose
+
+FREQUENTLY ASKED QUESTIONS
+   Module Stability
+       Is Moose "production ready"?
+
+       Yes! Many sites with household names are using Moose to build high-
+       traffic services. Countless others are using Moose in production.
+
+       As of this writing, Moose is a dependency of several hundred CPAN
+       modules. &lthttp://cpants.perl.org/dist/used_by/Moose&gt
+
+       Is Moose's API stable?
+
+       Yes. The sugary API, the one 95% of users will interact with, is very
+       stable. Any changes will be 100% backwards compatible.
+
+       The meta API is less set in stone. We reserve the right to tweak parts
+       of it to improve efficiency or consistency. This will not be done
+       lightly. We do perform deprecation cycles. We really do not like making
+       ourselves look bad by breaking your code.  Submitting test cases is the
+       best way to ensure that your code is not inadvertently broken by
+       refactoring.
+
+       I heard Moose is slow, is this true?
+
+       Again, this one is tricky, so Yes and No.
+
+       Firstly, nothing in life is free, and some Moose features do cost more
+       than others. It is also the policy of Moose to only charge you for the
+       features you use, and to do our absolute best to not place any extra
+       burdens on the execution of your code for features you are not using.
+       Of course using Moose itself does involve some overhead, but it is
+       mostly compile time. At this point we do have some options available
+       for getting the speed you need.
+
+       Currently we provide the option of making your classes immutable as a
+       means of boosting speed. This will mean a slightly larger compile time
+       cost, but the runtime speed increase (especially in object
+       construction) is pretty significant. This can be done with the
+       following code:
+
+	 MyClass-&gtmeta-&gtmake_immutable();
+
+       We are regularly converting the hotspots of Class::MOP to XS.  Florian
+       Ragwitz and Yuval Kogman are currently working on a way to compile your
+       accessors and instances directly into C, so that everyone can enjoy
+       blazing fast OO.
+
+       When will Moose 1.0 be ready?
+
+       Moose is ready now! Stevan Little declared 0.18, released in March
+       2007, to be "ready to use".
+
+   Constructors
+       How do I write custom constructors with Moose?
+
+       Ideally, you should never write your own "new" method, and should use
+       Moose's other features to handle your specific object construction
+       needs. Here are a few scenarios, and the Moose way to solve them;
+
+       If you need to call initialization code post instance construction,
+       then use the "BUILD" method. This feature is taken directly from Perl
+       6. Every "BUILD" method in your inheritance chain is called (in the
+       correct order) immediately after the instance is constructed.  This
+       allows you to ensure that all your superclasses are initialized
+       properly as well. This is the best approach to take (when possible)
+       because it makes subclassing your class much easier.
+
+       If you need to affect the constructor's parameters prior to the
+       instance actually being constructed, you have a number of options.
+
+       To change the parameter processing as a whole, you can use the
+       "BUILDARGS" method. The default implementation accepts key/value pairs
+       or a hash reference. You can override it to take positional args, or
+       any other format
+
+       To change the handling of individual parameters, there are coercions
+       (See the Moose::Cookbook::Basics::Recipe5 for a complete example and
+       explanation of coercions). With coercions it is possible to morph
+       argument values into the correct expected types. This approach is the
+       most flexible and robust, but does have a slightly higher learning
+       curve.
+
+       How do I make non-Moose constructors work with Moose?
+
+       Usually the correct approach to subclassing a non-Moose class is
+       delegation.  Moose makes this easy using the "handles" keyword,
+       coercions, and "lazy_build", so subclassing is often not the ideal
+       route.
+
+       That said, if you really need to inherit from a non-Moose class, see
+       Moose::Cookbook::Basics::Recipe11 for an example of how to do it, or
+       take a look at "MooseX::NonMoose" in Moose::Manual::MooseX.
+
+   Accessors
+       How do I tell Moose to use get/set accessors?
+
+       The easiest way to accomplish this is to use the "reader" and "writer"
+       attribute options:
+
+	 has 'bar' =&gt (
+	     isa    =&gt 'Baz',
+	     reader =&gt 'get_bar',
+	     writer =&gt 'set_bar',
+	 );
+
+       Moose will still take advantage of type constraints, triggers, etc.
+       when creating these methods.
+
+       If you do not like this much typing, and wish it to be a default for
+       your classes, please see MooseX::FollowPBP. This extension will allow
+       you to write:
+
+	 has 'bar' =&gt (
+	     isa =&gt 'Baz',
+	     is  =&gt 'rw',
+	 );
+
+       Moose will create separate "get_bar" and "set_bar" methods instead of a
+       single "bar" method.
+
+       If you like "bar" and "set_bar", see MooseX::SemiAffordanceAccessor.
+
+       NOTE: This cannot be set globally in Moose, as that would break other
+       classes which are built with Moose. You can still save on typing by
+       defining a new MyApp::Moose that exports Moose's sugar and then turns
+       on MooseX::FollowPBP. See Moose::Cookbook::Extending::Recipe4.
+
+       How can I inflate/deflate values in accessors?
+
+       Well, the first question to ask is if you actually need both inflate
+       and deflate.
+
+       If you only need to inflate, then we suggest using coercions. Here is
+       some basic sample code for inflating a DateTime object:
+
+	 class_type 'DateTime';
+
+	 coerce 'DateTime'
+	     =&gt from 'Str'
+	     =&gt via { DateTime::Format::MySQL-&gtparse_datetime($_) };
+
+	 has 'timestamp' =&gt (is =&gt 'rw', isa =&gt 'DateTime', coerce =&gt 1);
+
+       This creates a custom type for DateTime objects, then attaches a
+       coercion to that type. The "timestamp" attribute is then told to expect
+       a "DateTime" type, and to try to coerce it. When a "Str" type is given
+       to the "timestamp" accessor, it will attempt to coerce the value into a
+       "DateTime" object using the code in found in the "via" block.
+
+       For a more comprehensive example of using coercions, see the
+       Moose::Cookbook::Basics::Recipe5.
+
+       If you need to deflate your attribute's value, the current best
+       practice is to add an "around" modifier to your accessor:
+
+	 # a timestamp which stores as
+	 # seconds from the epoch
+	 has 'timestamp' =&gt (is =&gt 'rw', isa =&gt 'Int');
+
+	 around 'timestamp' =&gt sub {
+	     my $next = shift;
+	     my $self = shift;
+
+	     return $self-&gt$next unless @_;
+
+	     # assume we get a DateTime object ...
+	     my $timestamp = shift;
+	     return $self-&gt$next( $timestamp-&gtepoch );
+	 };
+
+       It is also possible to do deflation using coercion, but this tends to
+       get quite complex and require many subtypes. An example of this is
+       outside the scope of this document, ask on #moose or send a mail to the
+       list.
+
+       Still another option is to write a custom attribute metaclass, which is
+       also outside the scope of this document, but we would be happy to
+       explain it on #moose or the mailing list.
+
+       I created an attribute, where are my accessors?
+
+       Accessors are not created implicitly, you must ask Moose to create them
+       for you. My guess is that you have this:
+
+	 has 'foo' =&gt (isa =&gt 'Bar');
+
+       when what you really want to say is:
+
+	 has 'foo' =&gt (isa =&gt 'Bar', is =&gt 'rw');
+
+       The reason this is so is because it is a perfectly valid use case to
+       not have an accessor. The simplest one is that you want to write your
+       own. If Moose created one automatically, then because of the order in
+       which classes are constructed, Moose would overwrite your custom
+       accessor. You wouldn't want that would you?
+
+   Method Modifiers
+       How can I affect the values in @_ using "before"?
+
+       You can't, actually: "before" only runs before the main method, and it
+       cannot easily affect the method's execution.
+
+       You similarly can't use "after" to affect the return value of a method.
+
+       We limit "before" and "after" because this lets you write more concise
+       code. You do not have to worry about passing @_ to the original method,
+       or forwarding its return value (being careful to preserve context).
+
+       The "around" method modifier has neither of these limitations, but is a
+       little more verbose.
+
+       Can I use "before" to stop execution of a method?
+
+       Yes, but only if you throw an exception. If this is too drastic a
+       measure then we suggest using "around" instead. The "around" method
+       modifier is the only modifier which can gracefully prevent execution of
+       the main method. Here is an example:
+
+	   around 'baz' =&gt sub {
+	       my $next = shift;
+	       my ($self, %options) = @_;
+	       unless ($options-&gt{bar} eq 'foo') {
+		   return 'bar';
+	       }
+	       $self-&gt$next(%options);
+	   };
+
+       By choosing not to call the $next method, you can stop the execution of
+       the main method.
+
+       Why can't I see return values in an "after" modifier?
+
+       As with the "before" modifier, the "after" modifier is simply called
+       after the main method. It is passed the original contents of @_ and not
+       the return values of the main method.
+
+       Again, the arguments are too lengthy as to why this has to be. And as
+       with "before" I recommend using an "around" modifier instead.  Here is
+       some sample code:
+
+	 around 'foo' =&gt sub {
+	     my $next = shift;
+	     my ($self, @args) = @_;
+	     my @rv = $next-&gt($self, @args);
+	     # do something silly with the return values
+	     return reverse @rv;
+	 };
+
+   Type Constraints
+       How can I provide a custom error message for a type constraint?
+
+       Use the "message" option when building the subtype:
+
+	 subtype 'NaturalLessThanTen'
+	     =&gt as 'Natural'
+	     =&gt where { $_ &lt 10 }
+	     =&gt message { "This number ($_) is not less than ten!" };
+
+       This "message" block will be called when a value fails to pass the
+       "NaturalLessThanTen" constraint check.
+
+       Can I turn off type constraint checking?
+
+       Not yet. This option may come in a future release.
+
+       My coercions stopped working with recent Moose, why did you break it?
+
+       Moose 0.76 fixed a case where Coercions were being applied even if the
+       original constraint passed. This has caused some edge cases to fail
+       where people were doing something like
+
+	   subtype Address =&gt as 'Str';
+	   coerce Address =&gt from Str =&gt via { get_address($_) };
+
+       Which is not what they intended. The Type Constraint "Address" is too
+       loose in this case, it is saying that all Strings are Addresses, which
+       is obviously not the case. The solution is to provide a where clause
+       that properly restricts the Type Constraint.
+
+	   subtype Address =&gt as Str =&gt where { looks_like_address($_) };
+
+       This will allow the coercion to apply only to strings that fail to look
+       like an Address.
+
+   Roles
+       Why is BUILD not called for my composed roles?
+
+       "BUILD" is never called in composed roles. The primary reason is that
+       roles are not order sensitive. Roles are composed in such a way that
+       the order of composition does not matter (for information on the deeper
+       theory of this read the original traits papers here
+       &lthttp://www.iam.unibe.ch/~scg/Research/Traits/&gt).
+
+       Because roles are essentially unordered, it would be impossible to
+       determine the order in which to execute the "BUILD" methods.
+
+       As for alternate solutions, there are a couple.
+
+       o   Using a combination of lazy and default in your attributes to defer
+	   initialization (see the Binary Tree example in the cookbook for a
+	   good example of lazy/default usage
+	   Moose::Cookbook::Basics::Recipe3)
+
+       o   Use attribute triggers, which fire after an attribute is set, to
+	   facilitate initialization. These are described in the Moose docs,
+	   and examples can be found in the test suite.
+
+       In general, roles should not require initialization; they should either
+       provide sane defaults or should be documented as needing specific
+       initialization. One such way to "document" this is to have a separate
+       attribute initializer which is required for the role. Here is an
+       example of how to do this:
+
+	 package My::Role;
+	 use Moose::Role;
+
+	 has 'height' =&gt (
+	     is      =&gt 'rw',
+	     isa     =&gt 'Int',
+	     lazy    =&gt 1,
+	     default =&gt sub {
+		 my $self = shift;
+		 $self-&gtinit_height;
+	     }
+	 );
+
+	 requires 'init_height';
+
+       In this example, the role will not compose successfully unless the
+       class provides a "init_height" method.
+
+       If none of those solutions work, then it is possible that a role is not
+       the best tool for the job, and you really should be using classes. Or,
+       at the very least, you should reduce the amount of functionality in
+       your role so that it does not require initialization.
+
+       What are Traits, and how are they different from Roles?
+
+       In Moose, a trait is almost exactly the same thing as a role, except
+       that traits typically register themselves, which allows you to refer to
+       them by a short name ("Big" vs "MyApp::Role::Big").
+
+       In Moose-speak, a Role is usually composed into a class at compile
+       time, whereas a Trait is usually composed into an instance of a class
+       at runtime to add or modify the behavior of just that instance.
+
+       Outside the context of Moose, traits and roles generally mean exactly
+       the same thing. The original paper called them Traits, however Perl 6
+       will call them Roles.
+
+   Moose and Subroutine Attributes
+       Why don't subroutine attributes I inherited from a superclass work?
+
+       Currently when you subclass a module, this is done at runtime with the
+       "extends" keyword but attributes are checked at compile time by Perl.
+       To make attributes work, you must place "extends" in a "BEGIN" block so
+       that the attribute handlers will be available at compile time like
+       this:
+
+	 BEGIN { extends qw/Foo/ }
+
+       Note that we're talking about Perl's subroutine attributes here, not
+       Moose attributes:
+
+	 sub foo : Bar(27) { ... }
+
+AUTHOR
+       Stevan Little &ltstevan@iinteractive.com&gt
+
+COPYRIGHT AND LICENSE
+       Copyright 2006-2010 by Infinity Interactive, Inc.
+
+       &lthttp://www.iinteractive.com&gt
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-02-27		 Moose::Manual::FAQ(3)
+    </pre></body>
+
+</html>

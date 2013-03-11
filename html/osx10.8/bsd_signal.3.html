@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The bsd_signal() function provides a partially compatible interface for..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>bsd_signal -- simplified signal facilities</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+BSD_SIGNAL(3)		 BSD Library Functions Manual		 BSD_SIGNAL(3)
+
+NAME
+     bsd_signal -- simplified signal facilities
+
+SYNOPSIS
+     #include &ltsignal.h&gt
+
+     void (*
+     bsd_signal(int sig, void (*func)(int)))(int);
+
+     or in an equivalent but easier to read typedef'd version:
+
+     typedef void (*sig_t) (int);
+
+     sig_t
+     bsd_signal(int sig, sig_t func);
+
+DESCRIPTION
+     The bsd_signal() function provides a partially compatible interface for
+     programs written to historical system interfaces (see USAGE below).
+
+     The function call bsd_signal(sig, func) has the effect as if implemented
+     as:
+
+	   void (*bsd_signal(int sig, void (*func)(int)))(int)
+	   {
+	       struct sigaction act, oact;
+
+	       act.sa_handler = func;
+	       act.sa_flags = SA_RESTART;
+	       sigemptyset(&act.sa_mask);
+	       sigaddset(&act.sa_mask, sig);
+	       if (sigaction(sig, &act, &oact) == -1)
+		   return(SIG_ERR);
+	       return(oact.sa_handler);
+	   }
+
+     The handler function should be declared:
+
+	   void func(int sig)
+
+     where sig is the signal number.  The behavior is undefined if func() is a
+     function that takes more than one argument, or an argument of a different
+     type.
+
+RETURN VALUES
+     Upon successful completion, bsd_signal() returns the previous action for
+     sig.  Otherwise, SIG_ERR is returned and errno is set to indicate the
+     error.
+
+ERRORS
+     Refer to sigaction(2).
+
+USAGE
+     This function is a direct replacement for the BSD signal(3) function for
+     simple applications that are installing a single-argument signal handler
+     function.	If a BSD signal handler function is being installed that
+     expects more than one argument, the application has to be modified to use
+     sigaction(2).  The bsd_signal() function differs from signal(3) in that
+     the SA_RESTART flag is set and the SA_RESETHAND will be clear when
+     bsd_signal() is used.  The state of these flags is not specified for
+     signal(3).
+
+SEE ALSO
+     sigaction(2), sigaddset(3), sigemptyset(3), signal(3)
+
+STANDARDS
+     The bsd_signal() function conforms to IEEE Std 1003.1-2001 (``POSIX.1'').
+
+BSD			       December 20, 2003			   BSD
+    </pre></body>
+
+</html>

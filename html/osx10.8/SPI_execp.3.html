@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="SPI_execp is the same as SPI_execute_plan, with the latter's read_only..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>SPI_execp - execute a plan in read/write mode</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+SPI_EXECP(3)		PostgreSQL 9.1.4 Documentation		  SPI_EXECP(3)
+
+
+
+NAME
+       SPI_execp - execute a plan in read/write mode
+
+SYNOPSIS
+       int SPI_execp(SPIPlanPtr plan, Datum * values, const char * nulls, long count)
+
+DESCRIPTION
+       SPI_execp is the same as SPI_execute_plan, with the latter's read_only
+       parameter always taken as false.
+
+ARGUMENTS
+       SPIPlanPtr plan
+	   execution plan (returned by SPI_prepare)
+
+       Datum * values
+	   An array of actual parameter values. Must have same length as the
+	   plan's number of arguments.
+
+       const char * nulls
+	   An array describing which parameters are null. Must have same
+	   length as the plan's number of arguments.  n indicates a null value
+	   (entry in values will be ignored); a space indicates a nonnull
+	   value (entry in values is valid).
+
+	   If nulls is NULL then SPI_execp assumes that no parameters are
+	   null.
+
+       long count
+	   maximum number of rows to process or return
+
+RETURN VALUE
+       See SPI_execute_plan.
+
+
+       SPI_processed and SPI_tuptable are set as in SPI_execute if successful.
+
+
+
+PostgreSQL 9.1.4		  2012-05-31			  SPI_EXECP(3)
+    </pre></body>
+
+</html>

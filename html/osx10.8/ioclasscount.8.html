@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="ioclasscount displays the instance counts of OSObject-based C++ classes..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>ioclasscount</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+IOCLASSCOUNT(8) 	  BSD System Manager's Manual	       IOCLASSCOUNT(8)
+
+NAME
+     ioclasscount
+
+SYNOPSIS
+     ioclasscount [classname] [...]
+
+DESCRIPTION
+     ioclasscount displays the instance counts of OSObject-based C++ classes
+     in the kernel, incremented by the number of direct subclasses that have
+     an instance count of at least 1.  For example, if IONetworkController is
+     not directly instantiated, but its direct subclass IOEthernetController
+     has any instances, then IONetworkController's instance count will be at
+     least 1; if another direct subclass such as IOFWController has any
+     instances, then IONetworkController's instance count will be at least 2;
+     and so on.  (This modification of instance counts prevents unloading of
+     kexts defining superclasses that have no instances, but whose subclasses
+     in other kexts have instances.)
+
+     If classes are specified, instance counts are printed as a comma-sepa-
+     rated list in the order specified.  If no classes are specified, instance
+     counts for all classes are printed, one per line of output and sorted by
+     name.
+
+     This information is useful for tracking leaks.  Instance counts can also
+     found in the root of the IORegistry in the ``IOKitDiagnostics'' property.
+
+EXAMPLES
+     Display instance counts for IOPCIDevice and AppleTestPCI:
+
+     /usr/sbin/ioclasscount IOPCIDevice AppleTestPCI
+	    IOPCIDevice = 2, AppleTestPCI = 1
+
+SEE ALSO
+     ioalloccount(8), ioreg(8)
+
+Darwin			       November 06, 2008			Darwin
+    </pre></body>
+
+</html>

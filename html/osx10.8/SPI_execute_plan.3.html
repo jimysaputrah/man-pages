@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="SPI_execute_plan executes a plan prepared by SPI_prepare.  read_only..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>SPI_execute_plan - execute a plan prepared by SPI_prepare</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+SPI_EXECUTE_PLAN(3)	PostgreSQL 9.1.4 Documentation	   SPI_EXECUTE_PLAN(3)
+
+
+
+NAME
+       SPI_execute_plan - execute a plan prepared by SPI_prepare
+
+SYNOPSIS
+       int SPI_execute_plan(SPIPlanPtr plan, Datum * values, const char * nulls,
+			    bool read_only, long count)
+
+DESCRIPTION
+       SPI_execute_plan executes a plan prepared by SPI_prepare.  read_only
+       and count have the same interpretation as in SPI_execute.
+
+ARGUMENTS
+       SPIPlanPtr plan
+	   execution plan (returned by SPI_prepare)
+
+       Datum * values
+	   An array of actual parameter values. Must have same length as the
+	   plan's number of arguments.
+
+       const char * nulls
+	   An array describing which parameters are null. Must have same
+	   length as the plan's number of arguments.  n indicates a null value
+	   (entry in values will be ignored); a space indicates a nonnull
+	   value (entry in values is valid).
+
+	   If nulls is NULL then SPI_execute_plan assumes that no parameters
+	   are null.
+
+       bool read_only
+	   true for read-only execution
+
+       long count
+	   maximum number of rows to process or return
+
+RETURN VALUE
+       The return value is the same as for SPI_execute, with the following
+       additional possible error (negative) results:
+
+       SPI_ERROR_ARGUMENT
+	   if plan is NULL or invalid, or count is less than 0
+
+       SPI_ERROR_PARAM
+	   if values is NULL and plan was prepared with some parameters
+
+
+       SPI_processed and SPI_tuptable are set as in SPI_execute if successful.
+
+
+
+PostgreSQL 9.1.4		  2012-05-31		   SPI_EXECUTE_PLAN(3)
+    </pre></body>
+
+</html>

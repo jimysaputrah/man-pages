@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This example shows a custom method metaclass that models public versus..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Moose::Cookbook::Meta::Recipe6 - A method metaclass for marking methods</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Moose::Cookbook::Meta:UseriContributed Perl DMoose::Cookbook::Meta::Recipe6(3)
+
+
+
+NAME
+       Moose::Cookbook::Meta::Recipe6 - A method metaclass for marking methods
+       public or private
+
+SYNOPSIS
+	 package My::Meta::Method;
+
+	 use Moose;
+	 use Moose::Util::TypeConstraints;
+
+	 extends 'Moose::Meta::Method';
+
+	 has '_policy' =&gt (
+	     is       =&gt 'ro',
+	     isa      =&gt enum( [ qw( public private ) ] ),
+	     default  =&gt 'public',
+	     init_arg =&gt 'policy',
+	 );
+
+	 sub new {
+	     my $class	 = shift;
+	     my %options = @_;
+
+	     my $self = $class-&gtSUPER::wrap(%options);
+
+	     $self-&gt{_policy} = $options{policy};
+
+	     $self-&gt_add_policy_wrapper;
+
+	     return $self;
+	 }
+
+	 sub _add_policy_wrapper {
+	     my $self = shift;
+
+	     return if $self-&gtis_public;
+
+	     my $name	   = $self-&gtname;
+	     my $package   = $self-&gtpackage_name;
+	     my $real_body = $self-&gtbody;
+
+	     my $body = sub {
+		 die "The $package\::$name method is private"
+		     unless ( scalar caller() ) eq $package;
+
+		 goto &{$real_body};
+	     };
+
+	     $self-&gt{body} = $body;
+	 }
+
+	 sub is_public	{ $_[0]-&gt_policy eq 'public' }
+	 sub is_private { $_[0]-&gt_policy eq 'private' }
+
+	 package MyApp::User;
+
+	 use Moose;
+
+	 has 'password' =&gt ( is =&gt 'rw' );
+
+	 __PACKAGE__-&gtmeta()-&gtadd_method(
+	     '_reset_password',
+	     My::Meta::Method-&gtnew(
+		 name	      =&gt '_reset_password',
+		 package_name =&gt __PACKAGE__,
+		 body	      =&gt sub { $_[0]-&gtpassword('reset') },
+		 policy       =&gt 'private',
+	     )
+	 );
+
+DESCRIPTION
+       This example shows a custom method metaclass that models public versus
+       private methods. If a method is defined as private, it adds a wrapper
+       around the method which dies unless it is called from the class where
+       it was defined.
+
+       The way the method is added to the class is rather ugly. If we wanted
+       to make this a real feature, we'd probably want to add some sort of
+       sugar to allow us to declare private methods, but that is beyond the
+       scope of this recipe. See the Extending recipes for more on this topic.
+
+       The core of our custom class is the "policy" attribute, and
+       "_add_policy_wrapper" method.
+
+       You'll note that we have to explicitly set the "policy" attribute in
+       our constructor:
+
+	     $self-&gt{policy} = $options{policy};
+
+       That is necessary because Moose metaclasses do not use the meta API to
+       create objects. Most Moose classes have a custom "inlined" constructor
+       for speed.
+
+       In this particular case, our parent class's constructor is the "wrap"
+       method. We call that to build our object, but it does not include
+       subclass-specific attributes.
+
+       The "_add_policy_wrapper" method is where the real work is done. If the
+       method is private, we construct a wrapper around the real subroutine
+       which checks that the caller matches the package in which the
+       subroutine was created.
+
+       If they don't match, it dies. If they do match, the real method is
+       called. We use "goto" so that the wrapper does not show up in the call
+       stack.
+
+       Finally, we replace the value of "$self-&gt{body}". This is another case
+       where we have to do something a bit gross because Moose does not use
+       Moose for its own implementation.
+
+       When we pass this method object to the metaclass's "add_method" method,
+       it will take the method body and make it available in the class.
+
+       Finally, when we retrieve these methods via the introspection API, we
+       can call the "is_public" and "is_private" methods on them to get more
+       information about the method.
+
+SUMMARY
+       A custom method metaclass lets us add both behavior and meta-
+       information to methods. Unfortunately, because the Perl interpreter
+       does not private easy hooks into method declaration, the API we have
+       for adding these methods is not very pretty.
+
+       That can be improved with custom Moose-like sugar, or even by using a
+       tool like Devel::Declare to create full-blown new keywords in Perl.
+
+AUTHOR
+       Dave Rolsky &ltautarch@urth.org&gt
+
+COPYRIGHT AND LICENSE
+       Copyright 2009 by Infinity Interactive, Inc.
+
+       &lthttp://www.iinteractive.com&gt
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2009-04-07 Moose::Cookbook::Meta::Recipe6(3)
+    </pre></body>
+
+</html>

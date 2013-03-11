@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="gluLookAt  creates a viewing matrix derived from an eye point, a refer-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>gluLookAt - define a viewing transformation</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLULOOKAT(3G)							 GLULOOKAT(3G)
+
+
+
+NAME
+       gluLookAt - define a viewing transformation
+
+
+C SPECIFICATION
+       void gluLookAt( GLdouble eyeX,
+		       GLdouble eyeY,
+		       GLdouble eyeZ,
+		       GLdouble centerX,
+		       GLdouble centerY,
+		       GLdouble centerZ,
+		       GLdouble upX,
+		       GLdouble upY,
+		       GLdouble upZ )
+
+
+PARAMETERS
+       eyeX, eyeY, eyeZ
+		       Specifies the position of the eye point.
+
+       centerX, centerY, centerZ
+		       Specifies the position of the reference point.
+
+       upX, upY, upZ   Specifies the direction of the up vector.
+
+DESCRIPTION
+       gluLookAt  creates a viewing matrix derived from an eye point, a refer-
+       ence point indicating the center of the scene, and an UP vector.
+
+       The matrix maps the reference point to the negative z axis and the  eye
+       point  to  the  origin.	 When a typical projection matrix is used, the
+       center of the scene therefore maps to the center of the viewport.  Sim-
+       ilarly,	the  direction	described  by the UP vector projected onto the
+       viewing plane is mapped to the positive y axis so that it points upward
+       in  the	viewport.   The  UP vector must not be parallel to the line of
+       sight from the eye point to the reference point.
+
+       Let
+
+	    centerX - eyeX
+	F = centerY - eyeY
+	    centerZ - eyeZ
+
+       Let UP be the vector (upX, upY, upZ).
+
+       Then normalize as follows: f = F/ || F ||
+
+       UP' = UP/|| UP ||
+
+       Finally, let s = f X UP', and u = s X f.
+
+       M is then constructed as follows:
+
+	     s[0]    s[1]    s[2]    0
+	     u[0]    u[1]    u[2]    0
+	M = -f[0]   -f[1]   -f[2]    0
+	      0       0       0      1
+
+       and gluLookAt is equivalent to
+
+       glMultMatrixf(M);
+
+       glTranslated (-eyeX, -eyeY, -eyeZ);
+
+SEE ALSO
+       glFrustum, gluPerspective
+
+
+
+								 GLULOOKAT(3G)
+    </pre></body>
+
+</html>

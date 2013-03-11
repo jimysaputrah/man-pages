@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module provides all the functionality to send test reports to..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>CPANPLUS::Internals::Report</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+CPANPLUS::Internals::RePerl(Programmers RefereCPANPLUS::Internals::Report(3pm)
+
+
+
+NAME
+       CPANPLUS::Internals::Report
+
+SYNOPSIS
+	 ### enable test reporting
+	 $cb-&gtconfigure_object-&gtset_conf( cpantest =&gt 1 );
+
+	 ### set custom mx host, shouldn't normally be needed
+	 $cb-&gtconfigure_object-&gtset_conf( cpantest_mx =&gt 'smtp.example.com' );
+
+DESCRIPTION
+       This module provides all the functionality to send test reports to
+       "http://testers.cpan.org" using the "Test::Reporter" module.
+
+       All methods will be called automatically if you have "CPANPLUS"
+       configured to enable test reporting (see the "SYNOPSIS").
+
+METHODS
+   $bool = $cb-&gt_have_query_report_modules
+       This function checks if all the required modules are here for querying
+       reports. It returns true and loads them if they are, or returns false
+       otherwise.
+
+   $bool = $cb-&gt_have_send_report_modules
+       This function checks if all the required modules are here for sending
+       reports. It returns true and loads them if they are, or returns false
+       otherwise.
+
+   @list = $cb-&gt_query_report( module =&gt $modobj, [all_versions =&gt BOOL,
+       verbose =&gt BOOL] )
+       This function queries the CPAN testers database at
+       http://testers.cpan.org/ for test results of specified module objects,
+       module names or distributions.
+
+       The optional argument "all_versions" controls whether all versions of a
+       given distribution should be grabbed.  It defaults to false (fetching
+       only reports for the current version).
+
+       Returns the a list with the following data structures (for CPANPLUS
+       version 0.042) on success, or false on failure. The contents of the
+       data structure depends on what http://testers.cpan.org returns, but
+       generally looks like this:
+
+		 {
+		   'grade' =&gt 'PASS',
+		   'dist' =&gt 'CPANPLUS-0.042',
+		   'platform' =&gt 'i686-pld-linux-thread-multi'
+		   'details' =&gt 'http://nntp.x.perl.org/group/perl.cpan.testers/98316'
+		   ...
+		 },
+		 {
+		   'grade' =&gt 'PASS',
+		   'dist' =&gt 'CPANPLUS-0.042',
+		   'platform' =&gt 'i686-linux-thread-multi'
+		   'details' =&gt 'http://nntp.x.perl.org/group/perl.cpan.testers/99416'
+		   ...
+		 },
+		 {
+		   'grade' =&gt 'FAIL',
+		   'dist' =&gt 'CPANPLUS-0.042',
+		   'platform' =&gt 'cygwin-multi-64int',
+		   'details' =&gt 'http://nntp.x.perl.org/group/perl.cpan.testers/99371'
+		   ...
+		 },
+		 {
+		   'grade' =&gt 'FAIL',
+		   'dist' =&gt 'CPANPLUS-0.042',
+		   'platform' =&gt 'i586-linux',
+		   'details' =&gt 'http://nntp.x.perl.org/group/perl.cpan.testers/99396'
+		   ...
+		 },
+
+       The status of the test can be one of the following: UNKNOWN, PASS, FAIL
+       or NA (not applicable).
+
+   $bool = $cb-&gt_send_report( module =&gt $modobj, buffer =&gt $make_output,
+       failed =&gt BOOL, [save =&gt BOOL, address =&gt $email_to, verbose =&gt BOOL,
+       force =&gt BOOL]);
+       This function sends a testers report to "cpan-testers@perl.org" for a
+       particular distribution.  It returns true on success, and false on
+       failure.
+
+       It takes the following options:
+
+       module
+	   The module object of this particular distribution
+
+       buffer
+	   The output buffer from the 'make/make test' process
+
+       failed
+	   Boolean indicating if the 'make/make test' went wrong
+
+       save
+	   Boolean indicating if the report should be saved locally instead of
+	   mailed out. If provided, this function will return the location the
+	   report was saved to, rather than a simple boolean 'TRUE'.
+
+	   Defaults to false.
+
+       address
+	   The email address to mail the report for. You should never need to
+	   override this, but it might be useful for debugging purposes.
+
+	   Defaults to "cpan-testers@perl.org".
+
+       verbose
+	   Boolean indicating on whether or not to be verbose.
+
+	   Defaults to your configuration settings
+
+       force
+	   Boolean indicating whether to force the sending, even if the max
+	   amount of reports for fails have already been reached, or if you
+	   may already have sent it before.
+
+	   Defaults to your configuration settings
+
+
+
+perl v5.10.1			  2009-07-06  CPANPLUS::Internals::Report(3pm)
+    </pre></body>
+
+</html>

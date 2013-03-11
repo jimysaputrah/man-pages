@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glMultMatrix multiplies the current matrix with the one specified using..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>glMultMatrixd,  glMultMatrixf  -  multiply  the current matrix with the</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLMULTMATRIX(3G)					      GLMULTMATRIX(3G)
+
+
+
+NAME
+       glMultMatrixd,  glMultMatrixf  -  multiply  the current matrix with the
+       specified matrix
+
+
+C SPECIFICATION
+       void glMultMatrixd( const GLdouble *m )
+       void glMultMatrixf( const GLfloat *m )
+
+
+PARAMETERS
+       m  Points to 16 consecutive values that are used as the elements of a 4
+	  x 4 column-major matrix.
+
+DESCRIPTION
+       glMultMatrix multiplies the current matrix with the one specified using
+       m, and replaces the current matrix with the product.
+
+       The current matrix is  determined  by  the  current  matrix  mode  (see
+       glMatrixMode). It is either the projection matrix, modelview matrix, or
+       the texture matrix.
+
+EXAMPLES
+       If the current matrix is C, and the coordinates to be transformed  are,
+       v  =  (v[0], v[1], v[2], v[3]).	Then the current transformation is C X
+       v, or
+
+	c[0]  c[4]  c[8]  c[12]     v[0]
+	c[1]  c[5]  c[9]  c[13]     v[1]
+	c[2]  c[6]  c[10] c[14]  X  v[2]
+	c[3]  c[7]  c[11] c[15]     v[3]
+
+       Calling glMultMatrix with an argument of m =  m[0],  m[1],  ...,  m[15]
+       replaces the current transformation with (C X M) x v, or
+
+	c[0]  c[4]  c[8]  c[12]   m[0]	m[4]  m[8]  m[12]   v[0]
+	c[1]  c[5]  c[9]  c[13]   m[1]	m[5]  m[9]  m[13]   v[1]
+	c[2]  c[6]  c[10] c[14] X m[2]	m[6]  m[10] m[14] X v[2]
+	c[3]  c[7]  c[11] c[15]   m[3]	m[7]  m[11] m[15]   v[3]
+
+
+
+       Where  'X' denotes matrix multiplication, and v is represented as a 4 X
+       1 matrix.
+
+NOTES
+       While the elements of the matrix may be specified with single or double
+       precision,  the	GL  may  store or operate on these values in less than
+       single precision.
+
+       In many computer languages 4 X 4 arrays are  represented  in  row-major
+       order.  The  transformations just described represent these matrices in
+       column-major order.  The order of the multiplication is important.  For
+       example,  if the current transformation is a rotation, and glMultMatrix
+       is called with a translation matrix, the translation is	done  directly
+       on the coordinates to be transformed, while the rotation is done on the
+       results of that translation.
+
+ERRORS
+       GL_INVALID_OPERATION is generated if glMultMatrix is  executed  between
+       the execution of glBegin and the corresponding execution of glEnd.
+
+ASSOCIATED GETS
+       glGet with argument GL_MATRIX_MODE
+       glGet with argument GL_COLOR_MATRIX
+       glGet with argument GL_MODELVIEW_MATRIX
+       glGet with argument GL_PROJECTION_MATRIX
+       glGet with argument GL_TEXTURE_MATRIX
+
+SEE ALSO
+       glLoadIdentity, glLoadMatrix, glMatrixMode, glPushMatrix
+
+
+
+
+							      GLMULTMATRIX(3G)
+    </pre></body>
+
+</html>

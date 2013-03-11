@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="DBI::SQL::Nano is meant as a *very* minimal SQL engine for use in..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>DBI::SQL::Nano - a very tiny SQL engine</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+DBI::SQL::Nano(3)     User Contributed Perl Documentation    DBI::SQL::Nano(3)
+
+
+
+NAME
+       DBI::SQL::Nano - a very tiny SQL engine
+
+SYNOPSIS
+	BEGIN { $ENV{DBI_SQL_NANO}=1 } # forces use of Nano rather than SQL::Statement
+	use DBI::SQL::Nano;
+	use Data::Dumper;
+	my $stmt = DBI::SQL::Nano::Statement-&gtnew(
+	    "SELECT bar,baz FROM foo WHERE qux = 1"
+	) or die "Couldn't parse";
+	print Dumper $stmt;
+
+DESCRIPTION
+       DBI::SQL::Nano is meant as a *very* minimal SQL engine for use in
+       situations where SQL::Statement is not available.  In most situations
+       you are better off installing SQL::Statement although DBI::SQL::Nano
+       may be faster for some very simple tasks.
+
+       DBI::SQL::Nano, like SQL::Statement is primarily intended to provide a
+       SQL engine for use with some pure perl DBDs including DBD::DBM,
+       DBD::CSV, DBD::AnyData, and DBD::Excel.	It isn't of much use in and of
+       itself.	You can dump out the structure of a parsed SQL statement, but
+       that's about it.
+
+USAGE
+   Setting the DBI_SQL_NANO flag
+       By default, when a DBD uses DBI::SQL::Nano, the module will look to see
+       if SQL::Statement is installed.	If it is, SQL::Statement objects are
+       used.  If SQL::Statement is not available, DBI::SQL::Nano objects are
+       used.
+
+       In some cases, you may wish to use DBI::SQL::Nano objects even if
+       SQL::Statement is available.  To force usage of DBI::SQL::Nano objects
+       regardless of the availability of SQL::Statement, set the environment
+       variable DBI_SQL_NANO to 1.
+
+       You can set the environment variable in your shell prior to running
+       your script (with SET or EXPORT or whatever), or else you can set it in
+       your script by putting this at the top of the script:
+
+	BEGIN { $ENV{DBI_SQL_NANO} = 1 }
+
+   Supported SQL syntax
+	Here's a pseudo-BNF.  Square brackets [] indicate optional items;
+	Angle brackets &lt&gt indicate items defined elsewhere in the BNF.
+
+	 statement ::=
+	     DROP TABLE [IF EXISTS] &lttable_name&gt
+	   | CREATE TABLE &lttable_name&gt &ltcol_def_list&gt
+	   | INSERT INTO &lttable_name&gt [&ltinsert_col_list&gt] VALUES &ltval_list&gt
+	   | DELETE FROM &lttable_name&gt [&ltwhere_clause&gt]
+	   | UPDATE &lttable_name&gt SET &ltset_clause&gt &ltwhere_clause&gt
+	   | SELECT &ltselect_col_list&gt FROM &lttable_name&gt [&ltwhere_clause&gt]
+							[&ltorder_clause&gt]
+
+	 the optional IF EXISTS clause ::=
+	   * similar to MySQL - prevents errors when trying to drop
+	     a table that doesn't exist
+
+	 identifiers ::=
+	   * table and column names should be valid SQL identifiers
+	   * especially avoid using spaces and commas in identifiers
+	   * note: there is no error checking for invalid names, some
+	     will be accepted, others will cause parse failures
+
+	 table_name ::=
+	   * only one table (no multiple table operations)
+	   * see identifier for valid table names
+
+	 col_def_list ::=
+	   * a parens delimited, comma-separated list of column names
+	   * see identifier for valid column names
+	   * column types and column constraints may be included but are ignored
+	     e.g. these are all the same:
+	       (id,phrase)
+	       (id INT, phrase VARCHAR(40))
+	       (id INT PRIMARY KEY, phrase VARCHAR(40) NOT NULL)
+	   * you are *strongly* advised to put in column types even though
+	     they are ignored ... it increases portability
+
+	 insert_col_list ::=
+	   * a parens delimited, comma-separated list of column names
+	   * as in standard SQL, this is optional
+
+	 select_col_list ::=
+	   * a comma-separated list of column names
+	   * or an asterisk denoting all columns
+
+	 val_list ::=
+	   * a parens delimited, comma-separated list of values which can be:
+	      * placeholders (an unquoted question mark)
+	      * numbers (unquoted numbers)
+	      * column names (unquoted strings)
+	      * nulls (unquoted word NULL)
+	      * strings (delimited with single quote marks);
+	      * note: leading and trailing percent mark (%) and underscore (_)
+		can be used as wildcards in quoted strings for use with
+		the LIKE and CLIKE operators
+	      * note: escaped single quote marks within strings are not
+		supported, neither are embedded commas, use placeholders instead
+
+	 set_clause ::=
+	   * a comma-separated list of column = value pairs
+	   * see val_list for acceptable value formats
+
+	 where_clause ::=
+	   * a single "column/value &ltop&gt column/value" predicate, optionally
+	     preceded by "NOT"
+	   * note: multiple predicates combined with ORs or ANDs are not supported
+	   * see val_list for acceptable value formats
+	   * op may be one of:
+		&lt &gt &gt= &lt= = &lt&gt LIKE CLIKE IS
+	   * CLIKE is a case insensitive LIKE
+
+	 order_clause ::= column_name [ASC|DESC]
+	   * a single column optional ORDER BY clause is supported
+	   * as in standard SQL, if neither ASC (ascending) nor
+	     DESC (descending) is specified, ASC becomes the default
+
+ACKNOWLEDGEMENTS
+       Tim Bunce provided the original idea for this module, helped me out of
+       the tangled trap of namespace, and provided help and advice all along
+       the way.  Although I wrote it from the ground up, it is based on Jochen
+       Weidmann's orignal design of SQL::Statement, so much of the credit for
+       the API goes to him.
+
+AUTHOR AND COPYRIGHT
+       This module is written and maintained by
+
+       Jeff Zucker &lt jzucker AT cpan.org &gt
+
+       Copyright (C) 2004 by Jeff Zucker, all rights reserved.
+
+       You may freely distribute and/or modify this module under the terms of
+       either the GNU General Public License (GPL) or the Artistic License, as
+       specified in the Perl README file.
+
+
+
+perl v5.10.1			  2007-07-16		     DBI::SQL::Nano(3)
+    </pre></body>
+
+</html>

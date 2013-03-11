@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module provides the programmer's interface to the "CPANPLUS"..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>CPANPLUS::Backend</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+CPANPLUS::Backend(3pm) Perl Programmers Reference Guide CPANPLUS::Backend(3pm)
+
+
+
+NAME
+       CPANPLUS::Backend
+
+SYNOPSIS
+	   my $cb      = CPANPLUS::Backend-&gtnew;
+	   my $conf    = $cb-&gtconfigure_object;
+
+	   my $author  = $cb-&gtauthor_tree('KANE');
+	   my $mod     = $cb-&gtmodule_tree('Some::Module');
+	   my $mod     = $cb-&gtparse_module( module =&gt 'Some::Module' );
+
+	   my @objs    = $cb-&gtsearch(  type    =&gt TYPE,
+				       allow   =&gt [...] );
+
+	   $cb-&gtflush('all');
+	   $cb-&gtreload_indices;
+	   $cb-&gtlocal_mirror;
+
+DESCRIPTION
+       This module provides the programmer's interface to the "CPANPLUS"
+       libraries.
+
+ENVIRONMENT
+       When "CPANPLUS::Backend" is loaded, which is necessary for just about
+       every &ltCPANPLUS&gt operation, the environment variable
+       "PERL5_CPANPLUS_IS_RUNNING" is set to the current process id.
+
+       Additionally, the environment variable "PERL5_CPANPLUS_IS_VERSION" will
+       be set to the version of "CPANPLUS::Backend".
+
+       This information might be useful somehow to spawned processes.
+
+METHODS
+   $cb = CPANPLUS::Backend-&gtnew( [CONFIGURE_OBJ] )
+       This method returns a new "CPANPLUS::Backend" object.  This also
+       initialises the config corresponding to this object.  You have two
+       choices in this:
+
+       Provide a valid "CPANPLUS::Configure" object
+	   This will be used verbatim.
+
+       No arguments
+	   Your default config will be loaded and used.
+
+       New will return a "CPANPLUS::Backend" object on success and die on
+       failure.
+
+   $href = $cb-&gtmodule_tree( [@modules_names_list] )
+       Returns a reference to the CPANPLUS module tree.
+
+       If you give it any arguments, they will be treated as module names and
+       "module_tree" will try to look up these module names and return the
+       corresponding module objects instead.
+
+       See CPANPLUS::Module for the operations you can perform on a module
+       object.
+
+   $href = $cb-&gtauthor_tree( [@author_names_list] )
+       Returns a reference to the CPANPLUS author tree.
+
+       If you give it any arguments, they will be treated as author names and
+       "author_tree" will try to look up these author names and return the
+       corresponding author objects instead.
+
+       See CPANPLUS::Module::Author for the operations you can perform on an
+       author object.
+
+   $conf = $cb-&gtconfigure_object;
+       Returns a copy of the "CPANPLUS::Configure" object.
+
+       See CPANPLUS::Configure for operations you can perform on a configure
+       object.
+
+   $su = $cb-&gtselfupdate_object;
+       Returns a copy of the "CPANPLUS::Selfupdate" object.
+
+       See the CPANPLUS::Selfupdate manpage for the operations you can perform
+       on the selfupdate object.
+
+   @mods = $cb-&gtsearch( type =&gt TYPE, allow =&gt AREF, [data =&gt AREF, verbose =&gt
+       BOOL] )
+       "search" enables you to search for either module or author objects,
+       based on their data. The "type" you can specify is any of the accessors
+       specified in "CPANPLUS::Module::Author" or "CPANPLUS::Module". "search"
+       will determine by the "type" you specified whether to search by author
+       object or module object.
+
+       You have to specify an array reference of regular expressions or
+       strings to match against. The rules used for this array ref are the
+       same as in "Params::Check", so read that manpage for details.
+
+       The search is an "or" search, meaning that if "any" of the criteria
+       match, the search is considered to be successful.
+
+       You can specify the result of a previous search as "data" to limit the
+       new search to these module or author objects, rather than the entire
+       module or author tree.  This is how you do "and" searches.
+
+       Returns a list of module or author objects on success and false on
+       failure.
+
+       See CPANPLUS::Module for the operations you can perform on a module
+       object.	See CPANPLUS::Module::Author for the operations you can
+       perform on an author object.
+
+   $backend_rv = $cb-&gtfetch( modules =&gt \@mods )
+       Fetches a list of modules. @mods can be a list of distribution names,
+       module names or module objects--basically anything that parse_module
+       can understand.
+
+       See the equivalent method in "CPANPLUS::Module" for details on other
+       options you can pass.
+
+       Since this is a multi-module method call, the return value is
+       implemented as a "CPANPLUS::Backend::RV" object. Please consult that
+       module's documentation on how to interpret the return value.
+
+   $backend_rv = $cb-&gtextract( modules =&gt \@mods )
+       Extracts a list of modules. @mods can be a list of distribution names,
+       module names or module objects--basically anything that parse_module
+       can understand.
+
+       See the equivalent method in "CPANPLUS::Module" for details on other
+       options you can pass.
+
+       Since this is a multi-module method call, the return value is
+       implemented as a "CPANPLUS::Backend::RV" object. Please consult that
+       module's documentation on how to interpret the return value.
+
+   $backend_rv = $cb-&gtinstall( modules =&gt \@mods )
+       Installs a list of modules. @mods can be a list of distribution names,
+       module names or module objects--basically anything that parse_module
+       can understand.
+
+       See the equivalent method in "CPANPLUS::Module" for details on other
+       options you can pass.
+
+       Since this is a multi-module method call, the return value is
+       implemented as a "CPANPLUS::Backend::RV" object. Please consult that
+       module's documentation on how to interpret the return value.
+
+   $backend_rv = $cb-&gtreadme( modules =&gt \@mods )
+       Fetches the readme for a list of modules. @mods can be a list of
+       distribution names, module names or module objects--basically anything
+       that parse_module can understand.
+
+       See the equivalent method in "CPANPLUS::Module" for details on other
+       options you can pass.
+
+       Since this is a multi-module method call, the return value is
+       implemented as a "CPANPLUS::Backend::RV" object. Please consult that
+       module's documentation on how to interpret the return value.
+
+   $backend_rv = $cb-&gtfiles( modules =&gt \@mods )
+       Returns a list of files used by these modules if they are installed.
+       @mods can be a list of distribution names, module names or module
+       objects--basically anything that parse_module can understand.
+
+       See the equivalent method in "CPANPLUS::Module" for details on other
+       options you can pass.
+
+       Since this is a multi-module method call, the return value is
+       implemented as a "CPANPLUS::Backend::RV" object. Please consult that
+       module's documentation on how to interpret the return value.
+
+   $backend_rv = $cb-&gtdistributions( modules =&gt \@mods )
+       Returns a list of module objects representing all releases for this
+       module on success.  @mods can be a list of distribution names, module
+       names or module objects, basically anything that parse_module can
+       understand.
+
+       See the equivalent method in "CPANPLUS::Module" for details on other
+       options you can pass.
+
+       Since this is a multi-module method call, the return value is
+       implemented as a "CPANPLUS::Backend::RV" object. Please consult that
+       module's documentation on how to interpret the return value.
+
+   $mod_obj = $cb-&gtparse_module( module =&gt $modname|$distname|$modobj|URI|PATH
+       )
+       "parse_module" tries to find a "CPANPLUS::Module" object that matches
+       your query. Here's a list of examples you could give to "parse_module";
+
+       Text::Bastardize
+       Text-Bastardize
+       Text-Bastardize-1.06
+       AYRNIEU/Text-Bastardize
+       AYRNIEU/Text-Bastardize-1.06
+       AYRNIEU/Text-Bastardize-1.06.tar.gz
+       http://example.com/Text-Bastardize-1.06.tar.gz
+       file:///tmp/Text-Bastardize-1.06.tar.gz
+       /tmp/Text-Bastardize-1.06
+       ./Text-Bastardize-1.06
+       .
+
+       These items would all come up with a "CPANPLUS::Module" object for
+       "Text::Bastardize". The ones marked explicitly as being version 1.06
+       would give back a "CPANPLUS::Module" object of that version.  Even if
+       the version on CPAN is currently higher.
+
+       The last three are examples of PATH resolution. In the first, we supply
+       an absolute path to the unwrapped distribution. In the second the
+       distribution is relative to the current working directory.  In the
+       third, we will use the current working directory.
+
+       If "parse_module" is unable to actually find the module you are looking
+       for in its module tree, but you supplied it with an author, module and
+       version part in a distribution name or URI, it will create a fake
+       "CPANPLUS::Module" object for you, that you can use just like the real
+       thing.
+
+       See CPANPLUS::Module for the operations you can perform on a module
+       object.
+
+       If even this fancy guessing doesn't enable "parse_module" to create a
+       fake module object for you to use, it will warn about an error and
+       return false.
+
+   $bool = $cb-&gtreload_indices( [update_source =&gt BOOL, verbose =&gt BOOL] );
+       This method reloads the source files.
+
+       If "update_source" is set to true, this will fetch new source files
+       from your CPAN mirror. Otherwise, "reload_indices" will do its usual
+       cache checking and only update them if they are out of date.
+
+       By default, "update_source" will be false.
+
+       The verbose setting defaults to what you have specified in your config
+       file.
+
+       Returns true on success and false on failure.
+
+   $bool = $cb-&gtflush(CACHE_NAME)
+       This method allows flushing of caches.  There are several things which
+       can be flushed:
+
+       o   "methods"
+
+	   The return status of methods which have been attempted, such as
+	   different ways of fetching files.  It is recommended that automatic
+	   flushing be used instead.
+
+       o   "hosts"
+
+	   The return status of URIs which have been attempted, such as
+	   different hosts of fetching files.  It is recommended that
+	   automatic flushing be used instead.
+
+       o   "modules"
+
+	   Information about modules such as prerequisites and whether
+	   installation succeeded, failed, or was not attempted.
+
+       o   "lib"
+
+	   This resets PERL5LIB, which is changed to ensure that while
+	   installing modules they are in our @INC.
+
+       o   "load"
+
+	   This resets the cache of modules we've attempted to load, but
+	   failed.  This enables you to load them again after a failed load,
+	   if they somehow have become available.
+
+       o   "all"
+
+	   Flush all of the aforementioned caches.
+
+       Returns true on success and false on failure.
+
+   @mods = $cb-&gtinstalled()
+       Returns a list of module objects of all your installed modules.	If an
+       error occurs, it will return false.
+
+       See CPANPLUS::Module for the operations you can perform on a module
+       object.
+
+   $bool = $cb-&gtlocal_mirror([path =&gt '/dir/to/save/to', index_files =&gt BOOL,
+       force =&gt BOOL, verbose =&gt BOOL] )
+       Creates a local mirror of CPAN, of only the most recent sources in a
+       location you specify. If you set this location equal to a custom host
+       in your "CPANPLUS::Config" you can use your local mirror to install
+       from.
+
+       It takes the following arguments:
+
+       path
+	   The location where to create the local mirror.
+
+       index_files
+	   Enable/disable fetching of index files. You can disable fetching of
+	   the index files if you don't plan to use the local mirror as your
+	   primary site, or if you'd like up-to-date index files be fetched
+	   from elsewhere.
+
+	   Defaults to true.
+
+       force
+	   Forces refetching of packages, even if they are there already.
+
+	   Defaults to whatever setting you have in your "CPANPLUS::Config".
+
+       verbose
+	   Prints more messages about what its doing.
+
+	   Defaults to whatever setting you have in your "CPANPLUS::Config".
+
+       Returns true on success and false on error.
+
+   $file = $cb-&gtautobundle([path =&gt OUTPUT_PATH, force =&gt BOOL, verbose =&gt
+       BOOL])
+       Writes out a snapshot of your current installation in "CPAN" bundle
+       style. This can then be used to install the same modules for a
+       different or on a different machine by issuing the following commands:
+
+	   ### using the default shell:
+	   CPAN Terminal&gt i file://path/to/Snapshot_XXYY.pm
+
+	   ### using the API
+	   $modobj = $cb-&gtparse_module( module =&gt 'file://path/to/Snapshot_XXYY.pm' );
+	   $modobj-&gtinstall;
+
+       It will, by default, write to an 'autobundle' directory under your
+       cpanplus homedirectory, but you can override that by supplying a "path"
+       argument.
+
+       It will return the location of the output file on success and false on
+       failure.
+
+   $bool = $cb-&gtsave_state
+       Explicit command to save memory state to disk. This can be used to save
+       information to disk about where a module was extracted, the result of
+       "make test", etc. This will then be re-loaded into memory when a new
+       session starts.
+
+       The capability of saving state to disk depends on the source engine
+       being used (See "CPANPLUS::Config" for the option to choose your source
+       engine). The default storage engine supports this option.
+
+       Most users will not need this command, but it can handy for automated
+       systems like setting up CPAN smoke testers.
+
+       The method will return true if it managed to save the state to disk, or
+       false if it did not.
+
+CUSTOM MODULE SOURCES
+       Besides the sources as provided by the general "CPAN" mirrors, it's
+       possible to add your own sources list to your "CPANPLUS" index.
+
+       The methodology behind this works much like "Debian's apt-sources".
+
+       The methods below show you how to make use of this functionality. Also
+       note that most of these methods are available through the default shell
+       plugin command "/cs", making them available as shortcuts through the
+       shell and via the commandline.
+
+   %files = $cb-&gtlist_custom_sources
+       Returns a mapping of registered custom sources and their local indices
+       as follows:
+
+	   /full/path/to/local/index =&gt http://remote/source
+
+       Note that any file starting with an "#" is being ignored.
+
+   $local_index = $cb-&gtadd_custom_source( uri =&gt URI, [verbose =&gt BOOL] );
+       Adds an "URI" to your own sources list and mirrors its index. See the
+       documentation on "$cb-&gtupdate_custom_source" on how this is done.
+
+       Returns the full path to the local index on success, or false on
+       failure.
+
+       Note that when adding a new "URI", the change to the in-memory tree is
+       not saved until you rebuild or save the tree to disk again. You can do
+       this using the "$cb-&gtreload_indices" method.
+
+   $local_index = $cb-&gtremove_custom_source( uri =&gt URI, [verbose =&gt BOOL] );
+       Removes an "URI" from your own sources list and removes its index.
+
+       To find out what "URI"s you have as part of your own sources list, use
+       the "$cb-&gtlist_custom_sources" method.
+
+       Returns the full path to the deleted local index file on success, or
+       false on failure.
+
+   $bool = $cb-&gtupdate_custom_source( [remote =&gt URI] );
+       Updates the indexes for all your custom sources. It does this by
+       fetching a file called "packages.txt" in the root of the custom
+       sources's "URI".  If you provide the "remote" argument, it will only
+       update the index for that specific "URI".
+
+       Here's an example of how custom sources would resolve into index files:
+
+	 file:///path/to/sources       =&gt  file:///path/to/sources/packages.txt
+	 http://example.com/sources    =&gt  http://example.com/sources/packages.txt
+	 ftp://example.com/sources     =&gt  ftp://example.com/sources/packages.txt
+
+       The file "packages.txt" simply holds a list of packages that can be
+       found under the root of the "URI". This file can be automatically
+       generated for you when the remote source is a "file:// URI". For
+       "http://", "ftp://", and similar, the administrator of that repository
+       should run the method "$cb-&gtwrite_custom_source_index" on the
+       repository to allow remote users to index it.
+
+       For details, see the "$cb-&gtwrite_custom_source_index" method below.
+
+       All packages that are added via this mechanism will be attributed to
+       the author with "CPANID" "LOCAL". You can use this id to search for all
+       added packages.
+
+   $file = $cb-&gtwrite_custom_source_index( path =&gt /path/to/package/root, [to
+       =&gt /path/to/index/file, verbose =&gt BOOL] );
+       Writes the index for a custom repository root. Most users will not have
+       to worry about this, but administrators of a repository will need to
+       make sure their indexes are up to date.
+
+       The index will be written to a file called "packages.txt" in your
+       repository root, which you can specify with the "path" argument. You
+       can override this location by specifying the "to" argument, but in
+       normal operation, that should not be required.
+
+       Once the index file is written, users can then add the "URI" pointing
+       to the repository to their custom list of sources and start using it
+       right away. See the "$cb-&gtadd_custom_source" method for user details.
+
+BUG REPORTS
+       Please report bugs or other issues to &ltbug-cpanplus@rt.cpan.org&ltgt&gt.
+
+AUTHOR
+       This module by Jos Boumans &ltkane@cpan.org&gt.
+
+COPYRIGHT
+       The CPAN++ interface (of which this module is a part of) is copyright
+       (c) 2001 - 2007, Jos Boumans &ltkane@cpan.org&gt. All rights reserved.
+
+       This library is free software; you may redistribute and/or modify it
+       under the same terms as Perl itself.
+
+SEE ALSO
+       CPANPLUS::Configure, CPANPLUS::Module, CPANPLUS::Module::Author,
+       CPANPLUS::Selfupdate
+
+
+
+perl v5.12.4			  2011-06-07		CPANPLUS::Backend(3pm)
+    </pre></body>
+
+</html>

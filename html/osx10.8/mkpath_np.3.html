@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This routine allows the caller to create a path, including intermediate..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>mkpath_np -- Auxiliary routine for efficiently creating paths</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+mkpath_np(3)		 BSD Library Functions Manual		  mkpath_np(3)
+
+NAME
+     mkpath_np -- Auxiliary routine for efficiently creating paths
+
+SYNOPSIS
+     #include &ltunistd.h&gt
+
+     int
+     mkpath_np(const char * path, mode_t omode);
+
+DESCRIPTION
+     This routine allows the caller to create a path, including intermediate
+     directories.  It is equivalent to calling mkdir(1) with the -p command
+     line argument.
+
+     Intermediate directories are created with permission bits of rwxrwxrwx
+     (0777) as modified by the current umask, plus write and search permission
+     for the owner.
+
+     The leaf directory is created with permission bits of omode as modified
+     by the current umask.
+
+RETURN VALUES
+     A 0 return value indicates success.  If an error occurs, the return value
+     is a non-zero error code.	Note that EEXIST is returned iff the leaf
+     directory already exists and is a directory, so under certain circum-
+     stances, this error value may not indicate a failure state.
+
+     This routine does NOT modify errno.
+
+ERRORS
+     Any error code that can be returned by mkdir(2) can be returned by
+     mkpath_np(), but mkpath_np() will return the error code rather than set-
+     ting errno.
+
+     [ENOTDIR]		A component of the path is not a directory (in con-
+			trast to mkdir(2) which returns this based on the path
+			prefix rather than the path).
+
+     [EEXIST]		The path already exists and is a directory.
+
+HISTORY
+     This function first appeared in iOS 5.0.
+
+SEE ALSO
+     mkdir(1), chmod(2), mkdir(2)
+
+Mac OS X			 July 13, 2011			      Mac OS X
+    </pre></body>
+
+</html>

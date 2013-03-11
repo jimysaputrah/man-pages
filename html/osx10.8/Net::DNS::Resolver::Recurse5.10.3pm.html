@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module is a sub class of Net::DNS::Resolver. So the methods for..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Net::DNS::Resolver::Recurse - Perform recursive dns lookups</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Net::DNS::Resolver::ReUsereContributed Perl DocuNet::DNS::Resolver::Recurse(3)
+
+
+
+NAME
+       Net::DNS::Resolver::Recurse - Perform recursive dns lookups
+
+SYNOPSIS
+	 use Net::DNS::Resolver::Recurse;
+	 my $res = Net::DNS::Resolver::Recurse-&gtnew;
+
+DESCRIPTION
+       This module is a sub class of Net::DNS::Resolver. So the methods for
+       Net::DNS::Resolver still work for this module as well.  There are just
+       a couple methods added:
+
+   hints
+       Initialize the hint servers.  Recursive queries need a starting name
+       server to work off of. This method takes a list of IP addresses to use
+       as the starting servers.  These name servers should be authoritative
+       for the root (.) zone.
+
+	 $res-&gthints(@ips);
+
+       If no hints are passed, the default nameserver is asked for the hints.
+       Normally these IPs can be obtained from the following location:
+
+	 ftp://ftp.internic.net/domain/named.root
+
+   recursion_callback
+       This method is takes a code reference, which is then invoked each time
+       a packet is received during the recursive lookup.  For example to
+       emulate dig's "+trace" function:
+
+	$res-&gtrecursion_callback(sub {
+	    my $packet = shift;
+
+	    $_-&gtprint for $packet-&gtadditional;
+
+	    printf(";; Received %d bytes from %s\n\n",
+		$packet-&gtanswersize,
+		$packet-&gtanswerfrom
+	    );
+	});
+
+   query_dorecursion
+       This method is much like the normal query() method except it disables
+       the recurse flag in the packet and explicitly performs the recursion.
+
+	 $packet = $res-&gtquery_dorecursion( "www.netscape.com.", "A");
+
+IPv6 transport
+       If the appropriate IPv6 libraries are installed the recursive resolver
+       will randomly choose between IPv6 and IPv4 addresses of the nameservers
+       it encounters during recursion.
+
+       If you want to force IPv4 transport use the force_v4() method. Also see
+       the IPv6 transport notes in the Net::DNS::Resolver documentation.
+
+AUTHOR
+       Rob Brown, bbb@cpan.org
+
+SEE ALSO
+       Net::DNS::Resolver,
+
+COPYRIGHT
+       Copyright (c) 2002, Rob Brown.  All rights reserved.  Portions
+       Copyright (c) 2005, Olaf M Kolkman.
+
+       This module is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+       $Id: Recurse.pm 740 2008-12-17 23:20:53Z olaf $
+
+
+
+perl v5.10.1			  2009-12-30	Net::DNS::Resolver::Recurse(3)
+    </pre></body>
+
+</html>

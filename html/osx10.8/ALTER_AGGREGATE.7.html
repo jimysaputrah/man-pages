@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="ALTER AGGREGATE changes the definition of an aggregate function...." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>ALTER_AGGREGATE - change the definition of an aggregate function</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+ALTER AGGREGATE(7)	PostgreSQL 9.1.4 Documentation	    ALTER AGGREGATE(7)
+
+
+
+NAME
+       ALTER_AGGREGATE - change the definition of an aggregate function
+
+SYNOPSIS
+       ALTER AGGREGATE name ( type [ , ... ] ) RENAME TO new_name
+       ALTER AGGREGATE name ( type [ , ... ] ) OWNER TO new_owner
+       ALTER AGGREGATE name ( type [ , ... ] ) SET SCHEMA new_schema
+
+DESCRIPTION
+       ALTER AGGREGATE changes the definition of an aggregate function.
+
+       You must own the aggregate function to use ALTER AGGREGATE. To change
+       the schema of an aggregate function, you must also have CREATE
+       privilege on the new schema. To alter the owner, you must also be a
+       direct or indirect member of the new owning role, and that role must
+       have CREATE privilege on the aggregate function's schema. (These
+       restrictions enforce that altering the owner doesn't do anything you
+       couldn't do by dropping and recreating the aggregate function. However,
+       a superuser can alter ownership of any aggregate function anyway.)
+
+PARAMETERS
+       name
+	   The name (optionally schema-qualified) of an existing aggregate
+	   function.
+
+       type
+	   An input data type on which the aggregate function operates. To
+	   reference a zero-argument aggregate function, write * in place of
+	   the list of input data types.
+
+       new_name
+	   The new name of the aggregate function.
+
+       new_owner
+	   The new owner of the aggregate function.
+
+       new_schema
+	   The new schema for the aggregate function.
+
+EXAMPLES
+       To rename the aggregate function myavg for type integer to my_average:
+
+	   ALTER AGGREGATE myavg(integer) RENAME TO my_average;
+
+       To change the owner of the aggregate function myavg for type integer to
+       joe:
+
+	   ALTER AGGREGATE myavg(integer) OWNER TO joe;
+
+       To move the aggregate function myavg for type integer into schema
+       myschema:
+
+	   ALTER AGGREGATE myavg(integer) SET SCHEMA myschema;
+
+COMPATIBILITY
+       There is no ALTER AGGREGATE statement in the SQL standard.
+
+SEE ALSO
+       CREATE AGGREGATE (CREATE_AGGREGATE(7)), DROP AGGREGATE
+       (DROP_AGGREGATE(7))
+
+
+
+PostgreSQL 9.1.4		  2012-05-31		    ALTER AGGREGATE(7)
+    </pre></body>
+
+</html>

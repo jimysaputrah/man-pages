@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>snfs.cfg - Xsan Volume Configuration File</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+SNFS.CFG(5)							   SNFS.CFG(5)
+
+
+
+NAME
+       snfs.cfg - Xsan Volume Configuration File
+
+SYNOPSIS
+       This  page  describes  the  old	Volume configuration file format, used
+       prior to Xsan 4.0.
+
+       A volume name is associated to its configuration  file  by  the	file's
+       prefix.	 For example, if the volume were named projecta, then its con-
+       figuration file would be /Library/Preferences/Xsan/projecta.cfg.  There
+       may  be	multiple  volumes  simultaneously mounted, with an FSM program
+       running for each active volume.	Configuration files must reside on the
+       same system as the FSM processes that use them.
+
+DEPRECATED
+       This  format  has  been	deprecated  in favor of the cfgx format on all
+       platforms except Windows - see snfs.cfgx(5) for details on the new for-
+       mat.
+
+
+SYNTAX
+       Each configuration file has several section headers and section bodies.
+       A section header is enclosed by square brackets as follows:
+
+	       [ Keyword Name ]
+
+       A section body is the non-bracketed lines of configuration between sec-
+       tion headers.
+
+       Every  configuration  file  begins with a Global section body; a Global
+       section header is implied.  In addition to the implicitly named	Global
+       section,  other	section-header	keyword  values are DiskType, Disk and
+       StripeGroup.  Section-header keywords are case insensitive.
+
+       Section names consist of case-sensitive letters,  numbers,  underscores
+       (_), and dashes (-).
+
+       Each line of a section body has the following syntax:
+
+	       Keyword Value
+
+       Section-body keyword names are section dependent as described below.
+
+       Section-body values can be a number, name or any combination of charac-
+       ters enclosed by double quotes (").  A number can be in octal,  decimal
+       or  hexadecimal.  Octal numbers are represented by prefixing the number
+       with 0, and hexadecimal numbers are represented by prefixing the number
+       with 0x.
+
+       A  suffix  of  m  or  M	indicates  a  mega multiplier, which is 2^20 =
+       1,048,576.  For example the value 3M results in	an  integer  value  of
+       3,145,728.
+
+       Following is the list of case-insensitive multiplier suffixes:
+
+	  Suffix    Name    Multiplier
+	  ------    ----    ----------
+	    K	    kilo    1,024
+	    M	    mega    1,048,576
+	    G	    giga    1,073,741,824
+	    T	    tera    1,099,511,627,776
+
+       In some cases of specifying disk space, a suffix changes the meaning of
+       the parameter.  A number alone implies blocks while  a  number  with  a
+       suffix  implies bytes.  Following are the keywords configured in blocks
+       by default, or bytes when a multiplier suffix is used:
+
+	  Keyword
+	  -------
+	  InodeExpandMin
+	  InodeExpandInc
+	  InodeExpandMax
+	  InodeStripeWidth
+	  PerfectFitSize
+	  StripeAlignSize
+	  StripeBreadth
+
+       Comments start anywhere a pound sign (#) occurs, and  continue  to  the
+       end of that line.  The following are valid comment strings:
+
+	      # This is a comment line
+	      #     Text after and including a # sign on any line is ignored.
+	      # 	      vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+	      FsBlockSize 4k  # The file system block size is 4096 bytes.
+
+
+SECTIONS SUMMARY
+       The  configuration  file  has  four section types that are delimited by
+       square-bracketed section-header lines as described  above.   The  first
+       section	type  is  the  Global  section, which does not have a section-
+       header line.  It occurs only once, at the start of the file,  and  ends
+       with  the  first  bracketed  section-header  line.   The Global section
+       defines configuration attributes that affect table sizes,  file	system
+       caches and performance factors for the volume.
+
+       The  remaining sections are DiskTypes, Disk and StripeGroup.  These may
+       occur any number of times and in any order.
+
+       Each DiskTypes section defines an instance of a valid disk type.   This
+       is  simply a category of disk device and the disk device's size in sec-
+       tors.
+
+       The Disk section describes individual disk devices that are  configured
+       in the volume. The name of the disk device must be placed in the volume
+       header label using cvlabel(1).  This is how  the  disk  devices	become
+       associated with an Xsan disk name.
+
+       The  StripeGroup  section  describes a group of Disk entities that com-
+       prise a storage pool.  One or more storage pools  describe  the	entire
+       volume.	 A storage pool is the smallest entity that can be manipulated
+       by administration  commands,  such  as  cvadmin(1).  Even  though  disk
+       devices	may  be  brought  up or down, this has the effect of upping or
+       downing the entire storage pool.  The StripeGroup can be either read or
+       write  disabled.   The storage pool is still up, but one or more of the
+       related group's disks are disabled. When a storage pool is  write  dis-
+       abled, no further allocations are permitted on the group.
+
+       NOTE:  Several  releases ago, there was a section called MediaType that
+       defined Affinity names before they were used in a StripeGroup  section.
+       Affinities   no	 longer   need	to  be	defined  separately  from  the
+       StripeGroup, and if upgrading from a volume  that  used	the  MediaType
+       section, it must be removed or it will cause parser errors.
+
+
+DEFAULT GLOBAL VALUES
+       The  following defaults, minimums, and maximums are allowed for modifi-
+       able global variables.  NOTE: the Default Value is in effect  when  the
+       global  variable is absent from the configuration file.	Graphical user
+       interfaces and command-line tools such as sncfgedit may create configu-
+       ration files containing globals variables with initial values that dif-
+       fer from the Default Value below.
+
+
+	  Variable Name 		   Default Value   Min. Value  Max Value
+	  ----------------		   -------------   ----------  ---------
+	  ABMFreeLimit			       NO	       NO	     YES
+	  AllocationStrategy		    Round	    Round, Fill, Balance
+	  AllocSessionReservation      Deprecated
+	  AllocSessionReservationSize		0	     128M	1048576M
+	  BrlResyncTimeout-		       20		0	      60
+	  BufferCacheSize-		      32M	     128k	      1G
+	  BufferPoolSize	       Deprecated
+	  CvRootDir-			      "/"    valid dir with &lt 1024 chars
+	  DataMigration 		       NO	       NO	     YES
+	  DataMigrationThreadPoolSize	      128		1     0xFFFFFFFF
+	  Debug 				0		0     0xFFFFFFFF
+	  DirCacheSize		       Deprecated
+	  DirFDCacheSize	       Deprecated
+	  DirWarp			      YES	       NO	     YES
+	  EventFiles-			      YES	       NO	     YES
+	  EventFileDir- 		  special    valid dir with &lt 1024 chars
+	  ExtentCountThreshold		    49152		0      0x1FFFC00
+	  Filelocks			       NO	       NO	     YES
+	  ForcePerfectFit-		       NO	       NO	     YES
+	  ForceStripeAlignment	       Deprecated
+	  FsBlockSize			       4K	       4K	    512K
+	  FsCapacityThreshold			0		0	     100
+	  GlobalSuperUser		       NO	       NO	     YES
+	  InodeCacheSize		      32K	       4K	    512K
+	  InodeDeleteMax		  special	       10     0xFFFFFFFF
+	  InodeExpandInco			0		1	   32767
+	  InodeExpandMaxo			0		1	   32768
+	  InodeExpandMino			0		1	   32768
+	  InodeStripeWidth			0		0  1099511627776
+	  IoHangLimitSecs	       Deprecated
+	  JournalIcBufNum	       Deprecated
+	  JournalIcBufSize	       Deprecated
+	  JournalSize			       4M	      64k	    512M
+	  MaxConnections		       10		2	   65791
+	  MaxLogSize			       1M	       1M     0xFFFFFFFF
+	  MaxMBPerClientReserve        Deprecated
+	  Mbufs 		       Deprecated
+	  MbufSize		       Deprecated
+	  OpHangLimitSecs		      180		0     0xFFFFFFFF
+	  PerfectFitSize			8		1	   32768
+	  Quotas			       NO	       NO	     YES
+	  ReaddirForcedVersion	       Deprecated
+	  RemoteNotification		       NO	       NO	     YES
+	  ReservedSpace 		      YES	       NO	     YES
+	  RestoreJournal-		       NO	       NO	     YES
+	  RestoreJournalDir-		  special    valid dir with &lt 1024 chars
+	  RestoreJournalMaxMB-			0		0	     168
+	  RestoreJournalMaxHours-		0		0	  102400
+	  StaticInodes		       Deprecated
+	  StripeAlignSize		       -1	       -1     0xFFFFFFFF
+	  ThreadPoolSize		       16	       16     0xFFFFFFFF
+	  TrimOnClose-				0		0	(2^64)-1
+	  UnixDirectoryCreationModeOnWindows 0755		0	    0777
+	  UnixFileCreationModeOnWindows      0644		0	    0777
+	  UnixIdFabricationOnWindows	      YES	      NO	     YES
+	  UnixNobodyGidOnWindows	    60001		0     0x7FFFFFFF
+	  UnixNobodyUidOnWindows	    60001		0     0x7FFFFFFF
+	  WindowsSecurity		       NO	       NO	     YES
+	  ----------------------------------------------------------------------
+	  XSan Only Variables
+	  ----------------------------------------------------------------------
+	  EnforceACLs			       NO	       NO	     YES
+	  EnableSpotlight		       NO	       NO	     YES
+	  ----------------------------------------------------------------------
+
+       - NOTE: Not intended for general use.  Only  use  when  recommended  by
+       Apple Support.
+
+       o  NOTE:  Deprecated and will no longer be valid in a future release
+
+
+DEPRECATED GLOBAL OPTIONS
+       The following global options have been deprecated
+
+
+     o AllocSessionReservation &ltYes|No&gt
+
+       The  AllocSessionReservation  parameter has been replaced by the Alloc-
+       SessionReservationSize parameter.  The old parameter is	supported  but
+       will be eliminated in a future release.
+
+
+     o BufferPoolSize &ltvalue&gt
+
+       The  BufferPoolSize option was used to change the number of async write
+       queue worker threads that were created to process  asynchronous	buffer
+       cache writes.  This value is now always set to 4.
+
+     o DirCacheSize &ltvalue&gt
+
+       The DirCacheSize option was used to set the size of the client's direc-
+       tory cache.  This option has been superseded by the buffercache.
+
+
+     o DirFDCacheSize &ltvalue&gt
+
+       The DirFDCacheSize option was used to set  the  size  of  the  client's
+       directory file descriptor cache. This option has been superseded by the
+       buffercache.
+
+
+     o ForceStripeAlignment &ltYes|No&gt
+
+       The ForceStripeAlignment option was used to force the strict  alignment
+       of the start of the volume to a stripe width boundary, and affected the
+       way the file system was laid out at cvmkfs(1) time.   All  new  volumes
+       are  now  created  with ForceStripeAlignment on, but older volumes that
+       had ForceStripeAlignment off at create time will continue  to  function
+       properly.
+
+       NOTE:  If  cvmkfs(1)  is  run  on  a volume configuration file that has
+       ForceStripeAlignment set, a  warning  will  be  displayed  because  the
+       option has no effect.
+
+
+     o IoHangLimitSecs &ltvalue&gt
+
+       This  variable  defined the threshold for how long an I/O is determined
+       to be 'hung' by the FSM program.  When the  FSM	program  detected  I/O
+       hang  it  will  stop  execution in order to initiate failover to backup
+       system.	This is now superseded by OpHangLimitSecs.
+
+
+     o JournalICBufNum &ltvalue&gt
+
+       The JournalICBufNum  option  defined  the  number  of  in-core  journal
+       buffers to create.  This is now always set to 2.
+
+
+     o JournalICBufSize &ltvalue&gt
+
+       The  JournalICBufSize  option  defined  the size of the in-core Journal
+       Buffer.	This is now always set to 32k
+
+
+     o MaxMBPerClientReserve &ltvalue&gt
+
+       The  MaxMBPerClientReserve  option   has   been	 superseded   by   the
+       ReservedSpace option.
+
+       The  MaxMBPerClientReserve  variable  defined  the  maximum  number  of
+       megabytes the meta-data server should grant an Xsan client for  delayed
+       allocation.  The default was 100.
+
+       This  value  multiplied by MaxConnections - 1 was reserved by the meta-
+       data server in each stripe group that can contain data.	This was  done
+       so  that  clients  could  delay allocation and always be able to obtain
+       space for data, even across meta-data server restarts.  This  delay  of
+       allocation was only done on clients for buffer cache writes.
+
+       A  value  of  0	turned	off delayed allocations, significantly reduced
+       buffer cache performance on clients, and allowed nearly all of the disk
+       space to be used.
+
+
+     o MBufs &ltYes|No&gt
+
+       The  MBufs  option was used to set the number of message buffers in the
+       FSM message queues.  This is now always set to 32.
+
+
+     o MBufSize &ltvalue&gt
+
+       The MBufSize option was used to set  the  maximum  size	of  a  message
+       buffer.	This is now always set to 4k.
+
+
+     o OpHangLimitSecs &ltvalue&gt
+
+       This  variable  defines	the  threshold	(in seconds) for processing an
+       individual operation by the FSM server daemon.  When the  threshold  is
+       exceeded  the  FSM  server  daemon is aborted to initiate failover to a
+       standby server.	Note, this is  typically  triggered  by  a  faulty  or
+       underperforming	metadata  device causing FSM server operations to hang
+       or execute very slow.  The default value is 180 seconds.  This variable
+       can  be	adjusted  to  a higher value to avoid unnecessary failovers or
+       reduced to a lower value to initiate a faster failover.	It can be  set
+       to zero to completely disable monitoring.
+
+
+     o ReadDirForcedVersion &ltValue&gt
+       The  ReadDirForcedVersion enabled a modified directory search algorithm
+       for older file systems.	This is no longer needed and is always off.
+
+     o StaticInodes &ltYes|No&gt
+
+       The StaticInodes option was used to set the number  of  inodes  in  the
+       volume at cvmkfs(1) time.  Inodes are always dynamically created now.
+
+
+DISKTYPE SECTION
+       Following is the format for a DiskType section:
+
+	  [DiskType &ltname&gt]
+
+	  Sectors &ltsectors_per_disk&gt
+
+	  SectorSize &ltsector_size&gt
+
+
+DISK SECTION
+       The Disk section syntax is as follows:
+
+	  [Disk &ltname&gt]
+
+	  Status &ltUP | DOWN&gt
+
+	  Type &ltdisktype_name&gt
+
+
+STRIPEGROUP SECTION
+       The StripeGroup section format is as follows:
+
+	  [StripeGroup &ltname&gt]
+
+	  Status &ltUP | DOWN&gt
+
+	  Exclusive &ltYes | No&gt
+
+	  Metadata &ltYes | No&gt
+
+	  Journal &ltYes | No&gt
+
+	  Affinity &lteight_character_string&gt
+	   [ Zero or more affinity entries are allowed ]
+
+	  Read &ltEnabled | Disabled&gt
+
+	  Write &ltEnabled | Disabled&gt
+
+	  StripeBreadth &ltnumber_of_blocks_per_disk&gt
+
+	  MultiPathMethod &ltRotate|Static|Sticky|Balance|Cycle&gt
+
+	  Node &ltdisk_name&gt &ltstripe_group_unit_number&gt
+	   [ One Node per disk in storage pool ]
+
+
+     o Status
+       If Up, the storage pool is available, if Down it is not.
+
+     o StripeBreadth
+       Describes  the  number of volume blocks or bytes that are appended to a
+       file before switching to the next disk in the group.  When the value is
+       specified without a multiplier suffix, it is a number of volume blocks.
+       When specified with a multiplier, it is bytes.
+
+     o Metadata
+       If Yes, this storage pool contains metadata.  If No, it does not.
+
+     o Journal
+       If Yes, this storage pool contains the journal.	If No,	it  does  not.
+       Only one storage pool may contain a journal per file system.
+
+     o Exclusive
+       When  the  Exclusive  variable is set to YES on a storage pool that has
+       Metadata or Journal set to YES, no userdata may reside on that  storage
+       pool.
+
+       When  the  Exclusive variable is set to YES on a storage pool that does
+       not have either Metadata or Journal set toe YES, and does have Affinity
+       values  declared,  only the Affinities declared in its StripeGroup sec-
+       tion are allowed to reside on this storage pool. This may be preferable
+       for  high-bandwidth  applications.   Because  Exclusive	is used in two
+       ways, a storage pool cannot have both exclusive	Affinity  declarations
+       and metadata.
+
+       The Exclusive helps to optimize disk striping strategies.  For example,
+       in a broadcast video application, an  NTSC  field  is  blocked  out  at
+       352,256	bytes per field. The optimal and required stripe breadth for a
+       525 line (NTSC broadcast) storage pool is two fields (a frame), or  43,
+       16k  volume  blocks.   However, a 625 line (PAL broadcast) storage pool
+       uses 417,792 bytes per field, and the optimal stripe breadth is 51, 16k
+       volume blocks per disk. In order for allocation to work in a mixed mode
+       environment, it is necessary to have one storage pool set  up  for  525
+       (NTSC)  and  another  set up for 625 (PAL).  See the configuration file
+       example below to see two storage pools, each configured	optimally  for
+       NTSC and PAL modes.
+
+     o Affinity
+       In conjunction with the Exclusive variable, the Affinity variable helps
+       the FSM determine what type of allocation may occur on a storage  pool.
+       When  Exclusive is YES, only files with matching Affinity values can be
+       allocated.  When Exclusive is NO, it is possible that other file  types
+       would  be  allocated  on  the storage pool. This could have fragmenting
+       effects over time and eventually cause high-bandwidth performance prob-
+       lems.   It  is  recommended that storage pools are developed to be spe-
+       cialized for each file type used.
+
+       The Affinity value can be any string of 8 characters or less.
+
+     o Rtios
+       The Rtios variable defines the maximum number of  disk  I/O  operations
+       per  second  (IOs/s) available to real-time applications for the stripe
+       group using the Quality of Service (QoS) API.  If both Rtios  and  Rtmb
+       are  set  to  0 (the default value), QoS is disabled. If both Rtios and
+       Rtmb are defined, the smaller value (after Rtmb is converted  to  IOs/s
+       internally)  is used. This value should be obtained by real measurement
+       using IO benchmark tool.
+
+     o RtiosReserve
+       The RtiosReserve variable defines the minimum number of disk I/O opera-
+       tions  per  second reserved for non-realtime applications when realtime
+       operations have been enabled using the QoS API. This prevents non-real-
+       time  clients  from IO starvation. If both RtiosReserve and RtmbReserve
+       are set to 0 (the default value),  the  actual  bandwidth  reserved  is
+       1MB/s (converting to IO/s), at least 1 IO/s is reserved. If both param-
+       eters are defined, the smaller value (RtmbReserve is converted to IOs/s
+       internally)  is	used.  This  value should not be greater than Rtios or
+       Rtmb (after being converted to IOs/s).
+
+     o Rtmb
+       The Rtmb variable defines the maximum number of MBs per	second	avail-
+       able to real-time applications for the stripe group  using the QoS API.
+       Internally the bandwidth is converted to IOs/s based on the size  of  a
+       well-formed  I/Os,  i.e.  the size of a stripe width. If both Rtios and
+       Rtmb are set to 0 (the default value), QoS is  disabled.  If  both  are
+       defined,  the  smaller  value (RtmbReserve is converted to IOs/s inter-
+       nally) is used. This value should be obtained through real  measurement
+       using I/O benchmark tools. Note: since the system uses IOs/s internally
+       to throttle I/Os, it is recommended to specify Rtmb only  if  all  I/Os
+       are well formed. Otherwise, the conversion between MB/s and IOs/s using
+       well-formed IOs could lead to unexpected results.
+
+     o RtmbReserve
+       The RtmbReserve variable defines the minimum number of MBs  per	second
+       reserved  for  non-realtime  applications when realtime operations have
+       been enabled using the QoS API. This prevents non-realtime clients from
+       IO starvation. Internally this parameter is converted to IOs/s based on
+       the size of a well-formed IO. If both RtiosReserve and RtmbReserve  are
+       set  to	0  (the default value), the actual bandwidth reserved is 1MB/s
+       (converting to IOs/s), at least 1 IO/s is reserved. If both  parameters
+       are  defined,  the  smaller  value  (RtmbReserve  is converted to IOs/s
+       internally) is used.  This value should not be greater than  the  value
+       of Rtmb.
+
+     o RtTokenTimeout
+       The  RtTokenTimeout  variable defines the number of seconds for the FSM
+       server to wait for clients to respond to a QoS  token  callback	before
+       timeout.  If  this  parameter is not set or it is set to 0, the default
+       value is 1.5 (seconds). This value may need to be  changed  for	a  SAN
+       that has a mixture of client machine types (Linux, Windows, IRIX, etc.)
+       that all have different TCP/IP characteristics. Also, large numbers  of
+       clients (greater than 32) may also require increasing the value of this
+       parameter.
+
+
+EXAMPLE CONFIGURATION FILE
+       The following is an example of a fairly complex Xsan volume  that  sup-
+       ports  multiple broadcast video/audio file formats, seven storage pools
+       and eighteen disk drives.This volume is set up to support both 525  and
+       625 real-time broadcast formats.
+
+
+#
+# Xsan Volume Configuration File Example
+#
+#
+# Names can be of [A-Z][a-Z][0-9] hyphen (-) and a under-bar (_)
+#
+# Other things, like user defined strings and pathnames must be enclosed
+# by double quotes (").
+#
+# The comment character (#) may start anywhere and persists to the end
+#  of line.
+#
+
+# ****************************************************************************
+# A global section for defining file system-wide parameters.
+#
+# For Explanations of Values in this file see the following:
+#
+# UNIX Users:	 man snfs_config
+#
+# Windows Users: Start &gt Programs &gt
+#		     StorNext File System &gt Help &gt
+#			 Configuration File Format
+#
+# ****************************************************************************
+
+ABMFreeLimit		No
+AllocationStrategy	Round
+# BufferCacheSize	64M	# Default is 32MB
+DataMigration		No	# SNMS Managed File Systems Only
+# DataMigrationThreadPoolSize 128 # Default is 128 (Managed only)
+Debug			0x0
+FileLocks		No
+FsBlockSize		16K
+GlobalSuperUser 	Yes	# Set to Yes for SNMS Managed File Systems
+InodeCacheSize		16K	# 800-1000 bytes each, default 32K
+InodeExpandMin		32K
+InodeExpandInc		128K
+InodeExpandMax		8M
+JournalSize		16M
+MaxConnections		32
+# ReservedSpace Yes		# NO: Slows small I/Os. Causes fragmentation.
+MaxLogs 		4
+MaxLogSize		16M
+OpHangLimitSecs 	300	# Default is 180 secs
+Quotas			No
+ThreadPoolSize		32	# Default is 16, 512 KB memory per thread
+UnixDirectoryCreationModeOnWindows  0755
+UnixFileCreationModeOnWindows	    0644
+UnixIdFabricationOnWindows	    No
+UnixNobodyGidOnWindows	60001
+UnixNobodyUidOnWindows	60001
+WindowsSecurity 	Yes
+
+# ****************************************************************************
+# A disktype section for defining disk hardware parameters.
+# ****************************************************************************
+[DiskType MetaDrive] ##1+1 Raid 1 Mirrored Pair##
+Sectors    99999999	 ## Sectors Per Disk From Command "cvlabel -l" ##
+SectorSize 512
+
+[DiskType JournalDrive] ##1+1 Raid 1 Mirrored Pair##
+Sectors    99999999	 ## Sectors Per Disk From Command "cvlabel -l" ##
+SectorSize 512
+
+[DiskType VideoDrive] ##8+1 Raid 5 LUN for Video##
+Sectors    99999999	 ## Sectors Per Disk From Command "cvlabel -l" ##
+SectorSize 512
+
+[DiskType AudioDrive] ##4+1 Raid 3 LUN for Audio##
+Sectors    99999999	 ## Sectors Per Disk From Command "cvlabel -l" ##
+SectorSize 512
+
+[DiskType DataDrive] ##4+1 Raid 5 LUN for Regular Data##
+Sectors    99999999	 ## Sectors Per Disk From Command "cvlabel -l" ##
+SectorSize 512
+
+
+
+
+# ****************************************************************************
+# A disk section for defining disks in the hardware configuration.
+# ****************************************************************************
+
+[Disk CvfsDisk0]
+Status UP
+Type MetaDrive
+
+[Disk CvfsDisk1]
+Status UP
+Type JournalDrive
+
+[Disk CvfsDisk2]
+Status UP
+Type VideoDrive
+
+[Disk CvfsDisk3]
+Status UP
+Type VideoDrive
+
+[Disk CvfsDisk4]
+Status UP
+Type VideoDrive
+
+[Disk CvfsDisk5]
+Status UP
+Type VideoDrive
+
+[Disk CvfsDisk6]
+Status UP
+Type VideoDrive
+
+[Disk CvfsDisk7]
+Status UP
+Type VideoDrive
+
+[Disk CvfsDisk8]
+Status UP
+Type VideoDrive
+
+[Disk CvfsDisk9]
+Status UP
+Type VideoDrive
+
+[Disk CvfsDisk10]
+Status UP
+Type AudioDrive
+
+[Disk CvfsDisk11]
+Status UP
+Type AudioDrive
+
+[Disk CvfsDisk12]
+Status UP
+Type AudioDrive
+
+[Disk CvfsDisk13]
+Status UP
+Type AudioDrive
+
+[Disk CvfsDisk14]
+Status UP
+Type DataDrive
+
+[Disk CvfsDisk15]
+Status UP
+Type DataDrive
+
+[Disk CvfsDisk16]
+Status UP
+Type DataDrive
+
+[Disk CvfsDisk17]
+Status UP
+Type DataDrive
+
+
+
+
+# ****************************************************************************
+# A stripe section for defining stripe groups.
+# ****************************************************************************
+
+[StripeGroup MetaFiles]
+Status UP
+MetaData Yes
+Journal No
+Exclusive Yes
+Read Enabled
+Write Enabled
+StripeBreadth 256K
+MultiPathMethod Rotate
+Node CvfsDisk0 0
+
+
+[StripeGroup JournFiles]
+Status UP
+Journal Yes
+MetaData No
+Exclusive Yes
+Read Enabled
+Write Enabled
+StripeBreadth 256K
+MultiPathMethod Rotate
+Node CvfsDisk1 0
+
+
+[StripeGroup NTSCFiles]
+Status UP
+Exclusive Yes	    ##Exclusive StripeGroup for Video Files Only##
+Affinity NTSC	    ##8 character limit##
+Read Enabled
+Write Enabled
+StripeBreadth 688k  ## NTSC frame size
+MultiPathMethod Rotate
+Node CvfsDisk2 0
+Node CvfsDisk3 1
+Node CvfsDisk4 2
+Node CvfsDisk5 3
+
+
+[StripeGroup PALFiles]
+Status UP
+Exclusive Yes	    ##Exclusive StripeGroup for Video Files Only##
+Affinity PAL	    ##8 character limit##
+Read Enabled
+Write Enabled
+StripeBreadth 816k	## PAL frame size
+Node CvfsDisk6 4
+Node CvfsDisk7 5
+Node CvfsDisk8 6
+Node CvfsDisk9 7
+
+
+## CCIR-601 525 Audio is read/written in 65536 byte blocks
+[StripeGroup AudioFiles1]
+Status UP
+Exclusive Yes	    ##Exclusive StripeGroup for Audio File Only##
+Affinity NTSCAud    ##8 character limit##
+Read Enabled
+Write Enabled
+StripeBreadth 64k
+MultiPathMethod Rotate
+Node CvfsDisk10 0
+Node CvfsDisk11 1
+
+
+## CCIR-601 625 Audio is read/written in 61440 byte blocks
+## We put 4 blocks per stripe so that it's divisible by 16k fs block size
+[StripeGroup AudioFiles2]
+Status UP
+Exclusive Yes	    ##Exclusive StripeGroup for Audio File Only##
+Affinity PALAud 	 ##8 character limit##
+Read Enabled
+Write Enabled
+StripeBreadth 240k
+Node CvfsDisk12 2
+Node CvfsDisk13 3
+
+
+[StripeGroup RegularFiles]
+Status UP
+Exclusive No	    ##Non-Exclusive StripeGroup for all Files##
+Read Enabled
+Write Enabled
+StripeBreadth 256K
+MultiPathMethod Rotate
+Node CvfsDisk14 0
+Node CvfsDisk15 1
+Node CvfsDisk16 2
+Node CvfsDisk17 3
+
+#
+# End
+#
+
+
+
+FILES
+       /Library/Preferences/Xsan/*.cfg
+       /Library/Logs/Xsan/data/&ltfsname&gt/config_history/*.cfg.&ltTIMESTAMP&gt
+
+SEE ALSO
+       snfs_config(5), snfs.cfgx(5)
+
+
+
+Xsan File System		 December 2009			   SNFS.CFG(5)
+    </pre></body>
+
+</html>

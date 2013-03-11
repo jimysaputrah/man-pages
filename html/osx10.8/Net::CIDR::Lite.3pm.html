@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Faster alternative to Net::CIDR when merging a large number of CIDR..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Net::CIDR::Lite - Perl extension for merging IPv4 or IPv6 CIDR</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Lite(3) 	      User Contributed Perl Documentation	       Lite(3)
+
+
+
+NAME
+       Net::CIDR::Lite - Perl extension for merging IPv4 or IPv6 CIDR
+       addresses
+
+SYNOPSIS
+	 use Net::CIDR::Lite;
+
+	 my $cidr = Net::CIDR::Lite-&gtnew;
+	 $cidr-&gtadd($cidr_address);
+	 @cidr_list = $cidr-&gtlist;
+	 @ip_ranges = $cidr-&gtlist_range;
+
+DESCRIPTION
+       Faster alternative to Net::CIDR when merging a large number of CIDR
+       address ranges. Works for IPv4 and IPv6 addresses.
+
+METHODS
+       new()
+	    $cidr = Net::CIDR::Lite-&gtnew
+	    $cidr = Net::CIDR::Lite-&gtnew(@args)
+
+	   Creates an object to represent a list of CIDR address ranges.  No
+	   particular format is set yet; once an add method is called with a
+	   IPv4 or IPv6 format, only that format may be added for this cidr
+	   object. Any arguments supplied are passed to add_any() (see below).
+
+       add()
+	    $cidr-&gtadd($cidr_address)
+
+	   Adds a CIDR address range to the list.
+
+       add_range()
+	    $cidr-&gtadd_range($ip_range)
+
+	   Adds a hyphenated IP address range to the list.
+
+       add_cidr()
+	    $cidr1-&gtadd_cidr($cidr2)
+
+	   Adds address ranges from one object to another object.
+
+       add_ip()
+	    $cidr-&gtadd_ip($ip_address)
+
+	   Adds a single IP address to the list.
+
+       add_any()
+	    $cidr-&gtadd_any($cidr_or_range_or_address);
+
+	   Determines format of range or single ip address and calls add(),
+	   add_range(), add_cidr(), or add_ip() as appropriate.
+
+       $cidr-&gtclean()
+	    $cidr-&gtclean;
+
+	   If you are going to call the list method more than once on the same
+	   data, then for optimal performance, you can call this to purge null
+	   nodes in overlapping ranges from the list. Boundary nodes in
+	   contiguous ranges are automatically purged during add().  Only
+	   useful when ranges overlap or when contiguous ranges are added out
+	   of order.
+
+       $cidr-&gtlist()
+	    @cidr_list = $cidr-&gtlist;
+	    $list_ref  = $cidr-&gtlist;
+
+	   Returns a list of the merged CIDR addresses. Returns an array if
+	   called in list context, an array reference if not.
+
+       $cidr-&gtlist_range()
+	    @cidr_list = $cidr-&gtlist_range;
+	    $list_ref  = $cidr-&gtlist_range;
+
+	   Returns a list of the merged addresses, but in hyphenated range
+	   format. Returns an array if called in list context, an array
+	   reference if not.
+
+       $cidr-&gtlist_short_range()
+	    @cidr_list = $cidr-&gtlist_short_range;
+	    $list_ref  = $cidr-&gtlist_short_range;
+
+	   Returns a list of the C subnet merged addresses, in short
+	   hyphenated range format. Returns an array if called in list
+	   context, an array reference if not.
+
+	   Example:
+
+		   1.1.1.1-2
+		   1.1.1.5-7
+		   1.1.1.254-255
+		   1.1.2.0-2
+		   1.1.3.5
+		   1.1.3.7
+
+       $cidr-&gtfind()
+	    $found = $cidr-&gtfind($ip);
+
+	   Returns true if the ip address is found in the CIDR range. False if
+	   not.  Not extremely efficient, is O(n*log(n)) to sort the ranges in
+	   the cidr object O(n) to search through the ranges in the cidr
+	   object.  The sort is cached on the first call and used in
+	   subsequent calls, but if more addresses are added to the cidr
+	   object, prep_find() must be called on the cidr object.
+
+       $cidr-&gtbin_find()
+	   Same as find(), but forces a binary search. See also prep_find.
+
+       $cidr-&gtprep_find()
+	    $cidr-&gtprep_find($num);
+
+	   Caches the result of sorting the ip addresses. Implicitly called on
+	   the first find call, but must be explicitly called if more
+	   addresses are added to the cidr object. find() will do a binary
+	   search if the number of ranges is greater than or equal to $num
+	   (default 20);
+
+       $cidr-&gtspanner()
+	    $spanner = $cidr1-&gtspanner($label1, $cidr2, $label2, ...);
+
+	   Creates a spanner object to find out if multiple ip addresses are
+	   within multiple labeled address ranges. May also be called as (with
+	   or without any arguments):
+
+	    Net::CIDR::Lite::Span-&gtnew($cidr1, $label1, $cidr2, $label2, ...);
+
+       $spanner-&gtadd()
+	    $spanner-&gtadd($cidr1, $label1, $cidr2, $label2,...);
+
+	   Adds labeled address ranges to the spanner object. The 'address
+	   range' may be a Net::CIDR::Lite object, a single CIDR address
+	   range, a single hyphenated IP address range, or a single IP
+	   address.
+
+       $spanner-&gtfind()
+	    $href = $spanner-&gtfind(@ip_addresses);
+
+	   Look up which range(s) ip addresses are in, and return a lookup
+	   table of the results, with the keys being the ip addresses, and the
+	   value a hash reference of which address ranges the ip address is
+	   in.
+
+       $spanner-&gtbin_find()
+	   Same as find(), but forces a binary search. See also prep_find.
+
+       $spanner-&gtprep_find()
+	    $spanner-&gtprep_find($num);
+
+	   Called implicitly the first time $spanner-&gtfind(..) is called, must
+	   be called again if more cidr objects are added to the spanner
+	   object. Will do a binary search if ratio of the number of ip
+	   addresses to the number of ranges is less than $num percent
+	   (default 4).
+
+       $spanner-&gtclean()
+	    $clean_address = $spanner-&gtclean($ip_address);
+
+	   Validates and returns a cleaned up version of an ip address (which
+	   is what you will find as the key in the result from the
+	   $spanner-&gtfind(..), not necessarily what the original argument
+	   looked like). E.g. removes unnecessary leading zeros, removes null
+	   blocks from IPv6 addresses, etc.
+
+CAVEATS
+       Garbage in/garbage out. This module does do validation, but maybe not
+       enough to suit your needs.
+
+AUTHOR
+       Douglas Wilson, &ltdougw@cpan.org&gt w/numerous hints and ideas borrowed
+       from Tye McQueen.
+
+COPYRIGHT
+	This module is free software; you can redistribute it and/or
+	modify it under the same terms as Perl itself.
+
+SEE ALSO
+       Net::CIDR.
+
+
+
+perl v5.12.4			  2010-03-25			       Lite(3)
+    </pre></body>
+
+</html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The  cupsd.conf	file  configures  the CUPS scheduler, cupsd(8).  It is..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>cupsd.conf - server configuration file for cups</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+cupsd.conf(5)			  Apple Inc.			 cupsd.conf(5)
+
+
+
+NAME
+       cupsd.conf - server configuration file for cups
+
+DESCRIPTION
+       The  cupsd.conf	file  configures  the CUPS scheduler, cupsd(8).  It is
+       normally located in the /private/etc/cups directory.
+
+       Each line in the file can be a configuration directive, a  blank  line,
+       or  a comment. Comment lines start with the # character. The configura-
+       tion directives are intentionally similar to those used by the  popular
+       Apache web server software and are described below.
+
+DIRECTIVES
+       The  following  directives  are understood by cupsd(8). Consult the on-
+       line help for detailed descriptions:
+
+       AccessLog filename
+
+       AccessLog syslog
+	    Defines the access log filename.
+
+       AccessLogLevel config
+
+       AccessLogLevel actions
+
+       AccessLogLevel all
+	    Specifies the logging level for the AccessLog file.
+
+       Allow all
+
+       Allow none
+
+       Allow host.domain.com
+
+       Allow *.domain.com
+
+       Allow ip-address
+
+       Allow ip-address/netmask
+
+       Allow ip-address/mm
+
+       Allow @IF(name)
+
+       Allow @LOCAL
+	    Allows access from the named hosts or addresses.
+
+       AuthClass User
+
+       AuthClass Group
+
+       AuthClass System
+	    Specifies the authentication class (User, Group,  System)  -  this
+	    directive is deprecated.
+
+       AuthGroupName group-name
+	    Specifies the authentication group - this directive is deprecated.
+
+       AuthType None
+
+       AuthType Basic
+
+       AuthType BasicDigest
+
+       AuthType Digest
+
+       AuthType Negotiate
+	    Specifies  the  authentication  type  (None,  Basic,  BasicDigest,
+	    Digest, Negotiate)
+
+       AutoPurgeJobs Yes
+
+       AutoPurgeJobs No
+	    Specifies  whether to purge job history data automatically when it
+	    is no longer required for quotas.
+
+       BrowseLocalProtocols [All] [DNSSD]
+	    Specifies the protocols to use for local printer sharing.
+
+       BrowseWebIF Yes
+
+       BrowseWebIF No
+	    Specifies whether the CUPS web interface is advertised via DNS-SD.
+
+       Browsing Yes
+
+       Browsing No
+	    Specifies  whether	or  not  remote  printer  browsing  should  be
+	    enabled.
+
+       Classification banner
+	    Specifies the security classification of the server.
+
+       ClassifyOverride Yes
+
+       ClassifyOverride No
+	    Specifies whether to allow users to override the classification of
+	    individual print jobs.
+
+       ConfigFilePerm mode
+	    Specifies  the  permissions  for  all configuration files that the
+	    scheduler writes.
+
+       DataDir path
+	    Specified the directory where data files can be found.
+
+       DefaultAuthType Basic
+
+       DefaultAuthType BasicDigest
+
+       DefaultAuthType Digest
+
+       DefaultAuthType Negotiate
+	    Specifies the default type of authentication to use.
+
+       DefaultEncryption Never
+
+       DefaultEncryption IfRequested
+
+       DefaultEncryption Required
+	    Specifies  the  type  of  encryption  to  use  for	 authenticated
+	    requests.
+
+       DefaultLanguage locale
+	    Specifies the default language to use for text and web content.
+
+       DefaultPaperSize Auto
+
+       DefaultPaperSize None
+
+       DefaultPaperSize sizename
+	    Specifies the default paper size for new print queues. "Auto" uses
+	    a locale- specific default, while "None"  specifies  there	is  no
+	    default paper size.
+
+       DefaultPolicy policy-name
+	    Specifies the default access policy to use.
+
+       DefaultShared Yes
+
+       DefaultShared No
+	    Specifies whether local printers are shared by default.
+
+       Deny all
+
+       Deny none
+
+       Deny host.domain.com
+
+       Deny *.domain.com
+
+       Deny ip-address
+
+       Deny ip-address/netmask
+
+       Deny ip-address/mm
+
+       Deny @IF(name)
+
+       Deny @LOCAL
+	    Denies access to the named host or address.
+
+       DirtyCleanInterval seconds
+	    Specifies the delay for updating of configuration and state files.
+	    A value of 0 causes the update to happen as soon as possible, typ-
+	    ically within a few milliseconds.
+
+       DocumentRoot directory
+	    Specifies  the  root  directory  for the internal web server docu-
+	    ments.
+
+       Encryption IfRequested
+
+       Encryption Never
+
+       Encryption Required
+	    Specifies the level of encryption that is required for a  particu-
+	    lar location.
+
+       ErrorLog filename
+
+       ErrorLog syslog
+	    Specifies the error log filename.
+
+       FatalErrors none
+
+       FatalErrors all -kind [... -kind]
+
+       FatalErrors kind [... kind]
+	    Specifies  which  errors are fatal, causing the scheduler to exit.
+	    "Kind" is "browse", "config", "listen", "log", or "permissions".
+
+       FileDevice Yes
+
+       FileDevice No
+	    Specifies whether the file	pseudo-device  can  be	used  for  new
+	    printer queues.
+
+       FilterLimit limit
+	    Specifies the maximum cost of filters that are run concurrently.
+
+       FilterNice nice-value
+	    Specifies  the  scheduling priority ("nice" value) of filters that
+	    are run to print a job.
+
+       FontPath directory[:directory:...]
+	    Specifies the search path for fonts.
+
+       Group group-name-or-number
+	    Specifies the group name or ID that will be  used  when  executing
+	    external programs.
+
+       GSSServiceName name
+	    Specifies the service name when using Kerberos authentication. The
+	    default service name is "host".
+
+       HostNameLookups On
+
+       HostNameLookups Off
+
+       HostNameLookups Double
+	    Specifies  whether	or  not  to  do  reverse  lookups  on	client
+	    addresses.
+
+       Include filename
+	    Includes the named file.
+
+       JobKillDelay seconds
+	    Specifies the number of seconds to wait before killing the filters
+	    and backend associated with a canceled or held job.
+
+       JobPrivateAccess all
+
+       JobPrivateAccess default
+
+       JobPrivateAccess {user|@group|@ACL|@OWNER|@SYSTEM}+
+	    Specifies an access list for a job's private values. The "default"
+	    access  list  is  "@OWNER  @SYSTEM".  "@ACL" maps to the printer's
+	    requesting-user-name-allowed or  requesting-user-name-denied  val-
+	    ues.
+
+       JobPrivateValues all
+
+       JobPrivateValues default
+
+       JobPrivateValues none
+
+       JobPrivateValues attribute-name-1 [ ... attribute-name-N ]
+	    Specifies  the  list  of job values to make private. The "default"
+	    values are "job-name", "job-originating-host-name", and "job-orig-
+	    inating-user-name".
+
+       JobRetryInterval seconds
+	    Specifies the interval between retries of jobs in seconds.
+
+       JobRetryLimit count
+	    Specifies the number of retries that are done for jobs.
+
+       KeepAlive Yes
+
+       KeepAlive No
+	    Specifies whether to support HTTP keep-alive connections.
+
+       KeepAliveTimeout seconds
+	    Specifies the amount of time that connections are kept alive.
+
+       &ltLimit operations&gt ... &lt/Limit&gt
+	    Specifies  the IPP operations that are being limited inside a pol-
+	    icy.
+
+       &ltLimit methods&gt ... &lt/Limit&gt
+
+       &ltLimitExcept methods&gt ... &lt/LimitExcept&gt
+	    Specifies the HTTP methods that are being limited inside  a  loca-
+	    tion.
+
+       LimitRequestBody
+	    Specifies the maximum size of any print job request.
+
+       Listen ip-address:port
+
+       Listen *:port
+
+       Listen /path/to/domain/socket
+	    Listens to the specified address and port or domain socket path.
+
+       &ltLocation /path&gt ... &lt/Location&gt
+	    Specifies access control for the named location.
+
+       LogDebugHistory #-messages
+	    Specifies the number of debugging messages that are logged when an
+	    error occurs in a print job.
+
+       LogFilePerm mode
+	    Specifies the permissions for all log  files  that	the  scheduler
+	    writes.
+
+       LogLevel alert
+
+       LogLevel crit
+
+       LogLevel debug2
+
+       LogLevel debug
+
+       LogLevel emerg
+
+       LogLevel error
+
+       LogLevel info
+
+       LogLevel none
+
+       LogLevel notice
+
+       LogLevel warn
+	    Specifies the logging level for the ErrorLog file.
+
+       LogTimeFormat standard
+
+       LogTimeFormat usecs
+	    Specifies the format of the date and time in the log files.
+
+       MaxClients number
+	    Specifies the maximum number of simultaneous clients to support.
+
+       MaxClientsPerHost number
+	    Specifies  the  maximum  number of simultaneous clients to support
+	    from a single address.
+
+       MaxCopies number
+	    Specifies the maximum number of copies that a user	can  print  of
+	    each job.
+
+       MaxHoldTime seconds
+	    Specifies  the  maximum  time a job may remain in the "indefinite"
+	    hold state before it is canceled. Set to 0 to disable cancellation
+	    of held jobs.
+
+       MaxJobs number
+	    Specifies the maximum number of simultaneous jobs to support.
+
+       MaxJobsPerPrinter number
+	    Specifies  the  maximum number of simultaneous jobs per printer to
+	    support.
+
+       MaxJobsPerUser number
+	    Specifies the maximum number of simultaneous jobs per user to sup-
+	    port.
+
+       MaxJobTime seconds
+	    Specifies  the  maximum  time a job may take to print before it is
+	    canceled. The default is 10800 seconds (3 hours). Set to 0 to dis-
+	    able cancellation of "stuck" jobs.
+
+       MaxLogSize number-bytes
+	    Specifies  the  maximum  size  of  the  log  files before they are
+	    rotated (0 to disable rotation)
+
+       MaxRequestSize number-bytes
+	    Specifies the maximum request/file size in bytes (0 for no limit)
+
+       MultipleOperationTimeout seconds
+	    Specifies the maximum amount of time to allow between files  in  a
+	    multiple file print job.
+
+       Order allow,deny
+
+       Order deny,allow
+	    Specifies	the  order  of	HTTP  access  control  (allow,deny  or
+	    deny,allow)
+
+       PageLog filename
+
+       PageLog syslog
+	    Specifies the page log filename.
+
+       PageLogFormat format string
+	    Specifies the format of page log lines.
+
+       PassEnv variable [... variable]
+	    Passes the specified environment variable(s) to child processes.
+
+       &ltPolicy name&gt ... &lt/Policy&gt
+	    Specifies access control for the named policy.
+
+       Port number
+	    Specifies a port number to listen to for HTTP requests.
+
+       PreserveJobFiles Yes
+
+       PreserveJobFiles No
+	    Specifies whether or not to preserve  job  files  after  they  are
+	    printed.
+
+       PreserveJobHistory Yes
+
+       PreserveJobHistory No
+	    Specifies  whether	or  not to preserve the job history after they
+	    are printed.
+
+       Printcap
+
+       Printcap filename
+	    Specifies the filename for a printcap file that is	updated  auto-
+	    matically  with  a	list  of available printers (needed for legacy
+	    applications);  specifying	Printcap  with	no  filename  disables
+	    printcap generation.
+
+       PrintcapFormat bsd
+
+       PrintcapFormat plist
+
+       PrintcapFormat solaris
+	    Specifies the format of the printcap file.
+
+       PrintcapGUI
+
+       PrintcapGUI gui-program-filename
+	    Specifies  whether	to  generate  option panel definition files on
+	    some operating systems. When provided with	no  program  filename,
+	    disables option panel definition files.
+
+       ReloadTimeout seconds
+	    Specifies  the  amount  of	time to wait for job completion before
+	    restarting the scheduler.
+
+       RemoteRoot user-name
+	    Specifies the username that  is  associated  with  unauthenticated
+	    root accesses.
+
+       RequestRoot directory
+	    Specifies the directory to store print jobs and other HTTP request
+	    data.
+
+       Require group group-name-list
+
+       Require user user-name-list
+
+       Require valid-user
+	    Specifies that user or group authentication is required.
+
+       RIPCache bytes
+	    Specifies the maximum amount of  memory  to  use  when  converting
+	    images and PostScript files to bitmaps for a printer.
+
+       Satisfy all
+
+       Satisfy any
+	    Specifies  whether	all  or  any limits set for a Location must be
+	    satisfied to allow access.
+
+       ServerAdmin user@domain.com
+	    Specifies the email address of the server administrator.
+
+       ServerAlias hostname [... hostname]
+
+       ServerAlias *
+	    Specifies an alternate name that the server is known by. The  spe-
+	    cial name "*" allows any name to be used.
+
+       ServerBin directory
+	    Specifies the directory where backends, CGIs, daemons, and filters
+	    may be found.
+
+       ServerCertificate filename
+	    Specifies the encryption certificate to use.
+
+       ServerKey filename
+	    Specifies the encryption key to use.
+
+       ServerName hostname-or-ip-address
+	    Specifies the fully-qualified hostname of the server.
+
+       ServerRoot directory
+	    Specifies the directory where the server configuration  files  can
+	    be found.
+
+       ServerTokens Full
+
+       ServerTokens Major
+
+       ServerTokens Minimal
+
+       ServerTokens Minor
+
+       ServerTokens None
+
+       ServerTokens OS
+
+       ServerTokens ProductOnly
+	    Specifies  what  information  is  included in the Server header of
+	    HTTP responses.
+
+       SetEnv variable value
+	    Set the specified environment variable to be passed to child  pro-
+	    cesses.
+
+       SSLListen
+	    Listens  on  the  specified address and port for encrypted connec-
+	    tions.
+
+       SSLOptions None
+
+       SSLOptions NoEmptyFragments
+	    Sets SSL/TLS protocol options for encrypted connections.
+
+       SSLPort
+	    Listens on the specified port for encrypted connections.
+
+       StrictConformance Yes
+
+       StrictConformance No
+	    Specifies whether  the  scheduler  requires  clients  to  strictly
+	    adhere to the IPP specifications. The default is No.
+
+       SubscriptionPrivateAccess all
+
+       SubscriptionPrivateAccess default
+
+       SubscriptionPrivateAccess {user|@group|@ACL|@OWNER|@SYSTEM}+
+	    Specifies  an access list for a subscription's private values. The
+	    "default" access list is "@OWNER  @SYSTEM".  "@ACL"  maps  to  the
+	    printer's  requesting-user-name-allowed  or  requesting-user-name-
+	    denied values.
+
+       SubscriptionPrivateValues all
+
+       SubscriptionPrivateValues default
+
+       SubscriptionPrivateValues none
+
+       SubscriptionPrivateValues attribute-name-1 [ ... attribute-name-N ]
+	    Specifies the list of job values to make  private.	The  "default"
+	    values  are "notify-events", "notify-pull-method", "notify-recipi-
+	    ent-uri", "notify-subscriber-user-name", and "notify-user-data".
+
+       SystemGroup group-name [group-name ...]
+	    Specifies the group(s) to use for System class authentication.
+
+       TempDir directory
+	    Specifies the directory where temporary files are stored.
+
+       Timeout seconds
+	    Specifies the HTTP request timeout in seconds.
+
+       User user-name
+	    Specifies the user name or ID that is used when  running  external
+	    programs.
+
+       WebInterface yes
+
+       WebInterface no
+	    Specifies whether the web interface is enabled.
+
+SEE ALSO
+       classes.conf(5),   cupsd(8),   mime.convs(5),   mime.types(5),	print-
+       ers.conf(5), subscriptions.conf(5),
+       http://localhost:631/help
+
+COPYRIGHT
+       Copyright 2007-2012 by Apple Inc.
+
+
+
+18 May 2012			     CUPS			 cupsd.conf(5)
+    </pre></body>
+
+</html>

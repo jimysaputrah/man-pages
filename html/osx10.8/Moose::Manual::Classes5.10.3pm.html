@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Moose::Manual::Classes - Making your classes use Moose (and</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Moose::Manual::ClassesUser Contributed Perl DocumentaMoose::Manual::Classes(3)
+
+
+
+NAME
+       Moose::Manual::Classes - Making your classes use Moose (and
+       subclassing)
+
+USING MOOSE
+       Using Moose is very simple, you just "use Moose":
+
+	 package Person;
+
+	 use Moose;
+
+       That's it, you've made a class with Moose!
+
+       There's actually a lot going on here under the hood, so let's step
+       through it.
+
+       When you load Moose, a bunch of sugar functions are exported into your
+       class. These include things like "extends", "has", "with", and more.
+       These functions are what you use to define your class. For example, you
+       might define an attribute ...
+
+	 package Person;
+
+	 use Moose;
+
+	 has 'ssn' =&gt ( is =&gt 'rw' );
+
+       Attributes are described in the Moose::Manual::Attributes
+       documentation.
+
+       Loading Moose also enables "strict" and "warnings" pragmas in your
+       class.
+
+       When you load Moose, your class will become a subclass of
+       Moose::Object. The Moose::Object class provides a default constructor
+       and destructor, as well as object construction helper methods. You can
+       read more about this in the Moose::Manual::Construction document.
+
+       As a convenience, Moose creates a new class type for your class. See
+       the Moose::Manual::Types document to learn more about types.
+
+       It also creates a Moose::Meta::Class object for your class. This
+       metaclass object is now available by calling a "meta" method on your
+       class, for example "Person-&gtmeta".
+
+       The metaclass object provides an introspection API for your class. It
+       is also used by Moose itself under the hood to add attributes, define
+       parent classes, and so on. In fact, all of Moose's sugar does the real
+       work by calling methods on this metaclass object (and other meta API
+       objects).
+
+SUBCLASSING
+       Moose provides a simple sugar function for declaring your parent
+       classes, "extends":
+
+	 package User;
+
+	 use Moose;
+
+	 extends 'Person';
+
+	 has 'username' =&gt ( is =&gt 'rw' );
+
+       Note that each call to "extends" will reset your parents. For multiple
+       inheritance you must provide all the parents at once, "extends 'Foo',
+       'Bar'".
+
+       You can use Moose to extend a non-Moose parent. However, when you do
+       this, you will inherit the parent class's constructor (assuming it is
+       also called "new"). In that case, you will have to take care of
+       initializing attributes manually, either in the parent's constructor,
+       or in your subclass, and you will lose a lot of Moose magic.
+
+NO MOOSE
+       Moose also allows you to remove its sugar functions from your class's
+       namespace. We recommend that you take advantage of this feature, since
+       it just makes your classes "cleaner". You can do this by simply adding
+       "no Moose" at the end of your module file.
+
+	 package Person;
+
+	 use Moose;
+
+	 has 'ssn' =&gt ( is =&gt 'rw' );
+
+	 no Moose;
+
+       This deletes Moose's sugar functions from your class's namespace, so
+       that "Person-&gtcan('has')" will no longer return true.
+
+       A more generic way to unimport not only Moose's exports but also those
+       from type libraries and other modules is to use namespace::clean or
+       namespace::autoclean.
+
+MAKING IT FASTER
+       Moose has a feature called "immutabilization" that you can use to
+       greatly speed up your classes at runtime. However, using it does incur
+       a cost when your class is first being loaded. When you make your class
+       immutable you tell Moose that you will not be changing it in the
+       future. You will not be adding any more attributes, methods, roles,
+       etc.
+
+       This allows Moose to generate code specific to your class. In
+       particular, it creates an "inline" constructor, making object
+       construction much faster.
+
+       To make your class immutable you simply call "make_immutable" on your
+       class's metaclass object.
+
+	 __PACKAGE__-&gtmeta-&gtmake_immutable;
+
+   Immutabilization and "new()"
+       If you override "new()" in your class, then the immutabilization code
+       will not be able to provide an optimized constructor for your class.
+       Instead, you should use a "BUILD()" method, which will be called from
+       the inlined constructor.
+
+       Alternately, if you really need to provide a different "new()", you can
+       also provide your own immutabilization method. Doing so requires
+       extending the Moose metaclasses, and is well beyond the scope of this
+       manual.
+
+AUTHOR
+       Dave Rolsky &ltautarch@urth.org&gt
+
+COPYRIGHT AND LICENSE
+       Copyright 2008-2009 by Infinity Interactive, Inc.
+
+       &lthttp://www.iinteractive.com&gt
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2009-12-06	     Moose::Manual::Classes(3)
+    </pre></body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This  procedure	is  typically  invoked	when a Tcl error occurs during..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Tcl_BackgroundError - report Tcl error that occurred in background pro-</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Tcl_BackgroundError(3)	    Tcl Library Procedures	Tcl_BackgroundError(3)
+
+
+
+______________________________________________________________________________
+
+NAME
+       Tcl_BackgroundError - report Tcl error that occurred in background pro-
+       cessing
+
+SYNOPSIS
+       #include &lttcl.h&gt
+
+       Tcl_BackgroundError(interp)
+
+ARGUMENTS
+       Tcl_Interp *interp (in)		Interpreter   in   which   the	 error
+					occurred.
+_________________________________________________________________
+
+
+DESCRIPTION
+       This  procedure	is  typically  invoked	when a Tcl error occurs during
+       "background processing" such as executing an event handler.  When  such
+       an  error occurs, the error condition is reported to Tcl or to a widget
+       or some other C code, and there is not usually any obvious way for that
+       code  to  report  the error to the user.  In these cases the code calls
+       Tcl_BackgroundError with an interp argument identifying the interpreter
+       in  which  the  error  occurred.   At  the  time Tcl_BackgroundError is
+       invoked, the interpreter's result is expected to contain an error  mes-
+       sage.   Tcl_BackgroundError  will invoke the command registered in that
+       interpreter to handle background errors by the interp bgerror  command.
+       The  registered	handler  command  is  meant  to report the error in an
+       application-specific fashion.  The handler command receives  two  argu-
+       ments,  the  result of the interp, and the return options of the interp
+       at the time the error occurred.	If the application registers  no  han-
+       dler  command, the default handler command will attempt to call bgerror
+       to report the error.  If an error condition arises while  invoking  the
+       handler	command,  then Tcl_BackgroundError reports the error itself by
+       printing a message on the standard error file.
+
+       Tcl_BackgroundError does not invoke  the  handler  command  immediately
+       because	this  could  potentially  interfere  with  scripts that are in
+       process at the time the error occurred.	Instead, it invokes  the  han-
+       dler command later as an idle callback.
+
+       It is possible for many background errors to accumulate before the han-
+       dler command is invoked.  When this happens, each of the errors is pro-
+       cessed in order.  However, if the handle command returns a break excep-
+       tion, then all remaining error reports for the interpreter are skipped.
+
+
+KEYWORDS
+       background, bgerror, error, interp
+
+
+
+Tcl				      7.5		Tcl_BackgroundError(3)
+    </pre></body>
+
+</html>

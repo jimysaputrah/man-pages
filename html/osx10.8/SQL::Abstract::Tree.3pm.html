@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>SQL::Abstract::Tree - Represent SQL as an AST</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+SQL::Abstract::Tree(3)User Contributed Perl DocumentatioSQL::Abstract::Tree(3)
+
+
+
+NAME
+       SQL::Abstract::Tree - Represent SQL as an AST
+
+SYNOPSIS
+	my $sqla_tree = SQL::Abstract::Tree-&gtnew({ profile =&gt 'console' });
+
+	print $sqla_tree-&gtformat('SELECT * FROM foo WHERE foo.a &gt 2');
+
+	# SELECT *
+	#   FROM foo
+	#   WHERE foo.a &gt 2
+
+METHODS
+   new
+	my $sqla_tree = SQL::Abstract::Tree-&gtnew({ profile =&gt 'console' });
+
+	$args = {
+	  profile =&gt 'console',      # predefined profile to use (default: 'none')
+	  fill_in_placeholders =&gt 1, # true for placeholder population
+	  placeholder_surround =&gt    # The strings that will be wrapped around
+		     [GREEN, RESET], # populated placeholders if the above is set
+	  indent_string =&gt ' ',      # the string used when indenting
+	  indent_amount =&gt 2,	     # how many of above string to use for a single
+				     # indent level
+	  newline	=&gt "\n",     # string for newline
+	  colormap	=&gt {
+	    select =&gt [RED, RESET], # a pair of strings defining what to surround
+				    # the keyword with for colorization
+	    # ...
+	  },
+	  indentmap	=&gt {
+	    select	  =&gt 0,     # A zero means that the keyword will start on
+				    # a new line
+	    from	  =&gt 1,     # Any other positive integer means that after
+	    on		  =&gt 2,     # said newline it will get that many indents
+	    # ...
+	  },
+	}
+
+       Returns a new SQL::Abstract::Tree object.  All arguments are optional.
+
+       profiles
+
+       There are four predefined profiles, "none", "console",
+       "console_monochrome", and "html".  Typically a user will probably just
+       use "console" or "console_monochrome", but if something about a profile
+       bothers you, merely use the profile and override the parts that you
+       don't like.
+
+   format
+	$sqlat-&gtformat('SELECT * FROM bar WHERE x = ?', [1])
+
+       Takes $sql and "\@bindargs".
+
+       Returns a formatting string based on the string passed in
+
+   parse
+	$sqlat-&gtparse('SELECT * FROM bar WHERE x = ?')
+
+       Returns a "tree" representing passed in SQL.  Please do not depend on
+       the structure of the returned tree.  It may be stable at some point,
+       but not yet.
+
+   unparse
+	$sqlat-&gtparse($tree_structure, \@bindargs)
+
+       Transform "tree" into SQL, applying various transforms on the way.
+
+   format_keyword
+	$sqlat-&gtformat_keyword('SELECT')
+
+       Currently this just takes a keyword and puts the "colormap" stuff
+       around it.  Later on it may do more and allow for coderef based
+       transforms.
+
+   pad_keyword
+	my ($before, $after) = @{$sqlat-&gtpad_keyword('SELECT')};
+
+       Returns whitespace to be inserted around a keyword.
+
+   fill_in_placeholder
+	my $value = $sqlat-&gtfill_in_placeholder(\@bindargs)
+
+       Removes last arg from passed arrayref and returns it, surrounded with
+       the values in placeholder_surround, and then surrounded with single
+       quotes.
+
+   indent
+       Returns as many indent strings as indent amounts times the first
+       argument.
+
+ACCESSORS
+   colormap
+       See "new"
+
+   fill_in_placeholders
+       See "new"
+
+   indent_amount
+       See "new"
+
+   indent_string
+       See "new"
+
+   indentmap
+       See "new"
+
+   newline
+       See "new"
+
+   placeholder_surround
+       See "new"
+
+
+
+perl v5.12.4			  2010-12-21		SQL::Abstract::Tree(3)
+    </pre></body>
+
+</html>

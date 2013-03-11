@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="RFC2292 IPv6 advanced API defines eight functions that the application..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>inet6_rthdr_space, inet6_rthdr_init, inet6_rthdr_add,</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+INET6_RTHDR_SPACE(3)	 BSD Library Functions Manual	  INET6_RTHDR_SPACE(3)
+
+NAME
+     inet6_rthdr_space, inet6_rthdr_init, inet6_rthdr_add,
+     inet6_rthdr_lasthop, inet6_rthdr_reverse, inet6_rthdr_segments,
+     inet6_rthdr_getaddr, inet6_rthdr_getflags -- IPv6 Routing Header Options
+     manipulation
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include &ltsys/types.h&gt
+     #include &ltnetinet/in.h&gt
+
+     size_t
+     inet6_rthdr_space(int type, int segments);
+
+     struct cmsghdr *
+     inet6_rthdr_init(void *bp, int type);
+
+     int
+     inet6_rthdr_add(struct cmsghdr *cmsg, const struct in6_addr *addr,
+	 unsigned int flags);
+
+     int
+     inet6_rthdr_lasthop(struct cmsghdr *cmsg, unsigned int flags);
+
+     int
+     inet6_rthdr_reverse(const struct cmsghdr *in, struct cmsghdr *out);
+
+     int
+     inet6_rthdr_segments(const struct cmsghdr *cmsg);
+
+     struct in6_addr *
+     inet6_rthdr_getaddr(struct cmsghdr *cmsg, int index);
+
+     int
+     inet6_rthdr_getflags(const struct cmsghdr *cmsg, int index);
+
+DESCRIPTION
+     RFC2292 IPv6 advanced API defines eight functions that the application
+     calls to build and examine a Routing header.  Four functions build a
+     Routing header:
+
+     inet6_rthdr_space() return #bytes required for ancillary data
+
+     inet6_rthdr_init() initialize ancillary data for Routing header
+
+     inet6_rthdr_add() add IPv6 address & flags to Routing header
+
+     inet6_rthdr_lasthop() specify the flags for the final hop
+
+     Four functions deal with a returned Routing header:
+
+     inet6_rthdr_reverse() reverse a Routing header
+
+     inet6_rthdr_segments() return #segments in a Routing header
+
+     inet6_rthdr_getaddr() fetch one address from a Routing header
+
+     inet6_rthdr_getflags() fetch one flag from a Routing header
+
+     The function prototypes for these functions are all in the &ltnetinet/in.h&gt
+     header.
+
+     The full description of these functions is available in RFC2292.
+
+DIAGNOSTICS
+     inet6_rthdr_space() returns 0 on errors.
+
+     inet6_rthdr_add(), inet6_rthdr_lasthop() and inet6_rthdr_reverse() return
+     0 on success, and returns -1 on error.
+
+     inet6_rthdr_init() and inet6_rthdr_getaddr() return NULL on error.
+
+     inet6_rthdr_segments() and inet6_rthdr_getflags() return -1 on error.
+
+EXAMPLES
+     RFC2292 gives comprehensive examples in chapter 8.
+
+SEE ALSO
+     W. Stevens and M. Thomas, Advanced Sockets API for IPv6, RFC2292,
+     February 1998.
+
+     S. Deering and R. Hinden, Internet Protocol, Version 6 (IPv6)
+     Specification, RFC2460, December 1998.
+
+HISTORY
+     The implementation first appeared in KAME advanced networking kit.
+
+STANDARDS
+     The functions are documented in ``Advanced Sockets API for IPv6''
+     (RFC2292).
+
+BUGS
+     The text was shamelessly copied from RFC2292.
+
+     inet6_rthdr_reverse() is not implemented yet.
+
+BSD			       December 10, 1999			   BSD
+    </pre></body>
+
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content=""PPI::Transform" provides an API for the creation of classes and..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>PPI::Transform - Abstract base class for document transformation</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+PPI::Transform(3)     User Contributed Perl Documentation    PPI::Transform(3)
+
+
+
+NAME
+       PPI::Transform - Abstract base class for document transformation
+       classes
+
+DESCRIPTION
+       "PPI::Transform" provides an API for the creation of classes and
+       objects that modify or transform PPI documents.
+
+METHODS
+   new
+	 my $transform = PPI::Transform-&gtnew(
+	     param1 =&gt 'value1',
+	     param2 =&gt 'value2',
+	 );
+
+       The "new" constructor creates a new object for your "PPI::Transform"
+       subclass. A default constructor is provided for you which takes no
+       params and creates a basic, empty, object.
+
+       If you wish to have your transform constructor take params, these must
+       be in the form of a list of key/value pairs.
+
+       Returns a new "PPI::Transform"-compatible object, or returns "undef" on
+       error.
+
+   document
+       The "document" method should be implemented by each subclass, and takes
+       a single argument of a PPI::Document object, modifying it in place as
+       appropriate for the particular transform class.
+
+       That's right, this method will not clone and should not clone the
+       document object. If you do not want the original to be modified, you
+       need to clone it yourself before passing it in.
+
+       Returns the numbers of changes made to the document. If the transform
+       is unable to track the quantity (including the situation where it
+       cannot tell IF it made a change) it should return 1. Returns zero if no
+       changes were made to the document, or "undef" if an error occurs.
+
+       By default this error is likely to only mean that you passed in
+       something that wasn't a PPI::Document, but may include additional
+       errors depending on the subclass.
+
+   apply
+       The "apply" method is used to apply the transform to something. The
+       argument must be a PPI::Document, or something which can be turned into
+       a one and then be written back to again.
+
+       Currently, this list is limited to a "SCALAR" reference, although a
+       handler registration process is available for you to add support for
+       additional types of object should you wish (see the source for this
+       module).
+
+       Returns true if the transform was applied, false if there is an error
+       in the transform process, or may die if there is a critical error in
+       the apply handler.
+
+   file
+	 # Read from one file and write to another
+	 $transform-&gtfile( 'Input.pm' =&gt 'Output.pm' );
+
+	 # Change a file in place
+	 $transform-&gtfile( 'Change.pm' );
+
+       The "file" method modifies a Perl document by filename. If passed a
+       single parameter, it modifies the file in-place. If provided a second
+       parameter, it will attempt to save the modified file to the alternative
+       filename.
+
+       Returns true on success, or "undef" on error.
+
+SUPPORT
+       See the support section in the main module.
+
+AUTHOR
+       Adam Kennedy &ltadamk@cpan.org&gt
+
+COPYRIGHT
+       Copyright 2001 - 2011 Adam Kennedy.
+
+       This program is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+       The full text of the license can be found in the LICENSE file included
+       with this module.
+
+
+
+perl v5.12.4			  2011-02-25		     PPI::Transform(3)
+    </pre></body>
+
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module implements a client interface to the POP3 protocol,..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Net::POP3 - Post Office Protocol 3 Client class (RFC1939)</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Net::POP3(3pm)	       Perl Programmers Reference Guide 	Net::POP3(3pm)
+
+
+
+NAME
+       Net::POP3 - Post Office Protocol 3 Client class (RFC1939)
+
+SYNOPSIS
+	   use Net::POP3;
+
+	   # Constructors
+	   $pop = Net::POP3-&gtnew('pop3host');
+	   $pop = Net::POP3-&gtnew('pop3host', Timeout =&gt 60);
+
+	   if ($pop-&gtlogin($username, $password) &gt 0) {
+	     my $msgnums = $pop-&gtlist; # hashref of msgnum =&gt size
+	     foreach my $msgnum (keys %$msgnums) {
+	       my $msg = $pop-&gtget($msgnum);
+	       print @$msg;
+	       $pop-&gtdelete($msgnum);
+	     }
+	   }
+
+	   $pop-&gtquit;
+
+DESCRIPTION
+       This module implements a client interface to the POP3 protocol,
+       enabling a perl5 application to talk to POP3 servers. This
+       documentation assumes that you are familiar with the POP3 protocol
+       described in RFC1939.
+
+       A new Net::POP3 object must be created with the new method. Once this
+       has been done, all POP3 commands are accessed via method calls on the
+       object.
+
+CONSTRUCTOR
+       new ( [ HOST ] [, OPTIONS ] 0
+	   This is the constructor for a new Net::POP3 object. "HOST" is the
+	   name of the remote host to which an POP3 connection is required.
+
+	   "HOST" is optional. If "HOST" is not given then it may instead be
+	   passed as the "Host" option described below. If neither is given
+	   then the "POP3_Hosts" specified in "Net::Config" will be used.
+
+	   "OPTIONS" are passed in a hash like fashion, using key and value
+	   pairs.  Possible options are:
+
+	   Host - POP3 host to connect to. It may be a single scalar, as
+	   defined for the "PeerAddr" option in IO::Socket::INET, or a
+	   reference to an array with hosts to try in turn. The "host" method
+	   will return the value which was used to connect to the host.
+
+	   ResvPort - If given then the socket for the "Net::POP3" object will
+	   be bound to the local port given using "bind" when the socket is
+	   created.
+
+	   Timeout - Maximum time, in seconds, to wait for a response from the
+	   POP3 server (default: 120)
+
+	   Debug - Enable debugging information
+
+METHODS
+       Unless otherwise stated all methods return either a true or false
+       value, with true meaning that the operation was a success. When a
+       method states that it returns a value, failure will be returned as
+       undef or an empty list.
+
+       auth ( USERNAME, PASSWORD )
+	   Attempt SASL authentication.
+
+       user ( USER )
+	   Send the USER command.
+
+       pass ( PASS )
+	   Send the PASS command. Returns the number of messages in the
+	   mailbox.
+
+       login ( [ USER [, PASS ]] )
+	   Send both the USER and PASS commands. If "PASS" is not given the
+	   "Net::POP3" uses "Net::Netrc" to lookup the password using the host
+	   and username. If the username is not specified then the current
+	   user name will be used.
+
+	   Returns the number of messages in the mailbox. However if there are
+	   no messages on the server the string "0E0" will be returned. This
+	   is will give a true value in a boolean context, but zero in a
+	   numeric context.
+
+	   If there was an error authenticating the user then undef will be
+	   returned.
+
+       apop ( [ USER [, PASS ]] )
+	   Authenticate with the server identifying as "USER" with password
+	   "PASS".  Similar to "login", but the password is not sent in clear
+	   text.
+
+	   To use this method you must have the Digest::MD5 or the MD5 module
+	   installed, otherwise this method will return undef.
+
+       banner ()
+	   Return the sever's connection banner
+
+       capa ()
+	   Return a reference to a hash of the capabilities of the server.
+	   APOP is added as a pseudo capability.  Note that I've been unable
+	   to find a list of the standard capability values, and some appear
+	   to be multi-word and some are not.  We make an attempt at
+	   intelligently parsing them, but it may not be correct.
+
+       capabilities ()
+	   Just like capa, but only uses a cache from the last time we asked
+	   the server, so as to avoid asking more than once.
+
+       top ( MSGNUM [, NUMLINES ] )
+	   Get the header and the first "NUMLINES" of the body for the message
+	   "MSGNUM". Returns a reference to an array which contains the lines
+	   of text read from the server.
+
+       list ( [ MSGNUM ] )
+	   If called with an argument the "list" returns the size of the
+	   message in octets.
+
+	   If called without arguments a reference to a hash is returned. The
+	   keys will be the "MSGNUM"'s of all undeleted messages and the
+	   values will be their size in octets.
+
+       get ( MSGNUM [, FH ] )
+	   Get the message "MSGNUM" from the remote mailbox. If "FH" is not
+	   given then get returns a reference to an array which contains the
+	   lines of text read from the server. If "FH" is given then the lines
+	   returned from the server are printed to the filehandle "FH".
+
+       getfh ( MSGNUM )
+	   As per get(), but returns a tied filehandle.  Reading from this
+	   filehandle returns the requested message.  The filehandle will
+	   return EOF at the end of the message and should not be reused.
+
+       last ()
+	   Returns the highest "MSGNUM" of all the messages accessed.
+
+       popstat ()
+	   Returns a list of two elements. These are the number of undeleted
+	   elements and the size of the mbox in octets.
+
+       ping ( USER )
+	   Returns a list of two elements. These are the number of new
+	   messages and the total number of messages for "USER".
+
+       uidl ( [ MSGNUM ] )
+	   Returns a unique identifier for "MSGNUM" if given. If "MSGNUM" is
+	   not given "uidl" returns a reference to a hash where the keys are
+	   the message numbers and the values are the unique identifiers.
+
+       delete ( MSGNUM )
+	   Mark message "MSGNUM" to be deleted from the remote mailbox. All
+	   messages that are marked to be deleted will be removed from the
+	   remote mailbox when the server connection closed.
+
+       reset ()
+	   Reset the status of the remote POP3 server. This includes resetting
+	   the status of all messages to not be deleted.
+
+       quit ()
+	   Quit and close the connection to the remote POP3 server. Any
+	   messages marked as deleted will be deleted from the remote mailbox.
+
+NOTES
+       If a "Net::POP3" object goes out of scope before "quit" method is
+       called then the "reset" method will called before the connection is
+       closed. This means that any messages marked to be deleted will not be.
+
+SEE ALSO
+       Net::Netrc, Net::Cmd
+
+AUTHOR
+       Graham Barr &ltgbarr@pobox.com&gt
+
+COPYRIGHT
+       Copyright (c) 1995-2003 Graham Barr. All rights reserved.  This program
+       is free software; you can redistribute it and/or modify it under the
+       same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-06-01			Net::POP3(3pm)
+    </pre></body>
+
+</html>

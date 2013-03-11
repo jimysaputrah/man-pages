@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="shmat() maps the shared memory segment associated with the shared memory..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>shmat, shmdt -- map/unmap shared memory</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+SHMAT(2)		    BSD System Calls Manual		      SHMAT(2)
+
+NAME
+     shmat, shmdt -- map/unmap shared memory
+
+SYNOPSIS
+     #include &ltsys/shm.h&gt
+
+     void *
+     shmat(int shmid, const void *shmaddr, int shmflg);
+
+     int
+     shmdt(const void *shmaddr);
+
+DESCRIPTION
+     shmat() maps the shared memory segment associated with the shared memory
+     identifier shmid into the address space of the calling process. The
+     address at which the segment is mapped is determined by the shmaddr
+     parameter. If it is equal to 0, the system will pick an address itself.
+     Otherwise, an attempt is made to map the shared memory segment at the
+     address shmaddr specifies. If SHM_RND is set in shmflg, the system will
+     round the address down to a multiple of SHMLBA bytes (SHMLBA is defined
+     in &ltsys/shm.h&gt ).	A shared memory segment can be mapped read-only by
+     specifying the SHM_RDONLY flag in shmflg.	shmdt() unmaps the shared mem-
+     ory segment that is currently mapped at shmaddr from the calling process'
+     address space.  shmaddr must be a value returned by a prior shmat() call.
+     A shared memory segment will remain existant until it is removed by a
+     call to shmctl(2) with the IPC_RMID command.
+
+RETURN VALUES
+     shmat() returns the address at which the shared memory segment has been
+     mapped into the calling process' address space when successful, shmdt()
+     returns 0 on successful completion. Otherwise, a value of -1 is returned,
+     and the global variable errno is set to indicate the error.
+
+ERRORS
+     The shmat() system call will fail if:
+
+     [EACCES]		The calling process has no permission to access this
+			shared memory segment.
+
+     [EINVAL]		shmid is not a valid shared memory identifier.
+			shmaddr specifies an illegal address.
+
+     [EMFILE]		The number of shared memory segments has reached the
+			system-wide limit.
+
+     [ENOMEM]		There is not enough available data space for the call-
+			ing process to map the shared memory segment.
+
+     The shmdt() system call will fail if:
+
+     [EINVAL]		shmaddr is not the start address of a mapped shared
+			memory segment.
+
+LEGACY SYNOPSIS
+     #include &ltsys/types.h&gt
+     #include &ltsys/ipc.h&gt
+     #include &ltsys/shm.h&gt
+
+     The include files &ltsys/types.h&gt and &ltsys/ipc.h&gt are necessary for both
+     functions.
+
+SEE ALSO
+     mmap(2), shmctl(2), shmget(2), compat(5)
+
+BSD				August 17, 1995 			   BSD
+    </pre></body>
+
+</html>

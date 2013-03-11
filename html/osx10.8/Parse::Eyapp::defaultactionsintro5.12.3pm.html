@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Parse::Eyapp::defaultactionsintro - Introduction to Default Actions and</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Parse::Eyapp::defaultaUsernContributed PerParse::Eyapp::defaultactionsintro(3)
+
+
+
+NAME
+       Parse::Eyapp::defaultactionsintro - Introduction to Default Actions and
+       Grammar Reuse
+
+Introduction
+       The examples used in this tutorial can be found in the directory
+       "examples/recycle" accompanying this distribution
+
+Default Actions
+   Default actions
+       When no action is specified both "yapp" and "eyapp" implicitly insert
+       the semantic action "{ $_[1] }".  In "Parse::Eyapp" you can modify such
+       behavior using the "%defaultaction { Perl code }" directive. The "{
+       Perl code }" clause that follows the %defaultaction directive is
+       executed when reducing by any production for which no explicit action
+       was specified.
+
+       Translator from Infix to Postfix
+
+       See the example in "examples/eyapplanguageref/Postfix.eyp"  that
+       translates an infix expression like "a=b*-3" into a postfix expression
+       like "a b 3 NEG * = ":
+
+	 Parse-Eyapp/examples/eyapplanguageref$ cat -n Postfix.eyp
+	    1  # File Postfix.eyp
+	    2  %right  '='
+	    3  %left   '-' '+'
+	    4  %left   '*' '/'
+	    5  %left   NEG
+	    6
+	    7  %defaultaction { return	"$left $right $op"; }
+	    8
+	    9  %%
+	   10  line: $exp  { print "$exp\n" }
+	   11  ;
+	   12
+	   13  exp:	   $NUM  { $NUM }
+	   14	       |   $VAR  { $VAR }
+	   15	       |   VAR.left '='.op exp.right
+	   16	       |   exp.left '+'.op exp.right
+	   17	       |   exp.left '-'.op exp.right
+	   18	       |   exp.left '*'.op exp.right
+	   19	       |   exp.left '/'.op exp.right
+	   20	       |   '-' $exp %prec NEG { "$exp NEG" }
+	   21	       |   '(' $exp ')' { $exp }
+	   22  ;
+	   23
+	   24  %%
+	   25
+	   26  sub _Error {
+	   27	 my($token)=$_[0]-&gtYYCurval;
+	   28	 my($what)= $token ? "input: '$token'" : "end of input";
+	   29	 my @expected = $_[0]-&gtYYExpect();
+	   30
+	   31	 local $" = ', ';
+	   32	 die "Syntax error near $what. Expected one of these tokens: @expected\n";
+	   33  }
+	   34
+	   35  my $x;
+	   36
+	   37  sub _Lexer {
+	   38	 my($parser)=shift;
+	   39
+	   40	 for ($x) {
+	   41	   s/^\s+//;
+	   42	   $_ eq '' and return('',undef);
+	   43
+	   44	   s/^([0-9]+(?:\.[0-9]+)?)//	and return('NUM',$1);
+	   45	   s/^([A-Za-z][A-Za-z0-9_]*)// and return('VAR',$1);
+	   46	   s/^(.)//s			and return($1,$1);
+	   47	 }
+	   48  }
+	   49
+	   50  sub Run {
+	   51	 my($self)=shift;
+	   52	 my $debug = shift @ARGV;
+	   53	 $debug = 0x1F if $debug;
+	   54	 print "Infix to postfix translator. Write an arithmetic expression: ";
+	   55	 $x = &ltSTDIN&gt;
+	   56	 $self-&gtYYParse(
+	   57	   yylex =&gt \&_Lexer,
+	   58	   yyerror =&gt \&_Error,
+	   59	   yydebug =&gt $debug,
+	   60	 );
+	   61  }
+	   62
+	   63	# Modulino
+	   64	__PACKAGE__-&gtnew()-&gtRun unless caller();
+
+       The file containing the "Eyapp" program must be compiled with "eyapp":
+
+	Parse-Eyapp/examples/eyapplanguageref$ eyapp Postfix.eyp
+
+       Next, you have to write a client program:
+
+	 Parse-Eyapp/examples/eyapplanguageref$ cat -n usepostfix.pl
+	    1  #!/usr/bin/perl -w
+	    2  use strict;
+	    3  use Postfix;
+	    4
+	    5  my $parser = new Postfix();
+	    6  $parser-&gtRun;
+
+       Now we can run the client program:
+
+	Parse-Eyapp/examples/eyapplanguageref$ usepostfix.pl
+	Infix to postfix translator. Write an arithmetic expression: -(2*a-b*-3)
+	2 a * b 3 NEG * - NEG
+
+       An alternative is to use the generated module as a modulino, compiling
+       the grammar using option "-b":
+
+	 Parse-Eyapp/examples/eyapplanguageref$ eyapp -b '' Postfix.eyp
+
+       This way, we can directly use the modulo as a script:
+
+	 Parse-Eyapp/examples/eyapplanguageref$ ./Postfix.pm
+	 Infix to postfix translator. Write an arithmetic expression: 2*3+b
+	 2 3 * b +
+
+       Default Actions, %name and "YYName"
+
+       In "eyapp" each production rule has a name.  The name of a rule can be
+       explicitly given by the programmer using the %name directive. For
+       example, in the piece of code that follows the name "ASSIGN" is given
+       to the rule "exp: VAR '=' exp".
+
+       When no explicit name is given the rule has an implicit name.  The
+       implicit name of a rule is shaped by concatenating the name of the
+       syntactic variable on its left, an underscore and the ordinal number of
+       the production rule "Lhs_#" as it appears in the ".output" file.  Avoid
+       giving names matching such pattern to production rules.	The patterns
+       "/${lhs}_\d+$/" where "${lhs}" is the name of the syntactic variable
+       are reserved for internal use by "eyapp".
+
+	 pl@nereida:~/LEyapp/examples$ cat -n Lhs.eyp
+	  1  # Lhs.eyp
+	  2
+	  3  %right  '='
+	  4  %left   '-' '+'
+	  5  %left   '*' '/'
+	  6  %left   NEG
+	  7
+	  8  %defaultaction {
+	  9    my $self = shift;
+	 10    my $name = $self-&gtYYName();
+	 11    bless { children =&gt [ grep {ref($_)} @_] }, $name;
+	 12  }
+	 13
+	 14  %%
+	 15  input:
+	 16		 /* empty */
+	 17		   { [] }
+	 18	     |	 input line
+	 19		   {
+	 20		     push @{$_[1]}, $_[2] if defined($_[2]);
+	 21		     $_[1]
+	 22		   }
+	 23  ;
+	 24
+	 25  line:     '\n'	  { }
+	 26	     | exp '\n'   {  $_[1] }
+	 27  ;
+	 28
+	 29  exp:
+	 30		 NUM   { $_[1] }
+	 31	     |	 VAR   { $_[1] }
+	 32	     |	 %name ASSIGN
+	 33		 VAR '=' exp
+	 34	     |	 %name PLUS
+	 35		 exp '+' exp
+	 36	     |	 %name MINUS
+	 37		 exp '-' exp
+	 38	     |	 %name TIMES
+	 39		 exp '*' exp
+	 40	     |	 %name DIV
+	 41		 exp '/' exp
+	 42	     |	 %name UMINUS
+	 43		 '-' exp %prec NEG
+	 44	     |	'(' exp ')'  { $_[2] }
+	 45  ;
+
+       Inside a semantic action the name of the current rule can be recovered
+       using the method "YYName" of the parser object.
+
+       The default action (lines 8-12) computes as attribute of the left hand
+       side a reference to an object blessed in the name of the rule.  The
+       object has an attribute "children" which is a reference to the list of
+       children of the node.  The call to "grep"
+
+	 11    bless { children =&gt [ grep {ref($_)} @_] }, $name;
+
+       excludes children that aren't references. Notice that the lexical
+       analyzer only returns references for the "NUM" and "VAR" terminals:
+
+	 59  sub _Lexer {
+	 60	 my($parser)=shift;
+	 61
+	 62	 for ($parser-&gtYYData-&gt{INPUT}) {
+	 63	     s/^[ \t]+//;
+	 64	     return('',undef) unless $_;
+	 65	     s/^([0-9]+(?:\.[0-9]+)?)//
+	 66		     and return('NUM', bless { attr =&gt $1}, 'NUM');
+	 67	     s/^([A-Za-z][A-Za-z0-9_]*)//
+	 68		     and return('VAR',bless {attr =&gt $1}, 'VAR');
+	 69	     s/^(.)//s
+	 70		     and return($1, $1);
+	 71	 }
+	 72	 return('',undef);
+	 73  }
+
+       follows the client program:
+
+	 pl@nereida:~/LEyapp/examples$ cat -n uselhs.pl
+	      1  #!/usr/bin/perl -w
+	      2  use Lhs;
+	      3  use Data::Dumper;
+	      4
+	      5  $parser = new Lhs();
+	      6  my $tree = $parser-&gtRun;
+	      7  $Data::Dumper::Indent = 1;
+	      8  if (defined($tree)) { print Dumper($tree); }
+	      9  else { print "Cadena no vA~Xlida\n"; }
+
+       When executed with input "a=(2+3)*b" the parser produces the following
+       tree:
+
+	 ASSIGN(TIMES(PLUS(NUM[2],NUM[3]), VAR[b]))
+
+       See the result of an execution:
+
+	 pl@nereida:~/LEyapp/examples$ uselhs.pl
+	 a=(2+3)*b
+	 $VAR1 = [
+	   bless( {
+	     'children' =&gt [
+	       bless( { 'attr' =&gt 'a' }, 'VAR' ),
+	       bless( {
+		 'children' =&gt [
+		   bless( {
+		     'children' =&gt [
+		       bless( { 'attr' =&gt '2' }, 'NUM' ),
+		       bless( { 'attr' =&gt '3' }, 'NUM' )
+		     ]
+		   }, 'PLUS' ),
+		   bless( { 'attr' =&gt 'b' }, 'VAR' )
+		 ]
+	       }, 'TIMES' )
+	     ]
+	   }, 'ASSIGN' )
+	 ];
+
+       The name of a production rule can be changed at execution time.	See
+       the following example:
+
+	 29  exp:
+	 30		 NUM   { $_[1] }
+	 31	     |	 VAR   { $_[1] }
+	 32	     |	 %name ASSIGN
+	 33		 VAR '=' exp
+	 34	     |	 %name PLUS
+	 35		 exp '+' exp
+	 36	     |	 %name MINUS
+	 37		 exp '-' exp
+	 38		   {
+	 39		     my $self = shift;
+	 40		     $self-&gtYYName('SUBTRACT'); # rename it
+	 41		     $self-&gtYYBuildAST(@_); # build the node
+	 42		   }
+	 43	     |	 %name TIMES
+	 44		 exp '*' exp
+	 45	     |	 %name DIV
+	 46		 exp '/' exp
+	 47	     |	 %name UMINUS
+	 48		 '-' exp %prec NEG
+	 49	     |	'(' exp ')'  { $_[2] }
+	 50  ;
+
+       When the client program is executed we can see the presence of the
+       "SUBTRACT" nodes:
+
+	 pl@nereida:~/LEyapp/examples$ useyynamedynamic.pl
+	 2-b
+	 $VAR1 = [
+	   bless( {
+	     'children' =&gt [
+	       bless( {
+		 'attr' =&gt '2'
+	       }, 'NUM' ),
+	       bless( {
+		 'attr' =&gt 'b'
+	       }, 'VAR' )
+	     ]
+	   }, 'SUBTRACT' )
+	 ];
+
+Grammar Reuse
+       Terence Parr in his talk "Reuse of Grammars with Embedded Semantic
+       Actions" (see &lthttp://www.cs.vu.nl/icpc2008/docs/Parr.pdf&gt) explains
+       the problem:
+
+	"Because many applications deal with the same language, the reuse of a common
+       syntax specification with different semantics provides a number of advantages.
+       While the advantages are obvious, the mechanism for grammar reuse is not so
+       clear.  To go beyond syntax checking, grammars must have some way to specify
+       the translation or interpretation logic (the semantics). Unfortunately, the act
+       of specifying the semantics can lock a grammar into one specific application
+       since the grammar is often modified to suit (e.g., programmers often want to
+       embed unrestricted semantic actions)."
+
+       The incoming sections deal with different solutions to the problem.
+
+   An Action Method for each Production
+       Default actions provide a way to write reusable grammars.  Here is one
+       solution:
+
+	 pl@europa:~/LEyapp/examples/recycle$ cat -n Noactions.eyp
+	    1  %left   '+'
+	    2  %left   '*'
+	    3
+	    4  %defaultaction {
+	    5	 my $self = shift;
+	    6
+	    7	 my $class = $self-&gtYYPrefix;
+	    8	 $class .=  $self-&gtYYName;
+	    9
+	   10	 $class-&gtaction(@_);
+	   11  }
+	   12
+	   13  %%
+	   14  exp:	   %name NUM
+	   15		     NUM
+	   16	       |   %name PLUS
+	   17		     exp '+' exp
+	   18	       |   %name TIMES
+	   19		     exp '*' exp
+	   20	       |   '(' exp ')'
+	   21		     { $_[2] }
+	   22  ;
+	   23
+	   24  %%
+	   25
+	   26  sub _Error {
+	   27	 my($token)=$_[0]-&gtYYCurval;
+	   28	 my($what)= $token ? "input: '$token'" : "end of input";
+	   29	 my @expected = $_[0]-&gtYYExpect();
+	   30
+	   31	 local $" = ', ';
+	   32	 die "Syntax error near $what. Expected one of these tokens: @expected\n";
+	   33  }
+	   34
+	   35
+	   36  my $x = '';
+	   37
+	   38  sub _Lexer {
+	   39	 my($parser)=shift;
+	   40
+	   41	 for ($x) {
+	   42	   s/^\s+//;
+	   43	   $_ eq '' and return('',undef);
+	   44
+	   45	   s/^([0-9]+(?:\.[0-9]+)?)//	and return('NUM',$1);
+	   46	   s/^([A-Za-z][A-Za-z0-9_]*)// and return('VAR',$1);
+	   47	   s/^(.)//s			and return($1,$1);
+	   48	 }
+	   49  }
+	   50
+	   51  sub Run {
+	   52	 my($self)=shift;
+	   53	 $x = shift;
+	   54	 my $debug = shift;
+	   55
+	   56	 $self-&gtYYParse(
+	   57	   yylex    =&gt \&_Lexer,
+	   58	   yyerror  =&gt \&_Error,
+	   59	   yydebug  =&gt $debug,
+	   60	 );
+	   61  }
+
+       This grammar is reused by the following program to implement a
+       calculator: and a translator from infix to postfix:
+
+	 pl@europa:~/LEyapp/examples/recycle$ cat -n calcu_and_post.pl
+	    1  #!/usr/bin/perl
+	    2  use warnings;
+	    3  use Noactions;
+	    4
+	    5  sub Calc::NUM::action {
+	    6	 return $_[1];
+	    7  }
+	    8
+	    9  sub Calc::PLUS::action {
+	   10	 $_[1]+$_[3];
+	   11  }
+	   12
+	   13  sub Calc::TIMES::action {
+	   14	 $_[1]*$_[3];
+	   15  }
+	   16
+	   17  sub Post::NUM::action {
+	   18	 return $_[1];
+	   19  }
+	   20
+	   21  sub Post::PLUS::action {
+	   22	 "$_[1] $_[3] +";
+	   23  }
+	   24
+	   25  sub Post::TIMES::action {
+	   26	 "$_[1] $_[3] *";
+	   27  }
+	   28
+	   29  my $debug = shift || 0;
+	   30  my $pparser = Noactions-&gtnew( yyprefix =&gt 'Post::');
+	   31  print "Write an expression: ";
+	   32  my $x = &ltSTDIN&gt;
+	   33  my $t = $pparser-&gtRun($x, $debug);
+	   34
+	   35  print "$t\n";
+	   36
+	   37  my $cparser = Noactions-&gtnew(yyprefix =&gt 'Calc::');
+	   38  my $e = $cparser-&gtRun($x, $debug);
+	   39
+	   40  print "$e\n";
+
+   Reusing Grammars Using Inheritance
+       An method to reuse a grammar is via inheritance.  The client inherits
+       the generated parser module and expands it with methods that inherit or
+       overwrite the actions.  Here is an example. Initially we have this
+       Eyapp grammar:
+
+	 pl@europa:~/LEyapp/examples/recycle$ cat -n NoacInh.eyp
+	    1  %left   '+'
+	    2  %left   '*'
+	    3
+	    4  %defaultaction {
+	    5	 my $self = shift;
+	    6
+	    7	 my $action = $self-&gtYYName;
+	    8
+	    9	 $self-&gt$action(@_);
+	   10  }
+	   11
+	   12  %%
+	   13  exp:	   %name NUM
+	   14		     NUM
+	   15	       |   %name PLUS
+	   16		     exp '+' exp
+	   17	       |   %name TIMES
+	   18		     exp '*' exp
+	   19	       |   '(' exp ')'
+	   20		     { $_[2] }
+	   21  ;
+	   22
+	   23  %%
+	   24
+	   25  sub _Error {
+	   26	 my($token)=$_[0]-&gtYYCurval;
+	   27	 my($what)= $token ? "input: '$token'" : "end of input";
+	   28	 my @expected = $_[0]-&gtYYExpect();
+	   29
+	   30	 local $" = ', ';
+	   31	 die "Syntax error near $what. Expected one of these tokens: @expected\n";
+	   32  }
+	   33
+	   34
+	   35  my $x = '';
+	   36
+	   37  sub _Lexer {
+	   38	 my($parser)=shift;
+	   39
+	   40	 for ($x) {
+	   41	   s/^\s+//;
+	   42	   $_ eq '' and return('',undef);
+	   43
+	   44	   s/^([0-9]+(?:\.[0-9]+)?)//	and return('NUM',$1);
+	   45	   s/^([A-Za-z][A-Za-z0-9_]*)// and return('VAR',$1);
+	   46	   s/^(.)//s			and return($1,$1);
+	   47	 }
+	   48  }
+	   49
+	   50  sub Run {
+	   51	 my($self)=shift;
+	   52	 $x = shift;
+	   53	 my $debug = shift;
+	   54
+	   55	 $self-&gtYYParse(
+	   56	   yylex =&gt \&_Lexer,
+	   57	   yyerror =&gt \&_Error,
+	   58	   yydebug =&gt $debug,
+	   59	 );
+	   60  }
+
+       The following program defines two classes: "CalcActions" that
+       implements the actions for the calculator and package "PostActions"
+       that implements the actions for the infix to postfix translation. This
+       way we have an example that reuses the former grammar twice:
+
+	 pl@europa:~/LEyapp/examples/recycle$ cat -n icalcu_and_ipost.pl
+	    1  #!/usr/bin/perl -w
+	    2  package CalcActions;
+	    3  use strict;
+	    4  use base qw{NoacInh};
+	    5
+	    6  sub NUM {
+	    7	 return $_[1];
+	    8  }
+	    9
+	   10  sub PLUS {
+	   11	 $_[1]+$_[3];
+	   12  }
+	   13
+	   14  sub TIMES {
+	   15	 $_[1]*$_[3];
+	   16  }
+	   17
+	   18  package PostActions;
+	   19  use strict;
+	   20  use base qw{NoacInh};
+	   21
+	   22  sub NUM {
+	   23	 return $_[1];
+	   24  }
+	   25
+	   26  sub PLUS {
+	   27	 "$_[1] $_[3] +";
+	   28  }
+	   29
+	   30  sub TIMES {
+	   31	 "$_[1] $_[3] *";
+	   32  }
+	   33
+	   34  package main;
+	   35  use strict;
+	   36
+	   37  my $calcparser = CalcActions-&gtnew();
+	   38  print "Write an expression: ";
+	   39  my $x = &ltSTDIN&gt;
+	   40  my $e = $calcparser-&gtRun($x);
+	   41
+	   42  print "$e\n";
+	   43
+	   44  my $postparser = PostActions-&gtnew();
+	   45  my $p = $postparser-&gtRun($x);
+	   46
+	   47  print "$p\n";
+
+       The subroutine used as default action in "NoacInh.eyp" is so useful
+       that is packed as the Parse::Eyapp::Driver method "YYDelegateaction".
+
+       See files "examples/recycle/NoacYYDelegateaction.eyp" and
+       "examples/recycle/icalcu_and_ipost_yydel.pl" for an example of use of
+       "YYDelegateaction".
+
+   Reusing Grammars by Dynamic Substitution of Semantic Actions
+       The methods "YYSetaction" and "YYAction" of the parser object provide a
+       way to selectively substitute some actions of a given grammar.  Let us
+       consider once more a postfix to infix translator:
+
+	 pl@europa:~/LEyapp/examples/recycle$ cat -n PostfixWithActions.eyp
+	    1  # File PostfixWithActions.eyp
+	    2  %right  '='
+	    3  %left   '-' '+'
+	    4  %left   '*' '/'
+	    5  %left   NEG
+	    6
+	    7  %%
+	    8  line: $exp  { print "$exp\n" }
+	    9  ;
+	   10
+	   11  exp:	   $NUM
+	   12		       { $NUM }
+	   13	       |   $VAR
+	   14		       { $VAR }
+	   15	       |   %name ASSIGN
+	   16		     VAR.left '='exp.right
+	   17		       { "$_[3] &$_[1] ASSIGN"; }
+	   18	       |   %name PLUS
+	   19		     exp.left '+'exp.right
+	   20		       { "$_[1] $_[3] PLUS"; }
+	   21	       |   %name MINUS
+	   22		     exp.left '-'exp.right
+	   23		       { "$_[1] $_[3] MINUS"; }
+	   24	       |   %name TIMES
+	   25		     exp.left '*'exp.right
+	   26		       { "$_[1] $_[3] TIMES"; }
+	   27	       |   %name DIV
+	   28		     exp.left '/'exp.right
+	   29		       { "$_[1] $_[3] DIV"; }
+	   30	       |   %name NEG '-' $exp %prec NEG
+	   31		       { "$exp NEG" }
+	   32	       |   '(' $exp ')'
+	   33		       { $exp }
+	   34  ;
+	   35
+	   36  %%
+	   37
+	   38  sub _Error {
+	   39	 my($token)=$_[0]-&gtYYCurval;
+	   40	 my($what)= $token ? "input: '$token'" : "end of input";
+	   41	 my @expected = $_[0]-&gtYYExpect();
+	   42
+	   43	 local $" = ', ';
+	   44	 die "Syntax error near $what. Expected one of these tokens: @expected\n";
+	   45  }
+	   46
+	   47  my $x;
+	   48
+	   49  sub _Lexer {
+	   50	 my($parser)=shift;
+	   51
+	   52	 for ($x) {
+	   53	   s/^\s+//;
+	   54	   $_ eq '' and return('',undef);
+	   55
+	   56	   s/^([0-9]+(?:\.[0-9]+)?)//	and return('NUM',$1);
+	   57	   s/^([A-Za-z][A-Za-z0-9_]*)// and return('VAR',$1);
+	   58	   s/^(.)//s			and return($1,$1);
+	   59	 }
+	   60  }
+	   61
+	   62  sub Run {
+	   63	 my($self)=shift;
+	   64	 $x = shift;
+	   65	 $self-&gtYYParse( yylex =&gt \&_Lexer, yyerror =&gt \&_Error,
+	   66	   #yydebug =&gt 0xFF
+	   67	 );
+	   68  }
+
+       The program "rewritepostfixwithactions.pl" uses the former grammar to
+       translate infix expressions to postfix expressions.  It also implements
+       a calculator reusing the grammar in "PostfixWithActions.eyp". It does
+       so using the "YYSetaction" method.  The semantic actions for the
+       productions named
+
+       o ASSIGN
+
+       o PLUS
+
+       o TIMES
+
+       o DIV
+
+       o NEG
+
+       are selectively substituted by the appropriate actions, while the other
+       semantic actions remain unchanged:
+
+	 pl@europa:~/LEyapp/examples/recycle$ cat -n rewritepostfixwithactions.pl
+	    1  #!/usr/bin/perl
+	    2  use warnings;
+	    3  use PostfixWithActions;
+	    4
+	    5  my $debug = shift || 0;
+	    6  my $pparser = PostfixWithActions-&gtnew();
+	    7  print "Write an expression: ";
+	    8  my $x = &ltSTDIN&gt;
+	    9
+	   10  # First, trasnlate to postfix ...
+	   11  $pparser-&gtRun($x, $debug);
+	   12
+	   13  # And then selectively substitute
+	   14  # some semantic actions
+	   15  # to obtain an infix calculator ...
+	   16  my %s;		 # symbol table
+	   17  $pparser-&gtYYSetaction(
+	   18	 ASSIGN =&gt sub { $s{$_[1]} = $_[3] },
+	   19	 PLUS	=&gt sub { $_[1] + $_[3] },
+	   20	 TIMES	=&gt sub { $_[1] * $_[3] },
+	   21	 DIV	=&gt sub { $_[1] / $_[3] },
+	   22	 NEG	=&gt sub { -$_[2] },
+	   23  );
+	   24
+	   25  $pparser-&gtRun($x, $debug);
+
+       When running this program the output is:
+
+	 examples/recycle$ ./rewritepostfixwithactions.pl
+	 Write an expression: 2*3+4
+	 2 3 TIMES 4 PLUS
+	 10
+	 examples/recycle$ rewritepostfixwithactions.pl
+	 Write an expression: a = 2*(b = 3+5)
+	 2 3 5 PLUS &b ASSIGN TIMES &a ASSIGN
+	 16
+
+SEE ALSO
+       o   The project home is at http://code.google.com/p/parse-eyapp/
+	   &lthttp://code.google.com/p/parse-eyapp/&gt.  Use a subversion client
+	   to anonymously check out the latest project source code:
+
+	      svn checkout http://parse-eyapp.googlecode.com/svn/trunk/ parse-eyapp-read-only
+
+       o   The tutorial Parsing Strings and Trees with "Parse::Eyapp" (An
+	   Introduction to Compiler Construction in seven pages) in
+	   &lthttp://nereida.deioc.ull.es/~pl/eyapsimple/&gt
+
+       o   Parse::Eyapp, Parse::Eyapp::eyapplanguageref,
+	   Parse::Eyapp::debuggingtut, Parse::Eyapp::defaultactionsintro,
+	   Parse::Eyapp::translationschemestut, Parse::Eyapp::Driver,
+	   Parse::Eyapp::Node, Parse::Eyapp::YATW, Parse::Eyapp::Treeregexp,
+	   Parse::Eyapp::Scope, Parse::Eyapp::Base,
+	   Parse::Eyapp::datagenerationtut
+
+       o   The pdf file in
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/languageintro.pdf&gt
+
+       o   The pdf file in
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/debuggingtut.pdf&gt
+
+       o   The pdf file in
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/eyapplanguageref.pdf&gt
+
+       o   The pdf file in
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/Treeregexp.pdf&gt
+
+       o   The pdf file in
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/Node.pdf&gt
+
+       o   The pdf file in
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/YATW.pdf&gt
+
+       o   The pdf file in
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/Eyapp.pdf&gt
+
+       o   The pdf file in
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/Base.pdf&gt
+
+       o   The pdf file in
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/translationschemestut.pdf&gt
+
+       o   The pdf file in
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/treematchingtut.pdf&gt
+
+       o   perldoc eyapp,
+
+       o   perldoc treereg,
+
+       o   perldoc vgg,
+
+       o   The Syntax Highlight file for vim at
+	   &lthttp://www.vim.org/scripts/script.php?script_id=2453&gt and
+	   &lthttp://nereida.deioc.ull.es/~vim/&gt
+
+       o   Analisis Lexico y Sintactico, (Notes for a course in compiler
+	   construction) by  Casiano Rodriguez-Leon.  Available at
+	   &lthttp://nereida.deioc.ull.es/~pl/perlexamples/&gt Is the more
+	   complete and reliable source for Parse::Eyapp. However is in
+	   Spanish.
+
+       o   Parse::Yapp,
+
+       o   Man pages of yacc(1) and bison(1),
+	   &lthttp://www.delorie.com/gnu/docs/bison/bison.html&gt
+
+       o   Language::AttributeGrammar
+
+       o   Parse::RecDescent.
+
+       o   HOP::Parser
+
+       o   HOP::Lexer
+
+       o   ocamlyacc tutorial at
+	   http://plus.kaist.ac.kr/~shoh/ocaml/ocamllex-ocamlyacc/ocamlyacc-tutorial/ocamlyacc-tutorial.html
+	   &lthttp://plus.kaist.ac.kr/~shoh/ocaml/ocamllex-ocamlyacc/ocamlyacc-
+	   tutorial/ocamlyacc-tutorial.html&gt
+
+REFERENCES
+       o   The classic Dragon's book Compilers: Principles, Techniques, and
+	   Tools by Alfred V. Aho, Ravi Sethi and Jeffrey D. Ullman (Addison-
+	   Wesley 1986)
+
+       o   CS2121: The Implementation and Power of Programming Languages (See
+	   &lthttp://www.cs.man.ac.uk/~pjj&gt,
+	   &lthttp://www.cs.man.ac.uk/~pjj/complang/g2lr.html&gt and
+	   &lthttp://www.cs.man.ac.uk/~pjj/cs2121/ho/ho.html&gt) by Pete Jinks
+
+CONTRIBUTORS
+       o Hal Finkel &lthttp://www.halssoftware.com/&gt
+
+       o G. Williams &lthttp://kasei.us/&gt
+
+       o Thomas L. Shinnick &lthttp://search.cpan.org/~tshinnic/&gt
+
+       o Frank Leray
+
+AUTHOR
+       Casiano Rodriguez-Leon (casiano@ull.es)
+
+ACKNOWLEDGMENTS
+       This work has been supported by CEE (FEDER) and the Spanish Ministry of
+       Educacion y Ciencia through Plan Nacional I+D+I number
+       TIN2005-08818-C04-04 (ULL::OPLINK project &lthttp://www.oplink.ull.es/&gt).
+       Support from Gobierno de Canarias was through GC02210601 (Grupos
+       Consolidados).  The University of La Laguna has also supported my work
+       in many ways and for many years.
+
+       A large percentage of  code is verbatim taken from Parse::Yapp 1.05.
+       The author of Parse::Yapp is Francois Desarmenien.
+
+       I wish to thank Francois Desarmenien for his Parse::Yapp module, to my
+       students at La Laguna and to the Perl Community. Thanks to the people
+       who have contributed to improve the module (see "CONTRIBUTORS" in
+       Parse::Eyapp).  Thanks to Larry Wall for giving us Perl.  Special
+       thanks to Juana.
+
+LICENCE AND COPYRIGHT
+       Copyright (c) 2006-2008 Casiano Rodriguez-Leon (casiano@ull.es). All
+       rights reserved.
+
+       Parse::Yapp copyright is of Francois Desarmenien, all rights reserved.
+       1998-2001
+
+       These modules are free software; you can redistribute it and/or modify
+       it under the same terms as Perl itself. See perlartistic.
+
+       This program is distributed in the hope that it will be useful, but
+       WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+
+perl v5.12.4			  2011-02-Parse::Eyapp::defaultactionsintro(3)
+    </pre></body>
+
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This document describes differences between the 5.11.0 release and the..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>perl5111delta - what is new for perl v5.11.1</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+PERL5111DELTA(1)       Perl Programmers Reference Guide       PERL5111DELTA(1)
+
+
+
+NAME
+       perl5111delta - what is new for perl v5.11.1
+
+DESCRIPTION
+       This document describes differences between the 5.11.0 release and the
+       5.11.1 release.
+
+Incompatible Changes
+       o   The boolkeys op moved to the group of hash ops. This breaks binary
+	   compatibility.
+
+       o   "\s" "\w" and "\d" once again have the semantics they had in Perl
+	   5.8.x.
+
+Core Enhancements
+   Add "package NAME VERSION" syntax
+       This new syntax allows a module author to set the $VERSION of a
+       namespace when the namespace is declared with 'package'.  It eliminates
+       the need for "our $VERSION = ..." and similar constructs.  E.g.
+
+	     package Foo::Bar 1.23;
+	     # $Foo::Bar::VERSION == 1.23
+
+       There are several advantages to this:
+
+       o   $VERSION is parsed in exactly the same way as "use NAME VERSION"
+
+       o   $VERSION is set at compile time
+
+       o   Eliminates "$VERSION = ..." and "eval $VERSION" clutter
+
+       o   As it requires VERSION to be a numeric literal or v-string literal,
+	   it can be statically parsed by toolchain modules without "eval" the
+	   way MM-&gtparse_version does for "$VERSION = ..."
+
+       o   Alpha versions with underscores do not need to be quoted; static
+	   parsing will preserve the underscore, but during compilation, Perl
+	   will remove underscores as it does for all numeric literals
+
+	   It does not break old code with only "package NAME", but code that
+	   uses "package NAME VERSION" will need to be restricted to perl
+	   5.11.X or newer This is analogous to the change to "open" from two-
+	   args to three-args.	Users requiring the latest Perl will benefit,
+	   and perhaps N years from now it will become standard practice when
+	   Perl 5.12 is targeted the way that 5.6 is today.
+
+Modules and Pragmata
+   Updated Modules
+       o   Upgrade to Test-Simple 0.94
+
+       o   Upgrade to Storable 2.21
+
+       o   Upgrade to Pod-Simple 3.08
+
+       o   Upgrade to Parse-CPAN-Meta 1.40
+
+       o   Upgrade to ExtUtils-Manifest 1.57
+
+       o   Upgrade to ExtUtils-CBuilder 0.260301
+
+       o   Upgrade to CGI.pm-3.48
+
+       o   Upgrade CPANPLUS to CPAN version 0.89_02
+
+       o   Upgrade to threads::shared 1.32
+
+       o   Upgrade ExtUtils::ParseXS to 2.21
+
+       o   Upgrade File::Path to 2.08 (and add taint.t test)
+
+       o   Upgrade Module::CoreList to 2.20
+
+       o   Updated Object::Accessor to0.36
+
+New Documentation
+       o   perlpolicy extends the "Social contract about contributed modules"
+	   into the beginnings of a document on Perl porting policies.
+
+Changes to Existing Documentation
+       Documentation for $1 in perlvar.pod clarified
+
+Performance Enhancements
+       "if (%foo)" has been optimized to be faster than "if (keys %foo)"
+
+Platform Specific Notes
+       Darwin (Mac OS X)
+	   o   Skip testing the be_BY.CP1131 locale on Darwin 10 (Mac OS X
+	       10.6), as it's still buggy.
+
+	   o   Correct infelicities in the regexp used to identify buggy
+	       locales on Darwin 8 and 9 (Mac OS X 10.4 and 10.5,
+	       respectively).
+
+       DragonFly BSD
+	   o   Fix thread library selection [perl #69686]
+
+       Win32
+	   o   Initial support for mingw64 is now available
+
+	   o   Various bits of Perl's build infrastructure are no longer
+	       converted to win32 line endings at release time. If this hurts
+	       you, please speak up.
+
+Selected Bug Fixes
+       o   Perl now properly returns a syntax error instead of segfaulting if
+	   "each", "keys" or "values" is used without an argument
+
+       o   "tell()" now fails properly if called without an argument and when
+	   no previous file was read
+
+	   "tell()" now returns "-1", and sets errno to "EBADF", thus
+	   restoring the 5.8.x behaviour
+
+       o   overload no longer implicitly unsets fallback on repeated 'use
+	   overload' lines
+
+       o   POSIX::strftime() can now handle Unicode characters in the format
+	   string.
+
+       o   The Windows select() implementation now supports all empty
+	   "fd_set"s more correctly.
+
+New or Changed Diagnostics
+       o   The 'syntax' category was removed from 5 warnings that should only
+	   be in 'deprecated'.
+
+       o   Three fatal pack/unpack error messages have been normalized to
+	   "panic: %s"
+
+       o   "Unicode character is illegal" has been rephrased to be more
+	   accurate
+
+	   It now reads "Unicode non-character is illegal in interchange" and
+	   the perldiag documentation has been expanded a bit.
+
+       o   Perl now defaults to issuing a warning if a deprecated language
+	   feature is used.
+
+	   To disable this feature in a given lexical scope, you should use
+	   "no warnings 'deprecated';" For information about which language
+	   features are deprecated and explanations of various deprecation
+	   warnings, please see perldiag
+
+Testing
+       o   Significant cleanups to core tests to ensure that language and
+	   interpreter features are not used before they're tested.
+
+       o   "make test_porting" now runs a number of important pre-commit
+	   checks which might be of use to anyone working on the Perl core.
+
+       o   t/porting/podcheck.t automatically checks the well-formedness of
+	   POD found in all .pl, .pm and .pod files in the MANIFEST, other
+	   than in dual-lifed modules which are primarily maintained outside
+	   the Perl core.
+
+       o   t/porting/manifest.t now tests that all files listed in MANIFEST
+	   are present.
+
+Known Problems
+       Untriaged test crashes on Windows 2000
+	   Several porters have reported mysterious crashes when Perl's entire
+	   test suite is run after a build on certain Windows 2000 systems.
+	   When run by hand, the individual tests reportedly work fine.
+
+       Known test failures on VMS
+	   Perl 5.11.1 fails a small set of core and CPAN tests as of this
+	   release.  With luck, that'll be sorted out for 5.11.2
+
+Errata for 5.11.0
+       The Perl 5.11.0 release notes incorrectly described 'delete local'
+
+Acknowledgements
+       Perl 5.11.1 represents approximately 3 weeks development since Perl
+       5.11.0 contains 22,000 lines of changes across 396 files from 26
+       authors and committers:
+
+       Abigail, Alex Vandiver, brian d foy, Chris Williams, Craig A. Berry,
+       David Fifield, David Golden, demerphq, Eric Brine, Geoffrey T. Dairiki,
+       George Greer, H.Merijn Brand, Jan Dubois, Jerry D. Hedden, Jesse
+       Vincent, Josh ben Jore, Max Maischein, Nicholas Clark, Rafael Garcia-
+       Suarez, Simon Schubert, Sisyphus, Smylers, Steve Hay, Steve Peters,
+       Vincent Pit and Yves Orton.
+
+       Many of the changes included in this version originated in the CPAN
+       modules included in Perl's core.  We're grateful to the entire CPAN
+       community for helping Perl to flourish.
+
+Reporting Bugs
+       If you find what you think is a bug, you might check the articles
+       recently posted to the comp.lang.perl.misc newsgroup and the perl bug
+       database at http://rt.perl.org/perlbug/ .  There may also be
+       information at http://www.perl.org/ , the Perl Home Page.
+
+       If you believe you have an unreported bug, please run the perlbug
+       program included with your release.  Be sure to trim your bug down to a
+       tiny but sufficient test case.  Your bug report, along with the output
+       of "perl -V", will be sent off to perlbug@perl.org to be analysed by
+       the Perl porting team.
+
+       If the bug you are reporting has security implications, which make it
+       inappropriate to send to a publicly archived mailing list, then please
+       send it to perl5-security-report@perl.org. This points to a closed
+       subscription unarchived mailing list, which includes all the core
+       committers, who be able to help assess the impact of issues, figure out
+       a resolution, and help co-ordinate the release of patches to mitigate
+       or fix the problem across all platforms on which Perl is supported.
+       Please only use this address for security issues in the Perl core, not
+       for modules independently distributed on CPAN.
+
+SEE ALSO
+       The Changes file for an explanation of how to view exhaustive details
+       on what changed.
+
+       The INSTALL file for how to build Perl.
+
+       The README file for general stuff.
+
+       The Artistic and Copying files for copyright information.
+
+
+
+perl v5.12.4			  2011-06-01		      PERL5111DELTA(1)
+    </pre></body>
+
+</html>

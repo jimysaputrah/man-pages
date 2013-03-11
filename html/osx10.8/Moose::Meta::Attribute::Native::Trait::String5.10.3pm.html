@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module provides a simple string attribute, to which mutating..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Moose::Meta::Attribute::Native::Trait::String - Helper trait for Str</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Moose::Meta::AttributeUsertConMoose::Meta::Attribute::Native::Trait::String(3)
+
+
+
+NAME
+       Moose::Meta::Attribute::Native::Trait::String - Helper trait for Str
+       attributes
+
+SYNOPSIS
+	 package MyHomePage;
+	 use Moose;
+
+	 has 'text' =&gt (
+	     traits    =&gt ['String'],
+	     is        =&gt 'rw',
+	     isa       =&gt 'Str',
+	     default   =&gt q{},
+	     handles   =&gt {
+		 add_text     =&gt 'append',
+		 replace_text =&gt 'replace',
+	     },
+	 );
+
+	 my $page = MyHomePage-&gtnew();
+	 $page-&gtadd_text("foo"); # same as $page-&gttext($page-&gttext . "foo");
+
+DESCRIPTION
+       This module provides a simple string attribute, to which mutating
+       string operations can be applied more easily (no need to make an lvalue
+       attribute metaclass or use temporary variables). Additional methods are
+       provided for completion.
+
+       If your attribute definition does not include any of is, isa, default
+       or handles but does use the "String" metaclass, then this module
+       applies defaults as in the "SYNOPSIS" above. This allows for a very
+       basic string definition:
+
+	 has 'foo' =&gt (traits =&gt ['String']);
+	 $obj-&gtappend_foo;
+
+PROVIDED METHODS
+       These methods are implemented in
+       Moose::Meta::Attribute::Native::MethodProvider::String. It is important
+       to note that all those methods do in place modification of the value
+       stored in the attribute.
+
+       inc Increments the value stored in this slot using the magical string
+	   autoincrement operator. Note that Perl doesn't provide analogous
+	   behavior in "--", so "dec" is not available.
+
+       append($string)
+	   Append a string, like ".=".
+
+       prepend($string)
+	   Prepend a string.
+
+       replace($pattern, $replacement)
+	   Performs a regexp substitution ("s" in perlop). There is no way to
+	   provide the "g" flag, but code references will be accepted for the
+	   replacement, causing the regex to be modified with a single "e".
+	   "/smxi" can be applied using the "qr" operator.
+
+       match($pattern)
+	   Like "replace" but without the replacement. Provided mostly for
+	   completeness.
+
+       chop
+	   "chop" in perlfunc
+
+       chomp
+	   "chomp" in perlfunc
+
+       clear
+	   Sets the string to the empty string (not the value passed to
+	   "default").
+
+       length
+	   "length" in perlfunc
+
+       substr
+	   "substr" in perlfunc. We go to some lengths to match the different
+	   functionality based on "substr"'s arity.
+
+METHODS
+       meta
+       method_provider
+       has_method_provider
+
+BUGS
+       See "BUGS" in Moose for details on reporting bugs.
+
+AUTHOR
+       Stevan Little &ltstevan@iinteractive.com&gt
+
+COPYRIGHT AND LICENSE
+       Copyright 2007-2009 by Infinity Interactive, Inc.
+
+       &lthttp://www.iinteractive.com&gt
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1		      Moose::Meta::Attribute::Native::Trait::String(3)
+    </pre></body>
+
+</html>

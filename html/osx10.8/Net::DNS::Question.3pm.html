@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="A "Net::DNS::Question" object represents a record in the question..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Net::DNS::Question - DNS question class</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Net::DNS::Question(3) User Contributed Perl DocumentationNet::DNS::Question(3)
+
+
+
+NAME
+       Net::DNS::Question - DNS question class
+
+SYNOPSIS
+       "use Net::DNS::Question"
+
+DESCRIPTION
+       A "Net::DNS::Question" object represents a record in the question
+       section of a DNS packet.
+
+METHODS
+   new
+	   $question = Net::DNS::Question-&gtnew("example.com", "MX", "IN");
+
+       Creates a question object from the domain, type, and class passed as
+       arguments.
+
+       RFC4291 and RFC4632 IP address/prefix notation is supported for queries
+       in in-addr.arpa and ip6.arpa subdomains.
+
+   parse
+	   ($question, $offset) = Net::DNS::Question-&gtparse(\$data, $offset);
+
+       Parses a question section record at the specified location within a DNS
+       packet.	The first argument is a reference to the packet data.  The
+       second argument is the offset within the packet where the question
+       record begins.
+
+       Returns a Net::DNS::Question object and the offset of the next location
+       in the packet.
+
+       Parsing is aborted if the question object cannot be created (e.g.,
+       corrupt or insufficient data).
+
+   qname, zname
+	   print "qname = ", $question-&gtqname, "\n";
+	   print "zname = ", $question-&gtzname, "\n";
+
+       Returns the domain name.  In dynamic update packets, this field is
+       known as "zname" and refers to the zone name.
+
+   qtype, ztype
+	   print "qtype = ", $question-&gtqtype, "\n";
+	   print "ztype = ", $question-&gtztype, "\n";
+
+       Returns the record type.  In dymamic update packets, this field is
+       known as "ztype" and refers to the zone type (must be SOA).
+
+   qclass, zclass
+	   print "qclass = ", $question-&gtqclass, "\n";
+	   print "zclass = ", $question-&gtzclass, "\n";
+
+       Returns the record class.  In dynamic update packets, this field is
+       known as "zclass" and refers to the zone's class.
+
+   print
+	   $question-&gtprint;
+
+       Prints the question record on the standard output.
+
+   string
+	   print $qr-&gtstring, "\n";
+
+       Returns a string representation of the question record.
+
+   data
+	   $qdata = $question-&gtdata($packet, $offset);
+
+       Returns the question record in binary format suitable for inclusion in
+       a DNS packet.
+
+       Arguments are a "Net::DNS::Packet" object and the offset within that
+       packet's data where the "Net::DNS::Question" record is to be stored.
+       This information is necessary for using compressed domain names.
+
+COPYRIGHT
+       Copyright (c) 1997-2002 Michael Fuhr.
+
+       Portions Copyright (c) 2002-2004 Chris Reinhardt.
+
+       Portions Copyright (c) 2003,2006-2009 Dick Franks.
+
+       All rights reserved.
+
+       This program is free software; you may redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+SEE ALSO
+       perl(1), Net::DNS, Net::DNS::Resolver, Net::DNS::Packet,
+       Net::DNS::Update, Net::DNS::Header, Net::DNS::RR, RFC 1035 Section
+       4.1.2
+
+
+
+perl v5.12.4			  2009-12-30		 Net::DNS::Question(3)
+    </pre></body>
+
+</html>

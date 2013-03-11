@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Semaphores provide a mechanism to regulate access to resources.	Unlike..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Thread::Semaphore - Thread-safe semaphores</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Thread::Semaphore(3pm) Perl Programmers Reference Guide Thread::Semaphore(3pm)
+
+
+
+NAME
+       Thread::Semaphore - Thread-safe semaphores
+
+VERSION
+       This document describes Thread::Semaphore version 2.09
+
+SYNOPSIS
+	   use Thread::Semaphore;
+	   my $s = Thread::Semaphore-&gtnew();
+	   $s-&gtdown();	 # Also known as the semaphore P operation.
+	   # The guarded section is here
+	   $s-&gtup();	 # Also known as the semaphore V operation.
+
+	   # The default semaphore value is 1
+	   my $s = Thread::Semaphore-new($initial_value);
+	   $s-&gtdown($down_value);
+	   $s-&gtup($up_value);
+
+DESCRIPTION
+       Semaphores provide a mechanism to regulate access to resources.	Unlike
+       locks, semaphores aren't tied to particular scalars, and so may be used
+       to control access to anything you care to use them for.
+
+       Semaphores don't limit their values to zero and one, so they can be
+       used to control access to some resource that there may be more than one
+       of (e.g., filehandles).	Increment and decrement amounts aren't fixed
+       at one either, so threads can reserve or return multiple resources at
+       once.
+
+METHODS
+       -&gtnew()
+       -&gtnew(NUMBER)
+	       "new" creates a new semaphore, and initializes its count to the
+	       specified number (which must be an integer).  If no number is
+	       specified, the semaphore's count defaults to 1.
+
+       -&gtdown()
+       -&gtdown(NUMBER)
+	       The "down" method decreases the semaphore's count by the
+	       specified number (which must be an integer &gt= 1), or by one if
+	       no number is specified.
+
+	       If the semaphore's count would drop below zero, this method
+	       will block until such time as the semaphore's count is greater
+	       than or equal to the amount you're "down"ing the semaphore's
+	       count by.
+
+	       This is the semaphore "P operation" (the name derives from the
+	       Dutch word "pak", which means "capture" -- the semaphore
+	       operations were named by the late Dijkstra, who was Dutch).
+
+       -&gtup()
+       -&gtup(NUMBER)
+	       The "up" method increases the semaphore's count by the number
+	       specified (which must be an integer &gt= 1), or by one if no
+	       number is specified.
+
+	       This will unblock any thread that is blocked trying to "down"
+	       the semaphore if the "up" raises the semaphore's count above
+	       the amount that the "down" is trying to decrement it by.  For
+	       example, if three threads are blocked trying to "down" a
+	       semaphore by one, and another thread "up"s the semaphore by
+	       two, then two of the blocked threads (which two is
+	       indeterminate) will become unblocked.
+
+	       This is the semaphore "V operation" (the name derives from the
+	       Dutch word "vrij", which means "release").
+
+NOTES
+       Semaphores created by Thread::Semaphore can be used in both threaded
+       and non-threaded applications.  This allows you to write modules and
+       packages that potentially make use of semaphores, and that will
+       function in either environment.
+
+SEE ALSO
+       Thread::Semaphore Discussion Forum on CPAN:
+       http://www.cpanforum.com/dist/Thread-Semaphore
+       &lthttp://www.cpanforum.com/dist/Thread-Semaphore&gt
+
+       Annotated POD for Thread::Semaphore:
+       http://annocpan.org/~JDHEDDEN/Thread-Semaphore-2.09/lib/Thread/Semaphore.pm
+       &lthttp://annocpan.org/~JDHEDDEN/Thread-
+       Semaphore-2.09/lib/Thread/Semaphore.pm&gt
+
+       Source repository: http://code.google.com/p/thread-semaphore/
+       &lthttp://code.google.com/p/thread-semaphore/&gt
+
+       threads, threads::shared
+
+MAINTAINER
+       Jerry D. Hedden, &ltjdhedden AT cpan DOT org&gt
+
+LICENSE
+       This program is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-06-07		Thread::Semaphore(3pm)
+    </pre></body>
+
+</html>

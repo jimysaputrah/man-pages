@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glInterleavedArrays  lets you specify and enable individual color, nor-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>glInterleavedArrays  - simultaneously specify and enable several inter-</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLINTERLEAVEDARRAYS(3G) 			       GLINTERLEAVEDARRAYS(3G)
+
+
+
+NAME
+       glInterleavedArrays  - simultaneously specify and enable several inter-
+       leaved arrays
+
+
+C SPECIFICATION
+       void glInterleavedArrays( GLenum format,
+				 GLsizei stride,
+				 const GLvoid *pointer )
+
+
+PARAMETERS
+       format	Specifies the type of  array  to  enable.  Symbolic  constants
+		GL_V2F,    GL_V3F,   GL_C4UB_V2F,   GL_C4UB_V3F,   GL_C3F_V3F,
+		GL_N3F_V3F,    GL_C4F_N3F_V3F,	   GL_T2F_V3F,	   GL_T4F_V4F,
+		GL_T2F_C4UB_V3F,	GL_T2F_C3F_V3F,        GL_T2F_N3F_V3F,
+		GL_T2F_C4F_N3F_V3F, and GL_T4F_C4F_N3F_V4F are accepted.
+
+       stride	Specifies the offset in bytes  between	each  aggregate  array
+		element.
+
+DESCRIPTION
+       glInterleavedArrays  lets you specify and enable individual color, nor-
+       mal, texture and vertex arrays whose elements  are  part  of  a	larger
+       aggregate  array element.  For some implementations, this is more effi-
+       cient than specifying the arrays separately.
+
+       If stride is 0, the aggregate elements are stored consecutively.   Oth-
+       erwise, stride bytes occur between the beginning of one aggregate array
+       element and the beginning of the next aggregate array element.
+
+       format serves as a ``key''  describing  the  extraction	of  individual
+       arrays  from the aggregate array.  If format contains a T, then texture
+       coordinates are extracted from the interleaved array.  If C is present,
+       color  values  are  extracted.  If N is present, normal coordinates are
+       extracted.  Vertex coordinates are always extracted.
+
+       The digits 2, 3, and 4 denote how many values are extracted.   F  indi-
+       cates  that  values are extracted as floating-point values.  Colors may
+       also be extracted as 4 unsigned bytes if 4UB follows the C.  If a color
+       is  extracted  as 4 unsigned bytes, the vertex array element which fol-
+       lows is located at the first possible floating-point aligned address.
+
+NOTES
+       glInterleavedArrays is available only if  the  GL  version  is  1.1  or
+       greater.
+
+       If  glInterleavedArrays is called while compiling a display list, it is
+       not compiled into the list, and it is executed immediately.
+
+       Execution of glInterleavedArrays is not allowed between	the  execution
+       of  glBegin  and the corresponding execution of glEnd, but an error may
+       or may not be generated. If no error is	generated,  the  operation  is
+       undefined.
+
+       glInterleavedArrays is typically implemented on the client side.
+
+       Vertex  array  parameters  are  client-side state and are therefore not
+       saved   or   restored   by   glPushAttrib   and	  glPopAttrib.	   Use
+       glPushClientAttrib and glPopClientAttrib instead.
+
+       When	the	GL_ARB_multitexture	extension     is    supported,
+       glInterleavedArrays only updates the texture coordinate array  for  the
+       active  active  texture	unit.  The  texture coordinate state for other
+       client texture units is not update, regardless if they are  enabled  or
+       not.
+
+ERRORS
+       GL_INVALID_ENUM is generated if format is not an accepted value.
+
+       GL_INVALID_VALUE is generated if stride is negative.
+
+SEE ALSO
+       glArrayElement, glClientActiveTextureARB, glColorPointer, glDrawArrays,
+       glDrawElements, glEdgeFlagPointer,  glEnableClientState,  glGetPointer,
+       glIndexPointer, glNormalPointer, glTexCoordPointer, glVertexPointer
+
+
+
+						       GLINTERLEAVEDARRAYS(3G)
+    </pre></body>
+
+</html>

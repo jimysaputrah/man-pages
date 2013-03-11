@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This is a general-purpose text-wrapping module that I wrote because I..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Mail::DKIM::TextWrap - text wrapping module written for use with DKIM</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Mail::DKIM::TextWrap(3User Contributed Perl DocumentatiMail::DKIM::TextWrap(3)
+
+
+
+NAME
+       Mail::DKIM::TextWrap - text wrapping module written for use with DKIM
+
+SYNOPSIS (FOR MAIL::DKIM USERS)
+	 use Mail::DKIM::TextWrap;
+
+       Just add the above line to any program that uses Mail::DKIM::Signer and
+       your signatures will automatically be wrapped to 72 characters.
+
+SYNOPSIS (FOR OTHER USERS)
+	 my $output = "";
+	 my $tw = Mail::DKIM::TextWrap-&gtnew(
+			 Margin =&gt 10,
+			 Output =&gt \$output,
+		     );
+	 $tw-&gtadd("Mary had a little lamb, whose fleece was white as snow.\n");
+	 $tw-&gtfinish;
+
+	 print $output;
+
+DESCRIPTION
+       This is a general-purpose text-wrapping module that I wrote because I
+       had some specific needs with Mail::DKIM that none of the contemporary
+       text-wrapping modules offered.
+
+       Specifically, it offers the ability to change wrapping options in the
+       middle of a paragraph. For instance, with a DKIM signature:
+
+	 DKIM-Signature: a=rsa; c=simple; h=first:second:third:fourth;
+		 b=Xr2mo2wmb1LZBwmEJElIPezal7wQQkRQ8WZtxpofkNmXTjXf8y2f0
+
+       the line-breaks can be inserted next to any of the colons of the h=
+       tag, or any character of the b= tag. The way I implemented this was to
+       serialize the signature one element at a time, changing the text-
+       wrapping options at the start and end of each tag.
+
+TEXT WRAPPING OPTIONS
+       Text wrapping options can be specified when calling new(), or by simply
+       changing the property as needed. For example, to change the number of
+       characters allowed per line:
+
+	 $tw-&gt{Margin} = 20;
+
+       Break
+	   a regular expression matching characters where a line break can be
+	   inserted. Line breaks are inserted AFTER a matching substring.  The
+	   default is "/\s/".
+
+       BreakBefore
+	   a regular expression matching characters where a line break can be
+	   inserted. Line breaks are inserted BEFORE a matching substring.
+	   Usually, you want to use Break, rather than BreakBefore.  The
+	   default is "undef".
+
+       Margin
+	   specifies how many characters to allow per line.  The default is
+	   72. If no place to line-break is found on a line, the line will
+	   extend beyond this margin.
+
+       Separator
+	   the text to insert when a linebreak is needed.  The default is
+	   "\n". If you want to set a following-line indent (e.g. all lines
+	   but the first begin with four spaces), use something like "\n    ".
+
+       Swallow
+	   a regular expression matching characters that can be omitted when a
+	   line break occurs. For example, if you insert a line break between
+	   two words, then you are replacing a "space" with the line break, so
+	   you are omitting the space. On the other hand, if you insert a line
+	   break between two parts of a hyphenated word, then you are breaking
+	   at the hyphen, but you still want to display the hyphen.  The
+	   default is "/\s/".
+
+CONSTRUCTOR
+   new() - create a new text-wrapping object
+	 my $tw = Mail::DKIM::TextWrap-&gtnew(
+			     Output =&gt \$output,
+			     %wrapping_options,
+			 );
+
+       The text-wrapping object encapsulates the current options and the
+       current state of the text stream. In addition to specifying text
+       wrapping options as described in the section above, the following
+       options are recognized:
+
+       Output
+	   a scalar reference, or a glob reference, to specify where the
+	   "wrapped" text gets output to. If not specified, the default of
+	   STDOUT is used.
+
+METHODS
+   add() - process some text that can be wrapped
+	 $tw-&gtadd("Mary had a little lamb.\n");
+
+       You can add() all the text at once, or add() the text in parts by
+       calling add() multiple times.
+
+   finish() - call when no more text is to be added
+	 $tw-&gtfinish;
+
+       Call this when finished adding text, so that any remaining text in
+       TextWrap's buffers will be output.
+
+   flush() - output the current partial word, if any
+	 $tw-&gtflush;
+
+       Call this whenever changing TextWrap's parameters in the middle of a
+       string of words. It explicitly allows a line-break at the current
+       position in the string, regardless of whether it matches the current
+       break pattern.
+
+
+
+perl v5.12.4			  2010-02-28	       Mail::DKIM::TextWrap(3)
+    </pre></body>
+
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glDrawRangeElements is  a  restricted  form  of	glDrawElements.  mode,..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>glDrawRangeElements - render primitives from array data</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLDRAWRANGEELEMENTS(3G) 			       GLDRAWRANGEELEMENTS(3G)
+
+
+
+NAME
+       glDrawRangeElements - render primitives from array data
+
+
+C SPECIFICATION
+       void glDrawRangeElements( GLenum mode,
+				 GLuint start,
+				 GLuint end,
+				 GLsizei count,
+				 GLenum type,
+				 const GLvoid *indices )
+
+
+PARAMETERS
+       mode	Specifies  what  kind  of primitives to render.  Symbolic con-
+		stants	GL_POINTS,  GL_LINE_STRIP,   GL_LINE_LOOP,   GL_LINES,
+		GL_TRIANGLE_STRIP,	  GL_TRIANGLE_FAN,	 GL_TRIANGLES,
+		GL_QUAD_STRIP, GL_QUADS, and GL_POLYGON are accepted.
+
+       start	Specifies the minimum array index contained in indices.
+
+       end	Specifies the maximum array index contained in indices.
+
+       count	Specifies the number of elements to be rendered.
+
+       type	Specifies the type of the values in  count.  Must  be  one  of
+		GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, or GL_UNSIGNED_INT.
+
+       indices	Specifies  a  pointer  to  the	location where the indices are
+		stored.
+
+DESCRIPTION
+       glDrawRangeElements is  a  restricted  form  of	glDrawElements.  mode,
+       start,	end,   and   count   match   the  corresponding  arguments  to
+       glDrawElements, with the additional constraint that all values  in  the
+       arrays count must lie between start and end, inclusive.
+
+       Implementations denote recommended maximum amounts of vertex and
+       index  data,  which  may  be  queried  by  calling  glGet with argument
+       GL_MAX_ELEMENTS_VERTICES and GL_MAX_ELEMENTS_INDICES.  If end - start +
+       1 is greater than the value of GL_MAX_ELEMENTS_VERTICES, or if count is
+       greater than the value of GL_MAX_ELEMENTS_INDICES, then	the  call  may
+       operate	at reduced performance.  There is no requirement that all ver-
+       tices in the range [start, end] be referenced.  However, the  implemen-
+       tation may partially process unused vertices, reducing performance from
+       what could be achieved with an optimal index set.
+
+       When glDrawRangeElements is called, it uses count  sequential  elements
+       from  an  enabled  array,  starting at start to construct a sequence of
+       geometric primitives. mode specifies what kind of primitives  are  con-
+       structed,  and  how  the  array elements construct these primitives. If
+       more than one array is enabled, each is used. If GL_VERTEX_ARRAY is not
+       enabled, no geometric primitives are constructed.
+
+       Vertex  attributes  that  are  modified	by glDrawRangeElements have an
+       unspecified value after glDrawRangeElements returns.  For  example,  if
+       GL_COLOR_ARRAY  is enabled, the value of the current color is undefined
+       after glDrawRangeElements executes.  Attributes	that  aren't  modified
+       maintain their previous values.
+
+NOTES
+       glDrawRangeElements  is	available  only  if  the  GL version is 1.2 or
+       greater.
+
+       glDrawRangeElements    is    included	in    display	 lists.     If
+       glDrawRangeElements is entered into a display list, the necessary array
+       data (determined by the array pointers and  enables)  is  also  entered
+       into  the  display  list.  Because  the	array pointers and enables are
+       client-side state, their values affect display lists when the lists are
+       created, not when the lists are executed.
+
+ERRORS
+       It  is  an error for indices to lie outside the range [start, end], but
+       implementations may not check for this situation.  Such	indices  cause
+       implementation-dependent behavior.
+
+       GL_INVALID_ENUM is generated if mode is not an accepted value.
+
+       GL_INVALID_VALUE is generated if count is negative.
+
+       GL_INVALID_VALUE is generated if end &lt start.
+
+       GL_INVALID_OPERATION  is  generated  if glDrawRangeElements is executed
+       between the execution of glBegin and the corresponding glEnd.
+
+ASSOCIATED GETS
+       glGet with argument GL_MAX_ELEMENTS_VERTICES
+
+       glGet with argument GL_MAX_ELEMENTS_INDICES
+
+SEE ALSO
+       glArrayElement,	  glColorPointer,    glDrawArrays,     glDrawElements,
+       glEdgeFlagPointer,  glGetPointerv, glIndexPointer, glInterleavedArrays,
+       glNormalPointer, glTexCoordPointer, glVertexPointer
+
+
+
+						       GLDRAWRANGEELEMENTS(3G)
+    </pre></body>
+
+</html>

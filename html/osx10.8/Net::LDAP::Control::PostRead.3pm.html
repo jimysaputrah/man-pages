@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content=""Net::LDAP::Control::PostRead" provides an interface for the creation..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Net::LDAP::Control::PostRead - LDAPv3 Post-Read control object</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Net::LDAP::Control::PoUseraContributed Perl DocNet::LDAP::Control::PostRead(3)
+
+
+
+NAME
+       Net::LDAP::Control::PostRead - LDAPv3 Post-Read control object
+
+SYNOPSIS
+	use Net::LDAP;
+	use Net::LDAP::Control::PostRead;
+	use Net::LDAP::Constant qw( LDAP_CONTROL_POSTREAD LDAP_SUCCESS );
+
+	$ldap = Net::LDAP-&gtnew( "ldap.mydomain.eg" );
+
+	$postread = Net::LDAP::Control::Paged-&gtnew( attrs =&gt [ qw/givenName/ ] );
+
+	my $mesg = $ldap-&gtmodify( "cn=Barbara Jensen, o=University of Michigan, c=US",
+				  replace =&gt { givenName =&gt "Babs" },
+				  control =&gt $postread );
+
+	if ($mesg-&gtcode eq LDAP_SUCCESS) {
+	  my ($afterwards) = $mesg-&gtcontrol( LDAP_CONTROL_PREREAD );
+	  my $entry = $afterwards ? $afterwards-&gtentry() : undef;
+
+	  if ($entry) {
+	    print "givenName changed to '" .
+		  join("', '", $entry-&gtget_value(givenName") .
+		  "' to 'Babs'\n");
+	  }
+	}
+
+DESCRIPTION
+       "Net::LDAP::Control::PostRead" provides an interface for the creation
+       and manipulation of objects that represent the "Post-Read Control" as
+       described by RFC 4527.
+
+CONSTRUCTOR ARGUMENTS
+       In addition to the constructor arguments described in
+       Net::LDAP::Control the following are provided.
+
+       attrs =&gt [ ATTR, ... ]
+	   A list of attributes to be returned in the entry returned in the
+	   response control.
+
+	   If absent, all attributes are returned.
+
+	   Operational attributes may be included in the list by explicitely
+	   asking for them or by using special "+" feature (provided the
+	   server supports this feature).
+
+METHODS
+       As with Net::LDAP::Control each constructor argument described above is
+       also avaliable as a method on the object which will return the current
+       value for the attribute if called without an argument, and set a new
+       value for the attribute if called with an argument.
+
+       In addition to these methods, the control also supports the following
+       method:
+
+       entry ()
+	   Returns the entry from the response control in the response message
+	   to the LDAP request that contained the request control.
+
+	   The result is either a Net::LDAP::Entry object or undefined.
+
+SEE ALSO
+       Net::LDAP, Net::LDAP::Control, http://www.ietf.org/rfc/rfc4527.txt
+
+AUTHOR
+       Peter Marschall &ltpeter@adpm.de&gt
+
+       Please report any bugs, or post any suggestions, to the perl-ldap
+       mailing list &ltperl-ldap@perl.org&gt
+
+COPYRIGHT
+       Copyright (c) 2008 Peter Marschall. All rights reserved. This program
+       is free software; you can redistribute it and/or modify it under the
+       same terms as Perl itself.
+
+
+
+perl v5.12.4			  2010-03-11   Net::LDAP::Control::PostRead(3)
+    </pre></body>
+
+</html>

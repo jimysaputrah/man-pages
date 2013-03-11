@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Except for the special BEGIN, CHECK, UNITCHECK, INIT, and END..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>PPI::Statement::Sub - Subroutine declaration</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+PPI::Statement::Sub(3)User Contributed Perl DocumentatioPPI::Statement::Sub(3)
+
+
+
+NAME
+       PPI::Statement::Sub - Subroutine declaration
+
+INHERITANCE
+	 PPI::Statement::Sub
+	 isa PPI::Statement
+	     isa PPI::Node
+		 isa PPI::Element
+
+DESCRIPTION
+       Except for the special BEGIN, CHECK, UNITCHECK, INIT, and END
+       subroutines (which are part of PPI::Statement::Scheduled) all
+       subroutine declarations are lexed as a PPI::Statement::Sub object.
+
+       Primarily, this means all of the various "sub foo {}" statements, but
+       also forward declarations such as "sub foo;" or "sub foo($);". It does
+       not include anonymous subroutines, as these are merely part of a normal
+       statement.
+
+METHODS
+       "PPI::Statement::Sub" has a number of methods in addition to the
+       standard PPI::Statement, PPI::Node and PPI::Element methods.
+
+   name
+       The "name" method returns the name of the subroutine being declared.
+
+       In some rare cases such as a naked "sub" at the end of the file, this
+       may return false.
+
+   prototype
+       If it has one, the "prototype" method returns the subroutine's
+       prototype.  It is returned in the same format as "prototype" in
+       PPI::Token::Prototype, cleaned and removed from its brackets.
+
+       Returns false if the subroutine does not define a prototype
+
+   block
+       With its name and implementation shared with PPI::Statement::Scheduled,
+       the "block" method finds and returns the actual Structure object of the
+       code block for this subroutine.
+
+       Returns false if this is a forward declaration, or otherwise does not
+       have a code block.
+
+   forward
+       The "forward" method returns true if the subroutine declaration is a
+       forward declaration.
+
+       That is, it returns false if the subroutine has a code block, or true
+       if it does not.
+
+   reserved
+       The "reserved" method provides a convenience method for checking to see
+       if this is a special reserved subroutine. It does not check against any
+       particular list of reserved sub names, but just returns true if the
+       name is all uppercase, as defined in perlsub.
+
+       Note that in the case of BEGIN, CHECK, UNITCHECK, INIT and END, these
+       will be defined as PPI::Statement::Scheduled objects, not subroutines.
+
+       Returns true if it is a special reserved subroutine, or false if not.
+
+TO DO
+       - Write unit tests for this package
+
+SUPPORT
+       See the support section in the main module.
+
+AUTHOR
+       Adam Kennedy &ltadamk@cpan.org&gt
+
+COPYRIGHT
+       Copyright 2001 - 2011 Adam Kennedy.
+
+       This program is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+       The full text of the license can be found in the LICENSE file included
+       with this module.
+
+
+
+perl v5.12.4			  2011-02-25		PPI::Statement::Sub(3)
+    </pre></body>
+
+</html>

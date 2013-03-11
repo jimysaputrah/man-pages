@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Mail::SPF::Record is an abstract base class for SPF records.  It cannot..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Mail::SPF::Record - Abstract base class for SPF records</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Mail::SPF::Record(3)  User Contributed Perl Documentation Mail::SPF::Record(3)
+
+
+
+NAME
+       Mail::SPF::Record - Abstract base class for SPF records
+
+SYNOPSIS
+   Creating a record from a string
+	   use Mail::SPF::v1::Record;
+
+	   my $record = Mail::SPF::v1::Record-&gtnew_from_string("v=spf1 a mx -all");
+
+   Creating a record synthetically
+	   use Mail::SPF::v2::Record;
+
+	   my $record = Mail::SPF::v2::Record-&gtnew(
+	       scopes	   =&gt ['mfrom', 'pra'],
+	       terms	   =&gt [
+		   Mail::SPF::Mech::A-&gtnew(),
+		   Mail::SPF::Mech::MX-&gtnew(),
+		   Mail::SPF::Mech::All-&gtnew(qualifier =&gt '-')
+	       ],
+	       global_mods =&gt [
+		   Mail::SPF::Mod::Exp-&gtnew(domain_spec =&gt 'spf-exp.example.com')
+	       ]
+	   );
+
+DESCRIPTION
+       Mail::SPF::Record is an abstract base class for SPF records.  It cannot
+       be instantiated directly.  Create an instance of a concrete sub-class
+       instead.
+
+   Constructor
+       The following constructors are provided:
+
+       new(%options): returns Mail::SPF::Record
+	   Creates a new SPF record object.
+
+	   %options is a list of key/value pairs representing any of the
+	   following options:
+
+	   text
+	       A string denoting the unparsed text of the record.
+
+	   scopes
+	       A reference to an array of strings denoting the scopes that are
+	       covered by the record (see the description of the "scope"
+	       option of Mail::SPF::Request's "new" constructor).
+
+	   terms
+	       A reference to an array of Mail::SPF::Term (i.e.
+	       Mail::SPF::Mech or Mail::SPF::Mod) objects that make up the
+	       record.	Mail::SPF::GlobalMod objects must not be included
+	       here, but should be specified using the "global_mods" option
+	       instead.
+
+	   global_mods
+	       A reference to an array of Mail::SPF::GlobalMod objects that
+	       are global modifiers of the record.
+
+       new_from_string($text, %options): returns Mail::SPF::Record; throws
+       Mail::SPF::ENothingToParse, Mail::SPF::EInvalidRecordVersion,
+       Mail::SPF::ESyntaxError
+	   Creates a new SPF record object by parsing the string and any
+	   options given.
+
+   Class methods
+       The following class methods are provided:
+
+       version_tag_pattern: returns Regexp
+	   Abstract.  Returns a regular expression that matches a legal
+	   version tag.
+
+	   This method is abstract and must be implemented by sub-classes of
+	   Mail::SPF::Record.
+
+       default_qualifier: returns string
+	   Returns the default qualifier, i.e. '+'.
+
+       results_by_qualifier: returns hash of string
+	   Returns a reference to a hash that maps qualifiers to result codes
+	   as follows:
+
+		Qualifier | Result code
+	       -----------+-------------
+		    +	  | pass
+		    -	  | fail
+		    ~	  | softfail
+		    ?	  | neutral
+
+   Instance methods
+       The following instance methods are provided:
+
+       text: returns string; throws Mail::SPF::ENoUnparsedText
+	   Returns the unparsed text of the record.  Throws a
+	   Mail::SPF::ENoUnparsedText exception if the record was created
+	   synthetically instead of being parsed, and no text was provided.
+
+       version_tag: returns string
+	   Abstract.  Returns the version tag of the record.
+
+	   This method is abstract and must be implemented by sub-classes of
+	   Mail::SPF::Record.
+
+       scopes: returns list of string
+	   Returns a list of the scopes that are covered by the record.  See
+	   the description of the "new" constructor's "scopes" option.
+
+       terms: returns list of Mail::SPF::Term
+	   Returns a list of the terms that make up the record, excluding any
+	   global modifiers, which are returned by the "global_mods" method.
+	   See the description of the "new" constructor's "terms" option.
+
+       global_mods: returns list of Mail::SPF::GlobalMod
+	   Returns a list of the global modifiers of the record, ordered
+	   ascending by modifier precedence.  See the description of the "new"
+	   constructor's "global_mods" option.
+
+       global_mod($mod_name): returns Mail::SPF::GlobalMod
+	   Returns the global modifier of the given name if it is present in
+	   the record.	Returns undef otherwise.  Use this method if you wish
+	   to retrieve a specific global modifier as opposed to getting all of
+	   them.
+
+       stringify: returns string
+	   Returns the record's version tag and terms (including the global
+	   modifiers) formatted as a string.  You can simply use a
+	   Mail::SPF::Record object as a string for the same effect, see
+	   "OVERLOADING".
+
+       eval($server, $request): throws Mail::SPF::Result
+	   Evaluates the SPF record in the context of the request parameters
+	   represented by the given Mail::SPF::Request object.	The given
+	   Mail::SPF::Server object is used for performing DNS look-ups.
+	   Throws a Mail::SPF::Result object matching the outcome of the
+	   evaluation; see Mail::SPF::Result.  See RFC 4408, 4.6 and 4.7, for
+	   the exact algorithm used.
+
+OVERLOADING
+       If a Mail::SPF::Record object is used as a string, the "stringify"
+       method is used to convert the object into a string.
+
+SEE ALSO
+       Mail::SPF, Mail::SPF::v1::Record, Mail::SPF::v2::Record,
+       Mail::SPF::Term, Mail::SPF::Mech, Mail::SPF::Mod
+
+       &lthttp://www.ietf.org/rfc/rfc4408.txt&gt
+
+       For availability, support, and license information, see the README file
+       included with Mail::SPF.
+
+AUTHORS
+       Julian Mehnle &ltjulian@mehnle.net&gt, Shevek &ltcpan@anarres.org&gt
+
+
+
+perl v5.12.4			  2012-06-20		  Mail::SPF::Record(3)
+    </pre></body>
+
+</html>

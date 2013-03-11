@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glSeparableFilter2D builds a two-dimensional separable convolution fil-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>glSeparableFilter2D  -  define  a separable two-dimensional convolution</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLSEPARABLEFILTER2D(3G) 			       GLSEPARABLEFILTER2D(3G)
+
+
+
+NAME
+       glSeparableFilter2D  -  define  a separable two-dimensional convolution
+       filter
+
+
+C SPECIFICATION
+       void glSeparableFilter2D( GLenum target,
+				 GLenum internalformat,
+				 GLsizei width,
+				 GLsizei height,
+				 GLenum format,
+				 GLenum type,
+				 const GLvoid *row,
+				 const GLvoid *column )
+
+
+PARAMETERS
+       target	       Must be GL_SEPARABLE_2D.
+
+       internalformat  The internal  of the convolution  filter  kernel.   The
+		       allowable  values  are  GL_ALPHA, GL_ALPHA4, GL_ALPHA8,
+		       GL_ALPHA12,  GL_ALPHA16,  GL_LUMINANCE,	GL_LUMINANCE4,
+		       GL_LUMINANCE8,	   GL_LUMINANCE12,     GL_LUMINANCE16,
+		       GL_LUMINANCE_ALPHA,		 GL_LUMINANCE4_ALPHA4,
+		       GL_LUMINANCE6_ALPHA2,		 GL_LUMINANCE8_ALPHA8,
+		       GL_LUMINANCE12_ALPHA4,	       GL_LUMINANCE12_ALPHA12,
+		       GL_LUMINANCE16_ALPHA16,	 GL_INTENSITY,	GL_INTENSITY4,
+		       GL_INTENSITY8,	  GL_INTENSITY12,      GL_INTENSITY16,
+		       GL_R3_G3_B2,   GL_RGB,	GL_RGB4,   GL_RGB5,   GL_RGB8,
+		       GL_RGB10,  GL_RGB12,   GL_RGB16,   GL_RGBA,   GL_RGBA2,
+		       GL_RGBA4, GL_RGB5_A1, GL_RGBA8, GL_RGB10_A2, GL_RGBA12,
+		       or GL_RGBA16.
+
+       width	       The number of elements in the pixel array referenced by
+		       row.   (This  is the width of the separable filter ker-
+		       nel.)
+
+       height	       The number of elements in the pixel array referenced by
+		       column.	 (This	is  the height of the separable filter
+		       kernel.)
+
+       format	       The  of the pixel data in row and column.   The	allow-
+		       able  values  are  GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA,
+		       GL_RGB,	 GL_BGR,   GL_RGBA,   GL_BGRA,	 GL_INTENSITY,
+		       GL_LUMINANCE, and GL_LUMINANCE_ALPHA.
+
+       type	       The type of the pixel data in row and column.  Symbolic
+		       constants   GL_UNSIGNED_BYTE,	GL_BYTE,    GL_BITMAP,
+		       GL_UNSIGNED_SHORT,  GL_SHORT,  GL_UNSIGNED_INT, GL_INT,
+		       GL_FLOAT,		       GL_UNSIGNED_BYTE_3_3_2,
+		       GL_UNSIGNED_BYTE_2_3_3_REV,    GL_UNSIGNED_SHORT_5_6_5,
+		       GL_UNSIGNED_SHORT_5_6_5_REV, GL_UNSIGNED_SHORT_4_4_4_4,
+		       GL_UNSIGNED_SHORT_4_4_4_4_REV,
+		       GL_UNSIGNED_SHORT_5_5_5_1,
+		       GL_UNSIGNED_SHORT_1_5_5_5_REV, GL_UNSIGNED_INT_8_8_8_8,
+		       GL_UNSIGNED_INT_8_8_8_8_REV,
+		       GL_UNSIGNED_INT_10_10_10_2,			   and
+		       GL_UNSIGNED_INT_2_10_10_10_REV are accepted.
+
+       row	       Pointer to a one-dimensional array of pixel  data  that
+		       is processed to build the row filter kernel.
+
+       column	       Pointer	to  a one-dimensional array of pixel data that
+		       is processed to build the column filter kernel.
+
+DESCRIPTION
+       glSeparableFilter2D builds a two-dimensional separable convolution fil-
+       ter kernel from two arrays of pixels.
+
+       The  pixel  arrays specified by (width, format, type, row) and (height,
+       format, type, column) are processed just as if they had been passed  to
+       glDrawPixels, but processing stops after the final expansion to RGBA is
+       completed.
+
+       Next, the R, G, B, and A components of all pixels in  both  arrays  are
+       scaled  by the four separable 2D GL_CONVOLUTION_FILTER_SCALE parameters
+       and biased by the four separable 2D GL_CONVOLUTION_FILTER_BIAS  parame-
+       ters.  (The scale and bias parameters are set by glConvolutionParameter
+       using	 the	 GL_SEPARABLE_2D     target	and	the	 names
+       GL_CONVOLUTION_FILTER_SCALE and GL_CONVOLUTION_FILTER_BIAS.  The param-
+       eters themselves are vectors of four values that are  applied  to  red,
+       green,  blue, and alpha, in that order.)  The R, G, B, and A values are
+       not clamped to [0,1] at any time during this process.
+
+       Each pixel is then converted to the internal  specified by internalfor-
+       mat.  This conversion simply maps the component values of the pixel (R,
+       G, B, and A) to the values included in the internal  (red, green, blue,
+       alpha, luminance, and intensity).  The mapping is as follows:
+
+       ------------------------------------------------------------------------
+       Internal Format	    Red   Green   Blue	 Alpha	 Luminance   Intensity
+       ------------------------------------------------------------------------
+       GL_LUMINANCE					     R
+       GL_LUMINANCE_ALPHA			   A	     R
+       GL_INTENSITY							 R
+       GL_RGB		     R	    G	   B
+       GL_RGBA		     R	    G	   B	   A
+       ------------------------------------------------------------------------
+
+
+       The  red, green, blue, alpha, luminance, and/or intensity components of
+       the resulting pixels are stored in floating-point rather  than  integer
+       They  form  two one-dimensional filter kernel images.  The row image is
+       indexed by coordinate i starting at zero and increasing	from  left  to
+       right.	Each  location	in  the row image is derived from element i of
+       row.  The column image is indexed by coordinate j starting at zero  and
+       increasing  from  bottom  to top.  Each location in the column image is
+       derived from element j of column.
+
+       Note that after a convolution is performed, the resulting color	compo-
+       nents	  are	   also      scaled	by     their	 corresponding
+       GL_POST_CONVOLUTION_c_SCALE parameters and biased by their  correspond-
+       ing  GL_POST_CONVOLUTION_c_BIAS parameters (where c takes on the values
+       RED,  GREEN,  BLUE,  and  ALPHA).   These   parameters	are   set   by
+       glPixelTransfer.
+
+NOTES
+       glSeparableFilter2D  is present only if GL_ARB_imaging is returned when
+       glGetString is called with an argument of GL_EXTENSIONS.
+
+ERRORS
+       GL_INVALID_ENUM is generated if target is not GL_SEPARABLE_2D.
+
+       GL_INVALID_ENUM is generated if internalformat is not one of the allow-
+       able values.
+
+       GL_INVALID_VALUE  is  generated	if  width is less than zero or greater
+       than the maximum supported value.   This  value	may  be  queried  with
+       glGetConvolutionParameter   using   target   GL_SEPARABLE_2D  and  name
+       GL_MAX_CONVOLUTION_WIDTH.
+
+       GL_INVALID_VALUE is generated if height is less than  zero  or  greater
+       than  the  maximum  supported  value.   This  value may be queried with
+       glGetConvolutionParameter  using  target   GL_SEPARABLE_2D   and   name
+       GL_MAX_CONVOLUTION_HEIGHT.
+
+       GL_INVALID_ENUM is generated if format is not one of the allowable val-
+       ues.
+
+       GL_INVALID_ENUM is generated if type is not one of the  allowable  val-
+       ues.
+
+       GL_INVALID_OPERATION  is  generated  if glSeparableFilter2D is executed
+       between the execution of glBegin and  the  corresponding  execution  of
+       glEnd.
+
+       GL_INVALID_OPERATION    is    generated	  if	height	 is   one   of
+       GL_UNSIGNED_BYTE_3_3_2,			   GL_UNSIGNED_BYTE_2_3_3_REV,
+       GL_UNSIGNED_SHORT_5_6_5,  or  GL_UNSIGNED_SHORT_5_6_5_REV and format is
+       not GL_RGB.
+
+       GL_INVALID_OPERATION   is   generated   if    height    is    one    of
+       GL_UNSIGNED_SHORT_4_4_4_4,		GL_UNSIGNED_SHORT_4_4_4_4_REV,
+       GL_UNSIGNED_SHORT_5_5_5_1,		GL_UNSIGNED_SHORT_1_5_5_5_REV,
+       GL_UNSIGNED_INT_8_8_8_8, 		  GL_UNSIGNED_INT_8_8_8_8_REV,
+       GL_UNSIGNED_INT_10_10_10_2, or GL_UNSIGNED_INT_2_10_10_10_REV and  for-
+       mat is neither GL_RGBA nor GL_BGRA.
+
+ASSOCIATED GETS
+       glGetConvolutionParameter, glGetSeparableFilter
+
+SEE ALSO
+       glConvolutionFilter1D,  glConvolutionFilter2D,  glConvolutionParameter,
+       glPixelTransfer
+
+
+
+						       GLSEPARABLEFILTER2D(3G)
+    </pre></body>
+
+</html>

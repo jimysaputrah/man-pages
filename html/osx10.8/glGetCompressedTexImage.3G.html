@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glGetCompressedTexImage returns the compressed texture image associated..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>glGetCompressedTexImage - return a compressed texture image</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLGETCOMPRESSEDTEXIM(3G)	  OpenGL 3.3	      GLGETCOMPRESSEDTEXIM(3G)
+
+
+
+NAME
+       glGetCompressedTexImage - return a compressed texture image
+
+C SPECIFICATION
+       void glGetCompressedTexImage(GLenum target, GLint lod, GLvoid * img);
+
+PARAMETERS
+       target
+	   Specifies which texture is to be obtained.  GL_TEXTURE_1D,
+	   GL_TEXTURE_2D, GL_TEXTURE_3D, GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+	   GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+	   GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, and
+	   GL_TEXTURE_CUBE_MAP_NEGATIVE_Z are accepted.
+
+       lod
+	   Specifies the level-of-detail number of the desired image. Level 0
+	   is the base image level. Level n is the nth mipmap reduction image.
+
+       img
+	   Returns the compressed texture image.
+
+DESCRIPTION
+       glGetCompressedTexImage returns the compressed texture image associated
+       with target and lod into img.  img should be an array of
+       GL_TEXTURE_COMPRESSED_IMAGE_SIZE bytes.	target specifies whether the
+       desired texture image was one specified by glTexImage1D()
+       (GL_TEXTURE_1D), glTexImage2D() (GL_TEXTURE_2D or any of
+       GL_TEXTURE_CUBE_MAP_*), or glTexImage3D() (GL_TEXTURE_3D).  lod
+       specifies the level-of-detail number of the desired image.
+
+       If a non-zero named buffer object is bound to the GL_PIXEL_PACK_BUFFER
+       target (see glBindBuffer()) while a texture image is requested, img is
+       treated as a byte offset into the buffer object's data store.
+
+       To minimize errors, first verify that the texture is compressed by
+       calling glGetTexLevelParameter() with argument GL_TEXTURE_COMPRESSED.
+       If the texture is compressed, then determine the amount of memory
+       required to store the compressed texture by calling
+       glGetTexLevelParameter() with argument
+       GL_TEXTURE_COMPRESSED_IMAGE_SIZE. Finally, retrieve the internal format
+       of the texture by calling glGetTexLevelParameter() with argument
+       GL_TEXTURE_INTERNAL_FORMAT. To store the texture for later use,
+       associate the internal format and size with the retrieved texture
+       image. These data can be used by the respective texture or subtexture
+       loading routine used for loading target textures.
+
+ERRORS
+       GL_INVALID_VALUE is generated if lod is less than zero or greater than
+       the maximum number of LODs permitted by the implementation.
+
+
+       GL_INVALID_OPERATION is generated if glGetCompressedTexImage is used to
+       retrieve a texture that is in an uncompressed internal format.
+
+
+       GL_INVALID_OPERATION is generated if a non-zero buffer object name is
+       bound to the GL_PIXEL_PACK_BUFFER target and the buffer object's data
+       store is currently mapped.
+
+
+       GL_INVALID_OPERATION is generated if a non-zero buffer object name is
+       bound to the GL_PIXEL_PACK_BUFFER target and the data would be packed
+       to the buffer object such that the memory writes required would exceed
+       the data store size.
+
+ASSOCIATED GETS
+       glGetTexLevelParameter() with argument GL_TEXTURE_COMPRESSED
+
+
+       glGetTexLevelParameter() with argument GL_TEXTURE_COMPRESSED_IMAGE_SIZE
+
+
+       glGetTexLevelParameter() with argument GL_TEXTURE_INTERNAL_FORMAT
+
+
+       glGet() with argument GL_PIXEL_PACK_BUFFER_BINDING
+
+SEE ALSO
+       glActiveTexture(), glCompressedTexImage1D(), glCompressedTexImage2D(),
+       glCompressedTexImage3D(), glCompressedTexSubImage1D(),
+       glCompressedTexSubImage2D(), glCompressedTexSubImage3D(),
+       glReadPixels(), glTexImage1D(), glTexImage2D(), glTexImage3D(),
+       glTexParameter(), glTexSubImage1D(), glTexSubImage2D(),
+       glTexSubImage3D()
+
+COPYRIGHT
+       Copyright (C) 1991-2006 Silicon Graphics, Inc. This document is
+       licensed under the SGI Free Software B License. For details, see
+       http://oss.sgi.com/projects/FreeB/.
+
+
+
+OpenGL 3.3			  03/08/2011	      GLGETCOMPRESSEDTEXIM(3G)
+    </pre></body>
+
+</html>

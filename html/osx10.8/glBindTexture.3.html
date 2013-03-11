@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glBindTexture  lets  you  create  or  use  a  named  texture.   Calling..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>glBindTexture - bind a named texture to a texturing target</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLBINDTEXTURE(3G)					     GLBINDTEXTURE(3G)
+
+
+
+NAME
+       glBindTexture - bind a named texture to a texturing target
+
+
+C SPECIFICATION
+       void glBindTexture( GLenum target,
+			   GLuint texture )
+
+
+PARAMETERS
+       target	Specifies  the	target to which the texture is bound.  Must be
+		either GL_TEXTURE_1D, GL_TEXTURE_2D, or GL_TEXTURE_3D.
+
+       texture	Specifies the name of a texture.
+
+DESCRIPTION
+       glBindTexture  lets  you  create  or  use  a  named  texture.   Calling
+       glBindTexture with
+       target  set  to GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_3D and texture
+       set to the name of the newtexture binds the texture name to the target.
+       When a texture is bound to a target, the previous binding for that tar-
+       get is automatically broken.
+
+       Texture names are unsigned integers. The value zero is reserved to rep-
+       resent  the default texture for each texture target.  Texture names and
+       the corresponding texture contents are local to the shared display-list
+       space  (see  glXCreateContext) of the current GL rendering context; two
+       rendering contexts share texture names only if they also share  display
+       lists.
+
+       You may use glGenTextures to generate a set of new texture names.
+
+       When  a	texture  is  first bound, it assumes the dimensionality of its
+       target:	A texture first  bound	to  GL_TEXTURE_1D  becomes  one-dimen-
+       sional,	and  a texture first bound to GL_TEXTURE_2D becomes two-dimen-
+       sional, and a texture first bound to  GL_TEXTURE_3D  becomes  a	three-
+       dimensional texture. The state of a one-dimensional texture immediately
+       after it is first bound is equivalent  to  the  state  of  the  default
+       GL_TEXTURE_1D  at GL initialization, and similarly for two-, and three-
+       dimensional textures.
+
+       While a texture is bound, GL operations on the target to  which	it  is
+       bound  affect  the bound texture, and queries of the target to which it
+       is bound return state from the bound texture. If texture mapping of the
+       dimensionality of the target to which a texture is bound is active, the
+       bound texture is used.  In effect, the texture targets  become  aliases
+       for  the  textures  currently  bound to them, and the texture name zero
+       refers to the default textures that were bound to them  at  initializa-
+       tion.
+
+       A  texture  binding  created  with glBindTexture remains active until a
+       different texture is bound to the same target, or until the bound  tex-
+       ture is deleted with glDeleteTextures.
+
+       Once  created,  a  named  texture  may be re-bound to the target of the
+       matching dimensionality as often as needed.  It is usually much	faster
+       to  use	glBindTexture  to bind an existing named texture to one of the
+       texture	targets  than  it  is  to  reload  the	texture  image	 using
+       glTexImage1D,  glTexImage2D,  or  glTexImage3D.	For additional control
+       over performance, use glPrioritizeTextures.
+
+       glBindTexture is included in display lists.
+
+NOTES
+       glBindTexture is available only if the GL version is 1.1 or greater.
+
+ERRORS
+       GL_INVALID_ENUM is generated if target is not one of the allowable val-
+       ues.
+
+       GL_INVALID_OPERATION  is generated if texture has a dimensionality that
+       doesn't match that of target.
+
+       GL_INVALID_OPERATION is generated if glBindTexture is executed  between
+       the execution of glBegin and the corresponding execution of glEnd.
+
+ASSOCIATED GETS
+       glGet with argument GL_TEXTURE_BINDING_1D
+       glGet with argument GL_TEXTURE_BINDING_2D
+       glGet with argument GL_TEXTURE_BINDING_3D
+
+SEE ALSO
+       glAreTexturesResident, glDeleteTextures, glGenTextures, glGet,
+       glGetTexParameter,   glIsTexture,  glPrioritizeTextures,  glTexImage1D,
+       glTexImage2D, glTexParameter
+
+
+
+							     GLBINDTEXTURE(3G)
+    </pre></body>
+
+</html>

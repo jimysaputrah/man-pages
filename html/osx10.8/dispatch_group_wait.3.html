@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="A dispatch group is an association of one or more blocks submitted to..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>dispatch_group_create, dispatch_group_async, dispatch_group_wait,</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+dispatch_group_create(3) BSD Library Functions Manual dispatch_group_create(3)
+
+NAME
+     dispatch_group_create, dispatch_group_async, dispatch_group_wait,
+     dispatch_group_notify -- group blocks submitted to queues
+
+SYNOPSIS
+     #include &ltdispatch/dispatch.h&gt
+
+     dispatch_group_t
+     dispatch_group_create(void);
+
+     void
+     dispatch_group_enter(dispatch_group_t group);
+
+     void
+     dispatch_group_leave(dispatch_group_t group);
+
+     long
+     dispatch_group_wait(dispatch_group_t group, dispatch_time_t timeout);
+
+     void
+     dispatch_group_notify(dispatch_group_t group, dispatch_queue_t queue,
+	 void (^block)(void));
+
+     void
+     dispatch_group_notify_f(dispatch_group_t group, dispatch_queue_t queue,
+	 void *context, void (*function)(void *));
+
+     void
+     dispatch_group_async(dispatch_group_t group, dispatch_queue_t queue,
+	 void (^block)(void));
+
+     void
+     dispatch_group_async_f(dispatch_group_t group, dispatch_queue_t queue,
+	 void *context, void (*function)(void *));
+
+DESCRIPTION
+     A dispatch group is an association of one or more blocks submitted to
+     dispatch queues for asynchronous invocation.  Applications may use dis-
+     patch groups to wait for the completion of blocks associated with the
+     group.
+
+     The dispatch_group_create() function returns a new and empty dispatch
+     group.
+
+     The dispatch_group_enter() and dispatch_group_leave() functions update
+     the number of blocks running within a group.
+
+     The dispatch_group_wait() function waits until all blocks associated with
+     the group have completed, or until the specified timeout has elapsed.  If
+     the group becomes empty within the specified amount of time, the function
+     will return zero indicating success. Otherwise, a non-zero return code
+     will be returned.	When DISPATCH_TIME_FOREVER is passed as the timeout,
+     calls to this function will wait an unlimited amount of time until the
+     group becomes empty and the return value is always zero.
+
+     The dispatch_group_notify() function provides asynchronous notification
+     of the completion of the blocks associated with the group by submitting
+     the block to the specified queue once all blocks associated with the
+     group have completed.  The system holds a reference to the dispatch group
+     while an asynchronous notification is pending, therefore it is valid to
+     release the group after setting a notification block.  The group will be
+     empty at the time the notification block is submitted to the target
+     queue. The group may either be released with dispatch_release() or reused
+     for additional operations.
+
+     The dispatch_group_async() convenience function behaves like so:
+
+     void
+     dispatch_group_async(dispatch_group_t group, dispatch_queue_t queue, dispatch_block_t block)
+     {
+	     dispatch_retain(group);
+	     dispatch_group_enter(group);
+	     dispatch_async(queue, ^{
+		     block();
+		     dispatch_group_leave(group);
+		     dispatch_release(group);
+	     });
+     }
+
+RETURN VALUE
+     The dispatch_group_create() function returns NULL on failure and non-NULL
+     on success.
+
+     The dispatch_group_wait() function returns zero upon success and non-zero
+     after the timeout expires.  If the timeout is DISPATCH_TIME_FOREVER, then
+     dispatch_group_wait() waits forever and always returns zero.
+
+MEMORY MODEL
+     Dispatch groups are retained and released via calls to dispatch_retain()
+     and dispatch_release().
+
+FUNDAMENTALS
+     The dispatch_group_async() and dispatch_group_notify() functions are
+     wrappers around dispatch_group_async_f() and dispatch_group_notify_f()
+     respectively.
+
+CAVEATS
+     In order to ensure deterministic behavior, it is recommended to call
+     dispatch_group_wait() only once all blocks have been submitted to the
+     group. If it is later determined that new blocks should be run, it is
+     recommended not to reuse an already-running group, but to create a new
+     group.
+
+     dispatch_group_wait() returns as soon as there are exactly zero enqueued
+     or running blocks associated with a group (more precisely, as soon as
+     every dispatch_group_enter() call has been balanced by a
+     dispatch_group_leave() call). If one thread waits for a group while
+     another thread submits new blocks to the group, then the count of associ-
+     ated blocks might momentarily reach zero before all blocks have been sub-
+     mitted. If this happens, dispatch_group_wait() will return too early:
+     some blocks associated with the group have finished, but some have not
+     yet been submitted or run.
+
+     However, as a special case, a block associated with a group may submit
+     new blocks associated with its own group. In this case, the behavior is
+     deterministic: a waiting thread will not wake up until the newly submit-
+     ted blocks have also finished.
+
+     All of the foregoing also applies to dispath_group_notify() as well, with
+     "block to be submitted" substituted for "waiting thread".
+
+SEE ALSO
+     dispatch(3), dispatch_async(3), dispatch_object(3),
+     dispatch_queue_create(3), dispatch_semaphore_create(3), dispatch_time(3)
+
+Darwin				  May 1, 2009				Darwin
+    </pre></body>
+
+</html>

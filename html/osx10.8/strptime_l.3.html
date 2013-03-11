@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The strptime() function parses the string in the buffer buf, according to..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>strptime, strptime_l -- parse date and time string</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+STRPTIME(3)		 BSD Library Functions Manual		   STRPTIME(3)
+
+NAME
+     strptime, strptime_l -- parse date and time string
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include &lttime.h&gt
+
+     char *
+     strptime(const char *restrict buf, const char *restrict format,
+	 struct tm *restrict tm);
+
+     #include &lttime.h&gt
+     #include &ltxlocale.h&gt
+
+     char *
+     strptime_l(const char *restrict buf, const char *restrict format,
+	 struct tm *restrict tm, locale_t loc);
+
+DESCRIPTION
+     The strptime() function parses the string in the buffer buf, according to
+     the string pointed to by format, and fills in the elements of the struc-
+     ture pointed to by tm.  The resulting values will be relative to the
+     local time zone.  Thus, it can be considered the reverse operation of
+     strftime(3).
+
+     The format string consists of zero or more conversion specifications and
+     ordinary characters.  All ordinary characters are matched exactly with
+     the buffer, where white space in the format string will match any amount
+     of white space in the buffer.  All conversion specifications are identi-
+     cal to those described in strftime(3).
+
+     Two-digit year values, including formats %y and %D, are now interpreted
+     as beginning at 1969 per POSIX requirements.  Years 69-00 are interpreted
+     in the 20th century (1969-2000), years 01-68 in the 21st century
+     (2001-2068).
+
+     If the format string does not contain enough conversion specifications to
+     completely specify the resulting struct tm, the unspecified members of tm
+     are left untouched.  For example, if format is ``%H:%M:%S'', only
+     tm_hour, tm_sec and tm_min will be modified.  If time relative to today
+     is desired, initialize the tm structure with today's date before passing
+     it to strptime().
+
+     While the strptime() function uses the current locale, the strptime_l()
+     function may be passed a locale directly. See xlocale(3) for more infor-
+     mation.
+
+RETURN VALUES
+     Upon successful completion, strptime() returns the pointer to the first
+     character in buf that has not been required to satisfy the specified con-
+     versions in format.  It returns NULL if one of the conversions failed.
+
+LEGACY DESCRIPTION
+     In legacy mode, the %Y format specifier expects exactly 4 digits (leaving
+     any trailing digits for the next specifier).
+
+SEE ALSO
+     date(1), scanf(3), strftime(3), xlocale(3)
+
+HISTORY
+     The strptime() function appeared in FreeBSD 3.0.
+
+AUTHORS
+     The strptime() function has been contributed by Powerdog Industries.
+
+     This man page was written by Jorg Wunsch.
+
+BUGS
+     Both the %e and %l format specifiers may incorrectly scan one too many
+     digits if the intended values comprise only a single digit and that digit
+     is followed immediately by another digit.	Both specifiers accept zero-
+     padded values, even though they are both defined as taking unpadded val-
+     ues.
+
+     The %p format specifier has no effect unless it is parsed after hour-
+     related specifiers.  Specifying %l without %p will produce undefined
+     results.  Note that 12AM (ante meridiem) is taken as midnight and 12PM
+     (post meridiem) is taken as noon.
+
+     The %U and %W format specifiers accept any value within the range 00 to
+     53 without validating against other values supplied (like month or day of
+     the year, for example).
+
+     The %Z format specifier only accepts time zone abbreviations of the local
+     time zone, or the value "GMT".  This limitation is because of ambiguity
+     due to of the over loading of time zone abbreviations.  One such example
+     is EST which is both Eastern Standard Time and Eastern Australia Summer
+     Time.
+
+     The strptime() function does not correctly handle multibyte characters in
+     the format argument.
+
+BSD				January 4, 2003 			   BSD
+    </pre></body>
+
+</html>

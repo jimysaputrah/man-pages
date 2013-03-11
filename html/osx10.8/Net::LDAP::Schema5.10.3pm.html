@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content=""Net::LDAP::Schema" provides a means to load an LDAP schema and query..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Net::LDAP::Schema - Load and manipulate an LDAP v3 Schema</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Net::LDAP::Schema(3)  User Contributed Perl Documentation Net::LDAP::Schema(3)
+
+
+
+NAME
+       Net::LDAP::Schema - Load and manipulate an LDAP v3 Schema
+
+SYNOPSIS
+	use Net::LDAP;
+	use Net::LDAP::Schema;
+
+	#
+	# Read schema from server
+	#
+	$ldap = Net::LDAP-&gtnew ( $server );
+	$ldap-&gtbind ( );
+	$schema = $ldap-&gtschema ( );
+
+	#
+	# Load from LDIF
+	#
+	$schema = Net::LDAP::Schema-&gtnew;
+	$schema-&gtparse ( "schema.ldif" ) or die $schema-&gterror;
+
+DESCRIPTION
+       "Net::LDAP::Schema" provides a means to load an LDAP schema and query
+       it for information regarding supported objectclasses, attributes and
+       syntaxes.
+
+METHODS
+       Where a method is stated as taking the 'name or oid' of a schema item
+       (which may be an object class, attribute or syntax) then a case-
+       insensitive name or raw oid (object identifier, in dotted numeric
+       string form, e.g. 2.5.4.0) may be supplied.
+
+       Each returned item of schema (eg an attribute definition) is returned
+       in a HASH. The keys in the returned HASH are lowercased versions of the
+       keys read from the server. Here's a partial list (not all HASHes define
+       all keys) although note that RFC 2252 permits other keys as well:
+
+	name
+	desc
+	obsolete
+	sup
+	equality
+	ordering
+	substr
+	syntax
+	single-value
+	collective
+	no-user-modification
+	usage
+	abstract
+	structural
+	auxiliary
+	must
+	may
+	applies
+	aux
+	not
+	oc
+	form
+
+       all_attributes ( )
+       all_ditcontentrules ( )
+       all_ditstructurerules ( )
+       all_matchingrules ( )
+       all_matchingruleuses ( )
+       all_nameforms ( )
+       all_objectclasses ( )
+       all_syntaxes ( )
+	   Returns a list of all the requested types in the schema.
+
+       attribute ( NAME )
+       ditcontentrule ( NAME )
+       ditstructurerule ( NAME )
+       matchingrule ( NAME )
+       matchingruleuse ( NAME )
+       nameform ( NAME )
+       objectclass ( NAME )
+       syntax ( NAME )
+	   Returns a reference to a hash, or "undef" if the schema item does
+	   not exist. "NAME" can be a name or an OID.
+
+	    $attr_href = $schema-&gtattribute( "attrname" );
+
+       dump ( )
+	   Dump the raw schema information to standard out.
+
+       dump ( FILENAME )
+	   Dump the raw schema information to a file.
+
+	    $result = $schema-&gtdump ( "./schema.dump" );
+
+	   If no schema data is returned from directory server, the method
+	   will return undefined.  Otherwise a value of 1 is always returned.
+
+       error ( )
+	   Returns the last error encountered when parsing the schema.
+
+       may ( OBJECTCLASS )
+	   Given an argument which is the name or oid of a known object class,
+	   returns a list of HASHes describing the attributes which are
+	   optional in the class.
+
+	     @may = $schema-&gtmay ( $oc );
+	     # First optional attr has the name '$may[0]-&gt{name}'
+
+       must ( OBJECTCLASS )
+	   Given an argument which is the name or oid of a known object class,
+	   returns a list of HASHes describing the attributes which are
+	   mandatory in the class.
+
+	     @must = $schema-&gtmust ( $oc );
+
+       parse ( MESG )
+       parse ( ENTRY )
+       parse ( FILENAME )
+	   Takes a single argument which can be any of, a message object
+	   returned from an LDAP search, a "Net::LDAP::Entry" object or the
+	   name of a file containing an LDIF form of the schema.
+
+	   If the argument is a message result from a search,
+	   "Net::LDAP::Schema" will parse the schema from the first entry
+	   returned.
+
+	   Returns true on success and "undef" on error.
+
+       superclass ( NAME )
+	   Given an argument which is the name or oid of a known objectclass,
+	   returns the list of names of the immediate superclasses.
+
+       matchingrule_for_attribute ( NAME, RULE )
+	   Given an attribute name and a matching rule ("equality", "substr",
+	   etc), return the actual rule taking into account attribute
+	   supertypes.
+
+SEE ALSO
+       Net::LDAP, Net::LDAP::RFC
+
+AUTHORS
+       Graham Barr &ltgbarr@pobox.com&gt John Berthels &ltjjb@nexor.co.uk&gt
+
+       Please report any bugs, or post any suggestions, to the perl-ldap
+       mailing list &ltperl-ldap@perl.org&gt.
+
+COPYRIGHT
+       Copyright (c) 1998-2004 Graham Barr. All rights reserved. This program
+       is free software; you can redistribute it and/or modify it under the
+       same terms as Perl itself.
+
+
+
+perl v5.10.1			  2008-06-30		  Net::LDAP::Schema(3)
+    </pre></body>
+
+</html>

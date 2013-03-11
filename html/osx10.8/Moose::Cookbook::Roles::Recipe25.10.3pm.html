@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="In this example, we demonstrate how to exercise fine-grained control..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Moose::Cookbook::Roles::Recipe2 - Advanced Role Composition - method</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Moose::Cookbook::RolesUsercContributed Perl Moose::Cookbook::Roles::Recipe2(3)
+
+
+
+NAME
+       Moose::Cookbook::Roles::Recipe2 - Advanced Role Composition - method
+       exclusion and aliasing
+
+SYNOPSIS
+	 package Restartable;
+	 use Moose::Role;
+
+	 has 'is_paused' =&gt (
+	     is      =&gt 'rw',
+	     isa     =&gt 'Bool',
+	     default =&gt 0,
+	 );
+
+	 requires 'save_state', 'load_state';
+
+	 sub stop { 1 }
+
+	 sub start { 1 }
+
+	 package Restartable::ButUnreliable;
+	 use Moose::Role;
+
+	 with 'Restartable' =&gt {
+	     -alias =&gt {
+		 stop  =&gt '_stop',
+		 start =&gt '_start'
+	     },
+	     -excludes =&gt [ 'stop', 'start' ],
+	 };
+
+	 sub stop {
+	     my $self = shift;
+
+	     $self-&gtexplode() if rand(1) &gt .5;
+
+	     $self-&gt_stop();
+	 }
+
+	 sub start {
+	     my $self = shift;
+
+	     $self-&gtexplode() if rand(1) &gt .5;
+
+	     $self-&gt_start();
+	 }
+
+	 package Restartable::ButBroken;
+	 use Moose::Role;
+
+	 with 'Restartable' =&gt { -excludes =&gt [ 'stop', 'start' ] };
+
+	 sub stop {
+	     my $self = shift;
+
+	     $self-&gtexplode();
+	 }
+
+	 sub start {
+	     my $self = shift;
+
+	     $self-&gtexplode();
+	 }
+
+DESCRIPTION
+       In this example, we demonstrate how to exercise fine-grained control
+       over what methods we consume from a role. We have a "Restartable" role
+       which provides an "is_paused" attribute, and two methods, "stop" and
+       "start".
+
+       Then we have two more roles which implement the same interface, each
+       putting their own spin on the "stop" and "start" methods.
+
+       In the "Restartable::ButUnreliable" role, we want to provide a new
+       implementation of "stop" and "start", but still have access to the
+       original implementation. To do this, we alias the methods from
+       "Restartable" to private methods, and provide wrappers around the
+       originals (1).
+
+       Note that aliasing simply adds a name, so we also need to exclude the
+       methods with their original names.
+
+	 with 'Restartable' =&gt {
+	     -alias =&gt {
+		 stop  =&gt '_stop',
+		 start =&gt '_start'
+	     },
+	     -excludes =&gt [ 'stop', 'start' ],
+	 };
+
+       In the "Restartable::ButBroken" role, we want to provide an entirely
+       new behavior for "stop" and "start". We exclude them entirely when
+       composing the "Restartable" role into "Restartable::ButBroken".
+
+       It's worth noting that the "-excludes" parameter also accepts a single
+       string as an argument if you just want to exclude one method.
+
+	 with 'Restartable' =&gt { -excludes =&gt [ 'stop', 'start' ] };
+
+CONCLUSION
+       Exclusion and renaming are a power tool that can be handy, especially
+       when building roles out of other roles. In this example, all of our
+       roles implement the "Restartable" role. Each role provides same API,
+       but each has a different implementation under the hood.
+
+       You can also use the method aliasing and excluding features when
+       composing a role into a class.
+
+FOOTNOTES
+       (1) The mention of wrapper should tell you that we could do the same
+	   thing using method modifiers, but for the sake of this example, we
+	   don't.
+
+AUTHOR
+       Dave Rolsky &ltautarch@urth.org&gt
+
+COPYRIGHT AND LICENSE
+       Copyright 2006-2010 by Infinity Interactive, Inc.
+
+       &lthttp://www.iinteractive.com&gt
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-02-27Moose::Cookbook::Roles::Recipe2(3)
+    </pre></body>
+
+</html>

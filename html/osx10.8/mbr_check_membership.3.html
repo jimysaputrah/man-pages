@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="mbr_check_membership() tests if a given user is a member of a group..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>mbr_check_membership, mbr_check_service_membership -- check whether a</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+MBR_CHECK_MEMBERSHIP(3)  BSD Library Functions Manual  MBR_CHECK_MEMBERSHIP(3)
+
+NAME
+     mbr_check_membership, mbr_check_service_membership -- check whether a
+     user is a member of a group or service ACL
+
+SYNOPSIS
+     #include &ltmembership.h&gt
+
+     int
+     mbr_check_membership(uuid_t user, uuid_t group, int *ismember);
+
+     int
+     mbr_check_service_membership(uuid_t user, const char *service,
+	 int *ismember);
+
+DESCRIPTION
+     mbr_check_membership() tests if a given user is a member of a group
+     (either direct or indirect via a nested group).  ismember is set to 1 if
+     the user is a member or 0 if not a member of the group.
+     mbr_check_service_membership() similarly tests if a given user is a mem-
+     ber of a service ACL group.  Service ACLs are special groups defined with
+     the prefix "com.apple.access_".  The service is then prefixed (e.g.,
+     "afp" would check "com.apple.access_afp").  There is a special group that
+     grants accessto all services called "com.apple.access_all_services".
+
+     Users may belong to any number of groups.	mbr_check_membership() should
+     always be used to check group membership, rather than calling
+     getgroups(2) or getgrouplist(2).  The setgroups(2) and getgroups(2) rou-
+     tines are limited to a fixed number of gids, and so may not include all
+     of a user's groups.
+
+     There are two special cases.  If the two uuids are equal, then ismember
+     is set to 1.  If the group uuid is equal to the reserved "everyone" uuid
+     (ABCDEFAB-CDEF-ABCD-EFAB-CDEF0000000C), then ismember will be set to 1
+     for any valid user.
+
+     Group membership information is managed by opendirectoryd(8).
+
+RETURN VALUES
+     mbr_check_membership() does not test whether group exists or not.	Query-
+     ing membership for a nonexistent group will result in ismember being set
+     to 0.  The function returns 0 on success or one of the following error
+     codes on failure:
+
+     [EIO]		Communication with openditectoryd(8) failed.
+
+     [ENOENT]		user can not be found.
+
+     mbr_check_service_membership() is identical to mbr_check_membership()
+     except that ENOENT means no service ACL has been defined.
+
+SEE ALSO
+     odutil(1), setgroups(2), getgroups(2), mbr_uid_to_uuid(3),
+     opendirectoryd(8)
+
+Mac OS X		       November 5, 2011 		      Mac OS X
+    </pre></body>
+
+</html>

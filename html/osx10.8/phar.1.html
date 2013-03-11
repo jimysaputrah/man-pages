@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="PHP's phar extension provides a way to put entire PHP applications into a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>phar, phar.phar -- PHP archive command</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+phar(1) 		  BSD General Commands Manual		       phar(1)
+
+NAME
+     phar, phar.phar -- PHP archive command
+
+SYNOPSIS
+     phar command -f file [command-options]
+
+DESCRIPTION
+     PHP's phar extension provides a way to put entire PHP applications into a
+     single file called a "phar" (PHP Archive) for easy distribution and
+     installation. In addition to providing this service, the phar extension
+     also provides a file-format abstraction method for creating and manipu-
+     lating tar and zip files through the PharData class.
+
+     What is phar? Phar archives are best characterized as a convenient way to
+     group several files into a single file. As such, a phar archive provides
+     a way to distribute a complete PHP application in a single file and run
+     it from that file without the need to extract it to disk. Additionally,
+     phar archives can be executed by PHP as easily as any other file, both on
+     the commandline and from a web server. Phar is kind of like a thumb drive
+     for PHP applications.
+
+     Run `phar help' to access the built-in tool documentation.
+
+     Run `phar help command' to retrieve help for a specific command.
+
+     Run `phar help-list' to list all available commands.
+
+     Run `phar version' to get information about the PHAR environment and the
+     tool version.
+
+COMMAND SUMMARY
+     The following file operation commands are available.
+	   add	     Add entries to a PHAR package
+	   compress  Compress or uncompress all files or a selected entry
+	   delete    Delete entry from a PHAR archive
+	   extract   Extract a PHAR package to a directory
+	   info      Get information about a PHAR package
+	   list      List contents of a PHAR archive
+	   meta-del  Delete meta information of a PHAR entry or a PHAR package
+	   meta-get  Get meta information of a PHAR entry or a PHAR package in
+		     serialized form
+	   meta-set  Set meta information of a PHAR entry or a PHAR package
+		     using serialized input
+	   pack      Pack files into a PHAR archive
+	   sign      Set signature hash algorithm
+	   stub-get  Get the stub of a PHAR file
+	   stub-set  Set the stub of a PHAR file
+	   tree      Get a directory tree for a PHAR archive
+
+COMMON OPTIONS
+     Every file operation command requires at least one argument:
+	   -f file    Specifies the phar file to work on
+
+     Some commands also accept or require the following arguments as noted
+     below in their extended descriptions:
+	   -c algo    Selects the compression algorithm from the following:
+			 0	  No compression
+			 none	  No compression
+			 auto	  Automatically select compression algorithm
+			 gz	  GZip compression
+			 gzip	  GZip compression
+			 bz2	  BZip2 compression
+			 bzip2	  BZip2 compression
+	   -h method  Selects the hash algorithm from the following:
+			 md5	  MD5
+			 sha1	  SHA1
+			 sha256   SHA256
+			 sha512   SHA512
+			 openssl  OpenSSL
+	   -k index   Subscription index (a string "key" associated with a
+		      dictionary entry) to operate upon. Valid values cur-
+		      rently include:
+			 Alias
+			 Hash-type
+			 Hash
+			 Entries
+			 Uncompressed-files
+			 Compressed-files
+			 Compressed-gz
+			 Compressed-bz2
+			 Uncompressed-size
+			 Compressed-size
+			 Compression-ratio
+			 Metadata-global
+			 Metadata-files
+			 Stub-size
+
+COMMAND DETAILS
+     The following file operation commands are available.
+
+     add -f file [command-options] ...
+
+	     Additional required arguments:
+		...	   Any number of input files and directories. If -i is
+			   in use then ONLY files and matching the given regu-
+			   lar expression are being packed. If -x is given
+			   then files matching that regular expression are NOT
+			   being packed.
+
+	     Optional arguments:
+		-a alias   Provide an alias name for the phar file
+		-c algo    Compression algorithm (see COMMON OPTIONS above)
+		-i regex   Specifies a regular expression for input files
+		-l level   Number of preceeding subdirectories to strip from
+			   file entries
+		-x regex   Regular expression for input files to exclude
+
+     compress -f file -c algo [-e entry]
+
+	     Additional required arguments:
+		-c algo    Compression algorithm (see COMMON OPTIONS above)
+
+	     Optional arguments:
+		-e entry   Name of entry to work on (must include PHAR inter-
+			   nal directory name if any)
+
+     delete -f file -e entry
+
+	     Additional required arguments:
+		-e entry   Name of entry to work on (must include PHAR inter-
+			   nal directory name if any)
+
+     extract -f file [-i regex] [-x regex] [...]
+
+	     Optional arguments:
+		-i regex   Specifies a regular expression for input files
+		-x regex   Regular expression for input files to exclude
+		...	   Directory to extract to (defaults to '.')
+
+     info -f file [-k index]
+
+	     Optional arguments:
+		-k index   Return the single value associated with the given
+			   subscription index
+
+     list -f file [-i regex] [-x regex]
+
+	     Optional arguments:
+		-i regex   Specifies a regular expression for input files
+		-x regex   Regular expression for input files to exclude
+
+     meta-del -f file [-e entry] [-k index]
+
+	     Optional arguments:
+		-e entry   Name of entry to work on (must include PHAR inter-
+			   nal directory name if any)
+		-k index   Delete the given subscription index in the array of
+			   metadata
+
+	     If something was deleted the return value is 0 otherwise it is 1.
+
+     meta-get -f file [-e entry] [-k index]
+
+	     If no output file is specified for metadata then print to stdout.
+
+	     Optional arguments:
+		-e entry   Name of entry to work on (must include PHAR inter-
+			   nal directory name if any)
+		-k index   Return the given subscription index in the array of
+			   metadata using echo rather than serialize. If that
+			   index does not exist or no metadata is present,
+			   then the return value is 1.
+
+     meta-set -f file -m meta [-e entry] [-k index]
+
+	     If no input file is specified for meta data then stdin is used.
+
+	     Additional required arguments:
+		-m meta    Meta data to store with entry (serialized php data)
+
+	     Optional arguments:
+		-e entry   Name of entry to work on (must include PHAR inter-
+			   nal directory name if any)
+		-k index   Take the input directly (instead of serialized) and
+			   set the value for the given index in the array of
+			   metadata. If the metadata is not present or empty a
+			   new array will be created.  If the metadata is
+			   present and a flat value, then the return value is
+			   1.
+
+     pack -f file [command-options] ...
+
+	     When using -s stub, the stub file is excluded from the list of
+	     input files/dirs. To create an archive that contains PEAR's class
+	     PHP_Archive then point -p argument to PHP/Archive.php.
+
+	     Additional required arguments:
+		...	   Any number of input files and directories. If -i is
+			   in use then ONLY files and matching the given regu-
+			   lar expression are being packed. If -x is given
+			   then files matching that regular expression are NOT
+			   being packed.
+
+	     Optional arguments:
+		-a alias   Provide an alias name for the phar file.
+		-b bang    Hash-bang line to start the archive (e.g.
+			   #!/usr/bin/php).  The hash mark itself "#!" and the
+			   newline character are optional.
+		-c algo    Compression algorithm (see COMMON OPTIONS above)
+		-h method  Selects the hash algorithm (see COMMON OPTIONS
+			   above)
+		-i regex   Specifies a regular expression for input files
+		-l level   Number of preceeding subdirectories to strip from
+			   file entries
+		-p loader  Location of PHP_Archive class file ( pear
+			   list-files PHP_Archive ). You can use '0' or '1' to
+			   locate it automatically using the mentioned pear(1)
+			   command. Passing '0' causes the command to not
+			   error out when the class file cannot be located.
+			   This switch also adds some code around the stub so
+			   that class PHP_Archive gets registered as the
+			   phar:// stream wrapper if necessary. Finally, this
+			   switch adds the file phar.inc from this package and
+			   loads it to ensure class Phar is present.
+		-s stub    Select the stub file
+		-x regex   Regular expression for input files to exclude
+		-y key	   Private key for OpenSSL signing
+
+     sign -f file -h method [-y key]
+
+	     Additional required arguments:
+		-h method  Selects the hash algorithm (see COMMON OPTIONS
+			   above)
+
+	     Optional arguments:
+		-y key	   Private key for OpenSSL signing
+
+     stub-get -f file [-s stub]
+
+	     If no output file is specified then print the stub to stdout.
+
+	     Optional arguments:
+		-s stub    Select the stub file
+
+     stub-set -f file [-b bang] [-p loader] [-s stub]
+
+	     If no input file is specified then stdin is used as the source of
+	     the stub.
+
+	     Optional arguments:
+		-b bang    Hash-bang line to start the archive (e.g.
+			   #!/usr/bin/php).  The hash mark itself "#!" and the
+			   newline character are optional.
+		-p loader  Location of PHP_Archive class file ( pear
+			   list-files PHP_Archive ). You can use '0' or '1' to
+			   locate it automatically using the mentioned pear(1)
+			   command. Passing '0' causes the command to not
+			   error out when the class file cannot be located.
+			   This switch also adds some code around the stub so
+			   that class PHP_Archive gets registered as the
+			   phar:// stream wrapper if necessary. Finally, this
+			   switch adds the file phar.inc from this package and
+			   loads it to ensure class Phar is present.
+		-s stub    Select the stub file
+
+     tree -f file [-i regex] [-x regex]
+
+	     Optional arguments:
+		-i regex   Specifies a regular expression for input files
+		-x regex   Regular expression for input files to exclude
+
+SEE ALSO
+     For a complete description of Phar see
+	 &lthttp://www.php.net/manual/en/book.phar.php&gt
+     pear(1), php(1)
+
+BUGS
+     You can view the list of known bugs or report any new bug you found at
+	 &lthttp://www.php.net&gt
+
+AUTHORS
+     The PHP Group: Thies C. Arntzen, Stig Bakken, Andi Gutmans, Rasmus Ler-
+     dorf, Sam Ruby, Sascha Schumann, Zeev Suraski, Jim Winstead, Andrei
+     Zmievski.
+
+     Additional work for the CLI sapi was done by Edin Kadribasic, Marcus
+     Boerger and Johannes Schlueter.
+
+     A list of active developers can be found on the PHP web site
+	 &lthttp://www.php.net/credits.php&gt
+
+     And last but not least PHP was developed with the help of a  huge	amount
+     of contributors all around the world.
+
+VERSION INFORMATION
+     This manpage describes php version 5.3.3.
+
+COPYRIGHT
+     Copyright (C) 1997-2010 The PHP Group
+
+     This source file is subject to version 3.01 of the PHP license, that is
+     bundled with this package in the file LICENSE, and is available through
+     the world-wide-web at the following url:
+	 &lthttp://www.php.net/license/3_01.txt&gt
+
+     If you did not receive a copy of the PHP license and are unable to obtain
+     it through the world-wide-web, please send a note to  license@php.net  so
+     we can mail you a copy immediately.
+
+			       November 12, 2010
+    </pre></body>
+
+</html>

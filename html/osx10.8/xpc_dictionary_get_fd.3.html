@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>xpc_dictionary_create -- creation and management of XPC messages</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+xpc_dictionary_create(3) BSD Library Functions Manual xpc_dictionary_create(3)
+
+NAME
+     xpc_dictionary_create -- creation and management of XPC messages
+
+SYNOPSIS
+     #include &ltxpc/xpc.h&gt
+
+     xpc_object_t
+     xpc_dictionary_create(const char * const *keys,
+	 const xpc_object_t *values, size_t count);
+
+     xpc_object_t
+     xpc_dictionary_create_reply(xpc_object_t original);
+
+     void
+     xpc_dictionary_set_value(xpc_object_t dictionary, const char *key,
+	 xpc_object_t value);
+
+     xpc_object_t
+     xpc_dictionary_get_value(xpc_object_t dictionary, const char *key);
+
+     size_t
+     xpc_dictionary_get_count(xpc_object_t dictionary);
+
+     bool
+     xpc_dictionary_apply(xpc_object_t dictionary,
+	 xpc_dictionary_applier_t applier);
+
+     xpc_connection_t
+     xpc_dictionary_get_remote_connection(xpc_object_t dictionary);
+
+     void
+     xpc_dictionary_set_bool(xpc_object_t dictionary, const char *key,
+	 bool value);
+
+     void
+     xpc_dictionary_set_int64(xpc_object_t dictionary, const char *key,
+	 int64_t value);
+
+     void
+     xpc_dictionary_set_uint64(xpc_object_t dictionary, const char *key,
+	 uint64_t value);
+
+     void
+     xpc_dictionary_set_double(xpc_object_t dictionary, const char *key,
+	 double value);
+
+     void
+     xpc_dictionary_set_date(xpc_object_t dictionary, const char *key,
+	 int64_t value);
+
+     void
+     xpc_dictionary_set_data(xpc_object_t dictionary, const char *key,
+	 const void *value, size_t length);
+
+     void
+     xpc_dictionary_set_string(xpc_object_t dictionary, const char *value);
+
+     void
+     xpc_dictionary_set_uuid(xpc_object_t dictionary, const char *key,
+	 const uuid_t value);
+
+     void
+     xpc_dictionary_set_fd(xpc_object_t dictionary, const char *key,
+	 int value);
+
+     void
+     xpc_dictionary_set_connection(xpc_object_t dictionary, const char *key,
+	 xpc_connection_t connection);
+
+     bool
+     xpc_dictionary_get_bool(xpc_object_t dictionary, const char *key);
+
+     int64_t
+     xpc_dictionary_get_int64(xpc_object_t dictionary, const char *key);
+
+     uint64_t
+     xpc_dictionary_get_uint64(xpc_object_t dictionary, const char *key);
+
+     double
+     xpc_dictionary_get_double(xpc_object_t dictionary, const char *key);
+
+     int64_t
+     xpc_dictionary_get_date(xpc_object_t dictionary, const char *key);
+
+     const void *
+     xpc_dictionary_get_data(xpc_object_t dictionary, const char *key,
+	 size_t *length);
+
+     const uint8_t *
+     xpc_dictionary_get_uuid(xpc_object_t dictionary, const char *key);
+
+     const char *
+     xpc_dictionary_get_string(xpc_object_t dictionary, const char *key);
+
+     int
+     xpc_dictionary_get_fd(xpc_object_t dictionary, const char *key);
+
+     xpc_connection_t
+     xpc_dictionary_get_connection(xpc_object_t dictionary, const char *key);
+
+DICTIONARIES
+     XPC dictionaries are collections of XPC objects that map keys (expressed
+     as C strings) to values.
+
+     Objects of dictionary collection type are mutable and will automatically
+     expand to accommodate new keys and values that are inserted into the dic-
+     tionary.
+
+   CREATION
+     The xpc_dictionary_create() function returns a newly created dictionary.
+     The caller may optionally provide corresponding C arrays of keys and
+     values to initialize the dictionary.  All values must be XPC objects and
+     are automatically retained by the XPC framework as they are inserted into
+     the dictionary.  The count is used to specify the size of the C arrays.
+     Both arrays must be of the same size. The behavior when count is greater
+     than the number of elements in either of the C arrays is undefined.
+     These arguments are optional and NULL may be passed to both keys and
+     values with a count of zero, resulting in an empty dictionary.
+
+   GETTING AND SETTING VALUES
+     The xpc_dictionary_set_value() function may be used to insert or replace
+     the value of a specified key in a dictionary.  The XPC framework will
+     retain a reference to the value while it is present in the dictionary,
+     and will release the reference when it is removed.  The value provided
+     may be NULL, in which case the key will be removed from the dictionary.
+
+     The value of a specific key in the dictionary may be retrieved using the
+     xpc_dictionary_get_value() function. This function returns the value for
+     the specified key if it exists or NULL if it does not.
+
+   PRIMITIVE GET AND SET FUNCTIONS
+     Various functions exist for retrieving primitive C and operating system
+     types directly from a dictionary without the need for an intermediate
+     boxed object.  See xpc_object(3) for more information.
+
+   ITERATION
+     The xpc_dictionary_apply() function may be used to iterate the key and
+     value pairs of a dictionary using an applier callback block. The callback
+     block is invoked for each pair and must return a bool indicating whether
+     the iteration should continue (true if it should continue, false if it
+     should not).  The xpc_dictionary_apply() function will return true if the
+     applier block was called for all pairs, or false if it was not (i.e. the
+     applier returned false during the iteration).
+
+     Note that the C language does not require an explicit return type to be
+     declared for a block when the return expression is unambigous. Therefore
+     the formal block declaration
+
+	   (void)xpc_dictionary_apply(dictionary, ^ bool (const char *key, xpc_object_t value) {
+		   // Do iteration.
+		   return true;
+	   });
+
+     may instead be written as follows (omitting the declared return type, and
+     explicitly casting the return value to the desired type):
+
+	   (void)xpc_dictionary_apply(dictionary, ^(const char *key, xpc_object_t value) {
+		   // Do iteration.
+		   return (bool)true;
+	   });
+
+     Important: the behavior of modifying the contents of an XPC dictionary
+     during iteration is undefined.
+
+DICTIONARIES AS MESSAGES
+     All messages sent and received by XPC connections are dictionaries. As a
+     result, several functions are available to assist with the use of dictio-
+     naries as XPC messages.
+
+     The xpc_dictionary_get_remote_connection() function may be used to return
+     the underlying XPC connection through which a message was received.
+
+     When a client sends a message using the
+     xpc_connection_send_message_with_reply(3) function, a specific reply mes-
+     sage must be created with xpc_dictionary_create_reply().  This function
+     returns a new dictionary which shares the underlying remote connection as
+     the original message. A reply dictionary may be used the same as any
+     other dictionary, but it must be sent to the connection returned by
+     xpc_dictionary_get_remote_connection(), at which point the sender's reply
+     block will be invoked when the reply message is received.
+
+DICTIONARIES AS ERRORS
+     Errors encountered by the XPC framework are delivered to the event han-
+     dler of a connection as a dictionary of type XPC_TYPE_ERROR.  See
+     xpc_get_type(3) for more information about XPC object types.  These error
+     dictionaries may be directly compared against the following constants:
+	   o   XPC_ERROR_CONNECTION_INTERRUPTED
+	   o   XPC_ERROR_CONNECTION_INVALID
+	   o   XPC_ERROR_CONNECTION_TERMINATION_IMMINENT
+
+     Important: these dictionaries are constant singletons and must not be
+     modified.
+
+     Error dictionaries contain a single XPC_ERROR_KEY_DESCRIPTION key. The
+     value of this key is a string object which encapsulates a human-readable
+     description of the error condition. This value is guaranteed to be a
+     string type and it is safe to use the xpc_dictionary_get_string() func-
+     tion directly to obtain a C string representation of the description.
+     The contents of this string is intended for diagnostic use and is subject
+     to change in future releases.
+
+     Additional keys and values may be added to the error dictionaries over
+     time.
+
+SEE ALSO
+     xpc_object(3), xpc_objects(3), xpc_connection_create(3),
+     xpc_array_create(3)
+
+Darwin				 1 July, 2011				Darwin
+    </pre></body>
+
+</html>

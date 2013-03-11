@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content=""ModPerl::Global" provides an API to manipulate special perl lists. At..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>ModPerl::Global -- Perl API for manipulating special Perl lists</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+apache_mapache_mod_perl-106~237::mod_perl-2.0.5::docs::api::ModPerl::Global(3)
+
+
+
+NAME
+       ModPerl::Global -- Perl API for manipulating special Perl lists
+
+Synopsis
+	 use ModPerl::Global ();
+	 my $package = 'MyApache2::Package';
+
+	 # make the END blocks of this package special
+	 ModPerl::Global::special_list_register(END =&gt $package);
+
+	 # Execute all encoutered END blocks from this package now
+	 ModPerl::Global::special_list_call(	END =&gt $package);
+
+	 # delete the list of END blocks
+	 ModPerl::Global::special_list_clear(	END =&gt $package);
+
+Description
+       "ModPerl::Global" provides an API to manipulate special perl lists. At
+       the moment only the "END" blocks list is supported.
+
+       This API allows you to change the normal Perl behavior, and execute
+       special lists when you need to.
+
+       For example "ModPerl::RegistryCooker" uses it to run "END" blocks in
+       the scripts at the end of each request.
+
+       Before loading a module containing package $package, you need to
+       register it, so the special blocks will be intercepted by mod_perl and
+       not given to Perl. "special_list_register" does that. Later on when you
+       want to execute the special blocks, "special_list_call" should be
+       called. Unless you want to call the list more than once, clear the list
+       with "special_list_clear".
+
+API
+       "ModPerl::Global" provides the following methods:
+
+   "special_list_call"
+       Call the special list
+
+	 $ok = special_list_call($key =&gt $package);
+
+       arg1: $key ( string )
+	   The name of the special list. At the moment only 'END' is
+	   supported.
+
+       arg2: $package ( string )
+	   what package to special list is for
+
+       ret: $ok ( boolean )
+	   true value if $key is known, false otherwise.
+
+       since: 2.0.00
+
+   "special_list_clear"
+       Clear the special list
+
+	 $ok = special_list_clear($key =&gt $package);
+
+       arg1: $key ( string )
+	   The name of the special list. At the moment only 'END' is
+	   supported.
+
+       arg2: $package ( string )
+	   what package to special list is for
+
+       ret: $ok ( boolean )
+	   true value if $key is known, false otherwise.
+
+       since: 2.0.00
+
+   "special_list_register"
+       Register the special list
+
+	 $ok = special_list_call($key =&gt $package);
+
+       arg1: $key ( string )
+	   The name of the special list. At the moment only 'END' is
+	   supported.
+
+       arg2: $package ( string )
+	   what package to special list is for
+
+       ret: $ok ( boolean )
+	   true value if $key is known, false otherwise.
+
+       since: 2.0.00
+
+       Notice that you need to register the package before it is loaded. If
+       you register it after, Perl has already compiled the "END" blocks and
+       there are no longer under your control.
+
+See Also
+       mod_perl 2.0 documentation.
+
+Copyright
+       mod_perl 2.0 and its core modules are copyrighted under The Apache
+       Software License, Version 2.0.
+
+Authors
+       The mod_perl development team and numerous contributors.
+
+
+
+perl v5.apache_mod_perl-106~237::mod_perl-2.0.5::docs::api::ModPerl::Global(3)
+    </pre></body>
+
+</html>

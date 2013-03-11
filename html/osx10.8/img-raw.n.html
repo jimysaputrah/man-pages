@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The  package  img::raw  is  a sub-package of Img. It can be loaded as a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>img-raw - Img, Raw Data Format (raw)</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+img-raw(n)							    img-raw(n)
+
+
+
+______________________________________________________________________________
+
+NAME
+       img-raw - Img, Raw Data Format (raw)
+
+SYNOPSIS
+       package require Tk
+
+       package require img::raw  ?1.4?
+
+       image create photo ?name? ?options?
+
+_________________________________________________________________
+
+DESCRIPTION
+       The  package  img::raw  is  a sub-package of Img. It can be loaded as a
+       part of the complete Img support, via package require Img,  or  on  its
+       own, via package require img::raw.
+
+       Like  all packages of Img it does not provide new commands, but extends
+       the existing Tk command image so  that  it  supports  files  containing
+       raster  images in the Raw Data Format (raw). More specifically img::raw
+       extends Tk's photo image type.
+
+       The name of the new format handler is raw.  This handler  provides  new
+       additional  configuration  options.  See  section  RAW OPTIONS for more
+       detailed explanations.
+
+       All of the above means that in a call like
+
+       image create photo ?name? ?options?
+
+
+       [1]    Image data in raw format (options -data and -file)  is  detected
+	      automatically.
+
+       [2]    The  format  name  raw  is recognized by the option -format.  In
+	      addition the value for the option is treated  as	list  and  may
+	      contain  any  of	the  special  options  listed  in  section RAW
+	      OPTIONS.
+
+
+NOTE
+       This format handler must be  loaded  explicitly	with  package  require
+       img::raw.
+
+SUPPORTED RAW TYPES
+	Grayscale image:  1 channel  of 32-bit floating point	values.
+			  1 channel  of 16-bit unsigned integer values.
+			  1 channel  of  8-bit unsigned integer values.
+	True-color image: 3 channels of 32-bit floating point	values.
+			  3 channels of 16-bit unsigned integer values.
+			  3 channels of  8-bit unsigned integer values.
+
+	List of currently supported features:
+
+	Type   |     Read      |     Write     |
+	       | -file | -data | -file | -data |
+	----------------------------------------
+	Gray   | Yes   | Yes   | Yes   | Yes   |
+	RGB    | Yes   | Yes   | Yes   | Yes   |
+
+	There are 2 supported file formats:
+	One with the pure raw data only, the other with a 7 line ASCII header
+	of the following form:
+
+	    Magic=RAW\n 	 File format identifier. Fixed value.
+	    Width=128\n 	 Image width in pixels.
+	    Height=128\n	 Image height in pixels.
+	    NumChan=1\n 	 Possible values: 1 or 3.
+	    ByteOrder=Intel\n	 Possible values: "Intel" or "Motorola".
+	    ScanOrder=TopDown\n  Possible values: "TopDown" or "BottomUp".
+	    PixelType=byte\n	 Possible values: "float", "short" or "byte".
+
+
+
+RAW OPTIONS
+       The handler provides the following options:
+
+       -verbose bool
+	      This option is supported for reading and writing.
+
+	      If  set  to true, additional information about the loaded/stored
+	      image is printed to stdout. Default is false.
+
+       -useheader bool
+	      This option is supported for reading and writing.
+
+	      If set to true, use the file header information for reading  and
+	      writing.	Default is true.
+
+       -nchan int
+	      This  option  is	supported  for	reading and writing image data
+	      without header.
+
+	      Specify the number of channels of the input image.   Default  is
+	      1.
+
+       -width int
+	      This  option  is supported for reading image data without header
+	      only.
+
+	      Specify the width of the input image.  Default is 128.
+
+       -height int
+	      This option is supported for reading image data  without	header
+	      only.
+
+	      Specify the height of the input image.  Default is 128.
+
+       -byteorder string
+	      This  option  is supported for reading image data without header
+	      only.
+
+	      Specify the byteorder of the input image data.  Possible values:
+	      Intel  or  Motorola.   Default is assuming the same byteorder as
+	      that of the host computer.
+
+       -uuencode bool
+	      This option is supported for reading image data  without	header
+	      only.
+
+	      If  set to false, do not assume, that the image data stored in a
+	      Tcl variable is uuencoded. Default is true, i.e. the image  data
+	      in a Tcl variable is assumed to be uuencoded.
+
+       -scanorder string
+	      This  option  is	supported  for	reading and writing image data
+	      without header.
+
+	      Specify the scanline order of the input image.  Possible values:
+	      TopDown  or BottomUp.  Default is assuming the same byteorder as
+	      that of the host computer.
+
+       -pixeltype string
+	      This option is supported for reading image data  without	header
+	      only.
+
+	      Specify the type of the pixel values.  Possible values: float or
+	      short or byte.  Default is byte.
+
+	      RAW files are always written in byte pixel format.
+
+       -gamma float
+	      This option is supported for reading only.
+
+	      Specify a gamma correction to be applied when mapping the  input
+	      data to 8-bit image values.  Default is 1.0.
+
+       -nomap bool
+	      This option is supported for reading only.
+
+	      If  set  to  true, no mapping of input values is done.  Use this
+	      option, if your image already contains RGB values in  the  range
+	      of 0 .. 255.  Default is false.
+
+       -min float
+	      This option is supported for reading only.
+
+	      Specify the minimum pixel value to be used for mapping the input
+	      data to 8-bit image values.  Default is the minimum value  found
+	      in the image data.
+
+       -max float
+	      This option is supported for reading only.
+
+	      Specify the maximum pixel value to be used for mapping the input
+	      data to 8-bit image values.  Default is the maximum value  found
+	      in the image data.
+
+
+
+SEE ALSO
+       img-bmp, img-dted, img-gif, img-ico, img-intro, img-jpeg, img-pcx, img-
+       pixmap, img-png, img-ppm, img-ps, img-raw, img-sgi,  img-sun,  img-tga,
+       img-tiff, img-window, img-xbm, img-xpm
+
+KEYWORDS
+       image handling, raw, tk
+
+COPYRIGHT
+       Copyright (c) 1995-2009 Jan Nijtmans &ltnijtmans@users.sourceforge.net&gt
+
+
+
+
+Img				      1.4			    img-raw(n)
+    </pre></body>
+
+</html>

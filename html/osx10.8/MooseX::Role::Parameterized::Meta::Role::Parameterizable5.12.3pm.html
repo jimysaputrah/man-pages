@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This is the metaclass for parameterizable roles, roles that have their..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>MooseX::Role::Parameterized::Meta::Role::Parameterizable - metaclass</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+MooseX::Role::ParamMooseX::Role::Parameterized::Meta::Role::Parameterizable(3)
+
+
+
+NAME
+       MooseX::Role::Parameterized::Meta::Role::Parameterizable - metaclass
+       for parameterizable roles
+
+DESCRIPTION
+       This is the metaclass for parameterizable roles, roles that have their
+       parameters currently unbound. These are the roles that you use "with"
+       in Moose, but instead of composing the parameterizable role, we
+       construct a new parameterized role
+       (MooseX::Role::Parameterized::Meta::Role::Parameterized).
+
+ATTRIBUTES
+   parameters_class
+       The name of the class that will be used to construct the parameters
+       object.
+
+   parameters_metaclass
+       A metaclass representing this roles's parameters. It will be an
+       anonymous subclass of "parameters_class". Each call to "parameter" in
+       MooseX::Role::Parameters adds an attribute to this metaclass.
+
+       When this role is consumed, the parameters object will be instantiated
+       using this metaclass.
+
+   role_generator
+       A code reference that is used to generate a role based on the
+       parameters provided by the consumer. The user usually specifies it
+       using the "role" in MooseX::Role::Parameterized keyword.
+
+METHODS
+   add_parameter $name, %options
+       Basically delegates to "add_attribute" in Moose::Meta::Class on the
+       "parameters_metaclass" but with error messages that refer to a
+       "parameter" not an "attribute".
+
+   construct_parameters %arguments
+       Creates a new MooseX::Role::Parameterized::Parameters object using
+       metaclass "parameters_metaclass".
+
+       The arguments are those specified by the consumer as parameter values.
+
+   generate_role %arguments
+       Returns a new instance of
+       MooseX::Role::Parameterized::Meta::Role::Parameterized based on the
+       arguments. The arguments are a hash reference of "parameters" and, if
+       available, a "consumer" metaobject.  A "package" argument may be given
+       to use a specific package name instead of autogenerating one.
+
+   apply
+       Overrides "apply" in Moose::Meta::Role to automatically generate the
+       parameterized role.
+
+
+
+perl v5.12.4	   MooseX::Role::Parameterized::Meta::Role::Parameterizable(3)
+    </pre></body>
+
+</html>

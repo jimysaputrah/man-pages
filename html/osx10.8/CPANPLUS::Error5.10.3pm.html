@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module provides the error handling code for the CPANPLUS..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>CPANPLUS::Error</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+CPANPLUS::Error(3pm)   Perl Programmers Reference Guide   CPANPLUS::Error(3pm)
+
+
+
+NAME
+       CPANPLUS::Error
+
+SYNOPSIS
+	   use CPANPLUS::Error qw[cp_msg cp_error];
+
+DESCRIPTION
+       This module provides the error handling code for the CPANPLUS
+       libraries, and is mainly intended for internal use.
+
+FUNCTIONS
+   cp_msg("message string" [,VERBOSE])
+       Records a message on the stack, and prints it to "STDOUT" (or actually
+       $MSG_FH, see the "GLOBAL VARIABLES" section below), if the "VERBOSE"
+       option is true.	The "VERBOSE" option defaults to false.
+
+   msg()
+       An alias for "cp_msg".
+
+   cp_error("error string" [,VERBOSE])
+       Records an error on the stack, and prints it to "STDERR" (or actually
+       $ERROR_FH, see the "GLOBAL VARIABLES" sections below), if the "VERBOSE"
+       option is true.	The "VERBOSE" options defaults to true.
+
+   error()
+       An alias for "cp_error".
+
+CLASS METHODS
+   CPANPLUS::Error-&gtstack()
+       Retrieves all the items on the stack. Since "CPANPLUS::Error" is
+       implemented using "Log::Message", consult its manpage for the function
+       "retrieve" to see what is returned and how to use the items.
+
+   CPANPLUS::Error-&gtstack_as_string([TRACE])
+       Returns the whole stack as a printable string. If the "TRACE" option is
+       true all items are returned with "Carp::longmess" output, rather than
+       just the message.  "TRACE" defaults to false.
+
+   CPANPLUS::Error-&gtflush()
+       Removes all the items from the stack and returns them. Since
+       "CPANPLUS::Error" is  implemented using "Log::Message", consult its
+       manpage for the function "retrieve" to see what is returned and how to
+       use the items.
+
+GLOBAL VARIABLES
+       $ERROR_FH
+	   This is the filehandle all the messages sent to "error()" are being
+	   printed. This defaults to *STDERR.
+
+       $MSG_FH
+	   This is the filehandle all the messages sent to "msg()" are being
+	   printed. This default to *STDOUT.
+
+
+
+perl v5.10.1			  2009-02-12		  CPANPLUS::Error(3pm)
+    </pre></body>
+
+</html>

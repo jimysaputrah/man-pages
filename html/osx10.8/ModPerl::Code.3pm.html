@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module provides functionality for generating mod_perl glue code...." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>$class\::Const - Perl Interface for $class Constants</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+ModPerl::Code(3)      User Contributed Perl Documentation     ModPerl::Code(3)
+
+
+
+NAME
+       $class\::Const - Perl Interface for $class Constants
+
+SYNOPSIS
+CONSTANTS
+       EOF
+
+	       my $groups = $data{$class};
+	       for my $group (sort keys %$groups) {
+		   print $fh &lt&lt"EOF";
+
+   ":$group"
+	 use $class\::Const -compile qw(:$group);
+
+       The ":$group" group is for XXX constants.
+
+       EOF
+
+		   for my $const (sort @{ $groups-&gt{$group} }) {
+		       print $fh "=head3 C&lt$class\::$const&gt\n\n\n";
+		   }
+	       }
+
+	       print $fh "=cut\n";
+	   }
+       }
+
+       sub generate_constants_lookup_doc {
+	   my ($data) = @_;
+
+	   while (my ($class, $groups) = each %$Apache2::ConstantsTable) {
+	       my $constants = [map { @$_ } values %$groups];
+
+	       constants_lookup_code_doc($constants, $class, $data);
+	   }
+       }
+
+       sub generate_constants_group_lookup_doc {
+	   my ($data) = @_;
+
+	   while (my ($class, $groups) = each %$Apache2::ConstantsTable) {
+	       constants_group_lookup_code_doc($class, $groups, $data);
+	   }
+       }
+
+       sub constants_group_lookup_code_doc {
+	   my ($class, $groups, $data) = @_;
+	   my @tags;
+	   my @code;
+
+	   while (my ($group, $constants) = each %$groups) {
+	       $data-&gt{$class}{$group} = [
+		   map {
+		       my @ifdef = constants_ifdef($_);
+		       s/^($constant_prefixes)_?//o;
+		       $seen_const{$class}{$_}++;
+		       $_;
+		   } @$constants
+	       ];
+	   }
+       }
+
+       sub constants_lookup_code_doc {
+	   my ($constants, $class, $data) = @_;
+
+	   my (%switch, %alias);
+
+	   %alias = %shortcuts;
+
+	   my $postfix = lc $class;
+	   my $package = $class . '::';
+	   my $package_len = length $package;
+
+	   my $func = canon_func(qw(constants lookup), $postfix);
+
+	   for (@$constants) {
+	       if (s/^($constant_prefixes)(_)?//o) {
+		   $alias{$_} = join $2 || "", $1, $_;
+	       }
+	       else {
+		   $alias{$_} ||= $_;
+	       }
+	       next unless /^([A-Z])/;
+	       push @{ $switch{$1} }, $_;
+	   }
+
+	   for my $key (sort keys %switch) {
+	       my $names = $switch{$key};
+	       for my $name (@$names) {
+		   my @ifdef = constants_ifdef($alias{$name});
+		   push @{ $data-&gt{$class}{other} }, $name
+		       unless $seen_const{$class}{$name}
+	       }
+	   }
+       }
+
+       sub generate_exports {
+	   my ($self, $c_fh) = @_;
+	   require ModPerl::WrapXS;
+	   ModPerl::WrapXS-&gtgenerate_exports($c_fh); }
+
+       # src/modules/perl/*.c files needed to build APR/APR::* outside # of
+       mod_perl.so sub src_apr_ext {
+	   return map { "modperl_$_" } (qw(error bucket),
+					 map { "common_$_" } qw(util log)); }
+
+       1; __END__
+
+NAME
+       ModPerl::Code - Generate mod_perl glue code
+
+SYNOPSIS
+	 use ModPerl::Code ();
+	 my $code = ModPerl::Code-&gtnew;
+	 $code-&gtgenerate;
+
+DESCRIPTION
+       This module provides functionality for generating mod_perl glue code.
+       Reason this code is generated rather than written by hand include:
+
+       consistency
+       thin and clean glue code
+       enable/disable features (without #ifdefs)
+       adapt to changes in Apache
+       experiment with different approaches to gluing
+
+AUTHOR
+       Doug MacEachern
+
+
+
+perl v5.12.4			  2011-02-02		      ModPerl::Code(3)
+    </pre></body>
+
+</html>

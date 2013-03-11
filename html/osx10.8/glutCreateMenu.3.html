@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glutCreateMenu creates a new pop-up menu and  returns  a  unique  small..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>glutCreateMenu - creates a new pop-up menu.</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+glutCreateMenu(3GLUT)		     GLUT		 glutCreateMenu(3GLUT)
+
+
+
+NAME
+       glutCreateMenu - creates a new pop-up menu.
+
+SYNTAX
+       #include &ltGLUT/glut.h&gt
+
+       int glutCreateMenu(void (*func)(int value));
+
+ARGUMENTS
+       func	 The callback function for the menu that is called when a menu
+		 entry from the menu is selected.  The	value  passed  to  the
+		 callback  is  determined  by  the value for the selected menu
+		 entry.
+
+DESCRIPTION
+       glutCreateMenu creates a new pop-up menu and  returns  a  unique  small
+       integer	identifier.  The range of allocated identifiers starts at one.
+       The menu identifier range is separate from the window identifier range.
+       Implicitly,  the  current  menu	is set to the newly created menu. This
+       menu identifier can be used when calling glutSetMenu.
+
+       When the menu callback is called because a menu entry is  selected  for
+       the  menu, the current menu will be implicitly set to the menu with the
+       selected entry before the callback is made.
+
+EXAMPLE
+       Here is a quick example of how to create a GLUT	popup  menu  with  two
+       submenus and attach it to the right button of the current window:
+
+	 int submenu1, submenu2;
+
+	 submenu1 = glutCreateMenu(selectMessage);
+	 glutAddMenuEntry("abc", 1);
+	 glutAddMenuEntry("ABC", 2);
+	 submenu2 = glutCreateMenu(selectColor);
+	 glutAddMenuEntry("Green", 1);
+	 glutAddMenuEntry("Red", 2);
+	 glutAddMenuEntry("White", 3);
+	 glutCreateMenu(selectFont);
+	 glutAddMenuEntry("9 by 15", 0);
+	 glutAddMenuEntry("Times Roman 10", 1);
+	 glutAddMenuEntry("Times Roman 24", 2);
+	 glutAddSubMenu("Messages", submenu1);
+	 glutAddSubMenu("Color", submenu2);
+	 glutAttachMenu(GLUT_RIGHT_BUTTON);
+
+
+X IMPLEMENTATION NOTES
+       If  available,  GLUT  for  X  will take advantage of overlay planes for
+       implementing pop-up menus. The use of overlay planes can eliminate dis-
+       play  callbacks	when  pop-up  menus  are deactivated. The SERVER_OVER-
+       LAY_VISUALS convention is used to  determine  if  overlay  visuals  are
+       available.
+
+SEE ALSO
+       glutCreateWindow, glutDestroyMenu, glutSetMenu, glutAttachMenu
+
+AUTHOR
+       Mark J. Kilgard (mjk@nvidia.com)
+
+
+
+GLUT				      3.7		 glutCreateMenu(3GLUT)
+    </pre></body>
+
+</html>

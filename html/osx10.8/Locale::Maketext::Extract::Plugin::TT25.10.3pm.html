@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Extracts strings to localise from Template Toolkit templates...." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Locale::Maketext::Extract::Plugin::TT2 - Template Toolkit format parser</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Locale::Maketext::ExtrUser:ContributeLocale::Maketext::Extract::Plugin::TT2(3)
+
+
+
+NAME
+       Locale::Maketext::Extract::Plugin::TT2 - Template Toolkit format parser
+
+SYNOPSIS
+	   $plugin = Locale::Maketext::Extract::Plugin::TT2-&gtnew(
+	       $lexicon 	   # A Locale::Maketext::Extract object
+	       @file_types	   # Optionally specify a list of recognised file types
+	   )
+
+	   $plugin-&gtextract($filename,$filecontents);
+
+DESCRIPTION
+       Extracts strings to localise from Template Toolkit templates.
+
+SHORT PLUGIN NAME
+	   tt2
+
+VALID FORMATS
+       Valid formats are:
+
+       [% |l(args) %]string[% END %]
+       [% 'string' | l(args) %]
+       [% l('string',args) %]
+
+       l and loc are interchangable.
+
+       | and FILTER are interchangable.
+
+KNOWN FILE TYPES
+       .tt
+       .tt2
+       .html
+       .tt.*
+       .tt2.*
+
+REQUIRES
+       Template
+
+NOTES
+       o   BEWARE Using the "loc" form can give false positives if you use the
+	   Perl parser plugin on TT files.  If you want to use the "loc" form,
+	   then you should specify the file types that you want to the Perl
+	   plugin to parse, or enable the default file types, eg:
+
+	      xgetext.pl -P perl ....	     # default file types
+	      xgettext.pl -P perl=pl,pm  ... # specified file types
+
+       o   The string-to-be-localised must be a string, not a variable. We try
+	   not to extract calls to your localise function which contain
+	   variables eg:
+
+	       l('string',arg)	# extracted
+	       l(var,arg)	# not extracted
+
+	   This doesn't work for block filters, so don't do that. Eg:
+
+	       [%  FILTER l %]
+		  string [% var %]	# BAD!
+	       [% END %]
+
+       o   Getting the right line number is difficult in TT. Often it'll be a
+	   range of lines, or it may be thrown out by the use of PRE_CHOMP or
+	   POST_CHOMP.	It will always be within a few lines of the correct
+	   location.
+
+       o   If you have PRE/POST_CHOMP enabled by default in your templates,
+	   then you should extract the strings using the same values.  In
+	   order to set them, you can use the following wrapper script:
+
+	      #!/usr/bin/perl
+
+	      use Locale::Maketext::Extract::Run qw(xgettext);
+	      use Locale::Maketext::Extract::Plugin::TT2();
+
+	      %Locale::Maketext::Extract::Plugin::TT2::PARSER_OPTIONS = (
+		   PRE_CHOMP  =&gt 1, # or 2
+		   POST_CHOMP =&gt 1, # or 2
+
+		   # Also START/END_TAG, ANYCASE, INTERPOLATE, V1DOLLAR, EVAL_PERL
+	      );
+
+	      xgettext(@ARGV);
+
+ACKNOWLEDGEMENTS
+       Thanks to Andy Wardley for writing the Template::Directive subclass
+       which made this possible.
+
+SEE ALSO
+       xgettext.pl
+	   for extracting translatable strings from common template systems
+	   and perl source files.
+
+       Locale::Maketext::Lexicon
+       Locale::Maketext::Extract::Plugin::Base
+       Locale::Maketext::Extract::Plugin::FormFu
+       Locale::Maketext::Extract::Plugin::Perl
+       Locale::Maketext::Extract::Plugin::YAML
+       Locale::Maketext::Extract::Plugin::Mason
+       Locale::Maketext::Extract::Plugin::TextTemplate
+       Locale::Maketext::Extract::Plugin::Generic
+       Template::Toolkit
+
+AUTHORS
+       Clinton Gormley &ltclint@traveljury.com&gt
+
+       Andy Wardley http://wardley.org
+
+COPYRIGHT
+       Copyright 2002-2008 by Audrey Tang &ltcpan@audreyt.org&gt.
+
+       This software is released under the MIT license cited below.
+
+   The "MIT" License
+       Permission is hereby granted, free of charge, to any person obtaining a
+       copy of this software and associated documentation files (the
+       "Software"), to deal in the Software without restriction, including
+       without limitation the rights to use, copy, modify, merge, publish,
+       distribute, sublicense, and/or sell copies of the Software, and to
+       permit persons to whom the Software is furnished to do so, subject to
+       the following conditions:
+
+       The above copyright notice and this permission notice shall be included
+       in all copies or substantial portions of the Software.
+
+       THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+       OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+       MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+       IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+       CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+       TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+       SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+perl v5.10.1			  200Locale::Maketext::Extract::Plugin::TT2(3)
+    </pre></body>
+
+</html>

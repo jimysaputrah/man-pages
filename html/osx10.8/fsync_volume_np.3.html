@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The sync_volume_np() function causes data and metadata on the filesystem..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>sync_volume_np -- Sync a mounted filesystem</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+SYNC_VOLUME_NP(3)	 BSD Library Functions Manual	     SYNC_VOLUME_NP(3)
+
+NAME
+     sync_volume_np -- Sync a mounted filesystem
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include &ltunistd.h&gt
+
+     int
+     sync_volume_np(const char *path, int flags);
+
+     int
+     fsync_volume_np(int fd, int flags);
+
+DESCRIPTION
+     The sync_volume_np() function causes data and metadata on the filesystem
+     containing path to be synced to disk; this may be any file or directory
+     on that filesystem.  The fsync_volume_np() does the same thing, but using
+     an open file descriptor for that filesystem.  Both functions take a flags
+     parameter, with the currently-defined options:
+
+	   SYNC_VOLUME_FULLSYNC  Request that the data and metadata be written
+				 to the disk hardware; if not set, then the
+				 hardware may keep it in cache.
+
+	   SYNC_VOLUME_WAIT	 Wait for the data and metadata to be written;
+				 if not set, then it will return when the
+				 requests have been made.
+
+RETURN VALUES
+     Both functions return 0 on success, and a non-zero error code on error.
+
+ERRORS
+     The fsync_volume_np() function may return EBADF if the fd parameter is
+     not a valid, open file descriptor.  The sync_volume_np() function may
+     return errors if:
+
+     [EACCES]	   Search permission is denied for a component of the path
+		   prefix.
+
+     [EIO]	   An I/O error occurs while reading from or writing to the
+		   file system.
+
+     [ELOOP]	   Too many symbolic links are encountered in translating the
+		   pathname.  This is taken to be indicative of a looping sym-
+		   bolic link.
+
+     [ENAMETOOLONG]
+		   A component of a pathname exceeds {NAME_MAX} characters, or
+		   an entire path name exceeds {PATH_MAX} characters.
+
+     [ENOENT]	   The named file does not exist.
+
+     [ENOTDIR]	   A component of the path prefix is not a directory.
+
+BSD				 March 3, 2013				   BSD
+    </pre></body>
+
+</html>

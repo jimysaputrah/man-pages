@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Mail::SPF::Util is Mail::SPF's utility class...." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Mail::SPF::Util - Mail::SPF utility class</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Mail::SPF::Util(3)    User Contributed Perl Documentation   Mail::SPF::Util(3)
+
+
+
+NAME
+       Mail::SPF::Util - Mail::SPF utility class
+
+SYNOPSIS
+	   use Mail::SPF::Util;
+
+	   $hostname = Mail::SPF::Util-&gthostname;
+
+	   $ipv6_address_v4mapped =
+	       Mail::SPF::Util-&gtipv4_address_to_ipv6($ipv4_address);
+
+	   $ipv4_address =
+	       Mail::SPF::Util-&gtipv6_address_to_ipv4($ipv6_address_v4mapped);
+
+	   $is_v4mapped =
+	       Mail::SPF::Util-&gtipv6_address_is_ipv4_mapped($ipv6_address);
+
+	   $ip_address_string  = Mail::SPF::Util-&gtip_address_to_string($ip_address);
+	   $reverse_name       = Mail::SPF::Util-&gtip_address_reverse($ip_address);
+
+	   $validated_domain = Mail::SPF::Util-&gtvalid_domain_for_ip_address(
+	       $spf_server, $request,
+	       $ip_address, $domain,
+	       $find_best_match,       # defaults to false
+	       $accept_any_domain      # defaults to false
+	   );
+
+DESCRIPTION
+       Mail::SPF::Util is Mail::SPF's utility class.
+
+   Class methods
+       The following class methods are provided:
+
+       hostname: returns string
+	   Returns the fully qualified domain name (FQDN) of the local host.
+
+       ipv4_address_to_ipv6($ipv4_address): returns NetAddr::IP; throws
+       Mail::SPF::EInvalidOptionValue
+	   Converts the specified NetAddr::IP IPv4 address into an IPv4-mapped
+	   IPv6 address.  Throws a Mail::SPF::EInvalidOptionValue exception if
+	   the specified IP address is not an IPv4 address.
+
+       ipv6_address_to_ipv4($ipv6_address): returns NetAddr::IP; throws
+       Mail::SPF::EInvalidOptionValue
+	   Converts the specified NetAddr::IP IPv4-mapped IPv6 address into a
+	   proper IPv4 address.  Throws a Mail::SPF::EInvalidOptionValue
+	   exception if the specified IP address is not an IPv4-mapped IPv6
+	   address.
+
+       ipv6_address_is_ipv4_mapped($ipv6_address): returns boolean
+	   Returns true if the specified NetAddr::IP IPv6 address is an
+	   IPv4-mapped address, false otherwise.
+
+       ip_address_to_string($ip_address): returns string; throws
+       Mail::SPF::EInvalidOptionValue
+	   Returns the given NetAddr::IP IPv4 or IPv6 address compactly
+	   formatted as a string.  For IPv4 addresses, this is equivalent to
+	   calling  NetAddr::IP's "addr"  method.  For IPv6 addresses, this is
+	   equivalent to calling  NetAddr::IP's "short"  method.  Throws a
+	   Mail::SPF::EInvalidOptionValue exception if the specified object is
+	   not a NetAddr::IP IPv4 or IPv6 address object.
+
+       ip_address_reverse($ip_address): returns string; throws
+       Mail::SPF::EInvalidOptionValue
+	   Returns the "in-addr.arpa."/"ip6.arpa." reverse notation of the
+	   given NetAddr::IP IPv4 or IPv6 address.  Throws a
+	   Mail::SPF::EInvalidOptionValue exception if the specified object is
+	   not a NetAddr::IP IPv4 or IPv6 address object.
+
+       valid_domain_for_ip_address($server, $request, $ip_address, $domain,
+       $find_best_match = false, $accept_any_domain = false): returns string
+       or undef
+	   Finds a valid domain name for the given NetAddr::IP IP address that
+	   matches the given domain or a sub-domain thereof.  A domain name is
+	   valid for the given IP address if the IP address reverse-maps to
+	   that domain name in DNS, and the domain name in turn forward-maps
+	   to the IP address.  Uses the given Mail::SPF::Server and
+	   Mail::SPF::Request objects to perform DNS look-ups.	Returns the
+	   validated domain name.
+
+	   If $find_best_match is true, the one domain name is selected that
+	   best matches the given domain name, preferring direct matches over
+	   sub-domain matches.	Defaults to false.
+
+	   If $accept_any_domain is true, any domain names are considered
+	   acceptable, even if they differ completely from the given domain
+	   name (which is then effectively unused unless a best match is
+	   requested).	Defaults to false.
+
+SEE ALSO
+       Mail::SPF
+
+       For availability, support, and license information, see the README file
+       included with Mail::SPF.
+
+AUTHORS
+       Julian Mehnle &ltjulian@mehnle.net&gt, Shevek &ltcpan@anarres.org&gt
+
+
+
+perl v5.10.1			  2012-06-20		    Mail::SPF::Util(3)
+    </pre></body>
+
+</html>

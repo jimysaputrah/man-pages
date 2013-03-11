@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This  document  contains  the formal specification of the syntax of the..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>doctools_lang_syntax - doctools language syntax</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+doctools_lang_syntax(n)       Documentation tools      doctools_lang_syntax(n)
+
+
+
+______________________________________________________________________________
+
+NAME
+       doctools_lang_syntax - doctools language syntax
+
+DESCRIPTION
+       This  document  contains  the formal specification of the syntax of the
+       doctools markup language, version 1 in Backus-Naur-Form. This  document
+       is intended to be a reference, complementing the doctools language com-
+       mand reference.	A beginner should read the much more informally  writ-
+       ten  doctools  language	introduction first before trying to understand
+       either this document or the command reference.
+
+FUNDAMENTALS
+       In the broadest terms possible the doctools markup language  is	LaTeX-
+       like, instead of like SGML and similar languages. A document written in
+       this language consists primarily of text, with markup commands embedded
+       into it.
+
+       Each markup command is a just Tcl command surrounded by a matching pair
+       of [ and ]. Which commands are available,  and  their  arguments,  i.e.
+       syntax is specified in the doctools language command reference.
+
+       In this document we specify first the lexeme, and then the syntax, i.e.
+       how we can mix text and markup commands with each other.
+
+LEXICAL DEFINITIONS
+       In the syntax rules listed in the next section
+
+       [1]    &ltTEXT&gt stands for all text except markup commands.
+
+       [2]    Any XXX stands for the markup command [xxx] including its  argu-
+	      ments.  Each  markup  command  is  a Tcl command surrounded by a
+	      matching pair of [ and ]. Inside of these delimiters  the  usual
+	      rules  for  a  Tcl  command apply with regard to word quotation,
+	      nested commands, continuation lines, etc.
+
+       [3]    &ltWHITE&gt stands for all text consisting only of spaces, newlines,
+	      tabulators and the comment markup command.
+
+
+SYNTAX
+       The  rules  listed  here specify only the syntax of doctools documents.
+       The lexical level of the language was covered in the previous  section.
+
+       Regarding the syntax of the (E)BNF itself
+
+       [1]    The construct { X } stands for zero or more occurrences of X.
+
+       [2]    The construct [ X ] stands for zero or one occurrence of X.
+
+       [3]    The  construct  LIST_BEGIN&ltX&gt  stands  for  the  markup  command
+	      list_begin with X as its type argument.
+
+       The syntax:
+
+       manpage = defs
+		 MANPAGE_BEGIN
+		 header
+		 DESCRIPTION
+		 body
+		 MANPAGE_END
+		 { &ltWHITE&gt }
+
+       defs    = { INCLUDE | VSET | &ltWHITE&gt }
+
+       header  = { TITLEDESC | MODDESC | COPYRIGHT | REQUIRE | defs | xref }
+
+       xref    = KEYWORDS | SEE_ALSO | CATEGORY
+
+       body    = paras { SECTION    sbody  }
+       sbody   = paras { SUBSECTION ssbody }
+       ssbody  = paras
+
+       paras   = tblock { (PARA | NL) tblock }
+
+       tblock  = { &ltTEXT&gt | defs | markup | xref | an_example | a_list }
+
+       markup  = ARG	 | CLASS | CMD	   | CONST     | EMPH	| FILE
+	       | FUN	 | LB	 | METHOD  | NAMESPACE | OPT	| OPTION
+	       | PACKAGE | RB	 | SECTREF | STRONG    | SYSCMD | TERM
+	       | TYPE	 | URI	 | USAGE   | VAR       | WIDGET
+
+       example = EXAMPLE
+	       | EXAMPLE_BEGIN extext EXAMPLE_END
+
+       extext  = { &ltTEXT&gt | defs | markup }
+
+       a_list  = LIST_BEGIN&ltarguments&gt	 argd_list   LIST_END
+	       | LIST_BEGIN&ltcommands&gt	 cmdd_list   LIST_END
+	       | LIST_BEGIN&ltdefinitions&gt def_list    LIST_END
+	       | LIST_BEGIN&ltenumerated&gt  enum_list   LIST_END
+	       | LIST_BEGIN&ltitemized&gt	 item_list   LIST_END
+	       | LIST_BEGIN&ltoptions&gt	 optd_list   LIST_END
+	       | LIST_BEGIN&lttkoptions&gt	 tkoptd_list LIST_END
+
+       argd_list   = [ &ltWHITE&gt ] { ARG_DEF	paras }
+       cmdd_list   = [ &ltWHITE&gt ] { CMD_DEF	paras }
+       def_list    = [ &ltWHITE&gt ] { (DEF|CALL)	paras }
+       enum_list   = [ &ltWHITE&gt ] { ENUM 	paras }
+       item_list   = [ &ltWHITE&gt ] { ITEM 	paras }
+       optd_list   = [ &ltWHITE&gt ] { OPT_DEF	paras }
+       tkoptd_list = [ &ltWHITE&gt ] { TKOPTION_DEF paras }
+
+
+BUGS, IDEAS, FEEDBACK
+       This document,  will  undoubtedly  contain  bugs  and  other  problems.
+       Please  report  such in the category doctools of the Tcllib SF Trackers
+       [http://sourceforge.net/tracker/?group_id=12883].  Please  also	report
+       any ideas for enhancements you may have.
+
+SEE ALSO
+       doctools_intro,	   doctools_lang_cmdref,    doctools_lang_faq,	  doc-
+       tools_lang_intro
+
+KEYWORDS
+       doctools commands, doctools language, doctools markup, doctools syntax,
+       markup, semantic markup
+
+CATEGORY
+       Documentation tools
+
+COPYRIGHT
+       Copyright (c) 2007 Andreas Kupries &ltandreas_kupries@users.sourceforge.net&gt
+
+
+
+
+doctools			      1.0	       doctools_lang_syntax(n)
+    </pre></body>
+
+</html>

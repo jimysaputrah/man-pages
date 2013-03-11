@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Parse::Eyapp::Driver - The LR parser</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Parse::Eyapp::Driver(3User Contributed Perl DocumentatiParse::Eyapp::Driver(3)
+
+
+
+NAME
+       Parse::Eyapp::Driver - The LR parser
+
+INTRODUCTION
+       This class has the method "YYParse" implementing the LR generic parsing
+       algorithm plus the methods that give support to the generated parser.
+
+THE "YYParse" METHOD
+       The "YYParse" methods implements the generic LR parsing algorithm.  It
+       very much works "Parse::Yapp::YYParse" and as yacc/bison "yyparse".  It
+       accepts almost the same arguments as "Class-&gtnew" (Being "Class" the
+       name of the generated class).
+
+       The parser uses two tables and a stack. The two tables are called the
+       action table and the goto table.  The stack is used to keep track of
+       the states visited.
+
+       At each step the generated parser consults the "action" table and takes
+       one decision: To shift to a new state consuming one token (and pushing
+       the current state in the stack) or to reduce by some production rule.
+       In the last case the parser pops from its stack as many states as
+       symbols are on the right hand side of the production rule. Here is a
+       Perl/C like pseudocode summarizing the activity of "YYParse":
+
+	    1	my $parser = shift; # The parser object
+	    2	push(@stack, $parser-&gt{startstate});
+	    3	$b = $parser-&gtYYLexer(); # Get the first token
+	    4	FOREVER: {
+	    5	  $s = top(0);	# Get the state on top of the stack
+	    6	  $a = $b;
+	    7	  switch ($parser-&gtaction[$s-&gtstate][$a]) {
+	    8	    case "shift t" :
+	    9	      my $t;
+	   10	      $t-&gt{state} = t;
+	   11	      $t-&gt{attr}  = $a-&gt{attr};
+	   12	      push($t);
+	   13	      $b = $parser-&gtYYLexer(); # Call the lexical analyzer
+	   14	      break;
+	   15	    case "reduce A-&gtalpha" :
+	   16	      # Call the semantic action with the attributes of the rhs as args
+	   17	      my $semantic  = $parser-&gtSemantic{A -&gtalpha}; # The semantic action
+	   18	      my $r;
+	   19	      $r-&gt{attr} = $semantic-&gt($parser, top(|alpha|-1)-&gtattr, ... , top(0)-&gtattr);
+	   20
+	   21	      # Pop as many states as symbols on the rhs of A-&gtalpha
+	   22	      pop(|alpha|);
+	   23
+	   24	      # Goto next state
+	   25	      $r-&gt{state} = $parser-&gtgoto[top(0)][A];
+	   26	      push($r);
+	   27	      break;
+	   28	    case "accept" : return (1);
+	   29	    default : $parser-&gtYYError("syntax error");
+	   30	  }
+	   31	  redo FOREVER;
+	   32	}
+
+       Here "|alpha|" stands for the length of "alpha". Function top(k)
+       returns the state in position "k" from the top of the stack, i.e. the
+       state at depth "k".  Function pop(k) extracts "k" states from the
+       stack. The call "$state-&gtattr" returns the attribute associated with
+       $state. The call "$parser-&gtSemantic{A -&gtalpha}" returns the semantic
+       action associated with production "A -&gtalpha".
+
+       Let us see a trace for the small grammar in
+       "examples/debuggingtut/aSb.yp":
+
+	 pl@nereida:~/LEyapp/examples$ /usr/local/bin/paste.pl aSb.yp aSb.output | head -5
+	 %%						| Rules:
+	 S:		    { print "S -&gt epsilon\n" }	| ------
+	     |	 'a' S 'b'  { print "S -&gt a S b\n" }	| 0:	$start -&gt S $end
+	 ;						| 1:	S -&gt /* empty */
+	 %%						| 2:	S -&gt 'a' S 'b'
+
+       The tables in file "aSb.output" describe the actions and transitions to
+       take:
+
+	 pl@nereida:~/LEyapp/examples$ cat -n aSb.output
+	    .  .........................................
+	    7  States:
+	    8  -------
+	    9  State 0:
+	   10
+	   11	       $start -&gt . S $end      (Rule 0)
+	   12
+	   13	       'a'     shift, and go to state 2
+	   14
+	   15	       $default        reduce using rule 1 (S)
+	   16
+	   17	       S       go to state 1
+	   18
+	   19  State 1:
+	   20
+	   21	       $start -&gt S . $end      (Rule 0)
+	   22
+	   23	       $end    shift, and go to state 3
+	   24
+	   25  State 2:
+	   26
+	   27	       S -&gt 'a' . S 'b'        (Rule 2)
+	   28
+	   29	       'a'     shift, and go to state 2
+	   30
+	   31	       $default        reduce using rule 1 (S)
+	   32
+	   33	       S       go to state 4
+	   34
+	   35  State 3:
+	   36
+	   37	       $start -&gt S $end .      (Rule 0)
+	   38
+	   39	       $default        accept
+	   40
+	   41  State 4:
+	   42
+	   43	       S -&gt 'a' S . 'b'        (Rule 2)
+	   44
+	   45	       'b'     shift, and go to state 5
+	   46
+	   47  State 5:
+	   48
+	   49	       S -&gt 'a' S 'b' .        (Rule 2)
+	   50
+	   51	       $default        reduce using rule 2 (S)
+	   52
+	   53
+	   54  Summary:
+	   55  --------
+	   56  Number of rules	       : 3
+	   57  Number of terminals     : 3
+	   58  Number of non-terminals : 2
+	   59  Number of states        : 6
+
+       When executed with "yydebug" set and input "aabb"  we obtain the
+       following output:
+
+	 pl@nereida:~/LEyapp/examples/debuggingtut$ eyapp -b '' -o use_aSb.pl aSb
+	 pl@nereida:~/LEyapp/examples/debuggingtut$ ./use_aSb.pl -d
+	 Provide a statement like "a a b b" and press &ltCR&gt&ltCTRL-D&gt: aabb
+	 ----------------------------------------
+	 In state 0:
+	 Stack:[0]
+	 Need token. Got &gta&lt
+	 Shift and go to state 2.
+	 ----------------------------------------
+	 In state 2:
+	 Stack:[0,2]
+	 Need token. Got &gta&lt
+	 Shift and go to state 2.
+	 ----------------------------------------
+	 In state 2:
+	 Stack:[0,2,2]
+	 Need token. Got &gtb&lt
+	 Reduce using rule 1 (S --&gt /* empty */): S -&gt epsilon
+	 Back to state 2, then go to state 4.
+	 ----------------------------------------
+	 In state 4:
+	 Stack:[0,2,2,4]
+	 Shift and go to state 5.
+	 ----------------------------------------
+	 In state 5:
+	 Stack:[0,2,2,4,5]
+	 Don't need token.
+	 Reduce using rule 2 (S --&gt a S b): S -&gt a S b
+	 Back to state 2, then go to state 4.
+	 ----------------------------------------
+
+       As a result of reducing by rule 2 the three last visited states are
+       popped from the stack, and the stack becomes "[0,2]". But that means
+       that we are now in state 2 seeing a "S".  If you look at the table
+       above being in state 2 and seeing a "S" we go to state 4.
+
+	 In state 4:
+	 Stack:[0,2,4]
+	 Need token. Got &gtb&lt
+	 Shift and go to state 5.
+	 ----------------------------------------
+	 In state 5:
+	 Stack:[0,2,4,5]
+	 Don't need token.
+	 Reduce using rule 2 (S --&gt a S b): S -&gt a S b
+	 Back to state 0, then go to state 1.
+	 ----------------------------------------
+	 In state 1:
+	 Stack:[0,1]
+	 Need token. Got &gt&lt
+	 Shift and go to state 3.
+	 ----------------------------------------
+	 In state 3:
+	 Stack:[0,1,3]
+	 Don't need token.
+	 Accept.
+
+METHODS IN THE GENERATED CLASS: "Parse::Eyapp::Driver" METHODS
+       The class containing the parser generated by "Parse::Eyapp" inherits
+       from "Parse::Eyapp::Driver". Therefore all the methods in
+       "Parse::Eyapp::Driver"  are available in the generated class.
+
+       This section describes the methods and objects belonging to the class
+       generated either using eyapp or "Parse::Eyapp-&gtnew_grammar". In the
+       incoming paragraphs we will assume that "Class" was the value selected
+       for the "classname" argument when "Parse::Eyapp-&gtnew_grammar" was
+       called.	Objects belonging to  "Class" are the actual parsers for the
+       input grammar.
+
+   Class-&gtnew
+       The method "Class-&gtnew" returns a new LALR parser object.  Here "Class"
+       stands for the name of the class containing the parser.	See an example
+       of call:
+
+	 my $parser = main-&gtnew(yyprefix =&gt 'Parse::Eyapp::Node::',
+				yylex	 =&gt \&main::_Lexer,
+				yyerror  =&gt \&main::_Error,
+				yydebug =&gt 0x1F,
+	 );
+
+       The meaning of the arguments used in the example are as follows:
+
+       - yyprefix
+	   Used with %tree or %metatree.  When used, the type names of the
+	   nodes of the syntax tree will be build prefixing the value
+	   associated to "yyprefix" to the name of the production rule. The
+	   name of the production rule is either explicitly given through a
+	   %name directive or the concatenation of the left hand side of the
+	   rule with the ordinal of the right hand side of the production.
+	   See section "Compiling with eyapp and treereg" in Parse::Eyapp for
+	   an example.
+
+       - yylex
+	   Reference to the lexical analyzer subroutine
+
+       - yyerror
+	   Reference to the error subroutine. The error subroutine receives as
+	   first argument the reference to the "Class" parser object.  This
+	   way it can take advantage of methods like "YYCurval" and YYExpect
+	   (see below):
+
+	     sub _Error {
+	       my($token)=$_[0]-&gtYYCurval;
+	       my($what)= $token ? "input: '$token'" : "end of input";
+	       my @expected = $_[0]-&gtYYExpect();
+
+	       local $" = ', ';
+	       die "Syntax error near $what. Expected one of these tokens: @expected\n";
+	     }
+
+       - yydebug
+	   Controls the level of debugging. Must be a number.
+
+       The package produced from the grammar has several methods.
+
+       The parser object has the following methods that work at parsing time
+       exactly as in Parse::Yapp. These methods can be found in the module
+       Parse::Eyapp::Driver.  Assume you have in $parser the reference to your
+       parser object:
+
+   $parser-&gtYYAction
+       Receives the name of a production and a subroutine reference
+       implementing the new semantic action.  If no subroutine reference is
+       set returns the reference to the current semantic action. See the
+       tutorial Parse::Eyapp::defaultaction and the examples in the
+       "examples/recycle/" directory
+
+    $parser-&gtYYAccept
+       Works as yacc/bison "YYACCEPT".	The parser finishes returning the
+       current semantic value to indicate success.
+
+    $parser-&gtYYAbort
+       Works as yacc/bison "YYABORT".  The parser finishes returning "undef"
+       to indicate failure.
+
+   Parse::Eyapp::Driver::BeANode
+       Is not a method.  Receives as input a "Class" name.  Introduces
+       "Parse::Eyapp::Node" as an ancestor class of "Class". To work
+       correctly, objects belonging to "Class" must be hashes with a
+       "children" key whose value must be a reference to the array of
+       children. The children must be also "Parse::Eyapp::Node" nodes.
+       Actually you can circumvent this call by directly introducing
+       "Parse::Eyapp::Node" in the ancestors of "Class":
+
+		push @{$class."::ISA"}, "Parse::Eyapp::Node"
+
+   $parser-&gtYYBuildAST
+       Sometimes the best time to decorate a node with some attributes is just
+       after being built. In such cases the programmer can take manual control
+       building the node with "YYBuildAST" to immediately proceed to decorate
+       it.
+
+       The following example from the file "lib/Simple/Types.eyp" in the
+       tarball in "examples/typechecking/Simple-Types-XXX.tar.gz" illustrates
+       the idea:
+
+	Variable:
+	    %name  VARARRAY
+	    $ID ('[' binary ']') &lt%name INDEXSPEC +&gt
+	      {
+		my $self = shift;
+		my $node =  $self-&gtYYBuildAST(@_);
+		$node-&gt{line} = $ID-&gt[1];
+		return $node;
+	      }
+
+       Actually, the %tree directive is semantically equivalent to:
+
+	 %default action { goto &Parse::Eyapp::Driver::YYBuildAST }
+
+    $parser-&gtYYBuildingTree
+       Influences the semantic of list operators.  If true the action
+       associated with "X+" will be to build a "Parse::Eyapp::Node" node with
+       all the attributes of the elements in the list as children. This is the
+       appropriate semantic when working under the %tree directive.  If set to
+       false the semantic action will return an anonymous list with the
+       attributes associated with the "X" in the plus list.  Same thing with
+       the operators "*" and "?".
+
+   $parser-&gtYYBuildTS
+       Similar to "$parser-&gtYYBuildAST" but builds nodes for translation
+       schemes.
+
+   $parser-&gtYYBypass
+       Returns TRUE if running under the "%tree bypass" clause
+
+   $parser-&gtYYBypassrule
+       Returns TRUE if the production being used for reduction was marked to
+       be bypassed.
+
+    $parser-&gtYYCurtok
+       Gives the current token
+
+    $parser-&gtYYCurval
+       Gives the attribute associated with the current token
+
+   $parser-&gtYYDelegateaction
+       Use it as "defaultaction" if you want to recycle your grammar.  It is
+       equivalent to:
+
+	 sub YYDelegateaction {
+	   my $self = shift;
+
+	   my $action = $self-&gtYYName;
+
+	   $self-&gt$action(@_);
+	 }
+
+       For a full example illustrating how to use it, see files
+       "examples/recycle/NoacInh.eyp" and
+       "examples/recycle/icalcu_and_ipost.pl" in the Parse::Eyapp distribution
+
+    $parser-&gtYYEndOfInput
+       True if the "pos()" of the input being scanned in "${$parser-&gtinput}"
+       is at the end
+
+    $parser-&gtYYErrok
+       Works as yacc/bison "yyerrok".  Modifies the error status so that
+       subsequent error messages will be emitted.
+
+    $parser-&gtYYError
+       Works as yacc/bison "YYERROR".  Pretends that a syntax error has been
+       detected.
+
+    $parser-&gtYYExpect
+       Returns the list of tokens the parser expected when the failure
+       occurred
+
+	pl@nereida:~/src/perl/YappWithDefaultAction/examples$ \
+				   sed -ne '26,33p' Postfix.eyp
+	sub _Error {
+	  my($token)=$_[0]-&gtYYCurval;
+	  my($what)= $token ? "input: '$token'" : "end of input";
+	  my @expected = $_[0]-&gtYYExpect();
+
+	  local $" = ', ';
+	  die "Syntax error near $what. Expected one of these tokens: @expected\n";
+	}
+
+       See the tutorial Parse::Eyapp::datagenerationtut and the section TOKENS
+       DEPENDING ON THE SYNTACTIC CONTEXT in the tutorial
+       Parse::Eyapp::debuggingtut for more detailed examples of use of
+       "YYExpect".
+
+   $parser-&gtYYFirstline
+       First line of the input string describing the grammar
+
+   $parser-&gtYYGrammar
+       Return the list of grammar items.  Each item is an anonymous list
+       containing
+
+       o The name of the production
+
+       o The LHS of the production
+
+       o An anonymous list containing the symbols in the RHS
+
+       If it receives an index as argument returns the corresponding item The
+       following debugger session explain its use:
+
+	 pl@europa:~/LEyapp/examples/recycle$ perl -wd usepostfix.pl
+	 main::(usepostfix.pl:5):	 my $parser = new Postfix();
+	   DB&lt1&gt n
+	 main::(usepostfix.pl:6):	 $parser-&gtRun;
+	   DB&lt1&gt x $parser-&gtYYGrammar
+	 0  ARRAY(0xde5e20)
+	    0  '_SUPERSTART'
+	    1  '$start'
+	    2  ARRAY(0xc85e80)
+	       0  'line'
+	       1  '$end'
+	    3  0
+	 1  ARRAY(0xe2b6b0)
+	    0  'line_1'
+	    1  'line'
+	    2  ARRAY(0xe3abc0)
+	       0  'exp'
+	    3  0
+	 2  ARRAY(0xa05530)
+	    0  'exp_2'
+	    1  'exp'
+	    2  ARRAY(0x75bdc0)
+	       0  'NUM'
+	    3  0
+
+	    ...  etc, etc
+
+       If an index is provided it returns the item for such number:
+
+	   DB&lt2&gt x $parser-&gtYYGrammar(10)
+	 0  'exp_10'
+	 1  'exp'
+	 2  ARRAY(0xa05f80)
+	    0  '('
+	    1  'exp'
+	    2  ')'
+	 3  0
+
+       You can also use a production name as argument:
+
+	   DB&lt3&gt x $parser-&gtYYGrammar('exp_7')
+	 0  'exp_7'
+	 1  'exp'
+	 2  ARRAY(0xa05890)
+	    0  'exp'
+	    1  '*'
+	    2  'exp'
+	 3  0
+
+   $parser-&gtYYGetLRAction($state, $token)
+       Returns the shift-reduce action for state $state and token $token. A
+       positive number must be interpreted as a shift to the state with that
+       number. A negative number "-m" indicates a reduction by production with
+       index "m".  Returns "undef" if no action is defined for such
+       combination "($state, $token)".
+
+       See example "DynamicallyChangingTheParser.eyp" in the directory
+       "examples/debuggintut" for an example of use.
+
+   $parser-&gtYYIssemantic
+       Returns TRUE if the terminal is semantic. Semantics token can be
+       declared using the directive "%semantic token". The opposite of a
+       Semantic token is a Syntactic token. Syntactic tokens can be declared
+       using the directive  "%syntactic token".
+
+       When using the %tree directive all the nodes corresponding to syntactic
+       tokens are pruned from the tree. Under this directive tokens in the
+       text delimited by simple quotes (like '+') are, by default, considered
+       syntactic tokens.
+
+       When using the %metatree directive all the tokens are considered, by
+       default, semantic tokens.  Thus, no nodes will be - by default- pruned
+       when construction the code augmented tree. The exception are string
+       tokens used as separators in the definition of lists,  like in "S &lt*
+       ';'&gt". If you want the separating string token to appear include an
+       explicit semantic declaration for it (example "%semantic token ';'").
+
+   $parser-&gtYYIndex
+       Receives the name of production (right hand side).  Returns the index
+       in the grammar of the production with such name.  When called in a list
+       context and without a name return the hash containing the relation
+
+		  production name =&gt production index
+
+       The following debugger session illustrates its use:
+
+	 pl@europa:~/LEyapp/examples/recycle$ perl -wd usepostfix.pl
+	 main::(usepostfix.pl:5):	 my $parser = new Postfix();
+	 main::(usepostfix.pl:6):	 $parser-&gtRun;
+	 DB&lt1&gt x $parser-&gtYYIndex
+	 0  'line_1'
+	 1  1
+	 2  'exp_3'
+	 3  3
+	 4  'exp_6'
+	 5  6
+	 6  'exp_4'
+	 7  4
+	 8  'exp_10'
+	 9  10
+	 10  'exp_8'
+	 11  8
+	 12  'exp_5'
+	 13  5
+	 14  'exp_7'
+	 15  7
+	 16  'exp_2'
+	 17  2
+	 18  '_SUPERSTART'
+	 19  0
+	 20  'exp_9'
+	 21  9
+
+       We can specify a list of names:
+
+	 DB&lt2&gt x $parser-&gtYYIndex(qw{exp_4 exp_7})
+	 0  4
+	 1  7
+	 DB&lt3&gt x $parser-&gtYYIndex(qw{exp_4})
+	 0  4
+
+   $parser-&gtYYInput
+       Alias "input". If an argument is provided, sets the input for the
+       parser object.  The argument is a string or a reference to a string.
+       It returns a reference to the input string or "undef" if not set.
+
+   $parser-&gtYYIsterm
+       Returns TRUE  if the symbol given as argument is a terminal. Example:
+
+	 DB&lt0&gt x $self-&gtYYIsterm('exp')
+	0  ''
+	 DB&lt1&gt x $self-&gtYYIsterm('*')
+	0  1
+
+       An example of combined use of "YYRightside", "YYRuleindex", "YYLhs" and
+       "YYIsterm" can be found "examples/Eyapp/Rule3.yp":
+
+	nereida:~/src/perl/YappWithDefaultAction/examples&gt sed -n -e '4,22p' Rule3.yp | cat -n
+	 1  sub build_node {
+	 2    my $self = shift;
+	 3    my @children = @_;
+	 4    my @right = $self-&gtYYRightside();
+	 5    my $var = $self-&gtYYLhs;
+	 6    my $rule = $self-&gtYYRuleindex();
+	 7
+	 8    for(my $i = 0; $i &lt @right; $i++) {
+	 9	$_ = $right[$i];
+	10	if ($self-&gtYYIsterm($_)) {
+	11	  $children[$i] = bless { token =&gt $_, attr =&gt $children[$i] },
+	12					      __PACKAGE__.'::TERMINAL';
+	13	}
+	14    }
+	15    bless {
+	16	      children =&gt \@children,
+	17	      info =&gt "$var -&gt @right"
+	18	    }, __PACKAGE__."::${var}_$rule"
+	19  }
+
+       when executed an output similar to this is produced:
+
+	nereida:~/src/perl/YappWithDefaultAction/examples&gt userule3.pl
+	2*3
+	$VAR1 = bless( {
+	  'info' =&gt 'exp -&gt exp * exp',
+	  'children' =&gt [
+	    bless( {
+	      'info' =&gt 'exp -&gt NUM',
+	      'children' =&gt [ bless( { 'attr' =&gt '2', 'token' =&gt 'NUM' }, 'Rule3::TERMINAL' ) ]
+	    }, 'Rule3::exp_6' ),
+	    bless( { 'attr' =&gt '*', 'token' =&gt '*' }, 'Rule3::TERMINAL' ),
+	    bless( {
+	      'info' =&gt 'exp -&gt NUM',
+	      'children' =&gt [ bless( { 'attr' =&gt '3', 'token' =&gt 'NUM' }, 'Rule3::TERMINAL' )
+	      ]
+	    }, 'Rule3::exp_6' )
+	  ]
+	}, 'Rule3::exp_11' );
+
+    $parser-&gtYYLexer
+       Returns a reference to the lexical analyzer
+
+    $parser-&gtYYLhs
+       Returns the identifier of the left hand side of the current production
+       (the one that is being used for reduction/reverse derivation. An
+       example of use can be found in "examples/Eyapp/Lhs1.yp":
+
+	 %defaultaction { print $_[0]-&gtYYLhs,"\n" }
+
+   $parser-&gtYYMain
+       Alias is also "main".
+
+       Other than the package, it has as optional arguments the "prompt"
+       (shown each time it ask for input), the name of the input file (if it
+       wasn't specified in the command line using "--file filename") and also
+       the input string.
+
+       This method provides a default "main" for testing the generated parser.
+       It parses the commandline searching for a number of options. See an
+       example of use:
+
+	 pl@nereida:~/LEyapp/examples/eyapplanguageref$ cat use_list2.pl
+	 #!/usr/bin/env perl
+	 use warnings;
+	 use strict;
+	 use List2;
+
+	 unshift @ARGV, '--noslurp';
+	 List2-&gtnew-&gtmain("Try input 'aacbb': ");
+	 pl@nereida:~/LEyapp/examples/eyapplanguageref$ ./use_list2.pl --help
+	 Available options:
+	     --debug			sets yydebug on
+	     --nodebug			sets yydebug off
+	     --file filepath		read input from filepath
+	     --commandinput string	read input from string
+	     --tree			prints $tree-&gtstr
+	     --notree			does not print $tree-&gtstr
+	     --info			When printing $tree-&gtstr shows the value of TERMINALs
+	     --help			shows this help
+	     --slurp			read until EOF reached
+	     --noslurp			read until CR is reached
+	     --argfile			main() will take the input string from its @_
+	     --noargfile		main() will not take the input string from its @_
+	     --yaml			dumps YAML for $tree: YAML module must be installed
+	     --margin=i 		controls the indentation of $tree-&gtstr (i.e. $Parse::Eyapp::Node::INDENT)
+
+   $parser-&gtYYName
+       Returns the name of the current rule (The production whose reduction
+       gave place to the execution of the current semantic action).
+
+	 DB&lt12&gt x $self-&gtYYName
+	0  'exp_11'
+
+   $parser-&gtYYNames
+       Return the list of production names. In a scalar context returns a
+       reference to such list.
+
+	 pl@europa:~/LEyapp/examples/recycle$ eyapp Postfix
+	 pl@europa:~/LEyapp/examples/recycle$ perl -wd usepostfix.pl
+	 main::(usepostfix.pl:5):	 my $parser = new Postfix();
+	 main::(usepostfix.pl:6):	 $parser-&gtRun;
+	 DB&lt1&gt x $parser-&gtYYNames
+	 0  '_SUPERSTART'
+	 1  'line_1'
+	 2  'exp_2'
+	 3  'exp_3'
+	 4  'exp_4'
+	 5  'exp_5'
+	 6  'exp_6'
+	 7  'exp_7'
+	 8  'exp_8'
+	 9  'exp_9'
+	 10  'exp_10'
+
+   $parser-&gtYYNberr
+       The current number of errors
+
+   $parser-&gtYYNextState();
+       If called inside a semantic action, returns the state after the
+       reduction by the current production.
+
+       Provide a token if called from any other side:
+
+	 $parser-&gtYYNextState($token);
+
+       It will return the state given by the action table for the state in the
+       top of the stack and the given token.
+
+       For an example, see the program "DynamicallyChangingTheParser.eyp" in
+       the directory "examples/debuggintut/".
+
+   $parser-&gtYYPrefix
+       Return and/or sets the "yyprefix" attribute. This a string that will be
+       concatenated as a prefix to any "Parse::Eyapp::Node" nodes in the
+       syntax tree.
+
+    $parser-&gtYYParse()
+       It very much works "Parse::Yapp::YYParse" and as yacc/bison "yyparse".
+       It accepts almost the same arguments as "Class-&gtnew" with the exception
+       of "yyprefix" which can be used only with "new".
+
+    $parser-&gtYYRecovering
+       Works as yacc/bison "YYRECOVERING".  Returns "TRUE" if the parser is
+       recovering from a syntax error.
+
+   $parser-&gtYYRestoreLRAction('conflictname', $token)
+       This method has been designed to solve shift-reduce and reduce-reduce
+       conflicts at parsing-time using the postponed conflict strategy.  It
+       has to be called inside the semantic action associated with the
+       postponed conflict rule. The LALR table is changed so that the action
+       in the presence of the token $token is restored the one before the last
+       call to
+
+	 $parser-&gtYYSetReduce($token, $productionname )
+
+       See the examples in "examples/debuggingtut/" in files
+       "DynamicallyChangingTheParser2.eyp" and "Cplusplus.eyp".
+
+   $parser-&gtYYRHSLength($productionindex)
+       Also:
+
+	 $parser-&gtYYRHSLength
+
+       returns the length of the right hand side (the number of symbols) of
+       $productionindex. The name of the production can be used instead of its
+       index.  If no index or name is provided and the method is called inside
+       a semantic action, the length of the current production is returned.
+
+   $parser-&gtYYRightside
+       Also:
+
+	 $parser-&gtYYRightside($index)
+
+       Returns an array of strings describing the right hand side of the rule.
+       The name of the production can be given instead of $index. If no $index
+       is provided and the method is called inside a semantic action the right
+       hand side of the current production is returned.
+
+   $parser-&gtYYRuleindex
+       To be called inside a semantic action.  Returns the index of the
+       current production rule, counting the super rule as rule 0.
+
+       To know the numbers have a look at  the ".output" file.	To get a
+       ".output" file use the option "-v" of "eyapp" or the "outputfile"
+       parameter when using method "new_grammar" (see the documentation for
+       eyapp).
+
+   $parser-&gtYYRule
+       Return the list of rules.  The following debugger session illustrates
+       its use:
+
+	 pl@europa:~/LEyapp/examples/recycle$ perl -wd usepostfix.pl
+	 main::(usepostfix.pl:5):	 my $parser = new Postfix();
+	 main::(usepostfix.pl:6):	 $parser-&gtRun;
+	 0  ARRAY(0xa068e0)
+	    0  '$start'
+	    1  2
+	    2  undef
+	 1  ARRAY(0xa06940)
+	    0  'line'
+	    1  1
+	    2  CODE(0xc22360)
+	       -&gt &Postfix::__ANON__[Postfix.eyp:10] in Postfix.eyp:227-10
+	 ... etc, etc.
+
+       Each item has three components: the LHS of the production, the number
+       of symbols in the RHS and the CODE reference to the semantic action.
+
+       If an index is specified as argument it returns the corresponding item:
+
+	    DB&lt2&gt x $parser-&gtYYRule(7)
+	 0  'exp'
+	 1  3
+	 2  CODE(0xc1fce0)
+	    -&gt &Postfix::__ANON__[Postfix.eyp:7] in Postfix.eyp:276-7
+
+       To know to what production an item is associated we can use the
+       "YYGrammar" method:
+
+	    DB&lt3&gt x $parser-&gtYYGrammar('exp_7')
+	 0  'exp_7'
+	 1  'exp'
+	 2  ARRAY(0xa05290)
+	    0  'exp'
+	    1  '*'
+	    2  'exp'
+	 3  0
+
+       We can also use the name of the rule to get the item:
+
+	  DB&lt4&gt x $parser-&gtYYRule('exp_7')
+	 0  'exp'
+	 1  3
+	 2  CODE(0xc1fce0)
+	    -&gt &Postfix::__ANON__[Postfix.eyp:7] in Postfix.eyp:276-7
+
+   $parser-&gtYYSetaction
+       Receives a hash with keys the names of the production rules (right hand
+       sides) and values the new semantic actions. Used to reuse a grammar
+       without overwriting all the semantic actions.  See section Reusing
+       Grammars by Dynamic Substitution of Semantic Actions in
+       Parse::Eyapp::defaultactionsintro.
+
+   $parser-&gtYYSetLRAction($conflictstate, $token, $shiftreduceaction )
+       It also accepts the syntax:
+
+	 $parser-&gtYYSetLRAction($conflictstate, [$token1, ... ], $shiftreduceaction )
+
+       This method has been designed to solve shift-reduce and reduce-reduce
+       conflicts at parsing-time (not at parser-generation time).
+
+       The LR table is changed so that the action in state $conflictstate in
+       the presence of the token $token will be given by $shiftreduceaction.
+       The current shift-reduce action isn't saved.
+
+       See an example in "Cplusplus2.eyp" in the directory
+       "examples/debuggintut".
+
+   $parser-&gtYYSetReduce($token, $productionname )
+       This method has been designed to solve shift-reduce and reduce-reduce
+       conflicts at parsing-time using the postponed conflict strategy. See
+       the corresponding section in Parse::Eyapp::debuggintut. It has to be
+       called inside the semantic action associated with the postponed
+       conflict rule "conflictname".  The LALR table is changed so that the
+       action in the presence of the token $token will be to reduce by
+       $productionname. The current shift-reduce action is saved to be
+       restored using
+
+	 $parser-&gtYYRestoreLRAction('conflictname', $token)
+
+       See the examples in "examples/debuggingtut/" in files
+
+       o "DynamicallyChangingTheParser2.eyp"
+
+       o "confusingsolveddynamic.eyp"
+
+       o "DebugDynamicResolution.eyp"
+
+       o "DynamicallyChangingTheParser2.eyp"
+
+       o "DynamicallyChangingTheParser3.eyp"
+
+       o "DynamicallyChangingTheParser.eyp"
+
+       o "DynamicvsTieIns.eyp"
+
+       o "nolr_k_grammarsolveddynamic.eyp"
+
+       o "pascalenumeratedvsrangesolvedviadyn.eyp"
+
+       o "Cplusplus.eyp".
+
+   $parser-&gtYYSetShift($token)
+       Also:
+
+	     $parser-&gtYYSetShift([$token1, $token2, ... ])
+
+       This method has been designed to solve shift-reduce at parsing-time
+       using the postponed conflict strategy. See the corresponding section in
+       Parse::Eyapp::debuggintut. It has to be called inside the semantic
+       action associated with the postponed conflict rule "conflictname".  The
+       LALR table is changed so that the action in the presence of the token
+       $token will be to shift.
+
+       See the examples in "examples/debuggingtut/" in files
+
+       o "DebugDynamicResolution.eyp"
+
+       o "DynamicallyChangingTheParser.eyp"
+
+   $parser-&gtYYSlurpFile
+       alias:
+
+	$parser-&gtslurp_file($filename[,$prompt[,$mode]])
+
+       Receives the name of the file, reads its contents and stores it in
+       "$parser-&gtinput".
+
+       If the file does not exists, it proceeds to read from "STDIN".  If a
+       prompt was set with "$parser-&gtYYPrompt", it will be shown.  The
+       additional optional parameter $mode is used in such case to set $/. It
+       can also be used as a class method.
+
+   $parser-&gtYYState
+       "YYState" returns a reference to the list of states containing the
+       LALR(1) tables: the action and GOTO tables.  Each state is an anonymous
+       hash:
+
+	 DB&lt4&gt x $parser-&gtYYState(2)
+	 0  HASH(0xfa7120)
+	    'ACTIONS' =&gt HASH(0xfa70f0) # token =&gt state
+		  ':' =&gt '-7'
+	    'DEFAULT' =&gt '-6'
+
+       A negative number means reduction using the corresponding production
+       rule (opposite) number. The former example tells to reduce by rule 7
+       when in state 2 and seeing token ':'. By default, the action when in
+       state 2 is to reduce by rule number 6.
+
+       There are three keys: ACTIONS, GOTOS and  DEFAULT
+
+	 DB&lt7&gt x $parser-&gtYYState(13)
+	0  HASH(0xfa8b50)
+	   'ACTIONS' =&gt HASH(0xfa7530)
+	      'VAR' =&gt 17
+	   'GOTOS' =&gt HASH(0xfa8b20)
+	      'type' =&gt 19
+
+       The GOTOS tables contains the DFA transition tables for the syntactic
+       variables. The former example tells to move to state 19 when in state
+       13 after seeing the syntactic variable "type" (i.e. if after reducing
+       by a rule of "type" we are in state 13).
+
+   $parser-&gtYYTopState($length)
+       If $length is zero or not provided it returns the state on top of the
+       stack.  Otherwise, returns the state $length units deep in the stack.
+
+CONTRIBUTORS
+       o Hal Finkel &lthttp://www.halssoftware.com/&gt
+
+       o G. Williams &lthttp://kasei.us/&gt
+
+       o Thomas L. Shinnick &lthttp://search.cpan.org/~tshinnic/&gt
+
+       o Frank Leray
+
+AUTHOR
+       Casiano Rodriguez-Leon (casiano@ull.es)
+
+ACKNOWLEDGMENTS
+       This work has been supported by CEE (FEDER) and the Spanish Ministry of
+       Educacion y Ciencia through Plan Nacional I+D+I number
+       TIN2005-08818-C04-04 (ULL::OPLINK project &lthttp://www.oplink.ull.es/&gt).
+       Support from Gobierno de Canarias was through GC02210601 (Grupos
+       Consolidados).  The University of La Laguna has also supported my work
+       in many ways and for many years.
+
+       A large percentage of  code is verbatim taken from Parse::Yapp 1.05.
+       The author of Parse::Yapp is Francois Desarmenien.
+
+       I wish to thank Francois Desarmenien for his Parse::Yapp module, to my
+       students at La Laguna and to the Perl Community. Thanks to the people
+       who have contributed to improve the module (see "CONTRIBUTORS" in
+       Parse::Eyapp).  Thanks to Larry Wall for giving us Perl.  Special
+       thanks to Juana.
+
+LICENCE AND COPYRIGHT
+       Copyright (c) 2006-2008 Casiano Rodriguez-Leon (casiano@ull.es). All
+       rights reserved.
+
+       Parse::Yapp copyright is of Francois Desarmenien, all rights reserved.
+       1998-2001
+
+       These modules are free software; you can redistribute it and/or modify
+       it under the same terms as Perl itself. See perlartistic.
+
+       This program is distributed in the hope that it will be useful, but
+       WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+
+perl v5.12.4			  2011-02-16	       Parse::Eyapp::Driver(3)
+    </pre></body>
+
+</html>

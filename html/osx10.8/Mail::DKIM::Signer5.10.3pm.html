@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This class is the part of Mail::DKIM responsible for generating..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Mail::DKIM::Signer - generates a DKIM signature for a message</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Mail::DKIM::Signer(3) User Contributed Perl DocumentationMail::DKIM::Signer(3)
+
+
+
+NAME
+       Mail::DKIM::Signer - generates a DKIM signature for a message
+
+SYNOPSIS
+	 use Mail::DKIM::Signer;
+	 use Mail::DKIM::TextWrap;  #recommended
+
+	 # create a signer object
+	 my $dkim = Mail::DKIM::Signer-&gtnew(
+			 Algorithm =&gt "rsa-sha1",
+			 Method =&gt "relaxed",
+			 Domain =&gt "example.org",
+			 Selector =&gt "selector1",
+			 KeyFile =&gt "private.key",
+		    );
+
+	 # read an email from a file handle
+	 $dkim-&gtload(*STDIN);
+
+	 # or read an email and pass it into the signer, one line at a time
+	 while (&ltSTDIN&gt)
+	 {
+	     # remove local line terminators
+	     chomp;
+	     s/\015$//;
+
+	     # use SMTP line terminators
+	     $dkim-&gtPRINT("$_\015\012");
+	 }
+	 $dkim-&gtCLOSE;
+
+	 # what is the signature result?
+	 my $signature = $dkim-&gtsignature;
+	 print $signature-&gtas_string;
+
+DESCRIPTION
+       This class is the part of Mail::DKIM responsible for generating
+       signatures for a given message. You create an object of this class,
+       specifying the parameters of the signature you wish to create, or
+       specifying a callback function so that the signature parameters can be
+       determined later. Next, you feed it the entire message using "PRINT()",
+       completing with "CLOSE()". Finally, use the "signatures()" method to
+       access the generated signatures.
+
+   Pretty Signatures
+       Mail::DKIM includes a signature-wrapping module (which inserts
+       linebreaks into the generated signature so that it looks nicer in the
+       resulting message. To enable this module, simply call
+
+	 use Mail::DKIM::TextWrap;
+
+       in your program before generating the signature.
+
+CONSTRUCTOR
+   new()
+       Construct an object-oriented signer.
+
+	 # create a signer using the default policy
+	 my $dkim = Mail::DKIM::Signer-&gtnew(
+			 Algorithm =&gt "rsa-sha1",
+			 Method =&gt "relaxed",
+			 Domain =&gt "example.org",
+			 Selector =&gt "selector1",
+			 KeyFile =&gt "private.key",
+		    );
+
+	 # create a signer using a custom policy
+	 my $dkim = Mail::DKIM::Signer-&gtnew(
+			 Policy =&gt $policyfn,
+		    );
+
+       The "default policy" is to create a DKIM signature using the specified
+       parameters, but only if the message's sender matches the domain.  The
+       following parameters can be passed to this new() method to influence
+       the resulting signature: Algorithm, Method, Domain, Selector, KeyFile,
+       Identity, Timestamp.
+
+       If you want different behavior, you can provide a "signer policy"
+       instead. A signer policy is a subroutine or class that determines
+       signature parameters after the message's headers have been parsed.  See
+       the section "SIGNER POLICIES" below for more information.
+
+       See Mail::DKIM::SignerPolicy for more information about policy objects.
+
+       In addition to the parameters demonstrated above, the following are
+       recognized:
+
+       Key rather than using "KeyFile", use "Key" to use an already-loaded
+	   Mail::DKIM::PrivateKey object.
+
+METHODS
+   PRINT()
+       Feed part of the message to the signer.
+
+	 $dkim-&gtPRINT("a line of the message\015\012");
+
+       Feeds content of the message being signed into the signer.  The API is
+       designed this way so that the entire message does NOT need to be read
+       into memory at once.
+
+       Please note that although the PRINT() method expects you to use SMTP-
+       style line termination characters, you should NOT use the SMTP-style
+       dot-stuffing technique described in RFC 2821 section 4.5.2.  Nor should
+       you use a &ltCR&gt&ltLF&gt.&ltCR&gt&ltLF&gt sequence to terminate the message.
+
+   CLOSE()
+       Call this when finished feeding in the message.
+
+	 $dkim-&gtCLOSE;
+
+       This method finishes the canonicalization process, computes a hash, and
+       generates a signature.
+
+   add_signature()
+       Used by signer policy to create a new signature.
+
+	 $dkim-&gtadd_signature(new Mail::DKIM::Signature(...));
+
+       Signer policies can use this method to specify complete parameters for
+       the signature to add, including what type of signature. For more
+       information, see Mail::DKIM::SignerPolicy.
+
+   algorithm()
+       Get or set the selected algorithm.
+
+	 $alg = $dkim-&gtalgorithm;
+
+	 $dkim-&gtalgorithm("rsa-sha1");
+
+   domain()
+       Get or set the selected domain.
+
+	 $alg = $dkim-&gtdomain;
+
+	 $dkim-&gtdomain("example.org");
+
+   load()
+       Load the entire message from a file handle.
+
+	 $dkim-&gtload($file_handle);
+
+       Reads a complete message from the designated file handle, feeding it
+       into the signer.  The message must use &ltCRLF&gt line terminators (same as
+       the SMTP protocol).
+
+   headers()
+       Determine which headers to put in signature.
+
+	 my $headers = $dkim-&gtheaders;
+
+       This is a string containing the names of the header fields that will be
+       signed, separated by colons.
+
+   key()
+       Get or set the private key object.
+
+	 my $key = $dkim-&gtkey;
+
+	 $dkim-&gtkey(Mail::DKIM::PrivateKey-&gtload(File =&gt "private.key"));
+
+       The key object can be any object that implements the sign_digest()
+       method.	(Providing your own object can be useful if your actual keys
+       are stored out-of-process.)
+
+       If you use this method to specify a private key, do not use
+       "key_file()".
+
+   key_file()
+       Get or set the filename containing the private key.
+
+	 my $filename = $dkim-&gtkey_file;
+
+	 $dkim-&gtkey_file("private.key");
+
+       If you use this method to specify a private key file, do not use
+       "key()".
+
+   method()
+       Get or set the selected canonicalization method.
+
+	 $alg = $dkim-&gtmethod;
+
+	 $dkim-&gtmethod("relaxed");
+
+   message_originator()
+       Access the "From" header.
+
+	 my $address = $dkim-&gtmessage_originator;
+
+       Returns the "originator address" found in the message, as a
+       Mail::Address object.  This is typically the (first) name and email
+       address found in the From: header. If there is no From: header, then an
+       empty Mail::Address object is returned.
+
+       To get just the email address part, do:
+
+	 my $email = $dkim-&gtmessage_originator-&gtaddress;
+
+       See also "message_sender()".
+
+   message_sender()
+       Access the "From" or "Sender" header.
+
+	 my $address = $dkim-&gtmessage_sender;
+
+       Returns the "sender" found in the message, as a Mail::Address object.
+       This is typically the (first) name and email address found in the
+       Sender: header. If there is no Sender: header, it is the first name and
+       email address in the From: header. If neither header is present, then
+       an empty Mail::Address object is returned.
+
+       To get just the email address part, do:
+
+	 my $email = $dkim-&gtmessage_sender-&gtaddress;
+
+       The "sender" is the mailbox of the agent responsible for the actual
+       transmission of the message. For example, if a secretary were to send a
+       message for another person, the "sender" would be the secretary and the
+       "originator" would be the actual author.
+
+   selector()
+       Get or set the current key selector.
+
+	 $alg = $dkim-&gtselector;
+
+	 $dkim-&gtselector("alpha");
+
+   signature()
+       Access the generated signature object.
+
+	 my $signature = $dkim-&gtsignature;
+
+       Returns the generated signature. The signature is an object of type
+       Mail::DKIM::Signature. If multiple signatures were generated, this
+       method returns the last one.
+
+       The signature (as text) should be prepended to the message to make the
+       resulting message. At the very least, it should precede any headers
+       that were signed.
+
+   signatures()
+       Access list of generated signature objects.
+
+	 my @signatures = $dkim-&gtsignatures;
+
+       Returns all generated signatures, as a list.
+
+SIGNER POLICIES
+       The new() constructor takes an optional Policy argument. This can be a
+       Perl object or class with an apply() method, or just a simple
+       subroutine reference. The method/subroutine will be called with the
+       signer object as an argument. The policy is responsible for checking
+       the message and specifying signature parameters. The policy must return
+       a nonzero value to create the signature, otherwise no signature will be
+       created. E.g.,
+
+	 my $policyfn = sub {
+	     my $dkim = shift;
+
+	     # specify signature parameters
+	     $dkim-&gtalgorithm("rsa-sha1");
+	     $dkim-&gtmethod("relaxed");
+	     $dkim-&gtdomain("example.org");
+	     $dkim-&gtselector("mx1");
+
+	     # return true value to create the signature
+	     return 1;
+	 };
+
+       Or the policy object can actually create the signature, using the
+       add_signature method within the policy object.  If you add a signature,
+       you do not need to return a nonzero value.  This mechanism can be
+       utilized to create multiple signatures, or to create the older
+       DomainKey-style signatures.
+
+	 my $policyfn = sub {
+	     my $dkim = shift;
+	     $dkim-&gtadd_signature(
+		     new Mail::DKIM::Signature(
+			     Algorithm =&gt "rsa-sha1",
+			     Method =&gt "relaxed",
+			     Headers =&gt $dkim-&gtheaders,
+			     Domain =&gt "example.org",
+			     Selector =&gt "mx1",
+		     ));
+	     $dkim-&gtadd_signature(
+		     new Mail::DKIM::DkSignature(
+			     Algorithm =&gt "rsa-sha1",
+			     Method =&gt "nofws",
+			     Headers =&gt $dkim-&gtheaders,
+			     Domain =&gt "example.org",
+			     Selector =&gt "mx1",
+		     ));
+	     return;
+	 };
+
+       If no policy is specified, the default policy is used. The default
+       policy signs every message using the domain, algorithm, method, and
+       selector specified in the new() constructor.
+
+SEE ALSO
+       Mail::DKIM::SignerPolicy
+
+AUTHOR
+       Jason Long, &ltjlong@messiah.edu&gt
+
+COPYRIGHT AND LICENSE
+       Copyright (C) 2006-2007 by Messiah College
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself, either Perl version 5.8.6 or, at
+       your option, any later version of Perl 5 you may have available.
+
+
+
+perl v5.10.1			  2010-03-01		 Mail::DKIM::Signer(3)
+    </pre></body>
+
+</html>

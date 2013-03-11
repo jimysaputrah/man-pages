@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Dispatch data objects are opaque containers of bytes that represent one..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>dispatch_data_create, dispatch_data_create_concat,</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+dispatch_data_create(3)  BSD Library Functions Manual  dispatch_data_create(3)
+
+NAME
+     dispatch_data_create, dispatch_data_create_concat,
+     dispatch_data_create_subrange, dispatch_data_create_map,
+     dispatch_data_apply, dispatch_data_copy_region, dispatch_data_get_size --
+     create and manipulate dispatch data objects
+
+SYNOPSIS
+     #include &ltdispatch/dispatch.h&gt
+
+     dispatch_data_t
+     dispatch_data_create(const void* buffer, size_t size,
+	 dispatch_queue_t queue, dispatch_block_t destructor);
+
+     dispatch_data_t
+     dispatch_data_create_concat(dispatch_data_t data1,
+	 dispatch_data_t data2);
+
+     dispatch_data_t
+     dispatch_data_create_subrange(dispatch_data_t data, size_t offset,
+	 size_t length);
+
+     dispatch_data_t
+     dispatch_data_create_map(dispatch_data_t data, const void **buffer_ptr,
+	 size_t *size_ptr);
+
+     bool
+     dispatch_data_apply(dispatch_data_t data,
+	 bool (^applier)(dispatch_data_t, size_t, const void *, size_t));
+
+     dispatch_data_t
+     dispatch_data_copy_region(dispatch_data_t data, size_t location,
+	 size_t *offset_ptr);
+
+     size_t
+     dispatch_data_get_size(dispatch_data_t data);
+
+     dispatch_data_t dispatch_data_empty;
+
+DESCRIPTION
+     Dispatch data objects are opaque containers of bytes that represent one
+     or more regions of memory. They are created either from memory buffers
+     managed by the application or the system or from other dispatch data
+     objects. Dispatch data objects are immutable and the memory regions they
+     represent are required to remain unchanged for the lifetime of all data
+     objects that reference them.  Dispatch data objects avoid copying the
+     represented memory as much as possible.  Multiple data objects can repre-
+     sent the same memory regions or subsections thereof.
+
+CREATION
+     The dispatch_data_create() function creates a new dispatch data object of
+     given size from a buffer.	The provided destructor block will be submit-
+     ted to the specified queue when the object reaches the end of its lifecy-
+     cle, indicating that the system no longer references the buffer.  This
+     allows the application to deallocate the associated storage. The queue
+     argument is ignored if one of the following predefined destructors is
+     passed:
+	   DISPATCH_DATA_DESTRUCTOR_FREE     indicates that the provided
+					     buffer can be deallocated with
+					     free(3) directly.
+	   DISPATCH_DATA_DESTRUCTOR_DEFAULT  indicates that the provided
+					     buffer is not managed by the
+					     application and should be copied
+					     into memory managed and automati-
+					     cally deallocated by the system.
+
+     The dispatch_data_create_concat() function creates a new data object rep-
+     resenting the concatenation of the memory regions represented by the pro-
+     vided data objects.
+
+     The dispatch_data_create_subrange() function creates a new data object
+     representing the sub-region of the provided data object specified by the
+     offset and length parameters.
+
+     The dispatch_data_create_map() function creates a new data object by map-
+     ping the memory represented by the provided data object as a single con-
+     tiguous memory region (moving or copying memory as necessary). If the
+     buffer_ptr and size_ptr references are not NULL, they are filled with the
+     location and extent of the contiguous region, allowing direct read access
+     to the mapped memory. These values are valid only as long as the newly
+     created object has not been released.
+
+ACCESS
+     The dispatch_data_apply() function provides read access to represented
+     memory without requiring it to be mapped as a single contiguous region.
+     It traverses the memory regions represented by the data argument in logi-
+     cal order, invokes the specified applier block for each region and
+     returns a boolean indicating whether traversal completed successfully.
+     The applier block is passed the following arguments for each memory
+     region and returns a boolean indicating whether traversal should con-
+     tinue:
+	   dispatch_data_t rgn	data object representing the region
+	   size_t offset	logical position of the region in data
+	   const void *loc	memory location of the region
+	   size_t size		extent of the region
+     The rgn data object is released by the system when the applier block
+     returns.  The associated memory location loc is valid only as long as rgn
+     has not been deallocated; if loc is needed outside of the applier block,
+     the rgn object must be retained in the block.
+
+     The dispatch_data_copy_region() function finds the contiguous memory
+     region containing the logical position specified by the location argument
+     among the regions represented by the provided data object and returns a
+     newly created copy of the data object representing that region. The vari-
+     able specified by the offset_ptr argument is filled with the logical
+     position where the returned object starts in the data object.
+
+     The dispatch_data_get_size() function returns the logical size of the
+     memory region or regions represented by the provided data object.
+
+EMPTY DATA OBJECT
+     The dispatch_data_empty object is the global singleton object represent-
+     ing a zero-length memory region.  It is a valid input to any dis-
+     patch_data functions that take data object parameters.
+
+MEMORY MODEL
+     Dispatch data objects are retained and released via calls to
+     dispatch_retain() and dispatch_release().	Data objects passed as argu-
+     ments to a dispatch data create or copy function can be released when the
+     function returns. The newly created object holds implicit references to
+     their constituent memory regions as necessary.
+
+     The functions dispatch_data_create_map() and dispatch_data_apply() return
+     an interior pointer to represented memory that is only valid as long as
+     an associated object has not been released. When Objective-C Automated
+     Reference Counting is enabled, care needs to be taken if that object is
+     held in a variable with automatic storage. It may need to be annotated
+     with the objc_precise_lifetime attribute, or stored in a __strong
+     instance variable instead, to ensure that the object is not released pre-
+     maturely before memory accesses via the interor pointer have been com-
+     pleted.
+
+SEE ALSO
+     dispatch(3), dispatch_object(3), dispatch_io_read(3)
+
+Darwin			       December 1, 2010 			Darwin
+    </pre></body>
+
+</html>

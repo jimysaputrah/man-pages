@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This is a subclass of "HTTP::Cookies" which loads Microsoft Internet..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>HTTP::Cookies::Microsoft - access to Microsoft cookies files</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+HTTP::Cookies::MicrosoUser)Contributed Perl DocumenHTTP::Cookies::Microsoft(3)
+
+
+
+NAME
+       HTTP::Cookies::Microsoft - access to Microsoft cookies files
+
+SYNOPSIS
+	use LWP;
+	use HTTP::Cookies::Microsoft;
+	use Win32::TieRegistry(Delimiter =&gt "/");
+	my $cookies_dir = $Registry-&gt
+	     {"CUser/Software/Microsoft/Windows/CurrentVersion/Explorer/Shell Folders/Cookies"};
+
+	$cookie_jar = HTTP::Cookies::Microsoft-&gtnew(
+			  file	   =&gt "$cookies_dir\\index.dat",
+			  'delayload' =&gt 1,
+		      );
+	my $browser = LWP::UserAgent-&gtnew;
+	$browser-&gtcookie_jar( $cookie_jar );
+
+DESCRIPTION
+       This is a subclass of "HTTP::Cookies" which loads Microsoft Internet
+       Explorer 5.x and 6.x for Windows (MSIE) cookie files.
+
+       See the documentation for HTTP::Cookies.
+
+METHODS
+       The following methods are provided:
+
+       $cookie_jar = HTTP::Cookies::Microsoft-&gtnew;
+	   The constructor takes hash style parameters. In addition to the
+	   regular HTTP::Cookies parameters, HTTP::Cookies::Microsoft
+	   recognizes the following:
+
+	     delayload:       delay loading of cookie data until a request
+			      is actually made. This results in faster
+			      runtime unless you use most of the cookies
+			      since only the domain's cookie data
+			      is loaded on demand.
+
+CAVEATS
+       Please note that the code DOESN'T support saving to the MSIE cookie
+       file format.
+
+AUTHOR
+       Johnny Lee &lttypo_pl@hotmail.com&gt
+
+COPYRIGHT
+       Copyright 2002 Johnny Lee
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2009-06-13	   HTTP::Cookies::Microsoft(3)
+    </pre></body>
+
+</html>

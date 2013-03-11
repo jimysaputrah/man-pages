@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="closure is prepared to execute fun.  cif contains information describing..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>ffi_prep_closure -- Prepare a ffi_closure for execution.</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+ffi_prep_closure(3)	 BSD Library Functions Manual	   ffi_prep_closure(3)
+
+NAME
+     ffi_prep_closure -- Prepare a ffi_closure for execution.
+
+SYNOPSIS
+     #include &ltffi/ffi.h&gt
+
+     ffi_status
+     ffi_prep_closure(ffi_closure *closure, ffi_cif *cif,
+	 void (*fun)(ffi_cif*,void*,void**,void*), void *user_data);
+
+DESCRIPTION
+     closure is prepared to execute fun.  cif contains information describing
+     the data types, sizes and alignments of the arguments to and return value
+     from the function that will be called from fun, and must be initialized
+     with ffi_prep_cif before it is used with ffi_prep_closure.  user_data may
+     point to additional data to be used in fun.  If no additional data is
+     needed, user_data may be NULL.  When closure is invoked, fun is called
+     with cif, an array of pointers to arguments, a pointer to a return value,
+     and user_data.
+
+     Some architectures do not allow the execution of data by default. In such
+     cases, it is necessary to manually alter the permissions of the page that
+     contains closure prior to its execution.
+
+RETURN VALUES
+     Upon successful completion, ffi_prep_closure returns FFI_OK.  If the ABI
+     specified in cif does not refer to a valid ABI, FFI_BAD_ABI will be
+     returned. Available ABIs are defined in &ltffi/ppc-ffitarget.h&gt and
+     &ltffi/x86-ffitarget.h&gt.
+
+EXAMPLES
+     #define MACOSX  // for fficonfig.h on Darwin
+
+     #include &ltffi/ffi.h&gt
+     #include &ltsys/mman.h&gt   // for mmap()
+
+     unsigned char
+     foo(unsigned int, float);
+
+     static void
+     foo_closure(ffi_cif*, void*, void**, void*);
+
+     int
+     main(int argc, const char **argv)
+     {
+	 ffi_cif cif;
+	 ffi_closure *closure;
+	 ffi_type *arg_types[2];
+	 ffi_arg result;
+	 ffi_status status;
+
+	 // Specify the data type of each argument. Available types are defined
+	 // in &ltffi/ffi.h&gt.
+	 arg_types[0] = &ffi_type_uint;
+	 arg_types[1] = &ffi_type_float;
+
+	 // Allocate a page to hold the closure with read and write permissions.
+	 if ((closure = mmap(NULL, sizeof(ffi_closure), PROT_READ | PROT_WRITE,
+	     MAP_ANON | MAP_PRIVATE, -1, 0)) == (void*)-1)
+	 {
+	     // Check errno and handle the error.
+	 }
+
+	 // Prepare the ffi_cif structure.
+	 if ((status = ffi_prep_cif(&cif, FFI_DEFAULT_ABI,
+	     2, &ffi_type_uint8, arg_types)) != FFI_OK)
+	 {
+	     // Handle the ffi_status error.
+	 }
+
+	 // Prepare the ffi_closure structure.
+	 if ((status = ffi_prep_closure(closure, &cif, foo_closure, NULL)) != FFI_OK)
+	 {
+	     // Handle the ffi_status error.
+	 }
+
+	 // Ensure that the closure will execute on all architectures.
+	 if (mprotect(closure, sizeof(closure), PROT_READ | PROT_EXEC) == -1)
+	 {
+	     // Check errno and handle the error.
+	 }
+
+	 // The closure is now ready to be executed, and can be saved for later
+	 // execution if desired.
+
+	 // Invoke the closure.
+	 result = ((unsigned char(*)(float, unsigned int))closure)(42, 5.1);
+
+	 // Free the memory associated with the closure.
+	 if (munmap(closure, sizeof(closure)) == -1)
+	 {
+	     // Check errno and handle the error.
+	 }
+
+	 return 0;
+     }
+
+     // Invoking the closure transfers control to this function.
+     static void
+     foo_closure(ffi_cif* cif, void* result, void** args, void* userdata)
+     {
+	 // Access the arguments to be sent to foo().
+	 float arg1 = *(float*)args[0];
+	 unsigned int arg2 = *(unsigned int*)args[1];
+
+	 // Call foo() and save its return value.
+	 unsigned char ret_val = foo(arg1, arg2);
+
+	 // Copy the returned value into result. Because the return value of foo()
+	 // is smaller than sizeof(long), typecast it to ffi_arg. Use ffi_sarg
+	 // instead for signed types.
+	 *(ffi_arg*)result = (ffi_arg)ret_val;
+     }
+
+     // The closed-over function.
+     unsigned char
+     foo(unsigned int x, float y)
+     {
+	 unsigned char result = x - y;
+	 return result;
+     }
+
+SEE ALSO
+     ffi(3), ffi_prep_cif(3), mmap(2), munmap(2), mprotect(2)
+
+Darwin				 July 20, 2007				Darwin
+    </pre></body>
+
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="gluBuild1DMipmaps  builds  a series of prefiltered one-dimensional tex-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>gluBuild1DMipmaps - builds a one-dimensional mipmap</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLUBUILD1DMIPMAPS(3G)					 GLUBUILD1DMIPMAPS(3G)
+
+
+
+NAME
+       gluBuild1DMipmaps - builds a one-dimensional mipmap
+
+
+C SPECIFICATION
+       GLint gluBuild1DMipmaps( GLenum target,
+				GLint internalFormat,
+				GLsizei width,
+				GLenum format,
+				GLenum type,
+				const void *data )
+
+
+PARAMETERS
+       target	       Specifies the target texture.  Must be GL_TEXTURE_1D.
+
+       internalFormat  Requests  the  internal	storage  format of the texture
+		       image.  The most current version of the SGI implementa-
+		       tion  of  GLU  does  not  check this value for validity
+		       before passing it on to the underlying OpenGL implemen-
+		       tation.	 A  value  that  is not accepted by the OpenGL
+		       implementation will lead to an OpenGL error.  The bene-
+		       fit of not checking this value at the GLU level is that
+		       OpenGL extensions can add new internal texture  formats
+		       without requiring a revision of the GLU implementation.
+		       Older implementations of GLU check this value and raise
+		       a  GLU  error  if it is not 1, 2, 3, or 4 or one of the
+		       following  symbolic  constants:	GL_ALPHA,   GL_ALPHA4,
+		       GL_ALPHA8,    GL_ALPHA12,   GL_ALPHA16,	 GL_LUMINANCE,
+		       GL_LUMINANCE4,	   GL_LUMINANCE8,      GL_LUMINANCE12,
+		       GL_LUMINANCE16,			   GL_LUMINANCE_ALPHA,
+		       GL_LUMINANCE4_ALPHA4,		 GL_LUMINANCE6_ALPHA2,
+		       GL_LUMINANCE8_ALPHA8,		GL_LUMINANCE12_ALPHA4,
+		       GL_LUMINANCE12_ALPHA12,	       GL_LUMINANCE16_ALPHA16,
+		       GL_INTENSITY,	   GL_INTENSITY4,	GL_INTENSITY8,
+		       GL_INTENSITY12,	GL_INTENSITY16,  GL_RGB,  GL_R3_G3_B2,
+		       GL_RGB4,    GL_RGB5,   GL_RGB8,	 GL_RGB10,   GL_RGB12,
+		       GL_RGB16,  GL_RGBA,  GL_RGBA2,  GL_RGBA4,   GL_RGB5_A1,
+		       GL_RGBA8, GL_RGB10_A2, GL_RGBA12, or GL_RGBA16.
+
+       width	       Specifies the width, in pixels, of the texture image.
+
+       format	       Specifies the format of the pixel data.	Must be one of
+		       GL_COLOR_INDEX, GL_DEPTH_COMPONENT,  GL_RED,  GL_GREEN,
+		       GL_BLUE,  GL_ALPHA,  GL_RGB,  GL_RGBA, GL_BGR, GL_BGRA,
+		       GL_LUMINANCE, GL_LUMINANCE_ALPHA.
+
+       type	       Specifies the data type	for  data.   Must  be  one  of
+		       GL_UNSIGNED_BYTE,	  GL_BYTE,	    GL_BITMAP,
+		       GL_UNSIGNED_SHORT, GL_SHORT,  GL_UNSIGNED_INT,  GL_INT,
+		       GL_FLOAT,		       GL_UNSIGNED_BYTE_3_3_2,
+		       GL_UNSIGNED_BYTE_2_3_3_REV,    GL_UNSIGNED_SHORT_5_6_5,
+		       GL_UNSIGNED_SHORT_5_6_5_REV, GL_UNSIGNED_SHORT_4_4_4_4,
+		       GL_UNSIGNED_SHORT_4_4_4_4_REV,
+		       GL_UNSIGNED_SHORT_5_5_5_1,
+		       GL_UNSIGNED_SHORT_1_5_5_5_REV, GL_UNSIGNED_INT_8_8_8_8,
+		       GL_UNSIGNED_INT_8_8_8_8_REV,
+		       GL_UNSIGNED_INT_10_10_10_2,			    or
+		       GL_UNSIGNED_INT_2_10_10_10_REV.
+
+       data	       Specifies a pointer to the image data in memory.
+
+DESCRIPTION
+       gluBuild1DMipmaps  builds  a series of prefiltered one-dimensional tex-
+       ture maps of decreasing resolutions called a mipmap. This is  used  for
+       the antialiasing of texture mapped primitives.
+
+       A return value of zero indicates success, otherwise a GLU error code is
+       returned (see gluErrorString).
+
+       Initially, the width of data is checked to see if it is a power	of  2.
+       If  not, a copy of data is scaled up or down to the nearest power of 2.
+       (If width is exactly between powers of 2, then the copy	of  data  will
+       scale upwards.)	This copy will be used for subsequent mipmapping oper-
+       ations described below.	For example, if width is 57  then  a  copy  of
+       data will scale up to 64 before mipmapping takes place.
+
+       Then,  proxy  textures  (see glTexImage1D) are used to determine if the
+       implementation can fit the requested texture. If not, width is continu-
+       ally halved until it fits.
+
+       Next,  a  series of mipmap levels is built by decimating a copy of data
+       in half until size 1x1 is reached. At each level,  each	texel  in  the
+       halved  mipmap  level  is an average of the corresponding two texels in
+       the larger mipmap level.
+
+       glTexImage1D is called to load each of these mipmap levels.  Level 0 is
+       a copy of data.	The highest level is {log sub 2}(width).  For example,
+       if width is 64 and the implementation can store a texture of this size,
+       the  following mipmap levels are built: 64x1, 32x1, 16x1, 8x1, 4x1, 2x1
+       and 1x1. These correspond to levels 0 through 6, respectively.
+
+       See the glTexImage1D reference page for a description of the acceptable
+       values  for the type parameter. See the glDrawPixels reference page for
+       a description of the acceptable values for the data parameter.
+
+NOTES
+       Note that there is no direct way of querying the  maximum  level.  This
+       can  be derived indirectly via glGetTexLevelParameter. First, query for
+       the width actually used at level 0.  (The width may  not  be  equal  to
+       width  since proxy textures might have scaled it to fit the implementa-
+       tion.)  Then  the  maximum  level  can  be  derived  from  the  formula
+       log2(width).
+
+       Formats	 GL_BGR,   and	 GL_BGRA,  and	types  GL_UNSIGNED_BYTE_3_3_2,
+       GL_UNSIGNED_BYTE_2_3_3_REV,		      GL_UNSIGNED_SHORT_5_6_5,
+       GL_UNSIGNED_SHORT_5_6_5_REV,		    GL_UNSIGNED_SHORT_4_4_4_4,
+       GL_UNSIGNED_SHORT_4_4_4_4_REV,		    GL_UNSIGNED_SHORT_5_5_5_1,
+       GL_UNSIGNED_SHORT_1_5_5_5_REV,		      GL_UNSIGNED_INT_8_8_8_8,
+       GL_UNSIGNED_INT_8_8_8_8_REV,	 GL_UNSIGNED_INT_10_10_10_2,	   and
+       GL_UNSIGNED_INT_2_10_10_10_REV  are only available if the GL version is
+       1.2 or greater, and if the GLU version is 1.3 or greater.
+
+ERRORS
+       GLU_INVALID_VALUE is returned if width is &lt 1.
+
+       GLU_INVALID_ENUM is returned if format or type are not legal.
+
+       GLU_INVALID_OPERATION is returned if type is GL_UNSIGNED_BYTE_3_3_2  or
+       GL_UNSIGNED_BYTE_2_3_3_REV and format is not GL_RGB.
+
+       GLU_INVALID_OPERATION is returned if type is GL_UNSIGNED_SHORT_5_6_5 or
+       GL_UNSIGNED_SHORT_5_6_5_REV and format is not GL_RGB.
+
+       GLU_INVALID_OPERATION is returned if type is  GL_UNSIGNED_SHORT_4_4_4_4
+       or  GL_UNSIGNED_SHORT_4_4_4_4_REV  and  format  is  neither GL_RGBA nor
+       GL_BGRA.
+
+       GLU_INVALID_OPERATION is returned if type is  GL_UNSIGNED_SHORT_5_5_5_1
+       or  GL_UNSIGNED_SHORT_1_5_5_5_REV  and  format  is  neither GL_RGBA nor
+       GL_BGRA.
+
+       GLU_INVALID_OPERATION is returned if type is GL_UNSIGNED_INT_8_8_8_8 or
+       GL_UNSIGNED_INT_8_8_8_8_REV  and format is neither GL_RGBA nor GL_BGRA.
+
+       GLU_INVALID_OPERATION is returned if type is GL_UNSIGNED_INT_10_10_10_2
+       or  GL_UNSIGNED_INT_2_10_10_10_REV  and	format	is neither GL_RGBA nor
+       GL_BGRA.
+
+SEE ALSO
+       glDrawPixels,	  glTexImage1D,      glTexImage2D,	 glTexImage3D,
+       gluBuild2DMipmaps,  gluBuild3DMipmaps,  gluErrorString,	glGetTexImage,
+       glGetTexLevelParameter, gluBuild1DMipmapLevels, gluBuild2DMipmapLevels,
+       gluBuild3DMipmapLevels
+
+
+
+							 GLUBUILD1DMIPMAPS(3G)
+    </pre></body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content=""Net::LDAP::Control::PersistentSearch" provides an interface for the..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Net::LDAP::Control::PersistentSearch - LDAPv3 Persistent Search control</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Net::LDAP::Control::PeUsertContributed)Net::LDAP::Control::PersistentSearch(3)
+
+
+
+NAME
+       Net::LDAP::Control::PersistentSearch - LDAPv3 Persistent Search control
+       object
+
+SYNOPSIS
+	use Net::LDAP;
+	use Net::LDAP::Control::PersistentSearch;
+
+	$ldap = Net::LDAP-&gtnew( "ldap.mydomain.eg" );
+
+	$persist = Net::LDAP::Control::PersistentSearch-&gtnew( changeTypes =&gt 15,
+							      changesOnly =&gt 1,
+							      returnECs =&gt 1 );
+
+	$srch = $ldap-&gtsearch( base	=&gt "cn=People,dc=mydomain,dc=eg",
+			       filter	=&gt "(objectClass=person)",
+			       callback =&gt \&process_entry, # call for each entry
+			       control	=&gt [ $persist ] );
+
+	die "error: ",$srch-&gtcode(),": ",$srch-&gterror()  if ($srch-&gtcode());
+
+	sub process_entry {
+	  my $message = shift;
+	  my $entry = shift;
+
+	  print $entry-&gtdn()."\n";
+	}
+
+DESCRIPTION
+       "Net::LDAP::Control::PersistentSearch" provides an interface for the
+       creation and manipulation of objects that represent the
+       "PersistentSearch" control as described by
+       draft-smith-psearch-ldap-01.txt.
+
+CONSTRUCTOR ARGUMENTS
+       In addition to the constructor arguments described in
+       Net::LDAP::Control the following are provided.
+
+       changeTypes
+	   An integer value determining the types of changes to look out for.
+	   It is the bitwise OR of the following values (which represent the
+	   LDAP operations indicated next to them):
+
+	   1 = add
+	   2 = delete
+	   4 = modify
+	   8 = modDN
+
+	   If it is not given it defaults to 15 meaning all changes.
+
+       changesOnly
+	   A boolean value telling whether the server may return entries that
+	   match the search criteria.
+
+	   If "TRUE" the server must not return return any existing entries
+	   that match the search criteria.  Entries are only returned when
+	   they are changed (added, modified, deleted, or subject to a
+	   modifyDN operation)
+
+       returnECs
+	   If "TRUE", the server must return an Entry Change Notification
+	   control with each entry returned as the result of changes.
+
+	   See Net::LDAP::Control::EntryChange for details.
+
+METHODS
+       As with Net::LDAP::Control each constructor argument described above is
+       also available as a method on the object which will return the current
+       value for the attribute if called without an argument, and set a new
+       value for the attribute if called with an argument.
+
+SEE ALSO
+       Net::LDAP, Net::LDAP::Control, Net::LDAP::Control::EntryChange
+
+AUTHOR
+       Peter Marschall &ltpeter@adpm.de&gt, based on Net::LDAP::Control::Page from
+       Graham Barr &ltgbarr@pobox.com&gt and the preparatory work of Don Miller
+       &ltdonm@uidaho.edu&gt.
+
+       Please report any bugs, or post any suggestions, to the perl-ldap
+       mailing list &ltperl-ldap@perl.org&gt
+
+COPYRIGHT
+       Copyright (c) 2004 Peter Marschall. All rights reserved. This program
+       is free software; you can redistribute it and/or modify it under the
+       same terms as Perl itself.
+
+
+
+perl v5.12.4			  2010-Net::LDAP::Control::PersistentSearch(3)
+    </pre></body>
+
+</html>

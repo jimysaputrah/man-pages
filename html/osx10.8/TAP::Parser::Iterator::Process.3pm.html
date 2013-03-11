@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This is a simple iterator wrapper for executing external processes,..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>TAP::Parser::Iterator::Process - Internal TAP::Parser Iterator</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+TAP::Parser::Iterator::PerleProgrammers RefTAP::Parser::Iterator::Process(3pm)
+
+
+
+NAME
+       TAP::Parser::Iterator::Process - Internal TAP::Parser Iterator
+
+VERSION
+       Version 3.17
+
+SYNOPSIS
+	 # see TAP::Parser::IteratorFactory for preferred usage
+
+	 # to use directly:
+	 use TAP::Parser::Iterator::Process;
+	 my %args = (
+	  command  =&gt ['python', 'setup.py', 'test'],
+	  merge    =&gt 1,
+	  setup    =&gt sub { ... },
+	  teardown =&gt sub { ... },
+	 );
+	 my $it   = TAP::Parser::Iterator::Process-&gtnew(\%args);
+	 my $line = $it-&gtnext;
+
+DESCRIPTION
+       This is a simple iterator wrapper for executing external processes,
+       used by TAP::Parser.  Unless you're subclassing, you probably won't
+       need to use this module directly.
+
+METHODS
+   Class Methods
+       "new"
+
+       Create an iterator.  Expects one argument containing a hashref of the
+       form:
+
+	  command  =&gt \@command_to_execute
+	  merge    =&gt $attempt_merge_stderr_and_stdout?
+	  setup    =&gt $callback_to_setup_command
+	  teardown =&gt $callback_to_teardown_command
+
+       Tries to uses IPC::Open3 & IO::Select to communicate with the spawned
+       process if they are available.  Falls back onto "open()".
+
+   Instance Methods
+       "next"
+
+       Iterate through the process output, of course.
+
+       "next_raw"
+
+       Iterate raw input without applying any fixes for quirky input syntax.
+
+       "wait"
+
+       Get the wait status for this iterator's process.
+
+       "exit"
+
+       Get the exit status for this iterator's process.
+
+       "handle_unicode"
+
+       Upgrade the input stream to handle UTF8.
+
+       "get_select_handles"
+
+       Return a list of filehandles that may be used upstream in a select()
+       call to signal that this Iterator is ready. Iterators that are not
+       handle based should return an empty list.
+
+ATTRIBUTION
+       Originally ripped off from Test::Harness.
+
+SEE ALSO
+       TAP::Object, TAP::Parser, TAP::Parser::Iterator,
+       TAP::Parser::IteratorFactory,
+
+
+
+perl v5.12.4			  2011-06-0TAP::Parser::Iterator::Process(3pm)
+    </pre></body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Geometry  is always clipped against the boundaries of a six-plane frus-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>glClipPlane - specify a plane against which all geometry is clipped</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLCLIPPLANE(3G) 					       GLCLIPPLANE(3G)
+
+
+
+NAME
+       glClipPlane - specify a plane against which all geometry is clipped
+
+
+C SPECIFICATION
+       void glClipPlane( GLenum plane,
+			 const GLdouble *equation )
+
+
+PARAMETERS
+       plane	 Specifies which clipping plane is being positioned.  Symbolic
+		 names of the form  GL_CLIP_PLANEi,  where  i  is  an  integer
+		 between 0 and GL_MAX_CLIP_PLANES-1, are accepted.
+
+       equation  Specifies  the  address  of an array of four double-precision
+		 floating-point values.  These values  are  interpreted  as  a
+		 plane equation.
+
+DESCRIPTION
+       Geometry  is always clipped against the boundaries of a six-plane frus-
+       tum in x, y, and z.  glClipPlane allows the specification of additional
+       planes,	not  necessarily perpendicular to the x, y, or z axis, against
+       which all geometry is clipped.  To  determine  the  maximum  number  of
+       additional   clipping   planes,	 call	glGetIntegerv	with  argument
+       GL_MAX_CLIP_PLANES. All implementations support at least six such clip-
+       ping planes.  Because the resulting clipping region is the intersection
+       of the defined half-spaces, it is always convex.
+
+       glClipPlane specifies a half-space using a four-component  plane  equa-
+       tion.   When  glClipPlane  is  called,  equation  is transformed by the
+       inverse of the modelview matrix and stored in the resulting eye coordi-
+       nates.	Subsequent  changes  to the modelview matrix have no effect on
+       the stored plane-equation components.  If the dot product  of  the  eye
+       coordinates  of	a  vertex with the stored plane equation components is
+       positive or zero, the vertex is in with respect to that clipping plane.
+       Otherwise, it is out.
+
+       To enable and disable clipping planes, call glEnable and glDisable with
+       the argument GL_CLIP_PLANEi, where i is the plane number.
+
+       All clipping planes are initially defined as (0, 0, 0, 0) in eye  coor-
+       dinates and are disabled.
+
+NOTES
+       It is always the case that GL_CLIP_PLANEi = GL_CLIP_PLANE0+i.
+
+ERRORS
+       GL_INVALID_ENUM is generated if plane is not an accepted value.
+
+       GL_INVALID_OPERATION  is  generated  if glClipPlane is executed between
+       the execution of glBegin and the corresponding execution of glEnd.
+
+ASSOCIATED GETS
+       glGetClipPlane
+       glIsEnabled with argument GL_CLIP_PLANEi
+
+SEE ALSO
+       glEnable
+
+
+
+							       GLCLIPPLANE(3G)
+    </pre></body>
+
+</html>

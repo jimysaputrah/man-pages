@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module is only intended for authors of tests on SQL::Abstract and..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>SQL::Abstract::Test - Helper function for testing SQL::Abstract</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+SQL::Abstract::Test(3)User Contributed Perl DocumentatioSQL::Abstract::Test(3)
+
+
+
+NAME
+       SQL::Abstract::Test - Helper function for testing SQL::Abstract
+
+SYNOPSIS
+	 use SQL::Abstract;
+	 use Test::More;
+	 use SQL::Abstract::Test import =&gt [qw/
+	   is_same_sql_bind is_same_sql is_same_bind
+	   eq_sql_bind eq_sql eq_bind
+	 /];
+
+	 my ($sql, @bind) = SQL::Abstract-&gtnew-&gtselect(%args);
+
+	 is_same_sql_bind($given_sql,	 \@given_bind,
+			  $expected_sql, \@expected_bind, $test_msg);
+
+	 is_same_sql($given_sql, $expected_sql, $test_msg);
+	 is_same_bind(\@given_bind, \@expected_bind, $test_msg);
+
+	 my $is_same = eq_sql_bind($given_sql,	  \@given_bind,
+				   $expected_sql, \@expected_bind);
+
+	 my $sql_same = eq_sql($given_sql, $expected_sql);
+	 my $bind_same = eq_bind(\@given_bind, \@expected_bind);
+
+DESCRIPTION
+       This module is only intended for authors of tests on SQL::Abstract and
+       related modules; it exports functions for comparing two SQL statements
+       and their bound values.
+
+       The SQL comparison is performed on abstract syntax, ignoring
+       differences in spaces or in levels of parentheses.  Therefore the tests
+       will pass as long as the semantics is preserved, even if the surface
+       syntax has changed.
+
+       Disclaimer : the semantic equivalence handling is pretty limited.  A
+       lot of effort goes into distinguishing significant from non-significant
+       parenthesis, including AND/OR operator associativity.  Currently this
+       module does not support commutativity and more intelligent
+       transformations like Morgan laws, etc.
+
+       For a good overview of what this test framework is capable of refer to
+       "t/10test.t"
+
+FUNCTIONS
+   is_same_sql_bind
+	 is_same_sql_bind($given_sql,	 \@given_bind,
+			  $expected_sql, \@expected_bind, $test_msg);
+
+       Compares given and expected pairs of "($sql, \@bind)", and calls "ok"
+       in Test::Builder on the result, with $test_msg as message. If the test
+       fails, a detailed diagnostic is printed. For clients which use
+       Test::More, this is the one of the three functions ("is_same_sql_bind",
+       "is_same_sql", "is_same_bind") that needs to be imported.
+
+   is_same_sql
+	 is_same_sql($given_sql, $expected_sql, $test_msg);
+
+       Compares given and expected SQL statements, and calls "ok" in
+       Test::Builder on the result, with $test_msg as message. If the test
+       fails, a detailed diagnostic is printed. For clients which use
+       Test::More, this is the one of the three functions ("is_same_sql_bind",
+       "is_same_sql", "is_same_bind") that needs to be imported.
+
+   is_same_bind
+	 is_same_bind(\@given_bind, \@expected_bind, $test_msg);
+
+       Compares given and expected bind values, and calls "ok" in
+       Test::Builder on the result, with $test_msg as message. If the test
+       fails, a detailed diagnostic is printed. For clients which use
+       Test::More, this is the one of the three functions ("is_same_sql_bind",
+       "is_same_sql", "is_same_bind") that needs to be imported.
+
+   eq_sql_bind
+	 my $is_same = eq_sql_bind($given_sql,	  \@given_bind,
+				   $expected_sql, \@expected_bind);
+
+       Compares given and expected pairs of "($sql, \@bind)". Similar to
+       "is_same_sql_bind", but it just returns a boolean value and does not
+       print diagnostics or talk to Test::Builder.
+
+   eq_sql
+	 my $is_same = eq_sql($given_sql, $expected_sql);
+
+       Compares the abstract syntax of two SQL statements. Similar to
+       "is_same_sql", but it just returns a boolean value and does not print
+       diagnostics or talk to Test::Builder. If the result is false, the
+       global variable "$sql_differ" will contain the SQL portion where a
+       difference was encountered; this is useful for printing diagnostics.
+
+   eq_bind
+	 my $is_same = eq_sql(\@given_bind, \@expected_bind);
+
+       Compares two lists of bind values, taking into account the fact that
+       some of the values may be arrayrefs (see "bindtype" in SQL::Abstract).
+       Similar to "is_same_bind", but it just returns a boolean value and does
+       not print diagnostics or talk to Test::Builder.
+
+GLOBAL VARIABLES
+   $case_sensitive
+       If true, SQL comparisons will be case-sensitive. Default is false;
+
+   $parenthesis_significant
+       If true, SQL comparison will preserve and report difference in nested
+       parenthesis. Useful while testing "IN (( x ))" vs "IN ( x )".  Defaults
+       to false;
+
+   $sql_differ
+       When "eq_sql" returns false, the global variable $sql_differ contains
+       the SQL portion where a difference was encountered.
+
+SEE ALSO
+       SQL::Abstract, Test::More, Test::Builder.
+
+AUTHORS
+       Laurent Dami, &ltlaurent.dami AT etat  geneve  ch&gt
+
+       Norbert Buchmuller &ltnorbi@nix.hu&gt
+
+       Peter Rabbitson &ltribasushi@cpan.org&gt
+
+COPYRIGHT AND LICENSE
+       Copyright 2008 by Laurent Dami.
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2010-12-21		SQL::Abstract::Test(3)
+    </pre></body>
+
+</html>

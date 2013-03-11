@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="In this recipe, we show how a role can be applied to an object. In this..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Moose::Cookbook::Roles::Recipe3 - Applying a role to an object instance</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Moose::Cookbook::RolesUsercContributed Perl Moose::Cookbook::Roles::Recipe3(3)
+
+
+
+NAME
+       Moose::Cookbook::Roles::Recipe3 - Applying a role to an object instance
+
+VERSION
+       version 2.0205
+
+SYNOPSIS
+	 package MyApp::Role::Job::Manager;
+
+	 use List::Util qw( first );
+
+	 use Moose::Role;
+
+	 has 'employees' =&gt (
+	     is  =&gt 'rw',
+	     isa =&gt 'ArrayRef[Employee]',
+	 );
+
+	 sub assign_work {
+	     my $self = shift;
+	     my $work = shift;
+
+	     my $employee = first { !$_-&gthas_work } @{ $self-&gtemployees };
+
+	     die 'All my employees have work to do!' unless $employee;
+
+	     $employee-&gtwork($work);
+	 }
+
+	 package main;
+
+	 my $lisa = Employee-&gtnew( name =&gt 'Lisa' );
+	 MyApp::Role::Job::Manager-&gtmeta-&gtapply($lisa);
+
+	 my $homer = Employee-&gtnew( name =&gt 'Homer' );
+	 my $bart  = Employee-&gtnew( name =&gt 'Bart' );
+	 my $marge = Employee-&gtnew( name =&gt 'Marge' );
+
+	 $lisa-&gtemployees( [ $homer, $bart, $marge ] );
+	 $lisa-&gtassign_work('mow the lawn');
+
+DESCRIPTION
+       In this recipe, we show how a role can be applied to an object. In this
+       specific case, we are giving an employee managerial responsibilities.
+
+       Applying a role to an object is simple. The Moose::Meta::Role object
+       provides an "apply" method. This method will do the right thing when
+       given an object instance.
+
+	 MyApp::Role::Job::Manager-&gtmeta-&gtapply($lisa);
+
+       We could also use the "apply_all_roles" function from Moose::Util.
+
+	 apply_all_roles( $person, MyApp::Role::Job::Manager-&gtmeta );
+
+       The main advantage of using "apply_all_roles" is that it can be used to
+       apply more than one role at a time.
+
+       We could also pass parameters to the role we're applying:
+
+	 MyApp::Role::Job::Manager-&gtmeta-&gtapply(
+	     $lisa,
+	     -alias =&gt { assign_work =&gt 'get_off_your_lazy_behind' },
+	 );
+
+       We saw examples of how method exclusion and alias working in roles
+       recipe 2.
+
+CONCLUSION
+       Applying a role to an object instance is a useful tool for adding
+       behavior to existing objects. In our example, it is effective used to
+       model a promotion.
+
+       It can also be useful as a sort of controlled monkey-patching for
+       existing code, particularly non-Moose code. For example, you could
+       create a debugging role and apply it to an object at runtime.
+
+AUTHOR
+       Stevan Little &ltstevan@iinteractive.com&gt
+
+COPYRIGHT AND LICENSE
+       This software is copyright (c) 2011 by Infinity Interactive, Inc..
+
+       This is free software; you can redistribute it and/or modify it under
+       the same terms as the Perl 5 programming language system itself.
+
+
+
+perl v5.12.4			  2011-09-06Moose::Cookbook::Roles::Recipe3(3)
+    </pre></body>
+
+</html>

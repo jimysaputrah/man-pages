@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The tcdrain() function waits until all output written to the terminal..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>tcdrain, tcflow, tcflush, tcsendbreak -- line control functions</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+TCSENDBREAK(3)		 BSD Library Functions Manual		TCSENDBREAK(3)
+
+NAME
+     tcdrain, tcflow, tcflush, tcsendbreak -- line control functions
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include &lttermios.h&gt
+
+     int
+     tcdrain(int fildes);
+
+     int
+     tcflow(int fildes, int action);
+
+     int
+     tcflush(int fildes, int action);
+
+     int
+     tcsendbreak(int fildes, int duration);
+
+DESCRIPTION
+     The tcdrain() function waits until all output written to the terminal
+     referenced by fildes has been transmitted to the terminal.
+
+     The tcflow() function suspends transmission of data to, or the reception
+     of data from, the terminal referenced by fildes, depending on the value
+     of action.  The value of action must be one of the following:
+
+     TCOOFF  Suspend output.
+
+     TCOON   Restart suspended output.
+
+     TCIOFF  Transmit a STOP character, which is intended to cause the termi-
+	     nal to stop transmitting data to the system.  (See the descrip-
+	     tion of IXOFF in the `Input Modes' section of termios(4)).
+
+     TCION   Transmit a START character, which is intended to cause the termi-
+	     nal to start transmitting data to the system.  (See the descrip-
+	     tion of IXOFF in the `Input Modes' section of termios(4)).
+
+     The tcflush() function discards any data written to the terminal refer-
+     enced by fildes which has not been transmitted to the terminal, or any
+     data received from the terminal but not yet read, depending on the value
+     of action.  The value of action must be one of the following:
+
+     TCIFLUSH	Flush data received but not read.
+
+     TCOFLUSH	Flush data written but not transmitted.
+
+     TCIOFLUSH	Flush both data received but not read and data written but not
+		transmitted.
+
+     The tcsendbreak() function transmits a continuous stream of zero-valued
+     bits for four-tenths of a second to the terminal referenced by fildes.
+     The duration parameter is ignored in this implementation.
+
+RETURN VALUES
+     Upon successful completion, all of these functions return a value of
+     zero.
+
+ERRORS
+     If any error occurs, a value of -1 is returned and the global variable
+     errno is set to indicate the error, as follows:
+
+     [EBADF]		The fildes argument is not a valid file descriptor.
+
+     [EINTR]		A signal interrupted the tcdrain() function.
+
+     [EINVAL]		The action argument is not a proper value.
+
+     [ENOTTY]		The file associated with fildes is not a terminal.
+
+SEE ALSO
+     tcsetattr(3), termios(4)
+
+STANDARDS
+     The tcsendbreak(), tcdrain(), tcflush() and tcflow() functions are
+     expected to be compliant with the IEEE Std 1003.1-1988 (``POSIX.1'')
+     specification.
+
+BSD				 June 4, 1993				   BSD
+    </pre></body>
+
+</html>

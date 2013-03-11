@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The opendir() function opens the directory named by dirname, associates a..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>closedir, dirfd, opendir, readdir, readdir_r, rewinddir, seekdir, telldir</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+DIRECTORY(3)		 BSD Library Functions Manual		  DIRECTORY(3)
+
+NAME
+     closedir, dirfd, opendir, readdir, readdir_r, rewinddir, seekdir, telldir
+     -- directory operations
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include &ltdirent.h&gt
+
+     int
+     closedir(DIR *dirp);
+
+     int
+     dirfd(DIR *dirp);
+
+     DIR *
+     opendir(const char *dirname);
+
+     struct dirent *
+     readdir(DIR *dirp);
+
+     int
+     readdir_r(DIR *restrict dirp, struct dirent *restrict entry,
+	 struct dirent **restrict result);
+
+     void
+     rewinddir(DIR *dirp);
+
+     void
+     seekdir(DIR *dirp, long loc);
+
+     long
+     telldir(DIR *dirp);
+
+DESCRIPTION
+     The opendir() function opens the directory named by dirname, associates a
+     directory stream with it, and returns a pointer to be used to identify
+     the directory stream in subsequent operations.  The pointer NULL is
+     returned if dirname cannot be accessed or if it cannot malloc(3) enough
+     memory to hold the whole thing.
+
+     The readdir() function returns a pointer to the next directory entry.  It
+     returns NULL upon reaching the end of the directory or detecting an
+     invalid seekdir() operation.
+
+     readdir_r() provides the same functionality as readdir(), but the caller
+     must provide a directory entry buffer to store the results in.  If the
+     read succeeds, result is pointed at the entry; upon reaching the end of
+     the directory, result is set to NULL.  readdir_r() returns 0 on success
+     or an error number to indicate failure.
+
+     The telldir() function returns the current location associated with the
+     named directory stream.  Values returned by telldir() are good only for
+     the lifetime of the DIR pointer (e.g., dirp) from which they are derived.
+     If the directory is closed and then reopened, prior values returned by
+     telldir() will no longer be valid.
+
+     The seekdir() function sets the position of the next readdir() operation
+     on the directory stream.  The new position reverts to the one associated
+     with the directory stream when the telldir() operation was performed.
+
+     The rewinddir() function resets the position of the named directory
+     stream to the beginning of the directory.
+
+     The closedir() function closes the named directory stream and frees the
+     structure associated with the dirp pointer, returning 0 on success.  On
+     failure, -1 is returned and the global variable errno is set to indicate
+     the error.
+
+     The dirfd() function returns the integer file descriptor associated with
+     the named directory stream on success, see open(2).  On failure, -1 is
+     returned and the global variable errno is set to indicate the error.
+
+     Sample code which searches a directory for entry ``name'' is:
+
+	   len = strlen(name);
+	   dirp = opendir(".");
+	   while ((dp = readdir(dirp)) != NULL)
+		   if (dp-&gtd_namlen == len && !strcmp(dp-&gtd_name, name)) {
+			   (void)closedir(dirp);
+			   return FOUND;
+		   }
+	   (void)closedir(dirp);
+	   return NOT_FOUND;
+
+LEGACY SYNOPSIS
+     #include &ltsys/types.h&gt
+     #include &ltdirent.h&gt
+
+     &ltsys/types.h&gt is necessary for these functions.
+
+SEE ALSO
+     close(2), lseek(2), open(2), read(2), compat(5), dir(5)
+
+HISTORY
+     The closedir(), dirfd(), opendir(), readdir(), rewinddir(), seekdir(),
+     and telldir() functions appeared in 4.2BSD.
+
+BSD				 June 4, 1993				   BSD
+    </pre></body>
+
+</html>

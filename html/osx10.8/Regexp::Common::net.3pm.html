@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Please consult the manual of Regexp::Common for a general description..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Regexp::Common::net -- provide regexes for IPv4 addresses.</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Regexp::Common::net(3)User Contributed Perl DocumentatioRegexp::Common::net(3)
+
+
+
+NAME
+       Regexp::Common::net -- provide regexes for IPv4 addresses.
+
+SYNOPSIS
+	   use Regexp::Common qw /net/;
+
+	   while (&lt&gt) {
+	       /$RE{net}{IPv4}/       and print "Dotted decimal IP address";
+	       /$RE{net}{IPv4}{hex}/  and print "Dotted hexadecimal IP address";
+	       /$RE{net}{IPv4}{oct}{-sep =&gt ':'}/ and
+				      print "Colon separated octal IP address";
+	       /$RE{net}{IPv4}{bin}/  and print "Dotted binary IP address";
+	       /$RE{net}{MAC}/	      and print "MAC address";
+	       /$RE{net}{MAC}{oct}{-sep =&gt " "}/ and
+				      print "Space separated octal MAC address";
+	   }
+
+DESCRIPTION
+       Please consult the manual of Regexp::Common for a general description
+       of the works of this interface.
+
+       Do not use this module directly, but load it via Regexp::Common.
+
+       This modules gives you regular expressions for various style IPv4 and
+       MAC (or ethernet) addresses.
+
+   $RE{net}{IPv4}
+       Returns a pattern that matches a valid IP address in "dotted decimal".
+       Note that while 318.99.183.11 is not a valid IP address, it does match
+       "/$RE{net}{IPv4}/", but this is because 318.99.183.11 contains a valid
+       IP address, namely 18.99.183.11. To prevent the unwanted matching, one
+       needs to anchor the regexp: "/^$RE{net}{IPv4}$/".
+
+       For this pattern and the next four, under "-keep" (See Regexp::Common):
+
+       $1  captures the entire match
+
+       $2  captures the first component of the address
+
+       $3  captures the second component of the address
+
+       $4  captures the third component of the address
+
+       $5  captures the final component of the address
+
+   $RE{net}{IPv4}{dec}{-sep}
+       Returns a pattern that matches a valid IP address in "dotted decimal"
+
+       If "-sep=P" is specified the pattern P is used as the separator.  By
+       default P is "qr/[.]/".
+
+   $RE{net}{IPv4}{hex}{-sep}
+       Returns a pattern that matches a valid IP address in "dotted
+       hexadecimal", with the letters "A" to "F" capitalized.
+
+       If "-sep=P" is specified the pattern P is used as the separator.  By
+       default P is "qr/[.]/". "-sep=""" and "-sep=" "" are useful
+       alternatives.
+
+   $RE{net}{IPv4}{oct}{-sep}
+       Returns a pattern that matches a valid IP address in "dotted octal"
+
+       If "-sep=P" is specified the pattern P is used as the separator.  By
+       default P is "qr/[.]/".
+
+   $RE{net}{IPv4}{bin}{-sep}
+       Returns a pattern that matches a valid IP address in "dotted binary"
+
+       If "-sep=P" is specified the pattern P is used as the separator.  By
+       default P is "qr/[.]/".
+
+   $RE{net}{MAC}
+       Returns a pattern that matches a valid MAC or ethernet address as colon
+       separated hexadecimals.
+
+       For this pattern, and the next four, under "-keep" (See
+       Regexp::Common):
+
+       $1  captures the entire match
+
+       $2  captures the first component of the address
+
+       $3  captures the second component of the address
+
+       $4  captures the third component of the address
+
+       $5  captures the fourth component of the address
+
+       $6  captures the fifth component of the address
+
+       $7  captures the sixth and final component of the address
+
+       This pattern, and the next four, have a "subs" method as well, which
+       will transform a matching MAC address into so called canonical format.
+       Canonical format means that every component of the address will be
+       exactly two hexadecimals (with a leading zero if necessary), and the
+       components will be separated by a colon.
+
+       The "subs" method will not work for binary MAC addresses if the Perl
+       version predates 5.6.0.
+
+   $RE{net}{MAC}{dec}{-sep}
+       Returns a pattern that matches a valid MAC address as colon separated
+       decimals.
+
+       If "-sep=P" is specified the pattern P is used as the separator.  By
+       default P is "qr/:/".
+
+   $RE{net}{MAC}{hex}{-sep}
+       Returns a pattern that matches a valid MAC address as colon separated
+       hexadecimals, with the letters "a" to "f" in lower case.
+
+       If "-sep=P" is specified the pattern P is used as the separator.  By
+       default P is "qr/:/".
+
+   $RE{net}{MAC}{oct}{-sep}
+       Returns a pattern that matches a valid MAC address as colon separated
+       octals.
+
+       If "-sep=P" is specified the pattern P is used as the separator.  By
+       default P is "qr/:/".
+
+   $RE{net}{MAC}{bin}{-sep}
+       Returns a pattern that matches a valid MAC address as colon separated
+       binary numbers.
+
+       If "-sep=P" is specified the pattern P is used as the separator.  By
+       default P is "qr/:/".
+
+   $RE{net}{domain}
+       Returns a pattern to match domains (and hosts) as defined in RFC 1035.
+       Under I{-keep} only the entire domain name is returned.
+
+       RFC 1035 says that a single space can be a domainname too. So, the
+       pattern returned by $RE{net}{domain} recognizes a single space as well.
+       This is not always what people want. If you want to recognize
+       domainnames, but not a space, you can do one of two things, either use
+
+	   /(?! )$RE{net}{domain}/
+
+       or use the "{-nospace}" option (without an argument).
+
+REFERENCES
+       RFC 1035
+	   Mockapetris, P.: DOMAIN NAMES - IMPLEMENTATION AND SPECIFICATION.
+	   November 1987.
+
+SEE ALSO
+       Regexp::Common for a general description of how to use this interface.
+
+AUTHOR
+       Damian Conway damian@conway.org.
+
+MAINTAINANCE
+       This package is maintained by Abigail (regexp-common@abigail.be).
+
+BUGS AND IRRITATIONS
+       Bound to be plenty.
+
+       For a start, there are many common regexes missing.  Send them in to
+       regexp-common@abigail.be.
+
+LICENSE and COPYRIGHT
+       This software is Copyright (c) 2001 - 2009, Damian Conway and Abigail.
+
+       This module is free software, and maybe used under any of the following
+       licenses:
+
+	1) The Perl Artistic License.	  See the file COPYRIGHT.AL.
+	2) The Perl Artistic License 2.0. See the file COPYRIGHT.AL2.
+	3) The BSD Licence.		  See the file COPYRIGHT.BSD.
+	4) The MIT Licence.		  See the file COPYRIGHT.MIT.
+
+
+
+perl v5.12.4			  2010-02-23		Regexp::Common::net(3)
+    </pre></body>
+
+</html>

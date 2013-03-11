@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Moose exports a number of sugar functions in order to emulate Perl..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Moose::Cookbook::Snack::Keywords - Restricted "keywords" in Moose</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Moose::Cookbook::SnackUseryContributed PerlMoose::Cookbook::Snack::Keywords(3)
+
+
+
+NAME
+       Moose::Cookbook::Snack::Keywords - Restricted "keywords" in Moose
+
+DESCRIPTION
+       Moose exports a number of sugar functions in order to emulate Perl
+       built-in keywords. These can cause clashes with other user-defined
+       functions. This document provides a list of those keywords for easy
+       reference.
+
+   The 'meta' keyword
+       While most collisions can be avoided, you cannot avoid importing a
+       "meta" method when you "use Moose". If you try to override or change
+       what "meta" does, you could end up breaking Moose internals.
+
+   Moose Keywords
+       If you are using Moose or Moose::Role its best to avoid these keywords:
+
+       extends
+       with
+       has
+       before
+       after
+       around
+       super
+       override
+       inner
+       augment
+       confess
+       blessed
+
+   Moose::Util::TypeConstraints Keywords
+       If you are using Moose::Util::TypeConstraints its best to avoid these
+       keywords
+
+       type
+       subtype
+       class_type
+       role_type
+       maybe_type
+       as
+       where
+       message
+       optimize_as
+       coerce
+       from
+       via
+       enum
+       find_type_constraint
+       register_type_constraint
+
+   Avoiding collisions
+       Turning off Moose
+
+       To remove the sugar functions Moose exports just add "no Moose" at the
+       bottom of your code:
+
+	 package Thing;
+	 use Moose;
+
+	 # code here
+
+	 no Moose;
+
+       This will unexport the sugar functions that Moose originally exported.
+       The same will also work for Moose::Role and
+       Moose::Util::TypeConstraints.
+
+       Sub::Exporter features
+
+       Moose, Moose::Role and Moose::Util::TypeConstraints all use
+       Sub::Exporter to handle all their exporting needs. This means that all
+       the features that Sub::Exporter provides are also available to them.
+
+       For instance, with Sub::Exporter you can rename keywords, like so:
+
+	 package LOL::Cat;
+	 use Moose 'has' =&gt { -as =&gt 'i_can_haz' };
+
+	 i_can_haz 'cheeseburger' =&gt (
+	     is      =&gt 'rw',
+	     trigger =&gt sub { print "NOM NOM" }
+	 );
+
+	 LOL::Cat-&gtnew-&gtcheeseburger('KTHNXBYE');
+
+       See the Sub::Exporter docs for more information.
+
+       namespace::clean
+
+       You can also use namespace::clean to clean up your namespace, but you
+       must be careful not to remove "meta" when doing so:
+
+	 package Foo;
+	 use Moose;
+	 use namespace::clean -except =&gt 'meta';
+	 # ...
+
+SEE ALSO
+       Moose
+       Moose::Role
+       Moose::Utils::TypeConstraints
+       Sub::Exporter
+       namespace::clean
+
+AUTHOR
+       John Goulah "&ltjgoulah@cpan.org&ltgt"&gt
+
+       Stevan Little &ltstevan@iinteractive.com&gt
+
+COPYRIGHT AND LICENSE
+       Copyright 2006-2010 by Infinity Interactive, Inc.
+
+       &lthttp://www.iinteractive.com&gt
+
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+
+
+perl v5.10.1			  2010-02-2Moose::Cookbook::Snack::Keywords(3)
+    </pre></body>
+
+</html>

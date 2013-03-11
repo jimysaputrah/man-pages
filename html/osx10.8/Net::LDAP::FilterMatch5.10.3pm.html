@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>Net::LDAP::FilterMatch - LDAP entry matching</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Net::LDAP::FilterMatchUser Contributed Perl DocumentaNet::LDAP::FilterMatch(3)
+
+
+
+NAME
+       Net::LDAP::FilterMatch - LDAP entry matching
+
+SYNOPSIS
+	 use Net::LDAP::Entry;
+	 use Net::LDAP::Filter;
+	 use Net::LDAP::FilterMatch;
+
+	 my $entry = new Net::LDAP::Entry;
+	 $entry-&gtdn("cn=dummy entry");
+	 $entry-&gtadd (
+	  'cn' =&gt 'dummy entry',
+	  'street' =&gt [ '1 some road','nowhere' ] );
+
+	 my @filters = (qw/(cn=dummy*)
+			(ou=*)
+			(&(cn=dummy*)(street=*road))
+			(&(cn=dummy*)(!(street=nowhere)))/);
+
+
+	 for (@filters) {
+	   my $filter = Net::LDAP::Filter-&gtnew($_);
+	   print $_,' : ', $filter-&gtmatch($entry) ? 'match' : 'no match' ,"\n";
+	 }
+
+ABSTRACT
+       This extension of the class Net::LDAP::Filter provides entry matching
+       functionality on the Perl side.
+
+       Given an entry it will tell whether the entry matches the filter
+       object.
+
+       It can be used on its own or as part of a Net::LDAP::Server based LDAP
+       server.
+
+METHOD
+       match ( ENTRY [ ,SCHEMA ] )
+	   Return whether ENTRY matches the filter object. If a schema object
+	   is provided, the selection of matching algorithms will be derived
+	   from schema.
+
+	   In case of error undef is returned.
+
+       For approximate matching like (cn~=Schmidt) there are several modules
+       that can be used. By default the following modules will be tried in
+       this order:
+
+	 String::Approx
+	 Text::Metaphone
+	 Text::Soundex
+
+       If none of these modules is found it will fall back on a simple regexp
+       algorithm.
+
+       If you want to specifically use one implementation only, simply do
+
+	 use Net::LDAP::FilterMatch qw(Text::Soundex);
+
+SEE ALSO
+       Net::LDAP::Filter
+
+COPYRIGHT
+       This library is free software; you can redistribute it and/or modify it
+       under the same terms as Perl itself.
+
+AUTHORS
+       Hans Klunder &lthans.klunder@bigfoot.com&gt Peter Marschall &ltpeter@adpm.de&gt
+
+
+
+perl v5.10.1			  2010-03-11	     Net::LDAP::FilterMatch(3)
+    </pre></body>
+
+</html>

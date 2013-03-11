@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The kextstat utility displays the status of any kexts currently loaded in..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>kextstat -- display status of loaded kernel extensions (kexts)</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+KEXTSTAT(8)		  BSD System Manager's Manual		   KEXTSTAT(8)
+
+NAME
+     kextstat -- display status of loaded kernel extensions (kexts)
+
+SYNOPSIS
+     kextstat [-h] [-k] [-l] [-b identifier] ...
+
+DESCRIPTION
+     The kextstat utility displays the status of any kexts currently loaded in
+     the kernel.  The following information is shown for each loaded kext:
+
+     Index     The load index of the kext (used to track linkage references).
+	       Gaps in the list indicate kexts that have been unloaded.
+
+     Refs      The number of references to this kext by others.  If nonzero,
+	       the kext cannot be unloaded.
+
+     Address   The address in kernel space where the kext has been loaded.
+
+     Size      The number of bytes of kernel memory that the kext occupies.
+	       If this is zero, the kext is a built-in part of the kernel that
+	       has a record as a kext for resolving dependencies among kexts.
+
+     Wired     The number of wired bytes of kernel memory that the kext occu-
+	       pies.
+
+     Name      The CFBundleIdentifier of the kext.
+
+     (Version)
+	       The CFBundleVersion of the kext.
+
+     &ltLinked Against&gt
+	       The index numbers of all other kexts that this kext has a ref-
+	       erence to.
+
+OPTIONS
+     These options are available:
+
+     -b identifier, -bundle-id identifier
+	       Display the status of only the kext with the given bundle iden-
+	       tifier.	This option trumps the -no-kernel option; if both are
+	       given and a kernel component is specified, its information is
+	       shown.
+
+     -h, -help
+	       Print a help message describing each option flag and exit with
+	       a success result, regardless of any other options on the com-
+	       mand line.
+
+     -k, -no-kernel
+	       Don't show information for built-in components of the kernel.
+
+     -l, -list-only
+	       Print the list of loaded kexts only and omit the header (useful
+	       for running output through text-analysis tools).
+
+DIAGNOSTICS
+     The kextstat utility exits with a status of 0 on success and with a
+     nonzero status if an error occurs.
+
+SEE ALSO
+     kextcache(8), kextd(8), kextload(8), kextunload(8), kextutil(8)
+
+Darwin				 March 6, 2009				Darwin
+    </pre></body>
+
+</html>

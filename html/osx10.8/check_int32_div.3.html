@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The check_<type>_<operation>(x, y, err) family of functions perform the..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>check_int32_add, check_uint32_add, check_int64_add, check_uint64_add,</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+CHECK_INT32_ADD(3)	 BSD Library Functions Manual	    CHECK_INT32_ADD(3)
+
+NAME
+     check_int32_add, check_uint32_add, check_int64_add, check_uint64_add,
+     check_int32_sub, check_uint32_sub, check_int64_sub, check_uint64_sub,
+     check_int32_mul, check_uint32_mul, check_int64_mul, check_uint64_mul,
+     check_int32_div, check_uint32_div, check_int64_div, check_uint64_div, --
+     detect overflow in arithmetic
+
+SYNOPSIS
+     #include &ltcheckint.h&gt
+
+     int32_t
+     check_int32_add(int x, int y, int *err);
+
+     uint32_t
+     check_uint32_add(int x, int y, int *err);
+
+     int64_t
+     check_int64_add(int x, int y, int *err);
+
+     uint64_t
+     check_uint64_add(int x, int y, int *err);
+
+     int32_t
+     check_int32_sub(int x, int y, int *err);
+
+     uint32_t
+     check_uint32_sub(int x, int y, int *err);
+
+     int64_t
+     check_int64_sub(int x, int y, int *err);
+
+     uint64_t
+     check_uint64_sub(int x, int y, int *err);
+
+     int32_t
+     check_int32_mul(int x, int y, int *err);
+
+     uint32_t
+     check_uint32_mul(int x, int y, int *err);
+
+     int64_t
+     check_int64_mul(int x, int y, int *err);
+
+     uint64_t
+     check_uint64_mul(int x, int y, int *err);
+
+     int32_t
+     check_int32_div(int x, int y, int *err);
+
+     uint32_t
+     check_uint32_div(int x, int y, int *err);
+
+     int64_t
+     check_int64_div(int x, int y, int *err);
+
+     uint64_t
+     check_uint64_div(int x, int y, int *err);
+
+DESCRIPTION
+     The check_&lttype&gt_&ltoperation&gt(x, y, err) family of functions perform the
+     specified arithmetic operation (addition, subtraction, multiplication, or
+     division) with the left operand of x and right operand of y and return
+     the arithmetic result with the specified type.
+
+     Either operand x or y (or both) can be of any type that is compatible to
+     signed or unsigned 8-bit, 16-bit, 32-bit, or 64-bit integers.
+
+     The err argument is or'ed by flags in the function to indicate if an
+     overflow has occurred.  The possible flag values are:
+
+	   CHECKINT_NO_ERROR		   no overflow has occurred
+	   CHECKINT_OVERFLOW_ERROR	   overflow has occurred
+	   CHECKINT_TYPE_ERROR		   operand is of an incompatible type
+
+     The err argument is not cleared in calls to the
+     check_&lttype&gt_&ltoperation&gt(x, y, err) functions.  Detected overflow per-
+     sists in the err argument until err is reset to CHECKINT_NO_ERROR.
+
+RETURN VALUES
+     If successful, the check_&lttype&gt_&ltoperation&gt() functions will return the
+     arithmetic result of performing the operation with left operand x and
+     right operand y (even when overflow error occurs).
+
+     If any other error occurs, the return value is -1 and the argument err
+     will be set to indicate the error.
+
+EXAMPLES
+	   /* Create a variable to store overflow flag */
+	   int32_t err = CHECKINT_NO_ERROR;
+	   /* Use checkint API to perform an arithmetic operation and
+	    * store result in variable. */
+	   int32_t arithmetic_result = check_int32_add(UINT_MAX, 1, &err);
+	   /* Check status of overflow flag */
+	   if (err & CHECKINT_OVERFLOW_ERROR) {
+	       /* Perform overflow resolution code */
+	       fprintf(stderr, "Overflow detected!\n");
+	   }
+	   /* Check for type error */
+	   else if (err & CHECKINT_TYPE_ERROR) {
+	       /* Deal with incompatible types error */
+	       fprintf(stderr, "Incompatible types!\n");
+	   }
+	   /* Reset overflow flag for next operation */
+	   err = CHECKINT_NO_ERROR;
+
+
+ERRORS
+     The check_&lttype&gt_&ltoperation&gt() functions may fail if:
+
+	   [CHECKINT_TYPE_ERROR]	   operand is of an incompatible type
+
+HISTORY
+     The checkint() API was introduced in Mac OS X 10.5.
+
+BSD				April 20, 2007				   BSD
+    </pre></body>
+
+</html>

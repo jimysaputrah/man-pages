@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Scripting definition files (sdefs) are XML files that describe everything..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>sdef -- scripting definition file</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+SDEF(5) 		    BSD File Formats Manual		       SDEF(5)
+
+NAME
+     sdef -- scripting definition file
+
+DESCRIPTION
+     Scripting definition files (sdefs) are XML files that describe everything
+     about an application scripting interface: terminology, implementation
+     information, and complete documentation.  Applications may incorporate
+     them to define their own scriptability, and scripting clients such as
+     AppleScript and Scripting Bridge read them to determine what operations
+     an application supports.
+
+BASICS
+     To read this man page, you should know what ``element'' and ``attribute''
+     mean in an XML document.  To create an sdef, you should know how to cre-
+     ate well-formed XML; use of an XML editor will probably make your life
+     easier.  For basic concepts and style guidelines, see Technical Note
+     TN2106, Scripting Interface Guidelines.  Knowledge of AppleScript is
+     helpful but not necessary; see the AppleScript Language Guide, especially
+     chapters 4 (Commands) and 5 (Objects and References).  If you have
+     already been working with sdefs in an older version of Mac OS X, read the
+     History section, since there have been changes to the format.  If you are
+     using Cocoa, Cocoa Scripting as of Mac OS X 10.4 (Tiger) supports using
+     sdefs directly rather than preprocessing them with sdp(1); see the Sdef
+     Scriptability Guide for Cocoa for details.
+
+     If you are familiar with AppleScript or with writing aete resources, most
+     of the sdef elements will be familiar to you.  If you are not, or if you
+     want to know how sdef elements map to your implementation language, here
+     is a brief translation guide.  Many of these equivalents are not exact;
+     for more detailed information, see the definitions in the Reference sec-
+     tion.
+
+	   sdef 	     code
+	   class	     class
+	   class-extension   category
+	   property	     property (ObjC), member variable (C++), attribute
+			     (XML), to-one relation
+	   element	     element (XML), to-many relation
+	   command, event    method (ObjC), member function (C++)
+	   parameter	     parameter
+	   direct parameter  self (ObjC), this (C++)
+
+STRUCTURE
+     There are two broad categories of elements:
+
+     terminology element: An element that defines a term usable in a script:
+	   class, command, contents, enumerator, event, parameter, property,
+	   record-type, and value-type.
+
+     implementation element: An element that holds implementation information
+	   for a particular application framework.  Currently, the only imple-
+	   mentation element is the cocoa element.
+
+     The element structure of an sdef is as follows.  Indentation shows con-
+     tainment, and `*', `+', and `?' have their usual EBNF meanings: `*' means
+     zero or more, `+' means one or more, and `?' means zero or one (i.e.,
+     optional).
+
+	   dictionary (the root element)
+		 suite+
+		       (class | class-extension | command | enumeration |
+		       event | record-type | value-type) +
+
+	   enumeration
+		 enumerator+
+
+	   record-type
+		 property+
+
+	   class | class-extension
+		 contents?
+		 property*
+		 element*
+		       accessor*
+		 responds-to*
+
+	   command | event
+		 direct-parameter?
+		 parameter*
+		 result?
+
+     The elements listed above may also contain documentation, implementation,
+     synonym, xref and access-group elements, as noted here:
+
+     element	     occurs in
+     documentation   dictionary, suite, and all terminology elements
+     implementation  all but dictionary
+     synonym	     all terminology elements
+     xref	     suite children: class, class-extension, command,
+		     enumeration, event, record-type, and value-type.
+     access-group    suite, class, class-extension, command, element,
+		     property, contents, and responds-to.
+
+   Including Other Scripting Definitions
+     If you wish to re-export scripting features from a framework your appli-
+     cation links to, such as AppKit, you should include the sdef of that
+     framework in your own.  (Sdef-based applications have only the scripting
+     interface that they explicitly declare.  This is in contrast to the older
+     scriptSuite scheme, which would automatically import scripting interface
+     from any loaded bundles.)
+
+     To do this, use an XInclude element (http://www.w3.org/TR/xinclude)
+     pointing to the desired file.  Sdefs for system frameworks are located in
+     /System/Library/ScriptingDefinitions.  For example, the sdef for a typi-
+     cal Cocoa application would begin with this:
+
+       &ltdictionary xmlns:xi="http://www.w3.org/2003/XInclude"&gt
+	 &ltxi:include
+	   href="file:///System/Library/ScriptingDefinitions/CocoaStandard.sdef"
+	   xpointer="xpointer(/dictionary/suite)"
+	 /&gt
+	 ...
+
+     By using inclusion instead of copying and pasting, your application will
+     automatically stay up to date with changes to the framework.  Only
+     include a framework sdef if you also link to that framework; otherwise
+     you run the risk of your application interface disagreeing with what it
+     actually implements.
+
+REFERENCE
+   Common Attributes
+     The following attributes are common to several of the element types
+     described below.
+
+     name	  For terminology elements, the scripting term for the ele-
+		  ment.  Names must be one or more C identifiers (i.e.,
+		  [A-Za-z_][A-Za-z0-9_]*) separated by a space.  (Other
+		  elements have name attributes too, but for different
+		  purposes and with different content rules.)
+
+     id 	  (optional) A unique identifier for the element.  Use one
+		  when you want to refer to one of a set of identically named
+		  elements in a responds-to or xref element.
+
+     code	  The four-character code (eight-character for verbs) for the
+		  element.  AppleScript and the Apple Event Manager use these
+		  codes to handle dispatching.	``Character'' is something of
+		  a misnomer; a four-character code is really four bytes of
+		  data expressed as a string of four characters in the Mac OS
+		  Roman encoding.  A code may also be expressed as hexadecimal
+		  data with a leading ``0x''.  For example, ``ABCD'' and
+		  ``0x41424344'' are equivalent.  This is useful when one of
+		  the bytes is not in the printable ASCII range of 0x20 to
+		  0x7E, such as the code ``0x00000001''.
+
+     type	  The type of an element, property, or parameter.  The value
+		  must be one of the primitive types `any', `text', `integer',
+		  `real', `number', `boolean', `specifier', `location
+		  specifier', `record', `date', `file', `point', `rectangle',
+		  `type', or `missing value', or the name of a class, enumera-
+		  tion, record-type, or value-type defined elsewhere in the
+		  sdef.  To specify a complex type such as ``list of integer''
+		  or ``number or text'', use a type element as described
+		  below.  Usage of type attributes changed significantly in
+		  Mac OS X 10.4; see History for details.
+
+     description  (optional) A short description of the element.
+
+     hidden	  (optional) If an element is marked hidden, it is not shown
+		  in the dictionary, though it is still implemented.  This is
+		  useful for obsolete or not-ready-for-prime-time scripting
+		  features.  Cocoa scriptTerminology files do not support hid-
+		  den terms; for best results, build an `aete' into your
+		  application as well.	The value may be `yes' or `no' (the
+		  default).
+
+   Elements
+     access-group
+		  Defines a group of operations that is safe to use by sand-
+		  boxed applications.  A set of access-group elements with a
+		  single identifier defines a group identifier that a client
+		  application may use in its profile.  Any element without an
+		  access group is not accessible from a sandboxed application.
+
+		  access-groups are inherited by document containment.	For
+		  example, applying an access-group element to a class effec-
+		  tively applies the same rights to all of its property and
+		  element elements as well.  access-group elements are not
+		  inherited by class inheritance or class containment, so in
+		  the above example, while a client would be able to get ref-
+		  erences to elements of the original class, they would not
+		  necessarily be able to do anything with them, nor would they
+		  necessarily have access to elements defined in subclasses.
+
+		  ATTRIBUTES
+		  identifier	The name of the category; should be a reverse-
+				DNS string that describes its purpose.	An
+				identifier of ``*'' means the element is
+				usable by any application, without an explicit
+				entitlement.
+		  access	(optional) The access rights this category
+				grants for the enclosing element.  This
+				attribute is only meaningful when applied to a
+				property or element, either directly or by
+				inheritance.  The value may be `r' (read), `w'
+				(write), or `rw' (read-write, the default).
+
+     accessor	  Accessors define which access forms an element supports.
+		  There are six forms:
+
+		      index	numeric index (window 1)
+		      name	named element (window "Bob")
+		      id	unique id (file id 8727).  Ids are often
+				numeric, but don't have to be.
+		      range	a range of elements (records 4 through 12)
+		      relative	relative to another object (word before
+				paragraph 2)
+		      test	objects satisfying a test (shapes whose color
+				is blue)
+
+		  Accessor elements are currently only useful for aetes; Cocoa
+		  Scripting ignores them and figures out supported forms based
+		  on the element's properties.
+
+		  ATTRIBUTES
+		  style 	index | name | id | range | relative | test
+
+     class	  An abstract object definition that lists the properties,
+		  elements, and supported verbs for instances of that class.
+		  Class instances are called ``objects.''
+
+		  CONTAINS
+		  implementation?, synonym*, contents?, element*, property*,
+		  responds-to*
+
+		  ATTRIBUTES
+		  name		As above.
+		  id		As above.
+		  code		As above.
+		  description	As above.
+		  hidden	As above.
+		  plural	(optional) The plural name of the class.  If
+				omitted, defaults to the name with `s'
+				appended.
+		  inherits	(optional) The class, if any, that this one
+				descends from.
+
+     class-extension
+		  An extension to an existing class; in Objective-C terms, a
+		  category.  Use one of these when you want to add behavior to
+		  an existing class, such as the base ``application'' class,
+		  without defining a subclass.	You can also use it to break a
+		  class definition across multiple suites.  A class-extension
+		  has mostly the same content as a class, but because it is
+		  extending an existing class, it does not define its own name
+		  or code, but instead an `extends' attribute.
+
+		  A class-extension may have a cocoa element, depending on how
+		  it is implemented: despite its resemblance to an Objective-C
+		  category, the implementation of a class-extension may in
+		  fact be a subclass.  For example, when defining your own
+		  document class, the sdef would extend the standard
+		  ``document'' definition, but the implementation would be a
+		  subclass of NSDocument.  If the implementation is an Objec-
+		  tive-C category, then a cocoa element is not required; if it
+		  is a subclass, then use a cocoa element with a `class'
+		  attribute naming the subclass.
+
+		  CONTAINS
+		  implementation?, synonym*, contents?, element*, property*,
+		  responds-to*
+
+		  ATTRIBUTES
+		  extends	The name of the class this element extends.
+		  id		As above.
+		  description	As above.
+		  hidden	As above.
+
+     cocoa	  Holds implementation information for Cocoa Scripting.  Use
+		  the appropriate attribute for the containing element to
+		  describe the relevant bit of Cocoa implementation.
+
+		  ATTRIBUTES
+		  class 	An Objective-C class name: use for classes and
+				the CommandClass of verbs.
+		  key		A string key for an NSDictionary of parame-
+				ters, or a KVC key name for a property or ele-
+				ment.
+		  method	An Objective-C method name: use for responds-
+				to methods.
+		  boolean-value, string-value, integer-value
+				A value for an enumerator.  For
+				`boolean-value', the value may be YES or NO;
+				for `string-value', any text; and for
+				`integer-value', any integer.  You may use at
+				most one of these three attributes in a given
+				cocoa element.	The default value is the
+				numeric value of the enumerator's `code'
+				attribute.
+		  insert-at-beginning
+				This attribute may appear in cocoa elements
+				attached to element elements.  Its value may
+				be `yes', meaning that new items will be added
+				at the beginning if their position is not
+				specified, or `no', the default, meaning that
+				they will be added at the end.	See the Foun-
+				dation release notes for more details.
+		  name		A name used internally by Cocoa Scripting: use
+				for suites, command and event key names, enu-
+				merations, and enumerators.  This attribute is
+				only used for compatibility with older script-
+				Suite files; ordinary sdefs do not need it.
+
+		  cocoa elements are optional; if omitted, sdp(1) will gener-
+		  ate a default name.  The basic rule is to capitalize each
+		  word of the element's name except the first, and then to
+		  remove any spaces.  There are two special cases: classes
+		  also capitalize the first word, and elements start with the
+		  plural of the specified element type.  For example:
+
+		  element				default name
+		  &ltclass name="refresh rate"&gt		RefreshRate
+		  &ltproperty name="current resolution"&gt	currentResolution
+		  &ltelement type="monitor"&gt		monitors
+
+		  This default name becomes the `class' for classes, the `key'
+		  for properties, elements, and parameters, and the `name' for
+		  suites, verbs, enumerations, and enumerators.  In Cocoa,
+		  verbs are implemented by a class, which Cocoa refers to in
+		  scriptSuite files as the CommandClass; the default is always
+		  NSScriptCommand.  An explicit cocoa element is only neces-
+		  sary if you want to override these defaults.
+
+		  WARNING: The above is correct for sdp(1), but not for Cocoa
+		  Scripting.  See Bugs.
+
+     command	  (aka method, member function; see also event) Commands and
+		  events, collectively called ``verbs,'' are messages that may
+		  be sent to an object.  For documentation purposes, sdefs
+		  distinguish between commands, which are verbs a script would
+		  send to an object (e.g., ``close''), and events, which are
+		  notifications sent to an object by a framework or system
+		  service (e.g., ``did close'').
+
+		  Unlike most object-oriented languages, verbs are defined
+		  independently of any particular class; a class may then list
+		  the verbs that it responds to.  To Java and Objective-C pro-
+		  grammers, sdef verbs therefore resemble protocols more than
+		  member functions.  You may specify the same command more
+		  than once with different parameters, such as to define a
+		  polymorphic ``open'' command that has different parameters
+		  depending on whether it is applied to a document or a data-
+		  base.
+
+		  CONTAINS
+		  implementation?, synonym*, direct-parameter?, parameter*,
+		  result?
+
+		  ATTRIBUTES
+		  name		As above.
+		  id		As above.
+		  code		As above; event codes are eight characters.
+		  description	As above.
+		  hidden	As above.
+
+     contents	  contents is a special type of property: like a property, it
+		  defines a unique data member, but its name and code are
+		  optional; if omitted, they default to ``contents'' and
+		  `pcnt', respectively.  There may be at most one contents
+		  element in a class.
+
+		  In addition, Cocoa Scripting will treat the contents prop-
+		  erty as its class's implied container: scripts may refer to
+		  properties and elements of the contents property as if they
+		  belong to the class.	For example, TextEdit documents have a
+		  ``text'' contents property.  Technically, the first word of
+		  a document is ``word 1 of text of document 1'', but because
+		  ``text'' is an implied container, a script can also say
+		  ``word 1 of document 1''.
+
+     dictionary   The root element of an sdef.
+
+		  CONTAINS
+		  suite+
+
+		  ATTRIBUTES
+		  title 	(optional) The title of the dictionary, which
+				appears in the dictionary display.
+
+     direct-parameter
+		  direct-parameter is a special type of parameter: like a
+		  parameter, it defines a value included with a verb, but it
+		  has no `name' or `code' attribute, and may not be hidden.
+		  There may be at most one direct-parameter element in a verb.
+
+		  The direct parameter of a verb is a value that appears imme-
+		  diately after the verb and specifies its target.  The type
+		  of the direct parameter is usually an application class.
+		  For example, in the command ``close window 1'', the direct
+		  parameter is ``window 1''.  Not all verbs have a direct
+		  parameter; in such cases, omit this element.
+
+		  In Cocoa Scripting, the direct parameter is the object to
+		  which the message is sent (i.e., ``self'') if the direct
+		  parameter is an application class.  Otherwise, the message
+		  is sent to the application object with the direct parame-
+		  ter's value as a normal parameter.
+
+     documentation
+		  When an element needs more exposition than a simple
+		  `description' attribute can provide, use a documentation
+		  element.  A documentation element may contain any number of
+		  html elements, which contain text that will be displayed at
+		  that point in the dictionary.  The text may contain HTML
+		  markup tags, but in order to keep the XML processor from
+		  interpreting them as XML, they must be escaped using either
+		  entities or a CDATA section, for example:
+
+			&ltdocumentation&gt
+			&lthtml&gt
+			    For answers to commonly asked questions about
+			    &lt;i&gt;do shell script&lt;/i&gt;, see
+			    &lt![CDATA[
+			       &lta href="http://developer.apple.com"&gtTN2065&lt/a&gt.
+			    ]]&gt
+			&lt/html&gt
+			&lt/documentation&gt
+
+		  Bear in mind that an sdef is intended to be a reference, not
+		  a tutorial.  If you want to include any lengthy material,
+		  consider using a link to an external resource.
+
+     element	  (aka to-many relation.) An object contained in another one.
+		  An object may have any number of elements of a given class,
+		  including none at all, and may have any number of element
+		  classes.  For example, the documents of an application are
+		  elements.
+
+		  CONTAINS
+		  implementation?, accessor*
+
+		  ATTRIBUTES
+		  type		As above.
+		  description	As above.
+		  hidden	As above.
+		  access	(optional) The allowed access for the element
+				class: `r' for read-only, `w' for write-only,
+				or `rw' for read-write (the default).
+
+     enumeration  A list of symbolic constants (enumerators).  For example,
+		  the type of the ``saving'' parameter for ``close'' is the
+		  enumeration yes/no/ask.
+
+		  CONTAINS
+		  implementation?, enumerator+
+
+		  ATTRIBUTES
+		  name		As above.
+		  id		As above.
+		  code		As above.
+		  description	As above.
+		  hidden	As above.
+		  inline	(optional) Controls how many enumerators are
+				displayed in-line.  By default (with no
+				attribute), all enumerators are displayed in-
+				line.  For example:
+
+				      sdef:
+				      &ltenumeration name="save options"&gt
+					  &ltenumerator name="yes"/&gt
+					  &ltenumerator name="no"/&gt
+					  &ltenumerator name="ask"/&gt
+				      &lt/enumeration&gt
+				      &ltparameter name="saving" type="save options"/&gt
+
+				      display:
+				      saving yes/no/ask
+
+				By specifying a number, that number of enumer-
+				ators will be listed in-line, with a link to
+				the complete definition.  To show only the
+				enumeration name, use ``inline="0"''.  For
+				example:
+
+				      inline="2"    saving yes/no/more...
+				      inline="0"    saving save options
+
+				This attribute only affects the display; it
+				has no semantic meaning.
+
+     enumerator   A symbolic constant.
+
+		  CONTAINS
+		  implementation?, synonym*
+
+		  ATTRIBUTES
+		  name		As above.
+		  code		As above.
+		  description	As above.
+		  hidden	As above.
+
+     event	  See command.
+
+     parameter	  A named value included with a verb.  Parameter names are
+		  often prepositions: ``with'', ``by'', etc.
+
+		  CONTAINS
+		  implementation?
+
+		  ATTRIBUTES
+		  name		As above.
+		  code		As above.
+		  type		As above.
+		  description	As above.
+		  hidden	As above.
+		  optional	(optional) Indicates whether the parameter is
+				optional or required.  The value may be `yes'
+				(optional) or `no' (required; the default).
+		  requires-access
+				(optional) The access required for the actual
+				value of the parameter: `r' for read-only, `w'
+				for write-only, or `rw' for read-write (the
+				default).
+
+     property	  (aka field, instance variable, to-one relation.) A unique
+		  data member of an object.  Properties always have a name,
+		  and there is always exactly one of them with a given name in
+		  an object.  For example, the name of a document is a prop-
+		  erty.
+
+		  CONTAINS
+		  implementation?, synonym*
+
+		  ATTRIBUTES
+		  name		As above.
+		  code		As above.
+		  type		As above.
+		  description	As above.
+		  hidden	As above.
+		  access	(optional) `r', `w', or `rw' (the default), as
+				for element.
+		  in-properties
+				(optional) For frameworks that provide auto-
+				matic support for a ``properties'' property,
+				indicates whether or not this property should
+				not be included.  The value may be `yes' (the
+				default) or `no'.
+
+     record-type  A simple structure, as opposed to a class.  (In C terms, a
+		  ``POD'' or ``plain old data'' type.)	Points, rectangles,
+		  and print settings are all record-types.
+
+		  CONTAINS
+		  implementation?, synonym*, property+
+
+		  ATTRIBUTES
+		  name		As above.
+		  id		As above.
+		  code		As above.
+		  description	As above.
+		  hidden	As above.
+		  plural	As for class.
+
+		  WARNING: scriptSuite and scriptTerminology files do not sup-
+		  port record-type elements.  You must use an sdef file
+		  directly.
+
+     responds-to  Defines a verb that a class responds to.  Cocoa Scripting
+		  only requires these in order to define a custom method for
+		  handling a verb (see cocoa); they are otherwise purely for
+		  documentation.
+
+		  CONTAINS
+		  implementation?
+
+		  ATTRIBUTES
+		  command	The name or id of the verb.  (This attribute
+				used to be called `name'; see History.)
+		  hidden	As above.
+
+     result	  The type of value generated when a verb is executed.	If
+		  there is no result, omit this element.  result is a special
+		  case of parameter; it has only `type' and `description'
+		  attributes and may not be hidden or optional.
+
+     suite	  A collection of related terms.  Suites are purely an organi-
+		  zational aid to the user; they have no impact on scripts.
+		  There is no technical limit on how many items a suite can
+		  contain, but 10 to 15 items is considered a comfortable
+		  size.
+
+		  CONTAINS
+		  implementation?, (class | command | enumeration | event |
+		  record-type | value-type)+
+
+		  ATTRIBUTES
+		  name		The name of the suite, which appears in the
+				dictionary display.
+		  code		As above.
+		  description	As above.
+		  hidden	As above.
+
+     synonym	  Defines an alternate term or code for the main element.
+
+		  ATTRIBUTES
+		  name		The alternate name, which follows the rules
+				for terminology element names.
+		  code		The alternate code.
+		  hidden	As above.
+
+		  At least one of `name' or `code' is required.  Depending on
+		  which attributes are present, the element will have differ-
+		  ent effects:
+
+		      Name only
+		      Use these to define an alternate term that may be used
+		      at compile time.	It will decompile as the main term.
+		      For example, AppleScript uses ``app'' as a name-only
+		      synonym for ``application''.  Cocoa scriptTerminology
+		      files do not support these; generate an `aete' resource
+		      for your application as well.
+
+		      Code only
+		      Use these when migrating from one code to another.
+		      (Typically, this happens when correcting an older
+		      version of the dictionary which used a non-standard
+		      code.)  Compiled scripts that use the synonym code will
+		      decompile using the main term.  Code-only synonyms are
+		      implicitly hidden.  Because of how Cocoa scriptSuite
+		      files work, they must contain a cocoa element with a
+		      `method' or `key' attribute in order to generate a cor-
+		      rect scriptSuite file.
+
+		      Name and Code
+		      Use these to define an alternate term that is preserved
+		      across compilation.  Effectively, this is a separate
+		      term that happens to act the same as the main one.  As
+		      with code-only synonyms, they must contain a cocoa ele-
+		      ment to generate a correct scriptSuite file.
+
+		  Sdef synonym elements have nothing to do with `Synonyms'
+		  sections in Cocoa's suite definition files. Those are a
+		  trick to allow two different classes in the dictionary to
+		  share the same implementation class; this is necessary
+		  because suite definition files use the implementation class
+		  name as a key.  If you have two classes that happen to share
+		  the same implementation, declare them separately, and point
+		  their cocoa elements at the same class.  sdp(1) will do the
+		  right thing and generate a `Synonyms' section for you.
+
+     type	  Any element that has a type attribute may instead have one
+		  or more type elements.  (Using both in the same element is
+		  an error.) Using more than one type element indicates that
+		  any of the types are allowed; using the `list' attribute
+		  indicates a list of the specified type.  Using type elements
+		  inside type elements, such as to express ``list of list of
+		  integer'', is not currently supported.
+
+		  ATTRIBUTES
+		  type		As above.
+		  list		(optional) Indicates that the full type is a
+				list of the type specified by the `type'
+				attribute.  May be `yes' or `no' (the
+				default).
+		  hidden	As above.
+
+		  EXAMPLES
+
+		  tabs (list of integer):
+		  &ltproperty name="tabs"&gt
+		      &lttype type="integer" list="yes"/&gt
+		  &lt/property&gt
+
+		  frequency (number or text):
+		  &ltproperty name="frequency"&gt
+		      &lttype type="number"/&gt
+		      &lttype type="text"/&gt
+		  &lt/property&gt
+
+     value-type   A simple type definition.  A value-type has no properties
+		  and no elements accessible by your scripting; it is useful
+		  for defining new basic types, such as an image.
+
+		  CONTAINS
+		  implementation?, synonym*
+
+		  ATTRIBUTES
+		  name		As above.
+		  id		As above.
+		  code		As above.
+		  description	As above.
+		  hidden	As above.
+		  plural	As for class.
+
+		  cocoa elements for value-type elements should declare the
+		  backing Cocoa class (typically NSData) using the `class'
+		  attribute, and may also declare the qualifier name using the
+		  `name' attribute, but this is only used inside the script-
+		  Suite file.  For example, an ``image'' type might be
+		  declared like this:
+
+			&ltvalue-type name="image" code="PICT"&gt
+			    &ltcocoa class="NSData" name="Image"/&gt
+			&lt/value-type&gt
+
+     xref	  A cross-reference.  These are purely for documentation pur-
+		  poses; use one to refer to another suite child that is some-
+		  how related.	For example, ``open'' might have a cross-ref-
+		  erence to ``close''.	The cross-referenced element does not
+		  need to be of the same type as the original; a class may
+		  refer to a command, for example.
+
+		  ATTRIBUTES
+		  target	The name or id of the referenced item.
+		  hidden	As above.
+
+EXAMPLES
+     /Developer/Examples/AppKit/Sketch.
+
+SEE ALSO
+     sdp(1), /System/Library/DTDs/sdef.dtd, TN2106: Scripting Interface Guide-
+     lines &lthttp://developer.apple.com/technotes/tn2002/tn2106.html&gt, Sdef
+     Scriptability Guide for Cocoa &lthttp://developer.apple.com/documentation/
+     Cocoa/Conceptual/ScriptableCocoaApplications&gt.
+
+HISTORY
+     To upgrade an old sdef to the current format, you can use xsltproc(1)
+     with the supplied transform:
+
+	   xsltproc /usr/share/sdef/upgrade.xsl my.sdef &gt upgraded.sdef
+
+     Changes in Mac OS X 10.8:
+
+     o	 Added access-group elements.
+
+     o	 Cocoa Scripting no longer requires cocoa elements for class,
+	 parameter, responds-to, and value-type elements, and now uses default
+	 values as described above.
+
+     Changes in Mac OS X 10.5 (Leopard):
+
+     o	 Added xref elements.
+
+     o	 html elements (children of documentation elements) are now declared
+	 to contain text, not XHTML elements.  For example:
+
+	       before:	&lthtml&gt&ltb&gtImportant&lt/b&gt&lthtml&gt
+
+	       after:	&lthtml&gt&lt![CDATA[&ltb&gtImportant&lt/b&gt]]&gt&lthtml&gt
+
+	 Both forms work in 10.4 and 10.5, but the former is now deprecated.
+
+     o	 The `name' attribute of responds-to elements is now called `command',
+	 and may be an id or a name.
+
+     Changes in Mac OS X 10.4 (Tiger):
+
+     o	 ``collector'' elements such as classes, types, and properties no
+	 longer exist.	Their former children should be moved to their immedi-
+	 ate ancestor element.	In general, children may be freely mixed now.
+	 For example, placing a command element next to a class element is
+	 perfectly acceptable.
+
+     o	 Some primitive types changed their names: `string' is now `text',
+	 `object' is now `specifier', and `location' is now `location
+	 specifier'.
+
+     o	 Complex types such as `list of integer' or `number or text' are now
+	 expressed using type elements, not complex strings.  For example:
+
+	       before:
+	       &ltproperty name="tabs" type="list of integer"/&gt
+
+	       after:
+	       &ltproperty name="tabs"&gt
+		   &lttype type="integer" list="yes"/&gt
+	       &lt/property&gt
+
+	       before:
+	       &ltproperty name="frequency" type="number | text"/&gt
+
+	       after:
+	       &ltproperty name="frequency"&gt
+		   &lttype type="number"/&gt
+		   &lttype type="text"/&gt
+	       &lt/property&gt
+
+	 See the type documentation for complete details.
+
+     o	 Boolean attributes, that is, optional and hidden, now accept `yes'
+	 and `no' as values (formerly the attribute name, e.g.
+	 `hidden="hidden"').
+
+     o	 The not-in-properties attribute is now named in-properties; its pos-
+	 sible values are `yes' (the default) and `no'.
+
+     o	 cocoa elements of property and element elements now use a `key'
+	 attribute (formerly `method').
+
+     o	 The default Cocoa key for element elements is now the type's plural
+	 (formerly its name).
+
+Mac OS X			August 30, 2006 		      Mac OS X
+    </pre></body>
+
+</html>

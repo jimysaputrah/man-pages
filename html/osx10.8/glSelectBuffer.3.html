@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glSelectBuffer  has  two  arguments: buffer is a pointer to an array of..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>glSelectBuffer - establish a buffer for selection mode values</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLSELECTBUFFER(3G)					    GLSELECTBUFFER(3G)
+
+
+
+NAME
+       glSelectBuffer - establish a buffer for selection mode values
+
+
+C SPECIFICATION
+       void glSelectBuffer( GLsizei size,
+			    GLuint *buffer )
+
+
+PARAMETERS
+       size    Specifies the size of buffer.
+
+       buffer  Returns the selection data.
+
+DESCRIPTION
+       glSelectBuffer  has  two  arguments: buffer is a pointer to an array of
+       unsigned integers, and size indicates the size of  the  array.	buffer
+       returns	values	from  the  name  stack	(see  glInitNames, glLoadName,
+       glPushName) when the rendering mode is  GL_SELECT  (see	glRenderMode).
+       glSelectBuffer  must be issued before selection mode is enabled, and it
+       must not be issued while the rendering mode is GL_SELECT.
+
+       A programmer can use selection to determine which primitives are  drawn
+       into  some  region  of  a window.  The region is defined by the current
+       modelview and perspective matrices.
+
+       In selection mode, no pixel fragments are produced from	rasterization.
+       Instead,  if  a	primitive or a raster position intersects the clipping
+       volume defined by the viewing frustum  and  the	user-defined  clipping
+       planes,	this primitive causes a selection hit.	(With polygons, no hit
+       occurs if the polygon is culled.)  When a change is made  to  the  name
+       stack, or when glRenderMode is called, a hit record is copied to buffer
+       if any hits have occurred since the last such event (name stack	change
+       or  glRenderMode call).	The hit record consists of the number of names
+       in the name stack at the time of the event, followed by the minimum and
+       maximum depth values of all vertices that hit since the previous event,
+       followed by the name stack contents, bottom name first.
+
+       Depth values (which are in the range [0,1]) are multiplied by 2^32 - 1,
+       before being placed in the hit record.
+
+       An  internal index into buffer is reset to 0 whenever selection mode is
+       entered.  Each time a hit record is copied into buffer,	the  index  is
+       incremented  to	point  to  the	cell just past the end of the block of
+       names - that is, to the next available cell.   If  the  hit  record  is
+       larger  than  the number of remaining locations in buffer, as much data
+       as can fit is copied, and the overflow flag is set.  If the name  stack
+       is  empty  when	a hit record is copied, that record consists of 0 fol-
+       lowed by the minimum and maximum depth values.
+
+       To exit selection mode, call glRenderMode with an argument  other  than
+       GL_SELECT.   Whenever  glRenderMode  is called while the render mode is
+       GL_SELECT, it returns the number  of  hit  records  copied  to  buffer,
+       resets the overflow flag and the selection buffer pointer, and initial-
+       izes the name stack to be empty.  If the  overflow  bit	was  set  when
+       glRenderMode was called, a negative hit record count is returned.
+
+NOTES
+       The  contents  of buffer is undefined until glRenderMode is called with
+       an argument other than GL_SELECT.
+
+       glBegin/glEnd primitives and calls to glRasterPos can result in hits.
+
+ERRORS
+       GL_INVALID_VALUE is generated if size is negative.
+
+       GL_INVALID_OPERATION is generated if glSelectBuffer is called while the
+       render  mode  is  GL_SELECT, or if glRenderMode is called with argument
+       GL_SELECT before glSelectBuffer is called at least once.
+
+       GL_INVALID_OPERATION is generated if glSelectBuffer is executed between
+       the execution of glBegin and the corresponding execution of glEnd.
+
+ASSOCIATED GETS
+       glGet with argument GL_NAME_STACK_DEPTH
+       glGet with argument GL_SELECTION_BUFFER_SIZE
+       glGetPointerv with argument GL_SELECTION_BUFFER_POINTER
+
+SEE ALSO
+       glFeedbackBuffer, glInitNames, glLoadName, glPushName, glRenderMode
+
+
+
+							    GLSELECTBUFFER(3G)
+    </pre></body>
+
+</html>

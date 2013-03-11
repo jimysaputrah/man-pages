@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This style uses the Pkg option to find subs in a given package to call..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>XML::Parser::Style::Stream - Stream style for XML::Parser</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+Parser::Style::Stream(User Contributed Perl DocumentatParser::Style::Stream(3)
+
+
+
+NAME
+       XML::Parser::Style::Stream - Stream style for XML::Parser
+
+SYNOPSIS
+	 use XML::Parser;
+	 my $p = XML::Parser-&gtnew(Style =&gt 'Stream', Pkg =&gt 'MySubs');
+	 $p-&gtparsefile('foo.xml');
+
+	 {
+	   package MySubs;
+
+	   sub StartTag {
+	     my ($e, $name) = @_;
+	     # do something with start tags
+	   }
+
+	   sub EndTag {
+	     my ($e, $name) = @_;
+	     # do something with end tags
+	   }
+
+	   sub Characters {
+	     my ($e, $data) = @_;
+	     # do something with text nodes
+	   }
+	 }
+
+DESCRIPTION
+       This style uses the Pkg option to find subs in a given package to call
+       for each event.	If none of the subs that this style looks for is
+       there, then the effect of parsing with this style is to print a
+       canonical copy of the document without comments or declarations.  All
+       the subs receive as their 1st parameter the Expat instance for the
+       document they're parsing.
+
+       It looks for the following routines:
+
+       o   StartDocument
+
+	   Called at the start of the parse .
+
+       o   StartTag
+
+	   Called for every start tag with a second parameter of the element
+	   type. The $_ variable will contain a copy of the tag and the %_
+	   variable will contain attribute values supplied for that element.
+
+       o   EndTag
+
+	   Called for every end tag with a second parameter of the element
+	   type. The $_ variable will contain a copy of the end tag.
+
+       o   Text
+
+	   Called just before start or end tags with accumulated non-markup
+	   text in the $_ variable.
+
+       o   PI
+
+	   Called for processing instructions. The $_ variable will contain a
+	   copy of the PI and the target and data are sent as 2nd and 3rd
+	   parameters respectively.
+
+       o   EndDocument
+
+	   Called at conclusion of the parse.
+
+
+
+perl v5.12.4			  2011-05-24	      Parser::Style::Stream(3)
+    </pre></body>
+
+</html>

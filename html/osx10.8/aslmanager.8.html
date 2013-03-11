@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="aslmanager manages files in the ASL data store written by the syslogd..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>aslmanager -- Apple System Log data store file manager</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+ASLMANAGER(8)		  BSD System Manager's Manual		 ASLMANAGER(8)
+
+NAME
+     aslmanager -- Apple System Log data store file manager
+
+SYNOPSIS
+     aslmanager [-s store_dir] [-a [archive_dir]] [-ttl days] [-size max_size]
+
+DESCRIPTION
+     aslmanager manages files in the ASL data store written by the syslogd
+     server.
+
+     aslmanager is started automatically at various times.  It runs shortly
+     after the syslogd server starts, upon receipt of the first message after
+     midnight (local time), and any time a file in the ASL data store direc-
+     tory (/var/log/asl) reaches a maximum size limit as specified to the
+     syslogd server.
+
+     Command-line options may be specified in the aslmanager launch plist
+     file.  However, aslmanager reads the /etc/asl.conf file which may also
+     contain parameter settings.  Settings in the asl.conf file will override
+     those given on the command line.
+
+     aslmanager scans through the files in the ASL data store directory
+     /var/log/asl, or some other directory specified following the -s flag, or
+     by the setting of the store_path parameter in asl.conf.  Data files that
+     are older than the default 7 day time-to-live are either archived or
+     removed.  Files that contain messages with explicit expire times are
+     removed or archived monthly after all thier contents expire.  The default
+     7 day time-to-live value may be overridden by supplying a value following
+     the -ttl flag, or by the setting of the store_ttl parameter in asl.conf.
+     A value of zero allows files to remain in the store with no time limit.
+
+     A maximum size for the entire data store may be provided as a value fol-
+     lowing the -size flag, or by the setting of the max_store_size parameter
+     in asl.conf.  This will cause aslmanager to archive (if enabled) and
+     remove files until the total size of the data store is max_size bytes or
+     less.  The default value is 150000000 bytes.  A value of zero means the
+     size is unlimited.  An unlimited size specification should be used with
+     great caution, since a runaway process could quickly fill all available
+     disk space.  Files are removed in order starting from oldest to newest.
+     Files with the same date are removed in standard lexigraphic sort order
+     by file name.
+
+     Files are either removed entirely or copied to an archive directory.  If
+     the -a flag is specified with no argument, files are copied to the
+     /var/log/asl.archive directory.  An alternate directory path may be spec-
+     ified following the -a flag.  The archive parameter setting in asl.conf
+     enables or disables archiving.  The archive parameter requires a value of
+     "1" to enable archiving, or a value of "0" to disable it.	An option ar-
+     chive directory path may follow the "0" or "1".
+
+SEE ALSO
+     syslogd(8), syslog(1), asl(3), asl.conf(5), syslog(3).
+
+HISTORY
+     The aslmanager utility appeared in Mac OS X 10.6.
+
+Mac OS X		       December 7, 2007 		      Mac OS X
+    </pre></body>
+
+</html>

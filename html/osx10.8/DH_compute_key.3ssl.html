@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="DH_generate_key() performs the first step of a Diffie-Hellman key..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>DH_generate_key, DH_compute_key - perform Diffie-Hellman key exchange</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+DH_generate_key(3)		    OpenSSL		    DH_generate_key(3)
+
+
+
+NAME
+       DH_generate_key, DH_compute_key - perform Diffie-Hellman key exchange
+
+SYNOPSIS
+	#include &ltopenssl/dh.h&gt
+
+	int DH_generate_key(DH *dh);
+
+	int DH_compute_key(unsigned char *key, BIGNUM *pub_key, DH *dh);
+
+DESCRIPTION
+       DH_generate_key() performs the first step of a Diffie-Hellman key
+       exchange by generating private and public DH values. By calling
+       DH_compute_key(), these are combined with the other party's public
+       value to compute the shared key.
+
+       DH_generate_key() expects dh to contain the shared parameters dh-&gtp and
+       dh-&gtg. It generates a random private DH value unless dh-&gtpriv_key is
+       already set, and computes the corresponding public value dh-&gtpub_key,
+       which can then be published.
+
+       DH_compute_key() computes the shared secret from the private DH value
+       in dh and the other party's public value in pub_key and stores it in
+       key. key must point to DH_size(dh) bytes of memory.
+
+RETURN VALUES
+       DH_generate_key() returns 1 on success, 0 otherwise.
+
+       DH_compute_key() returns the size of the shared secret on success, -1
+       on error.
+
+       The error codes can be obtained by ERR_get_error(3).
+
+SEE ALSO
+       dh(3), ERR_get_error(3), rand(3), DH_size(3)
+
+HISTORY
+       DH_generate_key() and DH_compute_key() are available in all versions of
+       SSLeay and OpenSSL.
+
+
+
+47				  2011-09-28		    DH_generate_key(3)
+    </pre></body>
+
+</html>

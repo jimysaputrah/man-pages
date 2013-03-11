@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This page describes the available C floating-point types.	For a list of..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>float -- description of floating-point types available on OS X and iOS</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+FLOAT(3)		 BSD Library Functions Manual		      FLOAT(3)
+
+NAME
+     float -- description of floating-point types available on OS X and iOS
+
+DESCRIPTION
+     This page describes the available C floating-point types.	For a list of
+     math library functions that operate on these types, see the page on the
+     math library, "man math".
+
+TERMINOLOGY
+     Floating point numbers are represented in three parts: a sign, a mantissa
+     (or significand), and an exponent.  Given such a representation with sign
+     s, mantissa m, and exponent e, the corresponding numerical value is
+     s*m*2**e.
+
+     Floating-point types differ in the number of bits of accuracy in the man-
+     tissa (called the precision), and set of available exponents (the expo-
+     nent range).
+
+     Floating-point numbers with the maximum available exponent are reserved
+     operands, denoting an infinity if the significand is precisely zero, and
+     a Not-a-Number, or NaN, otherwise.
+
+     Floating-point numbers with the minimum available exponent are either
+     zero if the significand is precisely zero, and denormal otherwise.  Note
+     that zero is signed: +0 and -0 are distinct floating point numbers.
+
+     Floating-point numbers with exponents other than the maximum and minimum
+     available are called normal numbers.
+
+PROPERTIES OF IEEE-754 FLOATING-POINT
+     Basic arithmetic operations in IEEE-754 floating-point are correctly
+     rounded: this means that the result delivered is the same as the result
+     that would be achieved by computing the exact real-number operation on
+     the operands, then rounding the real-number result to a floating-point
+     value.
+
+     Overflow occurs when the value of the exact result is too large in magni-
+     tude to be represented in the floating-point type in which the computa-
+     tion is being performed; doing so would require an exponent outside of
+     the exponent range of the type.  By default, computations that result in
+     overflow return a signed infinity.
+
+     Underflow occurs when the value of the exact result is too small in mag-
+     nitude to be represented as a normal number in the floating-point type in
+     which the computation is being performed.	By default, underflow is grad-
+     ual, and produces a denormal number or a zero.
+
+     All floating-points number of a given type are integer multiples of the
+     smallest non-zero floating-point number of that type; however, the con-
+     verse is not true.  This means that, in the default mode, (x-y) = 0 only
+     if x = y.
+
+     The sign of zero transforms correctly through multiplication and divi-
+     sion, and is preserved by addition of zeros with like signs, but x - x
+     yields +0 for every finite floating-point number x.  The only operations
+     that reveal the sign of a zero are x/(+-0) and copysign(x,+-0).  In par-
+     ticular, comparisons (x &gt y, x != y, etc) are not affected by the sign of
+     zero.
+
+     The sign of infinity transforms correctly through multiplication and
+     division, and infinities are unaffected by addition or subtraction of any
+     finite floating-point number.  But Inf-Inf, Inf*0, and Inf/Inf are, like
+     0/0 or sqrt(-3), invalid operations that produce NaN.
+
+     NaNs are the default results of invalid operations, and they propagate
+     through subsequent arithmetic operations.	If x is a NaN, then x != x is
+     TRUE, and every other comparison predicate (x &gt y, x = y, x &lt= y, etc)
+     evaluates to FALSE, regardless of the value of y.	Additionally, predi-
+     cates that entail an ordered comparison (rather than mere equality or
+     inequality) signal Invalid Operation when one of the arguments is NaN.
+
+     IEEE-754 provides five kinds of floating-point exceptions, listed below:
+
+     Exception		    Default Result
+     __________________________________________
+     Invalid Operation	    NaN or FALSE
+     Overflow		    +-Infinity
+     Divide by Zero	    +-Infinity
+     Underflow		    Gradual Underflow
+     Inexact		    Rounded Value
+
+     NOTE: An exception is not an error unless it is handled incorrectly.
+     What makes a class of exceptions exceptional is that no single default
+     response can be satisfactory in every instance.  On the other hand,
+     because a default response will serve most instances of the exception
+     satisfactorily, simply aborting the computation cannot be justified.
+
+     For each kind of floating-point exception, IEEE-754 provides a flag that
+     is raised each time its exception is signaled, and remains raised until
+     the program resets it.  Programs may test, save, and restore the flags,
+     or a subset thereof.
+
+PRECISION AND EXPONENT RANGE OF SPECIFIC FLOATING-POINT TYPES
+     On both OS X and iOS, the type float corresponds to IEEE-754 single pre-
+     cision.  A single-precision number is represented in 32 bits, and has a
+     precision of 24 significant bits, roughly like 7 significant decimal dig-
+     its.  8 bits are used to encode the exponent, which gives an exponent
+     range from -126 to 127, inclusive.
+
+     The header &ltfloat.h&gt defines several useful constants for the float type:
+     FLT_MANT_DIG - The number of binary digits in the significand of a float.
+     FLT_MIN_EXP - One more than the smallest exponent available in the float
+     type.
+     FLT_MAX_EXP - One more than the largest exponent available in the float
+     type.
+     FLT_DIG - the precision in decimal digits of a float.  A decimal value
+     with this many digits, stored as a float, always yields the same value up
+     to this many digits when converted back to decimal notation.
+     FLT_MIN_10_EXP - the smallest n such that 10**n is a non-zero normal num-
+     ber as a float.
+     FLT_MAX_10_EXP - the largest n such that 10**n is finite as a float.
+     FLT_MIN - the smallest positive normal float.
+     FLT_MAX - the largest finite float.
+     FLT_EPSILON - the difference between 1.0 and the smallest float bigger
+     than 1.0.
+
+     On both OS X and iOS, the type double corresponds to IEEE-754 double pre-
+     cision.  A double-precision number is represented in 64 bits, and has a
+     precision of 53 significant bits, roughly like 16 significant decimal
+     digits.  11 bits are used to encode the exponent, which gives an exponent
+     range from -1022 to 1023, inclusive.
+
+     The header &ltfloat.h&gt defines several useful constants for the double
+     type:
+     DBL_MANT_DIG - The number of binary digits in the significand of a dou-
+     ble.
+     DBL_MIN_EXP - One more than the smallest exponent available in the double
+     type.
+     DBL_MAX_EXP - One more than the exponent available in the double type.
+     DBL_DIG - the precision in decimal digits of a double.  A decimal value
+     with this many digits, stored as a double, always yields the same value
+     up to this many digits when converted back to decimal notation.
+     DBL_MIN_10_EXP - the smallest n such that 10**n is a non-zero normal num-
+     ber as a double.
+     DBL_MAX_10_EXP - the largest n such that 10**n is finite as a double.
+     DBL_MIN - the smallest positive normal double.
+     DBL_MAX - the largest finite double.
+     DBL_EPSILON - the difference between 1.0 and the smallest double bigger
+     than 1.0.
+
+     On Intel macs, the type long double corresponds to IEEE-754 double
+     extended precision.  A double extended number is represented in 80 bits,
+     and has a precision of 64 significant bits, roughly like 19 significant
+     decimal digits.  15 bits are used to encode the exponent, which gives an
+     exponent range from -16383 to 16384, inclusive.
+
+     The header &ltfloat.h&gt defines several useful constants for the long double
+     type:
+     LDBL_MANT_DIG - The number of binary digits in the significand of a long
+     double.
+     LDBL_MIN_EXP - One more than the smallest exponent available in the long
+     double type.
+     LDBL_MAX_EXP - One more than the exponent available in the long double
+     type.
+     LDBL_DIG - the precision in decimal digits of a long double.  A decimal
+     value with this many digits, stored as a long double, always yields the
+     same value up to this many digits when converted back to decimal nota-
+     tion.
+     LDBL_MIN_10_EXP - the smallest n such that 10**n is a non-zero normal
+     number as a long double.
+     LDBL_MAX_10_EXP - the largest n such that 10**n is finite as a long dou-
+     ble.
+     LDBL_MIN - the smallest positive normal long double.
+     LDBL_MAX - the largest finite long double.
+     LDBL_EPSILON - the difference between 1.0 and the smallest long double
+     bigger than 1.0.
+
+     On ARM iOS devices, the type long double corresponds to IEEE-754 double
+     precision.  Thus, the values of the LDBL_* macros are identical to those
+     of the corresponding DBL_* macros.
+
+DEFAULT FLOATING-POINT ENVIRONMENT ON IOS
+     Unlike OS X, the default floating-point environment on iOS sets the pro-
+     cessor in flush-to-zero mode.  In this mode, any denormal values are
+     treated as zero when they appear as an input to a floating-point opera-
+     tion, and any denormal results are replaced with zero.  If IEEE-754 grad-
+     ual underflow is required, it can be enabled by clearing the flush-to-
+     zero bit of the floating-point environment using the functions provided
+     in &ltfenv.h&gt.  Note, however, that this will incur some performance
+     penalty when denormal values are encountered.
+
+SEE ALSO
+     math(3), complex(3)
+
+STANDARDS
+     Floating-point arithmetic conforms to the ISO/IEC 9899:1999(E) standard.
+
+BSD				March 28, 2007				   BSD
+    </pre></body>
+
+</html>

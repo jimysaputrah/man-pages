@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="Dispatch objects share functions for coordinating memory management, sus-..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>dispatch_object -- General manipulation of dispatch objects</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+dispatch_object(3)	 BSD Library Functions Manual	    dispatch_object(3)
+
+NAME
+     dispatch_object -- General manipulation of dispatch objects
+
+SYNOPSIS
+     #include &ltdispatch/dispatch.h&gt
+
+     void
+     dispatch_retain(dispatch_object_t object);
+
+     void
+     dispatch_release(dispatch_object_t object);
+
+     void
+     dispatch_suspend(dispatch_object_t object);
+
+     void
+     dispatch_resume(dispatch_object_t object);
+
+     void *
+     dispatch_get_context(dispatch_object_t object);
+
+     void
+     dispatch_set_context(dispatch_object_t object, void *context);
+
+     void
+     dispatch_set_finalizer_f(dispatch_object_t object,
+	 dispatch_function_t finalizer);
+
+DESCRIPTION
+     Dispatch objects share functions for coordinating memory management, sus-
+     pension, cancellation and context pointers.
+
+MEMORY MANGEMENT
+     Objects returned by creation functions in the dispatch framework may be
+     uniformly retained and released with the functions dispatch_retain() and
+     dispatch_release() respectively.
+
+     The dispatch framework does not guarantee that any given client has the
+     last or only reference to a given object. Objects may be retained inter-
+     nally by the system.
+
+   INTEGRATION WITH OBJECTIVE-C
+	   When  building  with an Objective-C or Objective-C++ compiler, dis-
+	   patch objects are declared as Objective-C types.  This  results  in
+	   the following differences compared to building as plain C/C++:
+
+	   -   if  Objective-C	Automated  Reference Counting is enabled, dis-
+	       patch objects are memory managed by the Objective-C runtime and
+	       explicit  calls to the dispatch_retain() and dispatch_release()
+	       functions will produce build errors.
+
+	       Note: when ARC is enabled, care needs to be taken with dispatch
+	       API returning an interior pointer that is only valid as long as
+	       an associated object has not been released. If that  object  is
+	       held  in  a  variable with automatic storage, it may need to be
+	       annotated with the objc_precise_lifetime attribute,  or	stored
+	       in  a  __strong	instance  variable instead, to ensure that the
+	       object is not prematurely  released.  The  functions  returning
+	       interior    pointers    are   dispatch_data_create_map(3)   and
+	       dispatch_data_apply(3).
+
+	   -   the Blocks runtime automatically retains and releases  dispatch
+	       objects	  captured    by    blocks   upon   Block_copy()   and
+	       Block_release(), e.g. as performed during  asynchronous	execu-
+	       tion of a block via dispatch_async(3).
+
+	       Note:  retain  cycles  may  be  encountered  if dispatch source
+	       objects are captured by their handler blocks; these cycles  can
+	       be broken by declaring the captured object __weak or by calling
+	       dispatch_source_cancel(3) to cause its  handler	blocks	to  be
+	       released explicitly.
+
+	   -   dispatch  objects  can  be added directly to Cocoa collections,
+	       and their lifetime is tracked by the  Objective-C  static  ana-
+	       lyzer.
+
+	   Integration of dispatch objects with Objective-C requires targeting
+	   Mac OS X 10.8 or later, and is disabled when building  with	Objec-
+	   tive-C Garbage Collection or for the legacy Objective-C runtime. It
+	   can also be disabled manually by using compiler options  to	define
+	   the OS_OBJECT_USE_OBJC preprocessor macro to 0.
+
+     Important: When building with a plain C/C++ compiler or when integration
+     with Objective-C is disabled, dispatch objects are not automatically
+     retained and released when captured by a block. Therefore, when a dis-
+     patch object is captured by a block that will be executed asynchronously,
+     the object must be manually retained and released:
+
+	   dispatch_retain(object);
+	   dispatch_async(queue, ^{
+		   do_something_with_object(object);
+		   dispatch_release(object);
+	   });
+
+SUSPENSION
+     The invocation of blocks on dispatch queues or dispatch sources may be
+     suspended or resumed with the functions dispatch_suspend() and
+     dispatch_resume() respectively. Other dispatch objects do not support
+     suspension.
+
+     The dispatch framework always checks the suspension status before execut-
+     ing a block, but such changes never affect a block during execution (non-
+     preemptive).  Therefore the suspension of an object is asynchronous,
+     unless it is performed from the context of the target queue for the given
+     object.  The result of suspending or resuming an object that is not a
+     dispatch queue or a dispatch source is undefined.
+
+     Important: suspension applies to all aspects of the dispatch object life
+     cycle, including the finalizer function and cancellation handler. Sus-
+     pending an object causes it to be retained and resuming an object causes
+     it to be released. Therefore it is important to balance calls to
+     dispatch_suspend() and dispatch_resume() such that the dispatch object is
+     fully resumed when the last reference is released. The result of releas-
+     ing all references to a dispatch object while in a suspended state is
+     undefined.
+
+CONTEXT POINTERS
+     Dispatch objects support supplemental context pointers. The value of the
+     context pointer may be retrieved and updated with dispatch_get_context()
+     and dispatch_set_context() respectively.  The dispatch_set_finalizer_f()
+     specifies an optional per-object finalizer function that is invoked asyn-
+     chronously if the context pointer is not NULL when the last reference to
+     the object is released.  This gives the application an opportunity to
+     free the context data associated with the object.	The finalizer will be
+     run on the object's target queue.
+
+SEE ALSO
+     dispatch(3), dispatch_async(3), dispatch_group_create(3),
+     dispatch_queue_create(3), dispatch_semaphore_create(3),
+     dispatch_set_target_queue(3), dispatch_source_cancel(3),
+     dispatch_source_create(3)
+
+Darwin				 March 1, 2012				Darwin
+    </pre></body>
+
+</html>

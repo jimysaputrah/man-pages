@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This module provides an interface for determining the local system's..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>DateTime::TimeZone::Local - Determine the local system's time zone</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+DateTime::TimeZone::LoUser3Contributed Perl DocumeDateTime::TimeZone::Local(3)
+
+
+
+NAME
+       DateTime::TimeZone::Local - Determine the local system's time zone
+
+VERSION
+       version 1.41
+
+SYNOPSIS
+	 my $tz = DateTime::TimeZone-&gtnew( name =&gt 'local' );
+
+	 my $tz = DateTime::TimeZone::Local-&gtTimeZone();
+
+DESCRIPTION
+       This module provides an interface for determining the local system's
+       time zone. Most of the functionality for doing this is in OS-specific
+       subclasses.
+
+USAGE
+       This class provides the following methods:
+
+   DateTime::TimeZone::Local-&gtTimeZone()
+       This attempts to load an appropriate subclass and asks it to find the
+       local time zone. This method is called by when you pass "local" as the
+       time zone name to "DateTime:TimeZone-&gtnew()".
+
+       If your OS is not explicitly handled, you can create a module with a
+       name of the form "DateTime::TimeZone::Local::$^O". If it exists, it
+       will be used instead of falling back to the Unix subclass.
+
+       If no OS-specific module exists, we fall back to using the Unix
+       subclass.
+
+       See DateTime::TimeZone::Local::Unix, DateTime::TimeZone::Local::Win32,
+       and DateTime::TimeZone::Local::VMS for OS-specific details.
+
+SUBCLASSING
+       If you want to make a new OS-specific subclass, there are several
+       methods provided by this module you should know about.
+
+   $class-&gtMethods()
+       This method should be provided by your class. It should provide a list
+       of methods that will be called to try to determine the local time zone.
+
+       Each of these methods is expected to return a new "DateTime::TimeZone"
+       object if it determines the time zone.
+
+   $class-&gtFromEnv()
+       This method tries to find a valid time zone in an %ENV value. It calls
+       "$class-&gtEnvVars()" to determine which keys to look at.
+
+       To use this from a subclass, simply return "FromEnv" as one of the
+       items from "$class-&gtMethods()".
+
+   $class-&gtEnvVars()
+       This method should be provided by your subclass. It should return a
+       list of env vars to be checked by "$class-&gtFromEnv()".
+
+   $class-&gt_IsValidName($name)
+       Given a possible time zone name, this returns a boolean indicating
+       whether or not the the name looks valid. It always return false for
+       "local" in order to avoid infinite loops.
+
+EXAMPLE SUBCLASS
+       Here is a simple example subclass:
+
+	 package DateTime::TimeZone::SomeOS;
+
+	 use strict;
+	 use warnings;
+
+	 use base 'DateTime::TimeZone::Local';
+
+
+	 sub Methods { qw( FromEnv FromEther ) }
+
+	 sub EnvVars { qw( TZ ZONE ) }
+
+	 sub FromEther
+	 {
+	     my $class = shift;
+
+	     ...
+	 }
+
+AUTHOR
+       Dave Rolsky &ltautarch@urth.org&gt
+
+COPYRIGHT AND LICENSE
+       This software is copyright (c) 2011 by Dave Rolsky.
+
+       This is free software; you can redistribute it and/or modify it under
+       the same terms as the Perl 5 programming language system itself.
+
+
+
+perl v5.12.4			  2011-10-24	  DateTime::TimeZone::Local(3)
+    </pre></body>
+
+</html>

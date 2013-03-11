@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="glCallLists  causes  each  display  list in the list of names passed as..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>glCallLists - execute a list of display lists</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+GLCALLLISTS(3G) 					       GLCALLLISTS(3G)
+
+
+
+NAME
+       glCallLists - execute a list of display lists
+
+
+C SPECIFICATION
+       void glCallLists( GLsizei n,
+			 GLenum type,
+			 const GLvoid *lists )
+
+
+PARAMETERS
+       n      Specifies the number of display lists to be executed.
+
+       type   Specifies  the  type  of	values	in  lists.  Symbolic constants
+	      GL_BYTE, GL_UNSIGNED_BYTE, GL_SHORT, GL_UNSIGNED_SHORT,  GL_INT,
+	      GL_UNSIGNED_INT,	  GL_FLOAT,    GL_2_BYTES,   GL_3_BYTES,   and
+	      GL_4_BYTES are accepted.
+
+       lists  Specifies the address of an array of name offsets in the display
+	      list.   The  pointer  type  is  void  because the offsets can be
+	      bytes, shorts, ints, or floats, depending on the value of  type.
+
+DESCRIPTION
+       glCallLists  causes  each  display  list in the list of names passed as
+       lists to be executed.  As a result, the commands saved in each  display
+       list are executed in order, just as if they were called without using a
+       display list.  Names of display lists that have not  been  defined  are
+       ignored.
+
+       glCallLists  provides  an  efficient  means for executing more than one
+       display list.  type allows  lists  with	various  name  formats	to  be
+       accepted.  The formats are as follows:
+
+       GL_BYTE			lists  is treated as an array of signed bytes,
+				each in the range -128 through 127.
+
+       GL_UNSIGNED_BYTE 	lists is  treated  as  an  array  of  unsigned
+				bytes, each in the range 0 through 255.
+
+       GL_SHORT 		lists  is  treated  as an array of signed two-
+				byte  integers,  each  in  the	range	-32768
+				through 32767.
+
+       GL_UNSIGNED_SHORT	lists  is treated as an array of unsigned two-
+				byte integers, each in	the  range  0  through
+				65535.
+
+       GL_INT			lists  is  treated as an array of signed four-
+				byte integers.
+
+       GL_UNSIGNED_INT		lists is treated as an array of unsigned four-
+				byte integers.
+
+       GL_FLOAT 		lists  is  treated  as	an  array of four-byte
+				floating-point values.
+
+       GL_2_BYTES		lists is  treated  as  an  array  of  unsigned
+				bytes.	 Each pair of bytes specifies a single
+				display-list name.  The value of the  pair  is
+				computed  as  256  times the unsigned value of
+				the first byte plus the unsigned value of  the
+				second byte.
+
+       GL_3_BYTES		lists  is  treated  as	an  array  of unsigned
+				bytes.	Each triplet of bytes specifies a sin-
+				gle  display-list  name.   The	value  of  the
+				triplet  is  computed  as  65536   times   the
+				unsigned  value  of  the  first byte, plus 256
+				times the unsigned value of the  second  byte,
+				plus the unsigned value of the third byte.
+
+       GL_4_BYTES		lists  is  treated  as	an  array  of unsigned
+				bytes.	Each quadruplet of bytes  specifies  a
+				single	display-list  name.   The value of the
+				quadruplet is computed as 16777216  times  the
+				unsigned  value  of the first byte, plus 65536
+				times the unsigned value of the  second  byte,
+				plus 256 times the unsigned value of the third
+				byte, plus the unsigned value  of  the	fourth
+				byte.
+
+       The list of display-list names is not null-terminated.  Rather, n spec-
+       ifies how many names are to be taken from lists.
+
+       An  additional  level  of  indirection  is  made  available  with   the
+       glListBase command, which specifies an unsigned offset that is added to
+       each display-list name specified in lists before that display  list  is
+       executed.
+
+       glCallLists can appear inside a display list.  To avoid the possibility
+       of infinite recursion resulting from display lists calling one another,
+       a limit is placed on the nesting level of display lists during display-
+       list execution.	This limit must be at least 64, and it depends on  the
+       implementation.
+
+       GL state is not saved and restored across a call to glCallLists.  Thus,
+       changes made to GL state during the  execution  of  the	display  lists
+       remain  after  execution  is completed.	Use glPushAttrib, glPopAttrib,
+       glPushMatrix, and glPopMatrix to preserve GL state  across  glCallLists
+       calls.
+
+NOTES
+       Display	lists can be executed between a call to glBegin and the corre-
+       sponding call to glEnd, as long as the display list includes only  com-
+       mands that are allowed in this interval.
+
+ERRORS
+       GL_INVALID_VALUE is generated if n is negative.
+
+       GL_INVALID_ENUM	 is   generated   if  type  is	not  one  of  GL_BYTE,
+       GL_UNSIGNED_BYTE, GL_SHORT, GL_UNSIGNED_SHORT, GL_INT, GL_UNSIGNED_INT,
+       GL_FLOAT, GL_2_BYTES, GL_3_BYTES, GL_4_BYTES.
+
+ASSOCIATED GETS
+       glGet with argument GL_LIST_BASE
+       glGet with argument GL_MAX_LIST_NESTING
+       glIsList
+
+SEE ALSO
+       glCallList,    glDeleteLists,	glGenLists,   glListBase,   glNewList,
+       glPushAttrib,
+       glPushMatrix
+
+
+
+							       GLCALLLISTS(3G)
+    </pre></body>
+
+</html>

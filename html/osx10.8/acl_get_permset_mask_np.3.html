@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="The acl_permset_mask_t functions are a Darwin extension to the POSIX.1e..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>acl_permset_mask -- Manipulate ACL permissions using bitmasks</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+ACL_PERMSET_MASK(3)	 BSD Library Functions Manual	   ACL_PERMSET_MASK(3)
+
+NAME
+     acl_permset_mask -- Manipulate ACL permissions using bitmasks
+
+LIBRARY
+     Standard C Library (libc, -lc)
+
+SYNOPSIS
+     #include &ltsys/types.h&gt
+     #include &ltsys/acl.h&gt
+
+     int
+     acl_maximal_permset_mask_np(acl_permset_mask_t * mask_p);
+
+     int
+     acl_get_permset_mask_np(acl_entry_t entry_d,
+	 acl_permset_mask_t * mask_p);
+
+     int
+     acl_set_permset_mask_np(acl_entry_t entry_d, acl_permset_mask_t mask);
+
+DESCRIPTION
+     The acl_permset_mask_t functions are a Darwin extension to the POSIX.1e
+     ACL standard which allow manipulation of permissions in an acl_entry_t
+     using a bitmask of type acl_permset_mask_t rather than a constructed
+     acl_permset_t (as done by acl_get_permset(3) and acl_set_permset(3)).
+
+     acl_permset_mask_t values may be constructed using bitwise operations
+     over acl_perm_t values.
+
+     acl_maximal_permset_mask_np() sets the value pointed to by mask_p to a
+     bitmask of all valid acl_perm_t values.
+
+     acl_get_permset_mask_np() returns via mask_p a bitmask of permissions set
+     on the ACL entry entry_d.
+
+     acl_set_permset_mask_np() sets the permissions of ACL entry entry_d to
+     match the permission bitmask provided by mask.
+
+RETURN VALUES
+     The acl_maximal_permset_mask_np() function returns the value 0 if suc-
+     cessful; otherwise the value -1 is returned and the global variable errno
+     is set to indicate the error.
+
+     The acl_get_permset_mask_np() function returns the value 0 if successful;
+     otherwise the value -1 is returned and the global variable errno is set
+     to indicate the error.
+
+     The acl_set_permset_mask_np() function returns the value 0 if successful;
+     otherwise the value -1 is returned and the global variable errno is set
+     to indicate the error.
+
+ERRORS
+     The acl_get_permset_mask_np() function fails if:
+
+     [EINVAL]		Argument entry_d is not a valid descriptor for an ACL
+			entry.
+
+     The acl_set_permset_mask_np() function fails if:
+
+     [EINVAL]		Argument entry_d is not a valid descriptor for an ACL
+			entry.
+
+     [EINVAL]		Argument mask is not a valid bitmask of ACL permis-
+			sions.
+
+SEE ALSO
+     acl(3), acl_add_perm(3), acl_clear_perms(3), acl_delete_perm(3),
+     acl_get_permset(3), acl_set_permset(3), posix1e(3)
+
+AUTHORS
+     Jeremy Huddleston
+
+Darwin				August 24, 2010 			Darwin
+    </pre></body>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="These functions are provided for compatibility with legacy code.  New..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>ecvt, fcvt, gcvt -- convert double to ASCII string</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+
+ECVT(3) 		 BSD Library Functions Manual		       ECVT(3)
+
+NAME
+     ecvt, fcvt, gcvt -- convert double to ASCII string
+
+SYNOPSIS
+     #include &ltstdlib.h&gt
+
+     char *
+     ecvt(double value, int ndigit, int * restrict decpt,
+	 int * restrict sign);
+
+     char *
+     fcvt(double value, int ndigit, int * restrict decpt,
+	 int * restrict sign);
+
+     char *
+     gcvt(double value, int ndigit, char *buf);
+
+DESCRIPTION
+     These functions are provided for compatibility with legacy code.  New
+     code should use the snprintf(3) function for improved safety and porta-
+     bility.
+
+     The ecvt(), fcvt() and gcvt() functions convert the double precision
+     floating-point number value to a NUL-terminated ASCII string.
+
+     The ecvt() function converts value to a NUL-terminated string of exactly
+     ndigit digits and returns a pointer to that string.  The result is padded
+     with zeroes from left to right as needed.	There are no leading zeroes
+     unless value itself is 0.	The least significant digit is rounded in an
+     implementation-dependent manner.  The position of the decimal point rela-
+     tive to the beginning of the string is stored in decpt.  A negative value
+     indicates that the decimal point is located to the left of the returned
+     digits (this occurs when there is no whole number component to value).
+     If value is zero, it is unspecified whether the integer pointed to by
+     decpt will be 0 or 1.  The decimal point itself is not included in the
+     returned string.  If the sign of the result is negative, the integer
+     pointed to by sign is non-zero; otherwise, it is 0.
+
+     If the converted value is out of range or is not representable, the con-
+     tents of the returned string are unspecified.
+
+     The fcvt() function is identical to ecvt() with the exception that ndigit
+     specifies the number of digits after the decimal point (zero-padded as
+     needed).
+
+     The gcvt() function converts value to a NUL-terminated string similar to
+     the %g printf(3) format specifier and stores the result in buf.  It pro-
+     duces ndigit significant digits similar to the %f printf(3) format speci-
+     fier where possible.  If ndigit does allow sufficient precision, the
+     result is stored in exponential notation similar to the %e printf(3) for-
+     mat specifier.  If value is less than zero, buf will be prefixed with a
+     minus sign.  A decimal point is included in the returned string if value
+     is not a whole number.  Unlike the ecvt() and fcvt() functions, buf is
+     not zero-padded.
+
+RETURN VALUES
+     The ecvt(), fcvt() and gcvt() functions return a NUL-terminated string
+     representation of value.
+
+WARNINGS
+     The ecvt() and fcvt() functions return a pointer to internal storage
+     space that will be overwritten by subsequent calls to either function.
+
+     The maximum possible precision of the return value is limited by the pre-
+     cision of a double and may not be the same on all architectures.
+
+     The snprintf(3) function is preferred over these functions for new code.
+
+SEE ALSO
+     printf(3), strtod(3)
+
+STANDARDS
+     The ecvt(), fcvt() and gcvt() functions conform to IEEE Std 1003.1-2001
+     (``POSIX.1'').
+
+BSD				 March 3, 2013				   BSD
+    </pre></body>
+
+</html>

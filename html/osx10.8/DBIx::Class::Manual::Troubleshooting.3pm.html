@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="..." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>DBIx::Class::Manual::Troubleshooting - Got a problem? Shoot it.</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+DBIx::Class::Manual::TUserlContributed)DBIx::Class::Manual::Troubleshooting(3)
+
+
+
+NAME
+       DBIx::Class::Manual::Troubleshooting - Got a problem? Shoot it.
+
+   "Can't locate storage blabla"
+       You're trying to make a query on a non-connected schema. Make sure you
+       got the current resultset from $schema-&gtresultset('Artist') on a schema
+       object you got back from connect().
+
+   Tracing SQL
+       The "DBIC_TRACE" environment variable controls SQL tracing, so to see
+       what is happening try
+
+	 export DBIC_TRACE=1
+
+       Alternatively use the "storage-&gtdebug" class method:-
+
+	 $schema-&gtstorage-&gtdebug(1);
+
+       To send the output somewhere else set debugfh:-
+
+	 $schema-&gtstorage-&gtdebugfh(IO::File-&gtnew('/tmp/trace.out', 'w');
+
+       Alternatively you can do this with the environment variable, too:-
+
+	 export DBIC_TRACE="1=/tmp/trace.out"
+
+   Can't locate method result_source_instance
+       For some reason the table class in question didn't load fully, so the
+       ResultSource object for it hasn't been created. Debug this class in
+       isolation, then try loading the full schema again.
+
+   Can't get last insert ID under Postgres with serial primary keys
+       Older DBI and DBD::Pg versions do not handle "last_insert_id"
+       correctly, causing code that uses auto-incrementing primary key columns
+       to fail with a message such as:
+
+	 Can't get last insert id at /.../DBIx/Class/Row.pm line 95
+
+       In particular the RHEL 4 and FC3 Linux distributions both ship with
+       combinations of DBI and DBD::Pg modules that do not work correctly.
+
+       DBI version 1.50 and DBD::Pg 1.43 are known to work.
+
+   Can't locate object method "source_name" via package
+       There's likely a syntax error in the table class referred to elsewhere
+       in this error message.  In particular make sure that the package
+       declaration is correct. For example, for a schema " MySchema " you need
+       to specify a fully qualified namespace: " package MySchema::MyTable; ".
+
+   syntax error at or near "&ltsomething&gt" ...
+       This can happen if you have a relation whose name is a word reserved by
+       your database, e.g. "user":
+
+	 package My::Schema::User;
+	 ...
+	 __PACKAGE__-&gttable('users');
+	 __PACKAGE__-&gtadd_columns(qw/ id name /);
+	 __PACKAGE__-&gtset_primary_key('id');
+	 ...
+	 1;
+
+	 package My::Schema::ACL;
+	 ...
+	 __PACKAGE__-&gttable('acl');
+	 __PACKAGE__-&gtadd_columns(qw/ user_id /);
+	 __PACKAGE__-&gtbelongs_to( 'user' =&gt 'My::Schema::User', 'user_id' );
+	 ...
+	 1;
+
+	 $schema-&gtresultset('ACL')-&gtsearch(
+	   {},
+	   {
+	     join =&gt [qw/ user /],
+	     '+select' =&gt [ 'user.name' ]
+	   }
+	 );
+
+       The SQL generated would resemble something like:
+
+	 SELECT me.user_id, user.name FROM acl me
+	 JOIN users user ON me.user_id = user.id
+
+       If, as is likely, your database treats "user" as a reserved word, you'd
+       end up with the following errors:
+
+       1) syntax error at or near "." - due to "user.name" in the SELECT
+       clause
+
+       2) syntax error at or near "user" - due to "user" in the JOIN clause
+
+       The solution is to enable quoting - see
+       "Setting_quoting_for_the_generated_SQL" in
+       DBIx::Class::Manual::Cookbook for details.
+
+   column "foo DESC" does not exist ...
+       This can happen if you are still using the obsolete order hack, and
+       also happen to turn on SQL-quoting.
+
+	 $rs-&gtsearch( {}, { order_by =&gt [ 'name DESC' ] } );
+
+       Since DBIx::Class &gt= 0.08100 and SQL::Abstract &gt= 1.50 the above should
+       be written as:
+
+	 $rs-&gtsearch( {}, { order_by =&gt { -desc =&gt 'name' } } );
+
+       For more ways to express order clauses refer to "ORDER_BY_CLAUSES" in
+       SQL::Abstract
+
+   Perl Performance Issues on Red Hat Systems
+       There is a problem with slow performance of certain DBIx::Class
+       operations using the system perl on some Fedora and Red Hat Enterprise
+       Linux system (as well as their derivative distributions such as Centos,
+       White Box and Scientific Linux).
+
+       Distributions affected include Fedora 5 through to Fedora 8 and RHEL5
+       upto and including RHEL5 Update 2. Fedora 9 (which uses perl 5.10) has
+       never been affected - this is purely a perl 5.8.8 issue.
+
+       As of September 2008 the following packages are known to be fixed and
+       so free of this performance issue (this means all Fedora and RHEL5
+       systems with full current updates will not be subject to this
+       problem):-
+
+	 Fedora 8     - perl-5.8.8-41.fc8
+	 RHEL5	      - perl-5.8.8-15.el5_2.1
+
+       This issue is due to perl doing an exhaustive search of blessed objects
+       under certain circumstances.  The problem shows up as performance
+       degradation exponential to the number of DBIx::Class row objects in
+       memory, so can be unnoticeable with certain data sets, but with huge
+       performance impacts on other datasets.
+
+       A pair of tests for susceptibility to the issue and performance effects
+       of the bless/overload problem can be found in the DBIx::Class test
+       suite, in the "t/99rh_perl_perf_bug.t" file.
+
+       Further information on this issue can be found in
+       &lthttps://bugzilla.redhat.com/show_bug.cgi?id=379791&gt,
+       &lthttps://bugzilla.redhat.com/show_bug.cgi?id=460308&gt and
+       http://rhn.redhat.com/errata/RHBA-2008-0876.html
+       &lthttp://rhn.redhat.com/errata/RHBA-2008-0876.html&gt
+
+   Excessive Memory Allocation with TEXT/BLOB/etc. Columns and Large
+       LongReadLen
+       It has been observed, using DBD::ODBC, that creating a DBIx::Class::Row
+       object which includes a column of data type TEXT/BLOB/etc. will
+       allocate LongReadLen bytes.  This allocation does not leak, but if
+       LongReadLen is large in size, and many such row objects are created,
+       e.g. as the output of a ResultSet query, the memory footprint of the
+       Perl interpreter can grow very large.
+
+       The solution is to use the smallest practical value for LongReadLen.
+
+
+
+perl v5.12.4			  2010-DBIx::Class::Manual::Troubleshooting(3)
+    </pre></body>
+
+</html>

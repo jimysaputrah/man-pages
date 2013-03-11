@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="description" content="This class requires SQL::Translator installed to work...." />
+        <meta http-equiv="Content-Type" CONTENT="text/html; charset="utf-8" />
+        <script type="text/javascript" src="../js/ga.js"></script>
+        <title>SQL::Translator::Parser::DBIx::Class - Create a SQL::Translator schema</title>
+        <META NAME="robots" CONTENT="all" />
+    </head>
+    
+<body><pre>
+
+SQL::Translator::ParseUserBContributed)SQL::Translator::Parser::DBIx::Class(3)
+
+
+
+NAME
+       SQL::Translator::Parser::DBIx::Class - Create a SQL::Translator schema
+       from a DBIx::Class::Schema instance
+
+SYNOPSIS
+	## Via DBIx::Class
+	use MyApp::Schema;
+	my $schema = MyApp::Schema-&gtconnect("dbi:SQLite:something.db");
+	$schema-&gtcreate_ddl_dir();
+	## or
+	$schema-&gtdeploy();
+
+	## Standalone
+	use MyApp::Schema;
+	use SQL::Translator;
+
+	my $schema = MyApp::Schema-&gtconnect;
+	my $trans  = SQL::Translator-&gtnew (
+	     parser	 =&gt 'SQL::Translator::Parser::DBIx::Class',
+	     parser_args =&gt {
+		 package =&gt $schema,
+		 add_fk_index =&gt 0,
+		 sources =&gt [qw/
+		   Artist
+		   CD
+		 /],
+	     },
+	     producer	 =&gt 'SQLite',
+	    ) or die SQL::Translator-&gterror;
+	my $out = $trans-&gttranslate() or die $trans-&gterror;
+
+DESCRIPTION
+       This class requires SQL::Translator installed to work.
+
+       "SQL::Translator::Parser::DBIx::Class" reads a DBIx::Class schema,
+       interrogates the columns, and stuffs it all in an $sqlt_schema object.
+
+       Its primary use is in deploying database layouts described as a set of
+       DBIx::Class classes, to a database. To do this, see "deploy" in
+       DBIx::Class::Schema.
+
+       This can also be achieved by having DBIx::Class export the schema as a
+       set of SQL files ready for import into your database, or passed to
+       other machines that need to have your application installed but don't
+       have SQL::Translator installed. To do this see "create_ddl_dir" in
+       DBIx::Class::Schema.
+
+PARSER OPTIONS
+   add_fk_index
+       Create an index for each foreign key.  Enabled by default, as having
+       indexed foreign key columns is normally the sensible thing to do.
+
+   sources
+       Arguments: \@class_names
+
+       Limit the amount of parsed sources by supplying an explicit list of
+       source names.
+
+SEE ALSO
+       SQL::Translator, DBIx::Class::Schema
+
+AUTHORS
+       See "CONTRIBUTORS" in DBIx::Class.
+
+LICENSE
+       You may distribute this code under the same terms as Perl itself.
+
+
+
+perl v5.12.4			  2011-SQL::Translator::Parser::DBIx::Class(3)
+    </pre></body>
+
+</html>
