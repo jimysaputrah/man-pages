@@ -10,6 +10,6 @@ for root, _, files in os.walk(inputdir):
         basename = os.path.basename(fullpath)
         if basename != "whatis":
             print "Processing: " + basename
-            new_basename = basename[:-4] + ".html"
+            new_basename = basename.replace("gz.txt", "txt")[:-4] + ".html"
             call("cat " + fullpath + " |./txt2html.py >" + outputdir + "/" + new_basename, shell=True)
         #print fullpath
