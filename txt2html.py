@@ -61,6 +61,6 @@ while line:
 
 content = content.replace("<", "&lt").replace(">", "&gt")
 
-body = "<content><pre>\n" + content + "    </pre></body>"
+body = "<body><pre>\n" + content + "    </pre></body>"
 print body
 util.print_footer()
