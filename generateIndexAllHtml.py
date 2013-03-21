@@ -12,4 +12,4 @@ for root, _, files in os.walk(inputdir):
     for f in files:
         fullpath = os.path.join(root, f)
         basename = os.path.basename(fullpath)
-        print "<a href=\"osx10.8/" + basename + ">" + rreplace(basename[:-5], ".", "(", 1) + ")" + "</a>"
+        print "<a href=\"osx10.8/" + basename + "\">" + rreplace(basename[:-5], ".", "(", 1) + ")" + "</a>"
